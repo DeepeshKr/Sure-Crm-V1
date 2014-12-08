@@ -1,0 +1,5 @@
+git config --global user.email "deepesh.krishnan@gmail.com"
+
+[user]
+	email = deepesh.krishnan@gmail.com
+	name = Deepesh Krishnan

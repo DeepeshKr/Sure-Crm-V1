@@ -1,0 +1,14 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @campaign_stage.name %>
+</p>
+
+<p>
+  <strong>Sortorder:</strong>
+  <%= @campaign_stage.sortorder %>
+</p>
+
+<%= link_to 'Edit', edit_campaign_stage_path(@campaign_stage) %> |
+<%= link_to 'Back', campaign_stages_path %>

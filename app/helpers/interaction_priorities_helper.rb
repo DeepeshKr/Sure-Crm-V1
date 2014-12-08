@@ -1,0 +1,2 @@
+module InteractionPrioritiesHelper
+end

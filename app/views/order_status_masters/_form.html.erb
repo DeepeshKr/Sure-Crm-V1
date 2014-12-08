@@ -1,0 +1,25 @@
+<%= form_for(@order_status_master) do |f| %>
+  <% if @order_status_master.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@order_status_master.errors.count, "error") %> prohibited this order_status_master from being saved:</h2>
+
+      <ul>
+      <% @order_status_master.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :name %><br>
+    <%= f.text_field :name %>
+  </div>
+  <div class="field">
+    <%= f.label :sortorder %><br>
+    <%= f.number_field :sortorder %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

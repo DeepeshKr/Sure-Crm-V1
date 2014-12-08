@@ -17,6 +17,12 @@ gem 'devise', github: 'plataformatec/devise'
 # Use boostrap for styling
 gem 'bootstrap-sass',       '3.2.0.0'
 
+# Use boostrap for testing
+group :test do
+  gem 'minitest-reporters', '1.0.5'
+  gem 'mini_backtrace',     '0.1.3'
+  gem 'guard-minitest',     '2.3.1'
+end
 
 # Use Uglifier as compressor for JavaScript assets
 gem 'uglifier', '>= 1.3.0'
@@ -38,8 +44,8 @@ gem 'sdoc', '~> 0.4.0',          group: :doc
 gem 'spring',        group: :development
 
 # Use ActiveModel has_secure_password
-# gem 'bcrypt', '~> 3.1.7'
-
+gem 'bcrypt', '~> 3.1.7'
+# gem 'bcrypt',               '3.1.7'
 # Use unicorn as the app server
 # gem 'unicorn'
 
@@ -48,3 +54,9 @@ gem 'spring',        group: :development
 
 # Use debugger
 # gem 'debugger', group: [:development, :test]
+
+group :production do
+  gem 'pg',             '0.17.1'
+  gem 'rails_12factor', '0.0.2'
+  gem 'unicorn',        '4.8.3'
+end

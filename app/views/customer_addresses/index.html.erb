@@ -1,0 +1,55 @@
+<h1>Listing customer_addresses</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Customer</th>
+      <th>Name</th>
+      <th>Address1</th>
+      <th>Address2</th>
+      <th>Address3</th>
+      <th>Landmark</th>
+      <th>City</th>
+      <th>Pincode</th>
+      <th>State</th>
+      <th>District</th>
+      <th>Country</th>
+      <th>Telephone1</th>
+      <th>Telephone2</th>
+      <th>Fax</th>
+      <th>Description</th>
+      <th>Valid</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @customer_addresses.each do |customer_address| %>
+      <tr>
+        <td><%= customer_address.customer_id %></td>
+        <td><%= customer_address.name %></td>
+        <td><%= customer_address.address1 %></td>
+        <td><%= customer_address.address2 %></td>
+        <td><%= customer_address.address3 %></td>
+        <td><%= customer_address.landmark %></td>
+        <td><%= customer_address.city %></td>
+        <td><%= customer_address.pincode %></td>
+        <td><%= customer_address.state %></td>
+        <td><%= customer_address.district %></td>
+        <td><%= customer_address.country %></td>
+        <td><%= customer_address.telephone1 %></td>
+        <td><%= customer_address.telephone2 %></td>
+        <td><%= customer_address.fax %></td>
+        <td><%= customer_address.description %></td>
+        <td><%= customer_address.valid_id %></td>
+        <td><%= link_to 'Show', customer_address %></td>
+        <td><%= link_to 'Edit', edit_customer_address_path(customer_address) %></td>
+        <td><%= link_to 'Destroy', customer_address, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Customer address', new_customer_address_path %>

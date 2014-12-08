@@ -1,0 +1,27 @@
+<h1>Listing order_status_masters</h1>
+
+<table class="table table-hover">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Sortorder</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @order_status_masters.each do |order_status_master| %>
+      <tr>
+        <td><%= order_status_master.name %></td>
+        <td><%= order_status_master.sortorder %></td>
+        <td><%= link_to 'Show', order_status_master %></td>
+        <td><%= link_to 'Edit', edit_order_status_master_path(order_status_master) %></td>
+        <td><%= link_to 'Destroy', order_status_master, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Order status master', new_order_status_master_path %>

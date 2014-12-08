@@ -1,0 +1,31 @@
+<h1>Listing interaction_categories</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Sortorder</th>
+      <th>Employeeid</th>
+      <th>Resolutionhours</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @interaction_categories.each do |interaction_category| %>
+      <tr>
+        <td><%= interaction_category.name %></td>
+        <td><%= interaction_category.sortorder %></td>
+        <td><%= interaction_category.employeeid %></td>
+        <td><%= interaction_category.resolutionhours %></td>
+        <td><%= link_to 'Show', interaction_category %></td>
+        <td><%= link_to 'Edit', edit_interaction_category_path(interaction_category) %></td>
+        <td><%= link_to 'Destroy', interaction_category, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Interaction category', new_interaction_category_path %>

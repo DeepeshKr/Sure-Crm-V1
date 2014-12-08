@@ -1,0 +1,2 @@
+module ProductTrainingHeadingsHelper
+end

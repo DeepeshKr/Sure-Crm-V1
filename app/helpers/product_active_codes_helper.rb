@@ -1,0 +1,2 @@
+module ProductActiveCodesHelper
+end

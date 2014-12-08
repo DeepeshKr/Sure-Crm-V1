@@ -1,0 +1,14 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @employee_role.name %>
+</p>
+
+<p>
+  <strong>Sortorder:</strong>
+  <%= @employee_role.sortorder %>
+</p>
+
+<%= link_to 'Edit', edit_employee_role_path(@employee_role) %> |
+<%= link_to 'Back', employee_roles_path %>

@@ -1,0 +1,14 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @employment_type.name %>
+</p>
+
+<p>
+  <strong>Sortorder:</strong>
+  <%= @employment_type.sortorder %>
+</p>
+
+<%= link_to 'Edit', edit_employment_type_path(@employment_type) %> |
+<%= link_to 'Back', employment_types_path %>

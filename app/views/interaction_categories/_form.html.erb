@@ -1,0 +1,33 @@
+<%= form_for(@interaction_category) do |f| %>
+  <% if @interaction_category.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@interaction_category.errors.count, "error") %> prohibited this interaction_category from being saved:</h2>
+
+      <ul>
+      <% @interaction_category.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :name %><br>
+    <%= f.text_field :name %>
+  </div>
+  <div class="field">
+    <%= f.label :sortorder %><br>
+    <%= f.number_field :sortorder %>
+  </div>
+  <div class="field">
+    <%= f.label :employeeid %><br>
+    <%= f.number_field :employeeid %>
+  </div>
+  <div class="field">
+    <%= f.label :resolutionhours %><br>
+    <%= f.number_field :resolutionhours %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

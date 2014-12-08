@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  billno: 1
+  fordate: 2014-12-07
+  orderid: 1
+  fy: MyString
+
+two:
+  billno: 1
+  fordate: 2014-12-07
+  orderid: 1
+  fy: MyString

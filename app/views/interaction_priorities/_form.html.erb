@@ -1,0 +1,25 @@
+<%= form_for(@interaction_priority) do |f| %>
+  <% if @interaction_priority.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@interaction_priority.errors.count, "error") %> prohibited this interaction_priority from being saved:</h2>
+
+      <ul>
+      <% @interaction_priority.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :name %><br>
+    <%= f.text_field :name %>
+  </div>
+  <div class="field">
+    <%= f.label :sortorder %><br>
+    <%= f.number_field :sortorder %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

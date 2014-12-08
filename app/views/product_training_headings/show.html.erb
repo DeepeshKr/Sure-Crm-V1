@@ -1,0 +1,14 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @product_training_heading.name %>
+</p>
+
+<p>
+  <strong>Sortorder:</strong>
+  <%= @product_training_heading.sortorder %>
+</p>
+
+<%= link_to 'Edit', edit_product_training_heading_path(@product_training_heading) %> |
+<%= link_to 'Back', product_training_headings_path %>

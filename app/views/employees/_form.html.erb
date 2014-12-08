@@ -1,0 +1,80 @@
+<%= form_for(@employee) do |f| %>
+  <% if @employee.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@employee.errors.count, "error") %> prohibited this employee from being saved:</h2>
+
+      <ul>
+      <% @employee.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+	<label>Name</label>
+	<br>
+    
+     <%= f.select(:title, 
+    options_from_collection_for_select(Salute.all, :name, :name), 
+    {:prompt => 'Please Choose'}, :class => "form-control col-xs-1")  %>
+ 
+  
+    <%= f.text_field :first_name , :class => "form-control col-xs-4"%>
+ 
+   
+    <%= f.text_field :last_name , :class => "form-control col-xs-4"%>
+  </div>
+  <div class="field">
+    <%= f.label :employeecode %><br>
+    <%= f.text_field :employeecode , :class => "form-control"%>
+  </div>
+  <div class="field">
+    <%= f.label :designation %><br>
+    <%= f.text_field :designation , :class => "form-control" %>
+  </div>
+  <div class="field">
+    <%= f.label :mobile %><br>
+    <%= f.text_field :mobile , :class => "form-control"%>
+  </div>
+  <div class="field">
+    <%= f.label :emailid %><br>
+    <%= f.text_field :emailid , :class => "form-control"%>
+  </div>
+  <div class="field">
+    <%= f.label :location %><br>
+    <%= f.text_field :location , :class => "form-control"%>
+  </div>
+  <div class="field">
+    <%= f.label :employment_type_id %><br>
+     <%= f.select(:employment_type_id, 
+    options_from_collection_for_select(EmploymentType.all, :id, :name), 
+    {:prompt => 'Please Choose'}, :class => "form-control")  %>
+   
+  </div>
+  <div class="field">
+    <%= f.label :employee_role_id %><br>
+     <%= f.select(:employee_role_id, 
+    options_from_collection_for_select(EmployeeRole.all, :id, :name), 
+    {:prompt => 'Please Choose'}, :class => "form-control")  %>
+   
+  </div>
+  <div class="field">
+    <%= f.label :reporting_to_id %><br>
+     <%= f.select(:reporting_to_id, 
+    options_from_collection_for_select(Employee.all, :id, :fullname), 
+    {:prompt => 'Please Choose'}, :class => "form-control")  %>
+    
+  </div>
+  <div class="field">
+    <%= f.label :enablelogin %><br>
+    <%= f.check_box :enablelogin %>
+  </div>
+  <div class="field">
+    <%= f.label :description %><br>
+    <%= f.text_area :description, class:"form-control" %>
+  </div>
+  <div class="actions">
+    <%= f.submit, class => "btn btn-primary" %>
+  </div>
+<% end %>

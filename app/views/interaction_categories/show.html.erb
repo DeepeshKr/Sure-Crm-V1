@@ -1,0 +1,24 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @interaction_category.name %>
+</p>
+
+<p>
+  <strong>Sortorder:</strong>
+  <%= @interaction_category.sortorder %>
+</p>
+
+<p>
+  <strong>Employeeid:</strong>
+  <%= @interaction_category.employeeid %>
+</p>
+
+<p>
+  <strong>Resolutionhours:</strong>
+  <%= @interaction_category.resolutionhours %>
+</p>
+
+<%= link_to 'Edit', edit_interaction_category_path(@interaction_category) %> |
+<%= link_to 'Back', interaction_categories_path %>

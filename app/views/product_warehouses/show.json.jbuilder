@@ -1,0 +1,1 @@
+json.extract! @product_warehouse, :id, :location_name, :address1, :address2, :address3, :landmark, :city, :pincode, :state, :country, :telephone1, :telephone2, :fax, :emailid, :description, :created_at, :updated_at

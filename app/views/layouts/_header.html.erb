@@ -1,0 +1,67 @@
+<header class="navbar navbar-fixed-top navbar-inverse" role="navigation">
+  <div class="container-fluid">
+    <%= link_to "sample app", root_path, id: "logo" %>
+    <nav>
+     <ul class="nav navbar-nav navbar-right">
+      	 <li><%= link_to "Home",    root_path %></li>
+        <li><%= link_to "Help",    help_path %></li>
+        <% if logged_in? %>
+           <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+              Set up <b class="caret"></b>
+            </a>
+            <ul class="dropdown-menu">
+              <li><%= link_to "Salutes", "/salutes" %></li>
+              <li><%= link_to "States", "/states" %></li>
+               <li class="divider"></li>
+               	<li><%= link_to "Employment Type", "/employment_types" %></li>
+             	<li><%= link_to "Employee Roles", "/employee_roles" %></li>
+             	 <li class="divider"></li>
+	              	<li><%= link_to "Dispatch Statuses", "/order_line_dispatch_statuses" %></li>
+	              	<li><%= link_to "Order Status", "/order_status_masters" %></li>
+	              	<li><%= link_to "Order Source", "/order_sources" %></li>
+	              	<li><%= link_to "Bill Number", "/bills" %></li>
+              	 <li class="divider"></li>
+              	 	<li><%= link_to "Product Active Code", "/product_active_codes" %></li>
+	              	<li><%= link_to "Product Categories", "/product_categories" %></li>
+	              	<li><%= link_to "product Inventory Type", "/product_inventory_codes" %></li>
+	              	<li><%= link_to "Product Training", "/product_training_headings" %></li>
+	              	<li><%= link_to "Product Type", "/product_types" %></li>
+	              	<li><%= link_to "Product Warehouse", "/product_warehouses" %></li>
+	             <li class="divider"></li>
+              	 	<li><%= link_to "Address Type", "/address_types" %></li>
+              	 	<li><%= link_to "Address Validity", "/address_valids" %></li>
+              	 <li class="divider"></li>
+              	 	<li><%= link_to "Campaign Stages", "/campaign_stages" %></li>
+              	 <li class="divider"></li>
+              	 	<li><%= link_to "Interaction Categories", "/interaction_categories" %></li>
+              	 	<li><%= link_to "Interaction Priorities", "/interaction_priorities" %></li>
+              	 	<li><%= link_to "Interaction Status", "/interaction_statuses" %></li>
+              	 	<li><%= link_to "Interaction Users", "/interaction_users" %></li>
+              	 	
+            </ul>
+          </li>
+       
+        <% end %>
+        <% if logged_in? %>
+        <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+              Account <b class="caret"></b>
+            </a>
+            <ul class="dropdown-menu">
+              <li><%= link_to "Profile", current_user %></li>
+              <li><%= link_to "Settings", '#' %></li>
+              <li class="divider"></li>
+              <li>
+                <%= link_to "Log out", logout_path, method: "delete" %>
+              </li>
+            </ul>
+          </li>
+        <% else %>
+          <li><%= link_to "Log in", login_path %></li>
+        <% end %>
+
+      </ul>
+    </nav>
+  </div>
+</header>

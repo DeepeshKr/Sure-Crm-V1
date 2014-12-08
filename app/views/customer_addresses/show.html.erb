@@ -1,0 +1,84 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Customer:</strong>
+  <%= @customer_address.customer_id %>
+</p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @customer_address.name %>
+</p>
+
+<p>
+  <strong>Address1:</strong>
+  <%= @customer_address.address1 %>
+</p>
+
+<p>
+  <strong>Address2:</strong>
+  <%= @customer_address.address2 %>
+</p>
+
+<p>
+  <strong>Address3:</strong>
+  <%= @customer_address.address3 %>
+</p>
+
+<p>
+  <strong>Landmark:</strong>
+  <%= @customer_address.landmark %>
+</p>
+
+<p>
+  <strong>City:</strong>
+  <%= @customer_address.city %>
+</p>
+
+<p>
+  <strong>Pincode:</strong>
+  <%= @customer_address.pincode %>
+</p>
+
+<p>
+  <strong>State:</strong>
+  <%= @customer_address.state %>
+</p>
+
+<p>
+  <strong>District:</strong>
+  <%= @customer_address.district %>
+</p>
+
+<p>
+  <strong>Country:</strong>
+  <%= @customer_address.country %>
+</p>
+
+<p>
+  <strong>Telephone1:</strong>
+  <%= @customer_address.telephone1 %>
+</p>
+
+<p>
+  <strong>Telephone2:</strong>
+  <%= @customer_address.telephone2 %>
+</p>
+
+<p>
+  <strong>Fax:</strong>
+  <%= @customer_address.fax %>
+</p>
+
+<p>
+  <strong>Description:</strong>
+  <%= @customer_address.description %>
+</p>
+
+<p>
+  <strong>Valid:</strong>
+  <%= @customer_address.valid_id %>
+</p>
+
+<%= link_to 'Edit', edit_customer_address_path(@customer_address) %> |
+<%= link_to 'Back', customer_addresses_path %>

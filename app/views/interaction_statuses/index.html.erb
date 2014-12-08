@@ -1,0 +1,29 @@
+<h1>Listing interaction_statuses</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Customer description</th>
+      <th>Internal description</th>
+      <th>Sortorder</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @interaction_statuses.each do |interaction_status| %>
+      <tr>
+        <td><%= interaction_status.customer_description %></td>
+        <td><%= interaction_status.internal_description %></td>
+        <td><%= interaction_status.sortorder %></td>
+        <td><%= link_to 'Show', interaction_status %></td>
+        <td><%= link_to 'Edit', edit_interaction_status_path(interaction_status) %></td>
+        <td><%= link_to 'Destroy', interaction_status, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Interaction status', new_interaction_status_path %>

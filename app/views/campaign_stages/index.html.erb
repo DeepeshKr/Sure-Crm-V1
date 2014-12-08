@@ -1,0 +1,27 @@
+<h1>Listing campaign_stages</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Sortorder</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @campaign_stages.each do |campaign_stage| %>
+      <tr>
+        <td><%= campaign_stage.name %></td>
+        <td><%= campaign_stage.sortorder %></td>
+        <td><%= link_to 'Show', campaign_stage %></td>
+        <td><%= link_to 'Edit', edit_campaign_stage_path(campaign_stage) %></td>
+        <td><%= link_to 'Destroy', campaign_stage, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Campaign stage', new_campaign_stage_path %>

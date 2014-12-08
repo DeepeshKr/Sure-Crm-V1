@@ -1,0 +1,19 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Customer description:</strong>
+  <%= @interaction_status.customer_description %>
+</p>
+
+<p>
+  <strong>Internal description:</strong>
+  <%= @interaction_status.internal_description %>
+</p>
+
+<p>
+  <strong>Sortorder:</strong>
+  <%= @interaction_status.sortorder %>
+</p>
+
+<%= link_to 'Edit', edit_interaction_status_path(@interaction_status) %> |
+<%= link_to 'Back', interaction_statuses_path %>

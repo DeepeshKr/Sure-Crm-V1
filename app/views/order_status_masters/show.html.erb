@@ -1,0 +1,14 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @order_status_master.name %>
+</p>
+
+<p>
+  <strong>Sortorder:</strong>
+  <%= @order_status_master.sortorder %>
+</p>
+
+<%= link_to 'Edit', edit_order_status_master_path(@order_status_master) %> |
+<%= link_to 'Back', order_status_masters_path %>

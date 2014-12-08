@@ -1,0 +1,25 @@
+<%= form_for(@campaign_stage) do |f| %>
+  <% if @campaign_stage.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@campaign_stage.errors.count, "error") %> prohibited this campaign_stage from being saved:</h2>
+
+      <ul>
+      <% @campaign_stage.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :name %><br>
+    <%= f.text_field :name %>
+  </div>
+  <div class="field">
+    <%= f.label :sortorder %><br>
+    <%= f.number_field :sortorder %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>
