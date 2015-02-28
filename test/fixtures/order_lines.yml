@@ -1,0 +1,43 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  orderid: 1
+  orderdate: 2014-12-25 16:41:03
+  employeecode: MyString
+  employee_id: 1
+  external_ref_no: MyString
+  productvariant_id: 1
+  pieces: 1
+  subtotal: 1.5
+  taxes: 1.5
+  shipping: 1.5
+  codcharges: 1.5
+  total: 1.5
+  orderlinestatusmaster_id: 1
+  productline_id: 1
+  description: MyText
+  estimatedshipdate: 2014-12-25 16:41:03
+  estimatedarrivaldate: 2014-12-25 16:41:03
+  orderchecked: 2014-12-25 16:41:03
+  actualshippate: 2014-12-25 16:41:03
+
+two:
+  orderid: 1
+  orderdate: 2014-12-25 16:41:03
+  employeecode: MyString
+  employee_id: 1
+  external_ref_no: MyString
+  productvariant_id: 1
+  pieces: 1
+  subtotal: 1.5
+  taxes: 1.5
+  shipping: 1.5
+  codcharges: 1.5
+  total: 1.5
+  orderlinestatusmaster_id: 1
+  productline_id: 1
+  description: MyText
+  estimatedshipdate: 2014-12-25 16:41:03
+  estimatedarrivaldate: 2014-12-25 16:41:03
+  orderchecked: 2014-12-25 16:41:03
+  actualshippate: 2014-12-25 16:41:03

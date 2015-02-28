@@ -9,7 +9,8 @@ class OrderStatusMastersController < ApplicationController
   end
 
   def show
-    respond_with(@order_status_master)
+    @order_masters = OrderMaster.where(order_status_master_id: params[:id])
+    respond_with(@order_status_master, @order_masters)
   end
 
   def new

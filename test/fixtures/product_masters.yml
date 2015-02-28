@@ -1,0 +1,23 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  name: MyString
+  categoryid: 1
+  inventoryid: 1
+  barcode: MyString
+  price: 1.5
+  taxes: 1.5
+  total: 1.5
+  extproductcode: MyString
+  description: MyText
+
+two:
+  name: MyString
+  categoryid: 1
+  inventoryid: 1
+  barcode: MyString
+  price: 1.5
+  taxes: 1.5
+  total: 1.5
+  extproductcode: MyString
+  description: MyText

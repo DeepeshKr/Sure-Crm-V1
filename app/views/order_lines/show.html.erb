@@ -1,0 +1,99 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Orderid:</strong>
+  <%= @order_line.orderid %>
+</p>
+
+<p>
+  <strong>Orderdate:</strong>
+  <%= @order_line.orderdate %>
+</p>
+
+<p>
+  <strong>Employeecode:</strong>
+  <%= @order_line.employeecode %>
+</p>
+
+<p>
+  <strong>Employee:</strong>
+  <%= @order_line.employee_id %>
+</p>
+
+<p>
+  <strong>External ref no:</strong>
+  <%= @order_line.external_ref_no %>
+</p>
+
+<p>
+  <strong>Productvariant:</strong>
+  <%= @order_line.product_variant.name %>
+</p>
+
+<p>
+  <strong>Pieces:</strong>
+  <%= @order_line.pieces %>
+</p>
+
+<p>
+  <strong>Subtotal:</strong>
+  <%= @order_line.subtotal %>
+</p>
+
+<p>
+  <strong>Taxes:</strong>
+  <%= @order_line.taxes %>
+</p>
+
+<p>
+  <strong>Shipping:</strong>
+  <%= @order_line.shipping %>
+</p>
+
+<p>
+  <strong>Codcharges:</strong>
+  <%= @order_line.codcharges %>
+</p>
+
+<p>
+  <strong>Total:</strong>
+  <%= @order_line.total %>
+</p>
+
+<p>
+  <strong>Orderlinestatusmaster:</strong>
+  <%= @order_line.orderlinestatusmaster_id %>
+</p>
+
+<p>
+  <strong>Productline:</strong>
+  <%= @order_line.productline_id %>
+</p>
+
+<p>
+  <strong>Description:</strong>
+  <%= @order_line.description %>
+</p>
+
+<p>
+  <strong>Estimatedshipdate:</strong>
+  <%= @order_line.estimatedshipdate %>
+</p>
+
+<p>
+  <strong>Estimatedarrivaldate:</strong>
+  <%= @order_line.estimatedarrivaldate %>
+</p>
+
+<p>
+  <strong>Orderchecked:</strong>
+  <%= @order_line.orderchecked %>
+</p>
+
+<p>
+  <strong>Actualshippate:</strong>
+  <%= @order_line.actualshippate %>
+</p>
+
+<%= link_to 'Edit', edit_order_line_path(@order_line) %> |
+<%= link_to 'Back', order_lines_path %>

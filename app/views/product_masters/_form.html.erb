@@ -1,0 +1,83 @@
+<%= bootstrap_form_for(@product_master) do |f| %>
+  <% if @product_master.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@product_master.errors.count, "error") %> prohibited this product_master from being saved:</h2>
+
+      <ul>
+      <% @product_master.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+   
+    <%= f.text_field :name %>
+  </div>
+  
+  <div class="field">
+   
+   
+      <%= f.select :productcategoryid,  options_from_collection_for_select(ProductCategory.all,
+       :id, :name, selected: @product_master.productcategoryid),
+		         { label: "Select the Product Category" },
+		       { class: "selectpicker" } %>
+  </div>
+  
+   <div class="field">
+   
+   
+      <%= f.select :productinventorycodeid,  options_from_collection_for_select(ProductInventoryCode.all,
+       :id, :name, selected: @product_master.productinventorycodeid),
+		         { label: "Select the Product Inventory" },
+		       { class: "selectpicker" } %>
+  </div>
+  <div class="field">
+  
+    <%= f.text_field :barcode, label: "Barcode*", placeholder: "Numeric code of Prod / Gprod etc external ref code", :required => true, help: "this code looks like 0092" %>
+  </div>
+  <div class="field">
+  
+    <%= f.text_field :price, required: true %>
+  </div>
+  <div class="field">
+  
+    <%= f.text_field :taxes, required: true %>
+  </div>
+  <div class="field">
+   
+    <%= f.text_field :shipping, required: true %>
+  </div>
+  <div class="field">
+   
+    <%= f.text_field :total, required: true %>
+  </div>
+  <div class="field">
+    
+    <%= f.text_field :extproductcode, label: "Product Ref Code*", placeholder: "Prod / Gprod etc external ref code", required: true, help: "this code looks like EV1, AK1 and unique" %>
+  </div>
+  <div class="field">
+    
+    <%= f.text_area :description %>
+  </div>
+    <div class="field">
+     <%= f.select :productactivecodeid,  options_from_collection_for_select(ProductActiveCode.all,
+       :id, :name, selected: @product_master.productactivecodeid),
+		         { label: "Product Status - Only Active Products are sold" } %>
+ 
+  </div>
+   <div class="field">
+     <%= f.select :product_sell_type_id,  options_from_collection_for_select(ProductSellType.all,
+       :id, :details, selected: @product_master.product_sell_type_id),
+             { label: "Product can be sold as - Add ons cannot be bought singularly" } %>
+ <%= @product_master.product_sell_type_id %>
+  </div>
+
+ 
+  <div class="row">
+  <div class="col-xs-2 col-md-offset-5">
+    <%= f.primary class: "btn btn-primary" %>
+  </div>
+  </div>
+<% end %>

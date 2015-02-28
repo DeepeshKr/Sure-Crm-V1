@@ -1,0 +1,29 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Listing Media Commisions</h1>
+
+<table class="table table-hover">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Description</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @media_commisions.each do |media_commision| %>
+      <tr>
+        <td><%= media_commision.name %></td>
+        <td><%= media_commision.description %></td>
+        <td><%= link_to 'Show', media_commision %></td>
+        <td><%= link_to 'Edit', edit_media_commision_path(media_commision) %></td>
+        <td><%= link_to 'Destroy', media_commision, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Media commision', new_media_commision_path, class: "btn btn-info" %>

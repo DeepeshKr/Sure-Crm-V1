@@ -1,0 +1,28 @@
+<div class="well well-sm">
+<div class="row">
+  <div class="col-xs-6">
+<h3><%= @category_name %>  interactions</h3>
+  </div>
+  <div class="col-xs-6">
+<%= bootstrap_form_tag url: interaction_path, :method => :GET, :enforce_utf8 => false do |f| %>
+<div class="col-xs-10">
+<%= select_tag(:category, 
+    options_from_collection_for_select(@category, :id, :name, selected: @categoryid), 
+    {:class => "form-control"})  %>
+</div>
+
+<div class="col-xs-2">
+        <%= submit_tag "Ok", name: nil,  class: "btn btn-primary" %>
+      </div>
+
+      <% end %>
+  </div>
+  
+</div>
+</div>
+
+<%= render "list" %>
+
+<br>
+
+

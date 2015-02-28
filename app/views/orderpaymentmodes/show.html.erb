@@ -1,0 +1,14 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @orderpaymentmode.name %> <strong>Charges: <%= @orderpaymentmode.charges %> </strong>
+</p>
+
+<p>
+  <strong>Description:</strong>
+  <%= @orderpaymentmode.description %>
+</p>
+
+<%= link_to 'Edit', edit_orderpaymentmode_path(@orderpaymentmode) %> |
+<%= link_to 'Back', orderpaymentmodes_path %>

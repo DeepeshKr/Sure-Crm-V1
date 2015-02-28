@@ -1,0 +1,14 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @change_log_type.name %>
+</p>
+
+<p>
+  <strong>Description:</strong>
+  <%= @change_log_type.description %>
+</p>
+
+<%= link_to 'Edit', edit_change_log_type_path(@change_log_type) %> |
+<%= link_to 'Back', change_log_types_path %>

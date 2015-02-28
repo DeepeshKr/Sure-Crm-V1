@@ -1,0 +1,49 @@
+<h1>Listing of campaign playlists</h1>
+
+<table class="table table-hover">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Campaign</th>
+      <th>Date From</th>
+      <th>Date To</th>
+      <th>Start time</th>
+      <th>End time</th>
+      <th>Air time</th>
+      <th>Product variant</th>
+      <th>Filename</th>
+      <th>Description</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+  	<% if (@campaign_playlists != nil) then %>
+    <% @campaign_playlists.each do |campaign_playlist| %>
+      <tr>
+        <td><%= campaign_playlist.name %></td>
+        <td><%= campaign_playlist.campaign.name %></td>
+      	<td><%= campaign_playlist.campaign.startdate %></td>
+    	<td><%= campaign_playlist.campaign.enddate %></td>
+        <td><%= campaign_playlist%></td>
+        <td><%= campaign_playlist %></td>
+         <td><%= campaign_playlist %></td>
+        <td><%= campaign_playlist.product_variant.name %></td>
+        <td><%= campaign_playlist.filename %></td>
+        <td><%= campaign_playlist.description %></td>
+        <td><%= link_to 'Show', campaign_playlist %></td>
+        <td><%= link_to 'Edit', edit_campaign_playlist_path(campaign_playlist) %></td>
+        <td><%= link_to 'Destroy', campaign_playlist, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+    <% elsif %>
+    <td colspan="12">
+    	Nothing here add new
+    </td>
+    <% end%>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Campaign playlist', new_campaign_playlist_path %>

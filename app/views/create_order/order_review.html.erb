@@ -1,0 +1,47 @@
+
+   <%= render 'customer_details' %>
+
+<div class="row">
+   <div class="col-xs-8">
+                     <div class="clearfix"></div>     
+       <%= render 'orderlines' %>
+
+        <div class="clearfix"></div>
+          <div class="row">
+                <div class="col-xs-offset-8">
+                <%= link_to 'Add More Products', showproducts_path(:order_id => @order_id), :class => "btn btn-info btn-sm" %>
+                </div>
+          </div>
+<br>
+   <div class="clearfix"></div>
+    
+       <!-- show address -->
+        <div class="row">
+          <%= render 'show_order_address' %>
+          </div>
+      <div class="clearfix"></div>
+        <div class="row">
+        <div class="col-xs-offset-8">
+        <%= link_to 'Add / Modify Address', showaddress_path(:order_id => @order_id), :class => "btn btn-info btn-sm" %>
+        </div>
+        </div>
+     <div class="clearfix"></div>
+      </div><!-- left panel end -->
+
+        <div class="col-xs-4">
+          <div class="panel panel-default">
+              <div class="panel-heading">
+              <h3 class="panel-title">Page Script</h3>
+              </div>
+              <div  class="panel-body">
+                  <div id="product-script-id">
+                
+                  </div>
+                  <div id="product-script">
+                
+                  </div>
+            </div>
+          </div><!-- panel end -->
+        </div>  
+</div>
+

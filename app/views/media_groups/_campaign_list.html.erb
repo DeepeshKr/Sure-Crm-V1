@@ -1,0 +1,47 @@
+<div class="row">
+<div class="col-xs-6">
+<h3><%= @stagename %></h3>
+</div>
+<div class="col-xs-2">
+<%= link_to 'Older Campaign', media_group_path(:stage => "old"), class: "btn btn-info btn-sm" %>
+</div>
+<div class="col-xs-2">
+<%= link_to 'Current Campaign', media_group_path(:stage => "current"), class: "btn btn-info btn-sm" %>
+</div>
+<div class="col-xs-2">
+<%= link_to 'Upcoming Campaign', media_group_path(:stage => "new"), class: "btn btn-info btn-sm" %>
+</div>
+</div>
+<hr>
+
+<table class="table table-hover">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Start date</th>
+      <th>End date</th>
+      <th>Days</th>
+      <th>Media</th>
+      <th>Cost</th>
+      <th>Revenue</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @campaigns.each do |campaign| %>
+      <tr>
+        <td><%= campaign.name %></td>
+        <td><%= campaign.startdate.strftime("%d-%b-%Y") %></td>
+        <td><%= campaign.enddate.strftime("%d-%b-%Y") %></td>
+        <td><%= campaign.days %></td>
+        <td><%= campaign.medium.mediainfo %></td>
+        <td><%= campaign.cost %></td>
+        <td><%= campaign.sales %></td>
+        <td><%= link_to 'Show', campaign %></td>
+        <td><%= link_to 'Edit', edit_campaign_path(campaign) %></td>
+        <td><%= link_to 'Destroy', campaign, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

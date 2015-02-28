@@ -1,0 +1,35 @@
+
+
+<h1>List of Dealers</h1>
+
+<table class="table table-hover">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Franchise</th>
+       <th>Address</th>
+        <th>State</th>
+      <th>Phone</th>
+       <th>Fax</th>
+        <th>Mobile</th>
+     
+
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @address_dealer.each do |dealer| %>
+      <tr>
+        <td><%= dealer.contactperson %></td>
+       <td><%= dealer.franchisee %></td>
+       <td><%= dealer.add1 %><br/>
+      <%= dealer.add2 %><br/>
+      <%= dealer.add3 %><br/>
+       <td><%= dealer.state %></td>
+       <td><%= dealer.phone %></td>
+       <td><%= dealer.fax %></td>
+       <td><%= dealer.mobile %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

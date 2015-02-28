@@ -1,0 +1,6 @@
+<dl>
+	<% @traininglist.each do |product_training_manual| %>
+      <dt> <%= product_training_manual.name %></dt>
+        <dd><%= product_training_manual.description %></dd>   
+    <% end %>
+</dl>

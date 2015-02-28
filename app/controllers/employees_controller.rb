@@ -9,7 +9,21 @@ class EmployeesController < ApplicationController
   end
 
   def show
-    respond_with(@employee)
+    chkuser = User.where(employee_code: @employee.employeecode)
+
+
+
+    if chkuser.present?
+      @addnewlogin = true
+      @userpas = chkuser.first
+      respond_with(@employee, @userpas)
+   else
+     @addnewlogin = false
+     @user = User.new(name: @employee.name, employee_code: @employee.employeecode, 
+      email: @employee.emailid , role: @employee.employee_role_id)
+     respond_with(@employee, @user)
+    end
+
   end
 
   def new
@@ -28,6 +42,12 @@ class EmployeesController < ApplicationController
 
   def update
     @employee.update(employee_params)
+
+     chkuser = User.where(employee_code: @employee.employeecode)
+     if chkuser.present?
+      chkuser.first.update(role: @employee.employee_role_id)
+     end
+
     respond_with(@employee)
   end
 

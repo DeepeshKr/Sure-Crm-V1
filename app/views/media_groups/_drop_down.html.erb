@@ -1,0 +1,21 @@
+<div class="alert alert-info" role="alert">
+ 
+<%= form_tag(addmedia_togroup_path, method: "post") do %>
+<%= hidden_field_tag :id, @media_group.id %>
+
+<div class="row">
+  	<div class="col-xs-2">
+    <strong> Select Media To add</strong>
+    </div>
+   	<div class="col-xs-8">
+   
+    <%= select_tag :mediumid, options_from_collection_for_select(@medialist, :id, :mediainfo), :class => "form-control" %>
+    
+  	</div>
+  	<div class="col-xs-2">
+         <%= submit_tag("Add Media", :class => "btn btn-success btn-sm") %> 
+	</div>
+</div>
+<% end %>
+
+</div>

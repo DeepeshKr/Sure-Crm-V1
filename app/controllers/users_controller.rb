@@ -1,11 +1,15 @@
 class UsersController < ApplicationController
+   before_action :set_user, only: [:show, :edit, :update, :destroy]
+  skip_before_action :require_login, only: [:new, :create]
+  respond_to :html
   def show
     @user = User.find(params[:id])
-     debugger
+     #debugger
   end
   
   def index
-    
+    @users = User.all
+    respond_with(@users)
   end
   
   def new
@@ -20,11 +24,31 @@ class UsersController < ApplicationController
       render 'new'
     end
   end
-  
+
+  def edit
+
+  end
+  def update   
+      @user.update(user_params)   
+      # if @user.update(user_params)
+      respond_with(@user)
+  end
+
+    #else
+      #respond_with(@product_variant)
+   # end
+   # respond_with(@product_variant.product_master)
+   # def role_enum
+   #    [:user, :manager, :accounts, :admin]
+   #  end
+
+
   private 
-  
+  def set_user
+      @user = User.find(params[:id])
+      #@roles = 
+  end
   def user_params
-      params.require(:user).permit(:name, :email, :employee_code, :password,
-                                   :password_confirmation)
+      params.require(:user).permit(:name, :email, :employee_code, :password, :role, :password_confirmation)
   end
 end

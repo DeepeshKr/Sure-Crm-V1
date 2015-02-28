@@ -1,0 +1,25 @@
+<% if @interaction_transcripts.present? %>
+<table class="table table-hover">
+  <thead>
+    <tr>
+      <th>Comments by</th>
+      <th>Details</th>
+      
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @interaction_transcripts.each do |interaction_transcript| %>
+      <tr>
+        <td>
+        <%= interaction_transcript.interaction_user.name %> <br>
+<small> <%= interaction_transcript.created_at %> </small>
+ </td>
+        <td><%= interaction_transcript.description %></td>
+        
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+<% end %>
+<br>

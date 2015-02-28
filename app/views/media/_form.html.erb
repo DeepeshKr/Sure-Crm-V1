@@ -1,0 +1,75 @@
+<%= bootstrap_form_for(@medium) do |f| %>
+  <% if @medium.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@medium.errors.count, "error") %> prohibited this medium from being saved:</h2>
+
+      <ul>
+      <% @medium.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+     <%= f.text_field :name, label: "Name" %>
+  </div>
+  <div class="field">
+     <%= f.text_field :ref_name, label: "Reference Name - Please ensure it is unique", placeholder: "Unique general name of Channel" %>
+  </div>
+ 
+  <div class="field">
+   
+    <%= f.text_field :telephone, label: "Incoming Telephone" %>
+  </div>
+  <div class="field">
+  
+    <%= f.text_field :alttelephone, label: "Alternate Telephone" %>
+  </div>
+  <div class="field">
+  
+   	<%= f.select(:state, 
+		    content_tag(:option,'All India',:value=>"")+options_from_collection_for_select(@statelist, :name, :name, @medium.state), 
+		    {:prompt => 'All India'}, :class => "form-control col-xs-1")  %>
+  </div>
+  <div class="row">
+  <div class="col-xs-4 col-offset-xs-2">
+    <%= f.select(:media_commision_id, 
+       options_from_collection_for_select(@media_commission, :id, :name, @medium.media_commision_id), {:prompt => 'None'}, :class => "form-control col-xs-1")  %>
+</div>
+<div class="col-xs-2">
+   
+    <%= f.text_field :value, placeholder: "0.20", label: "Commission Percent" %>
+  </div>
+
+  </div>
+  <div class="field">
+  
+    <%= f.select(:media_group_id, 
+        options_from_collection_for_select(@media_group, :id, :name, @medium.state), 
+        {:prompt => 'None'}, :class => "form-control col-xs-1")  %>
+  </div>
+  
+  <div class="field">
+  
+    <%= f.number_field :corporateid, label: "Corporate Id", placeholder: "Ignore if you dont know" %>
+  </div>
+  <div class="field">
+   
+    <%= f.text_area :description, label: "Description" %>
+  </div>
+  <div class="row">
+  		<div class="col-xs-4 col-xs-offset-1">
+	    <%= f.check_box :active, label: "Active Media" %>
+		</div>  
+	</div>
+
+ 	<div class="row">
+  		<div class="col-xs-2 col-md-offset-5">
+  			
+    		<%= f.submit  class: "btn btn-primary" %>
+  
+  			
+  		</div>
+  </div>
+<% end %>

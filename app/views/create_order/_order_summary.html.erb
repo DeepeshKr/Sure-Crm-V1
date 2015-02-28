@@ -1,0 +1,144 @@
+<% @order_masters.each do |order_master| %>
+<div class="panel panel-primary">
+  <div class="panel-heading">
+  <div class="row">
+  <div class="col-xs-4">   <h3 class="panel-title">Order Id <%= order_master.id rescue nil%></h3>  </div>
+   <div class="col-xs-4">   <h3 class="panel-title">Customer Id <%= order_master.customer_id rescue nil%></h3>  </div>
+   <div class="col-xs-4"> <h3 class="panel-title"><strong>Date:</strong>   <%= order_master.orderdate %> </div>
+   </div>
+  </div>
+  <div class="panel-body">
+    
+ 
+<div class="page-header">
+<div class="row">
+  <div class="col-xs-6">   <h3><%= order_master.customer.fullname rescue nil%> </h3>  </div>
+  <div class="col-xs-6">
+    <div class="row">
+    <div class="col-xs-6">
+      	<small> Mobile No <%= order_master.customer.mobile rescue nil%> </small><br/>
+      	<small> Mobile No <%= order_master.customer.alt_mobile rescue nil%></small> 
+    </div>
+    <div class="col-xs-6">
+    	<small> Email Id  <%= order_master.customer.emailid rescue nil%> </small><br/>
+    	<small> Email Id  <%= order_master.customer.alt_emailid rescue nil%></small>
+    </div>
+  </div>
+</div>
+</div>
+</div>
+
+<div class="well well-sm">
+<div class="row">
+<div class="col-xs-2"><strong>Address:</strong></div>
+<% if order_master.customer_address.present? %>
+  <div class="col-xs-12">   
+  <%= order_master.customer_address.address1 %> 
+<%= order_master.customer_address.address2 %> 
+<%= order_master.customer_address.address3 %> 
+<%= order_master.customer_address.landmark %> 
+<strong><%= order_master.customer_address.state %> </strong>
+<strong><%= order_master.customer_address.city %> </strong>
+<strong><%= order_master.customer_address.pincode %></strong> <br>
+<%= order_master.customer_address.district %>
+<%= order_master.customer_address.country %>
+<%= order_master.customer_address.district %>
+<%= order_master.customer_address.telephone1 %>
+<%= order_master.customer_address.telephone2 %>
+<%= order_master.customer_address.fax %>
+
+
+  </div>
+<% else %>
+<div class="col-xs-12">   
+No Address availabe!
+</div>
+<% end %>
+</div>
+</div>
+ <!--orderline begin-->
+ 
+ <table class="table table-striped">
+  <thead>
+    <tr>
+      <th>Product Description </th>
+      <th>Pieces</th>
+      <th>Subtotal</th>
+      <th>Taxes</th>
+      <th>Shipping</th>
+      <th>Codcharges</th>
+      <th>Total</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% order_master.order_line.each do |order_line| %>
+      <tr>
+        <td><%= order_line.description %></td>
+        <td><%= order_line.pieces %></td>
+        <td><%= order_line.subtotal %></td>
+        <td><%= order_line.taxes %></td>
+        <td><%= order_line.shipping %></td>
+        <td><%= order_line.codcharges %></td>
+        <td><%= order_line.total %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+  
+ 
+  <!-- orderline end -->
+<div class="row">
+	<div class="col-xs-6">
+	<div class="panel panel-default">
+  <!-- Default panel contents -->
+  
+			  
+			  <!-- List group -->
+			  <ul class="list-group">
+			    <li class="list-group-item"><strong>Pieces:</strong> <%= order_master.pieces %></li>
+			    <li class="list-group-item"><strong>Order Status:</strong> <%= order_master.order_status_master.name rescue nil%></li>
+			    <li class="list-group-item"><strong>Payment mode:</strong> <%= order_master.orderpaymentmode.name rescue nil%> </li>
+			   
+			  </ul>
+		</div>
+   
+   
+	</div>
+
+<div class="col-xs-6">
+		<div class="panel panel-default">
+		  <!-- Default panel contents -->
+		  <!-- Table -->
+		  		<table class="table table-hover">
+				<tr><td> <strong>Subtotal:</strong>   </td>	<td> <%= order_master.subtotal %></td>	</tr>
+				<tr><td> <strong>Taxes:</strong></td>	<td>  <%= order_master.taxes %></td> </tr>
+				<tr><td><strong>Shipping:</strong>  </td><td><%= order_master.shipping %> </td>  </tr>
+				<tr><td> <strong>Cod charges:</strong></td><td> <%= order_master.codcharges %></td> </tr>
+				<tr><td><strong>Total:</strong> </td><td><%= order_master.total %> </td></tr>
+				</table>  
+		</div>
+
+</div>
+</div>
+<div class="clearfix"></div>
+ </div>
+ <div class="panel-footer">
+ 	<div class="row">
+ 	<div class="col-xs-2"><%= link_to 'Add Products', showproducts_path(:order_id => order_master.id), class: "btn btn-primary btn-sm" %> </div>
+ 	<div class="col-xs-2"> 
+ 	<%= link_to 'Add Address', showaddress_path(:order_id => order_master.id), class: "btn btn-primary btn-sm" %>
+ 	</div>
+	<div class="col-xs-2">
+	<%= link_to "Add add-on's", showaddonproducts_path(:order_id => order_master.id), class: "btn btn-info btn-sm" %>
+	 </div>
+	<div class="col-xs-2"> 
+	<%= link_to 'Add Payments', showpayment_path(:order_id => order_master.id), class: "btn btn-info btn-sm" %></div>
+<div class="col-xs-2"><%= link_to 'Process Order', orderreview_path(:order_id => order_master.id), class: "btn btn-success btn-sm" %> </div>
+
+
+
+	</div>	
+ </div>
+</div>
+<% end %>

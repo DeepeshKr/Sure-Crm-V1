@@ -1,0 +1,111 @@
+<%= bootstrap_form_for @customer , url: newdealerenquiry_path do |f| %>
+
+  <% if @customer.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@customer.errors.count, "error") %> prohibited this customer from being saved:</h2>
+
+      <ul>
+      <% @customer.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+  <div class="panel panel-primary">
+  <div class="panel-heading">
+    <h3 class="panel-title">New Dealer Enquiry</h3>
+  </div>
+  <div class="panel-body">
+ 
+ 
+<div class="row">
+<%= hidden_field_tag :calledno, @calledno %>
+<%= hidden_field_tag :mobile, @mobile %>
+
+  <div class="col-xs-2">
+     <%= f.select(:salute, 
+    options_from_collection_for_select(Salute.all, :name, :name, :selected => @customer.salute), 
+    {}, :class => "form-control")  %>
+  </div>
+  <div class="col-xs-4">
+    <%= f.text_field :first_name,  :class => "form-control", :required => true %>
+  </div>
+  <div class="col-xs-4">
+     <%= f.text_field :last_name,  :class => "form-control" %>
+  </div>
+  <div class="col-xs-1">
+    
+  </div>
+</div>
+  
+ 
+  <div class="row">
+
+  <div class="col-xs-3">
+     <%= f.text_field :mobile,  :class =>"form-control", :readonly => "true" %>
+  </div>
+  <div class="col-xs-3">
+    <%= f.text_field :alt_mobile,  :class =>"form-control", :placeholder => "Phone no", :required => true %>
+  </div>
+  <div class="col-xs-2">
+    
+  </div>
+</div>
+
+ <div class="row">
+ 
+  <div class="col-xs-4">
+
+      <%= f.email_field :emailid,  :class =>"form-control", :placeholder => "email id", :required => true %>
+  </div>
+  <div class="col-xs-4">
+   <%= f.email_field :alt_emailid,  :class =>"form-control", :placeholder => "Alernate email id" %>
+  </div>
+  <div class="col-xs-2">
+    
+  </div>
+</div>
+<div class="row">
+ 
+  <div class="col-xs-4">
+      <%= f.text_field :city,  :class =>"form-control", :placeholder => "City", :required => true %>
+  </div>
+  <div class="col-xs-4">
+  <%= f.select(:state, 
+    options_from_collection_for_select(State.all, :name, :name), 
+    {}, :class => "form-control col-xs-1")  %>
+  </div>
+  <div class="col-xs-2">
+    
+  </div>
+</div>
+
+   <div class="row">
+    <div class="col-xs-10">
+    <strong>Important notes about the enquiry</strong>   
+    </div>
+
+  <div class="col-xs-10">
+  <%= text_area_tag 'description', nil, rows: 10, cols: 25, :placeholder => "Existing profession / what is he doing right now",  :class =>"form-control", label: "Important notes about the enquiy", :required => true %>
+
+  </div>
+  
+  <div class="col-xs-2">
+    
+  </div>
+</div>
+ <br>
+  <div class="row">
+     <div class="col-xs-3">
+<%= text_field_tag(:calledno, nil, :value => @calledno, :class =>"form-control", :readonly => "true", :required => true, label: "Called No") %>
+
+  </div>
+      <div class="col-xs-3 col-xs-offset-5">
+        <%= f.submit "Save New Distributor Enquiry", class: "btn btn-primary" %>
+      </div>
+    
+  </div>
+   </div>
+    
+</div>
+<% end %>

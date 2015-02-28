@@ -1,0 +1,51 @@
+<%= bootstrap_form_for(@customer) do |f| %>
+
+
+
+<div class="row">
+  
+  <div class="col-xs-2">
+  	 <%= f.select(:salute, 
+    options_from_collection_for_select(Salute.all, :name, :name, :selected => @customer.salute), 
+    {}, :class => "form-control")  %>
+  </div>
+  <div class="col-xs-4">
+  	<%= f.text_field :first_name,  :class => "form-control" %>
+  </div>
+  <div class="col-xs-4">
+  	 <%= f.text_field :last_name,  :class => "form-control" %>
+  </div>
+  <div class="col-xs-1">
+  	
+  </div>
+</div>
+  
+ 
+<div class="row">
+  	
+  
+  <div class="col-xs-3">
+  	 <%= f.text_field :mobile, :value => @mobile, :class =>"form-control", :readonly => "true" %>
+  </div>
+  <div class="col-xs-4">
+  	<%= f.text_field :alt_mobile,  :class =>"form-control", :placeholder => "alt mobile no" %>
+  </div>
+  <div class="col-xs-2">
+  	
+  </div>
+</div>
+
+<div class="row">
+ 
+  <div class="col-xs-4">
+  	  <%= f.text_field :emailid,  :class =>"form-control", :placeholder => "email id" %>
+  </div>
+  <div class="col-xs-4">
+   <%= f.text_field :alt_emailid,  :class =>"form-control", :placeholder => "Alernate email id" %>
+  </div>
+  <div class="col-xs-2">
+  	
+  </div>
+</div>
+
+<% end %>

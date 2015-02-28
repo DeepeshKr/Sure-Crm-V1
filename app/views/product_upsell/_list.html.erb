@@ -1,0 +1,31 @@
+<table class="table table-hover">
+  <thead>
+    <tr>
+      <th>prod  </th>
+      <th>Cost</th>
+       <th>Comm</th>
+        <th>SP</th>
+      <th>Postage</th>
+        <th>Ship</th>       
+          
+           
+
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @ropupsprod.each do |d| %>
+      <tr>
+       <td><%= d.prod %></td>
+           <td><%= d.cost %></td>
+       <td><%= d.comm %></td>
+    
+       <td><%= d.sp %></td>
+       
+       <td><%= d.postage %></td>
+        <td><%= d.ship %></td>
+      
+      </tr>
+    <% end %>
+  </tbody>
+</table>

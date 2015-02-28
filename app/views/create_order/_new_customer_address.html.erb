@@ -1,0 +1,81 @@
+
+
+<%= bootstrap_form_for @customer_address , url: addaddress_path, :method => :POST do |f| %>
+ 
+  
+  	  <%= f.hidden_field :customer_id %>
+   <%= hidden_field_tag :order_id, @order_master.id %>
+ 
+ <div class="row">
+      
+     <div class="col-xs-10">
+       
+        <%= f.text_field :address1,  :label => "Customer Address", :class =>"form-control", :placeholder => "Address Required", :required => true  %>
+      </div>
+  <div class="clearfix"></div>
+     
+     <div class="col-xs-10">
+          <%= f.text_field :address2, hide_label: :true,  :class =>"form-control", :placeholder => "Address", :required => true %>
+      </div>
+    <div class="clearfix"></div>
+    
+     <div class="col-xs-10">
+        <%= f.text_field :address3, hide_label: :true,  :class =>"form-control", :placeholder => "Address" %>
+      </div>
+   <div class="clearfix"></div>
+  
+ <div class="col-xs-10">
+  
+    <%= f.text_field :landmark, hide_label: :true,  :class =>"form-control", :placeholder => "Landmark" %>
+  </div>
+   <div class="clearfix"></div>
+  
+ <div class="col-xs-6">
+     
+     <%= f.select(:state, 
+    options_from_collection_for_select(State.all, :name, :name), 
+    {}, :class => "form-control col-xs-1")  %>
+  </div>
+  
+ <div class="col-xs-4">
+    
+    <%= f.text_field :city,   :class =>"form-control", :placeholder => "City", :required => true %>
+  </div>
+    <div class="col-xs-2">
+      <%= f.text_field :pincode,   :class =>"form-control", :placeholder => "Pincode" %>
+  </div>
+ </div>
+ 
+
+  <div class="row">
+ <div class="col-xs-6">
+   
+    <%= f.text_field :district,   :class =>"form-control", :placeholder => "District"  %>
+  </div>
+  <div class="col-xs-6">
+        <%= f.text_field :country,   :class =>"form-control", :placeholder => "Country"  %>
+  </div>
+</div>
+  <div class="row">
+   
+    <div class="col-xs-4">
+      <%= f.text_field :telephone1,   :class =>"form-control", :placeholder => "Alt Telephone", :required => true  %>
+    </div>
+    
+    <div class="col-xs-4">
+      <%= f.text_field :telephone2,   :class =>"form-control", :placeholder => "Telephone"  %>
+    </div>
+    
+    <div class="col-xs-4">
+      <%= f.text_field :fax,   :class =>"form-control", :placeholder => "Fax"  %>
+    </div>
+  </div>
+   
+  
+  
+  <div class="row">
+   <div class="col-xs-4 col-md-offset-8">
+    <%= f.submit "Add New Address", class: "btn btn-success" %>
+   </div>
+  </div>
+<% end %>

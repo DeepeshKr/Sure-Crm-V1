@@ -1,0 +1,2 @@
+module ProductTrainingManualsHelper
+end

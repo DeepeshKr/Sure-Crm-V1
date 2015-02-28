@@ -1,0 +1,93 @@
+<%= form_for(@order_line) do |f| %>
+  <% if @order_line.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@order_line.errors.count, "error") %> prohibited this order_line from being saved:</h2>
+
+      <ul>
+      <% @order_line.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :orderid %><br>
+    <%= f.number_field :orderid %>
+  </div>
+  <div class="field">
+    <%= f.label :orderdate %><br>
+    <%= f.datetime_select :orderdate %>
+  </div>
+  <div class="field">
+    <%= f.label :employeecode %><br>
+    <%= f.text_field :employeecode %>
+  </div>
+  <div class="field">
+    <%= f.label :employee_id %><br>
+    <%= f.number_field :employee_id %>
+  </div>
+  <div class="field">
+    <%= f.label :external_ref_no %><br>
+    <%= f.text_field :external_ref_no %>
+  </div>
+  <div class="field">
+    <%= f.label :productvariant_id %><br>
+    <%= f.number_field :productvariant_id %>
+  </div>
+  <div class="field">
+    <%= f.label :pieces %><br>
+    <%= f.number_field :pieces %>
+  </div>
+  <div class="field">
+    <%= f.label :subtotal %><br>
+    <%= f.text_field :subtotal %>
+  </div>
+  <div class="field">
+    <%= f.label :taxes %><br>
+    <%= f.text_field :taxes %>
+  </div>
+  <div class="field">
+    <%= f.label :shipping %><br>
+    <%= f.text_field :shipping %>
+  </div>
+  <div class="field">
+    <%= f.label :codcharges %><br>
+    <%= f.text_field :codcharges %>
+  </div>
+  <div class="field">
+    <%= f.label :total %><br>
+    <%= f.text_field :total %>
+  </div>
+  <div class="field">
+    <%= f.label :orderlinestatusmaster_id %><br>
+    <%= f.number_field :orderlinestatusmaster_id %>
+  </div>
+  <div class="field">
+    <%= f.label :productline_id %><br>
+    <%= f.number_field :productline_id %>
+  </div>
+  <div class="field">
+    <%= f.label :description %><br>
+    <%= f.text_area :description %>
+  </div>
+  <div class="field">
+    <%= f.label :estimatedshipdate %><br>
+    <%= f.datetime_select :estimatedshipdate %>
+  </div>
+  <div class="field">
+    <%= f.label :estimatedarrivaldate %><br>
+    <%= f.datetime_select :estimatedarrivaldate %>
+  </div>
+  <div class="field">
+    <%= f.label :orderchecked %><br>
+    <%= f.datetime_select :orderchecked %>
+  </div>
+  <div class="field">
+    <%= f.label :actualshippate %><br>
+    <%= f.datetime_select :actualshippate %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

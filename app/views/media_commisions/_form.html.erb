@@ -1,0 +1,28 @@
+<%= bootstrap_form_for(@media_commision) do |f| %>
+  <% if @media_commision.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@media_commision.errors.count, "error") %> prohibited this media_commision from being saved:</h2>
+
+      <ul>
+      <% @media_commision.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.text_field :name %>
+  </div>
+  <div class="field">
+    <%= f.text_area :description %>
+  </div>
+  <div class="row">
+      <div class="col-xs-2 col-md-offset-5">
+        
+        <%= f.submit  class: "btn btn-primary" %>
+  
+        
+      </div>
+  </div>
+<% end %>

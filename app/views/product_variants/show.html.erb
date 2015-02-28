@@ -1,0 +1,49 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @product_variant.name %>
+</p>
+
+<p>
+  <strong>Productmasterid:</strong>
+  <%= @product_variant.productmasterid %>
+</p>
+
+<p>
+  <strong>Variantbarcode:</strong>
+  <%= @product_variant.variantbarcode %>
+</p>
+
+<p>
+  <strong>Price:</strong>
+  <%= @product_variant.price %>
+</p>
+
+<p>
+  <strong>Taxes:</strong>
+  <%= @product_variant.taxes %>
+</p>
+
+<p>
+  <strong>Total:</strong>
+  <%= @product_variant.total %>
+</p>
+
+<p>
+  <strong>Extproductcode:</strong>
+  <%= @product_variant.extproductcode %>
+</p>
+
+<p>
+  <strong>Description:</strong>
+  <%= @product_variant.description %>
+</p>
+
+<p>
+  <strong>Activeid:</strong>
+  <%= @product_variant.activeid %>
+</p>
+
+<%= link_to 'Edit', edit_product_variant_path(@product_variant) %> |
+<%= link_to 'Back', product_variants_path %>

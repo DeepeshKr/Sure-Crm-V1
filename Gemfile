@@ -2,20 +2,41 @@ source 'https://rubygems.org'
 
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '4.1.8'
-# Use mysql as the database for Active Record
-gem 'mysql2'
-
+gem 'rails', '4.2.0'
+# Use postgresql as the database for Active Record
+gem 'pg'
 #visual view of models
-gem 'rails-erd', '~> 1.1.0'
+#gem 'rails-erd'
+gem 'rails-erd', github: 'ready4god2513/rails-erd', branch: 'rails-4.2-support-fix'
+#visual view of models dependecy
+gem 'ruby-graphviz'
+
+#intall luhn for credit card verification => not used for now
+gem 'luhn'
+
+#get multi form  
+#gem 'wicked'
+
+
+#get auto complete
+gem 'rails4-autocomplete'
+#get jquery ui is required for auto complete
+gem "jquery-ui-rails"
 
 #login gem
 gem 'devise', github: 'plataformatec/devise'
+#before_filter :admin_only, :except => :show
 
 # Use SCSS for stylesheets
 #gem 'sass-rails', '~> 4.0.3'
 # Use boostrap for styling
 gem 'bootstrap-sass',       '3.2.0.0'
+
+#Rails Bootstrap Forms for styling all bootstrap forms
+gem 'bootstrap_form'
+
+#date picker
+gem 'bootstrap-datepicker-rails'
 
 # Use boostrap for testing
 group :test do
@@ -29,7 +50,7 @@ gem 'uglifier', '>= 1.3.0'
 # Use CoffeeScript for .js.coffee assets and views
 gem 'coffee-rails', '~> 4.0.0'
 # See https://github.com/sstephenson/execjs#readme for more supported runtimes
-# gem 'therubyracer',  platforms: :ruby
+ gem 'therubyracer',  platforms: :ruby
 
 # Use jquery as the JavaScript library
 gem 'jquery-rails'
@@ -47,16 +68,25 @@ gem 'spring',        group: :development
 gem 'bcrypt', '~> 3.1.7'
 # gem 'bcrypt',               '3.1.7'
 # Use unicorn as the app server
-# gem 'unicorn'
+#gem 'unicorn'
 
+#gems for Oracle
+gem 'ruby-oci8', '~>2.1.5'
+#gem 'activerecord-oracle_enhanced-adapter', :git => 'git://github.com/rsim/oracle-enhanced.git'
+gem 'activerecord-oracle_enhanced-adapter', github: 'rsim/oracle-enhanced', branch: 'rails42'
+#gem "activerecord-oracle_enhanced-adapter", "~> 1.5.0"
+
+gem 'upmin-admin'
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
 
 # Use debugger
 # gem 'debugger', group: [:development, :test]
-
+#gem 'request-log-analyzer'
 group :production do
-  gem 'pg',             '0.17.1'
+  
   gem 'rails_12factor', '0.0.2'
-  gem 'unicorn',        '4.8.3'
+  #gem 'unicorn',        '4.8.3'
+  #gem 'passenger'
+
 end

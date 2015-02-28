@@ -1,0 +1,19 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  name: MyString
+  campaignid: 1
+  starttime: 2014-12-18 10:32:10
+  endtime: 2014-12-18 10:32:10
+  productvariantid: 1
+  filename: MyString
+  description: MyText
+
+two:
+  name: MyString
+  campaignid: 1
+  starttime: 2014-12-18 10:32:10
+  endtime: 2014-12-18 10:32:10
+  productvariantid: 1
+  filename: MyString
+  description: MyText

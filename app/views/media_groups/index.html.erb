@@ -1,0 +1,29 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Listing Media Groups</h1>
+
+<table class="table table-hover">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Description</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @media_groups.each do |media_group| %>
+      <tr>
+        <td><%= media_group.name %></td>
+        <td><%= media_group.description %></td>
+        <td><%= link_to 'Show', media_group %></td>
+        <td><%= link_to 'Edit', edit_media_group_path(media_group) %></td>
+        <td><%= link_to 'Destroy', media_group, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Media group', new_media_group_path,  class: "btn btn-info" %>

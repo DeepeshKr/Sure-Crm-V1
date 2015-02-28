@@ -1,0 +1,1 @@
+json.extract! @interaction_master, :id, :createdon, :resolveby, :interactionstatusid, :customerid, :interactioncategoryid, :productvariantid, :orderid, :interactionpriorityid, :campaignplaylistid, :notes, :created_at, :updated_at

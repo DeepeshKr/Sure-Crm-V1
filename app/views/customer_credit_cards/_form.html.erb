@@ -1,0 +1,40 @@
+<%= form_for(@customer_credit_card) do |f| %>
+  <% if @customer_credit_card.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@customer_credit_card.errors.count, "error") %> prohibited this customer_credit_card from being saved:</h2>
+
+      <ul>
+      <% @customer_credit_card.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :customer_id %><br>
+    <%= f.text_field :customer_id %>
+  </div>
+  <div class="field">
+    <%= f.label :card_no %><br>
+    <%= f.text_field :card_no  %>
+    <input id="credit_card_input"  name="credit_card_input" maxlength="16" placeholder="Credit Card"
+size="15" class="form-control">
+</input>
+  </div>
+  <div class="field">
+    <%= f.label :name_on_card %><br>
+    <%= f.text_field :name_on_card %>
+  </div>
+  <div class="field">
+    <%= f.label :expiry_mon %><br>
+    <%= f.text_field :expiry_mon %>
+  </div>
+  <div class="field">
+    <%= f.label :expiry_yr_string %><br>
+    <%= f.text_field :expiry_yr_string %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

@@ -1,0 +1,91 @@
+<%= bootstrap_form_for @customer , url: addcustomer_path do |f| %>
+
+  <% if @customer.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@customer.errors.count, "error") %> prohibited this customer from being saved:</h2>
+
+      <ul>
+      <% @customer.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+  <div class="panel panel-primary">
+  <div class="panel-heading">
+    <h3 class="panel-title">Create New Customer Order</h3>
+  </div>
+  <div class="panel-body">
+  
+<div class="row">
+<%= hidden_field_tag :calledno, @calledno %>
+<%= hidden_field_tag :mobile, @mobile %>
+
+  <div class="col-xs-2">
+  	 <%= f.select(:salute, 
+    options_from_collection_for_select(Salute.all, :name, :name, :selected => @customer.salute), 
+    {}, :class => "form-control")  %>
+  </div>
+  <div class="col-xs-4">
+  	<%= f.text_field :first_name,  :class => "form-control", :required => true %>
+  </div>
+  <div class="col-xs-4">
+  	 <%= f.text_field :last_name,  :class => "form-control" %>
+  </div>
+  <div class="col-xs-1">
+  	
+  </div>
+</div>
+  
+ 
+  <div class="row">
+   
+  <div class="col-xs-3">
+  	 <%= f.text_field :mobile, :value => @mobile, :class =>"form-control", :readonly => "true" %>
+  </div>
+  <div class="col-xs-3">
+  	<%= f.text_field :alt_mobile,  :class =>"form-control", :placeholder => "alt mobile no" %>
+  </div>
+  <div class="col-xs-2">
+  	
+  </div>
+</div>
+
+ <div class="row">
+ 
+  <div class="col-xs-4">
+  	  <%= f.email_field :emailid,  :class =>"form-control", :placeholder => "email id" %>
+  </div>
+  <div class="col-xs-4">
+   <%= f.email_field :alt_emailid,  :class =>"form-control", :placeholder => "Alernate email id" %>
+  </div>
+  <div class="col-xs-2">
+  	
+  </div>
+</div>
+
+
+	 
+ 
+  <div class="row">
+  
+  	  <div class="col-xs-3 col-xs-offset-8">
+  	  	<%= f.submit "Create Order", class: "btn btn-primary" %>
+  	  </div>
+    
+  </div>
+   </div>
+    <div class="panel-footer">
+ <div class="row">
+   <div class="col-xs-2 ">
+        <%= link_to 'Distributor Details', neworder_path(:calledno => @calledno, :mobile => @mobile), class: "btn btn-info btn-sm" %>
+      </div>
+   <div class="col-xs-2 ">
+        <%= link_to 'New Distributor', newdealer_path(:calledno => @calledno, :mobile => @mobile), class: "btn btn-info btn-sm" %>
+      </div>
+      </div>
+    </div>
+</div>
+<% end %>
+<hr/>
+  <%= render "customers/customer_list" %>

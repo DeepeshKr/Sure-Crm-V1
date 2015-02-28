@@ -1,0 +1,58 @@
+<%= render 'customers/details' %>
+<hr>
+<div class="panel panel-primary">
+  <div class="panel-heading">
+    <h3 class="panel-title">Create New Service Request</h3>
+  </div>
+  <div class="panel-body">
+  
+<%= bootstrap_form_for @interaction_master, url: newticket_path do |f| %>
+  <% if @interaction_master.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@interaction_master.errors.count, "error") %> prohibited this interaction_master from being saved:</h2>
+
+      <ul>
+      <% @interaction_master.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+ <%= f.hidden_field :customer_id %>
+  <%= f.hidden_field :interaction_status_id %> 
+ <%= hidden_field_tag :product_variant_id, @product_variant_id %>
+   <%= hidden_field_tag :orderid, @orderid %>
+   <%= hidden_field_tag :product_variant_id,  @campaign_playlist_id %>
+   <div class="row">
+                            
+                             <div class="col-xs-8">  
+                              <%= f.select(:interaction_category_id, 
+                              options_from_collection_for_select(@interactioncategorylist, :id, :name), 
+                              {}, :class => "form-control")  %>
+                            </div>
+                             <div class="col-xs-2">
+   <%= f.select(:interaction_priority_id, 
+                              options_from_collection_for_select(@interactionprioritylist, :id, :name), 
+                              {:label => "Priority"}, :class => "form-control")  %>
+                              </div>
+                        </div>
+  
+ 
+  <div class="row">
+                            
+                             <div class="col-xs-10 "> 
+                                <%= text_area_tag :description, nil, {:class => "form-control", :placeholder => "Details of problem as explained by the customers own words", :required => true}  %>
+                             </div>
+    
+  </div>
+  <br>
+  <div class="row">
+      <div class="col-xs-2 col-xs-offset-8">
+        <%= f.submit "Create", class: "btn btn-primary" %>
+      </div>
+    
+  </div>
+<% end %>
+
+</div>
+</div>

@@ -1,0 +1,14 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @corporate_type.name %>
+</p>
+
+<p>
+  <strong>Description:</strong>
+  <%= @corporate_type.description %>
+</p>
+
+<%= link_to 'Edit', edit_corporate_type_path(@corporate_type) %> |
+<%= link_to 'Back', corporate_types_path %>

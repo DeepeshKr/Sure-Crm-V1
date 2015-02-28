@@ -1,0 +1,42 @@
+<h1>Listing product_masters</h1>
+
+<table class="table table-hover">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Categoryid</th>
+      <th>Inventoryid</th>
+      <th>Barcode</th>
+      <th>Price</th>
+      <th>Taxes</th>
+      <th>Total</th>
+      <th>Extproductcode</th>
+      <th>Description</th>
+       <th>Active</th>
+      <th ></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @product_masters.each do |product_master| %>
+      <tr>
+      	
+        <td><%= product_master.name %></td>
+        <td><%= product_master.product_category.name if product_master.product_category.present? %></td>
+        <td><%= product_master.product_inventory_code.name if product_master.product_inventory_code.present? %></td>
+        <td><%= product_master.barcode %></td>
+        <td><%= product_master.price %></td>
+        <td><%= product_master.taxes %></td>
+        <td><%= product_master.total %></td>
+        <td><%= product_master.extproductcode %></td>
+        <td><%= product_master.description %></td>
+          <td><%= product_master.product_active_code.name if product_master.product_active_code.present?%></td>
+        <td><%= link_to 'Show', product_master %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+

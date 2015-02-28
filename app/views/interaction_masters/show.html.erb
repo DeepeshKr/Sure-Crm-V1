@@ -1,0 +1,137 @@
+<p id="notice"><%= notice %></p>
+<div class="row">
+<div class="col-xs-6">
+<div class="row" >
+<h3>  <%= @interaction_master.customer.fullname if @interaction_master.customer %> </h3>
+
+<p><%= @interaction_master.interaction_category.name if @interaction_master.interaction_category %> </p>
+</div>
+
+</div>
+<div class="col-xs-6">
+<div class="row" >
+		<div class="col-xs-6">
+		 <strong>Createdon:</strong>
+  <%= @interaction_master.createdon.strftime("%d-%b-%Y") %>
+	</div>
+	<div class="col-xs-6">
+		<strong>Resolve by:</strong>
+  <%= @interaction_master.resolveby.strftime("%d-%b-%Y") %>
+	</div>
+	<div class="col-xs-6">
+		  <strong>Status</strong>
+  <%= @interaction_master.interaction_status.internal_description if @interaction_master.interaction_status %>
+	</div>
+	
+	<div class="col-xs-6">
+		
+	
+		<strong>Interaction priority:</strong>
+  <%= @interaction_master.interaction_priority.name if @interaction_master.interaction_priority%>
+	</div>
+</div>
+</div>
+
+<div class="row" >
+	<% if @interaction_master.orderid.present? %>
+			<div class="col-xs-4">
+				 <strong>Product:</strong>
+		  <%= @interaction_master.product_variant.name if @interaction_master.product_variant %>
+			</div>
+	<% end %>
+
+
+	<% if @interaction_master.orderid.present? %>
+			<div class="col-xs-2">
+				 <strong>Order:</strong>
+		  <%= @interaction_master.orderid %>
+			</div>
+	<% end %>
+
+	<% if @interaction_master.campaign_playlist_id.present? %>
+	<div class="col-xs-4">
+		<strong>Campaign play list :</strong>
+  			<%= @interaction_master.campaign_playlist.playlistinfo if @interaction_master.campaign_playlist %>
+	</div>
+	<% end %>
+	
+</div> 
+
+<div class="row">
+	<div class="col-xs-12">
+		  <strong>Notes:</strong>
+  <%= @interaction_master.notes %>
+	</div>
+</div>
+
+
+<%= link_to 'Edit', edit_interaction_master_path(@interaction_master) %> |
+<%= link_to 'Back', interaction_masters_path %>
+
+<hr/>
+<div class="panel panel-primary">
+  <!-- Default panel contents -->
+  <div class="panel-heading">Service Ticket Interactions</div>
+
+<%= render "interaction_transcripts/list" %>
+
+
+
+<br>
+	<div class="panel-footer">
+	<div class="row">
+		<div class="col-xs-6">
+		 <button type="button" class="btn btn-success " data-toggle="modal" data-target="#CustomerModal">
+                      Add Customer Comments
+                  </button>
+			 
+		</div>
+		<div class="col-xs-6">
+		 <button type="button" class="btn btn-success " data-toggle="modal" data-target="#EmployeeModal">
+                      Add Employee Comments
+                  </button>
+			
+		</div>
+		</div>
+	</div>
+</div>
+
+
+<!-- Modal -->
+<div class="modal fade" id="CustomerModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">Add Customer Comments</h4>
+      </div>
+      <div class="modal-body">
+         <%= render 'interaction_transcripts/cm_comments' %>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+       <!--  <button type="button" class="btn btn-primary">Save changes</button> -->
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- Modal -->
+<div class="modal fade" id="EmployeeModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">Add Your Comments</h4>
+      </div>
+      <div class="modal-body">
+         <%= render 'interaction_transcripts/em_comments' %>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+       <!--  <button type="button" class="btn btn-primary">Save changes</button> -->
+      </div>
+    </div>
+  </div>
+</div>

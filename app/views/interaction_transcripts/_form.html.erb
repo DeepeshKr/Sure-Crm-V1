@@ -1,0 +1,29 @@
+<%= form_for(@interaction_transcript) do |f| %>
+  <% if @interaction_transcript.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@interaction_transcript.errors.count, "error") %> prohibited this interaction_transcript from being saved:</h2>
+
+      <ul>
+      <% @interaction_transcript.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :interactionid %><br>
+    <%= f.number_field :interactionid %>
+  </div>
+  <div class="field">
+    <%= f.label :interactionuserid %><br>
+    <%= f.text_field :interactionuserid %>
+  </div>
+  <div class="field">
+    <%= f.label :description %><br>
+    <%= f.text_area :description %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

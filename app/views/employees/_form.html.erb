@@ -1,4 +1,4 @@
-<%= form_for(@employee) do |f| %>
+<%= bootstrap_form_for(@employee) do |f| %>
   <% if @employee.errors.any? %>
     <div id="error_explanation">
       <h2><%= pluralize(@employee.errors.count, "error") %> prohibited this employee from being saved:</h2>
@@ -12,69 +12,83 @@
   <% end %>
 
   <div class="field">
-	<label>Name</label>
-	<br>
+	
+	<div class="col-xs-2">
+
     
      <%= f.select(:title, 
     options_from_collection_for_select(Salute.all, :name, :name), 
-    {:prompt => 'Please Choose'}, :class => "form-control col-xs-1")  %>
- 
+    {})  %>
+     </div>
+ <div class="col-xs-4">
+
   
-    <%= f.text_field :first_name , :class => "form-control col-xs-4"%>
- 
+    <%= f.text_field :first_name %>
+  </div>
+   <div class="col-xs-4">
+
+    <%= f.text_field :last_name %>
+  </div>
+  <div class="clearfix"> </div>
+  <br/>
+  <div class="col-xs-2">
+  
+    <%= f.text_field :employeecode %>
+  </div>
+  <div class="col-xs-4">
    
-    <%= f.text_field :last_name , :class => "form-control col-xs-4"%>
+    <%= f.text_field :designation %>
   </div>
-  <div class="field">
-    <%= f.label :employeecode %><br>
-    <%= f.text_field :employeecode , :class => "form-control"%>
+  <div class="col-xs-6">
+   
+    <%= f.text_field :location %>
   </div>
-  <div class="field">
-    <%= f.label :designation %><br>
-    <%= f.text_field :designation , :class => "form-control" %>
+  <div class="col-xs-4">
+   
+    <%= f.text_field :mobile %>
   </div>
-  <div class="field">
-    <%= f.label :mobile %><br>
-    <%= f.text_field :mobile , :class => "form-control"%>
+  <div class="col-xs-8">
+    
+    <%= f.text_field :emailid %>
   </div>
-  <div class="field">
-    <%= f.label :emailid %><br>
-    <%= f.text_field :emailid , :class => "form-control"%>
-  </div>
-  <div class="field">
-    <%= f.label :location %><br>
-    <%= f.text_field :location , :class => "form-control"%>
-  </div>
-  <div class="field">
-    <%= f.label :employment_type_id %><br>
+  
+  <div class="col-xs-4">
      <%= f.select(:employment_type_id, 
-    options_from_collection_for_select(EmploymentType.all, :id, :name), 
-    {:prompt => 'Please Choose'}, :class => "form-control")  %>
+    options_from_collection_for_select(EmploymentType.all, :id, :name, selected: @employee.employment_type_id), 
+    {:prompt => 'Please Choose', label: " Employment Type"})  %>
    
   </div>
-  <div class="field">
-    <%= f.label :employee_role_id %><br>
+  <div class="col-xs-4">
      <%= f.select(:employee_role_id, 
-    options_from_collection_for_select(EmployeeRole.all, :id, :name), 
-    {:prompt => 'Please Choose'}, :class => "form-control")  %>
+    options_from_collection_for_select(EmployeeRole.all, :id, :name, selected: @employee.employee_role_id), 
+    {:prompt => 'Please Choose', label: " Employee Role"})  %>
    
   </div>
-  <div class="field">
-    <%= f.label :reporting_to_id %><br>
+  <div class="col-xs-4">
      <%= f.select(:reporting_to_id, 
-    options_from_collection_for_select(Employee.all, :id, :fullname), 
-    {:prompt => 'Please Choose'}, :class => "form-control")  %>
+    options_from_collection_for_select(Employee.all, :id, :fullname, selected: @employee.reporting_to_id), 
+    {:prompt => 'Please Choose', label: " Reporting to"})  %>
     
   </div>
+  <div class="col-xs-4">
+   
+    <%= f.check_box :enablelogin, label: " Enable Login" %>
+   
+  </div>
+  <div class="col-xs-1">
+   
+  </div>
+   <div class="clearfix"> </div>
   <div class="field">
-    <%= f.label :enablelogin %><br>
-    <%= f.check_box :enablelogin %>
+   
+    <%= f.text_area :description, label: " Employee Notes" %>
   </div>
-  <div class="field">
-    <%= f.label :description %><br>
-    <%= f.text_area :description, class:"form-control" %>
+
+<div class="row">
+   <div class="col-xs-2 col-xs-offset-8">
+  
+  <%= f.submit class: "btn btn-primary" %>
+  
   </div>
-  <div class="actions">
-    <%= f.submit, class => "btn btn-primary" %>
-  </div>
+  </div>  
 <% end %>

@@ -1,0 +1,17 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  changelogtype_id: 1
+  refid: 1
+  name: MyString
+  description: MyText
+  username: MyString
+  ip: MyString
+
+two:
+  changelogtype_id: 1
+  refid: 1
+  name: MyString
+  description: MyText
+  username: MyString
+  ip: MyString

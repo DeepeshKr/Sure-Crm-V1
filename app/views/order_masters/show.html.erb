@@ -1,0 +1,151 @@
+<p id="notice"><%= notice %></p>
+<div class="row">
+	<div class="col-xs-4">
+		<strong>Date:</strong>   <%= @order_master.orderdate %>
+	</div>
+	
+	<div class="col-xs-2">
+		<strong>Billno:</strong>   <%= @order_master.billno %>
+	</div>
+	<div class="col-xs-2">
+		<strong>External order no:</strong>   <%= @order_master.external_order_no %>
+	</div>
+	<div class="col-xs-2">
+		
+	</div>
+</div>
+<div class="row">
+
+	<div class="col-xs-6">
+		<h4><%= @order_master.customer.fullname%></h4>
+	</div>
+	<div class="col-xs-6">
+	<div class="row">
+		<div class="col-xs-6">
+			Mobile No <%= @order_master.customer.mobile%> <br/>
+			Mobile No <%= @order_master.customer.alt_mobile%> 
+		</div>
+		<div class="col-xs-6">
+		Email Id	<%= @order_master.customer.emailid%> <br/>
+		Email Id	<%= @order_master.customer.alt_emailid%>
+		</div>
+	</div>
+</div>
+<div class="clearfix"></div>
+<div class="row">
+		<div class="col-xs-12 pull-left"><h2> <div class="text-left">	Customer Address </div> </h2> 
+		<hr/>	</div>
+		<div class="col-xs-8 col-xs-offset-1">
+		<%= render 'customer_addresses/quickadd' %>
+		</div> 
+</div>
+
+<div class="row">
+		<div class="col-xs-12 pull-left"><h2> <div class="text-left">	Add More Products </div> </h2> 
+		<hr/>	</div>
+		<div class="col-xs-8 col-xs-offset-1">
+		 <%= render 'order_lines/quickorder' %>
+		</div> 
+</div>
+ <div class="clearfix"></div>
+ <div class="row">
+	<div class="col-xs-12 pull-left"><h2><div class="text-left">	Ordered Product List </div></h2> <hr/>	</div>
+<div class="col-xs-8 col-xs-offset-1">
+		 <%= render 'order_lines/orderlines' %>
+		</div> 
+</div>	
+<div class="clearfix"></div>
+<div class="row">
+	<div class="col-xs-12 pull-left"><h2><div class="text-left">	Order Summary </div></h2> <hr/>	</div>
+	
+<div class="clearfix"></div>
+	<div class="col-xs-4">
+	<table >
+		  <tr>
+		<td> <strong>Pieces:</strong>   </td>
+		<td><%= @order_master.pieces %> </td>
+		</tr>
+		<tr>
+		<td><strong>Order Status:</strong></td>
+		<td> <%= @order_master.order_status_master.name rescue nil%></td>
+		</tr>
+		<tr>
+		<td><strong>Payment mode:</strong>  </td>
+		<td><%= @order_master.orderpaymentmode_id rescue nil%> </td>
+		   </tr>
+		   <tr>
+		<td> <strong>Play list:</strong></td>
+		<td><%= @order_master.campaign_playlist.name rescue nil%> </td>		   </tr>
+		     <tr>
+		<td><strong>Campaign:</strong> </td>
+		<td><%= @order_master.campaign_playlist.campaign.name rescue nil%> </td>
+		   </tr>
+		   <td><strong>Employee code:</strong> </td>
+		<td>  <%= @order_master.employeecode %> </td>
+		   </tr>
+		   <td><strong>Employee:</strong> </td>
+		<td><%= @order_master.employee_id %> </td>
+		   </tr>
+		</table>
+   
+   
+	</div>
+
+<div class="col-xs-5 col-xs-offset-2 text-right">
+		<table class="table table-hover">
+		  <tr>
+		<td> <strong>Subtotal:</strong>   </td>
+		<td> <%= @order_master.subtotal %></td>
+		</tr>
+		<tr>
+		<td> <strong>Taxes:</strong></td>
+		<td>  <%= @order_master.taxes %></td>
+		</tr>
+		<tr>
+		<td><strong>Shipping:</strong>  </td>
+		<td><%= @order_master.shipping %> </td>
+		   </tr>
+		   <tr>
+		<td> <strong>Cod charges:</strong></td>
+		<td> <%= @order_master.codcharges %></td>
+		   </tr>
+		     <tr>
+		<td><strong>Total:</strong> </td>
+		<td><%= @order_master.total %> </td>
+		   </tr>
+		   </table>
+	</div>
+
+</div>
+<div class="col-xs-1">
+<strong>Notes:</strong>
+<div class="col-xs-10">
+ 
+  <%= @order_master.notes %>
+</div>
+
+</div>
+<div class="clearfix"></div>
+
+	<div class="row">
+	<div class="col-xs-12 pull-left"><h2><div class="text-left">	Payment Mode </div></h2> <hr/>
+	<div class="col-xs-6">
+	</div>	
+	<div class="col-xs-6">
+	</div>
+	</div>
+<div class="clearfix"></div>
+
+	<div class="row">
+<div class="col-xs-3">
+<%= link_to 'Edit', edit_order_master_path(@order_master), class: "btn btn-primary" %> 
+</div>
+<div class="col-xs-3 ">
+<%= link_to 'Back', order_masters_path, class: "btn btn-primary" %>
+</div>
+<div class="col-xs-4 pull-right">
+<%= link_to 'Process Order', order_masters_path, class: "btn btn-success btn-lg" %>
+</div>
+	</div>
+
+

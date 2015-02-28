@@ -10,72 +10,145 @@
       </ul>
     </div>
   <% end %>
+  <div class="row">
+<div class="row">
+  <div class="col-xs-1">
+  	  <%= f.number_field :customer_id %>
+  </div>
+  </div>
+ <div class="row">
+ 	<div class="col-xs-1">
+ 	 <%= f.label :name, "This is" %>
+ </div>
+  <div class="col-xs-8">
+    <%= f.select(:name, 
+    options_from_collection_for_select(AddressType.all, :name, :name), 
+    {:prompt => 'Please Choose'}, :class => "form-control col-xs-1")  %>
+   
+  </div>
+  </div>
+  <div class="row">
+		  <div class="col-xs-1">
+		 	 <%= f.label :address1, "Address" %>
+		 </div>
+		 <div class="col-xs-8">
+		   
+		    <%= f.text_field :address1,   :class =>"form-control", :placeholder => "Address"  %>
+		  </div>
+ </div>
 
-  <div class="field">
-    <%= f.label :customer_id %><br>
-    <%= f.number_field :customer_id %>
+  	<div class="row">
+		  <div class="col-xs-1">
+		 	 <%= f.label :address2, "Address" %>
+		 </div>
+		 <div class="col-xs-8">
+		      <%= f.text_field :address2,   :class =>"form-control", :placeholder => "Address" %>
+		  </div>
+	</div>
+  <div class="row">
+		<div class="col-xs-1">
+		 	 <%= f.label :address3, "Address" %>
+		 </div>
+		 <div class="col-xs-8">
+		    <%= f.text_field :address3,   :class =>"form-control", :placeholder => "Address" %>
+		  </div>
+ </div>
+  <div class="row">
+  <div class="col-xs-1">
+ 	 <%= f.label :landmark %>
+ </div>
+ <div class="col-xs-8">
+  
+    <%= f.text_field :landmark,   :class =>"form-control", :placeholder => "Landmark" %>
   </div>
-  <div class="field">
-    <%= f.label :name %><br>
-    <%= f.text_field :name %>
   </div>
-  <div class="field">
-    <%= f.label :address1 %><br>
-    <%= f.text_field :address1 %>
+  <div class="row">
+  	<div class="col-xs-1">
+ 	 <%= f.label :state, "State" %>
+ </div>
+ <div class="col-xs-3">
+     
+     <%= f.select(:state, 
+    options_from_collection_for_select(State.all, :name, :name), 
+    {:prompt => 'Please Choose'}, :class => "form-control col-xs-1")  %>
   </div>
-  <div class="field">
-    <%= f.label :address2 %><br>
-    <%= f.text_field :address2 %>
+  <div class="col-xs-1">
+ 	 <%= f.label :city, "City" %>
+ </div>
+ <div class="col-xs-2">
+    
+    <%= f.text_field :city,   :class =>"form-control", :placeholder => "City" %>
   </div>
-  <div class="field">
-    <%= f.label :address3 %><br>
-    <%= f.text_field :address3 %>
+    <div class="col-xs-1">
+ 	 <%= f.label :pincode, "PINCODE" %>
+ </div>
+  <div class="col-xs-1">
+      <%= f.text_field :pincode,   :class =>"form-control", :placeholder => "Pincode" %>
   </div>
-  <div class="field">
-    <%= f.label :landmark %><br>
-    <%= f.text_field :landmark %>
+</div>
+  <div class="row">
+ 
+   </div>
+  <div class="row">
+     <div class="col-xs-1">
+     	 <%= f.label :district, "District" %>
+     </div>
+ <div class="col-xs-4">
+   
+    <%= f.text_field :district,   :class =>"form-control", :placeholder => "District"  %>
   </div>
-  <div class="field">
-    <%= f.label :city %><br>
-    <%= f.text_field :city %>
+   </div>
+  <div class="row">
+     <div class="col-xs-1">
+ <%= f.label :country %>
+  	
   </div>
-  <div class="field">
-    <%= f.label :pincode %><br>
-    <%= f.text_field :pincode %>
+  <div class="col-xs-4">
+  	    <%= f.text_field :country,   :class =>"form-control", :placeholder => "Country"  %>
   </div>
-  <div class="field">
-    <%= f.label :state %><br>
-    <%= f.text_field :state %>
+</div>
+  <div class="row">
+	 <div class="col-xs-1">
+	 	    <%= f.label :telephone1 %>
+	 </div>
+	  <div class="col-xs-2">
+	    <%= f.text_field :telephone1,   :class =>"form-control", :placeholder => "Telephone"  %>
+	  </div>
+	  
+	  <div class="col-xs-2">
+	    <%= f.text_field :telephone2,   :class =>"form-control", :placeholder => "Telephone"  %>
+	  </div>
+	  <div class="col-xs-1">
+  	    <%= f.label :fax %>
+  		</div>
+	  <div class="col-xs-2">
+	    <%= f.text_field :fax,   :class =>"form-control", :placeholder => "Fax"  %>
+	  </div>
   </div>
-  <div class="field">
-    <%= f.label :district %><br>
-    <%= f.text_field :district %>
+   <div class="row">
+	 <div class="col-xs-1">
+	 	<%= f.label :description %><br>
+	 </div>
+	 <div class="col-xs-8">
+	 	<%= f.text_area :description,  :class => "form-control", :rows => 3, :placeholder => "Description"  %>
+	 	</div>
   </div>
-  <div class="field">
-    <%= f.label :country %><br>
-    <%= f.text_field :country %>
+  
+  <div class="row">
+	 <div class="col-xs-1">
+	 	  <%= f.label :valid_id %>
+	 </div>
+	   <div class="col-xs-4">
+	   	     <%= f.select(:valid_id, 
+    		options_from_collection_for_select(AddressValid.all, :name, :name), 
+    		{:prompt => 'Please Choose'}, :class => "form-control col-xs-1")  %>
+	   </div>
+   
+
   </div>
-  <div class="field">
-    <%= f.label :telephone1 %><br>
-    <%= f.text_field :telephone1 %>
-  </div>
-  <div class="field">
-    <%= f.label :telephone2 %><br>
-    <%= f.text_field :telephone2 %>
-  </div>
-  <div class="field">
-    <%= f.label :fax %><br>
-    <%= f.text_field :fax %>
-  </div>
-  <div class="field">
-    <%= f.label :description %><br>
-    <%= f.text_area :description %>
-  </div>
-  <div class="field">
-    <%= f.label :valid_id %><br>
-    <%= f.number_field :valid_id %>
-  </div>
-  <div class="actions">
-    <%= f.submit %>
+  <div class="row">
+	 <div class="col-xs-2 col-md-offset-5">
+	 	<%= f.submit "Save / Update", class: "btn btn-primary" %>
+	 </div>
   </div>
 <% end %>

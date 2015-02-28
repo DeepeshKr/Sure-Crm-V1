@@ -1,13 +1,32 @@
-<table class="table table-hover">
-	<tr>
-		<th>Name</th>
-		<th>Email</th>
-		<th>Employee Code</th>
-	</tr>
-	
-	<tr>
-		<td><%= @user.name %></td>
-		<td><%= @user.email %></td>
-		<td><%= @user.employee_code %></td>
-		</tr>
-</table>
+<%= bootstrap_form_for(@user) do |f| %>
+
+<p>
+  <strong>Name:</strong>
+  <%= f.text_field :name,  :class => "form-control" %>
+  
+</p>
+<p>
+  <strong>Email:</strong>
+   <%= f.text_field :email,  :class => "form-control" %>
+  
+</p>
+<p>
+  <strong>Employee Code:</strong>
+   <%= f.text_field :employee_code,  :class => "form-control" %>
+  
+</p>
+<p>
+  <strong>Level:</strong>
+   <%= f.select(:role, 
+    options_from_collection_for_select(EmployeeRole.all, :id, :name, :selected => @user.role), 
+    {}, :class => "form-control")  %>
+ 
+
+</p>
+<div class="row">
+  	  <div class="col-xs-3 col-xs-offset-6">
+  	  	<%= f.submit class: "btn btn-primary" %>
+  	  </div>
+    
+  </div>
+<% end %>

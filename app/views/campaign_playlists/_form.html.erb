@@ -1,0 +1,105 @@
+<% if @campaign_playlist.present? %>
+<%= bootstrap_form_for(@campaign_playlist) do |f| %>
+  <% if @campaign_playlist.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@campaign_playlist.errors.count, "error") %> prohibited this campaign_playlist from being saved:</h2>
+
+      <ul>
+      <% @campaign_playlist.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+ <div class="field">
+   <%= f.text_field :name, label: "Playlist Name" %>
+ 
+  </div>
+ <div class="field">
+   
+    	
+		      <%= f.select :campaignid,  options_from_collection_for_select(Campaign.all, :id, :name, 
+		      @campaign_playlist.campaignid),
+		         { label: "Select the Campaign:" },
+		       { class: "selectpicker" } %>
+ 
+ </div>
+
+ <div class="row">
+ <div class="col-xs-1 col-xs-offset-2">
+ <%= f.select :start_hr, 0..23, label: "Start Hr" %>
+ </div>
+  <div class="col-xs-1">
+   <%= f.select :start_min, 0..59, label: "Start Min" %>
+ </div>
+  <div class="col-xs-1">
+   <%= f.select :start_sec, 0..59, label: "Start Sec" %>
+ </div>
+ 
+ <div class="col-xs-1 col-xs-offset-2">
+ <%= f.select :end_hr, 0..23, label: "End Hr" %>
+ </div>
+  <div class="col-xs-1">
+  <%= f.select :end_min, 0..59, label: "End Min" %>
+ </div>
+  <div class="col-xs-1">
+   <%= f.select :end_sec, 0..59, label: "End Sec" %>
+ </div>
+ </div>
+   
+		       
+  
+  
+
+ <div class="field">
+ 
+ 
+ 
+     
+  </div>
+ <div class="field">
+   
+        <%= f.select :productvariantid,  options_from_collection_for_select(@productvariant,
+       :id, :productinfo),
+		         { label: "Select the Product Variant" },
+		       { class: "selectpicker" } %>
+  </div>
+ <div class="field">
+   
+    	<%= f.text_field :cost, :label => "Campaign Cost:", control_col: "col-sm-2", required: true %>
+   
+    
+  </div>
+  <div class="field">
+   
+    	<%= f.text_field :channeltapeid, :label => "Channel Tape id:", control_col: "col-sm-2" %>
+   
+    
+  </div>
+  <div class="field">
+   
+    	<%= f.text_field :internaltapeid, :label => "Internal Tape id:", control_col: "col-sm-2" %>
+   
+    
+  </div>
+  <div class="field">
+   
+    <%= f.text_field :filename, :label => "File Name:" %>
+  </div>
+
+  <div class="field">
+   
+    <%= f.text_area :description, :label => "Description:" %>
+ 
+  </div>
+  <div class="row">
+  <div class="col-xs-2 col-md-offset-5">
+    <%= f.primary class: "btn btn-primary" %>
+  </div>
+  </div>
+<% end %>
+
+<% else %>
+<div class="alert alert-danger" role="alert">This campaign is over you cant add any playlist</div>
+
+<% end %>

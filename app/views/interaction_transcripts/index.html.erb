@@ -1,0 +1,29 @@
+<h1>Listing interaction_transcripts</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Interactionid</th>
+      <th>Interactionuserid</th>
+      <th>Description</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @interaction_transcripts.each do |interaction_transcript| %>
+      <tr>
+        <td><%= interaction_transcript.interactionid %></td>
+        <td><%= interaction_transcript.interactionuserid %></td>
+        <td><%= interaction_transcript.description %></td>
+        <td><%= link_to 'Show', interaction_transcript %></td>
+        <td><%= link_to 'Edit', edit_interaction_transcript_path(interaction_transcript) %></td>
+        <td><%= link_to 'Destroy', interaction_transcript, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Interaction transcript', new_interaction_transcript_path %>

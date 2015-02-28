@@ -1,0 +1,60 @@
+	<div class="row">
+	<div class="col-xs-4">
+		<strong>Date:</strong>   <%= @order_master.orderdate %>
+	</div>
+	
+	<div class="col-xs-2">
+		<strong>Billno:</strong>   <%= @order_master.billno %>
+	</div>
+	<div class="col-xs-2">
+		<strong>External order no:</strong>   <%= @order_master.external_order_no %>
+	</div>
+	<div class="col-xs-2">
+		
+	</div>
+</div>
+<div class="row">
+
+	<div class="col-xs-6">
+		<h4><%= @order_master.customer.fullname%></h4>
+	</div>
+	<div class="col-xs-6">
+	<div class="row">
+		<div class="col-xs-6">
+			Mobile No <%= @order_master.customer.mobile%> <br/>
+			Mobile No <%= @order_master.customer.alt_mobile%> 
+		</div>
+		<div class="col-xs-6">
+		Email Id	<%= @order_master.customer.emailid%> <br/>
+		Email Id	<%= @order_master.customer.alt_emailid%>
+		</div>
+	</div>
+</div>
+<div class="clearfix"></div>
+<% unless @all_calllist.empty?  %>
+	<div class="row">
+ 		<div class="col-xs-10">  
+		    <%= f.select(:campaign_playlist_id, 
+		    options_from_collection_for_select(@all_calllist, :id, :playlistinfo), 
+		    {}, :class => "form-control")  %>
+		</div>
+  	</div> 	
+<div class="clearfix"></div>
+<% end %>
+<div class="row">
+ 
+   <div class="col-xs-4">
+  	  <%= f.text_field :calledno,  :class =>"form-control", :readonly => "true" %>
+  </div>
+  
+ 
+  <div class="col-xs-4">
+  	 <%= f.select(:media_id, 
+		    options_from_collection_for_select(@medialist, :id, :ref_name), 
+		      {:prompt => 'Please Choose one'}, :class => "form-control")  %>
+  
+  </div>
+  <div class="col-xs-2">
+  	
+  </div>
+</div>

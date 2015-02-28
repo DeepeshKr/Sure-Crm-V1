@@ -1,5 +1,58 @@
-<h1>New customer</h1>
+
+
+<div class="row">
+	
+	<div class="col-xs-8">
+<h3>New customer Order</h3>
 
 <%= render 'form' %>
+<%= link_to 'Back', customers_path, class: "btn btn-info btn-sm" %>
+</div>
+	<div class="col-xs-4">
+		<div class="panel panel-default">
+  <div class="panel-heading">
+    <h3 class="panel-title">Product Script</h3>
+  </div>
+  <div  class="panel-body">
+   <div id="product-script-id">
+   	
+   </div>
+   <div id="product-script">
+   	
+   </div>
+  </div>
+</div>
+	</div>
+</div>
 
-<%= link_to 'Back', customers_path %>
+<script>
+  $(document).ready(function() {
+    $('#customer_order_master_attributes_0_order_line_attributes_0_productvariant_id').change(function() {
+        $.ajax({
+           url: "<%= producttraining_path %>",
+           data: {
+               id: $("#customer_order_master_attributes_0_order_line_attributes_0_productvariant_id option:selected").val()
+           },
+           dataType: "script"
+        });
+    });
+  });
+</script>
+<script>
+  
+
+$(document).ready(function () {
+    $("#customer_comment").hide();
+    $("#mismatched_campaign_0").click(function () {
+        $("#customer_comment").hide();
+    });
+    $("#mismatched_campaign_1").click(function () {
+        $("#customer_comment").show();
+    });
+    $("#mismatched_campaign_2").click(function () {
+        $("#customer_comment").show();
+    });
+});
+  	
+ 
+  </script>

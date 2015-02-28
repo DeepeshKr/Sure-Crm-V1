@@ -1,0 +1,25 @@
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>Product Description </th>
+      <th>Code</th>
+      <th>Pieces</th>
+      <th>Product Cost</th>
+      <th>Product Revenue</th>
+      <th>Sales Bill</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @orderlines.each do |order_line| %>
+      <tr>
+        <td><%= order_line.product_variant.name %></td>
+         <td><%= order_line.product_variant.product_master.extproductcode %></td>
+        <td><%= order_line.pieces %></td>
+        <td><%= order_line.productcost rescue nil %></td>
+        <td><%= order_line.productrevenue rescue nil %></td>
+        <td><%= order_line.total %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

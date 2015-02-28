@@ -1,0 +1,17 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @product_sell_type.name %>
+</p>
+
+<p>
+  <strong>Description:</strong>
+  <%= @product_sell_type.description %>
+</p>
+
+<%= link_to 'Edit', edit_product_sell_type_path(@product_sell_type) %> |
+<%= link_to 'Back', product_sell_types_path %>
+
+<hr />
+<%= render partial: "product_masters/list" %>

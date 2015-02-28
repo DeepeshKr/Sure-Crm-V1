@@ -1,0 +1,19 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Interactionid:</strong>
+  <%= @interaction_transcript.interactionid %>
+</p>
+
+<p>
+  <strong>Interactionuserid:</strong>
+  <%= @interaction_transcript.interactionuserid %>
+</p>
+
+<p>
+  <strong>Description:</strong>
+  <%= @interaction_transcript.description %>
+</p>
+
+<%= link_to 'Edit', edit_interaction_transcript_path(@interaction_transcript) %> |
+<%= link_to 'Back', interaction_transcripts_path %>

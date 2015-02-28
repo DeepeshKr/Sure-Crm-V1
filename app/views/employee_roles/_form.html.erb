@@ -1,4 +1,4 @@
-<%= form_for(@employee_role) do |f| %>
+<%= bootstrap_form_for(@employee_role) do |f| %>
   <% if @employee_role.errors.any? %>
     <div id="error_explanation">
       <h2><%= pluralize(@employee_role.errors.count, "error") %> prohibited this employee_role from being saved:</h2>
@@ -12,14 +12,17 @@
   <% end %>
 
   <div class="field">
-    <%= f.label :name %><br>
-    <%= f.text_field :name %>
+       <%= f.text_field :name, label: "Role Name - As close to business role " %>
   </div>
   <div class="field">
-    <%= f.label :sortorder %><br>
-    <%= f.number_field :sortorder %>
+      <%= f.number_field :sortorder, label: "Level No (Lower level no means higher authority)", placeholder: "Lower level no means higher authority" %>
   </div>
-  <div class="actions">
-    <%= f.submit %>
+  <div class="row">
+   <div class="col-xs-2 col-offset-xs-8">
+  
+  <%= f.submit class: "btn btn-primary" %>
+  
   </div>
+  </div>  
+
 <% end %>

@@ -1,0 +1,21 @@
+<%= bootstrap_form_for @em_interaction_transcript, url: newcomments_path do |f|  %>
+  
+ <%= f.hidden_field :interactionid %>
+ <%= f.hidden_field :interactionuserid %>
+   
+  <div class="row">
+                            
+                             <div class="col-xs-12 "> 
+                                <%= f.text_area  :description, :class => "form-control", :placeholder => "Please enter customers comments", :label => "Customers Comments / Remarks / Problems", :required => true %>
+                             </div>
+    
+  </div>
+  <br>
+  <div class="row">
+      <div class="col-xs-3 col-xs-offset-9">
+        <%= f.submit "Add Comments", class: "btn btn-primary" %>
+      </div>
+    
+  </div>
+<% end %>
+

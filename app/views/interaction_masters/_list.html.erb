@@ -1,0 +1,34 @@
+<% if @interaction_masters.present? %>
+
+<table class="table table-hover">
+  <thead>
+    <tr>
+      <th>Created on</th>
+      <th>Resolve by</th>
+      <th>status</th>
+      <th>category</th>
+      <th>priority</th>
+     
+     
+    
+      <th colspan="2"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @interaction_masters.each do |interaction_master| %>
+      <tr>
+        <td><%= interaction_master.createdon.strftime("%d-%b-%Y") rescue nil %></td>
+        <td><%= interaction_master.resolveby.strftime("%d-%b-%Y") rescue nil %></td>
+        <td><%= interaction_master.interaction_status.internal_description %></td>
+        <td><%= interaction_master.interaction_category.name %></td>
+         <td><%= interaction_master.interaction_priority.name %></td>  
+        
+        <td><%= link_to 'Show', interaction_master %></td>
+        <td><%= link_to 'Edit', edit_interaction_master_path(interaction_master) %></td>
+       
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+<% end %>

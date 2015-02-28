@@ -1,0 +1,22 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @media_group.name %>
+</p>
+
+<p>
+  <strong>Description:</strong>
+  <%= @media_group.description %>
+</p>
+
+<%= link_to 'Edit', edit_media_group_path(@media_group), class: "btn btn-info btn-xs" %> |
+<%= link_to 'Back', media_groups_path, class: "btn btn-info btn-xs" %>
+<hr/>
+<%= render partial: "campaign_list" %>
+<hr/>
+<%= render partial: "media/media_list" %>
+<hr/>
+<%= render partial: "drop_down" %>
+<hr />
+

@@ -1,0 +1,25 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  createdon: 2014-12-19 09:41:10
+  resolveby: 
+  interactionstatusid: 1
+  customerid: 1
+  interactioncategoryid: 1
+  productvariantid: 1
+  orderid: 1
+  interactionpriorityid: 1
+  campaignplaylistid: 1
+  notes: MyText
+
+two:
+  createdon: 2014-12-19 09:41:10
+  resolveby: 
+  interactionstatusid: 1
+  customerid: 1
+  interactioncategoryid: 1
+  productvariantid: 1
+  orderid: 1
+  interactionpriorityid: 1
+  campaignplaylistid: 1
+  notes: MyText

@@ -1,4 +1,4 @@
-<%= form_for(@product_warehouse) do |f| %>
+<%= bootstrap_form_for(@product_warehouse) do |f| %>
   <% if @product_warehouse.errors.any? %>
     <div id="error_explanation">
       <h2><%= pluralize(@product_warehouse.errors.count, "error") %> prohibited this product_warehouse from being saved:</h2>
@@ -67,7 +67,10 @@
     <%= f.label :description %><br>
     <%= f.text_area :description %>
   </div>
-  <div class="actions">
-    <%= f.submit %>
+   <div class="row">
+    <div class="col-xs-2 col-xs-offset-6">
+    <%= f.submit "Add", class: "btn btn-primary" %>
   </div>
+  </div>
+ 
 <% end %>

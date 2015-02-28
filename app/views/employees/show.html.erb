@@ -1,69 +1,79 @@
-<p id="notice"><%= notice %></p>
-
-<p>
-  <strong>Title:</strong>
-  <%= @employee.title %>
-</p>
-
-<p>
-  <strong>First name:</strong>
-  <%= @employee.first_name %>
-</p>
-
-<p>
-  <strong>Last name:</strong>
-  <%= @employee.last_name %>
-</p>
-
-<p>
-  <strong>Employeecode:</strong>
-  <%= @employee.employeecode %>
-</p>
-
-<p>
-  <strong>Designation:</strong>
-  <%= @employee.designation %>
-</p>
-
-<p>
-  <strong>Mobile:</strong>
-  <%= @employee.mobile %>
-</p>
-
-<p>
-  <strong>Emailid:</strong>
-  <%= @employee.emailid %>
-</p>
-
-<p>
-  <strong>Location:</strong>
-  <%= @employee.location %>
-</p>
-
-<p>
-  <strong>Employment type:</strong>
-  <%= @employee.employment_type_id %>
-</p>
-
-<p>
-  <strong>Employee role:</strong>
-  <%= @employee.employee_role_id %>
-</p>
-
-<p>
-  <strong>Reporting to:</strong>
-  <%= @employee.reporting_to_id %>
-</p>
-
-<p>
-  <strong>Enablelogin:</strong>
+<div class="page-header">
+  <strong>Login Enabled:</strong>
   <%= @employee.enablelogin %>
-</p>
+<div class="row">
 
-<p>
-  <strong>Description:</strong>
+
+  <div class="col-xs-6">
+   <h3><%= @employee.title %>  <%= @employee.first_name %>  <%= @employee.last_name %> </h3>
+  </div>
+  <div class="col-xs-6">
+  <div class="row">
+  <div class="col-xs-4">
+<strong>Employee code:</strong>
+  <%= @employee.employeecode %>
+  </div>
+  <div class="col-xs-8">
+  <strong>Reporting to:</strong>
+  <%= @employee.manager.fullname  rescue nil %>
+  </div>
+    <div class="col-xs-4">
+      <small> Mobile No <%= @employee.mobile %> </small>
+    
+    </div>
+    <div class="col-xs-8">
+    <small> Email Id   <%= @employee.emailid %> </small>
+    </div>
+  </div>
+</div>
+</div>
+<div class="well well-sm">
+<div class="row">
+  <div class="col-xs-3">
+    <strong>Designation:</strong>
+  <%= @employee.designation %>
+  </div>
+  <div class="col-xs-3">
+    <strong>Location:</strong>
+  <%= @employee.location %>
+  </div>
+  <div class="col-xs-3">
+   <strong>Employment type:</strong>
+  <%= @employee.employment_type.name %>
+  </div>
+ <div class="col-xs-3">
+ <strong>Employee role:</strong>
+  <%= @employee.employee_role.name rescue nil%>
+
+  </div>
+</div>
+<div class="row">
+  
+
+  <div class="col-xs-4">
+  
+  
+  </div>
+
+</div>
+
+</div>
+</div>
+
+
+
+
+  <strong>Notes:</strong>
   <%= @employee.description %>
-</p>
+  
 
-<%= link_to 'Edit', edit_employee_path(@employee) %> |
-<%= link_to 'Back', employees_path %>
+
+
+<%= link_to 'Edit', edit_employee_path(@employee), class: "btn btn-primary btn-sm" %> |
+<%= link_to 'Back', employees_path, class: "btn btn-primary btn-sm" %>
+<hr>
+
+
+<%= render 'users/create_login' %>
+
+<%= render 'users/change_password' %>

@@ -1,0 +1,64 @@
+<h4>List of existing customers with mobile no <%= @customer.mobile %></h4>
+
+<% unless @customers.blank? %>
+<table class="table table-hover">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Mobile </th>
+      <th>State</th>
+      
+      <th>Emailid</th>
+      
+     
+      <th colspan="2"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @customers.each do |customer| %>
+      <tr>
+        <td><%= customer.salute %>
+          <%= customer.first_name %>
+          <%= customer.last_name %></td>
+        <td><%= customer.mobile %> <br/>
+        <%= customer.alt_mobile %></td>
+        <td><%= customer.from_state %></td>
+       
+        <td><%= customer.emailid %> <br/>
+        <%= customer.alt_emailid %></td>
+           <td>
+<%= link_to 'New Dealer Enquiry', newdealer_path(:customer_id => customer.id), :class => "btn btn-info btn-sm" %>
+  
+
+
+         </td>
+         <td>
+<%= link_to 'New Support Ticket', newinteraction_path(:customer_id => customer.id), :class => "btn btn-info btn-sm" %>
+  
+
+
+         </td>
+       
+         <td>
+<%= form_tag(controller: "create_order", action: "add_order") do %>
+  <%= hidden_field_tag :calledno, @calledno %>
+  <%= hidden_field_tag :customer_id, customer.id %>
+   <%= hidden_field_tag :mobile, @mobile %>
+  <%= submit_tag("Create Order", :class => "btn btn-success btn-sm") %>
+<% end %>
+
+
+         </td>
+         
+       <!--<td><%= link_to 'Destroy', customer, method: :delete, data: { confirm: 'Are you sure?' } %></td>--> 
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+<% else %>
+<div class="alert alert-info" role="alert">
+
+<h3>There are no existing customers with this number</h3> 
+</div> 
+<%end%>

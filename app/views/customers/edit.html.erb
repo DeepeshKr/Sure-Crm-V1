@@ -1,6 +1,58 @@
-<h1>Editing customer</h1>
+<div class="row">
+	
+	<div class="col-xs-8">
+	<h1>Existing customer Order</h1>
 
 <%= render 'form' %>
 
-<%= link_to 'Show', @customer %> |
-<%= link_to 'Back', customers_path %>
+
+</div>
+	<div class="col-xs-4">
+		<div class="panel panel-default">
+  <div class="panel-heading">
+    <h3 class="panel-title">Product Script</h3>
+  </div>
+  <div  class="panel-body">
+   <div id="product-script-id">
+   	
+   </div>
+   <div id="product-script">
+   	
+   </div>
+  </div>
+</div>
+	</div>
+</div>
+<script>
+  $(document).ready(function() {
+    $('#customer_product').change(function() {
+        $.ajax({
+           url: "<%= producttraining_path %>",
+           data: {
+               id: $("#customer_product option:selected").val()
+           },
+           dataType: "script"
+        });
+    });
+      
+    
+  });
+</script>
+<script>
+  
+
+$(document).ready(function () {
+    $("#customer_comment").hide();
+    $("#mismatched_campaign_0").click(function () {
+        $("#customer_comment").hide();
+    });
+    $("#mismatched_campaign_1").click(function () {
+        $("#customer_comment").show();
+    });
+    $("#mismatched_campaign_2").click(function () {
+        $("#customer_comment").show();
+    });
+});
+  	
+ 
+  </script>

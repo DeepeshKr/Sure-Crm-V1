@@ -1,0 +1,29 @@
+<%= bootstrap_form_for @em_interaction_transcript, url: newcomments_path do |f| %>
+  
+ <%= f.hidden_field :interactionid %>
+ <%= f.hidden_field :interactionuserid %>
+  
+  <div class="row">
+                            
+                             <div class="col-xs-12 "> 
+                                <%= f.text_area  :description, :class => "form-control", :placeholder => "Please enter your comments", :label => "Employee Comments / Remarks / Solution", :required => true %>
+                             </div>
+    
+  </div>
+
+   <div class="row">
+   <div class="col-xs-12 "> 
+<%= select_tag(:interaction_status_id, 
+    options_from_collection_for_select(@interaction_status, :id, :internal_description, selected: @em_interaction_transcript.interaction_master.interaction_status_id), 
+    {:class => "form-control"})  %>
+
+  </div>
+   </div>
+  <br>
+  <div class="row">
+      <div class="col-xs-3 col-xs-offset-9">
+        <%= f.submit "Add Comments", class: "btn btn-primary" %>
+      </div>
+    
+  </div>
+<% end %>

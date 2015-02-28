@@ -1,0 +1,67 @@
+<%= bootstrap_form_for(@campaign) do |f| %>
+  <% if @campaign.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@campaign.errors.count, "error") %> prohibited this campaign from being saved:</h2>
+
+      <ul>
+      <% @campaign.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+<div class="row">
+	
+  <div class="col-xs-8">
+   
+    <%= f.text_field :name,  :class => "form-control", :label => "Name of Campaign" %>
+  </div>
+  </div>
+  <div class="row">
+  	
+    <div class="col-xs-8">
+  
+      <%= f.date_select(:startdate, {:use_short_month => 1, :order => [:month, :day, :year]},
+    {:class => "form-control select-date"}) %>
+  </div>
+  </div>
+    <div class="row">
+    	 
+    	 
+    	 
+   <div class="col-xs-8">
+  
+   
+   <%= f.date_select(:enddate, {:use_short_month => 1, :order => [:month, :day, :year]},
+    {:class => "form-control select-date"}) %>
+
+  </div>
+  </div>
+  <div class="row">
+  
+   <div class="col-xs-8">
+   
+    	 <%= f.select(:mediumid, 
+    options_from_collection_for_select(@medialist, :id, :mediainfo), 
+    {:label => "Select Media"}, :class => "form-control")  %>
+    <small> Only media which we pay in advance show up here </small>
+  </div>
+  </div>
+  <div class="row">
+  		
+   <div class="col-xs-8">
+  
+    <%= f.text_area :description,  :class => "form-control" %>
+  </div>
+  </div>
+  
+  
+  <div class="row">
+  		<div class="col-xs-2 col-md-offset-5">
+  			<div class="actions">
+    <%= f.submit  class: "btn btn-primary" %>
+  </div>
+  			
+  		</div>
+  </div>
+<% end %>

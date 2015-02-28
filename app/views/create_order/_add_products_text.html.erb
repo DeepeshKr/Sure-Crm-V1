@@ -1,0 +1,26 @@
+<%= form_for @order_line , url: addproducts_path, :method => :POST do |f| %>
+          
+            <div class="row">
+             <%= hidden_field_tag :order_id, @order_line.orderid %>
+             <%= f.hidden_field(:orderid) %>
+<div class="col-xs-11">
+            
+           
+             </div>
+              <div class="col-xs-9">
+             
+              <%= autocomplete_field_tag 'productvariant', ' ',autocomplete_product_variant_name_order_lines_path, :class => "form-control",  :size => 25,
+   input_html: { 'data-id-element' => '#id' } ,:element_id=>"#id", :update_elements => {:id => '#id', :description => '#description'} %>
+   <%= f.hidden_field :productvariant_id, :id => "id" %>
+  <!--  <%= f.hidden_field :productvariant_id, id: 'id' %> -->
+              </div>
+              <div class="col-xs-2">
+                <%= f.select :pieces, options_for_select(1..10), {}, :class => "form-control"  %>
+              </div>
+              <div class="col-xs-1">
+                <%= f.submit "Add", class: "btn btn-primary "%>
+              </div>
+               
+          </div>
+
+<% end %>

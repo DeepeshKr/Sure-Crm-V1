@@ -1,0 +1,31 @@
+<%= bootstrap_form_for(@orderpaymentmode) do |f| %>
+  <% if @orderpaymentmode.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@orderpaymentmode.errors.count, "error") %> prohibited this orderpaymentmode from being saved:</h2>
+
+      <ul>
+      <% @orderpaymentmode.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :name %><br>
+    <%= f.text_field :name %>
+  </div>
+  <div class="field">
+    <%= f.label :description %><br>
+    <%= f.text_area :description %>
+  </div>
+   <div class="field">
+    <%= f.label :charges %><br>
+    <%= f.text_field :charges, :required => true %>
+  </div>
+  <div class="row">
+      <div class="col-xs-2 col-md-offset-5">
+        <%= f.submit  class: "btn btn-primary" %>       
+      </div>
+  </div>
+<% end %>

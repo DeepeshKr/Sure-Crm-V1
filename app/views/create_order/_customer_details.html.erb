@@ -1,0 +1,63 @@
+<div class="page-header">
+  <small>Customer Id <%= @order_master.customer_id%></small> &nbsp;<small>Order Id <%= @order_master.id %></small>
+<div class="row">
+
+
+  <div class="col-xs-6">
+   <h1><%= @order_master.customer.fullname%> </h1>
+  </div>
+  <div class="col-xs-6">
+  <div class="row">
+    <div class="col-xs-6">
+      <small> Mobile No <%= @order_master.customer.mobile%> </small><br/>
+      <small> Mobile No <%= @order_master.customer.alt_mobile%></small> 
+    </div>
+    <div class="col-xs-6">
+    <small> Email Id  <%= @order_master.customer.emailid%> </small><br/>
+    <small> Email Id  <%= @order_master.customer.alt_emailid%></small>
+    </div>
+  </div>
+</div>
+</div>
+<div class="well well-sm">
+<div class="row">
+  <div class="col-xs-4">
+    <strong>Date:</strong>   <%= @order_master.orderdate %> 
+  </div>
+  <div class="col-xs-2">
+    <strong>Billno:</strong>   <%= @order_master.billno %>
+  </div>
+  <div class="col-xs-2">
+    <strong>External order no:</strong>   <%= @order_master.external_order_no %>
+  </div>
+  <div class="col-xs-2">
+    
+  </div>
+</div>
+<div class="row">
+  <div class="col-xs-4">
+ <strong> Called No </strong>  <%= @order_master.calledno %>
+  </div>
+<div class="col-xs-4">
+<strong> Media </strong> <%= @order_master.medium.name rescue nil%>
+  </div>
+  <div class="col-xs-4">
+  <strong>Play list:</strong> <%= @order_master.campaign_playlist.name rescue nil%>
+  </div>
+
+</div>
+<div class="row">
+  <div class="col-xs-4">
+ <strong>Campaign:</strong>
+<%= @order_master.campaign_playlist.campaign.name rescue nil%> 
+  </div>
+<div class="col-xs-4">
+<strong>Employee code:</strong>
+ <%= @order_master.employeecode %>
+  </div>
+  <div class="col-xs-4">
+<strong>Employee:</strong>  <%= @order_master.employee_id %>
+  </div>
+
+</div>
+</div>

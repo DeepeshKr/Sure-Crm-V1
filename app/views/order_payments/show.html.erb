@@ -1,0 +1,34 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Order master:</strong>
+  <%= @order_payment.order_master_id %>
+</p>
+
+<p>
+  <strong>Ref no:</strong>
+  <%= @order_payment.ref_no %>
+</p>
+
+<p>
+  <strong>Orderpaymentmode:</strong>
+  <%= @order_payment.orderpaymentmode_id %>
+</p>
+
+<p>
+  <strong>Paid date:</strong>
+  <%= @order_payment.paid_date %>
+</p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @order_payment.name %>
+</p>
+
+<p>
+  <strong>Description:</strong>
+  <%= @order_payment.description %>
+</p>
+
+<%= link_to 'Edit', edit_order_payment_path(@order_payment) %> |
+<%= link_to 'Back', order_payments_path %>

@@ -1,4 +1,4 @@
-<%= form_for(@interaction_category) do |f| %>
+<%= bootstrap_form_for(@interaction_category) do |f| %>
   <% if @interaction_category.errors.any? %>
     <div id="error_explanation">
       <h2><%= pluralize(@interaction_category.errors.count, "error") %> prohibited this interaction_category from being saved:</h2>
@@ -12,22 +12,25 @@
   <% end %>
 
   <div class="field">
-    <%= f.label :name %><br>
-    <%= f.text_field :name %>
+     <%= f.text_field :name, :label => "Problem Category" %>
   </div>
   <div class="field">
-    <%= f.label :sortorder %><br>
-    <%= f.number_field :sortorder %>
+       <%= f.number_field :sortorder, :label => "Sort Relevance" %>
   </div>
   <div class="field">
-    <%= f.label :employeeid %><br>
-    <%= f.number_field :employeeid %>
+
+     <%= f.select(:employeeid, 
+    options_from_collection_for_select(Employee.all, :id, :name, selected: :employeeid), 
+    {:prompt => 'Please Choose', :label => "Responsible Employee"}, :class => "form-control")  %>
+     
   </div>
   <div class="field">
-    <%= f.label :resolutionhours %><br>
-    <%= f.number_field :resolutionhours %>
+    <%= f.number_field :resolutionhours, :label => "Resolution in Hours" %>
   </div>
-  <div class="actions">
-    <%= f.submit %>
+  <div class="row">
+      <div class="col-xs-3 col-xs-offset-6">
+        <%= f.submit class: "btn btn-primary" %>
+      </div>
+    
   </div>
 <% end %>

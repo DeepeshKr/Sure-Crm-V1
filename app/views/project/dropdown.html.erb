@@ -1,0 +1,80 @@
+<h1>dynamic combo</h1>
+<p>Playing with dynamic AJAX page updates after the combo box selection change</p>
+
+<div id="select_div">
+    <select name="city_id" id="city_id">
+      <option value="0">1</option>
+      <option value="1">2</option>
+      <option value="2">3</option>
+      <option value="2">4</option>
+    </select>
+</div>
+<input id="credit_card_input"  name="credit_card_input" maxlength="16" placeholder="Credit Card"
+size="15" class="form-control">
+</input>
+
+<input type="text">
+<p>Write something in the input field, and then press enter or click outside the field.</p>
+
+<input id="price_input">
+	
+</input>
+<input id="priced_input">
+	
+</input>
+<div id="result_div">
+Here result_div
+  Results:
+</div>
+<div id="result_div2">
+Here result_div2
+  Results:
+</div>
+<textarea name="productmastertext" id="productmastertext"></textarea>
+<script>
+  $(document).ready(function() {
+    $('#city_id').change(function() {
+        $.ajax({
+           url: "<%= update_text_path %>",
+           data: {
+               city_name: $("#city_id option:selected").text()
+           },
+           dataType: "script"
+        });
+    });
+  });
+</script>
+<script>
+  $(document).ready(function() {
+    $('#city_id').change(function() {
+        $.ajax({
+           url: "<%= productdetails_path %>",
+           data: {
+               id: $("#city_id option:selected").val()
+           },
+           dataType: "script"
+        });
+    });
+  });
+</script>
+
+<script type="text/javascript">
+$(document).ready(function() {
+   
+        $('#credit_card_input').change(function(){
+        	val = $(this).val();
+  				alert("Check if Card if Valid :" + val);
+  			$.ajax({url: "<%= creditcard_path %>", 
+  			data: {code: $(this).val()},
+           dataType: "script"   });
+  			})
+  	});
+</script>
+
+<!--<script>
+$(document).ready(function(){
+  $("input").change(function(){
+    alert("The text has been changed.");
+  });
+});
+</script>-->

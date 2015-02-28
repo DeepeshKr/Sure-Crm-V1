@@ -1,0 +1,61 @@
+<%= bootstrap_form_for(@product_variant, layout: :horizontal, inline_errors: false, label_col: "col-sm-3", control_col: "col-sm-8", label_errors: true) do |f| %>
+
+
+ <% if @product_variant.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@product_variant.errors.count, "error") %> prohibited this product_variant from being saved:</h2>
+
+      <ul>
+      <% @product_variant.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+  
+
+<div class="field">
+    <%= f.select :productmasterid,  options_from_collection_for_select(ProductMaster.all.order(:extproductcode),
+       :id, :productname, selected: @product_variant.product_sell_type_id),
+    { label: "Product Master"},
+		       { class: "selectpicker" }
+		        %>
+  </div>
+  
+  
+    <div class="field">   
+    <%= f.text_field :name, label: "Product Name", required: true %> 
+    <%= f.text_field :variantbarcode, label: "Variant Barcode*", placeholder: "Numeric code of Prod / Gprod etc external ref code", :required => true, help: "this code looks like 0092" %>  
+    <%= f.text_field :extproductcode, label: "Product Ref Code*", readonly: true %>
+    </div>
+  
+  <div class="field">
+  	
+   
+    <%= f.text_field :total, label: "Total", readonly: true, help: "Auto Calcuated" %>
+ 
+   
+    <%= f.text_field :price, label: "Price", readonly: true %>
+  
+   
+    <%= f.text_field :taxes, label: "Taxes", readonly: true %>
+  
+   
+    <%= f.text_field :shipping, label: "Shipping ", readonly: true %>
+  
+  
+  </div>
+   
+  
+   <div class="field">
+     <%= f.select :product_sell_type_id,  options_from_collection_for_select(ProductSellType.all,
+       :id, :details, selected: @product_variant.product_sell_type_id),
+             { label: "Regular or Up Sell" } %>
+ 
+  </div>
+ <div class="row">
+  <div class="col-xs-2 col-md-offset-7">
+    <%= f.primary class: "btn btn-primary" %>
+  </div>
+  </div>
+<% end %>

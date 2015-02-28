@@ -1,0 +1,28 @@
+
+<h3>List of Products (B_PRODMASTER)</h3>
+
+<table class="table table-hover">
+  <thead>
+    <tr>
+      <th>prod	</th>
+      <th>prodname</th>
+       <th>code</th>
+        <th>stock<br>defective<br>Sr no</th>
+      
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @b_prodmaster.each do |d| %>
+      <tr>
+        <td><%= d.prod %></td>
+       <td><%= d.prodname %></td>
+       <td><%= d.code %></td>
+       <td><%= d.stock %><br><%= d.defective %><br><%= d.srno %></td>
+     
+       <td><%= link_to 'Show', bprodmaster_path(gprod: d.prod) %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+

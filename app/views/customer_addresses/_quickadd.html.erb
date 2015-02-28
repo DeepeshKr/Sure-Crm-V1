@@ -1,0 +1,76 @@
+<%= form_for(@customer_address) do |f| %>
+  <% if @customer_address.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@customer_address.errors.count, "error") %> prohibited this customer_address from being saved:</h2>
+
+      <ul>
+      <% @customer_address.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+<div class="row">
+ <%= f.hidden_field :customer_id,  :value => @customer_address.customer_id %>
+ <%= f.hidden_field :id,  :value => @customer_address.id %>
+
+  <div class="clearfix"></div>
+	<div class="col-xs-1">
+  	Address
+  </div>
+  <div class="col-xs-9">
+  	  <%= f.text_field :address1,  :class =>"form-control", :placeholder => "Address Required" %>
+  
+  </div>
+  <div class="clearfix"></div>
+  <div class="col-xs-1">
+  
+  </div>
+  <div class="col-xs-9">
+  	 
+    <%= f.text_field :address2,  :class =>"form-control", :placeholder => "Address optional" %>
+  </div>
+  <div class="clearfix"></div>
+  <div class="col-xs-1">
+  
+  </div>
+  <div class="col-xs-9">
+     
+    <%= f.text_field :address3,  :class =>"form-control", :placeholder => "Address optional" %>
+  </div>
+  <div class="clearfix"></div>
+  <div class="col-xs-1">
+  
+  </div>
+  <div class="col-xs-9">
+     
+    <%= f.text_field :landmark,  :class =>"form-control", :placeholder => "Landmark optional" %>
+  </div>
+  <div class="clearfix"></div>
+</div>
+<div class="row">
+	<div class="col-xs-1">
+  	State
+  </div>
+  <div class="col-xs-4">
+  	 <%= f.select(:state, 
+		    options_from_collection_for_select(@statelist, :name, :name, :selected => @customer_address.state),
+         {}, :class => "form-control")  %>
+  
+  </div>
+  <div class="col-xs-3">
+     
+    <%= f.text_field :city,  :class =>"form-control", :placeholder => "City" %>
+  </div>
+  <div class="col-xs-2">
+     
+    <%= f.text_field :pincode,  :class =>"form-control", :placeholder => "PIN" %>
+  </div>
+</div>
+<div class="row">
+<div class="col-xs-3 col-xs-offset-8">
+        <%= f.submit "Update address", class: "btn btn-primary "%>
+      </div>
+</div>
+
+<% end %>

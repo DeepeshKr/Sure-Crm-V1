@@ -1,0 +1,15 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  name: MyString
+  startdate: 2014-12-17
+  enddate: 2014-12-17
+  mediumid: 1
+  description: MyText
+
+two:
+  name: MyString
+  startdate: 2014-12-17
+  enddate: 2014-12-17
+  mediumid: 1
+  description: MyText

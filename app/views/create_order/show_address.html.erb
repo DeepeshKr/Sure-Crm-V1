@@ -1,0 +1,69 @@
+
+   <%= render 'customer_details' %>
+
+<div class="row">
+  
+        <div class="col-xs-8">
+                       <div class="clearfix"></div>
+          
+                 <%= render 'orderlines' %>
+                             
+  
+      
+    <div class="clearfix"></div>
+
+   
+    
+       <%= render 'customer_address' %>
+<div class="clearfix"></div>
+  
+<div class="clearfix"></div>
+        
+
+   <div class="clearfix"></div>
+  
+
+
+     <div class="clearfix"></div>
+      </div>
+        <div class="col-xs-4">
+          <div class="panel panel-default">
+              <div class="panel-heading">
+              <h3 class="panel-title">Page Script</h3>
+              </div>
+              <div  class="panel-body">
+                  <div id="product-script-id">
+                
+                  </div>
+                  <div id="product-script">
+                
+                  </div>
+            </div>
+          </div><!-- panel end -->
+        </div>  
+</div>
+ 
+
+  
+
+
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">Add New Address</h4>
+      </div>
+      <div class="modal-body">
+         <%= render 'new_customer_address' %>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+       <!--  <button type="button" class="btn btn-primary">Save changes</button> -->
+      </div>
+    </div>
+  </div>
+</div>
+
+

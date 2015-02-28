@@ -1,0 +1,149 @@
+<%= bootstrap_form_for @customer, :url => { :action => "add" }  do |f|  %>
+  
+  <% if @customer.errors.any? %>
+  <div id="error_explanation">
+    <div class="alert alert-danger">
+      The form contains <%= pluralize(@user.errors.count, "error") %>.
+    </div>
+    <ul>
+    <% @customer.errors.full_messages.each do |msg| %>
+      <li><%= msg %></li>
+    <% end %>
+    </ul>
+  </div>
+<% end %>
+
+<div class="row">
+  
+  <div class="col-xs-2">
+     <%= f.select(:salute, 
+    options_from_collection_for_select(Salute.all, :name, :name, :selected => @customer.salute), 
+    {}, :class => "form-control")  %>
+  </div>
+  <div class="col-xs-4">
+    <%= f.text_field :first_name,  :class => "form-control" %>
+  </div>
+  <div class="col-xs-4">
+     <%= f.text_field :last_name,  :class => "form-control" %>
+  </div>
+  <div class="col-xs-1">
+    
+  </div>
+</div>
+  
+ 
+  <div class="row">
+    
+  
+  <div class="col-xs-3">
+     <%= f.text_field :mobile,  :class =>"form-control", :readonly => "true" %>
+  </div>
+  <div class="col-xs-4">
+    <%= f.text_field :alt_mobile,  :class =>"form-control", :placeholder => "alt mobile no" %>
+  </div>
+  <div class="col-xs-2">
+    
+  </div>
+</div>
+
+ <div class="row">
+ 
+  <div class="col-xs-4">
+      <%= f.text_field :emailid,  :class =>"form-control", :placeholder => "email id" %>
+  </div>
+  <div class="col-xs-4">
+   <%= f.text_field :alt_emailid,  :class =>"form-control", :placeholder => "Alernate email id" %>
+  </div>
+  <div class="col-xs-2">
+    
+  </div>
+</div>
+
+ <div class="row">
+      
+      <div class="col-xs-8">
+       <%= f.select(:product, 
+        options_from_collection_for_select(@productvariantlist, :id, :productinfo), 
+        {:prompt => 'Please Choose Product'}, :class => "form-control col-xs-1")  %>
+      </div>
+      <div class="col-xs-2">
+        <%= f.select :pieces, options_for_select(1..10), {}, :class => "form-control col-xs-1"  %>
+      </div>
+  </div>
+<% unless @all_calllist.empty?  %>
+  
+      <div class="row">
+    
+    <div class="col-xs-10">  
+        <%= f.select(:campaignplaylistid, 
+        options_from_collection_for_select(@all_calllist, :id, :playlistinfo), 
+        {}, :class => "form-control")  %>
+      </div>
+      </div>    
+      
+       
+
+
+      <div class="row">  
+        
+        
+        <div class="col-xs-11">
+          
+        
+        <div class="col-xs-2">
+          <label class="radio"> 
+                        <%= label_tag(:mismatched_campaign, "All Ok") %>
+                    <%= radio_button_tag(:mismatched_campaign, "0", checked = true) %>
+              </label>
+          </div>
+          <div class="col-xs-2">
+            <label class="radio">
+                  <%= label_tag(:mismatched_campaign_1, "Ref Old ad") %>
+            <%= radio_button_tag(:mismatched_campaign, "1") %>
+            
+            </label>
+            
+          </div>
+          <div class="col-xs-2">
+            <label class="radio">
+          <%= label_tag(:mismatched_campaign_2, "Mismatch") %></td>
+        <%= radio_button_tag(:mismatched_campaign, "2") %>
+            </label>          
+        </div>
+        <div class="clearfix"></div>
+        <div id="customer_comment" class="col-xs-10">
+           <%= f.text_area :comments,  :class =>"form-control" %>
+        </div>
+        </div>
+      </div>
+      
+  <% end%>
+   <div class="row">
+  
+ 
+  <div class="col-xs-4">
+      <%= f.text_field :calledno,  :class =>"form-control", :value => @calledno, :readonly => "true" %>
+  </div>
+  
+ 
+  <div class="col-xs-1">
+    State
+  </div>
+  <div class="col-xs-4">
+     <%= f.select(:state, 
+        options_from_collection_for_select(@statelist, :name, :name), 
+          {}, :class => "form-control")  %>
+  
+  </div>
+  <div class="col-xs-2">
+    
+  </div>
+</div>  
+ 
+  <div class="row">
+      <div class="col-xs-3 col-xs-offset-6">
+        <%= f.submit class: "btn btn-primary" %>
+      </div>
+    
+  </div>
+<% end %>

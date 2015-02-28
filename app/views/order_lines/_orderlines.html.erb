@@ -1,0 +1,44 @@
+<div class="panel panel-primary">
+  <div class="panel-heading">
+   <h3 class="panel-title">Order Summary</h3>
+    
+  </div>
+  <div class="panel-body">
+   
+ 
+
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>Product Description </th>
+      <th>Pieces</th>
+      <th>Subtotal</th>
+      <th>Taxes</th>
+      <th>Shipping</th>
+      <th>Codcharges</th>
+      <th>Total</th>
+      
+      
+      <th ></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @order_lines.each do |order_line| %>
+      <tr>
+        <td><%= order_line.product_variant.name %></td>
+        <td><%= order_line.pieces %></td>
+        <td><%= order_line.subtotal %></td>
+        <td><%= order_line.taxes %></td>
+        <td><%= order_line.shipping %></td>
+        <td><%= order_line.codcharges %></td>
+        <td><%= order_line.total %></td>      
+        <td><%= link_to 'Destroy', order_line, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+ </div>
+
+  
+</div>

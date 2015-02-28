@@ -3,7 +3,7 @@ Rails.application.configure do
 
  # Force all access to the app over SSL, use Strict-Transport-Security,
   # and use secure cookies.
-  config.force_ssl = true
+  #config.force_ssl = true
 
   # Code is not reloaded between requests.
   config.cache_classes = true
@@ -13,6 +13,26 @@ Rails.application.configure do
   # and those relying on copy on write to perform better.
   # Rake tasks automatically ignore this option for performance.
   config.eager_load = true
+
+# Show full error reports and disable caching.
+  config.consider_all_requests_local       = true
+  config.action_controller.perform_caching = false
+
+  config.action_mailer.delivery_method = :smtp
+  config.action_mailer.smtp_settings = {
+  :address              => "3.0.3.85",
+  :port                 => 25,
+  :domain               => "gmail.com",
+  :user_name            => "telebrandsindia@tec2grow.in",
+  :password             => "Well@come101",
+  :authentication       => 'plain',
+  :enable_starttls_auto => true  }
+
+  # smtp       port 25            pop    3.0.3.85    port  110
+  config.action_mailer.perform_deliveries = true
+
+  # Don't care if the mailer can't send.
+  config.action_mailer.raise_delivery_errors = true
 
   # Full error reports are disabled and caching is turned on.
   config.consider_all_requests_local       = false

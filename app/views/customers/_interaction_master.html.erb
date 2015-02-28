@@ -1,0 +1,38 @@
+<%= bootstrap_form_for(@interaction_master) do |f| %>
+  <% if @interaction_master.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@interaction_master.errors.count, "error") %> prohibited this interaction_master from being saved:</h2>
+
+      <ul>
+      <% @interaction_master.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  
+  <div class="field">
+   
+    <%= f.number_field :interaction_status_id %>
+  </div>
+  <div class="field">
+      <%= f.number_field :customer_id %>
+  </div>
+  <div class="field">
+     <%= f.number_field :interaction_category_id %>
+  </div>
+  
+  <div class="field">
+    <%= f.label :interaction_priority_id %><br>
+    <%= f.number_field :interaction_priority_id %>
+  </div>
+  
+  
+  <div class="row">
+      <div class="col-xs-3 col-xs-offset-6">
+        <%= f.submit class: "btn btn-primary" %>
+      </div>
+    
+  </div>
+<% end %>

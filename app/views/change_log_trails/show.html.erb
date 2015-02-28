@@ -1,0 +1,34 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Changelogtype:</strong>
+  <%= @change_log_trail.changelogtype_id %>
+</p>
+
+<p>
+  <strong>Refid:</strong>
+  <%= @change_log_trail.refid %>
+</p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @change_log_trail.name %>
+</p>
+
+<p>
+  <strong>Description:</strong>
+  <%= @change_log_trail.description %>
+</p>
+
+<p>
+  <strong>Username:</strong>
+  <%= @change_log_trail.username %>
+</p>
+
+<p>
+  <strong>Ip:</strong>
+  <%= @change_log_trail.ip %>
+</p>
+
+<%= link_to 'Edit', edit_change_log_trail_path(@change_log_trail) %> |
+<%= link_to 'Back', change_log_trails_path %>

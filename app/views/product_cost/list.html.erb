@@ -1,0 +1,45 @@
+<h3>List of Products (PRODMASTER)</h3>
+
+<table class="table table-hover">
+  <thead>
+    <tr>
+      <th>prod  </th>
+      <th>prodname</th>
+       <th>category</th>
+        <th>weight<br> weight2 <br> weight3</th>
+      <th>basic1 <br> basic2 <br> basic3</th>
+        <th>kit</th>       
+           <th>trantype</th>
+            <th>moneyback</th>
+             <th>deo</th>
+              <th>mlm</th>
+                 <th>mahvat</th>
+             <th>othvat</th>
+              <th>gprod</th>
+
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @prodmasters.each do |d| %>
+      <tr>
+       <td><%= d.prod %></td>
+           <td><%= d.prodname %></td>
+       <td><%= d.category %></td>
+       <td><%= d.weight %><br><%= d.weight2 %><br><%= d.weight3 %></td>
+       <td><%= d.basic1 %><br><%= d.basic2 %><br><%= d.basic3 %></td>
+       <td><%= d.kit %></td>
+       
+       <td><%= d.trantype %></td>
+        <td><%= d.moneyback %></td>
+        <td><%= d.deo %></td>
+      <td><%= d.mlm %></td>
+       <td><%= d.mahvat %></td>
+      <td><%= d.othvat %></td>
+      <td><%= d.gprod %></td>
+       <td><%= link_to 'Show', productcost_path(prod: d.prod) %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+

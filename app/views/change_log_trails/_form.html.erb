@@ -1,0 +1,41 @@
+<%= form_for(@change_log_trail) do |f| %>
+  <% if @change_log_trail.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@change_log_trail.errors.count, "error") %> prohibited this change_log_trail from being saved:</h2>
+
+      <ul>
+      <% @change_log_trail.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :changelogtype_id %><br>
+    <%= f.number_field :changelogtype_id %>
+  </div>
+  <div class="field">
+    <%= f.label :refid %><br>
+    <%= f.number_field :refid %>
+  </div>
+  <div class="field">
+    <%= f.label :name %><br>
+    <%= f.text_field :name %>
+  </div>
+  <div class="field">
+    <%= f.label :description %><br>
+    <%= f.text_area :description %>
+  </div>
+  <div class="field">
+    <%= f.label :username %><br>
+    <%= f.text_field :username %>
+  </div>
+  <div class="field">
+    <%= f.label :ip %><br>
+    <%= f.text_field :ip %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

@@ -3,11 +3,20 @@
 		<th>Name</th>
 		<th>Email</th>
 		<th>Employee Code</th>
+		<th>Role</th>
 	</tr>
 	
-	<tr>
-		<td>Data</td>
-		<td>Data</td>
-		<td>Data</td>
+	<tbody>
+    <% @users.each do |u| %>
+      <tr>
+		<td><%= u.name %></td>
+		<td><%= u.email %></td>
+		<td><%= u.employee_code %></td>
+		<td><%= u.role %></td>
+		
+       
+       
 		</tr>
+	<% end %>
+	</tbody>
 </table>

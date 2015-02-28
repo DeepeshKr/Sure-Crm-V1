@@ -1,0 +1,20 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @media_commision.name %>
+</p>
+
+<p>
+  <strong>Description:</strong>
+  <%= @media_commision.description %>
+</p>
+
+<%= link_to 'Edit', edit_media_commision_path(@media_commision), class: "btn btn-info btn-xs" %> |
+<%= link_to 'Back', media_commisions_path, class: "btn btn-info btn-xs" %>
+<hr/>
+<%= render partial: "media/media_list" %>
+<hr/>
+<%= render partial: "drop_down" %>
+<hr />
+

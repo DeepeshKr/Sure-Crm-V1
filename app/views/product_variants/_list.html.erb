@@ -1,0 +1,36 @@
+<h4>Product variants</h4>
+
+<table class="table table-hover" >
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Barcode</th>
+      <th>Price</th>
+      <th>Taxes</th>
+       <th>Shipping</th>
+      <th>Total</th>
+      <th>Ext code</th>
+      <th>Active</th>
+      <th colspan="2"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @product_variants.each do |product_variant| %>
+      <tr>
+        <td><%= product_variant.name %></td>
+        <td><%= product_variant.variantbarcode %></td>
+        <td><%= product_variant.price %></td>
+        <td><%= product_variant.taxes %></td>
+         <td><%= product_variant.shipping %></td>
+        <td><%= product_variant.total %></td>
+        <td><%= product_variant.extproductcode %></td>
+        <td><%= product_variant.product_active_code.name if product_variant.product_active_code.present? %></td>
+        <td><%= link_to 'Show', product_variant %></td>
+        <td><%= link_to 'Edit', edit_product_variant_path(product_variant) %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+

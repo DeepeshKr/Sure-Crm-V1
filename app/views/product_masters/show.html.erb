@@ -1,0 +1,81 @@
+<p id="notice"><%= notice %></p>
+
+<h2>
+  <strong>Name:</strong>
+  <%= @product_master.name %>
+</h2>
+<div class="row">
+	<div class="col-sm-4">
+		<strong>Category:</strong>
+  <%= @product_master.product_category.name if @product_master.product_category %>
+	</div>
+	<div class="col-sm-4">
+		<strong>Inventory:</strong>
+  <%= @product_master.product_inventory_code.name if @product_master.product_inventory_code %>
+	</div>
+	<div class="col-sm-4">
+		<strong>Barcode:</strong>
+  <%= @product_master.barcode %>
+	</div>
+</div>
+<div class="row">
+	<div class="col-sm-4">
+		<strong>Extproductcode:</strong>
+  <%= @product_master.extproductcode %>
+	</div>
+	
+	<div class="col-sm-4">
+		<strong>Active Status:</strong>
+  <%= @product_master.product_active_code.name if @product_master.product_active_code %>
+	</div>
+	
+</div>
+<div class="row">
+	<div class="col-sm-3">
+		  <strong>Price:</strong>
+  <%= @product_master.price %>
+	</div>
+	<div class="col-sm-3">
+		 <strong>Taxes:</strong>
+  <%= @product_master.taxes %>
+	</div>
+	<div class="col-sm-3">
+		 <strong>Shipping:</strong>
+  <%= @product_master.shipping %>
+	</div>
+	<div class="col-sm-3">
+		 <strong>Total:</strong>
+  <%= @product_master.total %>
+	</div>
+</div>
+
+<div class="row">
+	<div class="col-sm-10">
+		  <strong>Description:</strong>
+  <%= @product_master.description %>
+	</div>
+</div>
+
+<%= link_to 'Edit', edit_product_master_path(@product_master), class: "btn btn-info btn-xs" %> |
+<%= link_to 'Back', product_masters_path, class: "btn btn-info btn-xs" %>
+<hr />
+<%= render partial: "product_variants/list" %>
+<hr />
+
+
+
+
+<h4>Add New Product Variant </h4>
+<%= render partial: "product_variants/form" %>
+<br/>
+<h4>Product Training </h4>
+<hr />
+<%= render partial: "product_training_manuals/listing" %>
+<h4>Add New Product Training </h4>
+<%= render partial: "product_training_manuals/quick_create" %>
+<br/>
+<!-- <h4>Product Add On - Which can be ordered with this product </h4>
+
+<%= render partial: "product_variant_add_ons/add_ons" %>
+<br/>
+<%= render partial: "product_variant_add_ons/quick_add" %> -->

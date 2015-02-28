@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  productid: 1
+  name: MyString
+  description: MyText
+  quicknotes: MyText
+
+two:
+  productid: 1
+  name: MyString
+  description: MyText
+  quicknotes: MyText

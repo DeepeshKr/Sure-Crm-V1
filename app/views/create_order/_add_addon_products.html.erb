@@ -1,0 +1,22 @@
+
+
+<%= form_for @order_line , url: addproducts_path, :method => :POST do |f| %>
+          
+            <div class="row">
+             <%= hidden_field_tag :order_id, @order_line.orderid %>
+             <%= f.hidden_field(:orderid) %>
+              <div class="col-xs-9">
+               <%= f.select(:productvariant_id, 
+                options_from_collection_for_select(@product_add_on_lists, :id, :productinfo), 
+                {:prompt => 'Please Choose Product'}, :class => "form-control col-xs-1")  %>
+              </div>
+              <div class="col-xs-2">
+                <%= f.select :pieces, options_for_select(1..2), {}, :class => "form-control col-xs-1"  %>
+              </div>
+              <div class="col-xs-1">
+                <%= f.submit "Add", class: "btn btn-primary "%>
+              </div>
+               
+          </div>
+
+<% end %>

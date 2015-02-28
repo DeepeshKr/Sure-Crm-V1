@@ -2,14 +2,18 @@
 <div class="center jumbotron">
   <h1>Welcome to the Sure CRM App</h1>
 
-  <h2>
-    This is the home page for the
-    <a href="http://www.telebrandsindia.com/">Telebrands India Website</a>
-    sales and support app.
-  </h2>
-<p>Only Authorised people are allowed to move ahead form here</p>
-   <%= link_to "Sign up now!", signup_path, class: "btn btn-lg btn-primary" %>
+  
+  <% if logged_in? %>
+   <h3>Welcome, <%= current_user.name %> , you are logged in as <%= current_user.user_role.name %></h3>
+
+  <!-- <p><%= link_to 'Users:', users_path %> <%= User.count %> registered</p> -->
+<% else %>
+  <h3>Welcome</h3>
+
+
+<small>Only Authorised people are allowed to move ahead form here</small>
+   <%= link_to "Sign up now!", signup_path, class: "btn btn-xs btn-primary" %>
+   <% end %>
 </div>
 
-<%= link_to image_tag("rails.png", alt: "Rails logo"),
-            'http://rubyonrails.org/' %>
+

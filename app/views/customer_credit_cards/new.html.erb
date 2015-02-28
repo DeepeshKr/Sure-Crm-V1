@@ -1,0 +1,17 @@
+<h1>New Customer Credit Card</h1>
+
+<%= render 'form' %>
+
+<%= link_to 'Back', customer_credit_cards_path %>
+<script type="text/javascript">
+$(document).ready(function() {
+   
+        $('#credit_card_input').change(function(){
+        	val = $(this).val();
+  				alert("Check if Card if Valid :" + val);
+  			$.ajax({url: "<%= creditcard_path %>", 
+  			data: {code: $(this).val()},
+           dataType: "script"   });
+  			})
+  	});
+</script>

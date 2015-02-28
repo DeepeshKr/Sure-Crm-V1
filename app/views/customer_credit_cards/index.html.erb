@@ -1,0 +1,35 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Listing Customer Credit Cards</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Customer</th>
+      <th>Card no</th>
+      <th>Name on card</th>
+      <th>Expiry mon</th>
+      <th>Expiry yr string</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @customer_credit_cards.each do |customer_credit_card| %>
+      <tr>
+        <td><%= customer_credit_card.customer_id %></td>
+        <td><%= customer_credit_card.card_no %></td>
+        <td><%= customer_credit_card.name_on_card %></td>
+        <td><%= customer_credit_card.expiry_mon %></td>
+        <td><%= customer_credit_card.expiry_yr_string %></td>
+        <td><%= link_to 'Show', customer_credit_card %></td>
+        <td><%= link_to 'Edit', edit_customer_credit_card_path(customer_credit_card) %></td>
+        <td><%= link_to 'Destroy', customer_credit_card, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Customer credit card', new_customer_credit_card_path %>

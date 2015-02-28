@@ -1,0 +1,27 @@
+<h1>Listing change_log_types</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Description</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @change_log_types.each do |change_log_type| %>
+      <tr>
+        <td><%= change_log_type.name %></td>
+        <td><%= change_log_type.description %></td>
+        <td><%= link_to 'Show', change_log_type %></td>
+        <td><%= link_to 'Edit', edit_change_log_type_path(change_log_type) %></td>
+        <td><%= link_to 'Destroy', change_log_type, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Change log type', new_change_log_type_path %>

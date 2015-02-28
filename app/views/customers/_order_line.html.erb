@@ -1,0 +1,10 @@
+<div class="row">
+			<div class="col-xs-8">
+			 <%= f.select(:productvariant_id, 
+		    options_from_collection_for_select(@productvariantlist, :id, :productinfo), 
+		    {:prompt => 'Please Choose Product'}, :class => "form-control col-xs-1")  %>
+			</div>
+      <div class="col-xs-2">
+        <%= f.select :pieces, options_for_select(1..10), {}, :class => "form-control col-xs-1"  %>
+      </div>
+</div>

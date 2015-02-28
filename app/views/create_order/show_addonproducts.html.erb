@@ -1,0 +1,70 @@
+
+   <%= render 'customer_details' %>
+<div class="row">
+  
+        <div class="col-xs-8">
+              <div class="clearfix"></div>         
+              <%= render 'order_lines/orderlines' %>
+
+         <div class="clearfix"></div>
+          
+  <br>
+   <%= render 'add_addon_products' %>
+   <br>
+            <div class="clearfix"></div>
+
+            
+              <%= render 'order_footer' %>
+            
+      
+    <div class="clearfix"></div>
+     <%= render 'btn_payment_mode' %>
+     <div class="clearfix"></div>
+      </div>
+
+        <div class="col-xs-4">
+          <div class="panel panel-default">
+              <div class="panel-heading">
+              <h3 class="panel-title">Product Script</h3>
+              </div>
+              <div  class="panel-body">
+                  <div id="product-script-id">
+                
+                  </div>
+                  <div id="product-script">
+                
+                  </div>
+            </div>
+          </div><!-- panel end -->
+        </div>  
+</div>
+ 
+
+
+
+<script>
+  $(document).ready(function() {
+    $('#order_line_productvariant_id').change(function() {
+        $.ajax({
+           url: "<%= producttraining_path %>",
+           data: {
+               id: $("#order_line_productvariant_id option:selected").val()
+           },
+           dataType: "script"
+       });
+    });
+  });
+</script>
+
+<script type="text/javascript">
+$(document).ready(function() {
+   
+        $('#productvariant').change(function(){
+          val = $('#order_line[productvariant_id]').val();
+          alert("Check if Card if Valid :" + val);
+        $.ajax({url: "<%= producttraining_path %>", 
+        data: {id: $(this).val()},
+           dataType: "script"   });
+        })
+    });
+</script>

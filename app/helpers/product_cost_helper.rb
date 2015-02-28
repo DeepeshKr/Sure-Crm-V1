@@ -1,0 +1,2 @@
+module ProductCostHelper
+end

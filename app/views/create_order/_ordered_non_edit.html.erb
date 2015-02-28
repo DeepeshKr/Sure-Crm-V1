@@ -1,0 +1,27 @@
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>Product Description </th>
+      <th>Pieces</th>
+      <th>Subtotal</th>
+      <th>Taxes</th>
+      <th>Shipping</th>
+      <th>Codcharges</th>
+      <th>Total</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @order_lines.each do |order_line| %>
+      <tr>
+        <td><%= order_line.product_variant.name %></td>
+        <td><%= order_line.pieces %></td>
+        <td><%= order_line.subtotal %></td>
+        <td><%= order_line.taxes %></td>
+        <td><%= order_line.shipping %></td>
+        <td><%= order_line.codcharges %></td>
+        <td><%= order_line.total %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

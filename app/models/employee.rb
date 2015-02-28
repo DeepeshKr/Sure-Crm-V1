@@ -1,6 +1,6 @@
 class Employee < ActiveRecord::Base
-  before_save {email.downcase! }
- before_save {employee_code.downcase! }
+  before_save {emailid.downcase! }
+ before_save {employeecode.downcase! }
  validates :first_name,  presence: true, length: { maximum: 50 }
 validates :last_name,  presence: true, length: { maximum: 50 }
  validates :employeecode,  presence: true, uniqueness: true, length:  { maximum: 50 }
@@ -14,15 +14,23 @@ validates :last_name,  presence: true, length: { maximum: 50 }
 # validates_uniqueness_of :employeecode, allow_blank: false
  
   belongs_to :employment_type
-  belongs_to :employee_role
+  belongs_to :employee_role, foreign_key: "employee_role_id"
   
   has_many :subordinates, class_name: "Employee",
                           foreign_key: "reporting_to_id"
  
-  belongs_to :manager, class_name: "Employee"
+  belongs_to :manager, class_name: "Employee",
+                          foreign_key: "reporting_to_id"
+  
+  has_many :interaction_category, foreign_key: "employeeid"
+  has_many :order_master, foreign_key: "employeeid"
 
 has_many :interaction_category
 def fullname
-   self.first_name + self.last_name + " (" + self.designation + ")"
+  self.title + " " + self.first_name  + " " + self.last_name + " (" + self.designation + ")"
+end
+
+def name
+   self.title + " " + self.first_name + " " + self.last_name 
 end
 end

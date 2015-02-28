@@ -1,0 +1,40 @@
+<% if @user.present? %>
+<% provide(:title, 'Create Login for Employee') %>
+
+
+<div class="row">
+  <div class="col-md-6 col-md-offset-2">
+  <h3>Create Login for Employee</h3>
+<p>Only registered employees can get the login's </p>
+    <%= form_for(@user) do |f| %>
+    
+  <%= f.hidden_field :role %>
+     
+      <%= f.label :name %>
+      <%= f.text_field :name, class: 'form-control', :readonly => "true" %>
+
+      <%= f.label :email %>
+      <%= f.text_field :email, class:'form-control', :readonly => "true" %>
+      
+       <%= f.label :employee_code %>
+      <%= f.text_field :employee_code, class:"form-control", :readonly => "true" %>
+
+      <%= f.label :password %>
+      <%= f.password_field :password, class:"form-control" %>
+
+      <%= f.label :password_confirmation, "Confirmation" %>
+      <%= f.password_field :password_confirmation, class:"form-control" %>
+
+
+   <div class="col-md-3 col-md-offset-7">
+  
+   <%= f.submit "Create Login", class: "btn btn-primary" %>
+  
+  </div>
+ 
+    
+    <% end %>
+  </div>
+</div>
+
+<% end %>
