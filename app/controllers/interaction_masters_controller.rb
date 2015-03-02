@@ -38,10 +38,12 @@ class InteractionMastersController < ApplicationController
   end
 
   def new_ticket
+    dropdowns
+    #'this is get'
     customer_id = params[:customer_id]
     @customer = Customer.find(customer_id)
-    @interaction_master = InteractionMaster.new(interaction_master_params)
-    @interaction_master.save
+    @interaction_master = InteractionMaster.new(interaction_status_id: 10000,customer_id: customer_id)
+    
     respond_with(@interaction_master, @customer)
   end
 
@@ -91,7 +93,7 @@ class InteractionMastersController < ApplicationController
 
     def dropdowns
 
-        @interactioncategorylist =  InteractionCategory.where("sortorder > 2")
+        @interactioncategorylist =  InteractionCategory.where("sortorder >= 10")
         @interactionprioritylist =  InteractionPriority.all
     end
 

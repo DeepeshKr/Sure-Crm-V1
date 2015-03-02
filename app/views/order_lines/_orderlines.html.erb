@@ -3,7 +3,7 @@
    <h3 class="panel-title">Order Summary</h3>
     
   </div>
-  <div class="panel-body">
+  
    
  
 
@@ -12,11 +12,11 @@
     <tr>
       <th>Product Description </th>
       <th>Pieces</th>
-      <th>Subtotal</th>
-      <th>Taxes</th>
+      <th>Basic</th>
       <th>Shipping</th>
-      <th>Codcharges</th>
-      <th>Total</th>
+      <th>COD</th>
+      <th>Credit Card</th>
+      <th>Maharashtra</th>
       
       
       <th ></th>
@@ -26,19 +26,34 @@
   <tbody>
     <% @order_lines.each do |order_line| %>
       <tr>
-        <td><%= order_line.product_variant.name %></td>
+         <td><%= order_line.product_variant.name %></td>
         <td><%= order_line.pieces %></td>
-        <td><%= order_line.subtotal %></td>
-        <td><%= order_line.taxes %></td>
-        <td><%= order_line.shipping %></td>
-        <td><%= order_line.codcharges %></td>
-        <td><%= order_line.total %></td>      
+       <td><%= order_line.subtotal %></td>
+        <td class="text-right">
+<%= order_line.subtotal + order_line.shipping %>
+<hr>
+     <small><%= order_line.shipping %> </small>   </td>
+
+        <td class="text-right">
+<%= order_line.subtotal + order_line.shipping + order_line.codcharges %> <hr>
+<small> <%= order_line.codcharges %></small>
+       </td>
+
+        <td class="text-right"><%= order_line.subtotal + order_line.shipping + order_line.creditcardcharges %> 
+<hr>
+<small> <%= order_line.creditcardcharges %></small>
+        </td>
+        <td class="text-right">
+<%= order_line.subtotal + order_line.shipping + order_line.codcharges + order_line.maharastraextra %> 
+<hr>
+<small> <%= order_line.maharastraextra %></small>
+       </td>  
         <td><%= link_to 'Destroy', order_line, method: :delete, data: { confirm: 'Are you sure?' } %></td>
       </tr>
     <% end %>
   </tbody>
 </table>
- </div>
+
 
   
 </div>

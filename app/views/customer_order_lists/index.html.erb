@@ -2,19 +2,51 @@
 
 <h1>Listing Customer Order Lists</h1>
 
-<table>
+<table class="table table-hover">
   <thead>
     <tr>
+    <th>Id</th>
+    <th>Name</th>
+    <th>Address</th>
+    <th>Phone / email</th>
+     <th>Card</th>
+      <th>Order Total</th>
+     <th>Ordered Products</th>
+
       <th colspan="3"></th>
     </tr>
   </thead>
 
   <tbody>
-    <% @customer_order_lists.each do |customer_order_list| %>
+    <% @customer_order_lists.each do |c| %>
       <tr>
-        <td><%= link_to 'Show', customer_order_list %></td>
-        <td><%= link_to 'Edit', edit_customer_order_list_path(customer_order_list) %></td>
-        <td><%= link_to 'Destroy', customer_order_list, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      <td><%= c.ordernum %>  <%= c.orderdate %> <%= c.channel %> 
+      <%= c.ipadd %> <%= c.dnis %>
+
+      </td>
+ <td><%= c.title %> <%= c.fname %> </td>
+ <td><%= c.add1 %> <%= c.add2 %> <%= c.add3 %> <%= c.landmark %> 
+
+ <%= c.city %> <%= c.state %> <%= c.pincode %> <%= c.mstate %>
+ </td>
+<td><%= c.tel1 %> <%= c.tel2 %> <%= c.fax %> <%= c.email %> </td>
+<td><%= c.ccnumber %> <%= c.expmonth %> <%= c.expyear %> <%= c.cardtype %> </td>
+<td><%= c.carddisc %> <%= c.totalamt %> <td>
+<td><%= c.prod1 %> <%= c.qty1 %>
+<%= c.prod2 %> <%= c.qty2 %>
+<%= c.prod3 %> <%= c.qty3 %>
+<%= c.prod4 %> <%= c.qty4 %>
+<%= c.prod5 %> <%= c.qty5 %>
+<%= c.prod6 %> <%= c.qty6 %>
+<%= c.prod7 %> <%= c.qty7 %>
+<%= c.prod8 %> <%= c.qty8 %>
+<%= c.prod9 %> <%= c.qty9 %>
+<%= c.prod10 %> <%= c.qty10 %>
+
+  <td>
+        <td><%= link_to 'Show', c %></td>
+        <td><%= link_to 'Edit', edit_customer_order_list_path(c) %></td>
+        <td><%= link_to 'Destroy', c, method: :delete, data: { confirm: 'Are you sure?' } %></td>
       </tr>
     <% end %>
   </tbody>
@@ -23,3 +55,4 @@
 <br>
 
 <%= link_to 'New Customer order list', new_customer_order_list_path %>
+ 

@@ -56,6 +56,50 @@ No Address availabe!
 <% end %>
 </div>
 </div>
+
+<div class="well well-sm">
+<div class="row">
+  <div class="col-xs-4">
+    <strong>Date:</strong>   <%= order_master.orderdate %> 
+  </div>
+  <div class="col-xs-2">
+    <strong>Billno:</strong>   <%= order_master.billno %>
+  </div>
+   <div class="col-xs-2">
+    
+  </div>
+  <div class="col-xs-2">
+    <strong>External order no:</strong>   <%= order_master.external_order_no %>
+  </div>
+ 
+</div>
+<div class="row">
+  <div class="col-xs-4">
+ <strong> Called No </strong>  <%= order_master.calledno %>
+  </div>
+<div class="col-xs-4">
+<strong> Media </strong> <%= order_master.medium.name rescue nil%>
+  </div>
+  <div class="col-xs-4">
+  <strong>Play list:</strong> <%= order_master.campaign_playlist.name rescue nil%>
+  </div>
+
+</div>
+<div class="row">
+  <div class="col-xs-4">
+ <strong>Campaign:</strong>
+<%= order_master.campaign_playlist.campaign.name rescue nil%> 
+  </div>
+<div class="col-xs-4">
+<strong>Employee code:</strong>
+ <%= @order_master.employeecode rescue nil%>
+  </div>
+  <div class="col-xs-4">
+<strong>Employee:</strong>  <%= order_master.employee_id rescue nil%>
+  </div>
+
+</div>
+</div>
  <!--orderline begin-->
  
  <table class="table table-striped">
@@ -111,11 +155,13 @@ No Address availabe!
 		  <!-- Default panel contents -->
 		  <!-- Table -->
 		  		<table class="table table-hover">
-				<tr><td> <strong>Subtotal:</strong>   </td>	<td> <%= order_master.subtotal %></td>	</tr>
-				<tr><td> <strong>Taxes:</strong></td>	<td>  <%= order_master.taxes %></td> </tr>
-				<tr><td><strong>Shipping:</strong>  </td><td><%= order_master.shipping %> </td>  </tr>
-				<tr><td> <strong>Cod charges:</strong></td><td> <%= order_master.codcharges %></td> </tr>
-				<tr><td><strong>Total:</strong> </td><td><%= order_master.total %> </td></tr>
+				<tr><td> <strong>Subtotal:</strong>   </td>	<td class="align-right"> <%= order_master.subtotal %></td>	</tr>
+				<tr><td><strong>Shipping:</strong>  </td><td class="align-right"><%= order_master.shipping %> </td>  </tr>
+				<tr><td> <strong>Cod charges:</strong></td><td class="align-right"> <%= order_master.codcharges %></td> </tr>
+        <tr><td> <strong>Credit Card Savings:</strong></td><td class="align-right"> <%= order_master.creditcardcharges %></td> </tr>
+ <tr><td> <strong>Maharastra Charges:</strong></td><td class="align-right"> <%= order_master.maharastraextra %></td> </tr>
+
+				<tr><td><strong>Total:</strong> </td><td class="align-right"><%= order_master.total %> </td></tr>
 				</table>  
 		</div>
 

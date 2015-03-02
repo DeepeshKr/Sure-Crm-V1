@@ -93,7 +93,7 @@ class CustomersController < ApplicationController
     end
 
     def interaction_dropdowns
-        @interactioncategorylist =  InteractionCategory.all
+        @interactioncategorylist =  InteractionCategory.where("sortorder >= 10")
         @interactionprioritylist =  InteractionPriority.all
     end 
 

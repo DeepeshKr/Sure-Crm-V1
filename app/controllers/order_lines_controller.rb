@@ -71,7 +71,8 @@ class OrderLinesController < ApplicationController
 
   def destroy
     @order_line.destroy
-    respond_with(@order_line.order_master)
+    #respond_with(@order_line.order_master)
+    redirect_to showproducts_path(:order_id => @order_line.orderid)  
   end
 
   private

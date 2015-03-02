@@ -74,6 +74,11 @@ class OrderMastersController < ApplicationController
     end
 
     def order_master_params
-      params.require(:order_master).permit(:orderdate, :employeecode, :employee_id, :customer_id, :customer_address_id, :billno, :external_order_no, :pieces, :subtotal, :taxes, :shipping, :codcharges, :total, :orderstatusmaster_id, :orderpaymentmode_id, :campaignplaylist_id, :notes)
+      params.require(:order_master).permit(:orderdate, :employeecode, :employee_id, 
+        :customer_id, :customer_address_id, :billno, :external_order_no, :pieces, 
+        :subtotal, :taxes, :shipping, :codcharges, :total, :order_status_master_id, 
+        :orderpaymentmode_id, :campaign_playlist_id, :notes, :order_source_id,
+        :media_id, :corporate_id, :order_for_id, :userip, :sessionid, :calledno
+        )
     end
 end

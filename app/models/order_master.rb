@@ -12,7 +12,7 @@ class OrderMaster < ActiveRecord::Base
    
   accepts_nested_attributes_for :order_line,  :allow_destroy => true
 
-  validates_presence_of :calledno, :media_id
+  validates_presence_of :calledno #, :media_id
 
   validates_associated :order_line
 
@@ -20,7 +20,14 @@ class OrderMaster < ActiveRecord::Base
   #order_for_id - Integer update with customer order id
   #external_order_no - string update with customer order id
   
-  after_create
+
+after_create :on_create
+
+#after_save :on_upate
+
+#after_update :on_update
+
+#after_destroy :updateOrder
 
   def no_order_master(attributes)
   attributes[:id].blank?
@@ -32,7 +39,7 @@ class OrderMaster < ActiveRecord::Base
   if productcost.exists?
     total = 0
     productcost.each do |c|
-      total += c.codcharges
+      total += c.codcharges || 0
     end
     return total
     
@@ -48,7 +55,7 @@ def creditcardcharges
   if productcost.exists?
     total = 0
     productcost.each do |c|
-      total += c.creditcardcharges
+      total += c.creditcardcharges || 0
     end
     return total
     
@@ -64,7 +71,7 @@ def maharastraextra
   if productcost.exists?
     total = 0
     productcost.each do |c|
-      total += c.maharastraextra
+      total += c.maharastraextra || 0
     end
     return total
     
@@ -110,9 +117,34 @@ def productrevenue
   #return OrderLine.where('orderid = ?', self.id).sum(:productrevenue)
 end
 private
-  def creator
-  self.update_column(pieces: 0,subtotal: 0, taxes: 0, codcharges: 0, shipping:0, total: 0)
+  def on_create
+  #self.update_column(pieces: 0,subtotal: 0, taxes: 0, codcharges: 0, shipping:0, total: 0)
+  self.update(pieces: OrderLine.where('orderid = ?', self.id).sum(:pieces),
+     subtotal: OrderLine.where('orderid = ?', self.id).sum(:subtotal),
+     shipping: OrderLine.where('orderid = ?', self.id).sum(:shipping), 
+      taxes:  OrderLine.where('orderid = ?', self.id).sum(:taxes), 
+      codcharges: OrderLine.where('orderid = ?', self.id).sum(:codcharges), 
+      total: OrderLine.where('orderid = ?', self.id).sum(:total))
   end
 
+   def on_update
+    self.update(pieces: OrderLine.where('orderid = ?', self.id).sum(:pieces),
+     subtotal: OrderLine.where('orderid = ?', self.id).sum(:subtotal),
+     shipping: OrderLine.where('orderid = ?', self.id).sum(:shipping), 
+      taxes:  OrderLine.where('orderid = ?', self.id).sum(:taxes), 
+      codcharges: OrderLine.where('orderid = ?', self.id).sum(:codcharges), 
+      total: OrderLine.where('orderid = ?', self.id).sum(:total))
+ 
+  end
+
+   def on_destroy
+    self.update(pieces: OrderLine.where('orderid = ?', self.id).sum(:pieces),
+     subtotal: OrderLine.where('orderid = ?', self.id).sum(:subtotal),
+     shipping: OrderLine.where('orderid = ?', self.id).sum(:shipping), 
+      taxes:  OrderLine.where('orderid = ?', self.id).sum(:taxes), 
+      codcharges: OrderLine.where('orderid = ?', self.id).sum(:codcharges), 
+      total: OrderLine.where('orderid = ?', self.id).sum(:total))
+  #self.update_column(pieces: 0,subtotal: 0, taxes: 0, codcharges: 0, shipping:0, total: 0)
+  end
   
 end

@@ -12,27 +12,50 @@ validates :productvariant_id,  :presence => { :message => "Please add a product!
 #auto fill requirement
 #delegate :product, to: :product_variant, prefix: true
 
-after_create :creator
+after_create :updateOrder # :creator
 
-after_save :updator
+after_save :updateOrder # :updator
 
 after_destroy :updateOrder  
 
 def codcharges
   cashondeliveryid = 10001
-  charges = Orderpaymentmode.find(cashondeliveryid).charges
-  return self.total * charges
+   charges = Orderpaymentmode.find(cashondeliveryid).charges
+  if self.order_master.orderpaymentmode_id.present?
+   #check if paid using credit card
+     if self.order_master.orderpaymentmode_id  == 10000
+         charges = 0
+     end
+  end
+  return (self.total || 0) * charges 
 end
 
 def creditcardcharges
   creditcardid = 10000
   charges = Orderpaymentmode.find(creditcardid).charges
-  return self.total * charges
+  if self.order_master.orderpaymentmode_id.present?
+     #check if paid using cash on delivery is selected
+     if self.order_master.orderpaymentmode_id == 10001
+        charges = 0
+     end
+  end
+
+  return (self.total || 0)  * charges 
 end
 
 def maharastraextra
   #2.5% extra charge
-  return self.total * 0.025
+surcharge = 0
+  #check if address is selected
+if self.order_master.customer_address_id.present?
+   #check if state is maharastra
+   if self.order_master.customer_address.state.downcase == 'maharashtra'
+      surcharge = 0.025
+   end
+end
+
+return (self.total || 0) * surcharge
+
 end
 
 def productrevenue
@@ -72,7 +95,7 @@ private
 
      self.update(description: productv.name)
      
-    updateOrder
+    #updateOrder
   end
 
 def updator
@@ -87,7 +110,7 @@ def updator
 
     self.update(description: productv.name)
 
-updateOrder
+#updateOrder
 
      #self.update_column(pieces: 0,subtotal: 0, taxes: 0, codcharges: 0, shipping:0, total: 0)
   end
