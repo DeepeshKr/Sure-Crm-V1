@@ -189,6 +189,14 @@ def add_media
 	if order_master_params[:campaign_playlist_id].present?
 		@order_master.update(:campaign_playlist_id => order_master_params[:campaign_playlist_id])
 	end
+  if params[:mismatched_campaign] = 1
+    #Old ad
+      interactions(10004)
+  elsif params[:mismatched_campaign] = 2
+    #Different ad
+      interactions(10005)
+  end
+
 	if @order_master.valid?
 		flash[:success] = "Media added and Campaign Playlist added " 
     	redirect_to showaddonproducts_path(:order_id => @order_master.id) 
@@ -429,24 +437,25 @@ private
            .where('campaigns.startdate <= ? and enddate >= ?', DateTime.now, DateTime.now)
            .where({campaignid: @campaignlist})
     end
+    
   	def productvariantlist
   		@productvariantlist = ProductVariant.where('activeid = ?',  10000)
           .joins(:product_master).where("product_masters.productactivecodeid = ?", 10000)
   	end
+
     def interactions(refcatid)
      @intearaction_master = InteractionMaster.create(createdon: Time.now, 
-     		interaction_status_id:1,
+     		interaction_status_id:10000,
           	customer_id: @order_master.customer_id, 
           	callednumber: @order_master.calledno,
           	interaction_category_id:refcatid, 
             orderid: @order_master.id, 
-          	interaction_priority_id:1,
+          	interaction_priority_id:10000,
           	campaign_playlist_id: @order_master.campaign_playlist_id, 
           	state: customer_params[:state], resolveby: 2.days.from_now)
 
           if order_params[:comments].present?
-            @interaction_transcripts = InteractionTranscript.create(interactionid:@intearaction_master.id,
-            description:order_master_params[:comments], interactionuserid:1, callednumber:calledno)
+            @interaction_transcripts = @intearaction_master.interaction_transcript.create(description:order_master_params[:comments], interactionuserid:10000, callednumber:calledno)
           end
     end
 
