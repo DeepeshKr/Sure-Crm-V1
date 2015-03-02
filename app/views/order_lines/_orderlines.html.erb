@@ -34,20 +34,34 @@
 <hr>
      <small><%= order_line.shipping %> </small>   </td>
 
-        <td class="text-right">
-<%= order_line.subtotal + order_line.shipping + order_line.codcharges %> <hr>
+         <td class="text-right">
+        <% if order_line.codcharges != 0 %>
+<%= order_line.subtotal + order_line.shipping + order_line.codcharges %>
+<% else %>
+          0.00
+        <% end %>
+ <hr>
 <small> <%= order_line.codcharges %></small>
        </td>
-
-        <td class="text-right"><%= order_line.subtotal + order_line.shipping + order_line.creditcardcharges %> 
+        <td class="text-right">
+<% if order_line.creditcardcharges != 0 %>
+        <%= order_line.subtotal + order_line.shipping + order_line.creditcardcharges %> 
+        <% else %>
+          0.00
+        <% end %>
 <hr>
 <small> <%= order_line.creditcardcharges %></small>
         </td>
         <td class="text-right">
-<%= order_line.subtotal + order_line.shipping + order_line.codcharges + order_line.maharastraextra %> 
+        <% if order_line.maharastraextra != 0 %>
+
+<%= order_line.subtotal + order_line.shipping + order_line.codcharges + order_line.creditcardcharges + order_line.maharastraextra %> 
+<% else %>
+          0.00
+        <% end %>
 <hr>
 <small> <%= order_line.maharastraextra %></small>
-       </td>  
+       </td> 
         <td><%= link_to 'Destroy', order_line, method: :delete, data: { confirm: 'Are you sure?' } %></td>
       </tr>
     <% end %>

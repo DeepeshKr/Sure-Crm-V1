@@ -11,18 +11,12 @@ class Campaign < ActiveRecord::Base
 
   def sales 
   	campaignlist =  CampaignPlaylist.where('campaignid = ?', self.id)
-  	# @all_calllist = CampaignPlaylist.joins(:campaign)
-   #         .where('campaigns.startdate <= ? and enddate >= ?', DateTime.now, DateTime.now)
-   #         .where({campaignid: @campaignlist})
       OrderMaster.where({campaign_playlist_id: campaignlist}).sum(:total) || 0
   end
   
 
   def productrevenue 
     campaignlist =  CampaignPlaylist.where('campaignid = ?', self.id)
-    # @all_calllist = CampaignPlaylist.joins(:campaign)
-   #         .where('campaigns.startdate <= ? and enddate >= ?', DateTime.now, DateTime.now)
-   #         .where({campaignid: @campaignlist})
    orderrevenue =  OrderMaster.where({campaign_playlist_id: campaignlist})
     if orderrevenue.present?
         total = 0
@@ -40,11 +34,7 @@ class Campaign < ActiveRecord::Base
 
   def productcost 
     campaignlist =  CampaignPlaylist.where('campaignid = ?', self.id)
-    # @all_calllist = CampaignPlaylist.joins(:campaign)
-   #         .where('campaigns.startdate <= ? and enddate >= ?', DateTime.now, DateTime.now)
-   #         .where({campaignid: @campaignlist})
-      #OrderMaster.where({campaign_playlist_id: campaignlist}).sum(:productcost) || 0
-      ordercost =  OrderMaster.where({campaign_playlist_id: campaignlist})
+    ordercost =  OrderMaster.where({campaign_playlist_id: campaignlist})
 
       if ordercost.present?
         total = 0
@@ -56,10 +46,6 @@ class Campaign < ActiveRecord::Base
     else
       return 0
     end
-    
-    #return orderrevenue.sum(:total)
-
-
   end
 
   def days

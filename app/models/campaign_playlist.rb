@@ -82,13 +82,9 @@ def productrevenue
         end
       return total
       
-    else
-      return 0
-    end
-    
-    #return orderrevenue.sum(:total)
-
-
+      else
+        return 0
+      end  
   end
 
 after_create :updatecampaign

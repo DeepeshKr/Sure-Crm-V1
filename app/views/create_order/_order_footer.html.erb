@@ -33,15 +33,21 @@
 				</tr>
 				<tr><td> <strong>Cod charges:</strong></td><td class="text-right"> 
 				<small>(<%= @order_master.codcharges %>)</small>
+				<% if @order_master.codcharges != 0 %>
 				 <%= @order_master.subtotal + @order_master.shipping + @order_master.codcharges %>
+				<% end %>
 				</td> </tr>
 				<tr><td> <strong>Credit Card Savings:</strong></td><td class="text-right"> 
 				<small>(<%= @order_master.creditcardcharges %>)</small>
+				<% if @order_master.creditcardcharges != 0 %>
 				 <%= @order_master.subtotal + @order_master.shipping + @order_master.creditcardcharges %>
+				 	<% end %>
 				</td> </tr>
-				<tr><td> <strong>Maharastra Charges:</strong></td><td class="text-right"> 
+				<tr><td> <strong>Maharashtra Surcharge:</strong></td><td class="text-right"> 
 			<small>(<%= @order_master.maharastraextra %>)</small>	
- 			<%= @order_master.subtotal + @order_master.shipping + @order_master.codcharges + @order_master.maharastraextra %>
+			<% if @order_master.maharastraextra != 0 %>
+ 			<%= @order_master.subtotal + @order_master.shipping + @order_master.codcharges + @order_master.creditcardcharges + @order_master.maharastraextra %>
+ 				<% end %>
 			</td> </tr>
 				
 				</table>  

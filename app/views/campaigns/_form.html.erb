@@ -42,7 +42,7 @@
    <div class="col-xs-8">
    
     	 <%= f.select(:mediumid, 
-    options_from_collection_for_select(@medialist, :id, :mediainfo), 
+    options_from_collection_for_select(@medialist, :id, :mediainfo, selected: @campaign.mediumid), 
     {:label => "Select Media"}, :class => "form-control")  %>
     <small> Only media which we pay in advance show up here </small>
   </div>

@@ -41,7 +41,7 @@
         <td><%= campaign.sales %></td>
         <td><%= campaign.productrevenue %></td>
         <td><%= campaign.productcost %></td>
-        <td><%= @campaign_playlist.productrevenue - (@campaign_playlist.cost + @campaign_playlist.productcost) %> </td>
+        <td><%= @campaign.productrevenue - (@campaign.cost + @campaign.productcost) rescue nil %>  </td>
         <td><%= link_to 'Show', campaign %></td>
        <!--  <td><%= link_to 'Edit', edit_campaign_path(campaign) %></td>
         <td><%= link_to 'Destroy', campaign, method: :delete, data: { confirm: 'Are you sure?' } %></td> -->
