@@ -11,18 +11,17 @@ class CampaignPlaylistsController < ApplicationController
     # elsif
     #   @campaign_playlists = CampaignPlaylist.all
     # respond_with(@campaign_playlists)
-    respond_to do |format|
-    format.html
-    format.csv do
-      headers['Content-Disposition'] = "attachment; filename=\"user-list\""
-      headers['Content-Type'] ||= 'text/csv'
-    end
-  end
+      respond_to do |format|
+          format.html
+          format.csv do
+            headers['Content-Disposition'] = "attachment; filename=\"campaign-playlist\""
+            headers['Content-Type'] ||= 'text/csv'
+          end
+      end
     end
     
   end
-  
-  
+
   
   def show
   # @campaignlist =  Campaign.joins(:medium).where('media.telephone = ?', @order_master.calledno)

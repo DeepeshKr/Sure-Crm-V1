@@ -124,7 +124,8 @@ mount Upmin::Engine => '/admin'
   #get "project/update_text", as: "update_text"
   get "productdetails" => 'product_masters#details'
   get "producttraining" => 'product_training_manuals#training'
-   get "productvariantdetails" => 'product_variants#details'
+  get "productvariantdetails" => 'product_variants#details'
+
   #get "creditcard" => 'project#luhn'
 
   get 'signup'  => 'users#new'

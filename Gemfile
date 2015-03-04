@@ -16,7 +16,8 @@ gem 'luhn'
 
 #get multi form  
 #gem 'wicked'
-
+#gem for getting csv files
+#gem 'fastercsv', '~> 1.5.5'
 
 #get auto complete
 gem 'rails4-autocomplete'

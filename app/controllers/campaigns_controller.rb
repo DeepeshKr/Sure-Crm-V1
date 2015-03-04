@@ -31,9 +31,9 @@ class CampaignsController < ApplicationController
 
   def show
       @campaign_playlists = CampaignPlaylist.where("campaignid = ?" , params[:id])
+       @campaign_id = params[:id]
      if @campaign.enddate >= DateTime.now
       @campaign_playlist = CampaignPlaylist.new(campaignid: params[:id])
-      @campaign_id = params[:id]
      end
     respond_with(@campaign, @campaign_playlists,  @campaign_playlist)
   end
