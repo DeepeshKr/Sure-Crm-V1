@@ -4,3 +4,17 @@
 
 <%= link_to 'Show', @campaign_playlist, class: "btn btn-info btn-xs" %> |
 <%= link_to 'Back', @campaign_playlist.campaign, class: "btn btn-info btn-xs" %>
+
+<script>
+  $(document).ready(function() {
+    $('#campaign_playlist_productvariantid').change(function() {
+        $.ajax({
+           url: "<%= productvariantdetails_path %>",
+           data: {
+               variant_id: $("#campaign_playlist_productvariantid option:selected").val()
+           },
+           dataType: "script"
+       });
+    });
+  });
+</script>

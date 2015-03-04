@@ -414,9 +414,7 @@ private
        
         flash[:error] = "This order no #{orderid} is already processed at #{ondate}" 
         redirect_to ordersummary_path(:order_id => @order_master.id)
-      else
-         flash[:error] = "Order no #{orderid} is already processed at #{ondate} current status #{statusno}" 
-      end
+       end
     end
 
     def new_order_master
@@ -431,9 +429,10 @@ private
     def addon_product_list
 
      # @productadded_list = @order_line.joins(:product_variants).pluck(product_variants.productmasterid)
-
-      @product_add_on_lists  = ProductVariant.joins(:product_master)
-      .where(product_masters: { product_sell_type_id: 2 })
+ @product_add_on_lists = ProductVariant.where(product_sell_type_id: 10001)
+ .where(activeid: 10000)
+          .where('activeid = ?',  10000)
+         .joins(:product_master).where("product_masters.productactivecodeid = ?", 10000)
 #.where(productmasterid: @productadded_list)
     end
     def get_variables
@@ -461,7 +460,11 @@ private
   	def productvariantlist
   		@productvariantlist = ProductVariant.where('activeid = ?',  10000)
           .joins(:product_master).where("product_masters.productactivecodeid = ?", 10000)
+
+
   	end
+
+
 
     def interactions(refcatid)
      @intearaction_master = InteractionMaster.create(createdon: Time.now, 

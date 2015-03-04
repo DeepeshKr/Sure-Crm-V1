@@ -76,7 +76,7 @@ class CampaignPlaylistsController < ApplicationController
 
   def destroy
     @campaign_playlist.destroy
-    respond_with(@campaign_playlist)
+    respond_with(@campaign_playlist.campaign)
   end
 
   private
