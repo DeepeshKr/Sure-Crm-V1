@@ -27,12 +27,10 @@
   <div class="col-xs-2">
     <strong>Billno:</strong>   <%= @order_master.billno %>
   </div>
-  <div class="col-xs-2">
-    <strong>External order no:</strong>   <%= @order_master.external_order_no %>
+  <div class="col-xs-3">
+    <strong>External order no:</strong>   <%= @order_master.external_order_no.truncate(10) %>
   </div>
-  <div class="col-xs-2">
-    
-  </div>
+  
 </div>
 <div class="row">
   <div class="col-xs-4">

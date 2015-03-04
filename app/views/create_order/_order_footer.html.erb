@@ -11,6 +11,7 @@
 			    <li class="list-group-item"><strong>Pieces:</strong> <%= @order_master.pieces %></li>
 			    <li class="list-group-item"><strong>Order Status:</strong> <%= @order_master.order_status_master.name  if @order_master.order_status_master %></li>
 			    <li class="list-group-item"><strong>Payment mode:</strong> <%= @order_master.orderpaymentmode.name if @order_master.orderpaymentmode %> </li>
+			    <li class="list-group-item"><strong>State:</strong> <%= @order_master.customer_address.state if @order_master.customer_address %> </li>
 			   
 			  </ul>
 		</div>

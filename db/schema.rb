@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150226072625) do
+ActiveRecord::Schema.define(version: 20150303075610) do
 
   create_table "address_types", force: true do |t|
     t.string   "name"
@@ -168,68 +168,68 @@ ActiveRecord::Schema.define(version: 20150226072625) do
   end
 
   create_table "customer_order_lists", force: true do |t|
-    t.integer  "ordernum",    limit: nil, precision: 38
+    t.integer  "ordernum",   limit: nil, precision: 38
     t.datetime "orderdate"
-    t.string   "title",       limit: 5
-    t.string   "fname",       limit: 30
-    t.string   "lname??",     limit: 30
-    t.string   "add1",        limit: 30
-    t.string   "add2",        limit: 30
-    t.string   "add3",        limit: 30
-    t.string   "city",        limit: 20
-    t.integer  "pincode",     limit: nil, precision: 38
-    t.string   "tel1",        limit: 20
-    t.string   "tel2",        limit: 20
-    t.string   "fax",         limit: 20
-    t.string   "email",       limit: 30
-    t.string   "ccnumber",    limit: 16
-    t.string   "cvc",         limit: 5
-    t.string   "cardtype",    limit: 20
-    t.string   "expmonth",    limit: 2
-    t.string   "expyear",     limit: 4
-    t.string   "prod1",       limit: 10
-    t.integer  "qty1",        limit: nil, precision: 38
-    t.string   "prod2",       limit: 10
-    t.integer  "qty2",        limit: nil, precision: 38
-    t.string   "prod3",       limit: 10
-    t.integer  "qty3",        limit: nil, precision: 38
-    t.string   "prod4",       limit: 10
-    t.integer  "qty4",        limit: nil, precision: 38
-    t.string   "prod5",       limit: 10
-    t.integer  "qty5",        limit: nil, precision: 38
-    t.string   "prod6",       limit: 10
-    t.integer  "qty6",        limit: nil, precision: 38
-    t.string   "prod7",       limit: 10
-    t.integer  "qty7",        limit: nil, precision: 38
-    t.string   "prod8",       limit: 10
-    t.integer  "qty8",        limit: nil, precision: 38
-    t.string   "prod9",       limit: 10
-    t.integer  "qty9",        limit: nil, precision: 38
-    t.string   "prod10",      limit: 10
-    t.integer  "qty10",       limit: nil, precision: 38
-    t.string   "channel",     limit: 50
-    t.string   "state",       limit: 5
-    t.string   "username",    limit: 50
-    t.integer  "oper_no",     limit: nil, precision: 38
-    t.string   "recupd",      limit: 1
-    t.integer  "dt_hour",     limit: nil, precision: 38
-    t.integer  "dt_min",      limit: nil, precision: 38
-    t.datetime "birthdate??"
-    t.string   "mstate",      limit: 50
-    t.integer  "people",      limit: nil, precision: 38
-    t.integer  "cards",       limit: nil, precision: 38
-    t.string   "carddisc",    limit: 50
-    t.string   "recfile",     limit: 100
-    t.string   "ipadd",       limit: 50
-    t.string   "dnis",        limit: 50
-    t.string   "landmark",    limit: 50
-    t.string   "chqdisc",     limit: 50
-    t.integer  "totalamt",    limit: nil, precision: 38
-    t.datetime "trandate??"
-    t.string   "uae_status",  limit: 50
-    t.string   "emischeme",   limit: 50
-    t.datetime "created_at",                             null: false
-    t.datetime "updated_at",                             null: false
+    t.string   "title",      limit: 5
+    t.string   "fname",      limit: 30
+    t.string   "lname",      limit: 30
+    t.string   "add1",       limit: 30
+    t.string   "add2",       limit: 30
+    t.string   "add3",       limit: 30
+    t.string   "city",       limit: 20
+    t.integer  "pincode",    limit: nil, precision: 38
+    t.string   "tel1",       limit: 20
+    t.string   "tel2",       limit: 20
+    t.string   "fax",        limit: 20
+    t.string   "email",      limit: 30
+    t.string   "ccnumber",   limit: 16
+    t.string   "cvc",        limit: 5
+    t.string   "cardtype",   limit: 20
+    t.string   "expmonth",   limit: 2
+    t.string   "expyear",    limit: 4
+    t.string   "prod1",      limit: 10
+    t.integer  "qty1",       limit: nil, precision: 38
+    t.string   "prod2",      limit: 10
+    t.integer  "qty2",       limit: nil, precision: 38
+    t.string   "prod3",      limit: 10
+    t.integer  "qty3",       limit: nil, precision: 38
+    t.string   "prod4",      limit: 10
+    t.integer  "qty4",       limit: nil, precision: 38
+    t.string   "prod5",      limit: 10
+    t.integer  "qty5",       limit: nil, precision: 38
+    t.string   "prod6",      limit: 10
+    t.integer  "qty6",       limit: nil, precision: 38
+    t.string   "prod7",      limit: 10
+    t.integer  "qty7",       limit: nil, precision: 38
+    t.string   "prod8",      limit: 10
+    t.integer  "qty8",       limit: nil, precision: 38
+    t.string   "prod9",      limit: 10
+    t.integer  "qty9",       limit: nil, precision: 38
+    t.string   "prod10",     limit: 10
+    t.integer  "qty10",      limit: nil, precision: 38
+    t.string   "channel",    limit: 50
+    t.string   "state",      limit: 5
+    t.string   "username",   limit: 50
+    t.integer  "oper_no",    limit: nil, precision: 38
+    t.string   "recupd",     limit: 1
+    t.integer  "dt_hour",    limit: nil, precision: 38
+    t.integer  "dt_min",     limit: nil, precision: 38
+    t.datetime "birthdate"
+    t.string   "mstate",     limit: 50
+    t.integer  "people",     limit: nil, precision: 38
+    t.integer  "cards",      limit: nil, precision: 38
+    t.string   "carddisc",   limit: 50
+    t.string   "recfile",    limit: 100
+    t.string   "ipadd",      limit: 50
+    t.string   "dnis",       limit: 50
+    t.string   "landmark",   limit: 50
+    t.string   "chqdisc",    limit: 50
+    t.integer  "totalamt",   limit: nil, precision: 38
+    t.datetime "trandate"
+    t.string   "uae_status", limit: 50
+    t.string   "emischeme",  limit: 50
+    t.datetime "created_at",                            null: false
+    t.datetime "updated_at",                            null: false
   end
 
   create_table "customers", force: true do |t|

@@ -82,6 +82,7 @@ def maharastraextra
 end
 
 
+
 def productcost
  productcost = OrderLine.where('orderid = ?', self.id)
   #return productcost.first.productcost

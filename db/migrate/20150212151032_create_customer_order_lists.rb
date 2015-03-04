@@ -5,7 +5,7 @@ class CreateCustomerOrderLists < ActiveRecord::Migration
 t.date  :orderdate 
 t.string  :title, limit: 5
 t.string  :fname, limit: 30
-t.string  :lname , limit: 30
+t.string  :lname, limit: 30
 t.string  :add1, limit: 30
 t.string  :add2, limit: 30
 t.string  :add3, limit: 30
@@ -58,7 +58,7 @@ t.string  :dnis, limit: 50
 t.string  :landmark, limit: 50
 t.string  :chqdisc, limit: 50
 t.integer  :totalamt
-t.date  :trandate  
+t.date  :trandate
 t.string  :uae_status, limit: 50
 t.string  :emischeme, limit: 50
 t.timestamps null: false

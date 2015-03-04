@@ -1,5 +1,6 @@
 class CreateOrderController < ApplicationController
 	#include Wicked::Wizard
+
 	before_action :get_variables, only: [:index, :add_customer, :add_order, :show_media, :add_media, 
     :show_products, :add_products, :show_payment, :add_payment, :new_order, :update_order, 
     :order_summary, :show_address, :add_address, :show_addonproducts, :add_addonproducts, 
@@ -7,6 +8,9 @@ class CreateOrderController < ApplicationController
 	before_action :set_order, only: [:order_summary, :show_media,  :show_media, :add_media, :show_products, 
     :add_products, :show_payment, :add_payment, :add_credit_card, :show_addonproducts, :add_addonproducts, :show_address, :add_address, 
     :update_address, :order_review, :order_process ]
+  before_action :check_order, only: [:show_media, :add_media, :show_products, :add_products, :show_payment, :add_payment, :update_order, 
+    :show_address, :add_address, :update_address, :show_addonproducts, :add_addonproducts, :order_review]
+
 	#before_action :productvariantlist [:show_products, :add_products]
 
 	respond_to :html
@@ -400,6 +404,21 @@ def show_recentorders
 end
 
 private
+    def check_order
+      orderid = params[:order_id] 
+
+     order_master =  OrderMaster.find(orderid)
+     statusno = order_master.order_status_master_id
+      ondate = order_master.updated_at.to_s
+      if order_master.order_status_master_id >= 10003
+       
+        flash[:error] = "This order no #{orderid} is already processed at #{ondate}" 
+        redirect_to ordersummary_path(:order_id => @order_master.id)
+      else
+         flash[:error] = "Order no #{orderid} is already processed at #{ondate} current status #{statusno}" 
+      end
+    end
+
     def new_order_master
       customer_id = params[:customer_id] || @customer.id
 
@@ -515,12 +534,13 @@ private
         expyear = customer_credit_card.expiry_yr_string.truncate(20)
         cardtype = CreditCard.find_type(creditcardno).truncate(20)
       end
-#lname: @order_master.customer.last_name.truncate(30), 
-#trandate: Time.zone.now
+#
+#
 if @order_master.external_order_no.nil?
      customer_order_list =  CustomerOrderList.create(ordernum: order_id, orderdate: Time.zone.now,
       title: @order_master.customer.salute.truncate(5), 
       fname: @order_master.customer.first_name.truncate(30), 
+      lname: @order_master.customer.last_name.truncate(30), 
       add1: @order_master.customer_address.address1.truncate(30), 
       add2: @order_master.customer_address.address2.truncate(30), 
       add3: (@order_master.customer_address.address3.truncate(30) if @order_master.customer_address.address3.present?), 
@@ -542,7 +562,8 @@ if @order_master.external_order_no.nil?
       channel: @order_master.medium.name.truncate(50), 
       carddisc: @order_master.creditcardcharges, 
       chqdisc: @order_master.creditcardcharges,
-      totalamt: @order_master.subtotal + @order_master.shipping + @order_master.creditcardcharges + @order_master.codcharges + @order_master.maharastraextra)
+      totalamt: @order_master.subtotal + @order_master.shipping + @order_master.creditcardcharges + @order_master.codcharges + @order_master.maharastraextra,
+      trandate: Time.zone.now)
       
      orderline1 = OrderLine.where("orderid = ?", order_id)
       if orderline1.exists?
@@ -595,7 +616,8 @@ if @order_master.external_order_no.nil?
       
       customer_order_list.update(ordernum: order_id, orderdate: Time.zone.now,
       title: @order_master.customer.salute.truncate(5), 
-      fname: @order_master.customer.first_name.truncate(30), 
+      fname: @order_master.customer.first_name.truncate(30),
+      lname: @order_master.customer.last_name.truncate(30),  
       add1: @order_master.customer_address.address1.truncate(30), 
       add2: @order_master.customer_address.address2.truncate(30), 
       add3: (@order_master.customer_address.address3.truncate(30) if @order_master.customer_address.address3.present?), 
@@ -617,7 +639,8 @@ if @order_master.external_order_no.nil?
       channel: @order_master.medium.name.truncate(50), 
       carddisc: @order_master.creditcardcharges, 
       chqdisc: @order_master.creditcardcharges,
-      totalamt: @order_master.subtotal + @order_master.shipping + @order_master.creditcardcharges + @order_master.codcharges + @order_master.maharastraextra)     
+      totalamt: @order_master.subtotal + @order_master.shipping + @order_master.creditcardcharges + @order_master.codcharges + @order_master.maharastraextra,
+      trandate: Time.zone.now)     
 
       
       orderline1 = OrderLine.where("orderid = ?", order_id)

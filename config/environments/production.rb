@@ -22,11 +22,9 @@ Rails.application.configure do
   config.action_mailer.smtp_settings = {
   :address              => "3.0.3.85",
   :port                 => 25,
-  :domain               => "gmail.com",
-  :user_name            => "telebrandsindia@tec2grow.in",
-  :password             => "Well@come101",
-  :authentication       => 'plain',
-  :enable_starttls_auto => true  }
+  :user_name            => "noreply@telebrandsindia.com",
+  :password             => "Well@noreply",
+  :authentication       => 'plain'}
 
   # smtp       port 25            pop    3.0.3.85    port  110
   config.action_mailer.perform_deliveries = true

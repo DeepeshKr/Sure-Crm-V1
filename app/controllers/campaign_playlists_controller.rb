@@ -8,10 +8,17 @@ class CampaignPlaylistsController < ApplicationController
     if(params.has_key?(:campaignid))
       @campaign_playlists = CampaignPlaylist.where("campaignid = ?" , params[:campaignid])
     respond_with(@campaign_playlists)
-    elsif
-      @campaign_playlists = CampaignPlaylist.all
-    respond_with(@campaign_playlists)
-      end
+    # elsif
+    #   @campaign_playlists = CampaignPlaylist.all
+    # respond_with(@campaign_playlists)
+    respond_to do |format|
+    format.html
+    format.csv do
+      headers['Content-Disposition'] = "attachment; filename=\"user-list\""
+      headers['Content-Type'] ||= 'text/csv'
+    end
+  end
+    end
     
   end
   

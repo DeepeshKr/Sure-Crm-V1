@@ -32,7 +32,7 @@ class CampaignPlaylist < ActiveRecord::Base
  # str = ":"
      #  self.end_hr + ":" + self.end_min + ":" + self.end_sec 
      #str.concat(self.start_hr)
-      self.start_hr.to_s << ":" << self.start_min.to_s  << ":" << self.start_sec.to_s 
+      self.start_hr.to_s.rjust(2, '0') << ":" << self.start_min.to_s.rjust(2, '0')  << ":" << self.start_sec.to_s.rjust(2, '0') 
     #t = (self.end_hr + ":" + self.end_min + ":" + self.end_sec)  - (self.start_hr + ":" + self.start_min + ":" + self.start_sec)
    # mm, ss = t.divmod(60)
    #  "%d m %d s" % [mm, ss]
@@ -42,7 +42,7 @@ class CampaignPlaylist < ActiveRecord::Base
      #str = ":"
      #  self.end_hr + ":" + self.end_min + ":" + self.end_sec 
      #str.concat(self.end_hr)
-      self.end_hr.to_s << ":" << self.end_min.to_s << ":" << self.end_sec.to_s
+      self.end_hr.to_s.rjust(2, '0') << ":" << self.end_min.to_s.rjust(2, '0') << ":" << self.end_sec.to_s.rjust(2, '0')
      # self.start_hr + ":" + self.start_min + ":" + self.start_sec
     #t = (self.end_hr + ":" + self.end_min + ":" + self.end_sec)  - (self.start_hr + ":" + self.start_min + ":" + self.start_sec)
    # mm, ss = t.divmod(60)
@@ -50,6 +50,9 @@ class CampaignPlaylist < ActiveRecord::Base
   
   end
   
+  def playtime
+   hour_min_sec(self.start_hr, self.start_min, self.start_sec, self.end_hr, self.end_min, self.end_sec)
+  end
 
   def playlistinfo
     #self.product_variant.name + " between " + self.start_hr || 0 + ":" + self.start_min + ":" + self.start_sec + " to " + self.end_hr + ":" + self.end_min + ":" + self.end_sec + " (" + self.name + ") "
@@ -92,6 +95,21 @@ after_create :updatecampaign
 after_save :updatecampaign
 
 private
+
+    def hour_min_sec(s_hr,s_min, s_sec, e_hr, e_min, e_sec)
+     first = (s_hr.to_i * 60 * 60) + (s_min.to_i * 60) + s_sec.to_i
+     last = (e_hr.to_i * 60 * 60) + (e_min * 60) + e_sec.to_i
+
+    difference = last - first
+    seconds    =  difference % 60
+    difference = (difference - seconds) / 60
+    minutes    =  difference % 60
+    difference = (difference - minutes) / 60
+    hours      =  difference % 24
+
+    return hours.to_s.rjust(2, '0') << ":" << minutes.to_s.rjust(2, '0') << ":" << seconds.to_s.rjust(2, '0')
+
+  end
 
     def updatecampaign
       campaign = Campaign.find(self.campaignid)

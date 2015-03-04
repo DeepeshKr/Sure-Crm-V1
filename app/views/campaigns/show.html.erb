@@ -47,3 +47,17 @@
 <%= render partial: "campaign_playlists/campaign_playlist" %>
 <hr />
 <%= render partial: "campaign_playlists/form" %>
+
+<script>
+  $(document).ready(function() {
+    $('#order_line_productvariant_id').change(function() {
+        $.ajax({
+           url: "<%= productvariant_path %>",
+           data: {
+               id: $("#order_line_productvariant_id option:selected").val()
+           },
+           dataType: "script"
+       });
+    });
+  });
+</script>

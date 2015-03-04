@@ -1,7 +1,7 @@
 class ProductVariantsController < ApplicationController
   before_action :set_product_variant, only: [:show, :edit, :update, :destroy]
 
-  respond_to :html
+  respond_to :html, :xml, :json
 
   def index
     @product_variants = ProductVariant.all
@@ -20,6 +20,13 @@ class ProductVariantsController < ApplicationController
   def edit
   end
 
+  def details
+    if(params.has_key?(:id) 
+       product = ProductVariant.find('id = ?', params[:id])   
+      @details =  product.name << "(" << product.extproductcode << ")"
+    end
+  end
+
   def create
     @product_variant = ProductVariant.new(product_variant_params)
     @product_variant.total = @product_variant.price + @product_variant.taxes + @product_variant.shipping
@@ -33,11 +40,7 @@ class ProductVariantsController < ApplicationController
     
   end
    
-
-
-  def update
-   
-      
+  def update 
        @product_variant.update(product_variant_params)   
      
      if @product_variant.update(product_variant_params)
