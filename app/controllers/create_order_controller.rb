@@ -454,6 +454,7 @@ private
             #time_range = (Time.now.midnight - 1.day)..Time.now.midnight
     	@all_calllist = CampaignPlaylist.joins(:campaign)
            .where('campaigns.startdate <= ? and enddate >= ?', DateTime.now, DateTime.now)
+           .where.not(productvariantid: nil)
            .where({campaignid: @campaignlist})
     end
     

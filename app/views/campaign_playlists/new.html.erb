@@ -3,3 +3,16 @@
 <%= render 'form' %>
 
 <%= link_to 'Back', campaign_playlists_path %>
+<script>
+  $(document).ready(function() {
+    $('#campaign_playlist_productvariantid').change(function() {
+        $.ajax({
+           url: "<%= productvariantdetails_path %>",
+           data: {
+               variant_id: $("#campaign_playlist_productvariantid option:selected").val()
+           },
+           dataType: "script"
+       });
+    });
+  });
+</script>

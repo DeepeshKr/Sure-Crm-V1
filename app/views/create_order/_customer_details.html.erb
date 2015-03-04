@@ -28,7 +28,7 @@
     <strong>Billno:</strong>   <%= @order_master.billno %>
   </div>
   <div class="col-xs-3">
-    <strong>External order no:</strong>   <%= @order_master.external_order_no.truncate(10) %>
+    <strong>External order no:</strong>   <%= @order_master.external_order_no.truncate(10) if !@order_master.external_order_no.blank? %>
   </div>
   
 </div>

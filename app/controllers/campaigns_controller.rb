@@ -30,7 +30,7 @@ class CampaignsController < ApplicationController
   end
 
   def show
-      @campaign_playlists = CampaignPlaylist.where("campaignid = ?" , params[:id])
+      @campaign_playlists = CampaignPlaylist.where("campaignid = ?", params[:id]).order(:start_hr, :start_min, :start_sec)
        @campaign_id = params[:id]
      if @campaign.enddate >= DateTime.now
       @campaign_playlist = CampaignPlaylist.new(campaignid: params[:id])

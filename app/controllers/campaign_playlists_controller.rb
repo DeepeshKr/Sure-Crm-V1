@@ -1,12 +1,14 @@
 class CampaignPlaylistsController < ApplicationController
   before_action :set_campaign_playlist, only: [:show, :edit, :update, :destroy]
- before_action :dropdown, only: [:show, :new, :edit, :update]
+ #before_action :dropdown, only: [:show, :new,  :edit, :update]
+ before_action :proddropdown, only: [:show, :new,  :edit, :update]
+
   respond_to :html
 
   def index
     
     if(params.has_key?(:campaignid))
-      @campaign_playlists = CampaignPlaylist.where("campaignid = ?" , params[:campaignid])
+      @campaign_playlists = CampaignPlaylist.where("campaignid = ?" , params[:campaignid]).order(:start_hr, :start_min, :start_sec)
     #respond_with(@campaign_playlists)
     # elsif
     #   @campaign_playlists = CampaignPlaylist.all
