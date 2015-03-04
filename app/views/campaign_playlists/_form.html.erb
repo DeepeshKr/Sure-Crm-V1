@@ -11,19 +11,22 @@
       </ul>
     </div>
   <% end %>
- <div class="field">
-   <%= f.text_field :name, label: "Playlist Name" %>
- 
+
+  <% if @campaign_playlist.campaignid.blank?  %>
+<div class="field">
+    <%= f.select :campaignid,  options_from_collection_for_select(Campaign.all, :id, :name, 
+          @campaign_playlist.campaignid),
+             { label: "Select the Campaign:" },
+           { class: "selectpicker" } %>
   </div>
- <div class="field">
+  <% elsif%>
+   <%= f.hidden_field :campaignid %>
+  <% end %>
+ 
+ 
    
     	
-		      <%= f.select :campaignid,  options_from_collection_for_select(Campaign.all, :id, :name, 
-		      @campaign_playlist.campaignid),
-		         { label: "Select the Campaign:" },
-		       { class: "selectpicker" } %>
- 
- </div>
+
 
  <div class="row">
  <div class="col-xs-1 col-xs-offset-2">
@@ -61,8 +64,12 @@
    
         <%= f.select :productvariantid,  options_from_collection_for_select(@productvariant,
        :id, :productinfo),
-		         { label: "Select the Product Variant" },
+		         {:prompt => 'No Product Ad', label: "Select the Product Variant if an ad is to be shown or No Product Ad " },
 		       { class: "selectpicker" } %>
+  </div>
+  <div class="field">
+   <%= f.text_field :name, label: "Product or Play list Name", required: true, :placeholder => "Get Product Name by selecting above -- OR -- Type => HBNLOGO / TOTD etc" %>
+ 
   </div>
  <div class="field">
    
@@ -72,19 +79,19 @@
   </div>
   <div class="field">
    
-    	<%= f.text_field :channeltapeid, :label => "Channel Tape id:", control_col: "col-sm-2" %>
+    	<%= f.text_field :channeltapeid, :label => "Channel Tape id:", control_col: "col-sm-2", required: true %>
    
     
   </div>
   <div class="field">
    
-    	<%= f.text_field :internaltapeid, :label => "Internal Tape id:", control_col: "col-sm-2" %>
+    	<%= f.text_field :internaltapeid, :label => "Internal Tape id:", control_col: "col-sm-2", required: true %>
    
     
   </div>
   <div class="field">
    
-    <%= f.text_field :filename, :label => "File Name:" %>
+    <%= f.text_field :filename, :label => "File Name:", :placeholder => 'E:\TELEBRANDSMULTI\AK1-5999-495-29.48.avi', required: true %>
   </div>
 
   <div class="field">

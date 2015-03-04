@@ -46,15 +46,16 @@
 <hr />
 <%= render partial: "campaign_playlists/campaign_playlist" %>
 <hr />
+<h3>Add New Campaign Playlist </h3>
 <%= render partial: "campaign_playlists/form" %>
 
 <script>
   $(document).ready(function() {
-    $('#order_line_productvariant_id').change(function() {
+    $('#campaign_playlist_productvariantid').change(function() {
         $.ajax({
-           url: "<%= productvariant_path %>",
+           url: "<%= productvariantdetails_path %>",
            data: {
-               id: $("#order_line_productvariant_id option:selected").val()
+               variant_id: $("#campaign_playlist_productvariantid option:selected").val()
            },
            dataType: "script"
        });

@@ -1,13 +1,13 @@
 class CampaignPlaylistsController < ApplicationController
   before_action :set_campaign_playlist, only: [:show, :edit, :update, :destroy]
-
+ before_action :dropdown, only: [:show, :new, :edit, :update]
   respond_to :html
 
   def index
     
     if(params.has_key?(:campaignid))
       @campaign_playlists = CampaignPlaylist.where("campaignid = ?" , params[:campaignid])
-    respond_with(@campaign_playlists)
+    #respond_with(@campaign_playlists)
     # elsif
     #   @campaign_playlists = CampaignPlaylist.all
     # respond_with(@campaign_playlists)
@@ -82,7 +82,12 @@ class CampaignPlaylistsController < ApplicationController
     def set_campaign_playlist
       @campaign_playlist = CampaignPlaylist.find(params[:id])
     end
-
+    def dropdown
+     @medialist = Medium.where('media_commision_id = ?',  10000).order('name')
+    end
+     def proddropdown
+     @productvariant = ProductVariant.where('activeid = 10000').order('name')
+    end
     def campaign_playlist_params
       params.require(:campaign_playlist).permit(:name, :campaignid, 
         :start_hr, :start_min, :start_sec, 

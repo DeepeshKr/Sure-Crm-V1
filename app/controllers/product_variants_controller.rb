@@ -21,9 +21,16 @@ class ProductVariantsController < ApplicationController
   end
 
   def details
-    if(params.has_key?(:id) 
-       product = ProductVariant.find('id = ?', params[:id])   
-      @details =  product.name << "(" << product.extproductcode << ")"
+    if params.has_key?(:variant_id)
+       results = ProductVariant.where('id = ?', params[:variant_id])
+       if results.exists?
+         @result =  results.first.name + " - " + results.first.extproductcode 
+       else
+        @result = nil
+       end
+     
+    else
+       @result = nil
     end
   end
 
