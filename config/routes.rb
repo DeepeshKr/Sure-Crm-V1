@@ -2,6 +2,32 @@ Rails.application.routes.draw do
 
 
 
+  resources :product_lists
+
+  resources :media_cost_masters
+
+  resources :product_spec_lists
+
+  resources :media_tapes
+
+  get 'tapeiddet/list'
+
+  get 'tapeiddet/search'
+
+  get 'tapeiddet/details'
+
+  get 'tapeids/list'
+
+  get 'tapeids/search'
+
+  get 'tapeids/details'
+
+  get 'purchase/list'
+
+  get 'purchase/search'
+
+  get 'purchase/details'
+
   #auto fill details from here
   resources :order_lines do
       get :autocomplete_product_variant_name, on: :collection

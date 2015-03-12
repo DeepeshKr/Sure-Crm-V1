@@ -23,7 +23,7 @@ class CorporatesController < ApplicationController
      flash[:error] = @corporate.errors.full_messages.join(" ")
      redirect_to :action => 'createnew'
        else
-         flash[:success] = "Todo added successfully"   
+         flash[:success] = "Corporate added successfully"   
         #  @corporate = Corporate.new(corporate_params)
         #@corporate.save
         respond_with(@corporate)

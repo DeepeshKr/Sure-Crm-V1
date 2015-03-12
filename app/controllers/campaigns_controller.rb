@@ -33,7 +33,7 @@ class CampaignsController < ApplicationController
       @campaign_playlists = CampaignPlaylist.where("campaignid = ?", params[:id]).order(:start_hr, :start_min, :start_sec)
        @campaign_id = params[:id]
      if @campaign.enddate >= DateTime.now
-      @campaign_playlist = CampaignPlaylist.new(campaignid: params[:id])
+      @campaign_playlist = CampaignPlaylist.new(campaignid: params[:id], cost: 0)
      end
     respond_with(@campaign, @campaign_playlists,  @campaign_playlist)
   end

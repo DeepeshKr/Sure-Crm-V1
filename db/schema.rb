@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150303075610) do
+ActiveRecord::Schema.define(version: 20150312033956) do
 
   create_table "address_types", force: true do |t|
     t.string   "name"
@@ -51,6 +51,8 @@ ActiveRecord::Schema.define(version: 20150303075610) do
     t.integer  "end_hr",           limit: nil, precision: 38
     t.integer  "end_min",          limit: nil, precision: 38
     t.integer  "end_sec",          limit: nil, precision: 38
+    t.integer  "duration_secs",    limit: nil, precision: 38
+    t.integer  "tape_id",          limit: nil, precision: 38
   end
 
   create_table "campaign_stages", force: true do |t|
@@ -361,11 +363,39 @@ ActiveRecord::Schema.define(version: 20150303075610) do
     t.datetime "updated_at"
   end
 
+  create_table "media_cost_masters", force: true do |t|
+    t.string   "name"
+    t.integer  "duration_secs", limit: nil, precision: 38
+    t.integer  "cost_per_sec",  limit: nil, precision: 38
+    t.integer  "media_id",      limit: nil, precision: 38
+    t.integer  "str_hr",        limit: nil, precision: 38
+    t.integer  "str_min",       limit: nil, precision: 38
+    t.integer  "str_sec",       limit: nil, precision: 38
+    t.integer  "end_hr",        limit: nil, precision: 38
+    t.integer  "end_min",       limit: nil, precision: 38
+    t.integer  "end_sec",       limit: nil, precision: 38
+    t.text     "description"
+    t.datetime "created_at",                               null: false
+    t.datetime "updated_at",                               null: false
+  end
+
   create_table "media_groups", force: true do |t|
     t.string   "name"
     t.text     "description"
     t.datetime "created_at"
     t.datetime "updated_at"
+  end
+
+  create_table "media_tapes", force: true do |t|
+    t.string   "name"
+    t.integer  "duration_secs",      limit: nil, precision: 38
+    t.integer  "tape_ext_ref_id",    limit: nil, precision: 38
+    t.string   "unique_tape_name"
+    t.integer  "media_id",           limit: nil, precision: 38
+    t.integer  "product_variant_id", limit: nil, precision: 38
+    t.text     "description"
+    t.datetime "created_at",                                    null: false
+    t.datetime "updated_at",                                    null: false
   end
 
   create_table "order_fors", force: true do |t|
@@ -446,177 +476,3 @@ ActiveRecord::Schema.define(version: 20150303075610) do
     t.datetime "updated_at",                                     null: false
   end
 
-  create_table "order_sources", force: true do |t|
-    t.string   "name"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  create_table "order_status_masters", force: true do |t|
-    t.string   "name"
-    t.integer  "sortorder",  limit: nil, precision: 38
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  create_table "orderpaymentmodes", force: true do |t|
-    t.string   "name"
-    t.text     "description"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.decimal  "charges"
-  end
-
-  create_table "product_active_codes", force: true do |t|
-    t.string   "name"
-    t.integer  "sortorder",  limit: nil, precision: 38
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  create_table "product_categories", force: true do |t|
-    t.string   "name"
-    t.decimal  "vatpercent"
-    t.string   "description"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  create_table "product_inventory_codes", force: true do |t|
-    t.string   "name"
-    t.integer  "sortorder",  limit: nil, precision: 38
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  create_table "product_masters", force: true do |t|
-    t.string   "name"
-    t.integer  "productcategoryid",      limit: nil, precision: 38
-    t.integer  "productinventorycodeid", limit: nil, precision: 38
-    t.string   "barcode"
-    t.decimal  "price"
-    t.decimal  "taxes"
-    t.decimal  "total"
-    t.string   "extproductcode"
-    t.text     "description"
-    t.integer  "productactivecodeid",    limit: nil, precision: 38
-    t.decimal  "costprice"
-    t.decimal  "costtaxes"
-    t.decimal  "costtotal"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.decimal  "shipping"
-    t.integer  "product_sell_type_id",   limit: nil, precision: 38
-  end
-
-  create_table "product_sell_types", force: true do |t|
-    t.string   "name"
-    t.text     "description"
-    t.datetime "created_at",  null: false
-    t.datetime "updated_at",  null: false
-  end
-
-  create_table "product_training_headings", force: true do |t|
-    t.string   "name"
-    t.integer  "sortorder",  limit: nil, precision: 38
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  create_table "product_training_manuals", force: true do |t|
-    t.integer  "productid",                   limit: nil, precision: 38
-    t.string   "name"
-    t.text     "description"
-    t.text     "quicknotes"
-    t.integer  "product_training_heading_id", limit: nil, precision: 38
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  create_table "product_types", force: true do |t|
-    t.string   "name"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  create_table "product_variant_add_ons", force: true do |t|
-    t.integer  "product_master_id",  limit: nil, precision: 38
-    t.integer  "product_variant_id", limit: nil, precision: 38
-    t.datetime "created_at",                                    null: false
-    t.datetime "updated_at",                                    null: false
-  end
-
-  create_table "product_variants", force: true do |t|
-    t.string   "name"
-    t.integer  "productmasterid",      limit: nil, precision: 38
-    t.string   "variantbarcode"
-    t.decimal  "price"
-    t.decimal  "taxes"
-    t.decimal  "total"
-    t.string   "extproductcode"
-    t.text     "description"
-    t.integer  "activeid",             limit: nil, precision: 38
-    t.decimal  "shipping"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.integer  "product_sell_type_id", limit: nil, precision: 38
-  end
-
-  create_table "product_warehouses", force: true do |t|
-    t.string   "location_name"
-    t.string   "address1"
-    t.string   "address2"
-    t.string   "address3"
-    t.string   "landmark"
-    t.string   "city"
-    t.string   "pincode"
-    t.string   "state"
-    t.string   "country"
-    t.string   "telephone1"
-    t.string   "telephone2"
-    t.string   "fax"
-    t.string   "emailid"
-    t.text     "description"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  create_table "salutes", force: true do |t|
-    t.string   "name"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  create_table "sessions", force: true do |t|
-    t.string   "employee_code"
-    t.string   "emailid"
-    t.string   "userip"
-    t.string   "sessionid"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  create_table "states", force: true do |t|
-    t.string   "name"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  create_table "users", force: true do |t|
-    t.string   "name"
-    t.string   "email"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.string   "password_digest"
-    t.string   "employee_code"
-    t.integer  "role",            limit: nil, precision: 38
-  end
-
-  add_index "users", ["email"], name: "index_users_on_email"
-  add_index "users", ["employee_code"], name: "index_users_on_employee_code", unique: true
-
-  create_table "vpp_test", id: false, force: true do |t|
-    t.integer "asd", limit: nil, precision: 5
-  end
-
-end
