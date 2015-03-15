@@ -28,7 +28,7 @@
         <td><%= campaign_playlist.starttime %></td>
         <td><%= campaign_playlist.endtime %></td>
          <td><%= campaign_playlist.playtime %></td>
-        <td><%= campaign_playlist.product_variant.name %></td>
+        <td><%= campaign_playlist.product_variant.name if campaign_playlist.product_variant? %></td>
         <td><%= campaign_playlist.filename %></td>
         <td><%= campaign_playlist.description %></td>
         <td><%= link_to 'Show', campaign_playlist %></td>

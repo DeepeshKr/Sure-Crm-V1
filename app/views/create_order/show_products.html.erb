@@ -34,15 +34,21 @@
         <div class="col-xs-4">
           <div class="panel panel-default">
               <div class="panel-heading">
-              <h3 class="panel-title">Product Script</h3>
+              <h3 class="panel-title">
+<div id="product-heading_id">Script</div>
+              </h3>
               </div>
               <div  class="panel-body">
+                  
+                  <div id="product-script">
+                Script Details here
+                  </div>
+                  <hr>
+<small>
                   <div id="product-script-id">
                 
                   </div>
-                  <div id="product-script">
-                
-                  </div>
+                  </small>
             </div>
           </div><!-- panel end -->
         </div>  
@@ -52,12 +58,14 @@
 
 
 <script>
+//script for drop down list for product training
+//product_training_manuals#training
   $(document).ready(function() {
-    $('#order_line_productvariant_id').change(function() {
+    $('#order_line_product_list_id').change(function() {
         $.ajax({
            url: "<%= producttraining_path %>",
            data: {
-               id: $("#order_line_productvariant_id option:selected").val()
+               id: $("#order_line_product_list_id option:selected").val()
            },
            dataType: "script"
        });
@@ -70,7 +78,7 @@
 <script type="text/javascript">
 $(document).ready(function() {
    
-        $('#productvariant').change(function(){
+        $('#productlist').change(function(){
           //var msglist = document.getElementById("productvariant");
           //var show = msglist.dataset.ElementId;
           val = $('#id').val();

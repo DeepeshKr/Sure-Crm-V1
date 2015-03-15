@@ -5,6 +5,8 @@ class OrderLinesController < ApplicationController
 
   autocomplete :product_variant, :name, :extra_data => [:total, :price, :taxes], full: true, :display_value => :productinfo
 
+  autocomplete :product_list, :name, full: true, :display_value => :name
+
   autocomplete :product_variant, :description, :extra_data => [:total, :name], full: true
 
   def index
@@ -29,7 +31,8 @@ class OrderLinesController < ApplicationController
                     orderlinestatusmaster_id: 1, orderid: order_line_params[:orderid],
                      pieces:  order_line_params[:pieces],
                      orderdate: Time.now, 
-            productvariant_id: order_line_params[:productvariant_id])
+            productvariant_id: order_line_params[:productvariant_id],
+            product_list_id: order_line_params[:product_list_id])
 
     if @order_line.valid?
 
@@ -59,7 +62,7 @@ class OrderLinesController < ApplicationController
       #params[:id]
      productvariant_id = params[:productvariant_id]
       productv = ProductVariant.find(productvariant_id)
-      @order_line..update(description: productv.name)
+      @order_line.update(description: productv.name)
 
       respond_with(@order_lines)
   end
@@ -85,6 +88,6 @@ class OrderLinesController < ApplicationController
         :external_ref_no, :productvariant_id, :pieces, :subtotal, :taxes, 
         :shipping, :codcharges, :total, :orderlinestatusmaster_id, :productline_id,
          :description, :estimatedshipdate, :estimatedarrivaldate, :orderchecked,
-          :actualshippate)
+          :actualshippate. :product_list_id)
     end
 end

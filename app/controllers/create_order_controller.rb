@@ -11,7 +11,7 @@ class CreateOrderController < ApplicationController
   before_action :check_order, only: [:show_media, :add_media, :show_products, :add_products, :show_payment, :add_payment, :update_order, 
     :show_address, :add_address, :update_address, :show_addonproducts, :add_addonproducts, :order_review]
 
-	#before_action :productvariantlist [:show_products, :add_products]
+	before_action :productlist, only: [:show_products, :add_products]
 
 	respond_to :html
 
@@ -60,7 +60,7 @@ def add_order
 end
 
 def show_products
-productvariantlist
+
 @order_lines = OrderLine.where(orderid: @order_master.id)
 @order_line = OrderLine.new(orderid: @order_master.id)
 @order_line.orderid = @order_master.id
@@ -68,11 +68,12 @@ respond_with(@order_master, @order_lines, @order_line)
 end
 
 def add_products
-productvariantlist
-exproductvariant = ProductVariant.find(order_line_params[:productvariant_id])
-@order_lines = OrderLine.where("productvariant_id = ? AND orderid = ?", order_line_params[:productvariant_id], order_line_params[:orderid])
+exproductlist = ProductList.find(order_line_params[:product_list_id])
+exproductvariant = ProductVariant.find(exproductlist.product_variant_id)
+@order_lines = OrderLine.where("product_list_id = ? AND orderid = ?", 
+  order_line_params[:product_list_id], order_line_params[:orderid])
 
- product_name = exproductvariant.name 
+ product_name = exproductlist.name 
         
         if @order_lines.exists?
             pieces = @order_lines.first.pieces + order_line_params[:pieces].to_i
@@ -95,8 +96,10 @@ exproductvariant = ProductVariant.find(order_line_params[:productvariant_id])
                 shipping: exproductvariant.shipping * pieces,
                 pieces:  order_line_params[:pieces],
                 total: exproductvariant.total * pieces,
-                description: exproductvariant.description,
-                productvariant_id: order_line_params[:productvariant_id],
+                description: product_name,
+                productvariant_id: exproductlist.product_variant_id,
+                product_master_id: exproductvariant.productmasterid,
+                product_list_id: order_line_params[:product_list_id],
                 orderlinestatusmaster_id: 1)
             if @order_line.valid?
                 flash[:success] = "#{product_name} successfully added " 
@@ -426,15 +429,7 @@ private
       order_for_id: 10000, customer_id: customer_id)
     end
 
-    def addon_product_list
-
-     # @productadded_list = @order_line.joins(:product_variants).pluck(product_variants.productmasterid)
- @product_add_on_lists = ProductVariant.where(product_sell_type_id: 10001)
- .where(activeid: 10000)
-          .where('activeid = ?',  10000)
-         .joins(:product_master).where("product_masters.productactivecodeid = ?", 10000)
-#.where(productmasterid: @productadded_list)
-    end
+    
     def get_variables
     	@empcode = current_user.employee_code
     	@empid = current_user.id
@@ -457,13 +452,20 @@ private
            .where({campaignid: @campaignlist})
     end
     
-  	def productvariantlist
-  		@productvariantlist = ProductVariant.where('activeid = ?',  10000)
-          .joins(:product_master).where("product_masters.productactivecodeid = ?", 10000)
-
-
+  	def productlist
+       product_masters = ProductMaster.where("productactivecodeid = ?", 10000).pluck("id")
+      product_variants = ProductVariant.where("activeid = ? and product_sell_type_id = ?", 10000, 10000).where(productmasterid: product_masters).pluck("id")
+  		@productlist = ProductList.where('active_status_id = ?',  10000).where(product_variant_id: product_variants)
+      #.joins(:product_variant).where("product_variant.activeid = ?", 10000)
+      #.joins(:product_variant => :product_master).where("product_variant.product_masters.productactivecodeid = ?", 10000)
+      #.joins(:Source => :SourceType)
   	end
 
+    def addon_product_list
+      product_masters = ProductMaster.where("productactivecodeid = ?", 10000).pluck("id")
+      product_variants = ProductVariant.where("activeid = ? and product_sell_type_id = ?", 10000, 10001).where(productmasterid: product_masters).pluck("id")
+      @productaddonlist = ProductList.where('active_status_id = ?',  10000).where(product_variant_id: product_variants)     
+    end
 
 
     def interactions(refcatid)
@@ -498,7 +500,7 @@ private
   	def order_master_params
         params.require(:order_master).permit(:id, :customer_id, :media_id,
           :campaign_playlist_id, :calledno, :comments, :payment_id, :orderpaymentmode_id, 
-          :comments, :mismatched_campaign)
+          :comments, :mismatched_campaign, :product_list_id)
     end
 
     def order_line_params
@@ -506,7 +508,7 @@ private
         :external_ref_no, :productvariant_id, :pieces, :subtotal, :taxes, 
         :shipping, :codcharges, :total, :orderlinestatusmaster_id, :productline_id,
          :description, :estimatedshipdate, :estimatedarrivaldate, :orderchecked,
-          :actualshippate, :orderpaymentmode_id)
+          :actualshippate, :orderpaymentmode_id, :product_list_id)
     end
 
     def customer_credit_card_params

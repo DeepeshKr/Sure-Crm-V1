@@ -14,6 +14,9 @@ class Campaign < ActiveRecord::Base
       OrderMaster.where({campaign_playlist_id: campaignlist}).sum(:total) || 0
   end
   
+  def detailed_info
+    self.name << " between " << self.startdate.strftime("%d-%m-%Y") << " and " << self.enddate.strftime("%d-%m-%Y") << " on " << self.medium.name 
+  end
 
   def productrevenue 
     campaignlist =  CampaignPlaylist.where('campaignid = ?', self.id)

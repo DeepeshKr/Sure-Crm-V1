@@ -9,12 +9,20 @@ class ProductVariantsController < ApplicationController
   end
 
   def show
-    respond_with(@product_variant)
+    @product_lists = ProductList.where(product_variant_id: @product_variant.id)
+    @product_list = ProductList.new(:product_variant_id => @product_variant.id)
+
+    @product_spec_list = ProductSpecList.all.order("id")
+    respond_with(@product_variant,  @product_list, @product_lists)
   end
 
   def new
-    @product_variant = ProductVariant.new
-    respond_with(@product_variant.product_master)
+    # def product_list_params
+    #   params.require(:product_list).permit(:name, :product_variant_id,
+    # :product_spec_list_id, :extproductcode, :list_barcode, :active_status_id)
+    # end
+    @product_variant = ProductVariant.new()
+    respond_with(@product_variant)
   end
 
   def edit
@@ -31,6 +39,23 @@ class ProductVariantsController < ApplicationController
      
     else
        @result = nil
+    end
+  end
+
+  def combined
+    if params.has_key?(:variant_id)
+       results = ProductVariant.where('id = ?', params[:variant_id])
+       if results.exists?
+         @combined =  results.first.name + "-" + results.first.extproductcode + "-" + results.first.price.to_i.to_s + "-" + results.first.shipping.to_i.to_s 
+          @pro_code = results.first.extproductcode
+       else
+        @combined = nil
+        @pro_code = nil
+       end
+     
+    else
+       @combined = nil
+       @pro_code = nil
     end
   end
 

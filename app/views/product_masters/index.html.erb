@@ -1,69 +1,66 @@
-<h3>Listing Of All Product Masters</h3>
-
-<table class="table table-hover">
-  <thead>
-    <tr>
-      <th>Name</th>
-       <th>Code</th>
-       <th>Barcode</th>
-      <th>Category <br>
-      Inventory</th>
-      
-      <th>
-          Prices 
-      </th>
-       
-        <th>Variants</th>
-      <th></th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <% @product_masters.each do |product_master| %>
-      <tr>
-      	
-        <td><%= product_master.name %> <br>
-
-        <small>
-         This product is: <%= product_master.product_active_code.name if product_master.product_active_code.present?%>
-
-        </small> <br>
-        <div class="row">
-          <div class="col-xs-6">
-            <%= link_to 'Show', product_master  , class: "btn btn-primary btn-xs" %> 
-          </div>
-          <div class="col-xs-6">
-             <%= link_to 'Edit', edit_product_master_path(product_master), class: "btn btn-primary btn-xs" %>
-          </div>
+<div class="row">
+    <div class="col-xs-6"><h3><%= @search %> <%= @found %>  </h3>    </div>
+    <div class="col-xs-6"> <%= render 'search' %></div>
+</div>
+<hr>
+<br>
+ <% if @product_masters.present? %>
+ <% @product_masters.each do |product_master| %>
+<div class="row">
+        <div class="col-xs-6">
+          <h3><%= product_master.name %> </h3>
+          <div class="row">
+            <div class="col-xs-4">
+                <strong>Price :</strong> <%= product_master.price %> 
+            </div>
+            <div class="col-xs-4">
+                <strong>Shipping :</strong> <%= product_master.shipping %>
+            </div>
+            <div class="col-xs-4">
+                <strong>Total :</strong> <%= product_master.total %>
+            </div>           
         </div>
-        </td>
-         <td><%= product_master.extproductcode %></td>
-          <td><%= product_master.barcode %></td>
-        <td>
-        <%= product_master.product_category.name if product_master.product_category %> <br>
-     <%= product_master.product_inventory_code.name if product_master.product_inventory_code %>
-        </td>
-       
-        <td>
-          <strong>Price :</strong> <%= product_master.price %> <br>
-          <strong>Taxes :</strong> <%= product_master.taxes %> <br>
-          <strong>Shipping :</strong> <%= product_master.shipping %> <br>
-           <strong>Total :</strong> <%= product_master.total %> <br>
+          <small>
+           This product is: <%= product_master.product_active_code.name if product_master.product_active_code.present?%>
+          </small>
 
-
-        </td>
-       
+           <div class="row">
+            <div class="col-xs-6">
+                <strong>External Product Code :</strong> <%= product_master.extproductcode %>
+            </div>
+            <div class="col-xs-6">
+                 <strong>Numeric Code :</strong><%= product_master.barcode %>
+            </div>
+            </div>
         
-          
-          <td>
-            <div class="well well-sm">
-          <% if product_master.variants.exists? %>
+         <div class="row">
+            <div class="col-xs-6">
+               <strong>Category Name : </strong>   <%= product_master.product_category.name if product_master.product_category %>
+            </div>
+            <div class="col-xs-6">
+                  <strong>Inventory Type : </strong>
+            <%= product_master.product_inventory_code.name if product_master.product_inventory_code %>
+            </div>
+            </div>
+         
+        <div class="row">
+            <div class="col-xs-6">
+              <%= link_to 'Add Variant', product_master  , class: "btn btn-primary btn-sm" %> 
+            </div>
+            <div class="col-xs-6">
+               <%= link_to 'Edit Product', edit_product_master_path(product_master), class: "btn btn-primary btn-sm" %>
+            </div>
+        </div>
+</div>
+<div class="col-xs-6">
+      <% if product_master.variants.exists? %>
             <table class="table table-hover">
               <thead>
                 <tr>
                   <th>Name</th>
                    <th>Code</th>
                   <th>Total</th>
+                  <th colspan="2"></th>
                 
                 </tr>
               </thead>
@@ -75,7 +72,33 @@
             <td> <%= v.name %> </td>
               <td> <%= v.extproductcode %></td>
              <td> <%= v.total %> </td>
-              </small>
+             
+              <td>
+                <%= link_to 'Add List', v  , class: "btn btn-primary btn-xs" %> 
+              </td>
+              <td>
+              <%= link_to 'Edit Product', edit_product_variant_path(v), class: "btn btn-primary btn-xs" %>
+              </td>
+               </small>
+              </tr>
+              <tr>
+                 <td colspan="5">
+                 
+                 <% if v.product_list.exists? %>
+                 <div class="alert alert-success">
+                 <strong>Available </strong>
+                  <ul class="list-inline">
+                     <% v.product_list.each do |c| %>
+                        <li><small> <%= c.product_spec_list.name if c.product_spec_list %></small></li>
+                       <% end -%> 
+                  </ul>
+                
+                 <% else %>
+                 <div class="alert alert-warning">
+                 <small>No product listed for sale!</small>
+                 <% end %>
+                 </div>
+                 </td>
               </tr>
              <% end %>
                </tbody>
@@ -84,14 +107,16 @@
           No Variants found <br>
           <small>(click on show to add new)</small> 
           <% end %>
-          </div>
-          </td>
-        
-       
-      </tr>
-    <% end %>
-  </tbody>
-</table>
+
+</div>
+
+</div>
+<hr>
+  <% end %>
+ 
+<% else %>
+<h3>No products found </h3>
+<% end %>
 
 <br>
 

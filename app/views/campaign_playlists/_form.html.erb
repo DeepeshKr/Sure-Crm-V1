@@ -13,94 +13,68 @@
   <% end %>
 
   <% if @campaign_playlist.campaignid.blank?  %>
-<div class="field">
-    <%= f.select :campaignid,  options_from_collection_for_select(Campaign.all, :id, :name, 
-          @campaign_playlist.campaignid),
-             { label: "Select the Campaign:" },
-           { class: "selectpicker" } %>
-  </div>
-  <% elsif%>
-   <%= f.hidden_field :campaignid %>
+        <div class="field">
+            <%= f.select :campaignid,  options_from_collection_for_select(Campaign.all, :id, :name, 
+                  @campaign_playlist.campaignid),
+                     { label: "Select the Campaign:" },
+                   { class: "selectpicker" } %>
+          </div>
+          <% elsif%>
+           <%= f.hidden_field :campaignid %>
   <% end %>
- 
- 
-   
-    	
 
-
- <div class="row">
- <div class="col-xs-1 col-xs-offset-2">
- <%= f.select :start_hr, 0..23, label: "Start Hr" %>
- </div>
-  <div class="col-xs-1">
-   <%= f.select :start_min, 0..59, label: "Start Min" %>
- </div>
-  <div class="col-xs-1">
-   <%= f.select :start_sec, 0..59, label: "Start Sec" %>
- </div>
- 
- <div class="col-xs-1 col-xs-offset-2">
- <%= f.select :end_hr, 0..23, label: "End Hr" %>
- </div>
-  <div class="col-xs-1">
-  <%= f.select :end_min, 0..59, label: "End Min" %>
- </div>
-  <div class="col-xs-1">
-   <%= f.select :end_sec, 0..59, label: "End Sec" %>
- </div>
- </div>
-   
-		       
-  
-  
-
- <div class="field">
- 
- 
- 
-     
-  </div>
- <div class="field">
+<div class="field">
    
         <%= f.select :productvariantid,  options_from_collection_for_select(@productvariant,
-       :id, :productinfo),
-		         {:prompt => 'No Product Ad', label: "Select the Product Variant if an ad is to be shown or No Product Ad " },
-		       { class: "selectpicker" } %>
-  </div>
-  <div class="field">
-   <%= f.text_field :name, label: "Product or Play list Name", required: true, :placeholder => "Get Product Name by selecting above -- OR -- Type => HBNLOGO / TOTD etc" %>
- 
-  </div>
- <div class="field">
-   
-    	<%= f.text_field :cost, :label => "Campaign Cost:", control_col: "col-sm-2", required: true %>
-   
-    
-  </div>
-  <div class="field">
-   
-    	<%= f.text_field :channeltapeid, :label => "Channel Tape id:", control_col: "col-sm-2", required: true %>
-   
-    
-  </div>
-  <div class="field">
-   
-    	<%= f.text_field :internaltapeid, :label => "Internal Tape id:", control_col: "col-sm-2", required: true %>
-   
-    
-  </div>
-  <div class="field">
-   
-    <%= f.text_field :filename, :label => "File Name:", :placeholder => 'E:\TELEBRANDSMULTI\AK1-5999-495-29.48.avi', required: true %>
+       :id, :productinfo, selected: @campaign_playlist.productvariantid ),
+		         {:prompt => 'No Product Ad', label: "Select the Product Variant if an ad is to be shown or No Product Ad " } %>
   </div>
 
+   <div class="field">
+      <%= f.select :tape_id,  options_from_collection_for_select(@media_tapes,
+       :id, :name, selected: @campaign_playlist.tape_id), { label: "Select the Media Tape, this is mandatory field" } %>
+           <small>In case you dont find tapes listed here add the tape details </small>
+  </div>
+
+  <div class="field">
+   <%= f.text_field :name, label: "Product or Play list Name", required: true, :placeholder => "Get Product Name by selecting above -- OR -- Type => HBNLOGO / TOTD etc" %>
+  </div>
+ 
+  <div class="field">
+   	<%= f.text_field :channeltapeid, :label => "Channel Tape id:", control_col: "col-sm-2" %>
+  </div>
+
+  <div class="field">
+   	<%= f.text_field :internaltapeid, :label => "Internal Tape id:", control_col: "col-sm-2", required: true %>
+  </div>
+  <div class="field">
+   <%= f.text_field :filename, :label => "File Name:", :placeholder => 'E:\TELEBRANDSMULTI\AK1-5999-495-29.48.avi', required: true %>
+  </div>
+  <div class="row">
+ <div class="col-xs-1 col-xs-offset-1">
+ <%= f.select :start_hr, 0..23, label: "Start Hr", :selected => @campaign_playlist.start_hr %>
+ </div>
+  <div class="col-xs-1">
+   <%= f.select :start_min, 0..59, label: "Start Min", :selected => @campaign_playlist.start_min  %>
+ </div>
+  <div class="col-xs-1">
+   <%= f.select :start_sec, 0..59, label: "Start Sec", :selected => @campaign_playlist.start_sec  %>
+ </div>
+ <div class="col-xs-2 col-xs-offset-1">
+   <%= f.text_field :duration_secs, :label => "Duration in Sec:", :placeholder => 'Duration in Seconds', required: true %>
+ </div>
+
+ </div>
+ <div class="field">
+       <%= f.text_field :cost, :label => "Campaign Cost:", control_col: "col-sm-2", required: true %>   
+  </div>
   <div class="field">
    
     <%= f.text_area :description, :label => "Description:" %>
  
   </div>
   <div class="row">
-  <div class="col-xs-2 col-md-offset-5">
+  <div class="col-xs-3 col-md-offset-8">
     <%= f.primary class: "btn btn-primary" %>
   </div>
   </div>

@@ -16,17 +16,22 @@ class ProductTrainingManualsController < ApplicationController
   
   def training
   if !params.blank?
-     @productid = ProductVariant.where('id = ?', params[:id]).pluck(:productmasterid).first
+     productvariantid = ProductList.where('id = ?', params[:id]).pluck(:product_variant_id).first
       
+     @productid = ProductVariant.where('id = ?', productvariantid).pluck(:productmasterid).first
+
      @traininglist = ProductTrainingManual.where('productid = ?', @productid)
               
      if @traininglist.empty?
-       @training = "No script for !" + params[:id] + "product id " + @productid.to_s
+       @training = "No script for " + params[:id] + "product id " + @productid.to_s
+       @heading = "Searched for " << @productid.to_s 
      end         
       
-      @training =  "script for ! " + params[:id] + " and product id " + @productid.to_s + " " + DateTime.now.to_s 
-  else
-      @traininglist = ProductTrainingManual.all
+      @training =  "updated at " + DateTime.now.to_s 
+      @heading = "No Script for " << @productid.to_s 
+
+       @heading = ProductList.find(params[:id]).name
+  
    end
      
   end

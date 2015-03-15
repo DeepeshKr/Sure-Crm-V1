@@ -1,37 +1,25 @@
 Rails.application.routes.draw do
 
-
-
   resources :product_lists
-
   resources :media_cost_masters
-
   resources :product_spec_lists
-
   resources :media_tapes
 
   get 'tapeiddet/list'
-
   get 'tapeiddet/search'
-
   get 'tapeiddet/details'
-
   get 'tapeids/list'
-
   get 'tapeids/search'
-
   get 'tapeids/details'
-
   get 'purchase/list'
-
   get 'purchase/search'
-
   get 'purchase/details'
 
   #auto fill details from here
   resources :order_lines do
       get :autocomplete_product_variant_name, on: :collection
       get :autocomplete_product_variant_description, on: :collection
+       get :autocomplete_product_list_name, on: :collection
   end
  
     #get 'update_all_for_code' => 'product_masters#update_all_for_code'
@@ -101,6 +89,9 @@ Rails.application.routes.draw do
     get 'b_prodmaster/details'
     get 'bprodmaster' => 'b_prodmaster#list'
 
+    get 'duplicate_playlist' => 'campaign_playlists#duplicate'
+    post 'create_duplicate_playlist' => 'campaign_playlists#create_duplicate'
+
     get 'product_upsell/list'
     get 'product_upsell/search'
     get 'product_upsell/details'
@@ -151,6 +142,10 @@ mount Upmin::Engine => '/admin'
   get "productdetails" => 'product_masters#details'
   get "producttraining" => 'product_training_manuals#training'
   get "productvariantdetails" => 'product_variants#details'
+  get "productvariantcombined" => 'product_variants#combined'
+  get "mediatapesforproducts" => 'media_tapes#productwise'
+  get "mediatapesdetails" => 'media_tapes#tape_details'
+
 
   #get "creditcard" => 'project#luhn'
 

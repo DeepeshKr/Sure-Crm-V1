@@ -1,49 +1,102 @@
 <p id="notice"><%= notice %></p>
+<h2>
+  <%= @product_variant.product_master.name %>
+  <small>Product Master</small>
+</h2>
+<div class="well well-sm">
+<div class="row">
+  <div class="col-sm-3">
+    <strong>Category:</strong>
+  <%= @product_variant.product_master.product_category.name if @product_variant.product_master.product_category %>
+  </div>
+  <div class="col-sm-3">
+    <strong>Inventory:</strong>
+  <%= @product_variant.product_master.product_inventory_code.name if @product_variant.product_master.product_inventory_code %>
+  </div>
+  <div class="col-sm-3">
+    <strong>Barcode:</strong>
+  <%= @product_variant.product_master.barcode %>
+  </div>
+  <div class="col-sm-3">
+    <strong>Active:</strong>
+  <%= @product_variant.product_master.product_active_code.name if @product_variant.product_master.product_active_code %>
+  </div>
+</div>
 
-<p>
-  <strong>Name:</strong>
-  <%= @product_variant.name %>
-</p>
+<div class="row">
+  <div class="col-sm-3">
+    <strong>Extproductcode:</strong>
+  <%= @product_variant.product_master.extproductcode %>
+  </div>
+  <div class="col-sm-3">
+      <strong>Price:</strong>
+  <%= @product_variant.product_master.price %>
+  </div>
+ 
+  <div class="col-sm-3">
+     <strong>Shipping:</strong>
+  <%= @product_variant.product_master.shipping %>
+  </div>
+  <div class="col-sm-3">
+     <strong>Total:</strong>
+  <%= @product_variant.product_master.total %>
+  </div>
+</div>
 
-<p>
-  <strong>Productmasterid:</strong>
-  <%= @product_variant.productmasterid %>
-</p>
+<div class="row">
+  <div class="col-sm-10">
+      <strong>Description:</strong>
+  <%= @product_variant.product_master.description %>
+  </div>
+</div>
+</div>
 
-<p>
-  <strong>Variantbarcode:</strong>
-  <%= @product_variant.variantbarcode %>
-</p>
+<br>
+<h3>
+  <%= @product_variant.name %> <small>Product Variant</small>
+</h3>
+<div class="well well-sm">
+<div class="row">
+<div class="col-xs-3"> <strong>Master id:</strong>
+  <%= @product_variant.productmasterid %></div>
+<div class="col-xs-3"> <strong>Code:</strong>
+  <%= @product_variant.variantbarcode %> </div>
+<div class="col-xs-3"> <strong>PROD:</strong>
+  <%= @product_variant.extproductcode %> </div>
+<div class="col-xs-3"><strong>Active:</strong>
+  <%= @product_variant.product_active_code.name if @product_variant.product_active_code %> </div>
 
-<p>
-  <strong>Price:</strong>
-  <%= @product_variant.price %>
-</p>
+</div>
 
-<p>
-  <strong>Taxes:</strong>
-  <%= @product_variant.taxes %>
-</p>
 
-<p>
-  <strong>Total:</strong>
-  <%= @product_variant.total %>
-</p>
+<div class="row">
 
-<p>
-  <strong>Extproductcode:</strong>
-  <%= @product_variant.extproductcode %>
-</p>
+<div class="col-xs-3"> <strong>Sell as:</strong>
+  <%= @product_variant.product_sell_type.name if @product_variant.product_sell_type %> </div>
+<div class="col-xs-3"> <strong>Price:</strong>
+  <%= @product_variant.price %> </div>
+<div class="col-xs-3">  <strong>Shipping:</strong>
+  <%= @product_variant.shipping %></div>
+<div class="col-xs-3">  <strong>Total:</strong>
+  <%= @product_variant.total %></div>
+
+
+</div>
 
 <p>
   <strong>Description:</strong>
   <%= @product_variant.description %>
 </p>
 
-<p>
-  <strong>Activeid:</strong>
-  <%= @product_variant.activeid %>
-</p>
+<br>
 
-<%= link_to 'Edit', edit_product_variant_path(@product_variant) %> |
-<%= link_to 'Back', product_variants_path %>
+<%= link_to 'Edit', edit_product_variant_path(@product_variant), class: "btn btn-info btn-sm" %> |
+<%= link_to 'Back', product_variants_path, class: "btn btn-info btn-sm" %>
+</div>
+<br>
+<hr />
+<h4>Existing Product List <small>Only these products can be sold</small></h4>
+<%= render "product_lists/list" %>
+<hr />
+<h4>Add New Product List <small>Only these products can be sold</small></h4>
+<%= render "product_lists/quickadd" %>

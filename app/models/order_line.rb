@@ -3,20 +3,22 @@ class OrderLine < ActiveRecord::Base
 
   belongs_to :order_line_dispatch_status
   belongs_to :product_variant, foreign_key: "productvariant_id" #, polymorphic: true
+  belongs_to :product_list, foreign_key: "product_list_id"
   belongs_to :order_status_master #, polymorphic: true
 
-validates_presence_of :productvariant_id, :pieces
+  belongs_to :product_list, foreign_key: "product_list_id"
+  validates  :pieces ,  :presence => { :message => "Please add no of pieces!" }
 
-validates :productvariant_id,  :presence => { :message => "Please add a product!" } 
+  validates :product_list_id,  :presence => { :message => "Please add a product!" } 
 
 #auto fill requirement
 #delegate :product, to: :product_variant, prefix: true
 
-after_create :updateOrder # :creator
+  after_create :updateOrder # :creator
 
-after_save :updateOrder # :updator
+  after_save :updateOrder # :updator
 
-after_destroy :updateOrder  
+  after_destroy :updateOrder  
 
 def codcharges
   cashondeliveryid = 10001

@@ -5,7 +5,18 @@ class ProductMastersController < ApplicationController
 respond_to :html, :xml, :json
 
   def index
-    @product_masters = ProductMaster.all
+    if params.has_key?(:search)
+      @search = "Search for " << params[:search].upcase
+      @product_masters = ProductMaster.where("name like ? OR extproductcode like ?", "#{@search}%", "#{@search}%")
+       @searchvalue = params[:search]   
+      @found = @product_masters.count
+    else
+      @search = "Product Master List"
+     @searchvalue = nil
+      @product_masters = ProductMaster.all
+       @found = nil
+    end
+
     respond_with(@product_masters)
   end
 

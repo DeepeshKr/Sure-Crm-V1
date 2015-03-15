@@ -7,11 +7,11 @@
 <div class="row">
 	<div class="col-xs-2">
 		 <strong>Start date:</strong>
-  <%= @campaign.startdate %>
+  <%= @campaign.startdate.strftime("%d-%b-%Y") %>
 	</div>
 	<div class="col-xs-2">
 		 <strong>End date:</strong>
-  <%= @campaign.enddate %>
+  <%= @campaign.enddate.strftime("%d-%b-%Y") %>
 	</div>
 	<div class="col-xs-4">
 		 <strong>Media:</strong>
@@ -25,16 +25,7 @@
 	</div>
 	
 </div>
- 
 
- 
-</p>
-<p>
-  
-</p>
-<p>
- 
-</p>
 <p>
   <strong>Description:</strong>
   <%= @campaign.description %>
@@ -49,16 +40,3 @@
 <h3>Add New Campaign Playlist </h3>
 <%= render partial: "campaign_playlists/form" %>
 
-<script>
-  $(document).ready(function() {
-    $('#campaign_playlist_productvariantid').change(function() {
-        $.ajax({
-           url: "<%= productvariantdetails_path %>",
-           data: {
-               variant_id: $("#campaign_playlist_productvariantid option:selected").val()
-           },
-           dataType: "script"
-       });
-    });
-  });
-</script>
