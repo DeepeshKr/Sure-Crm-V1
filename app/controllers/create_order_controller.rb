@@ -100,7 +100,7 @@ exproductvariant = ProductVariant.find(exproductlist.product_variant_id)
                 productvariant_id: exproductlist.product_variant_id,
                 product_master_id: exproductvariant.productmasterid,
                 product_list_id: order_line_params[:product_list_id],
-                orderlinestatusmaster_id: 1)
+                orderlinestatusmaster_id: 10000)
             if @order_line.valid?
                 flash[:success] = "#{product_name} successfully added " 
             else

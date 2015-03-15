@@ -22,13 +22,13 @@
         <td><%= order_line.orderid %> <br> <%= order_line.orderdate %> 
         <br> <%= order_line.external_ref_no %></td>
         <td><%= order_line.employeecode %> <br> <%= order_line.employee_id %></td>
-        <td><%= order_line.product_variant.name if order_line.product_variant  %> <br>
-          <%= order_line.product_master.name if order_line.product_master  %> <br>
+        <td><%= order_line.product_variant.product_master.name if order_line.product_variant  %> <br>
+          <%= order_line.product_variant.name if order_line.product_variant  %> <br>
           <%= order_line.product_list.name if order_line.product_list  %>
         </td>
         <td><%= order_line.pieces %></td>
         <td><%= order_line.subtotal %><br><%= order_line.shipping %><br><%= order_line.codcharges %> <br> <%= order_line.total %></td>
-        <td><%= order_line.orderlinestatusmaster.name if order_line.orderlinestatusmaster%></td>
+        <td><%= order_line.order_line_dispatch_status.name if order_line.order_line_dispatch_status %></td>
         
         <td><%= order_line.description %></td>
         <td><%= order_line.estimatedshipdate %> <br> <%= order_line.estimatedarrivaldate %></td>

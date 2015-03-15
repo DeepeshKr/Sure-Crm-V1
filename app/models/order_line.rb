@@ -1,7 +1,7 @@
 class OrderLine < ActiveRecord::Base
   belongs_to :order_master, foreign_key: "orderid"
 
-  belongs_to :order_line_dispatch_status
+  belongs_to :order_line_dispatch_status, foreign_key: "orderlinestatusmaster_id"
   belongs_to :product_variant, foreign_key: "productvariant_id" #, polymorphic: true
   belongs_to :product_list, foreign_key: "product_list_id"
   belongs_to :order_status_master #, polymorphic: true
