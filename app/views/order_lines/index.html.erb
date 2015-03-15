@@ -1,56 +1,39 @@
-<h1>Listing order_lines</h1>
+<h1>Listing orders lines</h1>
 
-<table>
+<table class="table table-hover">
   <thead>
     <tr>
-      <th>Orderid</th>
-      <th>Orderdate</th>
-      <th>Employeecode</th>
-      <th>Employee</th>
-      <th>External ref no</th>
-      <th>Productvariant</th>
+      <th>Orderid <br> Orderdate <br> External ref no</th>
+      <th>Employeecode <br>    Employee </th>
+      <th>Master <br> variant <br> List</th>
       <th>Pieces</th>
-      <th>Subtotal</th>
-      <th>Taxes</th>
-      <th>Shipping</th>
-      <th>Codcharges</th>
-      <th>Total</th>
-      <th>Orderlinestatusmaster</th>
-      <th>Productline</th>
-      <th>Description</th>
-      <th>Estimatedshipdate</th>
-      <th>Estimatedarrivaldate</th>
-      <th>Orderchecked</th>
-      <th>Actualshippate</th>
-      <th colspan="3"></th>
+      <th>Subtotal <br> Shipping <br> Codcharges <br> Total</th>
+      <th>Status</th>
+       <th>Description</th>
+      <th>Estimatedshipdate <br> Estimatedarrivaldate</th>
+      <th>Orderchecked  <br> Actualshippate</th>
+     
     </tr>
   </thead>
 
   <tbody>
     <% @order_lines.each do |order_line| %>
       <tr>
-        <td><%= order_line.orderid %></td>
-        <td><%= order_line.orderdate %></td>
-        <td><%= order_line.employeecode %></td>
-        <td><%= order_line.employee_id %></td>
-        <td><%= order_line.external_ref_no %></td>
-        <td><%= order_line.product_variant.name  %></td>
+        <td><%= order_line.orderid %> <br> <%= order_line.orderdate %> 
+        <br> <%= order_line.external_ref_no %></td>
+        <td><%= order_line.employeecode %> <br> <%= order_line.employee_id %></td>
+        <td><%= order_line.product_variant.name if order_line.product_variant  %> <br>
+          <%= order_line.product_master.name if order_line.product_master  %> <br>
+          <%= order_line.product_list.name if order_line.product_list  %>
+        </td>
         <td><%= order_line.pieces %></td>
-        <td><%= order_line.subtotal %></td>
-        <td><%= order_line.taxes %></td>
-        <td><%= order_line.shipping %></td>
-        <td><%= order_line.codcharges %></td>
-        <td><%= order_line.total %></td>
-        <td><%= order_line.orderlinestatusmaster_id %></td>
-        <td><%= order_line.productline_id %></td>
+        <td><%= order_line.subtotal %><br><%= order_line.shipping %><br><%= order_line.codcharges %> <br> <%= order_line.total %></td>
+        <td><%= order_line.orderlinestatusmaster.name if order_line.orderlinestatusmaster%></td>
+        
         <td><%= order_line.description %></td>
-        <td><%= order_line.estimatedshipdate %></td>
-        <td><%= order_line.estimatedarrivaldate %></td>
-        <td><%= order_line.orderchecked %></td>
-        <td><%= order_line.actualshippate %></td>
-        <td><%= link_to 'Show', order_line %></td>
-        <td><%= link_to 'Edit', edit_order_line_path(order_line) %></td>
-        <td><%= link_to 'Destroy', order_line, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <td><%= order_line.estimatedshipdate %> <br> <%= order_line.estimatedarrivaldate %></td>
+        <td><%= order_line.orderchecked %> <br> <%= order_line.actualshippate %></td>
+       
       </tr>
     <% end %>
   </tbody>
