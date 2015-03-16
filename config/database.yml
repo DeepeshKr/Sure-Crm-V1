@@ -18,7 +18,7 @@
 default: &default
   adapter: oracle_enhanced
   database: TLBRNDDB
-  host: 3.0.3.5
+  host: 49.248.13.34
   username: testora
   password: testora
   port: 1521
@@ -40,7 +40,7 @@ development_web:
 development_ccview:
   adapter: oracle_enhanced
   database: TLBRNDDB
-  host: 3.0.3.5
+  host: 49.248.13.34
   username: CCVIEW
   password: CCVIEW
   port: 1521
@@ -48,7 +48,7 @@ development_ccview:
 development_tuview:
   adapter: oracle_enhanced
   database: TLBRNDDB
-  host: 3.0.3.5
+  host: 49.248.13.34
   username: TUVIEW
   password: TUVIEW
   port: 1521
