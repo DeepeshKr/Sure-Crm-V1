@@ -1,6 +1,6 @@
 
 
-<%= form_for @order_line , url: addproducts_path, :method => :POST do |f| %>
+<%= form_for @order_line , url: addaddonproducts_path, :method => :POST do |f| %>
           
             <div class="row">
              <%= hidden_field_tag :order_id, @order_line.orderid %>

@@ -39,7 +39,7 @@ Rails.application.routes.draw do
     post 'updateaddress' => 'create_order#update_address'
 
     get 'showaddonproducts' => 'create_order#show_addonproducts'
-    post 'addaddonproducts' => 'create_order#show_addonproducts'
+    post 'addaddonproducts' => 'create_order#add_addonproducts'
 
     get 'showpayment' => 'create_order#show_payment'
     post 'addpayment' => 'create_order#add_payment'

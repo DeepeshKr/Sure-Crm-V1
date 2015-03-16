@@ -227,32 +227,48 @@ end
 def add_addonproducts
   productvariantlist
   addon_product_list
- 
+  exproductlist = ProductList.find(order_line_params[:product_list_id])
+exproductvariant = ProductVariant.find(exproductlist.product_variant_id)
+@order_lines = OrderLine.where("product_list_id = ? AND orderid = ?", 
+  order_line_params[:product_list_id], order_line_params[:orderid])
 
-  @order_line = OrderLine.new( orderid: order_line_params[:orderid],
-  orderdate: Time.now, 
-  employeecode: @empcode, employee_id: @empid,
-  pieces:  order_line_params[:pieces],
-  productvariant_id: order_line_params[:productvariant_id],
-  orderlinestatusmaster_id: 1)
-
-  if @order_line.valid?
-    @order_lines = OrderLine.where("productvariant_id = ? AND orderid = ?", order_line_params[:productvariant_id], order_line_params[:orderid])
+ product_name = exproductlist.name 
         
-        if @order_lines.present?
-            pieces = @order_lines.first.pieces
-            @order_lines.first.update(pieces: pieces + order_line_params[:pieces].to_i)
-            @order_line = @order_lines.first
-            flash[:success] = "Product Pieces successfully added " 
+        if @order_lines.exists?
+            pieces = @order_lines.first.pieces + order_line_params[:pieces].to_i
+            @order_lines.first.update(pieces: pieces,
+             subtotal: exproductvariant.price * pieces, 
+                taxes: exproductvariant.taxes * pieces,
+                codcharges: 0,
+                shipping: exproductvariant.shipping * pieces,
+               total: exproductvariant.total * pieces)
+          
+            flash[:success] = " #{pieces} Piece/s of #{product_name} successfully added " 
           else
-            @order_line.save
-            flash[:success] = "Product successfully added " 
+                pieces = order_line_params[:pieces].to_f
+                @order_line = OrderLine.create(orderid: order_line_params[:orderid],
+                orderdate: Time.zone.now, 
+                employeecode: @empcode, employee_id: @empid,
+                subtotal: exproductvariant.price * pieces, 
+                taxes: exproductvariant.taxes * pieces,
+                codcharges: 0,
+                shipping: exproductvariant.shipping * pieces,
+                pieces:  order_line_params[:pieces],
+                total: exproductvariant.total * pieces,
+                description: product_name,
+                productvariant_id: exproductlist.product_variant_id,
+                product_master_id: exproductvariant.productmasterid,
+                product_list_id: order_line_params[:product_list_id],
+                orderlinestatusmaster_id: 10000)
+            if @order_line.valid?
+                flash[:success] = "#{product_name} successfully added " 
+            else
+                flash[:error] = @order_line.errors.full_messages.join("<br/>")
+            end
         end    
-  elsif 
-    flash[:error] = @order_line.errors.full_messages.join("<br/>")
-  end
+redirect_to showaddonproducts_path(:order_id => @order_master.id) 
 
-redirect_to showpayment_path(:order_id => @order_master.id)
+#redirect_to showpayment_path(:order_id => @order_master.id)
 
 end
 
