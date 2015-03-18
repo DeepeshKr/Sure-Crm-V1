@@ -3,6 +3,7 @@
 <table class="table table-hover">
   <thead>
     <tr>
+    <th>Ref Name (Clubbed Names)</th>
       <th>Name</th>
       <th>Campaign</th>
       <th>Date From</th>
@@ -12,7 +13,11 @@
       <th>Air time</th>
       <th>Product variant</th>
       <th>Filename</th>
-      <th>Description</th>
+      <th>Cost</th>
+      <th>Sales</th>
+       <th>Profitability</th>
+        <th>Status</th>
+     
       <th colspan="3"></th>
     </tr>
   </thead>
@@ -30,7 +35,12 @@
          <td><%= campaign_playlist.playtime %></td>
         <td><%= campaign_playlist.product_variant.name if campaign_playlist.product_variant? %></td>
         <td><%= campaign_playlist.filename %></td>
-        <td><%= campaign_playlist.description %></td>
+        <td><%= campaign_playlist.cost %></td>
+         <td><%= campaign_playlist.sales %></td>
+        <td><%= (campaign_playlist.productrevenue + campaign_playlist.productcost) rescue nil %> </td>
+         <td><%= campaign_playlist.campaign_play_list_status.name if campaign_playlist.campaign_play_list_status%></td>
+      
+
         <td><%= link_to 'Show', campaign_playlist %></td>
         <td><%= link_to 'Edit', edit_campaign_playlist_path(campaign_playlist) %></td>
         <td><%= link_to 'Destroy', campaign_playlist, method: :delete, data: { confirm: 'Are you sure?' } %></td>

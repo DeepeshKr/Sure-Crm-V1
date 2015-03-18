@@ -1,5 +1,13 @@
 Rails.application.routes.draw do
 
+  get 'dnismaster/list'
+
+  get 'dnismaster/search'
+
+  get 'dnismaster/details'
+
+  resources :campaign_play_list_statuses
+
   resources :product_lists
   resources :media_cost_masters
   resources :product_spec_lists

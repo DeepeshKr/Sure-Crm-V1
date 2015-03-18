@@ -43,6 +43,17 @@
   </div>
 
   </div>
+   <div class="row">
+    <div class="col-xs-4">
+    <%= f.text_field :dnis, placeholder: "dnis", label: "4 digit dnis" %>
+    </div>
+    <div class="col-xs-6">
+    <%= f.text_field :channel, placeholder: "Chanel", label: "Channel" %>
+    </div>
+    <div class="col-xs-2">
+    <%= f.text_field :slot, placeholder: "Slot", label: "Slot" %>
+    </div>
+  </div>
   <div class="field">
   
     <%= f.select(:media_group_id, 

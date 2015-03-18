@@ -35,7 +35,9 @@
        :id, :name, selected: @campaign_playlist.tape_id), { label: "Select the Media Tape, this is mandatory field" } %>
            <small>In case you dont find tapes listed here add the tape details </small>
   </div>
-
+<div class="field">
+   <%= f.text_field :ref_name, label: "Name as spelled out by Sales Team ", required: true,  :placeholder => "To combine more playlists hide the subsequent playlists and show just the first one" %>
+  </div>
   <div class="field">
    <%= f.text_field :name, label: "Product or Play list Name", required: true, :placeholder => "Get Product Name by selecting above -- OR -- Type => HBNLOGO / TOTD etc" %>
   </div>
@@ -73,6 +75,12 @@
     <%= f.text_area :description, :label => "Description:" %>
  
   </div>
+   <div class="field">
+      <%= f.select :list_status_id,  options_from_collection_for_select(@active_status,
+       :id, :name, selected: @campaign_playlist.list_status_id), { label: "Active are shown to Sales Agent, Hidden are not" } %>
+           <small>You can combine all the hidden listing to one by giving them same reference names </small>
+  </div>
+  
   <div class="row">
   <div class="col-xs-3 col-md-offset-8">
     <%= f.primary class: "btn btn-primary" %>

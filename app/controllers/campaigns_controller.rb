@@ -3,6 +3,7 @@ class CampaignsController < ApplicationController
   before_action :dropdown, only: [:show, :new, :edit, :create, :update]
   before_action :proddropdown, only: [:show, :new, :edit, :create, :update, :destroy]
   before_action :set_media_tape, only: [:show, :new, :create, :edit, :update]
+  before_action :activestatus, only: [:show, :new, :create, :edit, :update]
 
   respond_to :html
 
@@ -94,7 +95,11 @@ recent_campaigns
      @medialist = Medium.where('media_commision_id = ?',  10000).order('name')
     end
      def proddropdown
-     @productvariant = ProductVariant.where('activeid = 10000').order('name')
+      #product_sell_type_id
+     @productvariant = ProductVariant.where('activeid = ? and product_sell_type_id <= ?', 10000, 10001).order('name')
+    end
+     def activestatus
+     @active_status = CampaignPlayListStatus.all.order('id')
     end
     def set_campaign
       @campaign = Campaign.find(params[:id])

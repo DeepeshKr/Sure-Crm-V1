@@ -1,0 +1,41 @@
+<p id="notice"><%= notice %></p>
+
+<h3>Listing Of All Media Tapes</h3>
+
+<table class="table table-hover">
+  <thead>
+    <tr>
+      <th>Tape Name</th>
+       <th>Release Date</th>
+      <th>Duration secs</th>
+      <th>Tape ext ref</th>
+      <th>Unique tape name</th>
+      <th>Media</th>
+      <th>Product variant</th>
+     
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @media_tapes.each do |media_tape| %>
+      <tr>
+        <td><%= media_tape.name %></td>
+        <td><%= media_tape.release_date.strftime("%d/%m/%Y") %></td>
+        <td><%= media_tape.duration_secs %></td>
+        <td><%= media_tape.tape_ext_ref_id %></td>
+        <td><%= media_tape.unique_tape_name %></td>
+        <td><%= media_tape.medium.name || "No Media Selected"  if media_tape.medium.present? %></td>
+        <td><%= media_tape.product_variant.productinfo || "No Product Selected" if media_tape.product_variant.present? %></td>
+       
+        <td><%= link_to 'Show', media_tape %></td>
+        <td><%= link_to 'Edit', edit_media_tape_path(media_tape) %></td>
+        <td><%= link_to 'Destroy', media_tape, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Media tape', new_media_tape_path,  class: "btn btn-info" %>

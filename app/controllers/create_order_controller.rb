@@ -114,10 +114,18 @@ redirect_to showproducts_path(:order_id => @order_master.id)
 end
 
 def show_address
-  @customer_address = CustomerAddress.new(customer_id:  @order_master.customer_id)
+  @customer_address = CustomerAddress.new(customer_id:  @order_master.customer_id, telephone1: @mobile)
   @customer_address_ex = CustomerAddress.where(customer_id: @order_master.customer_id).last
   if !@order_master.customer_address_id.present?
-    @customer_address_ex = @customer_address
+    
+    if @customer_address_ex.present?
+      flash[:error] = "Existing Address found and shown below please add to Order " << Time.zone.now.to_s
+    #else
+      @customer_address = @customer_address_ex
+    end
+      
+  else
+     flash[:success] = "Address has been already added! " << Time.zone.now.to_s
   end
 
   @order_lines = OrderLine.where(orderid: @order_master.id)
@@ -216,7 +224,7 @@ def add_media
 end
 
 def show_addonproducts
-  productvariantlist
+  productlist
   addon_product_list
   @order_lines = OrderLine.where(orderid: @order_master.id)
   @order_line = OrderLine.new
@@ -225,7 +233,7 @@ def show_addonproducts
 end
 
 def add_addonproducts
-  productvariantlist
+  productlist
   addon_product_list
   exproductlist = ProductList.find(order_line_params[:product_list_id])
 exproductvariant = ProductVariant.find(exproductlist.product_variant_id)
@@ -273,8 +281,14 @@ redirect_to showaddonproducts_path(:order_id => @order_master.id)
 end
 
 def show_payment
+  if @order_master.customer_address_id.blank?
+  flash[:error] = "No Address found you need to add / save address before you process payment " << Time.zone.now.to_s
+  return redirect_to showaddress_path(:order_id => @order_master.id) 
+
+ end
+
   @orderpaymentlists = Orderpaymentmode.all
-    productvariantlist
+    productlist
     @customer_credit_card_o = CustomerCreditCard.where(customer_id: @order_master.customer_id).last
     @customer_credit_card = CustomerCreditCard.new(customer_id:  @order_master.customer_id)
     @customer_credit_card.name_on_card = @order_master.customer.fullname
@@ -347,6 +361,9 @@ def order_review
   #check for address
  
   @show_process = 0
+
+  @customer = Customer.find(@order_master.customer_id)
+
   if @order_master.customer_address_id.nil?
     @show_process = 1
     flash[:error] = "Customer Address is missing " 
@@ -366,11 +383,16 @@ def order_review
     flash[:error] = " Media is missing " 
   end
 
-  
-  @customer_address = CustomerAddress.find(@order_master.customer_address_id)
-  @order_id = @order_master.id
+  if @order_master.customer_address_id.present?
+    @customer_address = CustomerAddress.find(@order_master.customer_address_id)
+
+  else
+    @show_process = 1
+     flash[:error] = " Customer Address is missing !" 
+  end
+    @order_id = @order_master.id
   @order_lines = OrderLine.where(orderid: @order_master.id)
-  respond_with(@order_master, @order_lines, @customer_address)
+  respond_with(@order_master, @order_lines, @customer_address, @customer)
 end
 
 def order_process
@@ -458,12 +480,12 @@ private
     end
 
     def mediadropdown
-    	@medialist =  Medium.where('telephone = ?', @order_master.calledno)
+    	@medialist =  Medium.where('dnis = ?', @order_master.calledno)
 
-    	@campaignlist =  Campaign.joins(:medium).where('media.telephone = ?', @order_master.calledno)
+    	@campaignlist =  Campaign.joins(:medium).where('media.dnis = ?', @order_master.calledno)
             #time_range = (Time.now.midnight - 1.day)..Time.now.midnight
     	@all_calllist = CampaignPlaylist.joins(:campaign)
-           .where('campaigns.startdate <= ? and enddate >= ?', DateTime.now, DateTime.now)
+           .where('campaigns.startdate <= ? and enddate >= ? and list_status_id = ?', DateTime.now, DateTime.now, 10000)
            .where.not(productvariantid: nil)
            .where({campaignid: @campaignlist})
     end

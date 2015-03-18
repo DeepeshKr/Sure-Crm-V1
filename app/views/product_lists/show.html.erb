@@ -1,0 +1,32 @@
+<p id="notice"><%= notice %></p>
+<h3>
+   <%= @product_list.name %>
+</h3>
+<p>
+  <strong>Product variant:</strong>
+   <%= @product_list.product_variant.productinfo if @product_list.product_variant %>
+</p>
+
+<p>
+  <strong>Product spec list:</strong>
+   <%= @product_list.product_spec_list.name if @product_list.product_spec_list %>
+  
+</p>
+
+<p>
+  <strong>Extproductcode:</strong>
+  <%= @product_list.extproductcode %>
+</p>
+
+<p>
+  <strong>List barcode:</strong>
+  <%= @product_list.list_barcode %>
+</p>
+<p>
+  <strong>Active Status:</strong>
+  <%= @product_list.product_active_code.name if @product_list.product_active_code %>
+</p>
+
+<%= link_to 'Edit', edit_product_list_path(@product_list) %> |
+<%= link_to 'Back', product_lists_path %>
+

@@ -1,0 +1,82 @@
+<%= bootstrap_form_for(@media_tape) do |f| %>
+  <% if @media_tape.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@media_tape.errors.count, "error") %> prohibited this media_tape from being saved:</h2>
+
+      <ul>
+      <% @media_tape.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+<div class="field">
+    <%= f.select(:product_variant_id, 
+    options_from_collection_for_select(@productvariantlist, :id, :productinfo, selected: @media_tape.product_variant_id), 
+    {prompt: "Please select the Product Variant", label: "Product Variant"}, :class => "form-control")  %>
+   
+     <small> The tapes would be generally created for a product variant only, but if there are no products like HBN Logo, then dont select any product above.  </small>
+  </div>
+  <div class="row">
+    <div class="col-xs-8">
+      <%= f.text_field :name,  :label => "Tape File Name", :required => true, :placeholder => "Please select the product above for name or for non product videos type in names like HBN logo etc"  %>
+       
+    </div>
+    <div class="col-xs-2">
+    <label>File Parts</label> <br>
+     <%=  select_tag "file_parts", options_for_select(0..10), {:class => "form-control"}
+     %>
+
+    </div>
+    <div class="col-xs-2">
+<label>File Extension</label> <br>
+     <%=   select_tag "file_extension", options_for_select([ ".avi", ".mcx" ], ".avi"), {:class => "form-control"} %>
+    </div>
+     <div class="row">
+    <div class="col-xs-12">
+    <small> What would you like this tape to be called is you are making this for a product variant the name would appear after you select from above else, enter the details like if this is for HBN Logo, coming up next etc? </small>
+    </div>
+    </div>
+
+  </div>
+  <div class="field">
+    <%= f.select(:media_id, 
+    options_from_collection_for_select(@medialist, :id, :mediainfo, selected: @media_tape.media_id), 
+    {prompt: "Please select the Media List",  :label => "Select Media"}, :class => "form-control")  %>
+    <small> Only media which we pay in advance show up here, this is optional </small>
+  
+  </div>
+  <div class="row">
+   <div class="col-xs-2">
+      <%= f.text_field :release_date,  :label => "Release Date" , :data => {:provide => "datepicker"} , :required => true %>
+  </div>
+   <div class="col-xs-2">
+       <%= f.number_field :duration_secs,  :label => "Duration in Secs" , :required => true %>
+        <small>Hr x 60 x 60 + Min x 60 + Sec </small>
+   </div>
+    <div class="col-xs-2">
+       <%= f.number_field :tape_ext_ref_id, :label => "External Tape No" , :required => true %>
+       <small> No duplicates allowed </small>
+   </div>
+   <div class="col-xs-4">
+   
+    <%= f.text_field :unique_tape_name, :label => "Unique Tape Name (System Generated)"  %>
+    <small> If you leave this blank then the unique numeric tape id would be added after saving </small>
+  
+  </div>
+  </div>
+  
+
+  
+  
+  
+  <div class="field">
+   
+    <%= f.text_area :description %>
+  </div>
+  <div class="row">
+    <div class="col-xs-3 col-md-offset-8">
+      <%= f.submit class:"btn btn-primary" %>
+    </div>
+  </div>
+<% end %>

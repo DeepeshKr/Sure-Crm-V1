@@ -1,0 +1,17 @@
+
+<h3>Copy the playlist from an earlier one</h3>
+<div class="row">
+ <%= form_tag("/create_duplicate_playlist", method: "post") do  %>
+ <%= hidden_field_tag :campaignid, @campaignid %>
+<div class="col-xs-8">
+<%= select_tag(:old_campaign_id, 
+                options_from_collection_for_select(@recentplaylist, :id, :detailed_info ), 
+                {:class => "form-control"} )  %>
+</div>
+
+<div class="col-xs-2">
+	<%= submit_tag "Duplicate", name: nil, class: "btn btn-primary" %>
+</div>
+<% end %>
+</div>
+

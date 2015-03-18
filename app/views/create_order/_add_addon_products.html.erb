@@ -7,7 +7,7 @@
              <%= f.hidden_field(:orderid) %>
               <div class="col-xs-9">
                <%= f.select(:productvariant_id, 
-                options_from_collection_for_select(@product_add_on_lists, :id, :productinfo), 
+                options_from_collection_for_select(@productaddonlist, :id, :productinfo), 
                 {:prompt => 'Please Choose Product'}, :class => "form-control col-xs-1")  %>
               </div>
               <div class="col-xs-2">

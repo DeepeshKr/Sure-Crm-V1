@@ -1,0 +1,47 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Listing Media Cost Masters</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Duration secs</th>
+      <th>Cost per sec</th>
+      <th>Media</th>
+      <th>Str hr</th>
+      <th>Str min</th>
+      <th>Str sec</th>
+      <th>End hr</th>
+      <th>End min</th>
+      <th>End sec</th>
+      <th>Description</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @media_cost_masters.each do |media_cost_master| %>
+      <tr>
+        <td><%= media_cost_master.name %></td>
+        <td><%= media_cost_master.duration_secs %></td>
+        <td><%= media_cost_master.cost_per_sec %></td>
+        <td><%= media_cost_master.media_id %></td>
+        <td><%= media_cost_master.str_hr %></td>
+        <td><%= media_cost_master.str_min %></td>
+        <td><%= media_cost_master.str_sec %></td>
+        <td><%= media_cost_master.end_hr %></td>
+        <td><%= media_cost_master.end_min %></td>
+        <td><%= media_cost_master.end_sec %></td>
+        <td><%= media_cost_master.description %></td>
+        <td><%= link_to 'Show', media_cost_master %></td>
+        <td><%= link_to 'Edit', edit_media_cost_master_path(media_cost_master) %></td>
+        <td><%= link_to 'Destroy', media_cost_master, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Media cost master', new_media_cost_master_path %>

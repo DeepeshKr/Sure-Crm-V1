@@ -16,16 +16,14 @@ class Customer < ActiveRecord::Base
 attr_accessor :mismatched_campaign  
 attr_accessor :comments
 
- 
-  
  VALID_MOBILE_REGEX = /[0-9]+(\%7C[0-9]+)*/
  VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
-
- validates :emailid, allow_blank: true, uniqueness: true, length: { maximum: 255 },
+#uniqueness: true, 
+ validates :emailid, allow_blank: true, length: { maximum: 255 },
                     format: { with: VALID_EMAIL_REGEX },
                     uniqueness: { case_sensitive: false }
 
- validates :alt_emailid, allow_blank: true, uniqueness: true, length: { maximum: 255 },
+ validates :alt_emailid, allow_blank: true, length: { maximum: 255 },
                     format: { with: VALID_EMAIL_REGEX },
                     uniqueness: { case_sensitive: false }   
 

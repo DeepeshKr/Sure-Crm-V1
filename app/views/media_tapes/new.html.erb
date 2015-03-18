@@ -1,0 +1,27 @@
+<h1>New Media Tape</h1>
+
+<%= render 'form' %>
+
+<%= link_to 'Back', media_tapes_path %>
+
+<script>
+  $(document).ready(function() {
+    $('#media_tape_product_variant_id').change(function() {
+        $.ajax({
+           url: "<%= productvariantcombined_path %>",
+           data: {
+               variant_id: $("#media_tape_product_variant_id option:selected").val()
+           },
+           dataType: "script"
+       });
+    });
+  });
+</script>
+<script type="text/javascript">
+$(function () {
+$('#media_tape_release_date').datetimepicker({
+locale: 'in'
+});
+});
+</script>
+

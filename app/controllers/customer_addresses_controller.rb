@@ -4,7 +4,7 @@ class CustomerAddressesController < ApplicationController
   respond_to :html
 
   def index
-    @customer_addresses = CustomerAddress.all
+    @customer_addresses = CustomerAddress.all.order("id")
     respond_with(@customer_addresses)
   end
 
@@ -42,6 +42,9 @@ class CustomerAddressesController < ApplicationController
     end
 
     def customer_address_params
-      params.require(:customer_address).permit(:customer_id, :name, :address1, :address2, :address3, :landmark, :city, :pincode, :state, :district, :country, :telephone1, :telephone2, :fax, :description, :valid_id)
+      params.require(:customer_address).permit(:customer_id, :name, 
+        :address1, :address2, :address3, :landmark, 
+        :city, :pincode, :state, :district, :country, 
+        :telephone1, :telephone2, :fax, :description, :valid_id)
     end
 end

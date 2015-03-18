@@ -1,0 +1,45 @@
+<%= bootstrap_form_for(@product_list) do |f| %>
+  <% if @product_list.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@product_list.errors.count, "error") %> prohibited this product_list from being saved:</h2>
+
+      <ul>
+      <% @product_list.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+<div class="field">
+      <%= f.text_field :name %>
+      <small>Auto Generated name</small>
+  </div>
+  <div class="field">
+
+      <%= f.select :product_variant_id,  options_from_collection_for_select(@product_variants,
+       :id, :productinfo, selected: @product_list.product_variant_id),
+             {} %>
+     
+  </div>
+  <div class="field">
+   <%= f.select :product_spec_list_id,  options_from_collection_for_select(@product_specs, :id, :name, selected: @product_list.product_spec_list_id), {} %>
+      
+  </div>
+  <div class="field">
+   
+    <%= f.text_field :extproductcode, :required => true, :placeholder => "Required code for matching this product to inventory" %>
+  </div>
+  <div class="field">
+    
+    <%= f.text_field :list_barcode, :placeholder => "Optional code for this product" %>
+  </div>
+  <div class="field">
+      <%= f.select :active_status_id,  options_from_collection_for_select(ProductActiveCode.all, :id, :name, selected: @product_list.active_status_id), {} %>
+   
+  </div>
+  <div class="row">
+    <div class="col-xs-2 col-md-offset-5">
+      <%= f.submit class:"btn btn-primary" %>
+    </div>
+  </div>
+<% end %>

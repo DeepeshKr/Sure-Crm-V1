@@ -1,0 +1,59 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @media_cost_master.name %>
+</p>
+
+<p>
+  <strong>Duration secs:</strong>
+  <%= @media_cost_master.duration_secs %>
+</p>
+
+<p>
+  <strong>Cost per sec:</strong>
+  <%= @media_cost_master.cost_per_sec %>
+</p>
+
+<p>
+  <strong>Media:</strong>
+  <%= @media_cost_master.media_id %>
+</p>
+
+<p>
+  <strong>Str hr:</strong>
+  <%= @media_cost_master.str_hr %>
+</p>
+
+<p>
+  <strong>Str min:</strong>
+  <%= @media_cost_master.str_min %>
+</p>
+
+<p>
+  <strong>Str sec:</strong>
+  <%= @media_cost_master.str_sec %>
+</p>
+
+<p>
+  <strong>End hr:</strong>
+  <%= @media_cost_master.end_hr %>
+</p>
+
+<p>
+  <strong>End min:</strong>
+  <%= @media_cost_master.end_min %>
+</p>
+
+<p>
+  <strong>End sec:</strong>
+  <%= @media_cost_master.end_sec %>
+</p>
+
+<p>
+  <strong>Description:</strong>
+  <%= @media_cost_master.description %>
+</p>
+
+<%= link_to 'Edit', edit_media_cost_master_path(@media_cost_master) %> |
+<%= link_to 'Back', media_cost_masters_path %>

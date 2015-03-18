@@ -23,18 +23,12 @@ respond_to :html, :xml, :json
   def show
   #  respond_with(@product_master)
      @product_variants = ProductVariant.where("productmasterid = ?" ,  @product_master.id)
-     @product_variant = ProductVariant.new
-     @product_variant.productmasterid =  @product_master.id
-     @product_variant.name = @product_master.name
-     @product_variant.price = @product_master.price
-     
-     @product_variant.taxes = @product_master.taxes || 0
+     @product_variant = ProductVariant.new(productmasterid:  @product_master.id, name: @product_master.name, 
+      price: @product_master.price, taxes: @product_master.taxes || 0, shipping: @product_master.shipping,
+     total: @product_master.total, variantbarcode: @product_master.barcode, description: @product_master.description,
+     extproductcode: @product_master.extproductcode)
 
-     @product_variant.shipping = @product_master.shipping
-     @product_variant.total = @product_master.total
-     @product_variant.variantbarcode = @product_master.barcode
-      @product_variant.description = @product_master.description
-      @product_training_manuals = ProductTrainingManual.where("productid = ?",  @product_master.id)
+        @product_training_manuals = ProductTrainingManual.where("productid = ?",  @product_master.id)
       @product_training_manual = ProductTrainingManual.new
       @product_training_manual.productid =  @product_master.id
       #productmasters = ProductMaster.where('product_sell_type_id = 1').pluck(:id)
@@ -127,7 +121,7 @@ respond_to :html, :xml, :json
   
   private
     def product_sell_type
-      @product_sell_types = ProductSellType.all
+      @product_sell_types = ProductSellType.all.order("id")
     end
     def set_product_master
       @product_master = ProductMaster.find(params[:id])

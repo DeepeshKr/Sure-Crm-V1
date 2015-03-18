@@ -1,0 +1,63 @@
+<%= bootstrap_form_for(@media_cost_master) do |f| %>
+  <% if @media_cost_master.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@media_cost_master.errors.count, "error") %> prohibited this media_cost_master from being saved:</h2>
+
+      <ul>
+      <% @media_cost_master.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+   
+    <%= f.text_field :name %>
+  </div>
+  <div class="field">
+  
+    <%= f.select :duration_secs, 1..1, label: "Duration in Sec" %>
+  
+  </div>
+  <div class="field">
+       <%= f.text_field :cost_per_sec %>
+  </div>
+  <div class="field">
+       <%= f.select(:media_id, 
+    options_from_collection_for_select(@medialist, :id, :mediainfo, selected: @media_cost_master.media_id), 
+    {:label => "Select Media"}, :class => "form-control")  %>
+    <small> Only media which we pay in advance show up here </small>
+  </div>
+  <div class="row">
+ <div class="col-xs-1 col-xs-offset-2">
+ <%= f.select :str_hr, 0..23, label: "Start Hr" %>
+ </div>
+  <div class="col-xs-1">
+   <%= f.select :str_min, 0..59, label: "Start Min" %>
+ </div>
+  <div class="col-xs-1">
+   <%= f.select :str_sec, 0..59, label: "Start Sec" %>
+ </div>
+ 
+ <div class="col-xs-1 col-xs-offset-2">
+ <%= f.select :end_hr, 0..23, label: "End Hr" %>
+ </div>
+  <div class="col-xs-1">
+  <%= f.select :end_min, 0..59, label: "End Min" %>
+ </div>
+  <div class="col-xs-1">
+   <%= f.select :end_sec, 0..59, label: "End Sec" %>
+ </div>
+ </div>
+ 
+  <div class="field">
+  
+    <%= f.text_area :description %>
+  </div>
+  <div class="row">
+  <div class="col-xs-3 col-md-offset-7">
+    <%= f.submit class:"btn btn-primary" %>
+  </div>
+  </div>
+<% end %>

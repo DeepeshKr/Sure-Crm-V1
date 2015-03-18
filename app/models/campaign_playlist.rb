@@ -2,6 +2,8 @@ class CampaignPlaylist < ActiveRecord::Base
   belongs_to :campaign, foreign_key: "campaignid"
   belongs_to :product_variant, foreign_key: "productvariantid"
   belongs_to :media_tape, foreign_key: "tape_id"
+
+  belongs_to :campaign_play_list_status, foreign_key: "list_status_id"
  
  has_many :order_master, foreign_key: "campaignplaylist_id"
 

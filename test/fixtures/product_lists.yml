@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  product_variant_id: 1
+  product_spec_list_id: 1
+  extproductcode: MyString
+  list_barcode: MyString
+
+two:
+  product_variant_id: 1
+  product_spec_list_id: 1
+  extproductcode: MyString
+  list_barcode: MyString

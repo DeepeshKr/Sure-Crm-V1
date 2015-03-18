@@ -1,0 +1,2 @@
+module MediaCostMastersHelper
+end

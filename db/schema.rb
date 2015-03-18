@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150312082619) do
+ActiveRecord::Schema.define(version: 20150317103319) do
 
   create_table "address_types", force: true do |t|
     t.string   "name"
@@ -34,6 +34,13 @@ ActiveRecord::Schema.define(version: 20150312082619) do
     t.datetime "updated_at"
   end
 
+  create_table "campaign_play_list_statuses", force: true do |t|
+    t.string   "name"
+    t.text     "description"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+  end
+
   create_table "campaign_playlists", force: true do |t|
     t.string   "name"
     t.integer  "campaignid",       limit: nil, precision: 38
@@ -53,6 +60,8 @@ ActiveRecord::Schema.define(version: 20150312082619) do
     t.integer  "end_sec",          limit: nil, precision: 38
     t.integer  "duration_secs",    limit: nil, precision: 38
     t.integer  "tape_id",          limit: nil, precision: 38
+    t.string   "ref_name"
+    t.integer  "list_status_id",   limit: nil, precision: 38
   end
 
   create_table "campaign_stages", force: true do |t|
@@ -354,6 +363,9 @@ ActiveRecord::Schema.define(version: 20150312082619) do
     t.integer  "media_commision_id", limit: nil, precision: 38
     t.decimal  "value"
     t.integer  "media_group_id",     limit: nil, precision: 38
+    t.string   "dnis"
+    t.string   "channel"
+    t.string   "slot"
   end
 
   create_table "media_commisions", force: true do |t|

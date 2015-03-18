@@ -1,0 +1,39 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @product_spec_list.name %>
+</p>
+
+<p>
+  <strong>Spec 1:</strong>
+  <%= @product_spec_list.spec_1 %>
+</p>
+
+<p>
+  <strong>Spec 2:</strong>
+  <%= @product_spec_list.spec_2 %>
+</p>
+
+<p>
+  <strong>Spec 3:</strong>
+  <%= @product_spec_list.spec_3 %>
+</p>
+
+<p>
+  <strong>Spec 4:</strong>
+  <%= @product_spec_list.spec_4 %>
+</p>
+
+<p>
+  <strong>Spec 5:</strong>
+  <%= @product_spec_list.spec_5 %>
+</p>
+
+<p>
+  <strong>Description:</strong>
+  <%= @product_spec_list.description %>
+</p>
+
+<%= link_to 'Edit', edit_product_spec_list_path(@product_spec_list) %> |
+<%= link_to 'Back', product_spec_lists_path %>

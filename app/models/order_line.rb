@@ -54,6 +54,9 @@ if self.order_master.customer_address_id.present?
    if self.order_master.customer_address.state.downcase == 'maharashtra'
       surcharge = 0.025
    end
+ else
+  #no address present return default 
+   surcharge = 0.025
 end
 
 return (self.total || 0) * surcharge

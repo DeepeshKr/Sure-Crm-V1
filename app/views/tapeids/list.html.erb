@@ -1,0 +1,35 @@
+
+<h3>Tape Ids </h3>
+
+
+<table class="table table-hover">
+  <thead>
+    <tr>
+      <th>Tape Id</th>
+      <th>Product</th>
+      <th>Channel</th>
+      <th>C Date</th>
+      <th>Remarks</th>
+      <th>slot</th>
+      <th>E Name</th>
+    
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @tapeids.each do |d| %>
+      <tr>
+        <td><%= d.tapeid %></td>
+       <td><%= d.product %></td>
+       <td><%= d.channel %></td>
+       <td><%= d.cdate %></td>
+       <td><%= d.remarks %></td>
+       <td><%= d.slot %></td>
+       <td><%= d.ename %></td>
+           
+      
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+

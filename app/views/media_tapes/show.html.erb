@@ -1,0 +1,59 @@
+<p id="notice"><%= notice %></p>
+
+
+<div class="field">
+   <h3><%= @media_tape.name %></h3>
+      
+       <small> What would you like this tape to be called is you are making this for a product variant the name would appear after you select from above else, enter the details like if this is for HBN Logo, coming up next etc? </small>
+  </div>
+<div class="field">
+   <h4><%= @media_tape.product_variant.productinfo || "No Product Selected" if @media_tape.product_variant.present?  %></h4>
+   
+     <small> The tapes would be generally created for a product variant only, but if there are no products like HBN Logo, then dont select any product above.  </small>
+  </div>
+  
+  <div class="field">
+  <strong>Media:</strong>
+  <%= @media_tape.medium.name || "No Media Selected"  if @media_tape.medium.present?  %> <br>
+   
+    <small> Only media which we pay in advance show up here, this is optional </small>
+  
+  </div>
+  <div class="row">
+   <div class="col-xs-2">
+      
+       <strong>Release Date:</strong>
+  <%= @media_tape.release_date.strftime("%d/%m/%Y") %>
+      
+  </div>
+   <div class="col-xs-2">
+      <strong>Duration secs:</strong>
+  <%= @media_tape.duration_secs %> <br>
+        <small>Hr x 60 x 60 + Min x 60 + Sec </small>
+   </div>
+    <div class="col-xs-2">
+       <strong>Tape ext ref:</strong>
+  <%= @media_tape.tape_ext_ref_id %> <br>
+       <small> No duplicates allowed </small>
+   </div>
+   <div class="col-xs-4">
+    <strong>Unique Tape Name (System Generated):</strong>
+  <%= @media_tape.unique_tape_name %> <br>
+  
+    <small> If you leave this blank then the unique value would be added after saving </small>
+  
+  </div>
+  </div>
+  
+
+  
+  
+  
+  <div class="field">
+   <strong>Description:</strong>
+  <%= @media_tape.description %>
+   
+  </div>
+ 
+<%= link_to 'Edit', edit_media_tape_path(@media_tape), class:"btn btn-primary btn-sm" %> |
+<%= link_to 'Back', media_tapes_path, class:"btn btn-primary btn-sm" %>

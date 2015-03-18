@@ -1,0 +1,27 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  name: MyString
+  duration_secs: 1
+  cost_per_sec: 9.99
+  media_id: 1
+  str_hr: 1
+  str_min: 1
+  str_sec: 1
+  end_hr: 1
+  end_min: 1
+  end_sec: 1
+  description: MyText
+
+two:
+  name: MyString
+  duration_secs: 1
+  cost_per_sec: 9.99
+  media_id: 1
+  str_hr: 1
+  str_min: 1
+  str_sec: 1
+  end_hr: 1
+  end_min: 1
+  end_sec: 1
+  description: MyText

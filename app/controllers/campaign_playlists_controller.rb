@@ -3,7 +3,8 @@ class CampaignPlaylistsController < ApplicationController
  #before_action :dropdown, only: [:show, :new,  :edit, :update]
  before_action :proddropdown, only: [:show, :new, :create, :update,  :edit, :update]
  before_action :set_media_tape, only: [:show, :new, :create, :update,  :edit, :update]
- 
+ before_action :activestatus, only: [:show, :new, :create, :edit, :update]
+
   respond_to :html
 
   def index
@@ -122,6 +123,9 @@ class CampaignPlaylistsController < ApplicationController
     def dropdown
      @medialist = Medium.where('media_commision_id = ?',  10000).order('name')
     end
+    def activestatus
+     @active_status = CampaignPlayListStatus.all.order('id')
+    end
      def proddropdown
      @productvariant = ProductVariant.where('activeid = 10000').order('name')
     end
@@ -131,7 +135,7 @@ class CampaignPlaylistsController < ApplicationController
         :end_hr, :end_min, :end_sec,
         :cost, :channeltapeid, :internaltapeid, 
         :productvariantid, :filename, :description, :duration_secs, 
-        :tape_id, :old_campaign_id)
+        :tape_id, :old_campaign_id, :ref_name, :list_status_id)
     end
     def set_media_tape
       @media_tapes = MediaTape.all

@@ -12,6 +12,9 @@
       <th>Group</th>
       <th>Commission</th>
       <th>Percent </th>
+      <th>DNIS </th>
+      <th>Channel </th>
+      <th>Slot</th>
      
       <th colspan="3"></th>
     </tr>
@@ -29,6 +32,9 @@
         <td><%= medium.media_group.name if medium.media_group %></td>
         <td><%= medium.media_commision.name if medium.media_commision %></td>
          <td><%= medium.value %></td>
+        <td><%= medium.dnis %></td>
+        <td><%= medium.channel %></td>
+        <td><%= medium.slot %></td>
         <td><%= link_to 'Show', medium %></td>
         <td><%= link_to 'Edit', edit_medium_path(medium) %></td>
         <td><%= link_to 'Destroy', medium, method: :delete, data: { confirm: 'Are you sure?' } %></td>

@@ -1,0 +1,46 @@
+<%= bootstrap_form_for(@product_spec_list) do |f| %>
+  <% if @product_spec_list.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@product_spec_list.errors.count, "error") %> prohibited this product_spec_list from being saved:</h2>
+
+      <ul>
+      <% @product_spec_list.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+ <div class="field">
+ <small> Please enter one spec in each row below, so it would be small red large red etc. All the specs would be combined together for selecting the product specs. The individual specs would help sort, segregate the product list. Add spec, individually or as a combination </small>
+ </div>
+  <div class="field">
+   
+    <%= f.text_field :spec_1, label: "Size", placeholder: "Please enter the Size Spec here" %>
+  </div>
+  <div class="field">
+   
+    <%= f.text_field :spec_2, label: "Colour for each size, or colour with no size", placeholder: "Please enter the Colour Spec here, you have to enter colour for each size, or colour with no size" %>
+  </div>
+  <div class="field">
+   
+    <%= f.text_field :spec_3, label: "Flavour", placeholder: "Please enter the Flavour Spec here"   %>
+  </div>
+  <div class="field">
+  
+    <%= f.text_field :spec_4, label: "Free Spec", placeholder: "Free to add your own spec, individually or as a combination" %>
+  </div>
+  <div class="field">
+   
+    <%= f.text_field :spec_5, label: "Free Spec", placeholder: "Free to add your own spec, individually or as a combination" %>
+  </div>
+  <div class="field">
+  
+    <%= f.text_area :description %>
+  </div>
+ <div class="row">
+    <div class="col-xs-2 col-md-offset-5">
+      <%= f.submit class:"btn btn-primary" %>
+    </div>
+  </div>
+<% end %>
