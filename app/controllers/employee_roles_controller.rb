@@ -4,7 +4,7 @@ class EmployeeRolesController < ApplicationController
   respond_to :html
 
   def index
-    @employee_roles = EmployeeRole.all
+    @employee_roles = EmployeeRole.all.order("sortorder")
     respond_with(@employee_roles)
   end
 

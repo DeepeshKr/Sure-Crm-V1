@@ -1,0 +1,36 @@
+<h3>DNIS Master </h3>
+
+
+<table class="table table-hover">
+  <thead>
+    <tr>
+      <th>Channel</th>
+      <th>Slot</th>
+      <th>Tata</th>
+      <th>DNIS</th>
+      <th>Airtel</th>
+      <th>DNIS1</th>
+      <th>oldch</th>
+      <th>cdm</th>
+     
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @dnismaster.each do |d| %>
+      <tr>
+        <td><%= d.channel %></td>
+       <td><%= d.slot %></td>
+       <td><%= d.tata %></td>
+       <td><%= d.dnis %></td>
+       <td><%= d.airtel %></td>
+       <td><%= d.dnis1 %></td>
+       <td><%= d.oldch %></td>
+       <td><%= d.cdm %></td>
+     
+      
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+

@@ -32,6 +32,12 @@ class MediaTapesController < ApplicationController
    rand = rand(10000 .. 99999) # this generator a number between 1 to 50
       tape_params[:unique_tape_name] = rand
    end
+tapename = tape_params[:name]
+if params[:file_parts].to_i > 0
+tapename = tapename << "_" << params[:file_parts].to_s
+end
+tapename = tapename << "." << params[:file_extension]
+tape_params[:name] = tapename
 
     @media_tape = MediaTape.new(tape_params)
     

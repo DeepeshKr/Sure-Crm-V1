@@ -1,0 +1,27 @@
+<%= bootstrap_form_for(@campaign_play_list_status) do |f| %>
+  <% if @campaign_play_list_status.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@campaign_play_list_status.errors.count, "error") %> prohibited this campaign_play_list_status from being saved:</h2>
+
+      <ul>
+      <% @campaign_play_list_status.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    
+    <%= f.text_field :name %>
+  </div>
+  <div class="field">
+   
+    <%= f.text_area :description %>
+  </div>
+   <div class="row">
+  <div class="col-xs-3 col-md-offset-8">
+    <%= f.primary class: "btn btn-primary" %>
+  </div>
+  </div>
+<% end %>

@@ -30,6 +30,24 @@ class CustomersController < ApplicationController
     respond_with(@customer, @order_master, @order_masters, @interaction_masters, @interaction_master)
   end
 
+  def update_customer
+  
+  orderid = params[:order_id]
+
+  @customerup = Customer.find(params[:customer_id])
+    @customerup.update(salute: customer_params[:salute], 
+      first_name: customer_params[:first_name], 
+      last_name: customer_params[:last_name])
+    name =  @customerup.salute << " " << @customerup.first_name << " " << @customerup.last_name
+     
+    if @customerup.errors.any?
+        flash[:success] = @customerup.errors.full_messages.join("<br/>")
+      else
+        flash[:success] = "Customer Details were was updated successfully. #{name}" 
+    end
+    redirect_to orderreview_path(:order_id => params[:order_id]) 
+  end
+
   def new
     @calledno = params[:calledno]
       @customer = Customer.where('mobile = ?' , params[:mobile])

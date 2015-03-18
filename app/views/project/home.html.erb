@@ -4,7 +4,7 @@
 
   
   <% if logged_in? %>
-   <h3>Welcome, <%= current_user.name %> , you are logged in as </h3>
+   <h3>Welcome, <%= current_user.name %> , you are logged in as <%= current_user.employee_role.name %> </h3>
 
   <!-- <%= current_user.employee_role.name %> <p><%= link_to 'Users:', users_path %> <%= User.count %> registered</p> -->
 <% else %>

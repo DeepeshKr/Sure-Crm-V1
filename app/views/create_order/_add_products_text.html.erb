@@ -9,7 +9,7 @@
              </div>
               <div class="col-xs-9">
              
-              <%= autocomplete_field_tag 'productlist', ' ',autocomplete_product_list_name_order_lines_path, :class => "form-control",  :size => 25, 'data-auto-focus' => true,
+              <%= autocomplete_field_tag 'productlist', ' ',autocomplete_product_list_name_order_lines_path, :class => "form-control", :placeholder => "Please enter the name of the products",  :size => 25, 'data-auto-focus' => true,
    input_html: { 'data-id-element' => '#id' } ,:element_id=>"#id", :update_elements => {:id => '#id', :description => '#description'} %>
    <%= f.hidden_field :product_list_id, :id => "id" %>
 

@@ -86,6 +86,19 @@ class CampaignPlaylistsController < ApplicationController
     respond_with(@campaign_playlist.campaign)
   end
   
+  def edit_individual
+  @campaign_playlists = CampaignPlaylist.find(params[:campaign_playlist_ids])
+end
+
+  def update_individual
+    @campaign_playlists = CampaignPlaylist.update(params[:campaign_playlists].keys, params[:campaign_playlists].values).reject { |p| p.errors.empty? }
+    if @campaign_playlists.empty?
+      flash[:success] = "Campaign Playlists updated"
+      respond_with(@campaign_playlists.first.campaign)
+    else
+      render :action => "edit_individual"
+    end
+  end
  
   #post create_duplicate_playlist
   def create_duplicate
@@ -96,6 +109,8 @@ class CampaignPlaylistsController < ApplicationController
         start_hr: old_campaign_playlist.start_hr, 
         start_min: old_campaign_playlist.start_min, 
         start_sec: old_campaign_playlist.start_sec, 
+        ref_name: old_campaign_playlist.ref_name,
+        list_status_id: old_campaign_playlist.list_status_id,
         end_hr: old_campaign_playlist.end_hr, 
         end_min: old_campaign_playlist.end_min, 
         end_sec: old_campaign_playlist.end_sec,

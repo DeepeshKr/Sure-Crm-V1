@@ -22,11 +22,12 @@
 		        %>
   </div>
   
-  
+  <%= f.hidden_field :variantbarcode %>
+   <%= f.hidden_field :extproductcode %>
+
     <div class="field">   
     <%= f.text_field :name, label: "Product Name", required: true %> 
-    <%= f.text_field :variantbarcode, label: "Variant Barcode*", placeholder: "Numeric code of Prod / Gprod etc external ref code", :required => true, help: "this code looks like 0092" %>  
-    <%= f.text_field :extproductcode, label: "Product Ref Code*", readonly: true %>
+    
     </div>
   
   <div class="field">

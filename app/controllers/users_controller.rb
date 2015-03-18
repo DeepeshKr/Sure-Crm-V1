@@ -1,8 +1,10 @@
 class UsersController < ApplicationController
-   before_action :set_user, only: [:show, :edit, :update, :destroy]
-  skip_before_action :require_login, only: [:new, :create]
+  before_action :set_user, only: [:show, :edit, :update, :destroy]
+  # skip_before_action :require_login, only: [:new, :create]
   respond_to :html
+  #before_filter :authenticate_user!
   def show
+    
     @user = User.find(params[:id])
      #debugger
   end
@@ -26,11 +28,16 @@ class UsersController < ApplicationController
   end
 
   def edit
-
+         
   end
   def update   
+    if current_user.employee_role.sortorder < 5
       @user.update(user_params)   
       # if @user.update(user_params)
+       flash[:success] = 'You have sucessfully changed the user details!'
+    else
+      flash[:error] = 'You are not authorised to change the details!'
+    end
       respond_with(@user)
   end
 

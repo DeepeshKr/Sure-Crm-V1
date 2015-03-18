@@ -18,9 +18,9 @@ class ProductVariant < ActiveRecord::Base
   validates_presence_of :variantbarcode
   validates_presence_of :price
   validates_presence_of :taxes
-  validates_uniqueness_of :variantbarcode, { case_sensitive: false }
+  #validates_uniqueness_of :variantbarcode, { case_sensitive: false }
     #validates :total, presence: true
-  validates_uniqueness_of :extproductcode, { case_sensitive: false }
+  #validates_uniqueness_of :extproductcode, { case_sensitive: false }
 
 after_create :creator
 

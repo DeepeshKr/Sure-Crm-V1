@@ -1,11 +1,13 @@
 class User < ActiveRecord::Base
  belongs_to :employee_role, foreign_key: "role"
+
 #enum role: [:user, :manager, :accounts, :admin]
 
  after_initialize :set_default_role, :if => :new_record?
  
- before_save {email.downcase! }
- before_save {employee_code.downcase! }
+  before_save :downcase
+
+
  validates :name,  presence: true, length: { maximum: 50 }
  VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
   validates :email, allow_blank: true, length: { maximum: 255 },
@@ -27,6 +29,13 @@ def set_default_role
 100
 end
 
+private
+  def downcase
+     if email.present?
+        email = email.downcase
+    end
+    employeecode = employeecode.to_s.downcase
+  end
  # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
  # devise :database_authenticatable, :registerable,

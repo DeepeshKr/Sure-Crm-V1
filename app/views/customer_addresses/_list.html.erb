@@ -1,0 +1,41 @@
+<% @customer_addresses.each do |order_master| %>
+<div class="panel panel-primary">
+  
+  <div class="panel-body">
+  <div class="row">
+    <div class="col-xs-12">
+       <%= customer_address.address1 %>
+    </div>
+  </div>
+   <div class="row">
+    <div class="col-xs-12">
+     <%= customer_address.address2 %>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-xs-12">
+     <%= customer_address.address3 %>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-xs-6">
+     <%= customer_address.landmark %>
+    </div>
+     <div class="col-xs-6">
+     <%= customer_address.district %>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-xs-3">     <%= customer_address.city %>    </div>
+     <div class="col-xs-2">     <%= customer_address.pincode %>    </div>    <div class="col-xs-3">     <%= customer_address.state %>    </div>
+
+  </div>
+ <div class="row">
+    <div class="col-xs-3"> <%= customer_address.telephone1 %>  </div>
+     <div class="col-xs-2"> <%= customer_address.telephone2 %>   </div>    <div class="col-xs-3">     <%= customer_address.address_valid.name if customer_address.address_valid %>   </div>
+
+  </div>
+
+  </div>
+</div>
+<% end %>

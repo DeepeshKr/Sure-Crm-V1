@@ -5,6 +5,13 @@ class SessionsController < ApplicationController
   
   def create
      user = User.find_by(employee_code: params[:session][:employee_code].downcase)
+   
+#check if user can login
+if Employee.where(employeecode: params[:session][:employee_code].downcase)
+  .where(enablelogin: 1).present?
+
+  employee = Employee.where(employeecode: params[:session][:employee_code].downcase)
+
     if user && user.authenticate(params[:session][:password])
  # Log the user in and redirect to the user's show page.
  #also create a session for the user
@@ -32,11 +39,15 @@ class SessionsController < ApplicationController
       redirect_to after_sign_in_path_for(user)
     else
       # Create an error message.
-       flash.now[:danger] = 'Invalid employee code password combination'
+       flash.now[:error] = 'Invalid employee code password combination'
        # add more authentication details like employee name here
         render 'new'
     end
-    
+else
+   flash.now[:error] = 'You are not authorised to login!'
+    render 'new'
+end
+
     
   end
 

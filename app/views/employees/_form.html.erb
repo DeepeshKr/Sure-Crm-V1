@@ -17,7 +17,7 @@
 
     
      <%= f.select(:title, 
-    options_from_collection_for_select(Salute.all, :name, :name), 
+    options_from_collection_for_select(Salute.all, :name, :name, :selected => @employee.title ), 
     {})  %>
      </div>
  <div class="col-xs-4">

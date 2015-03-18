@@ -1,0 +1,14 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @campaign_play_list_status.name %>
+</p>
+
+<p>
+  <strong>Description:</strong>
+  <%= @campaign_play_list_status.description %>
+</p>
+
+<%= link_to 'Edit', edit_campaign_play_list_status_path(@campaign_play_list_status), class: "btn btn-primary btn-sm" %> |
+<%= link_to 'Back', campaign_play_list_statuses_path, class: "btn btn-primary btn-sm" %>

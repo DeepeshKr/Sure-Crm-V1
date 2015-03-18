@@ -1,13 +1,10 @@
 Rails.application.routes.draw do
 
   get 'dnismaster/list'
-
   get 'dnismaster/search'
-
   get 'dnismaster/details'
 
   resources :campaign_play_list_statuses
-
   resources :product_lists
   resources :media_cost_masters
   resources :product_spec_lists
@@ -27,7 +24,7 @@ Rails.application.routes.draw do
   resources :order_lines do
       get :autocomplete_product_variant_name, on: :collection
       get :autocomplete_product_variant_description, on: :collection
-       get :autocomplete_product_list_name, on: :collection
+      get :autocomplete_product_list_name, on: :collection
   end
  
     #get 'update_all_for_code' => 'product_masters#update_all_for_code'
@@ -37,6 +34,7 @@ Rails.application.routes.draw do
     get 'neworder' => 'create_order#index'
     #post 'neworder' => 'create_order#index'
     post 'addcustomer' => 'create_order#add_customer'
+     post 'updatecustomer' => 'customers#update_customer'
     post 'addorder' => 'create_order#add_order'
 
     get 'showproducts' => 'create_order#show_products'
@@ -124,7 +122,7 @@ mount Upmin::Engine => '/admin'
   resources :order_fors, :media_groups,  :create_order , :order_payments
   resources :media_groups, :media_commisions, :customer_credit_cards, :change_log_trails, :change_log_types
   resources :order_masters, :order_lines, :orderpaymentmodes, :interaction_transcripts, :interaction_masters
-  resources :product_training_manuals, :campaign_playlists, :product_variants, :product_masters  
+  resources :product_training_manuals, :product_variants, :product_masters  
   resources :media, :campaigns, :bills, :order_sources, :customers
   resources :customer_addresses, :address_valids, :address_types, :interaction_categories
   resources :campaign_stages, :product_types, :product_categories, :interaction_priorities
@@ -133,13 +131,14 @@ mount Upmin::Engine => '/admin'
   resources :salutes, :employment_types, :employee_roles, :order_line_dispatch_statuses
   resources :order_status_masters, :product_training_headings, :product_inventory_codes
 
+  resources :campaign_playlists, :collection => { :edit_individual => :post, :update_individual => :put }
 
   #root             'product#home'
   root 'project#home'
   get 'help'    => 'product#help'
   get 'about'   => 'product#about'
   get 'contact' => 'product#contact'
-
+ 
   get 'dealers' => 'address_dealer#list'
  
   get 'oldhelp'    => 'project#help'

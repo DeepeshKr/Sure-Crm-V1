@@ -1,6 +1,7 @@
 class Employee < ActiveRecord::Base
-  before_save {emailid.downcase! }
- before_save {employeecode.downcase! }
+
+ before_save :downcase
+ 
  validates :first_name,  presence: true, length: { maximum: 50 }
 validates :last_name,  presence: true, length: { maximum: 50 }
  validates :employeecode,  presence: true, uniqueness: true, length:  { maximum: 50 }
@@ -25,7 +26,7 @@ validates :last_name,  presence: true, length: { maximum: 50 }
   has_many :interaction_category, foreign_key: "employeeid"
   has_many :order_master, foreign_key: "employeeid"
 
-has_many :interaction_category
+
 def fullname
   self.title + " " + self.first_name  + " " + self.last_name + " (" + self.designation + ")"
 end
@@ -33,4 +34,12 @@ end
 def name
    self.title + " " + self.first_name + " " + self.last_name 
 end
+
+private
+  def downcase
+     if emailid.present?
+        emailid = emailid.downcase
+    end
+    employeecode = employeecode.to_s.downcase
+  end
 end

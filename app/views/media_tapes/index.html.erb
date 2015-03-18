@@ -13,7 +13,7 @@
       <th>Media</th>
       <th>Product variant</th>
      
-      <th colspan="3"></th>
+      <th colspan="2"></th>
     </tr>
   </thead>
 
@@ -29,7 +29,7 @@
         <td><%= media_tape.product_variant.productinfo || "No Product Selected" if media_tape.product_variant.present? %></td>
        
         <td><%= link_to 'Show', media_tape %></td>
-        <td><%= link_to 'Edit', edit_media_tape_path(media_tape) %></td>
+       
         <td><%= link_to 'Destroy', media_tape, method: :delete, data: { confirm: 'Are you sure?' } %></td>
       </tr>
     <% end %>

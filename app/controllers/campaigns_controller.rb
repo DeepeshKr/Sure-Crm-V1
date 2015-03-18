@@ -22,18 +22,12 @@ class CampaignsController < ApplicationController
       else
         @stagename = "All Current Campaigns"
     end
-
-   # if params.has_key?[:media]
-   #  case a = params[:media]
-
-
-   # end
-
+    
     respond_with(@campaigns)
   end
 
   def show
-recent_campaigns
+    recent_campaigns
     proddropdown
       @campaign_playlists = CampaignPlaylist.where("campaignid = ?", params[:id]).order(:start_hr, :start_min, :start_sec)
        @campaign_id = params[:id]

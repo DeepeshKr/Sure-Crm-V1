@@ -28,6 +28,8 @@ respond_to :html, :xml, :json
      total: @product_master.total, variantbarcode: @product_master.barcode, description: @product_master.description,
      extproductcode: @product_master.extproductcode)
 
+     @productactivecode = ProductActiveCode.all.order("id")
+     @productselltype = ProductSellType.all.order("id")
         @product_training_manuals = ProductTrainingManual.where("productid = ?",  @product_master.id)
       @product_training_manual = ProductTrainingManual.new
       @product_training_manual.productid =  @product_master.id

@@ -7,7 +7,12 @@ class CreateOrderController < ApplicationController
     :update_address, :order_review, :order_process]
 	before_action :set_order, only: [:order_summary, :show_media,  :show_media, :add_media, :show_products, 
     :add_products, :show_payment, :add_payment, :add_credit_card, :show_addonproducts, :add_addonproducts, :show_address, :add_address, 
-    :update_address, :order_review, :order_process ]
+    :update_address, :order_review, :order_process]
+
+  before_action :customer, only: [:order_summary, :show_media,  :show_media, :add_media, :show_products, 
+    :add_products, :show_payment, :add_payment, :add_credit_card, :show_addonproducts, :add_addonproducts, :show_address, :add_address, 
+    :update_address, :order_review, :order_process]
+
   before_action :check_order, only: [:show_media, :add_media, :show_products, :add_products, :show_payment, :add_payment, :update_order, 
     :show_address, :add_address, :update_address, :show_addonproducts, :add_addonproducts, :order_review]
 
@@ -38,6 +43,7 @@ def add_customer
          #respond_with(@customer, @order_master)
     end
 end
+
 
 def add_order
    	customer_id = params[:customer_id]
@@ -114,14 +120,17 @@ redirect_to showproducts_path(:order_id => @order_master.id)
 end
 
 def show_address
-  @customer_address = CustomerAddress.new(customer_id:  @order_master.customer_id, telephone1: @mobile)
+  @customer_address = CustomerAddress.new(customer_id:  @order_master.customer_id, telephone1: @customer.mobile)
   @customer_address_ex = CustomerAddress.where(customer_id: @order_master.customer_id).last
-  if !@order_master.customer_address_id.present?
-    
+  if @order_master.customer_address_id.blank?
+     
     if @customer_address_ex.present?
       flash[:error] = "Existing Address found and shown below please add to Order " << Time.zone.now.to_s
     #else
       @customer_address = @customer_address_ex
+    else
+      flash[:error] = "No Existing Address found " << Time.zone.now.to_s
+      @customer_address_ex = @customer_address
     end
       
   else
@@ -148,7 +157,7 @@ def add_address
 end
 
 def update_address
-  @customer_address = CustomerAddress.where(customer_id: @order_master.customer_id).last
+  @customer_address = CustomerAddress.where(customer_id: @cu.customer_id).last
   
         if @customer_address.present?
           @customer_address.update(customer_address_params)
@@ -522,6 +531,9 @@ private
           end
     end
 
+    def customer
+       @customer = Customer.find(@order_master.customer_id)
+    end
     def set_customer
       @customer = Customer.find(params[:customer_id])
     end
