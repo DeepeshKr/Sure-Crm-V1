@@ -81,14 +81,14 @@ class CampaignPlaylistsController < ApplicationController
     
     @campaign_playlist.update(campaign_playlist_params)
     #reset timings  
-    #update(@campaign_playlist.campaign_id)
+    #update_timings(@campaign_playlist.campaign_id)
 
     respond_with(@campaign_playlist.campaign)
   end
   
   def edit_individual
   @campaign_playlists = CampaignPlaylist.find(params[:campaign_playlist_ids])
-end
+  end
 
   def update_individual
     @campaign_playlists = CampaignPlaylist.update(params[:campaign_playlists].keys, params[:campaign_playlists].values).reject { |p| p.errors.empty? }
@@ -171,7 +171,7 @@ end
     #   @recentplaylist = Campaigns.where("mediumid = ?", @campaign_playlist.campaigns.mediumid).order('id DESC').limit(10)
     # end
 
-    def update(campaign_id)
+    def update_timings(campaign_id)
       campaigns = CampaignPlaylist.where(campaignid: campaign_id).order(:start_hr, :start_min, :start_sec)
 
           n_str_hr = campaigns.first.start_hr

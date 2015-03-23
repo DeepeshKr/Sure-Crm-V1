@@ -62,15 +62,15 @@
     <%= f.text_area :description %>
   </div>
     <div class="field">
-     <%= f.select :productactivecodeid,  options_from_collection_for_select(ProductActiveCode.all,
+     <%= f.select :productactivecodeid,  options_from_collection_for_select(@productactivecode,
        :id, :name, selected: @product_master.productactivecodeid),
 		         { label: "Product Status - Only Active Products are sold" } %>
  
-  </div>
+  </div> 
    <div class="field">
-     <%= f.select :product_sell_type_id,  options_from_collection_for_select(ProductSellType.all,
+     <%= f.select :product_sell_type_id,  options_from_collection_for_select(@productselltype,
        :id, :details, selected: @product_master.product_sell_type_id),
-             { label: "Product can be sold as - Add ons cannot be bought singularly" } %>
+             { label: "Product can be sold as - Add ons can only be set at the variant level along with price for each" } %>
  <%= @product_master.product_sell_type_id %>
   </div>
 

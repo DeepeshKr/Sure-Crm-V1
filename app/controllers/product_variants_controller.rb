@@ -94,6 +94,9 @@ class ProductVariantsController < ApplicationController
   private
     def set_product_variant
       @product_variant = ProductVariant.find(params[:id])
+       @productactivecode = ProductActiveCode.all.order("id")
+     @productselltype = ProductSellType.all.order("id")
+    
     end
 
     def product_variant_params

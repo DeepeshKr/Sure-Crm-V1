@@ -58,47 +58,7 @@
   </div>
 </div>
 
-<%= f.fields_for :order_master do |builder| %>
-    <%= render "order", :f => builder %>
-  <% end %>
- 
-<% unless @all_calllist.empty?  %>
 
-	<%= f.fields_for :order_master do |builder| %>
-    <%= render "campaign_playlist", :f => builder %>
-  <% end %>
-
-  		<div class="row">	 			
-  			<div class="col-xs-11">
-  			<div class="col-xs-2">
-  				<label class="radio">	
-		  				  				<%= label_tag(:mismatched_campaign, "All Ok") %>
-		  				  		<%= radio_button_tag(:mismatched_campaign, "0", checked = true) %>
-		  				</label>
-  				</div>
-  				<div class="col-xs-2">
-  					<label class="radio">
-  								<%= label_tag(:mismatched_campaign_1, "Ref Old ad") %>
-						<%= radio_button_tag(:mismatched_campaign, "1") %>
-						
-						</label>
-  					
-  				</div>
-  				<div class="col-xs-2">
-  					<label class="radio">
-					<%= label_tag(:mismatched_campaign_2, "Mismatch") %></td>
-				<%= radio_button_tag(:mismatched_campaign, "2") %>
-						</label>					
-  			</div>
-  			<div class="clearfix"></div>
-  			<div id="customer_comment" class="col-xs-10">
-  				 <%= f.text_area :comments,  :class =>"form-control" %>
-  			</div>
-  			</div>
-  		</div>
-  		
-  <% end%>
-	 
  
   <div class="row">
   	  <div class="col-xs-3 col-xs-offset-6">

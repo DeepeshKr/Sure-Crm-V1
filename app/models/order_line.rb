@@ -7,8 +7,10 @@ class OrderLine < ActiveRecord::Base
   belongs_to :order_status_master #, polymorphic: true
 
   belongs_to :product_list, foreign_key: "product_list_id"
-  validates  :pieces ,  :presence => { :message => "Please add no of pieces!" }
 
+
+  validates :pieces ,  :presence => { :message => "Please select no of pieces!" }
+  validates :orderid,  :presence => { :message => "Please add an order first!" } 
   validates :product_list_id,  :presence => { :message => "Please add a product!" } 
 
 #auto fill requirement
@@ -21,6 +23,7 @@ class OrderLine < ActiveRecord::Base
   after_destroy :updateOrder  
 
 def codcharges
+  if (self.orderid).present? 
   cashondeliveryid = 10001
    charges = Orderpaymentmode.find(cashondeliveryid).charges
   if self.order_master.orderpaymentmode_id.present?
@@ -29,10 +32,12 @@ def codcharges
          charges = 0
      end
   end
-  return (self.total || 0) * charges 
+  return (self.total || 0) * (charges || 0)
+  end
 end
 
 def creditcardcharges
+  if (self.orderid).present? 
   creditcardid = 10000
   charges = Orderpaymentmode.find(creditcardid).charges
   if self.order_master.orderpaymentmode_id.present?
@@ -42,24 +47,26 @@ def creditcardcharges
      end
   end
 
-  return (self.total || 0)  * charges 
+  return (self.total || 0)  * (charges || 0)
+
+  end
 end
 
 def maharastraextra
-  #2.5% extra charge
-surcharge = 0
+  if (self.orderid).present? 
+ surchargeid = 10020
+ surcharge = Orderpaymentmode.find(surchargeid).charges
+
   #check if address is selected
 if self.order_master.customer_address_id.present?
    #check if state is maharastra
-   if self.order_master.customer_address.state.downcase == 'maharashtra'
-      surcharge = 0.025
+   if !self.order_master.customer_address.state.downcase == 'maharashtra'
+      surcharge = 0
    end
- else
-  #no address present return default 
-   surcharge = 0.025
+ end
 end
 
-return (self.total || 0) * surcharge
+return (self.total || 0) *  (surcharge || 0)
 
 end
 
@@ -89,7 +96,7 @@ private
   #campaign_playlist_id in orderline
   #add to campaign
   def creator
-  	productv = ProductVariant.find(self.productvariant_id)
+  	productlist = ProductList.find(self.product_list_id)
 
     self.update_columns(subtotal: productv.price * self.pieces, 
     taxes: productv.taxes * self.pieces,
@@ -98,13 +105,13 @@ private
     total: productv.total * self.pieces,
     description: productv.name) # This will skip validation gracefully.
 
-     self.update(description: productv.name)
+     self.update(description: productlist.productlistdetails)
      
     #updateOrder
   end
 
 def updator
-  	productv = ProductVariant.find(self.productvariant_id)
+  	productlist = ProductList.find(self.product_list_id)
 
     self.update_columns(subtotal: productv.price * self.pieces, 
     taxes: productv.taxes * self.pieces,
@@ -113,25 +120,20 @@ def updator
     total: productv.total * self.pieces,
     description: productv.name) # This will skip validation gracefully.
 
-    self.update(description: productv.name)
-
-#updateOrder
-
-     #self.update_column(pieces: 0,subtotal: 0, taxes: 0, codcharges: 0, shipping:0, total: 0)
-  end
+    self.update(description: productlist.productlistdetails)
+end
 
 def updateOrder
-
-	order_master = OrderMaster.find(self.orderid)
- order_lines = OrderLine.find_by orderid: self.orderid
-
-
- order_master.update(pieces: OrderLine.where('orderid = ?', self.orderid).sum(:pieces),
-     subtotal: OrderLine.where('orderid = ?', self.orderid).sum(:subtotal),
-     shipping: OrderLine.where('orderid = ?', self.orderid).sum(:shipping), 
-    	taxes:  OrderLine.where('orderid = ?', self.orderid).sum(:taxes), 
-    	codcharges: OrderLine.where('orderid = ?', self.orderid).sum(:codcharges), 
-    	total: OrderLine.where('orderid = ?', self.orderid).sum(:total))
+    if (self.orderid).present? 
+      order_master = OrderMaster.find(self.orderid)
+    
+      order_master.update_columns(pieces: OrderLine.where('orderid = ?', self.orderid).sum(:pieces),
+       subtotal: OrderLine.where('orderid = ?', self.orderid).sum(:subtotal),
+       shipping: OrderLine.where('orderid = ?', self.orderid).sum(:shipping), 
+      	taxes:  OrderLine.where('orderid = ?', self.orderid).sum(:taxes), 
+      	codcharges: OrderLine.where('orderid = ?', self.orderid).sum(:codcharges), 
+      	total: OrderLine.where('orderid = ?', self.orderid).sum(:total))
+    end
 end
 
 end

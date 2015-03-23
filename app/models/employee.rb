@@ -38,7 +38,7 @@ end
 private
   def downcase
      if emailid.present?
-        emailid = emailid.downcase
+        emailid = emailid.to_s.downcase.gsub(/\s+/, '')
     end
     employeecode = employeecode.to_s.downcase
   end

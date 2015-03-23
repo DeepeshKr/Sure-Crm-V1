@@ -4,7 +4,8 @@ class ProductMaster < ActiveRecord::Base
   belongs_to :product_active_code, foreign_key: "productactivecodeid"
   belongs_to :product_sell_type , foreign_key: "product_sell_type_id"
   
-  has_many :product_variant_add_ons, foreign_key: "product_master_id"
+  has_many :product_master_ann_on, foreign_key: "product_master_id" 
+
   has_many :product_variant, foreign_key: "productmasterid" 
   
   validates :barcode, uniqueness: { case_sensitive: false }
@@ -18,5 +19,9 @@ class ProductMaster < ActiveRecord::Base
 
   def variants
     ProductVariant.where("productmasterid = ?", self.id)
+  end
+
+  def AddOn
+    ProductMasterAddOn.where("product_master_id = ?", self.id)
   end
 end

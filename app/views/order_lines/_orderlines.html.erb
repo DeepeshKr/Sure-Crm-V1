@@ -5,7 +5,7 @@
   </div>
   
    
- 
+  <% if @order_lines.present? %>
 
 <table class="table table-striped">
   <thead>
@@ -68,6 +68,10 @@
   </tbody>
 </table>
 
-
+<% else %>
+  <div class="well">
+  <p>No products have been ordered </p>
+  </div>
+<% end %>
   
 </div>

@@ -1,5 +1,14 @@
 Rails.application.routes.draw do
 
+  get 'customerorder/products'
+  get 'customerorder/address'
+  get 'customerorder/payment'
+  get 'customerorder/channel'
+  get 'customerorder/review'
+  get 'customerorder/summary'
+
+  resources :product_master_add_ons
+
   get 'dnismaster/list'
   get 'dnismaster/search'
   get 'dnismaster/details'
@@ -27,40 +36,39 @@ Rails.application.routes.draw do
       get :autocomplete_product_list_name, on: :collection
   end
  
+  #step 1
+  get 'neworder' => 'customerorder#products'
+  post 'addproducts' => 'customerorder#add_products'
+  #step 2
+  get 'address' => 'customerorder#address'
+  post 'addaddress' => 'customerorder#add_address'
+    #step 3
+  get 'upsell' => 'customerorder#upsell'
+  post 'addupsell' => 'customerorder#add_upsell'
+  
+  #step 3
+  get 'payment' => 'customerorder#payment'
+  post 'addpayment' => 'customerorder#add_payment'
+  post 'addcard' => 'customerorder#add_credit_card'
+  get "creditcardvalid" => 'customer_credit_cards#luhn'
+  get "creditcardtype" => 'customer_credit_cards#card_type'
+  
+  #step 4
+  get 'channel' => 'customerorder#channel'
+  get 'addchannel' => 'customerorder#add_channel'
+  #step 5
+  get 'review' => 'customerorder#review'
+  #step 6
+  post 'processorder' => 'customerorder#process_order'
+  get 'summary' => 'customerorder#summary'
+
     #get 'update_all_for_code' => 'product_masters#update_all_for_code'
 
     post 'updatedescription' => 'order_line#update_description'
 
-    get 'neworder' => 'create_order#index'
     #post 'neworder' => 'create_order#index'
-    post 'addcustomer' => 'create_order#add_customer'
-     post 'updatecustomer' => 'customers#update_customer'
-    post 'addorder' => 'create_order#add_order'
 
-    get 'showproducts' => 'create_order#show_products'
-    post 'addproducts' => 'create_order#add_products'
-
-    get 'showaddress' => 'create_order#show_address'
-    post 'addaddress' => 'create_order#add_address'
-    post 'updateaddress' => 'create_order#update_address'
-
-    get 'showaddonproducts' => 'create_order#show_addonproducts'
-    post 'addaddonproducts' => 'create_order#add_addonproducts'
-
-    get 'showpayment' => 'create_order#show_payment'
-    post 'addpayment' => 'create_order#add_payment'
-    post 'addcard' => 'create_order#add_credit_card'
-
-    get "creditcardvalid" => 'customer_credit_cards#luhn'
-    get "creditcardtype" => 'customer_credit_cards#card_type'
-
-    get 'showmedia' => 'create_order#show_media'
-    post 'addmedia' => 'create_order#add_media'
-
-    get 'orderreview' => 'create_order#order_review'
-    post 'orderprocess' => 'create_order#order_process'
-
-    get 'ordersummary' => 'create_order#order_summary'
+    
 
     get 'recentorders' => 'create_order#show_recentorders'
 
@@ -131,7 +139,8 @@ mount Upmin::Engine => '/admin'
   resources :salutes, :employment_types, :employee_roles, :order_line_dispatch_statuses
   resources :order_status_masters, :product_training_headings, :product_inventory_codes
 
-  resources :campaign_playlists, :collection => { :edit_individual => :post, :update_individual => :put }
+  #resources :campaign_playlists, :collection => { :edit_individual => :post, :update_individual => :put }
+  resources :campaign_playlists
 
   #root             'product#home'
   root 'project#home'
@@ -152,8 +161,9 @@ mount Upmin::Engine => '/admin'
   get "productvariantcombined" => 'product_variants#combined'
   get "mediatapesforproducts" => 'media_tapes#productwise'
   get "mediatapesdetails" => 'media_tapes#tape_details'
-
-
+  get "addonproductlist" => 'media_tapes#product_lists'
+  get "addonproductlist" => 'product_master_add_ons#product_lists'
+#addonproducts
   #get "creditcard" => 'project#luhn'
 
   get 'signup'  => 'users#new'
@@ -173,6 +183,43 @@ mount Upmin::Engine => '/admin'
  # get    'product_active_codes'   => 'product_active_codes#index'
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
+
+  #**************************************
+    #******* order process start **********
+    #**************************************
+
+    #order process is listed below is this is no longer users
+    #get 'neworder' => 'create_order#index'
+    # post 'addcustomer' => 'create_order#add_customer'
+    # post 'updatecustomer' => 'customers#update_customer'
+    # post 'addorder' => 'create_order#add_order'
+
+    # get 'showproducts' => 'create_order#show_products'
+    # post 'addproducts' => 'create_order#add_products'
+
+    # get 'showaddress' => 'create_order#show_address'
+    # post 'addaddress' => 'create_order#add_address'
+    # post 'updateaddress' => 'create_order#update_address'
+
+     get 'showaddonproducts' => 'create_order#show_addonproducts'
+     post 'addaddonproducts' => 'create_order#add_addonproducts'
+
+    # get 'showpayment' => 'create_order#show_payment'
+    
+
+    
+
+    # get 'showmedia' => 'create_order#show_media'
+    # post 'addmedia' => 'create_order#add_media'
+
+    # get 'orderreview' => 'create_order#order_review'
+    # post 'orderprocess' => 'create_order#order_process'
+
+    # get 'ordersummary' => 'create_order#order_summary'
+
+    #**********************
+    #******* order process end *********
+    #**************************
 
   # You can have the root of your site routed with "root"
 

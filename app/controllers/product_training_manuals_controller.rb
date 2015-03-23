@@ -30,8 +30,15 @@ class ProductTrainingManualsController < ApplicationController
       @training =  "updated at " + DateTime.now.to_s 
       @heading = "No Script for " << @productid.to_s 
 
-       @heading = ProductList.find(params[:id]).name
-  
+      productlist = ProductList.find(params[:id])
+       @heading = productlist.productinfo
+      
+       @basic =  productlist.basic.to_i.to_s
+       @shipping =  productlist.shipping.to_i.to_s
+       @cod =  productlist.codcharges.to_i.to_s
+       @cc =  productlist.creditcardcharges.to_i.to_s
+       @mah =  productlist.maharastraextra.to_i.to_s
+
    end
      
   end

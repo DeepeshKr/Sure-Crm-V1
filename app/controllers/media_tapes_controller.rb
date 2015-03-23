@@ -22,33 +22,32 @@ class MediaTapesController < ApplicationController
   def edit
   end
 
-  def create
-       
+  def create  
    # @media_tape.release_date = params[:release_date]
-  tape_params = media_tape_params
-  tape_params[:release_date] = Date.strptime(tape_params[:release_date],
+          tape_params = media_tape_params
+          tape_params[:release_date] = Date.strptime(tape_params[:release_date],
                                                 '%m/%d/%Y')
-  if tape_params[:unique_tape_name].empty?
-   rand = rand(10000 .. 99999) # this generator a number between 1 to 50
-      tape_params[:unique_tape_name] = rand
-   end
-tapename = tape_params[:name]
-if params[:file_parts].to_i > 0
-tapename = tapename << "_" << params[:file_parts].to_s
-end
-tapename = tapename << "." << params[:file_extension]
-tape_params[:name] = tapename
+        if tape_params[:unique_tape_name].empty?
+          rand = rand(10000 .. 99999) # this generator a number between 1 to 50
+          tape_params[:unique_tape_name] = rand
+        end
+          tapename = tape_params[:name]
+        if params[:file_parts].to_i > 0
+          tapename = tapename << "_" << params[:file_parts].to_s
+        end
+          tapename = tapename << params[:file_extension]
+          tape_params[:name] = tapename
 
-    @media_tape = MediaTape.new(tape_params)
+          @media_tape = MediaTape.new(tape_params)
     
-    if @media_tape.valid?
-      flash[:notice] = "The tape details have been saved, now you can create."
-      @media_tape.save
-    else
-       flash[:notice] = @media_tape.errors.full_messages.join("<br/>")
-    end
+        if @media_tape.valid?
+          flash[:notice] = "The tape details have been saved, now you can create."
+          @media_tape.save
+        else
+           flash[:notice] = @media_tape.errors.full_messages.join("<br/>")
+        end
     
-     respond_with(@media_tape)
+        respond_with(@media_tape)
   end
 
   def update
@@ -78,6 +77,23 @@ tape_params[:name] = tapename
         @duration_secs = @media_tapes.first.duration_secs
         @cost = 0
     end  
+  end
+
+# get "addonproducts" => 'product_master_add_ons#productlist'
+  def product_lists
+    @productlists = ProductList.all
+    if ProductList.find(params[:product_list_id]).present?
+    productvariantid = ProductList.find(params[:product_list_id]).product_variant_id
+      id = params[:product_list_id]
+      if ProductVariant.find(productvariantid).present?
+          productid = ProductVariant.find(productvariantid).productmasterid
+          if ProductMasterAddOn.where(product_master_id: productid).present? 
+          @productlists = ProductMasterAddOn.where(product_master_id: productid)
+          
+          end
+      end
+    end  
+  
   end
 
   def tape_details

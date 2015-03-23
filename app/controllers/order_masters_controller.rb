@@ -4,7 +4,7 @@ class OrderMastersController < ApplicationController
   respond_to :html
 
   def index
-    @order_masters = OrderMaster.all
+    @order_masters = OrderMaster.all.order("id DESC").limit(10)
     respond_with(@order_masters)
   end
 

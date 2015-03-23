@@ -60,21 +60,18 @@
 <hr />
 <%= render partial: "product_variants/list" %>
 <hr />
-
-
-
-
-<h4>Add New Product Variant </h4>
+<h4>Add New Product Variant for <%= @product_master.name %> </h4>
 <%= render partial: "product_variants/form" %>
 <br/>
-<h4>Product Training </h4>
+
+<h4>Product Training for <%= @product_master.name %> </h4>
 <hr />
 <%= render partial: "product_training_manuals/listing" %>
-<h4>Add New Product Training </h4>
+<h4>Add New Product Training for <%= @product_master.name %></h4>
 <%= render partial: "product_training_manuals/quick_create" %>
 <br/>
-<!-- <h4>Product Add On - Which can be ordered with this product </h4>
+ <h4>Product Add On - Which can be ordered with <strong> ONLY WITH <%= @product_master.name %></strong> </h4>
 
-<%= render partial: "product_variant_add_ons/add_ons" %>
+<%= render partial: "product_master_add_ons/list" %>
 <br/>
-<%= render partial: "product_variant_add_ons/quick_add" %> -->
+<%= render partial: "product_master_add_ons/quick_add" %> 

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150317103319) do
+ActiveRecord::Schema.define(version: 20150321053953) do
 
   create_table "address_types", force: true do |t|
     t.string   "name"
@@ -478,6 +478,7 @@ ActiveRecord::Schema.define(version: 20150317103319) do
     t.integer  "order_for_id",           limit: nil, precision: 38
     t.string   "userip"
     t.string   "sessionid"
+    t.string   "mobile"
   end
 
   create_table "order_payments", force: true do |t|
@@ -545,6 +546,24 @@ ActiveRecord::Schema.define(version: 20150317103319) do
     t.string   "name"
   end
 
+  create_table "product_master_add_ons", force: true do |t|
+    t.integer  "product_master_id", limit: nil, precision: 38
+    t.integer  "product_list_id",   limit: nil, precision: 38
+    t.integer  "activeid",          limit: nil, precision: 38
+    t.integer  "change_price",      limit: nil, precision: 38
+    t.datetime "created_at",                                   null: false
+    t.datetime "updated_at",                                   null: false
+  end
+
+  create_table "product_master_ons", force: true do |t|
+    t.integer  "product_master_id", limit: nil, precision: 38
+    t.integer  "product_list_id",   limit: nil, precision: 38
+    t.integer  "activeid",          limit: nil, precision: 38
+    t.integer  "change_price",      limit: nil, precision: 38
+    t.datetime "created_at",                                   null: false
+    t.datetime "updated_at",                                   null: false
+  end
+
   create_table "product_masters", force: true do |t|
     t.string   "name"
     t.integer  "productcategoryid",      limit: nil, precision: 38
@@ -605,13 +624,6 @@ ActiveRecord::Schema.define(version: 20150317103319) do
     t.string   "name"
     t.datetime "created_at"
     t.datetime "updated_at"
-  end
-
-  create_table "product_variant_add_ons", force: true do |t|
-    t.integer  "product_master_id",  limit: nil, precision: 38
-    t.integer  "product_variant_id", limit: nil, precision: 38
-    t.datetime "created_at",                                    null: false
-    t.datetime "updated_at",                                    null: false
   end
 
   create_table "product_variants", force: true do |t|

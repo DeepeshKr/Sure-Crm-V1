@@ -10,7 +10,7 @@ class OrderLinesController < ApplicationController
   autocomplete :product_variant, :description, :extra_data => [:total, :name], full: true
 
   def index
-    @order_lines = OrderLine.all
+    @order_lines = OrderLine.all.order("id DESC").limit(20)
     respond_with(@order_lines)
   end
 

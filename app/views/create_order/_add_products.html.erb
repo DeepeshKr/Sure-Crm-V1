@@ -1,11 +1,12 @@
 <%= form_for @order_line , url: addproducts_path, :method => :POST do |f| %>
-          
+          <%= hidden_field_tag :calledno, @calledno %>
+<%= hidden_field_tag :mobile, @mobile %>
             <div class="row">
              <%= hidden_field_tag :order_id, @order_line.orderid %>
              <%= f.hidden_field(:orderid) %>
               <div class="col-xs-9">
                <%= f.select(:product_list_id, 
-                options_from_collection_for_select(@productlist, :id, :name), 
+                options_from_collection_for_select(@productlist, :id, :productlistdetails), 
                 {:prompt => 'Please Choose Product'}, :class => "form-control col-xs-1")  %>
               </div>
               <div class="col-xs-2">

@@ -14,7 +14,7 @@ class InteractionMaster < ActiveRecord::Base
   validates :interaction_priority_id,  :presence => { :message => "No problem priority selected!" }
   validates :interaction_status_id,  :presence => { :message => "No problem status selected!" }
 
-  validates_associated :interaction_transcript
+  #validates_associated :interaction_transcript
 
   after_create :creator
 

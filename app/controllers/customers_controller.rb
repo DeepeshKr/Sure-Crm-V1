@@ -31,20 +31,20 @@ class CustomersController < ApplicationController
   end
 
   def update_customer
-  
+   @customer = Customer.find(params[:customer_id])
   orderid = params[:order_id]
-
-  @customerup = Customer.find(params[:customer_id])
-    @customerup.update(salute: customer_params[:salute], 
+ #@customer.update(customer_params)
+    #respond_with(@customer)
+  # @customerup = Customer.find(params[:customer_id])
+    @customer.update_columns(salute: customer_params[:salute], 
       first_name: customer_params[:first_name], 
       last_name: customer_params[:last_name])
-    name =  @customerup.salute << " " << @customerup.first_name << " " << @customerup.last_name
+    name =  @customer.salute << " " << @customer.first_name << " " << @customer.last_name
      
-    if @customerup.errors.any?
-        flash[:success] = @customerup.errors.full_messages.join("<br/>")
-      else
+    
         flash[:success] = "Customer Details were was updated successfully. #{name}" 
-    end
+    
+    #respond_with(@customer)
     redirect_to orderreview_path(:order_id => params[:order_id]) 
   end
 
@@ -88,6 +88,7 @@ class CustomersController < ApplicationController
 
 
   def update
+     @customer = Customer.find(params[:customer_id])
     @customer.update(customer_params)
     respond_with(@customer)
   end

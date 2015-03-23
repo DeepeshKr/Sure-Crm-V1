@@ -21,9 +21,16 @@ class AddressDealerController < ApplicationController
   @description = params[:description]
     refcatid = 10020
 
-  #check if customer registered earlier
-    @customer = Customer.new(customer_params)
-   @customer.save
+  @customers = Customer.where('emailid = ?' , customer_params[:emailid])
+   @customer = Customer.new(customer_params)
+  if Customer.where('emailid = ?' , customer_params[:emailid]).present?
+    @customer = @customers.first
+    else
+    @customer.save
+  end
+  #check if customer registered earlier based on email id
+   
+   
 
    #if customer found just create a ticket with all the description
 
@@ -31,7 +38,7 @@ class AddressDealerController < ApplicationController
       flash[:error] = @customer.errors.full_messages.join("<br/>")
     end
 
-   @interaction_master = InteractionMaster.create(createdon: Time.zone.now, 
+   @interaction_master = InteractionMaster.create!(createdon: Time.now, 
         interaction_status_id:10000,
             callednumber: @calledno,
             interaction_category_id:refcatid, 
@@ -53,8 +60,10 @@ class AddressDealerController < ApplicationController
      if !@interaction_transcript.valid?
       flash[:error] = @interaction_transcript.errors.full_messages.join("<br/>")
     end
-
-    redirect_to interaction_masters_path(@interaction_master)
+    @interaction_transcripts =@interaction_transcript
+flash[:success] = "You have create new interaction please close the window now!"
+    #redirect_to interaction_masters_path(@interaction_master)
+    respond_with(@interaction_master, @interaction_transcript)
   end
 
 

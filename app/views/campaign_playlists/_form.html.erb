@@ -11,7 +11,7 @@
       </ul>
     </div>
   <% end %>
-
+ 
   <% if @campaign_playlist.campaignid.blank?  %>
         <div class="field">
             <%= f.select :campaignid,  options_from_collection_for_select(Campaign.all, :id, :name, 

@@ -19,7 +19,7 @@ class CreateOrderController < ApplicationController
 	before_action :productlist, only: [:show_products, :add_products]
 
 	respond_to :html
-
+ 
 	#steps :check_customer, :customer_list, :register_customer, :confirm_campaign, :take_orders, :take_address, :process_order
 def index
 	@customer = Customer.new
@@ -60,13 +60,13 @@ def add_order
  		else
        flash[:error] = @order_master.errors.full_messages.join("<br/>")
          redirect_to neworder_path(:mobile => mobile, :calledno => calledno ) 
-       end
+    end
   		#redirect_to :action => 'order_summary'
       #showmedia_path
 end
 
 def show_products
-
+specific_addon_product_list
 @order_lines = OrderLine.where(orderid: @order_master.id)
 @order_line = OrderLine.new(orderid: @order_master.id)
 @order_line.orderid = @order_master.id
@@ -157,7 +157,7 @@ def add_address
 end
 
 def update_address
-  @customer_address = CustomerAddress.where(customer_id: @cu.customer_id).last
+  @customer_address = CustomerAddress.where(customer_id: @order_master.customer_id).last
   
         if @customer_address.present?
           @customer_address.update(customer_address_params)
@@ -473,7 +473,7 @@ private
       @order_master = OrderMaster.new(calledno: @calledno, order_status_master_id: 10000, 
       orderdate: Time.zone.now, pieces: 0,subtotal: 0, taxes: 0, codcharges: 0, shipping:0, 
       total: 0, order_source_id: 10000, employeecode: @empcode, employee_id: @empid, 
-      order_for_id: 10000, customer_id: customer_id)
+      order_for_id: 10000, customer_id: customer_id, mobile: @mobile)
     end
 
     
@@ -514,6 +514,12 @@ private
       @productaddonlist = ProductList.where('active_status_id = ?',  10000).where(product_variant_id: product_variants)     
     end
 
+     def specific_addon_product_list
+      product_masters = ProductMaster.where("productactivecodeid = ?", 10000).pluck("id")
+      product_variants = ProductVariant.where("activeid = ? and product_sell_type_id = ?", 10000, 10040).where(productmasterid: product_masters).pluck("id")
+      @productaddonlist = ProductList.where('active_status_id = ?',  10000).where(product_variant_id: product_variants)     
+    end
+
 
     def interactions(refcatid)
      @intearaction_master = InteractionMaster.create(createdon: Time.now, 
@@ -524,9 +530,9 @@ private
             orderid: @order_master.id, 
           	interaction_priority_id:10000,
           	campaign_playlist_id: @order_master.campaign_playlist_id, 
-          	state: customer_params[:state], resolveby: 2.days.from_now)
+          	state: @customer.state, resolveby: 2.days.from_now)
 
-          if order_params[:comments].present?
+          if order_master_params[:comments].present?
             @interaction_transcripts = @intearaction_master.interaction_transcript.create(description:order_master_params[:comments], interactionuserid:10000, callednumber:calledno)
           end
     end

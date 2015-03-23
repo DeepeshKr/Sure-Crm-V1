@@ -30,6 +30,8 @@ respond_to :html, :xml, :json
 
      @productactivecode = ProductActiveCode.all.order("id")
      @productselltype = ProductSellType.all.order("id")
+     @productaddonlist = ProductList.all #.where("product_sell_type_id = ? ", 10040)
+
         @product_training_manuals = ProductTrainingManual.where("productid = ?",  @product_master.id)
       @product_training_manual = ProductTrainingManual.new
       @product_training_manual.productid =  @product_master.id
@@ -45,10 +47,9 @@ respond_to :html, :xml, :json
         if @product_master.product_sell_type_id = 1
           #show all add on to be added into this product
         #  if @product_master.product_variant_add_on.present?
-          @product_add_ons = ProductVariantAddOn.where("product_master_id = ?" ,  @product_master.id)
-        #  end 
-          @product_variant_add_on = ProductVariantAddOn.new
-          @product_variant_add_on.product_master_id = @product_master.id
+          @product_master_add_ons = ProductMasterAddOn.where("product_master_id = ?" ,  @product_master.id)
+        #  end  
+          @product_master_add_on = ProductMasterAddOn.new(product_master_id: @product_master.id, change_price: 0)
           @productaddonhead = "No Add on found"
         else
             @productaddonhead = "You cannot add-on to a Add On"
@@ -61,9 +62,11 @@ respond_to :html, :xml, :json
   end
 
   def new
-     @product_master.taxes = @product_master.taxes || 0
+     #@product_master.taxes =  0
+     @productactivecode = ProductActiveCode.all.order("id")
+     @productselltype = ProductSellType.where("id = ?", 10000)
     product_sell_type
-    @product_master = ProductMaster.new
+    @product_master = ProductMaster.new(taxes: 0)
     respond_with(@product_master)
   end
 

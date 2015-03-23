@@ -12,7 +12,7 @@ class OrderMaster < ActiveRecord::Base
    
   accepts_nested_attributes_for :order_line,  :allow_destroy => true
 
-  validates_presence_of :calledno #, :media_id
+  validates_presence_of :calledno , :mobile
 
   validates_associated :order_line
 
@@ -21,13 +21,13 @@ class OrderMaster < ActiveRecord::Base
   #external_order_no - string update with customer order id
   
 
-after_create :on_create
+#after_create :on_create
 
 #after_save :on_upate
 
-#after_update :on_update
+after_update :updateOrder
 
-#after_destroy :updateOrder
+after_destroy :updateOrder
 
   def no_order_master(attributes)
   attributes[:id].blank?

@@ -13,16 +13,23 @@ Rails.application.configure do
   config.consider_all_requests_local       = true
   config.action_controller.perform_caching = false
 
+  #config.action_mailer.delivery_method = :smtp
+  # config.action_mailer.smtp_settings = {
+  # :address              => "smtp.gmail.com",
+  # :port                 => 587,
+  # :domain               => "gmail.com",
+  # :user_name            => "telebrandsindia@tec2grow.in",
+  # :password             => "Well@come101",
+  # :authentication       => 'plain',
+  # :enable_starttls_auto => true  }
+  
   config.action_mailer.delivery_method = :smtp
   config.action_mailer.smtp_settings = {
-  :address              => "smtp.gmail.com",
-  :port                 => 587,
-  :domain               => "gmail.com",
-  :user_name            => "telebrandsindia@tec2grow.in",
-  :password             => "Well@come101",
-  :authentication       => 'plain',
-  :enable_starttls_auto => true  }
-  
+  :address              => "3.0.3.85",
+  :port                 => 25,
+  :user_name            => "noreply@telebrandsindia.com",
+  :password             => "noreply",
+  :authentication       => 'plain'}
   config.action_mailer.perform_deliveries = true
 
   # Don't care if the mailer can't send.

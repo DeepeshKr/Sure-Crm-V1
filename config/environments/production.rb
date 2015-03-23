@@ -23,7 +23,7 @@ Rails.application.configure do
   :address              => "3.0.3.85",
   :port                 => 25,
   :user_name            => "noreply@telebrandsindia.com",
-  :password             => "Well@noreply",
+  :password             => "noreply",
   :authentication       => 'plain'}
 
   # smtp       port 25            pop    3.0.3.85    port  110
