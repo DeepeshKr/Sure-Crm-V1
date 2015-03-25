@@ -1,5 +1,4 @@
- <div class="clearfix"></div>
-     <div class="panel panel-primary">
+ <div class="panel panel-primary">
   <div class="panel-heading">
     <h3 class="panel-title">Customer Order Summary</h3>
   </div>
@@ -41,8 +40,6 @@
       </div><!-- left panel end -->
 <br>
         
-</div>
-<br>
        <!-- show process buttons -->
 
         <div class="row">
@@ -61,21 +58,7 @@
           <% end %>
          
         </div>
-<!-- Modal -->
-<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="myModalLabel">Edit Customer name</h4>
-      </div>
-      <div class="modal-body">
-           <%= render 'customername' %>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-       <!--  <button type="button" class="btn btn-primary">Save changes</button> -->
-      </div>
-    </div>
-  </div>
-</div>
+
+
+<!-- bottom menu -->
+  <%= render 'call_menu' %> 

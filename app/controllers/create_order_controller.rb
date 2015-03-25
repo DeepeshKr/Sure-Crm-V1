@@ -4,7 +4,7 @@ class CreateOrderController < ApplicationController
 	before_action :get_variables, only: [:index, :add_customer, :add_order, :show_media, :add_media, 
     :show_products, :add_products, :show_payment, :add_payment, :new_order, :update_order, 
     :order_summary, :show_address, :add_address, :show_addonproducts, :add_addonproducts, 
-    :update_address, :order_review, :order_process]
+    :update_address, :order_review, :order_process, :show_recentorders]
 	before_action :set_order, only: [:order_summary, :show_media,  :show_media, :add_media, :show_products, 
     :add_products, :show_payment, :add_payment, :add_credit_card, :show_addonproducts, :add_addonproducts, :show_address, :add_address, 
     :update_address, :order_review, :order_process]
@@ -441,7 +441,8 @@ def order_summary
 end
 
 def show_recentorders
- @order_masters = OrderMaster.where(order_status_master_id: 10000).last(10)
+ @order_masters = OrderMaster.where(order_status_master_id: 10000)
+ .where("employee_id =? OR employeecode = ? ", @empid,  @empcode).order('id desc').limit(10)
   
  # @order_lines = OrderLine.where(orderid: @order_master.id)
 

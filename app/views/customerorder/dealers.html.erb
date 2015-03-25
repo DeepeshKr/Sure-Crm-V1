@@ -1,0 +1,75 @@
+
+<div class="well well-sm">
+<div class="row">
+  <div class="col-xs-7">
+<h3><%= @state_searched %>  Dealers</h3>
+  </div>
+  <div class="col-xs-5">
+<%= bootstrap_form_tag url: dealersearch_path, :method => :GET, :enforce_utf8 => false do |f| %>
+<div class="col-xs-10">
+<%= select_tag(:from_state, 
+    options_from_collection_for_select(@states, :state, :state, selected: @state), 
+    {:class => "form-control"})  %>
+</div>
+
+<div class="col-xs-2">
+        <%= submit_tag "Ok", name: nil,  class: "btn btn-primary" %>
+      </div>
+
+      <% end %>
+  </div>
+  
+</div>
+</div>
+<% if @cities.present? %>
+<div class="well well-sm">
+<ul class="list-inline">
+ <% @cities.each do |citi| %>
+  <li>
+<%= link_to citi.add3 || "NA", dealersearch_path(:from_state => @state, :city => citi.add3), class: "btn btn-info btn-sm" %>
+  </li>
+  <% end %>
+</ul>
+
+<% end %>
+</div>
+<% if @address_dealer.present? %>
+<table class="table table-hover">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Franchise</th>
+       <th>Address</th>
+        <th>State</th>
+      <th>Phone</th>
+       <th>Fax</th>
+        <th>Mobile</th>
+     
+
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @address_dealer.each do |dealer| %>
+      <tr>
+        <td><%= dealer.contactperson %></td>
+       <td><%= dealer.franchisee %></td>
+       <td><%= dealer.add1 %><br/>
+      <%= dealer.add2 %><br/>
+      <%= dealer.add3 %><br/>
+       <td><%= dealer.state %></td>
+       <td><%= dealer.phone %></td>
+       <td><%= dealer.fax %></td>
+       <td><%= dealer.mobile %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+<% else %>
+<div class="well well-sm">
+Please select a State from above
+</div>
+<% end %>
+
+<!-- bottom menu -->
+  <%= render 'call_menu' %> 

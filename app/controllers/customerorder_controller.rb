@@ -22,14 +22,6 @@ before_action :customer, only: [ :upsell, :payment, :channel, :review, :summary]
         addon_product_lists  
     end
 
-     t = Time.now
-           nowhour = t.strftime('%H').to_i
-            #=> returns a 0-padded string of the hour, like "07"
-           nowminute = t.strftime('%M').to_i
-            #=> returns a 0-padded string of the minute, like "03"
-           flash[:notice] = "Hours #{nowhour} and minutes #{nowminute}"
-
-
   respond_with(@order_master, @order_lines, @order_line)
   end
 
@@ -300,8 +292,8 @@ end
           return redirect_to review_path(:order_id => @order_master.id)
         end
 
-        if Medium.where('dnis = ? and state = ?', @order_master.calledno, order_master.customer_address.state).present?
-          @newmedialist = Medium.where('dnis = ? and state = ?', @order_master.calledno, order_master.customer_address.state)
+        if Medium.where('dnis = ? and state = ?', @order_master.calledno, @order_master.customer_address.state.upcase).present?
+          @newmedialist = Medium.where('dnis = ? and state = ?', @order_master.calledno, @order_master.customer_address.state.upcase)  
           @order_master.update(media_id: @newmedialist.first.id)
           medianame = @newmedialist.first.name
 
@@ -317,8 +309,12 @@ end
         # end
       end
 
-     
-
+campaignlist =  Campaign.where('TRUNC(startdate) <=  ? and TRUNC(enddate) >= ?', Date.today, Date.today)
+  
+  noof = campaignlist.count || "None" if campaignlist.present?
+  
+     todaydate = Date.today
+ flash[:success] = "today's date #{todaydate} and there are #{noof}" 
     #media found and no campaign playlists found, just go to review
     #for media we use DNIS and State details
         
@@ -342,7 +338,7 @@ end
   end
   
   if @order_master.valid?
-    flash[:success] = "Media added and Campaign Playlist added " 
+    flash[:success] = "Channel successfully added " 
       redirect_to review_path(:order_id => @order_master.id) 
   else
          flash[:error] = @order_master.errors.full_messages.join("<br/>")
@@ -456,47 +452,68 @@ end
 
      # product_variant_id = productvariants
 
-          t = Time.now
+          t = Time.zone.now
           nowhour = t.strftime('%H').to_i
-            #=> returns a 0-padded string of the hour, like "07"
+          #=> returns a 0-padded string of the hour, like "07"
           nowminute = t.strftime('%M').to_i
-            #=> returns a 0-padded string of the minute, like "03"
-          flash[:notice] = "Hours #{nowhour} and minutes #{nowminute}"
-
-           campaignlist =  Campaign.where('mediumid = ?', mediumid)
+          #=> returns a 0-padded string of the minute, like "03"
+          #flash[:notice] = "Hours #{nowhour} and minutes #{nowminute}"
+          #campaignlist =  Campaign.where('mediumid = ? and startdate <= ? and enddate >= ?',  mediumid, Time.zone.now.to_date, Time.zone.now.to_date)
+         
+          campaignlist =  Campaign.where(mediumid: mediumid).where('TRUNC(startdate) <=  ? and TRUNC(enddate) >= ?', Date.today, Date.today)
             #time_range = (Time.now.midnight - 1.day)..Time.now.midnight 
             #list_status_id = ?, 1000
-           all_calllist = CampaignPlaylist.joins(:campaign)
-          .where('campaigns.startdate = ?', DateTime.today, 10000)
-          .where(productvariantid: product_variant_id)
-          .where(list_status_id: 10000)
-          .where({campaignid: @campaignlist})
-          .where("start_hr <= ? and start_min <= ?", nowhour, nowminute)
-          .order("id DESC")
+            # .where('campaigns.startdate = ?', Time.zone.now.to_date)
+            # 
+            # .joins(:campaign).where('campaigns.startdate <= ? and enddate >= ?', Time.zone.now.to_date)
+            #   
+            #  
+            # .joins(:campaign).where("campaign.mediumid = ? ", mediumid)
 
+          all_calllist = CampaignPlaylist.where({campaignid: campaignlist}).where(list_status_id: 10000).order("id DESC").where("start_hr <= ? and start_min <= ?", nowhour, nowminute).where(productvariantid: product_variant_id)
+
+        camdate = "No list found"
+         todaydate = Date.today
+        
           productvariant = ProductVariant.find(product_variant_id).name
 
             if all_calllist.count > 0
+              camdate = campaignlist.first.startdate
+               namecamp = all_calllist.first.name << " " << campaignlist.first.name
                campaignplaylist = CampaignPlaylist.find(campaignlist.first.id).name
-              @order_master.update(campaignid: campaignlist.first.id)
+              @order_master.update(campaign_playlist_id: campaignlist.first.id)
               
-              flash[:notice] = " Product #{productvariant} added to playlist #{campaignplaylist}" 
+              flash[:notice] = " Product #{productvariant} added to playlist #{namecamp} for camp date #{camdate} while today is #{todaydate}" 
               else
+               namecamp = "Nothing in list" << " Campaign " << camdate
 
-                flash[:error] = " Unable to add Product #{productvariant} to any playlist"  
+              flash[:error] = " Unable to add Product #{productvariant} to any playlist tried for #{namecamp} for camp date #{camdate} while today is #{todaydate}"   
             end
 
 
     end
 
     def new_call
+      set_order
+      @calledno = params[:calledno] #|| if params[:calledno].present?
+      @mobile = params[:mobile] #|| if params[:mobile].present?
+      if params[:order_id].present?
+       @order_id = params[:order_id] 
+       @customer_id = @order_master.customer_id 
+       @calledno = @order_master.calledno
+       @mobile = @order_master.mobile
+      end
+       
+
       @empcode = current_user.employee_code
       @empid = current_user.id
-      @calledno = params[:calledno]
-      @mobile = params[:mobile]
-      @order_id = params[:order_id]
+      
+     
+      
       @interactioncategorylist =  InteractionCategory.where("sortorder >= 10")
+      @interactiondisposelist =  InteractionCategory.where("sortorder >= 10")
       @interactionprioritylist =  InteractionPriority.all
+      
     end
 
     def customer

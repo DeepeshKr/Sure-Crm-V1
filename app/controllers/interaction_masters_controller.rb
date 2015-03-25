@@ -22,6 +22,7 @@ class InteractionMastersController < ApplicationController
   end
 
   def show
+    
     @interaction_status = InteractionStatus.all
     @em_interaction_transcript = InteractionTranscript.new(:interactionid => params[:id], :interactionuserid => 10001)
     @cm_interaction_transcript = InteractionTranscript.new(:interactionid => params[:id], :interactionuserid => 10000)
@@ -58,12 +59,36 @@ class InteractionMastersController < ApplicationController
     @interaction_master.save
     respond_with(@interaction_master)
   end
+# interaction_masters
+#  Name            Null?    Type
+#  ----------------------------------------- -------- ----------------------------
+#  ID            NOT NULL NUMBER(38)
+#  CREATEDON              DATE
+#  CLOSEDON             DATE
+#  RESOLVEBY              DATE
+#  INTERACTION_STATUS_ID            NUMBER(38)
+#  CUSTOMER_ID              NUMBER(38)
+#  CALLEDNUMBER             VARCHAR2(255 CHAR)
+#  INTERACTION_CATEGORY_ID          NUMBER(38)
+#  PRODUCT_VARIANT_ID           NUMBER(38)
+#  ORDERID              NUMBER(38)
+#  INTERACTION_PRIORITY_ID          NUMBER(38)
+#  CAMPAIGN_PLAYLIST_ID           NUMBER(38)
+#  NOTES                CLOB
+#  STATE                VARCHAR2(255 CHAR)
+#  CREATED_AT             DATE
+#  UPDATED_AT             DATE
 
   def new_interaction
     dropdowns
    
-    @interaction_master = InteractionMaster.new(interaction_master_params)
-    @interaction_master.save
+    @interaction_master = InteractionMastercreate(customer_id: params[:customer_id],
+     callednumber: params[:callednumber], orderid: params[:orderid],
+     interaction_category_id: params[:interaction_category_id],
+     state: params[:state], mobile: params[:mobile],
+     employee_id: params[:employee_id], employee_code: params[:employee_code],
+     interaction_status_id: 10000, interaction_priority_id: 10000, 
+     createdon: Time.now, resolveby: Time.now + 10.days)
    #customer_id: interaction_master_params[:customer_id], interaction_category_id: interaction_master_params[:interaction_category_id], interaction_priority_id: interaction_master_params[:interaction_priority_id]
     #@interaction_transcript = InteractionTranscript.new(interactionid: @interaction_master.id, interactionuserid: 10000, description: params[:description])
     @interaction_transcript = @interaction_master.interaction_transcript(interactionuserid: 10000, description: params[:description])
@@ -73,6 +98,20 @@ class InteractionMastersController < ApplicationController
 
   end
 
+  def dispose_call
+    dropdowns
+    #Time.now + 10.days
+    @interaction_master = InteractionMaster.create(customer_id: params[:customer_id],
+     callednumber: params[:callednumber], orderid: params[:orderid],
+     interaction_category_id: params[:interaction_category_id],
+     state: params[:state], mobile: params[:mobile],
+     employee_id: params[:employee_id], employee_code: params[:employee_code],
+     interaction_status_id: 10003, interaction_priority_id: 10000, 
+     createdon: Time.now, resolveby: Time.now,
+      closedon: Time.now)
+    
+    respond_with(@interaction_master.customer)
+  end
 
   def update_ticket
     customer_id = params[:customer_id]

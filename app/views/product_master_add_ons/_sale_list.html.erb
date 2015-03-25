@@ -1,0 +1,36 @@
+<% if @product_master_add_ons.present? %>
+<div class="well well-lg">
+<p class="lead">You can add these products to the order</p>
+<table class="table table-hover">
+<thead>
+    <tr>
+      <th>Product Ordered</th>
+      <th>Product Can be Added</th>
+     
+      <th></th>
+    </tr>
+  </thead>
+   <tbody>
+    <% @product_master_add_ons.each do |product_master_add_on| %>
+      <tr>
+        <td><%= product_master_add_on.product_master.name if product_master_add_on.product_master %></td>
+        <td><%= product_master_add_on.product_list.productlistdetails if product_master_add_on.product_list  %></td>
+        
+        <td>
+<%= form_tag("/addproducts", method: "POST") do |f| %>
+<%= hidden_field_tag :order_id, @order_id %>
+<%= hidden_field_tag :product_list_id, product_master_add_on.product_list_id %>
+<%= hidden_field_tag :pieces, 1 %>
+<%= submit_tag "Add to Order", name: nil, class: "btn btn-success btn-sm" %>
+       
+<% end %>
+        </td>
+       
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+</div>
+<% else %>
+<p>No Add on available for products ordered </p>
+<% end %>

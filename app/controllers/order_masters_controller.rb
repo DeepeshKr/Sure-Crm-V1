@@ -18,6 +18,11 @@ class OrderMastersController < ApplicationController
     if @order_master.customer_address_id.present?
       @customer_address = CustomerAddress.find(@order_master.customer_address_id) 
     end
+
+     if @order_master.campaign_playlist_id.present?
+    @campaign_playlist = CampaignPlaylist.find(@order_master.campaign_playlist_id)
+  end
+
       @order_lines = OrderLine.where(orderid: @order_master.id)
 
      @order_line = OrderLine.new

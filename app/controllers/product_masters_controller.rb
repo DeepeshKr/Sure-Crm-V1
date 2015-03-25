@@ -7,7 +7,7 @@ respond_to :html, :xml, :json
   def index
     if params.has_key?(:search)
       @search = "Search for " << params[:search].upcase
-      @product_masters = ProductMaster.where("name like ? OR extproductcode like ?", "#{@search}%", "#{@search}%")
+      @product_masters = ProductMaster.where("name like ? OR extproductcode like ? or description like ?", "#{@search}%", "#{@search}%", "#{@search}%")
        @searchvalue = params[:search]   
       @found = @product_masters.count
     else

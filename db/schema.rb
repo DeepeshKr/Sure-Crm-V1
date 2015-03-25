@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150321053953) do
+ActiveRecord::Schema.define(version: 20150325105827) do
 
   create_table "address_types", force: true do |t|
     t.string   "name"
@@ -317,6 +317,9 @@ ActiveRecord::Schema.define(version: 20150321053953) do
     t.string   "state"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "mobile"
+    t.integer  "employee_id",             limit: nil, precision: 38
+    t.string   "employee_code"
   end
 
   create_table "interaction_priorities", force: true do |t|
