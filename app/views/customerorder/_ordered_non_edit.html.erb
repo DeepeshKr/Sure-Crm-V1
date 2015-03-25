@@ -1,0 +1,55 @@
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>Product Description </th>
+      <th>Pieces</th>
+      <th>Basic</th>
+      <th>Shipping</th>
+      <th>COD</th>
+      <th>Credit Card</th>
+      <th>Maharashtra</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @order_lines.each do |order_line| %>
+      <tr>
+        <td><%= order_line.description %></td>
+        <td><%= order_line.pieces %></td>
+       <td><%= order_line.subtotal %></td>
+        <td class="text-right">
+<%= order_line.subtotal + order_line.shipping %>
+<hr>
+     <small><%= order_line.shipping %> </small>   </td>
+        <td class="text-right">
+        <% if order_line.codcharges != 0 %>
+        <%= (order_line.subtotal || 0) + (order_line.shipping || 0) + (order_line.codcharges || 0) %>
+        <% else %>
+          0.00
+        <% end %>
+ <hr>
+<small> <%= order_line.codcharges %></small>
+       </td>
+        <td class="text-right">
+<% if order_line.creditcardcharges != 0 %>
+        <%= (order_line.subtotal || 0) + (order_line.shipping || 0)  + (order_line.creditcardcharges || 0) %> 
+        <% else %>
+          0.00
+        <% end %>
+<hr>
+<small> <%= order_line.creditcardcharges %></small>
+        </td>
+        <td class="text-right">
+        <% if order_line.maharastraextra != 0 %>
+
+<%= (order_line.subtotal || 0) + (order_line.shipping || 0) + (order_line.codcharges || 0)  + (order_line.creditcardcharges || 0)  + (order_line.maharastraextra || 0)  %> 
+<% else %>
+          0.00
+        <% end %>
+<hr>
+<small> <%= order_line.maharastraextra %></small>
+       </td>  
+      </tr>
+    <% end %>
+  </tbody>
+</table>

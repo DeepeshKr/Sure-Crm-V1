@@ -81,7 +81,8 @@ class MediaTapesController < ApplicationController
 
 # get "addonproducts" => 'product_master_add_ons#productlist'
   def product_lists
-    @productlists = ProductList.all
+    #@productlists = ProductList.all
+    @product_master_add_ons = nil
     if ProductList.find(params[:product_list_id]).present?
     productvariantid = ProductList.find(params[:product_list_id]).product_variant_id
       id = params[:product_list_id]
@@ -89,7 +90,8 @@ class MediaTapesController < ApplicationController
           productid = ProductVariant.find(productvariantid).productmasterid
           if ProductMasterAddOn.where(product_master_id: productid).present? 
           @productlists = ProductMasterAddOn.where(product_master_id: productid)
-          
+           else
+          @product_master_add_ons = nil
           end
       end
     end  

@@ -102,26 +102,29 @@ class CampaignPlaylistsController < ApplicationController
  
   #post create_duplicate_playlist
   def create_duplicate
-     old_campaign_playlist = CampaignPlaylist.find(params[:old_campaign_id])
+     old_campaign_playlists = CampaignPlaylist.where(campaignid: params[:old_campaign_id])
       c_campaignid = params[:campaignid]
-      @new_campaign_playlist = CampaignPlaylist.create(name: old_campaign_playlist.name, 
-        campaignid: c_campaignid, 
-        start_hr: old_campaign_playlist.start_hr, 
-        start_min: old_campaign_playlist.start_min, 
-        start_sec: old_campaign_playlist.start_sec, 
-        ref_name: old_campaign_playlist.ref_name,
-        list_status_id: old_campaign_playlist.list_status_id,
-        end_hr: old_campaign_playlist.end_hr, 
-        end_min: old_campaign_playlist.end_min, 
-        end_sec: old_campaign_playlist.end_sec,
-        cost: old_campaign_playlist.cost, 
-        channeltapeid: old_campaign_playlist.channeltapeid, 
-        internaltapeid: old_campaign_playlist.internaltapeid, 
-        productvariantid: old_campaign_playlist.productvariantid, 
-        filename: old_campaign_playlist.filename, 
-        description: old_campaign_playlist.description, 
-        duration_secs: old_campaign_playlist.duration_secs, 
-        tape_id: old_campaign_playlist.tape_id)
+      old_campaign_playlists.each do |old_campaign_playlist|
+                  @new_campaign_playlist = CampaignPlaylist.create(name: old_campaign_playlist.name, 
+            campaignid: c_campaignid, 
+            start_hr: old_campaign_playlist.start_hr, 
+            start_min: old_campaign_playlist.start_min, 
+            start_sec: old_campaign_playlist.start_sec, 
+            ref_name: old_campaign_playlist.ref_name,
+            list_status_id: old_campaign_playlist.list_status_id,
+            end_hr: old_campaign_playlist.end_hr, 
+            end_min: old_campaign_playlist.end_min, 
+            end_sec: old_campaign_playlist.end_sec,
+            cost: old_campaign_playlist.cost, 
+            channeltapeid: old_campaign_playlist.channeltapeid, 
+            internaltapeid: old_campaign_playlist.internaltapeid, 
+            productvariantid: old_campaign_playlist.productvariantid, 
+            filename: old_campaign_playlist.filename, 
+            description: old_campaign_playlist.description, 
+            duration_secs: old_campaign_playlist.duration_secs, 
+            tape_id: old_campaign_playlist.tape_id)
+        
+        end
 
        respond_with(@new_campaign_playlist.campaign)
   end

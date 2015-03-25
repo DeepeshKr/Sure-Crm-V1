@@ -1,0 +1,17 @@
+<% if @order_master.present? %>
+<div class="row">
+		<div class="col-xs-4">
+              
+          <%= link_to "Add Products", neworder_path(:order_id => @order_id), class: "btn btn-info" %>
+          </div>
+
+    <div class="col-xs-4 col-xs-offset-4">      
+    <%= link_to "Next Add Address", address_path(:order_id => @order_id), class: "btn btn-primary" %>
+    </div>
+        
+</div>
+<% else %>
+<div class="well well-sm">
+<p>No products have been ordered </p>
+</div>
+<% end %>

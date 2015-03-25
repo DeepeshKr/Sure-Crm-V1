@@ -25,7 +25,7 @@ class OrderMaster < ActiveRecord::Base
 
 #after_save :on_upate
 
-after_update :updateOrder
+#after_update :on_update
 
 after_destroy :updateOrder
 
@@ -57,7 +57,7 @@ def creditcardcharges
     productcost.each do |c|
       total += c.creditcardcharges || 0
     end
-    return total
+    return total.to_i
     
   else
     return 0
@@ -72,8 +72,26 @@ def maharastraextra
     total = 0
     productcost.each do |c|
       total += c.maharastraextra || 0
+
     end
-    return total
+    return total.to_i
+    
+  else
+    return 0
+  end
+ 
+end
+
+def totalCODCharges
+ productcost = OrderLine.where('orderid = ?', self.id)
+  #return productcost.first.productcost
+  if productcost.exists?
+    total = 0
+    productcost.each do |c|
+      total += c.maharastraextra || 0
+     total += c.codcharges || 0
+    end
+    return total.to_i
     
   else
     return 0

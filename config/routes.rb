@@ -18,7 +18,7 @@ Rails.application.routes.draw do
   resources :media_cost_masters
   resources :product_spec_lists
   resources :media_tapes
-
+ 
   get 'tapeiddet/list'
   get 'tapeiddet/search'
   get 'tapeiddet/details'
@@ -39,9 +39,11 @@ Rails.application.routes.draw do
   #step 1
   get 'neworder' => 'customerorder#products'
   post 'addproducts' => 'customerorder#add_products'
+ 
   #step 2
   get 'address' => 'customerorder#address'
   post 'addaddress' => 'customerorder#add_address'
+  post 'updatecustomer' => 'customers#update_customer'
     #step 3
   get 'upsell' => 'customerorder#upsell'
   post 'addupsell' => 'customerorder#add_upsell'
@@ -55,18 +57,30 @@ Rails.application.routes.draw do
   
   #step 4
   get 'channel' => 'customerorder#channel'
-  get 'addchannel' => 'customerorder#add_channel'
+  post 'addchannel' => 'customerorder#add_channel'
   #step 5
   get 'review' => 'customerorder#review'
   #step 6
   post 'processorder' => 'customerorder#process_order'
   get 'summary' => 'customerorder#summary'
 
+  #other activities
+  get 'dealersearch' => 'customerorder#dealers'
+  get 'newdealer' =>  'customerorder#new_dealer'
+
+  # get 'dealersearch' => 'address_dealer#list'
+  # get 'newdealer' =>  'address_dealer#new_dealer'
+
+  post 'newdealerenquiry' =>  'address_dealer#dealer_enquiry'
+
+  #this is a duplication of interaction below
+  post 'disposition' => 'customerorder#new_interaction'
+  #post 'disposition' => 'interaction_masters#new_interaction'
     #get 'update_all_for_code' => 'product_masters#update_all_for_code'
 
-    post 'updatedescription' => 'order_line#update_description'
+  post 'updatedescription' => 'order_line#update_description'
 
-    #post 'neworder' => 'create_order#index'
+  #post 'neworder' => 'create_order#index'
 
     
 
@@ -81,9 +95,9 @@ Rails.application.routes.draw do
     post 'addmedia_togroup' => 'media_groups#addmedia'
     post 'addmedia_tocomission' => 'media_commisions#addmedia'
     
-    get 'address_dealer/list'
-    get 'newdealer' =>  'address_dealer#new_dealer'
-    post 'newdealerenquiry' =>  'address_dealer#dealer_enquiry'
+    # get 'address_dealer/list'
+    # get 'newdealer' =>  'address_dealer#new_dealer'
+    # post 'newdealerenquiry' =>  'address_dealer#dealer_enquiry'
 
     get 'interaction' => 'interaction_masters#index'
     get 'newinteraction' => 'interaction_masters#new_ticket'
@@ -109,7 +123,7 @@ Rails.application.routes.draw do
     get 'product_upsell/list'
     get 'product_upsell/search'
     get 'product_upsell/details'
-     get 'product_upsell' => 'product_upsell#details'
+    get 'product_upsell' => 'product_upsell#details'
     get 'productupsell' => 'product_upsell#list'
 
     get 'productreport' => 'product_report#list'
@@ -201,8 +215,8 @@ mount Upmin::Engine => '/admin'
     # post 'addaddress' => 'create_order#add_address'
     # post 'updateaddress' => 'create_order#update_address'
 
-     get 'showaddonproducts' => 'create_order#show_addonproducts'
-     post 'addaddonproducts' => 'create_order#add_addonproducts'
+    #get 'showaddonproducts' => 'create_order#show_addonproducts'
+    #post 'addaddonproducts' => 'create_order#add_addonproducts'
 
     # get 'showpayment' => 'create_order#show_payment'
     

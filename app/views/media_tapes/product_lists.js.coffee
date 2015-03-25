@@ -1,0 +1,1 @@
+$("#addon_product_list_id").empty().append("<%= escape_javascript(render(:partial => @productlists)) %>")

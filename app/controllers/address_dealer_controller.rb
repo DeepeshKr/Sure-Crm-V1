@@ -21,10 +21,12 @@ class AddressDealerController < ApplicationController
   @description = params[:description]
     refcatid = 10020
 
+customercalledearlier = nil
   @customers = Customer.where('emailid = ?' , customer_params[:emailid])
    @customer = Customer.new(customer_params)
   if Customer.where('emailid = ?' , customer_params[:emailid]).present?
     @customer = @customers.first
+    customercalledearlier = "This customer has called earlier or bought from us "
     else
     @customer.save
   end
@@ -50,20 +52,20 @@ class AddressDealerController < ApplicationController
       flash[:error] = @interaction_master.errors.full_messages.join("<br/>")
     end
 
-    description = "Customer Name: " << customer_params[:salute] << " " <<  customer_params[:first_name] << " " << customer_params[:last_name] << "  current details " << @description << " called number " << customer_params[:mobile] << " called number " << customer_params[:alt_mobile] << "-- update by user: " << current_user.name << " from ip:" << request.remote_ip
+    description = "Customer Name: " << customer_params[:salute] << " " <<  customer_params[:first_name] << " " << customer_params[:last_name] << "  current details " << @description << " called number " << customer_params[:mobile] << " called number " << customer_params[:alt_mobile] <<  "  " << customercalledearlier << "  " << "-- update by user: " << current_user.name << " from ip:" << request.remote_ip
     
     @interaction_transcript = @interaction_master.interaction_transcript.create(interactionuserid: 10000,  description: description)
    # :, :
 
-     MailerAlerts.dealer_enquiry("deepesh@tec2grow.com", @customer, @description).deliver_now
+     #MailerAlerts.dealer_enquiry("deepesh@tec2grow.com", @customer, @description).deliver_now
 
      if !@interaction_transcript.valid?
       flash[:error] = @interaction_transcript.errors.full_messages.join("<br/>")
     end
     @interaction_transcripts =@interaction_transcript
-flash[:success] = "You have create new interaction please close the window now!"
-    #redirect_to interaction_masters_path(@interaction_master)
-    respond_with(@interaction_master, @interaction_transcript)
+      flash[:success] = "You have completed the process to create a new dealer enquiry please close the window now!"
+      #redirect_to interaction_masters_path(@interaction_master)
+      respond_with(@interaction_master, @interaction_transcript)
   end
 
 

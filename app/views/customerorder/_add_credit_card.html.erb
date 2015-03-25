@@ -1,0 +1,36 @@
+
+<div class="alert alert-info" role="alert">
+
+<%= bootstrap_form_for @customer_credit_card , url: addcard_path, :method => :POST do |f| %>
+<%= hidden_field_tag :order_id, @order_master.id %>
+<%= hidden_field_tag :order_card_payment_mode_id, @order_card_payment_mode_id %>
+ <%= f.hidden_field :customer_id %>
+  <div class="row"> 
+  <div class="col-xs-12">
+ <%= f.text_field :name_on_card, label: "Name on Card", placeholder: "Name on Card", required: true %>
+  </div>
+          <div class="col-xs-6">
+              <%= f.text_field :card_no, label: "16 Digit Credit Card No", maxlength: "16", placeholder: "Credit Card",  required: true  %>
+          </div>
+          <div class="col-xs-3 ">
+          <%= f.select :expiry_mon, 1..12, label: "Expiry Mon",  required: true %>
+          </div>
+          <div class="col-xs-3">
+          <%= f.select :expiry_yr_string, Date.today.year.. 12.years.from_now.year, label: "Expiry Year" %>
+          </div>
+
+  </div>
+ 
+  <div class="row">
+
+          <div class="col-xs-4 ">
+          <%= submit_tag("Add Card Details", :class => "btn btn-success btn-sm") %> 
+          </div>
+        <div class="col-xs-8">
+        <div id="result_div"></div>
+        </div>
+  </div>
+ 
+
+<% end %>
+</div>

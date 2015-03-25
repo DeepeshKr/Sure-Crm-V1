@@ -4,7 +4,7 @@ class CustomerAddressesController < ApplicationController
   respond_to :html
 
   def index
-    @customer_addresses = CustomerAddress.all.order("id")
+    @customer_addresses = CustomerAddress.all.order("id desc").limit(20)
     respond_with(@customer_addresses)
   end
 

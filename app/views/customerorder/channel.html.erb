@@ -1,0 +1,55 @@
+<%= bootstrap_form_for @order_master , url: addchannel_path, :method => :POST do |f| %>
+
+ <%= hidden_field_tag :order_id, @order_master.id %>
+      <div class="row">
+       <%= f.hidden_field :calledno %>
+                          <div class="col-xs-1"> </div>
+                          <div class="col-xs-4">
+                          	 <%= f.select(:media_id, 
+                        		    options_from_collection_for_select(@medialist, :id, :name), 
+                        		      { label: "Select Channel" }, :class => "form-control", hide_label: true) %>
+                          
+                          </div>
+                         
+                   <div class="col-xs-3 col-xs-offset-2">
+                   <br>
+              <%= f.submit "Add Channel / Ad",  class: "btn btn-primary" %>
+            </div>
+                              
+           
+       </div>
+<% end %>
+
+<br>
+ <div class="clearfix"></div>
+     <div class="panel panel-primary">
+  <div class="panel-heading">
+    <h3 class="panel-title">Customer Order Summary</h3>
+  </div>
+  <%= render "order_customer" %>
+
+  <%= render "order_address" %>
+    <%= render "ordered_non_edit" %>
+
+
+    
+<div class="panel-footer"><%= render "order_masters/order_footer" %></div>
+</div>
+
+<script>
+
+$(document).ready(function () {
+    $("#customer_comment").hide();
+    $("#mismatched_campaign_0").click(function () {
+        $("#customer_comment").hide();
+    });
+    $("#mismatched_campaign_1").click(function () {
+        $("#customer_comment").show();
+    });
+    $("#mismatched_campaign_2").click(function () {
+        $("#customer_comment").show();
+    });
+});
+  	
+ 
+  </script>

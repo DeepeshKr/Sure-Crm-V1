@@ -1,0 +1,39 @@
+<%= bootstrap_form_for(@product_master_add_on) do |f| %>
+  <% if @product_master_add_on.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@product_master_add_on.errors.count, "error") %> prohibited this product_master_add_on from being saved:</h2>
+
+      <ul>
+      <% @product_master_add_on.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+
+   
+    <%= f.hidden_field :product_master_id %>
+
+ 
+  <div class="field">
+     <%= f.select :product_list_id,  options_from_collection_for_select(@productspecificaddonlist,
+       :id, :productlistdetails),
+             { label: "Select these product which can be sold as Specific Add Ons" } %>
+ 
+  </div>
+  <div class="field">
+     <%= f.select :activeid,  options_from_collection_for_select(@productactivecode,
+       :id, :name),
+             { label: "Select the Product Active Status" } %>
+ 
+  </div>
+ 
+    <%= f.hidden_field :change_price %>
+  
+ <div class="row">
+  <div class="col-xs-3 col-md-offset-8">
+    <%= f.primary class: "btn btn-primary" %>
+  </div>
+  </div>
+<% end %>

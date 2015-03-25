@@ -1,0 +1,27 @@
+<%= bootstrap_form_for @customer , url: updatecustomer_path,  method: :post  do |f| %>
+
+<div class="row">
+<%= f.hidden_field :id %>
+<%= hidden_field_tag :order_id, @order_master.id %>
+  <%= hidden_field_tag :customer_id,  @order_master.customer_id %>
+  <div class="col-xs-2">
+  	 <%= f.select(:salute, 
+    options_from_collection_for_select(Salute.all, :name, :name, :selected => @customer.salute), 
+    {}, :class => "form-control")  %>
+  </div>
+  <div class="col-xs-5">
+  	<%= f.text_field :first_name,  :class => "form-control", :required => true %>
+  </div>
+  <div class="col-xs-5">
+  	 <%= f.text_field :last_name,  :class => "form-control" %>
+  </div>
+  
+</div>
+<div class="row">
+  
+  	  <div class="col-xs-3 col-xs-offset-8">
+  	  	<%= f.submit "Update Name", class: "btn btn-primary" %>
+  	  </div>
+    
+  </div>
+<% end %>

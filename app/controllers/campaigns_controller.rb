@@ -100,7 +100,7 @@ class CampaignsController < ApplicationController
     end
 
     def recent_campaigns
-      @recentplaylist = Campaign.where("mediumid = ?", @campaign.mediumid).order('id DESC').limit(10)
+      @recentplaylist = Campaign.order('id DESC').limit(30)
     end
 
     def campaign_params

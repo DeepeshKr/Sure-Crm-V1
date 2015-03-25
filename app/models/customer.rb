@@ -41,7 +41,7 @@ length: { maximum: 12 }, :presence => { :message => "Enter only numbers" }
 
 
 def fullname
-  self.salute + " " + self.first_name + " " + self.last_name
+  self.salute << " " << self.first_name << " " << self.last_name
 end
 
 def from_state

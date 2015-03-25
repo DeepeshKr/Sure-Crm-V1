@@ -1,0 +1,33 @@
+<%= form_for(@product_master_add_on) do |f| %>
+  <% if @product_master_add_on.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@product_master_add_on.errors.count, "error") %> prohibited this product_master_add_on from being saved:</h2>
+
+      <ul>
+      <% @product_master_add_on.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :product_master_id %><br>
+    <%= f.number_field :product_master_id %>
+  </div>
+  <div class="field">
+    <%= f.label :product_list_id %><br>
+    <%= f.number_field :product_list_id %>
+  </div>
+  <div class="field">
+    <%= f.label :activeid %><br>
+    <%= f.number_field :activeid %>
+  </div>
+  <div class="field">
+    <%= f.label :change_price %><br>
+    <%= f.text_field :change_price %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

@@ -1,5 +1,5 @@
 class InteractionMastersController < ApplicationController
-  before_action :set_interaction_master, only: [:show, :edit, :update, :destroy, :dealer_enquiry]
+  before_action :set_interaction_master, only: [:show, :new_ticket, :edit, :update, :destroy, :dealer_enquiry]
 
 
   respond_to :html
@@ -38,13 +38,19 @@ class InteractionMastersController < ApplicationController
   end
 
   def new_ticket
-    dropdowns
-    #'this is get'
-    customer_id = params[:customer_id]
-    @customer = Customer.find(customer_id)
-    @interaction_master = InteractionMaster.new(interaction_status_id: 10000,customer_id: customer_id)
     
-    respond_with(@interaction_master, @customer)
+      dropdowns
+    #'this is get'
+      customer_id = params[:customer_id]
+      @customer = Customer.find(customer_id)
+      @interaction_master = InteractionMaster.new(interaction_status_id: 10000, 
+        customer_id: customer_id)
+      flash[:error] = "Customer Id is missing!" 
+      respond_with(@interaction_master, @customer)
+
+    
+      
+    
   end
 
   def create

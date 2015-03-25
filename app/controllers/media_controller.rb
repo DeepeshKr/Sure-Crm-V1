@@ -4,7 +4,16 @@ class MediaController < ApplicationController
   respond_to :html
 
   def index
-    @media = Medium.all
+     @media = Medium.all.order("id DESC").limit(10)
+    if params[:telephone].present?
+       @media = Medium.where(telephone: params[:telephone])
+       @telephone = params[:telephone]
+    end
+     if params[:dnis].present?
+       @media = Medium.where(dnis: params[:dnis])
+       @dnis = params[:dnis]
+    end
+   
     respond_with(@media)
   end
 

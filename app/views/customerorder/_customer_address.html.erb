@@ -1,0 +1,83 @@
+<div class="panel panel-info">
+  <div class="panel-heading">   <h3 class="panel-title">Customer Address</h3>  </div>
+    <div class="panel-body">
+ 
+        	<%= hidden_field_tag :order_id, @order_id %>
+  <div class="row">
+		  
+		 <div class="col-xs-10"> 
+		   
+		    <%= f.text_field :address1, :label => "Customer Address",  :class =>"form-control", :maxlength=> "30", :placeholder => "Address Required", :required => true  %>
+		  </div>
+  <div class="clearfix"></div>
+		 
+		 <div class="col-xs-10">
+		      <%= f.text_field :address2, hide_label: :true,  :class =>"form-control",:maxlength=> "30",  :placeholder => "Address", :required => true %>
+		  </div>
+	  <div class="clearfix"></div>
+		
+		 <div class="col-xs-10">
+		    <%= f.text_field :address3, hide_label: :true,  :class =>"form-control",:maxlength=> "30",  :placeholder => "Address" %>
+		  </div>
+   <div class="clearfix"></div>
+  
+ <div class="col-xs-8">
+  
+    <%= f.text_field :landmark, hide_label: :true, :maxlength=> "30",   :class =>"form-control", :placeholder => "Landmark" , :required => true %>
+  </div>
+   <div class="clearfix"></div>
+  
+ <div class="col-xs-6">
+     
+     <%= f.select(:state, 
+    options_from_collection_for_select(State.all, :name, :name, selected: f.object.state), 
+    {},:label => "Select State", :class => "form-control col-xs-1")  %>
+  </div>
+  
+ <div class="col-xs-4">
+    
+    <%= f.text_field :city, :maxlength=> "30",  :label => "City",  :class =>"form-control", :placeholder => "City" , :required => true %>
+  </div>
+    <div class="col-xs-2">
+      <%= f.text_field :pincode, :label => "Pincode",   :class =>"form-control", :placeholder => "Pincode" %>
+  </div>
+ </div>
+ 
+
+  <div class="row">
+ <div class="col-xs-4">
+   
+    <%= f.text_field :district, :maxlength=> "30",  :label => "District",  :class =>"form-control", :placeholder => "District"  %>
+  </div>
+  
+  <div class="col-xs-4">
+  	    <%= f.text_field :country, :maxlength=> "30",  :label => "Country",  :class =>"form-control", :placeholder => "Country", :value => "India" %>
+  </div>
+</div>
+  <div class="row">
+	 
+	  <div class="col-xs-4">
+	    <%= f.text_field :telephone1, :maxlength=> "30",  :label => "Telephone",  :class =>"form-control", :placeholder => "Telephone", :readonly => "true", :required => true%>
+	  </div>
+	  
+	  <div class="col-xs-4">
+	    <%= f.text_field :telephone2, :maxlength=> "30", :label => "Alt Telephone",  :class =>"form-control", :placeholder => "Telephone"  %>
+	  </div>
+	  
+	  <div class="col-xs-4">
+	    <%= f.text_field :fax, :maxlength=> "30",  :label => "Fax",  :class =>"form-control", :placeholder => "Fax"  %>
+	  </div>
+  </div>
+   <!--  <div class="row">
+  
+  	  <div class="col-xs-3 col-xs-offset-8">
+  	  	<%= f.submit class: "btn btn-primary" %>
+  	  </div>
+    
+  </div> -->
+  
+  
+
+
+</div>
+</div>

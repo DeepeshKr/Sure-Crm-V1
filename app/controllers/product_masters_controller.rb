@@ -1,6 +1,6 @@
 class ProductMastersController < ApplicationController
   before_action :set_product_master, only: [:show, :edit, :update, :destroy]
-
+before_action :dropdownlist
   #respond_to :html
 respond_to :html, :xml, :json
 
@@ -28,10 +28,7 @@ respond_to :html, :xml, :json
      total: @product_master.total, variantbarcode: @product_master.barcode, description: @product_master.description,
      extproductcode: @product_master.extproductcode)
 
-     @productactivecode = ProductActiveCode.all.order("id")
-     @productselltype = ProductSellType.all.order("id")
-     @productaddonlist = ProductList.all #.where("product_sell_type_id = ? ", 10040)
-
+     
         @product_training_manuals = ProductTrainingManual.where("productid = ?",  @product_master.id)
       @product_training_manual = ProductTrainingManual.new
       @product_training_manual.productid =  @product_master.id
@@ -39,12 +36,12 @@ respond_to :html, :xml, :json
      # product_add_on_l = ProductVariantAddOn.where(productid: productmasters).pluck(:productvariantid)
       
       @product_add_on_lists  = ProductVariant.joins(:product_master)
-      .where(product_masters: { product_sell_type_id: 2 })
+      .where(product_masters: { product_sell_type_id: 10001 })
 
       #Author.joins(:articles).where(articles: { author: author })
       
       if @product_master.product_sell_type.present?
-        if @product_master.product_sell_type_id = 1
+        if @product_master.product_sell_type_id = 10000
           #show all add on to be added into this product
         #  if @product_master.product_variant_add_on.present?
           @product_master_add_ons = ProductMasterAddOn.where("product_master_id = ?" ,  @product_master.id)
@@ -71,6 +68,7 @@ respond_to :html, :xml, :json
   end
 
   def edit
+
      @product_master.taxes = @product_master.taxes || 0
     product_sell_type
   end
@@ -125,6 +123,13 @@ respond_to :html, :xml, :json
   end
   
   private
+    def dropdownlist
+      @productactivecode = ProductActiveCode.all.order("id")
+      @productselltype = ProductSellType.all.order("id")
+      @productspecificaddonlist = ProductList.joins(:product_variant).where("product_variants.product_sell_type_id = ? ", 10040)
+
+    end 
+
     def product_sell_type
       @product_sell_types = ProductSellType.all.order("id")
     end

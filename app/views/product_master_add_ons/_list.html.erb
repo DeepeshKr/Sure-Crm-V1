@@ -1,0 +1,13 @@
+
+<% if @product_master_add_ons.present? %>
+<ul class="list-inline">
+    <% @product_master_add_ons.each do |product_master_add_on| %>
+     <li>
+       <%= product_master_add_on.product_list.productlistdetails %>      
+     <%= link_to 'Destroy', product_master_add_on, method: :delete, data: { confirm: 'Are you sure?' } , class: "btn btn-link btn-xs" %> </li>
+    <% end %>
+</ul>
+
+<% else %>
+<p> No Specific Add on available </p>
+<% end %>

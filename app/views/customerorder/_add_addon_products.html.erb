@@ -1,0 +1,24 @@
+<div id="add_on_product_sale_list">
+<%= hidden_field_tag :calledno, @calledno %>
+<%= hidden_field_tag :mobile, @mobile %>
+<p>This is being tested</p>
+<%= bootstrap_form_for @order_line , url: addupsell_path, :method => :POST do |f| %>
+          
+            <div class="row">
+             <%= hidden_field_tag :order_id, @order_line.orderid %>
+             <%= f.hidden_field(:orderid) %>
+              <%= f.hidden_field(:pieces) %>
+              <div class="col-xs-9">
+               <%= select_tag "addon_product_list_id", 
+                options_from_collection_for_select(@productaddonlist, :id, :productlistdetails), 
+                {:prompt => 'Please Choose Product', :class => "form-control col-xs-1"}  %>
+              </div>
+              
+              <div class="col-xs-3">
+                <%= f.submit "Add This to Order", class: "btn btn-success "%>
+              </div>
+               
+          </div>
+
+<% end %>
+</div>

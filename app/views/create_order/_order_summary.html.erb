@@ -169,22 +169,6 @@ No Address availabe!
 </div>
 <div class="clearfix"></div>
  </div>
- <div class="panel-footer">
- 	<div class="row">
- 	<div class="col-xs-2"><%= link_to 'Add Products', showproducts_path(:order_id => order_master.id), class: "btn btn-primary btn-sm" %> </div>
- 	<div class="col-xs-2"> 
- 	<%= link_to 'Add Address', showaddress_path(:order_id => order_master.id), class: "btn btn-primary btn-sm" %>
- 	</div>
-	<div class="col-xs-2">
-	<%= link_to "Add add-on's", showaddonproducts_path(:order_id => order_master.id), class: "btn btn-info btn-sm" %>
-	 </div>
-	<div class="col-xs-2"> 
-	<%= link_to 'Add Payments', showpayment_path(:order_id => order_master.id), class: "btn btn-info btn-sm" %></div>
-<div class="col-xs-2"><%= link_to 'Process Order', orderreview_path(:order_id => order_master.id), class: "btn btn-success btn-sm" %> </div>
 
-
-
-	</div>	
- </div>
 </div>
 <% end %>
