@@ -59,29 +59,11 @@ class InteractionMastersController < ApplicationController
     @interaction_master.save
     respond_with(@interaction_master)
   end
-# interaction_masters
-#  Name            Null?    Type
-#  ----------------------------------------- -------- ----------------------------
-#  ID            NOT NULL NUMBER(38)
-#  CREATEDON              DATE
-#  CLOSEDON             DATE
-#  RESOLVEBY              DATE
-#  INTERACTION_STATUS_ID            NUMBER(38)
-#  CUSTOMER_ID              NUMBER(38)
-#  CALLEDNUMBER             VARCHAR2(255 CHAR)
-#  INTERACTION_CATEGORY_ID          NUMBER(38)
-#  PRODUCT_VARIANT_ID           NUMBER(38)
-#  ORDERID              NUMBER(38)
-#  INTERACTION_PRIORITY_ID          NUMBER(38)
-#  CAMPAIGN_PLAYLIST_ID           NUMBER(38)
-#  NOTES                CLOB
-#  STATE                VARCHAR2(255 CHAR)
-#  CREATED_AT             DATE
-#  UPDATED_AT             DATE
+
 
   def new_interaction
     dropdowns
-   
+   if params[:orderid].present?
     @interaction_master = InteractionMastercreate(customer_id: params[:customer_id],
      callednumber: params[:callednumber], orderid: params[:orderid],
      interaction_category_id: params[:interaction_category_id],
@@ -94,7 +76,9 @@ class InteractionMastersController < ApplicationController
     @interaction_transcript = @interaction_master.interaction_transcript(interactionuserid: 10000, description: params[:description])
    # @customer = @interaction_master.customer
     respond_with(@interaction_master.customer)  
-  
+  else
+     flash[:error] = "You can report this order after some products are added or order process is midway!"
+  end
 
   end
 
@@ -110,7 +94,14 @@ class InteractionMastersController < ApplicationController
      createdon: Time.now, resolveby: Time.now,
       closedon: Time.now)
     
-    respond_with(@interaction_master.customer)
+    if params[:orderid].present?
+        flash[:success] = "The disposition is logged, start new call!"
+      respond_with(@interaction_master.customer)
+    else
+      flash[:success] = "The disposition is logged, start new call!"
+      redirect_to root_path
+    end
+    
   end
 
   def update_ticket

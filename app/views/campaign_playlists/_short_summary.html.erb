@@ -1,0 +1,43 @@
+<p id="notice"><%= notice %></p>
+<% if @campaign_playlist.present? %>
+
+<div class="row">
+<div class="col-xs-6">
+<p><strong>Campaign: <%= @campaign_playlist.campaign.name if @campaign_playlist.campaign %></strong></p>
+<p> <strong>Name:</strong> <%= @campaign_playlist.name %></p>
+<p> <strong>DNIS:</strong> <%= @campaign_playlist.campaign.medium.dnis %></p>
+</div>
+
+<div class="col-xs-6">
+<strong>Starttime:</strong> <%= @campaign_playlist.starttime %> &nbsp;
+ <strong>Endtime:</strong> <%= @campaign_playlist.endtime %>
+ <p>
+  <strong>Product Advertised:</strong>
+  <%= @campaign_playlist.product_variant.name if @campaign_playlist.product_variant %>
+</p>
+<p>
+  <strong>Description:</strong>
+  <%= @campaign_playlist.description %>
+</p>
+</div>
+</div>
+<div class="well well-sm">
+<div class="row">
+<div class="col-xs-3">
+<h5> <strong>Media Cost Rs:</strong> <%= @campaign_playlist.cost %></h5>
+</div>
+<div class="col-xs-3">
+<h5> <strong>Product Revenue Rs:</strong> <%= @campaign_playlist.productrevenue %></h5>
+</div>
+<div class="col-xs-3">
+<h5> <strong>Product Cost Rs:</strong> <%= @campaign_playlist.productcost %></h5>
+</div>
+<div class="col-xs-3">
+<h5> <strong>Projected Profitability Rs:</strong> <%= @campaign_playlist.productrevenue - (@campaign_playlist.cost + @campaign_playlist.productcost) %></h5>
+</div>
+</div>	
+</div>
+
+<% else %>
+<p>No campaign playlist assgined </p>
+<% end %>
