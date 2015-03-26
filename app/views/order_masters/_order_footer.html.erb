@@ -34,16 +34,26 @@
 				<%= @order_master.subtotal + @order_master.shipping  %>
 				</td> 
 				</tr>
+				<tr>
+				<td> <strong>Maharashtra COD Surcharge:</strong></td><td class="text-right"> 
+			<small>(<%= @order_master.maharastracodextra %>)</small>	
+			<% if @order_master.maharastracodextra != 0 %>
+ 			<%= @order_master.subtotal + @order_master.shipping + @order_master.maharastracodextra %>
+ 				<% end %>
+			</td> </tr>
 				<tr><td> <strong>Cod charges:</strong></td><td class="text-right"> 
 				<small>(<%= @order_master.codcharges %>)</small>
 				<% if @order_master.codcharges != 0 %>
-				 <%= @order_master.subtotal + @order_master.shipping + @order_master.codcharges %>
+				 <%= @order_master.subtotal + @order_master.shipping + @order_master.codcharges + @order_master.maharastracodextra %>
 				<% end %>
 				</td> </tr>
-				<tr><td> <strong>Maharashtra Surcharge:</strong></td><td class="text-right"> 
-			<small>(<%= @order_master.maharastraextra %>)</small>	
-			<% if @order_master.maharastraextra != 0 %>
- 			<%= @order_master.subtotal + @order_master.shipping + @order_master.codcharges + @order_master.maharastraextra %>
+				
+				
+			<tr>
+				<td> <strong>Service Tax:</strong></td><td class="text-right"> 
+			<small>(<%= @order_master.servicetax %>)</small>	
+			<% if @order_master.servicetax != 0 %>
+ 			<%= @order_master.subtotal + @order_master.shipping + @order_master.codcharges + @order_master.servicetax + @order_master.maharastracodextra %>
  				<% end %>
 			</td> </tr>
 				<tr><td> <strong>Credit Card Savings:</strong></td><td class="text-right"> 
@@ -53,7 +63,13 @@
 				 	<% end %>
 				</td> </tr>
 				
-				
+				<tr>
+				<td> <strong>Maharashtra CC Surcharge:</strong></td><td class="text-right"> 
+			<small>(<%= @order_master.maharastraccextra %>)</small>	
+			<% if @order_master.maharastraccextra != 0 %>
+ 			<%= @order_master.subtotal + @order_master.shipping + @order_master.creditcardcharges + @order_master.maharastraccextra %>
+ 				<% end %>
+			</td> </tr>
 				</table>  
 		</div>
 

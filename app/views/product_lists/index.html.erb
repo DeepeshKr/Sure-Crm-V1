@@ -1,6 +1,13 @@
 <p id="notice"><%= notice %></p>
 
-<h1>Listing Product Lists</h1>
+
+<div class="row">
+<div class="col-xs-6">
+<h3>Listing of Products for Sale</h3></div>
+<div class="col-xs-6">
+<p>These are list of products for sale.  </p>
+</div>
+</div>
 
 <table class="table table-hover">
   <thead>
@@ -11,7 +18,7 @@
       <th>Extproductcode</th>
       <th>List barcode</th>
         <th>Active</th>
-      <th colspan="3"></th>
+      <th colspan="2"></th>
     </tr>
   </thead>
 
@@ -23,9 +30,9 @@
        <td><%= product_list.product_spec_list.name if product_list.product_spec_list %></td>
         <td><%= product_list.extproductcode %></td>
         <td><%= product_list.list_barcode %></td>
-         <td><%= product_list.list_barcode %></td>
+        
         <td>  <%= product_list.product_active_code.name if product_list.product_active_code %> </td>
-        <td><%= link_to 'Show', product_list, class: "btn btn-info btn-xs" %></td>
+        
         <td><%= link_to 'Edit', edit_product_list_path(product_list), class: "btn btn-info btn-xs" %></td>
         <td><%= link_to 'Destroy', product_list, method: :delete, data: { confirm: 'Are you sure?' }, class: "btn btn-info btn-xs" %></td>
       </tr>
@@ -35,4 +42,4 @@
 
 <br>
 
-<%= link_to 'New Product list', new_product_list_path, class: "btn btn-info" %>
+<!-- <%= link_to 'New Product list', new_product_list_path, class: "btn btn-info" %> -->

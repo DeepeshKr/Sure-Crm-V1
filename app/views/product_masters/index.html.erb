@@ -45,7 +45,7 @@
          
         <div class="row">
             <div class="col-xs-6">
-              <%= link_to 'Add Variant', product_master  , class: "btn btn-primary btn-sm" %> 
+              <%= link_to 'Add Variant / Training / Basic Upsell', product_master  , class: "btn btn-primary btn-sm" %> 
             </div>
             <div class="col-xs-6">
                <%= link_to 'Edit Product', edit_product_master_path(product_master), class: "btn btn-primary btn-sm" %>
@@ -58,8 +58,8 @@
               <thead>
                 <tr>
                   <th>Name</th>
-                   <th>Code</th>
-                  <th>Total</th>
+                   <th>Basic</th>
+                  <th>Shipping</th>
                   <th colspan="2"></th>
                 
                 </tr>
@@ -70,14 +70,14 @@
              <tr>
              <small>
             <td> <%= v.name %> </td>
-              <td> <%= v.extproductcode %></td>
-             <td> <%= v.total %> </td>
+            <td> <%= v.price %> </td>
+            <td> <%= v.shipping %> </td>
              
               <td>
-                <%= link_to 'Add List', v  , class: "btn btn-primary btn-xs" %> 
+                <%= link_to 'Add To List', v  , class: "btn btn-primary btn-xs" %> 
               </td>
               <td>
-              <%= link_to 'Edit Product', edit_product_variant_path(v), class: "btn btn-primary btn-xs" %>
+              <%= link_to 'Edit Product Variant', edit_product_variant_path(v), class: "btn btn-primary btn-xs" %>
               </td>
                </small>
               </tr>

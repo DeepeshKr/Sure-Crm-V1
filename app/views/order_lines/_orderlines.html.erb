@@ -6,46 +6,74 @@
   
    
   <% if @order_lines.present? %>
-
-<table class="table table-striped">
+<table class="table table-striped table-bordered">
   <thead>
+  <tr>
+      <th colspan="4"> </th>
+      
+     
+      <th colspan="3" class="text-center">COD Charges</th>
+      
+      <th colspan="2" class="text-center">Credit Card</th>
+      <th></th>
+    </tr>
     <tr>
       <th>Product Description </th>
-      <th>Pieces</th>
-      <th>Basic</th>
-      <th>Shipping</th>
-      <th>COD</th>
-      <th>Credit Card</th>
-      <th>Maharashtra</th>
-      
-      
-      <th ></th>
+      <th class="text-right">Pieces</th>
+      <th class="text-right">Basic</th>
+      <th class="text-right">Shipping</th>
+      <th class="text-right"><small>Mah Surcharge</small></th>
+      <th class="text-right"><small>COD Charge</small></th>
+      <th class="text-right"><small>Service Tax </small></th>
+      <th class="text-right"><small>Credit Card</small></th>
+      <th class="text-right"><small>Mah Surcharge</small></th>
+      <th></th>
     </tr>
   </thead>
 
   <tbody>
     <% @order_lines.each do |order_line| %>
       <tr>
-         <td><%= order_line.description %></td>
-        <td><%= order_line.pieces %></td>
-       <td><%= order_line.subtotal %></td>
+        <td><%= order_line.description %></td>
+        <td class="text-right"><%= order_line.pieces %></td>
+       <td class="text-right"><%= order_line.subtotal %></td>
         <td class="text-right">
 <%= order_line.subtotal + order_line.shipping %>
 <hr>
      <small><%= order_line.shipping %> </small>   </td>
+        
+       <td class="text-right">
+        <% if order_line.maharastracodextra != 0 %>
 
-         <td class="text-right">
-        <% if order_line.codcharges != 0 %>
-<%= order_line.subtotal + order_line.shipping + order_line.codcharges %>
+<%= (order_line.subtotal || 0) + (order_line.shipping || 0) + (order_line.maharastracodextra || 0)  %> 
 <% else %>
           0.00
         <% end %>
+<hr>
+<small> <%= order_line.maharastracodextra %></small>
+       </td> 
+       <td class="text-right">
+        <% if order_line.codcharges != 0 %>
+        <%= (order_line.subtotal || 0) + (order_line.shipping || 0) + (order_line.codcharges || 0) + (order_line.maharastracodextra || 0) %>
+        <% else %>
+          0.00
+        <% end %>
  <hr>
-<small> <%= order_line.codcharges %></small>
+      <small> <%= order_line.codcharges %></small>
        </td>
+       <td class="text-right">
+        <% if order_line.servicetax != 0 %>
+
+<%= (order_line.subtotal || 0) + (order_line.shipping || 0) + (order_line.codcharges || 0)   + (order_line.maharastracodextra || 0)  + (order_line.servicetax || 0)  %> 
+<% else %>
+          0.00
+        <% end %>
+<hr>
+<small> <%= order_line.servicetax %></small>
+       </td>  
         <td class="text-right">
 <% if order_line.creditcardcharges != 0 %>
-        <%= order_line.subtotal + order_line.shipping + order_line.creditcardcharges %> 
+        <%= (order_line.subtotal || 0) + (order_line.shipping || 0)  + (order_line.creditcardcharges || 0) %> 
         <% else %>
           0.00
         <% end %>
@@ -53,20 +81,22 @@
 <small> <%= order_line.creditcardcharges %></small>
         </td>
         <td class="text-right">
-        <% if order_line.maharastraextra != 0 %>
+        <% if order_line.maharastraccextra != 0 %>
 
-<%= order_line.subtotal + order_line.shipping + order_line.codcharges + order_line.creditcardcharges + order_line.maharastraextra %> 
+<%= (order_line.subtotal || 0) + (order_line.shipping || 0) + (order_line.creditcardcharges || 0)  + (order_line.maharastraccextra || 0)  %> 
 <% else %>
           0.00
         <% end %>
 <hr>
-<small> <%= order_line.maharastraextra %></small>
-       </td> 
+<small> <%= order_line.maharastraccextra %></small>
+       </td>  
         <td><%= link_to 'Destroy', order_line, method: :delete, data: { confirm: 'Are you sure?' } %></td>
       </tr>
     <% end %>
   </tbody>
 </table>
+
+
 
 <% else %>
   <div class="well">

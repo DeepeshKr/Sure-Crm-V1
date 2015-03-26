@@ -39,6 +39,7 @@ Rails.application.routes.draw do
   #step 1
   get 'neworder' => 'customerorder#products'
   post 'addproducts' => 'customerorder#add_products'
+  post 'addbasicupsellproducts' => 'customerorder#add_basic_upsell'
  
   #step 2
   get 'address' => 'customerorder#address'
@@ -82,9 +83,7 @@ Rails.application.routes.draw do
 
   #post 'neworder' => 'create_order#index'
 
-    
-
-    get 'recentorders' => 'create_order#show_recentorders'
+  #get 'recentorders' => 'create_order#show_recentorders'
 
     get 'create' => 'customers#createnew'
     post   'add' => 'customers#add'

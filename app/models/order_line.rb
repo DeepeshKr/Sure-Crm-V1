@@ -23,17 +23,29 @@ class OrderLine < ActiveRecord::Base
   after_destroy :updateOrder  
 
 def codcharges
+codcharges = 0
   if (self.orderid).present? 
-  cashondeliveryid = 10001
-   charges = Orderpaymentmode.find(cashondeliveryid).charges
-  if self.order_master.orderpaymentmode_id.present?
-   #check if paid using credit card
-     if self.order_master.orderpaymentmode_id  == 10000
-         charges = 0
-     end
+    
+    cashondeliveryid = 10001
+    cashondeliverycharge = Orderpaymentmode.find(cashondeliveryid).charges
+
+    maharastracodextraid = 10020
+    maharastracodcharge = Orderpaymentmode.find(maharastracodextraid).charges
+    maharastracodextra = self.total * maharastracodcharge
+    #add all charges
+    codcharges = ((self.total || 0 ) + (maharastracodextra ||0)) * (cashondeliverycharge || 0) 
+    
+    #check if address is selected
+    if self.order_master.customer_address_id.present?
+     #check if state is maharastra
+      if self.order_master.customer_address.state.upcase == 'MAHARASHTRA'
+         codcharges = ((self.total || 0 ) + (maharastracodextra ||0)) * (cashondeliverycharge || 0) 
+      else
+        codcharges = ((self.total || 0 )) * (cashondeliverycharge || 0) 
+      end
+    end
   end
-  return (self.total || 0) * (charges || 0)
-  end
+    return codcharges.to_i
 end
 
 def creditcardcharges
@@ -47,26 +59,94 @@ def creditcardcharges
      end
   end
 
-  return (self.total || 0)  * (charges || 0)
+
+  return ((self.subtotal || 0)  * (charges || 0)).to_i 
 
   end
 end
 
-def maharastraextra
+#service it levied on COD charges only at 12.36%
+def servicetax
   if (self.orderid).present? 
- surchargeid = 10020
- surcharge = Orderpaymentmode.find(surchargeid).charges
+    servicetaxid = 10040
+    servicetaxrate = Orderpaymentmode.find(servicetaxid).charges 
+   
+    cashondeliveryid = 10001
+    cashondeliverycharge = Orderpaymentmode.find(cashondeliveryid).charges
 
-  #check if address is selected
-if self.order_master.customer_address_id.present?
-   #check if state is maharastra
-   if !self.order_master.customer_address.state.downcase == 'maharashtra'
-      surcharge = 0
-   end
- end
+    #add all charges
+    servicetax = (self.total * (cashondeliverycharge || 0) || 0) * (servicetaxrate || 0)
+
+    #check if address is selected
+    if self.order_master.customer_address_id.present?
+       #check if state is maharastra
+       if self.order_master.customer_address.state.upcase == 'MAHARASHTRA'
+        maharastracodextraid = 10020
+        maharastracodextracharge = Orderpaymentmode.find(maharastracodextraid).charges
+
+        #add all charges
+        servicetax = ((self.total * (cashondeliverycharge || 0)  || 0) + (maharastracodextracharge ||0) * (servicetaxrate || 0))
+       end
+    end
+
+  end
+ 
+ return servicetax.to_i
+
 end
 
-return (self.total || 0) *  (surcharge || 0)
+def maharastracodextra
+  if (self.orderid).present? 
+    surchargeid = 10020
+    maharastracodcharge = Orderpaymentmode.find(surchargeid).charges
+
+    maharastracodextra = self.total * maharastracodcharge
+      #check if address is selected
+    if self.order_master.customer_address_id.present?
+     #check if state is maharastra
+     if self.order_master.customer_address.state.upcase == 'MAHARASHTRA'
+        maharastracodextra = self.total * maharastracodcharge
+     else
+        maharastracodextra = 0
+     end
+    end
+  end
+
+return maharastracodextra.to_i
+
+end
+
+def maharastraccextra
+  maharastraccextra = 0
+  if (self.orderid).present? 
+  
+  creditcardid = 10000
+  creditcardcharges = Orderpaymentmode.find(creditcardid).charges
+  creditcardtotal = (self.subtotal || 0)  * (creditcardcharges || 0)
+
+   surchargeid = 10020
+  surcharge = Orderpaymentmode.find(surchargeid).charges
+  
+
+  maharastraccextra =  (self.subtotal + creditcardtotal + self.shipping) * surcharge
+
+    #check if address is selected
+    if self.order_master.customer_address_id.present?
+     #check if state is maharastra
+     if !self.order_master.customer_address.state.downcase == 'maharashtra'
+        maharastraccextra  = 0
+      end
+    end
+    
+ #check if paid using cash on delivery is selected
+  if self.order_master.orderpaymentmode_id.present?
+     if self.order_master.orderpaymentmode_id == 10001
+      return  0
+     end
+  end
+
+end
+  return maharastraccextra.to_i
 
 end
 

@@ -2,6 +2,21 @@
   <small>
     The Ruby on Rails Application
     by <a href="#">Tec2grow Solutions</a>
+  
+  &nbsp;
+  
+    </small>
+
+    <% if logged_in? %>
+  
+  <p><small> You are logged in as <%= current_user.name %> with role of <%= current_user.employee_role.name %> </small></p>
+
+ 
+<% else %>
+  
+<small>Please login</small>
+ 
+   <% end %>
   </small>
   <nav>
     <ul>

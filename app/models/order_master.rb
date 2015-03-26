@@ -65,13 +65,47 @@ def creditcardcharges
  
 end
 
-def maharastraextra
+def maharastracodextra
  productcost = OrderLine.where('orderid = ?', self.id)
   #return productcost.first.productcost
   if productcost.exists?
     total = 0
     productcost.each do |c|
-      total += c.maharastraextra || 0
+      total += c.maharastracodextra || 0
+
+    end
+    return total.to_i
+    
+  else
+    return 0
+  end
+ 
+end
+
+def servicetax
+  productcost = OrderLine.where('orderid = ?', self.id)
+  #return productcost.first.productcost
+  if productcost.exists?
+    total = 0
+    productcost.each do |c|
+      total += c.servicetax || 0
+
+    end
+    return total.to_i
+    
+  else
+    return 0
+  end
+
+end
+
+def maharastraccextra
+ productcost = OrderLine.where('orderid = ?', self.id)
+  #return productcost.first.productcost
+  if productcost.exists?
+    total = 0
+    productcost.each do |c|
+      total += c.maharastraccextra || 0
 
     end
     return total.to_i
@@ -88,7 +122,7 @@ def totalCODCharges
   if productcost.exists?
     total = 0
     productcost.each do |c|
-      total += c.maharastraextra || 0
+      total += c.maharastracodextra || 0
      total += c.codcharges || 0
     end
     return total.to_i

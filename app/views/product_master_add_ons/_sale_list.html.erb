@@ -17,7 +17,7 @@
         <td><%= product_master_add_on.product_list.productlistdetails if product_master_add_on.product_list  %></td>
         
         <td>
-<%= form_tag("/addproducts", method: "POST") do |f| %>
+<%= form_tag("/addbasicupsellproducts", method: "POST") do |f| %>
 <%= hidden_field_tag :order_id, @order_id %>
 <%= hidden_field_tag :product_list_id, product_master_add_on.product_list_id %>
 <%= hidden_field_tag :pieces, 1 %>
