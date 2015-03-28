@@ -44,6 +44,10 @@ def fullname
   self.salute << " " << self.first_name << " " << self.last_name
 end
 
+def name
+   self.first_name << " " << self.last_name
+end
+
 def from_state
   mystate = CustomerAddress.where(customer_id: self.id)
     if mystate.present?

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150325105827) do
+ActiveRecord::Schema.define(version: 20150327061310) do
 
   create_table "address_types", force: true do |t|
     t.string   "name"
@@ -62,6 +62,7 @@ ActiveRecord::Schema.define(version: 20150325105827) do
     t.integer  "tape_id",          limit: nil, precision: 38
     t.string   "ref_name"
     t.integer  "list_status_id",   limit: nil, precision: 38
+    t.datetime "for_date"
   end
 
   create_table "campaign_stages", force: true do |t|

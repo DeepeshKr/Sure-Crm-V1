@@ -23,6 +23,10 @@
 	 <strong>Cost:</strong>
   <%= @campaign.cost %>
 	</div>
+	<div class="col-xs-2">
+	 <strong>DNIS:</strong>
+  <%= @campaign.dnis %>
+	</div>
 	
 </div>
 
@@ -39,4 +43,18 @@
 <hr />
 <h3>Add New Campaign Playlist </h3>
 <%= render partial: "campaign_playlists/form" %>
+
+<script>
+  $(document).ready(function() {
+    $('#campaign_playlist_productvariantid').change(function() {
+        $.ajax({
+           url: "<%= productvariantdetails_path %>",
+           data: {
+               variant_id: $("#campaign_playlist_productvariantid option:selected").val()
+           },
+           dataType: "script"
+       });
+    });
+  });
+</script>
 

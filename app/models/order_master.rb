@@ -41,7 +41,7 @@ after_destroy :updateOrder
     productcost.each do |c|
       total += c.codcharges || 0
     end
-    return total
+    return total.round(2)
     
   else
     return 0
@@ -57,7 +57,7 @@ def creditcardcharges
     productcost.each do |c|
       total += c.creditcardcharges || 0
     end
-    return total.to_i
+    return total.round(2)
     
   else
     return 0
@@ -74,7 +74,7 @@ def maharastracodextra
       total += c.maharastracodextra || 0
 
     end
-    return total.to_i
+    return total.round(2)
     
   else
     return 0
@@ -91,7 +91,7 @@ def servicetax
       total += c.servicetax || 0
 
     end
-    return total.to_i
+    return total.round(2)
     
   else
     return 0
@@ -108,7 +108,7 @@ def maharastraccextra
       total += c.maharastraccextra || 0
 
     end
-    return total.to_i
+    return total.round(2)
     
   else
     return 0
@@ -125,7 +125,7 @@ def totalCODCharges
       total += c.maharastracodextra || 0
      total += c.codcharges || 0
     end
-    return total.to_i
+    return total.round(2)
     
   else
     return 0

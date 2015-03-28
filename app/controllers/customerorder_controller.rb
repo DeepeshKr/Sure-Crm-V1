@@ -259,19 +259,16 @@ before_action :customer, only: [ :upsell, :payment, :channel, :review, :summary]
     
     @customer_credit_card_o = CustomerCreditCard.where(customer_id: @order_master.customer_id).last
     @customer_credit_card = CustomerCreditCard.new(customer_id:  @order_master.customer_id)
-    @customer_credit_card.name_on_card = @order_master.customer.fullname
-    if @customer_credit_card_o.present?
-     
-      @customer_credit_card.name_on_card = @customer_credit_card_o.name_on_card
-    end
-    
+    #@customer_credit_card.name_on_card = @order_master.customer.name
+    # if @customer_credit_card_o.present?
+    #   @customer_credit_card.name_on_card = @order_master.customer.fullname
+    # end
     
     @cashondeliveryid = 10001
     orderpaymentmode_1 = Orderpaymentmode.find(@cashondeliveryid).charges
 
-    @cod_charges = @order_master.totalCODCharges 
-
-    cod_amount_i = (@order_master.total.to_i * (1 + orderpaymentmode_1) ).to_i
+   
+    cod_amount_i = @order_master.subtotal + @order_master.shipping + @order_master.codcharges + @order_master.servicetax + @order_master.maharastracodextra
 
      @creditcardid = 10000
     orderpaymentmode_2 = Orderpaymentmode.find(@creditcardid).charges
@@ -279,11 +276,34 @@ before_action :customer, only: [ :upsell, :payment, :channel, :review, :summary]
      # cod_charge =  OrderPaymentMode.find(1)
      # cc_charge = OrderPaymentMode.find(2)
     #@result = CreditCard.luhn(customer_credit_card_params[:card_no])
-    cc_amount_i = (@order_master.total.to_i * (1 +orderpaymentmode_2) ).to_i
-    @cod_amount = "Pay Rs #{cod_amount_i} as Cash on Delivery "  
-    @cc_amount = "Pay Rs #{cc_amount_i} by Credit Card " 
 
-    respond_with(@order_master, @order_lines, @customer, @customer_address,  @customer_credit_card_o, @customer_credit_card)
+    cc_amount_i = (@order_master.subtotal + @order_master.shipping + @order_master.creditcardcharges + @order_master.maharastraccextra).to_i
+    
+    @paidover = "This order is Not Paid."
+
+      @cod_amount = "Pay Rs #{cod_amount_i} "  
+      @cc_amount = "Pay Rs #{cc_amount_i}" 
+
+
+     #check if paid using credit card is selected
+  if @order_master.orderpaymentmode_id.present?
+     if @order_master.orderpaymentmode_id == 10000 #paid over CC
+      @paidover = "Paid using Credit Card, you saved on extra charges"
+
+        @cod_amount = "Pay Rs #{cod_amount_i}. "  
+        @cc_amount = "Rs #{cc_amount_i}  " 
+        
+   elsif @order_master.orderpaymentmode_id == 10001 #paid over COD
+     @paidover = "Paid over Cash on Delivery, Save on extra charges if paid over Credit Card"
+
+      @cod_amount = "Rs #{cod_amount_i}"  
+      @cc_amount = "Pay Rs #{cc_amount_i}" 
+     end
+  end
+
+
+    
+    respond_with(@order_master, @order_lines,  @customer_credit_card_o, @customer_credit_card)
   end
 
   def add_credit_card
@@ -448,6 +468,7 @@ end
   end
   def summary
      customer
+     @cust_details_id = @order_master.external_order_no
     respond_with(@order_master, @order_lines, @customer, @customer_address)
   end
 
@@ -836,6 +857,8 @@ end
     end
 
   def check_order
+    if params[:order_id].present?
+
       orderid = params[:order_id] 
 
      order_master =  OrderMaster.find(orderid)
@@ -843,7 +866,8 @@ end
       ondate = order_master.updated_at.to_s
       if order_master.order_status_master_id >= 10003
          flash[:error] = "This order no #{orderid} is already processed at #{ondate}" 
-        redirect_to summary_path(:order_id => @order_master.external_order_no)
+        redirect_to summary_path(:order_id => @order_master.id)
        end
     end
+  end
 end

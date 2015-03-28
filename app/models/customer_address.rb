@@ -7,4 +7,13 @@ class CustomerAddress < ActiveRecord::Base
  validates :address1,  presence: true, length: { maximum: 50 }
  validates :state,  presence: true, length: { maximum: 50 }
  validates :city,  presence: true, length: { maximum: 50 }
+
+def st
+  if self.state.upcase == 'MAHARASHTRA'
+  	'MAH'
+  else
+  	'OTH'
+  end
+end
+
 end

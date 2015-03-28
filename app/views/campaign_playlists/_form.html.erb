@@ -22,14 +22,21 @@
           <% elsif%>
            <%= f.hidden_field :campaignid %>
   <% end %>
+<div class="field">
+  
+   
+   <%= f.date_select(:for_date, {:use_short_month => 1, :order => [:month, :day, :year]},
+    {:class => "form-control select-date", :label => "Date of Advertisement"}) %>
 
+  </div>
+  <br>
 <div class="field">
    
         <%= f.select :productvariantid,  options_from_collection_for_select(@productvariant,
        :id, :productinfo, selected: @campaign_playlist.productvariantid ),
 		         {:prompt => 'No Product Ad', label: "Select the Product Variant if an ad is to be shown or No Product Ad " } %>
   </div>
-
+ 
    <div class="field">
       <%= f.select :tape_id,  options_from_collection_for_select(@media_tapes,
        :id, :name, selected: @campaign_playlist.tape_id), { label: "Select the Media Tape, this is mandatory field" } %>
@@ -42,9 +49,7 @@
    <%= f.text_field :name, label: "Product or Play list Name", required: true, :placeholder => "Get Product Name by selecting above -- OR -- Type => HBNLOGO / TOTD etc" %>
   </div>
  
-  <div class="field">
-   	<%= f.text_field :channeltapeid, :label => "Channel Tape id:", control_col: "col-sm-2" %>
-  </div>
+  
 
   <div class="field">
    	<%= f.text_field :internaltapeid, :label => "Internal Tape id:", control_col: "col-sm-2", required: true %>
@@ -53,13 +58,13 @@
    <%= f.text_field :filename, :label => "File Name:", :placeholder => 'E:\TELEBRANDSMULTI\AK1-5999-495-29.48.avi', required: true %>
   </div>
   <div class="row">
- <div class="col-xs-1 col-xs-offset-1">
+ <div class="col-xs-2 col-xs-offset-1">
  <%= f.select :start_hr, 0..23, label: "Start Hr", :selected => @campaign_playlist.start_hr %>
  </div>
-  <div class="col-xs-1">
+  <div class="col-xs-2">
    <%= f.select :start_min, 0..59, label: "Start Min", :selected => @campaign_playlist.start_min  %>
  </div>
-  <div class="col-xs-1">
+  <div class="col-xs-2">
    <%= f.select :start_sec, 0..59, label: "Start Sec", :selected => @campaign_playlist.start_sec  %>
  </div>
  <div class="col-xs-2 col-xs-offset-1">
@@ -71,6 +76,9 @@
        <%= f.text_field :cost, :label => "Campaign Cost:", control_col: "col-sm-2", required: true %>   
   </div>
   <div class="field">
+    <%= f.text_field :channeltapeid, :label => "Channel Tape id:", control_col: "col-sm-2" %>
+  </div>
+  <div class="field">
    
     <%= f.text_area :description, :label => "Description:" %>
  
@@ -80,8 +88,21 @@
        :id, :name, selected: @campaign_playlist.list_status_id), { label: "Active are shown to Sales Agent, Hidden are not" } %>
            <small>You can combine all the hidden listing to one by giving them same reference names </small>
   </div>
-  
+ <div class="well well-sm">
   <div class="row">
+      <div class="col-xs-1">
+        <%= check_box_tag :discontinued %>
+      </div>
+      <div class="col-xs-2">
+        <label>Auto Re Align Playlist</label>
+      </div>
+     <div class="col-xs-8">
+      <small>This would ensure playlist order is sequentially saved, not recommended for Private Channels</small>
+     </div>
+</div>
+</div>
+
+<br>  <div class="row">
   <div class="col-xs-3 col-md-offset-8">
     <%= f.primary class: "btn btn-primary" %>
   </div>

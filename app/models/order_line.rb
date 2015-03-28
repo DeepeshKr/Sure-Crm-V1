@@ -44,8 +44,15 @@ codcharges = 0
         codcharges = ((self.total || 0 )) * (cashondeliverycharge || 0) 
       end
     end
+     #check if paid using credit card is selected
+  if self.order_master.orderpaymentmode_id.present?
+     if self.order_master.orderpaymentmode_id == 10000
+      return  0
+     end
   end
-    return codcharges.to_i
+  
+  end
+    return codcharges.round(2)
 end
 
 def creditcardcharges
@@ -60,7 +67,7 @@ def creditcardcharges
   end
 
 
-  return ((self.subtotal || 0)  * (charges || 0)).to_i 
+  return ((self.subtotal || 0)  * (charges || 0)).round(2)
 
   end
 end
@@ -91,7 +98,14 @@ def servicetax
 
   end
  
- return servicetax.to_i
+  #check if paid using credit card is selected
+  if self.order_master.orderpaymentmode_id.present?
+     if self.order_master.orderpaymentmode_id == 10000
+      return  0
+     end
+  end
+
+ return servicetax.round(2)
 
 end
 
@@ -111,8 +125,13 @@ def maharastracodextra
      end
     end
   end
-
-return maharastracodextra.to_i
+ #check if paid using credit card is selected
+  if self.order_master.orderpaymentmode_id.present?
+     if self.order_master.orderpaymentmode_id == 10000
+      return  0
+     end
+  end
+return maharastracodextra.round(2)
 
 end
 
@@ -146,7 +165,7 @@ def maharastraccextra
   end
 
 end
-  return maharastraccextra.to_i
+  return maharastraccextra.round(2)
 
 end
 

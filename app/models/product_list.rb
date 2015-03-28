@@ -24,35 +24,84 @@ class ProductList < ActiveRecord::Base
      self.name << " Price:" << product_variant.price.to_s << " Shipping:" << product_variant.shipping.to_s << " (" << self.extproductcode << ")"
    end
 
-   def basic
+   def price
       product_variant = ProductVariant.find(self.product_variant_id)
-    return (product_variant.price || 0)
+    return "Basic Price : " << (product_variant.price || 0).to_s << "  Shipping : " << (product_variant.shipping || 0).to_s
   end
 
   def shipping
       product_variant = ProductVariant.find(self.product_variant_id)
-    return (product_variant.shipping || 0) 
+    return  "Shipping : " << (product_variant.shipping || 0).to_i.to_s
   end
-   def codcharges
-      product_variant = ProductVariant.find(self.product_variant_id)
+  
+  def codcharges
+      
+      price = (product_variant.price  || 0) + (product_variant.shipping || 0)
+
+      # surchargeid = 10020
+      # surcharge = 1 + Orderpaymentmode.find(surchargeid).charges
+      # total = price * surcharge
+      total = price
+      
       cashondeliveryid = 10001
-      charges = 1 +  Orderpaymentmode.find(cashondeliveryid).charges
-    return ((product_variant.price  || 0) + (product_variant.shipping || 0)) * charges 
+      charges = 1 + Orderpaymentmode.find(cashondeliveryid).charges
+      total = total * charges
+
+      servicetaxid = 10040
+      servicetax = 1 + Orderpaymentmode.find(servicetaxid).charges
+      servicetaxcharges = (price * Orderpaymentmode.find(cashondeliveryid).charges ) * Orderpaymentmode.find(servicetaxid).charges
+      
+      total = total + servicetaxcharges
+     
+    return total
   end
 
-  def creditcardcharges
-    creditcardid = 10000
-    charges = 1 +  Orderpaymentmode.find(creditcardid).charges
-    return ((product_variant.price  || 0) + (product_variant.shipping || 0))  * charges 
+  def maharastracodextra
+      price = (product_variant.price  || 0) + (product_variant.shipping || 0)
+
+      surchargeid = 10020
+      surcharge = 1 + Orderpaymentmode.find(surchargeid).charges
+      total = price * surcharge
+
+      cashondeliveryid = 10001
+      charges = 1 + Orderpaymentmode.find(cashondeliveryid).charges
+      total = total * charges
+
+      servicetaxid = 10040
+      servicetax = 1 + Orderpaymentmode.find(servicetaxid).charges
+      servicetaxcharges = (price * Orderpaymentmode.find(cashondeliveryid).charges ) * Orderpaymentmode.find(servicetaxid).charges
+      
+      total = total + servicetaxcharges
+     
+    return total
   end
 
-  def maharastraextra
+  def servicetax
     cashondeliveryid = 10001
     codcharges = 1 + Orderpaymentmode.find(cashondeliveryid).charges
 
     surchargeid = 10020
     surcharge = 1 + Orderpaymentmode.find(surchargeid).charges
+
+    servicetaxid = 10040
+    servicetax = 1 + Orderpaymentmode.find(servicetaxid).charges
     return (((product_variant.price  || 0) + (product_variant.shipping || 0)) * codcharges) * surcharge
+  end
+
+  def creditcardcharges
+    creditcardid = 10000
+    charges = 1 +  Orderpaymentmode.find(creditcardid).charges
+    return ((product_variant.price  || 0) * charges ) + (product_variant.shipping || 0)  
+  end
+
+  def maharastraccextra
+   creditcardid = 10000
+    charges = 1 +  Orderpaymentmode.find(creditcardid).charges
+    cccharges = ((product_variant.price  || 0) * charges ) + (product_variant.shipping || 0) 
+
+    surchargeid = 10020
+    surcharge = 1 + Orderpaymentmode.find(surchargeid).charges
+    return (cccharges) * surcharge
   end
 
 end

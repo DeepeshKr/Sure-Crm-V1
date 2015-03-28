@@ -122,7 +122,8 @@ class CampaignPlaylistsController < ApplicationController
             filename: old_campaign_playlist.filename, 
             description: old_campaign_playlist.description, 
             duration_secs: old_campaign_playlist.duration_secs, 
-            tape_id: old_campaign_playlist.tape_id)
+            tape_id: old_campaign_playlist.tape_id,
+            for_date: Time.now + 1.days)
         
         end
 
@@ -153,7 +154,7 @@ class CampaignPlaylistsController < ApplicationController
         :end_hr, :end_min, :end_sec,
         :cost, :channeltapeid, :internaltapeid, 
         :productvariantid, :filename, :description, :duration_secs, 
-        :tape_id, :old_campaign_id, :ref_name, :list_status_id)
+        :tape_id, :old_campaign_id, :ref_name, :list_status_id, :for_date)
     end
     def set_media_tape
       @media_tapes = MediaTape.all

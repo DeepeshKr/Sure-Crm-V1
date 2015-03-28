@@ -33,11 +33,15 @@ class ProductTrainingManualsController < ApplicationController
       productlist = ProductList.find(params[:id])
        @heading = productlist.productinfo
       
-       @basic =  productlist.basic.to_i.to_s
-       @shipping =  productlist.shipping.to_i.to_s
+       @basic =  productlist.price
+       #@shipping =  productlist.shipping.to_i.to_s
+       
        @cod =  productlist.codcharges.to_i.to_s
+       @mahcod =  productlist.maharastracodextra.to_i.to_s
+       #@servicetx =  productlist.servicetax.to_i.to_s
+
        @cc =  productlist.creditcardcharges.to_i.to_s
-       @mah =  productlist.maharastraextra.to_i.to_s
+       @mahcc =  productlist.maharastraccextra.to_i.to_s
 
    end
      
