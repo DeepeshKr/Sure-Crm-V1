@@ -14,27 +14,28 @@
 <br>
 <div class="row">
 		<div class="col-xs-12 pull-left">
-		<h2> <div class="text-left">	Purchases </div> <small>Rdate in Purchase_New</small> </h2> 
+		<h2> <div class="text-left">	Purchases <small>Rdate in Purchase_New</small></div>  </h2> 
 		<hr/>	
 		</div>
 	
 </div>
-
-
-<br>
-<div class="row">
-		<div class="col-xs-12 pull-left">
-		<h2> <div class="text-left">	Customer Sales </div> <small>Paiddate in VPP</small></h2> 
-		<hr/>	
-		</div>
-	
-</div>
+   <%= render 'purchases_new/list' %>
 
 <br>
 <div class="row">
 		<div class="col-xs-12 pull-left">
-		<h2> <div class="text-left">	Wholesale Sales </div><small>Shdate in NewWlsDet</small> </h2> 
+		<h2> <div class="text-left">	Customer Sales <small>Paiddate in VPP</small></div> </h2> 
 		<hr/>	
 		</div>
 	
 </div>
+   <%= render 'vpp/list' %>
+<br>
+<div class="row">
+		<div class="col-xs-12 pull-left">
+		<h2> <div class="text-left">	Wholesale Sales <small>Shdate in NewWlsDet</small></div> </h2> 
+		<hr/>	
+		</div>
+	
+</div>
+<%= render 'newwlsdet/list' %>

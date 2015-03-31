@@ -14,12 +14,16 @@ class ProductReportController < ApplicationController
     @from_date = from_date.to_formatted_s(:rfc822)
     @to_date =  to_date.to_formatted_s(:rfc822)
 
-  else
+    @purchases_new = PURCHASES_NEW.where(prod: prod).where("TRUNC(rdate) >= ? and TRUNC(rdate) <= ?", from_date, to_date).limit(10)
+    @vpp = VPP.where(prod: prod).where("TRUNC(paiddate) >= ? and TRUNC(paiddate) <= ?", from_date, to_date).limit(100)
+    @newwlsdet = NEWWLSDET.where(prod: prod).where("TRUNC(shdate) >= ? and TRUNC(shdate) <= ?", from_date, to_date).limit(10)
 
-  end
+  else
     @purchases_new = PURCHASES_NEW.all.limit(10)
     @vpp = VPP.all.limit(10)
     @newwlsdet = NEWWLSDET.all.limit(10)
+  end
+    
 
   end
 
