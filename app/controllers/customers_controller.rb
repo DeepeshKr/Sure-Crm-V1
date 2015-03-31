@@ -14,7 +14,7 @@ class CustomersController < ApplicationController
 
       respond_with(@customers, :mobile => params[:mobile], :calledno => params[:calledno], :force => 'yes')
     else
-      @customers = Customer.limit(5).reorder('id desc') #, :notice => "Showing recent 5 customers!"
+      @customers = Customer.limit(500).reorder('id desc') #, :notice => "Showing recent 5 customers!"
     end
   end
 
@@ -39,9 +39,10 @@ class CustomersController < ApplicationController
     @customer.update_columns(salute: customer_params[:salute], 
       first_name: customer_params[:first_name], 
       last_name: customer_params[:last_name])
+
+
     name =  @customer.salute << " " << @customer.first_name << " " << @customer.last_name
-     
-    
+   
         flash[:success] = "Customer Details were was updated successfully. #{name}" 
     
     #respond_with(@customer)

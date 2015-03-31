@@ -1,7 +1,6 @@
 class CampaignPlaylistsController < ApplicationController
-  before_action :set_campaign_playlist, only: [:show, :duplicate, :edit, :update, :destroy]
- #before_action :dropdown, only: [:show, :new,  :edit, :update]
- before_action :proddropdown, only: [:show, :new, :create, :update,  :edit, :update]
+ before_action :set_campaign_playlist, only: [:show, :duplicate, :edit, :update, :destroy] #before_action :dropdown, only: [:show, :new,  :edit, :update]
+ before_action :proddropdown, only: [:show, :new, :create, :update,  :edit, :update, :showproductvariant]
  before_action :set_media_tape, only: [:show, :new, :create, :update,  :edit, :update]
  before_action :activestatus, only: [:show, :new, :create, :edit, :update]
 
@@ -22,8 +21,58 @@ class CampaignPlaylistsController < ApplicationController
     
   end
 
+  def perday
+    medialist = Medium.where("media_group_id not in 10000")
+      campaigns = Campaign.where(mediumid: medialist)
+
+     @showingfor
+      @for_date = Time.now
+    if(params.has_key?(:for_date))
+      str = params[:for_date]
+      newdate = Time.strptime(str, '%m/%d/%Y')
+
+      # .where(list_status_id: 10000)
+     #  .where(list_status_id: 10000).where(campaignid: campaigns)
+      @campaign_playlists = CampaignPlaylist.where(for_date: newdate)
+      .order(:start_hr, :start_min, :start_sec)
+
+
+      @showingfor = "Schedule for " << newdate.to_formatted_s(:rfc822)
+      @for_date =  newdate
+
+    else
+
+      #@campaign_playlists = CampaignPlaylist.all
+      @campaign_playlists = CampaignPlaylist.where("for_date = ?" , Time.now.to_date)
+      .where(list_status_id: 10000).where(campaignid: campaigns).order(:start_hr, :start_min, :start_sec)
+      
+
+       @showingfor = "Schedule for " << Time.now.to_date.to_formatted_s(:rfc822)
+       @for_date = Time.now.to_date
+    end
+      respond_with(@campaign_playlists)
+  end
   
-  def show
+def showproductvariant
+ @campaign_playlist = CampaignPlaylist.find(params[:id])
+  @productvariant = ProductVariant.where('activeid = ? and product_sell_type_id <= ?', 10000, 10001).order('name')
+  respond_with(@campaign_playlist)
+
+end
+
+def updateproductvariant
+   @campaign_playlist = CampaignPlaylist.find(params[:id])
+if campaign_playlist_params[:productvariantid].present?
+ 
+   @campaign_playlist.update(productvariantid: campaign_playlist_params[:productvariantid])
+end
+
+ redirect_to dailyschedule_path(:for_date => @campaign_playlist.for_date) 
+end
+
+
+
+def show
     set_media_tape
   # @campaignlist =  Campaign.joins(:medium).where('media.telephone = ?', @order_master.calledno)
     @orderlines = OrderLine.joins(:order_master).where("order_masters.campaign_playlist_id = ?", params[:id])

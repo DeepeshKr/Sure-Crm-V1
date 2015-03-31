@@ -1,5 +1,23 @@
 Rails.application.routes.draw do
 
+  get 'newwlsdet/list'
+
+  get 'newwlsdet/search'
+
+  get 'newwlsdet/details'
+
+  get 'purchases_new/list'
+
+  get 'purchases_new/search'
+
+  get 'purchases_new/details'
+
+  get 'vpp/list'
+
+  get 'vpp/search'
+
+  get 'vpp/details'
+
   get 'customerorder/products'
   get 'customerorder/address'
   get 'customerorder/payment'
@@ -59,12 +77,19 @@ Rails.application.routes.draw do
   #step 4
   get 'channel' => 'customerorder#channel'
   post 'addchannel' => 'customerorder#add_channel'
+
+  
+  get  'playlistvariant' => 'campaign_playlists#showproductvariant'
+  post 'playlistupdatevariant' => 'campaign_playlists#updateproductvariant'
+
   #step 5
   get 'review' => 'customerorder#review'
   #step 6
   post 'processorder' => 'customerorder#process_order'
   get 'summary' => 'customerorder#summary'
 
+
+  get 'dailyschedule' => 'campaign_playlists#perday' 
   #other activities
   get 'dealersearch' => 'customerorder#dealers'
   get 'newdealer' =>  'customerorder#new_dealer'

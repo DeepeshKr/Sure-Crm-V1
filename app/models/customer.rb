@@ -38,14 +38,30 @@ validates :first_name,  :presence => { :message => "Need a proper first name!" }
 validates :alt_mobile,  allow_blank: true,   format: { with: VALID_MOBILE_REGEX }, uniqueness: true, 
 length: { maximum: 12 }, :presence => { :message => "Enter only numbers" } 
 
-
+def gender
+  # if self.salute == "Mr"
+  #   return 'M'
+  #     elsif self.salute == 'Ms'
+  #   return 'F'
+  #     elsif self.salute == 'Mrs'
+  #   return 'F'      
+  # end
+  case self.salute
+      when "Mr"
+          return "M"
+      when "Mrs"
+          return "F"
+      when "Ms"
+          return "F"
+  end
+end
 
 def fullname
-  self.salute << " " << self.first_name << " " << self.last_name
+  return self.salute + " " + self.first_name + " " + self.last_name
 end
 
 def name
-   self.first_name << " " << self.last_name
+  return self.first_name + " " + self.last_name
 end
 
 def from_state
@@ -56,6 +72,7 @@ def from_state
         "No address"
     end
 end
+
 
 
 end

@@ -48,7 +48,10 @@ class UsersController < ApplicationController
    # def role_enum
    #    [:user, :manager, :accounts, :admin]
    #  end
-
+  def destroy
+    @user.destroy
+    respond_with(@user)
+  end
 
   private 
   def set_user

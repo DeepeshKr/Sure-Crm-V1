@@ -1,23 +1,40 @@
-<h1>ProductReport#list</h1>
-<p>Find me in app/views/product_report/list.html.erb</p>
 <div class="row">
- <%= form_tag("/productdetails", method: "get") do  %>
-<div class="col-xs-4">
-<%= select_tag(:productmaster_id, 
-                options_from_collection_for_select(@productmasterlist, :id, :name), 
-                {:class => "form-control"} )  %>
-</div>
-<div class="col-xs-4">
-<div class="input-daterange input-group">
-<%= text_field_tag(:from_date, nil, :data => {:provide => "datepicker"}, :class => "form-control", :required => "true" )   %>
-<span class="input-group-addon">to</span>
-<%= text_field_tag(:to_date, nil, :data => {:provide => "datepicker"}, :class => "form-control", :required => "true" )  %>
-</div>
-</div>
 <div class="col-xs-2">
-	<%= submit_tag "Report", name: nil, class: "btn btn-primary" %>
+  <h3> Product Report</h3>
+<small>General Accouting Report</small>
 </div>
-<% end %>
+<div class="col-xs-10">
+   <%= render 'search' %>
 </div>
 
-<hr/>
+</div>
+<div class="well well-lg">
+<h3>Report for <%= @prod %> between <%= @from_date %> and <%= @to_date %></h3>
+</div>
+<br>
+<div class="row">
+		<div class="col-xs-12 pull-left">
+		<h2> <div class="text-left">	Purchases </div> <small>Rdate in Purchase_New</small> </h2> 
+		<hr/>	
+		</div>
+	
+</div>
+
+
+<br>
+<div class="row">
+		<div class="col-xs-12 pull-left">
+		<h2> <div class="text-left">	Customer Sales </div> <small>Paiddate in VPP</small></h2> 
+		<hr/>	
+		</div>
+	
+</div>
+
+<br>
+<div class="row">
+		<div class="col-xs-12 pull-left">
+		<h2> <div class="text-left">	Wholesale Sales </div><small>Shdate in NewWlsDet</small> </h2> 
+		<hr/>	
+		</div>
+	
+</div>

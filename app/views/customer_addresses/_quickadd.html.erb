@@ -14,7 +14,7 @@
  <%= f.hidden_field :customer_id,  :value => @customer_address.customer_id %>
  <%= f.hidden_field :id,  :value => @customer_address.id %>
 
-  <div class="clearfix"></div>
+  <div class="clearfix"></div><br>
 	<div class="col-xs-1">
   	Address
   </div>
@@ -23,7 +23,7 @@
   
   </div>
   <br>
-  <div class="clearfix"></div>
+  <div class="clearfix"></div> <br>
   <div class="col-xs-1">
   
   </div>
@@ -31,7 +31,7 @@
   	 
     <%= f.text_field :address2,  :class =>"form-control", :placeholder => "Address optional" %>
   </div>
-  <br><div class="clearfix"></div>
+  <br><div class="clearfix"></div><br>
   <div class="col-xs-1">
   
   </div>
@@ -39,7 +39,7 @@
      
     <%= f.text_field :address3,  :class =>"form-control", :placeholder => "Address optional" %>
   </div>
-  <br><div class="clearfix"></div>
+  <br><div class="clearfix"></div><br>
   <div class="col-xs-1">
   
   </div>
@@ -47,7 +47,7 @@
      
     <%= f.text_field :landmark,  :class =>"form-control", :placeholder => "Landmark optional" %>
   </div>
-  <br><div class="clearfix"></div>
+  <br><div class="clearfix"></div><br>
 </div>
 <div class="row">
 	<div class="col-xs-1">
@@ -68,6 +68,7 @@
     <%= f.text_field :pincode,  :class =>"form-control", :placeholder => "PIN" %>
   </div>
 </div>
+<br>
 <div class="row">
 <div class="col-xs-3 col-xs-offset-8">
         <%= f.submit "Update address", class: "btn btn-primary "%>

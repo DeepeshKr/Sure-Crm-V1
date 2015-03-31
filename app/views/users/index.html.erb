@@ -4,6 +4,7 @@
 		<th>Email</th>
 		<th>Employee Code</th>
 		<th>Role</th>
+		<th></th>
 	</tr>
 	
 	<tbody>
@@ -13,7 +14,7 @@
 		<td><%= u.email %></td>
 		<td><%= u.employee_code %></td>
 		<td><%= u.role %></td>
-		
+		 <td><%= link_to 'Destroy', u, method: :delete, data: { confirm: 'Are you sure?' } %></td>
        
        
 		</tr>

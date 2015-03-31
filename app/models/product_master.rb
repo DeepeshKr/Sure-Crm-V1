@@ -14,7 +14,11 @@ class ProductMaster < ActiveRecord::Base
   validates_associated :product_variant
   
   def productname
-   self.barcode + " - " + self.name  + " Rs. " + self.total.to_s 
+   self.barcode + " - " + self.name  + " Basic " + self.price.to_s + " Shipping " + self.shipping.to_s 
+  end
+
+  def fullproductname
+   self.barcode  + " - " +  self.extproductcode + " - " + self.name  + " Basic " + self.price.to_s + " Shipping " + self.shipping.to_s 
   end
 
   def variants

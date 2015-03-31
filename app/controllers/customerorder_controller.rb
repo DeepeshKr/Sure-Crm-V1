@@ -4,7 +4,7 @@ before_action :productlist, only: [:products, :add_products]
 before_action :order_line_params, only: [ :add_products]
 before_action :set_order
 before_action :new_call
-before_action :check_order, except: [:summary] 
+#before_action :check_order, except: [:summary] 
 before_action :customer_address, only: [ :upsell, :payment, :channel, :review, :summary]
 before_action :customer, only: [ :upsell, :payment, :channel, :review, :summary]
 
@@ -35,13 +35,10 @@ before_action :customer, only: [ :upsell, :payment, :channel, :review, :summary]
     if params[:order_id].present?
        @order_id =  order_line_params[:orderid]
      else
-      @order_master = OrderMaster.create!(calledno: @calledno, order_status_master_id: 10000, 
-        orderdate: Time.zone.now, pieces: 0,subtotal: 0, taxes: 0, codcharges: 0, shipping:0, 
-        total: 0, order_source_id: 10000, employeecode: @empcode, employee_id: @empid, 
-        order_for_id: 10000, mobile: @mobile)
-      
-       order_line_params[:orderid] = @order_master.id
-       @order_id = @order_master.id
+      @order_id = neworder
+
+       order_line_params[:orderid] = @order_id
+       
     end
     #orderid = @order_id
     #flash[:notice] = "Order id is created #{orderid} called from numer #{@mobile} to number #{@calledno}" 
@@ -145,19 +142,29 @@ before_action :customer, only: [ :upsell, :payment, :channel, :review, :summary]
   #customer_address = @customer.customer_address.build(telephone1: @customer.mobile)
   if @order_master.customer_id.present?
     @customer = Customer.find(@order_master.customer_id)
+      success = "Existing Customer found." 
   elsif Customer.where(mobile: @order_master.mobile).present?
     @customer = Customer.where(mobile: @order_master.mobile).last
+     success = "Existing Customer found." 
   else
     @customer = Customer.new(mobile: @order_master.mobile)
+    notice = "No customer found." 
   end
 
   if @order_master.customer_address_id.present?
     @customer_address = CustomerAddress.find(@order_master.customer_address_id)
+     success = " Existing address is available" 
   elsif CustomerAddress.where(telephone1: @order_master.mobile).present?
     @customer_address = CustomerAddress.where(telephone1: @order_master.mobile).last
+     success = "Existing address found." 
   else
     @customer_address = CustomerAddress.new(telephone1: @order_master.mobile)
+     notice = "No address found." 
   end
+
+  flash[:notice] = "#{notice}"
+
+  flash[:success] = "#{success}"
 
   respond_with(@order_master, @order_lines, @customer_address, @customer)
 
@@ -167,17 +174,19 @@ before_action :customer, only: [ :upsell, :payment, :channel, :review, :summary]
 
     if params[:customer_id].present?
       @customer = Customer.find(params[:customer_id])
-      @customer.update(:salute =>  params[:customer_salute] , 
-      :first_name =>  params[:customer_first_name]  , :last_name => params[:customer_last_name] ,
-       :mobile => params[:customer_mobile] , 
-      :alt_mobile => params[:customer_alt_mobile],
-       :emailid => params[:customer_emailid])
+      @customer.update(salute:  params[:customer_salute], 
+      first_name: params[:customer_first_name],
+      last_name: params[:customer_last_name],
+       mobile: params[:customer_mobile], 
+      alt_mobile: params[:customer_alt_mobile],
+      emailid: params[:customer_emailid])
     else
-       @customer = Customer.create(:salute =>  params[:customer_salute] , 
-      :first_name =>  params[:customer_first_name]  , :last_name => params[:customer_last_name] ,
-       :mobile => params[:customer_mobile] , 
-      :alt_mobile => params[:customer_alt_mobile],
-       :emailid => params[:customer_emailid])
+       @customer = Customer.create(salute:  params[:customer_salute] , 
+      first_name: params[:customer_first_name]  ,
+      last_name: params[:customer_last_name] ,
+       mobile: params[:customer_mobile] , 
+      alt_mobile: params[:customer_alt_mobile],
+      emailid: params[:customer_emailid])
     end
    
     @order_master.update(customer_id: @customer.id)
@@ -379,7 +388,7 @@ campaignlist =  Campaign.where('TRUNC(startdate) <=  ? and TRUNC(enddate) >= ?',
   noof = campaignlist.count || "None" if campaignlist.present?
   
      todaydate = Date.today
- flash[:success] = "today's date #{todaydate} and there are #{noof}" 
+ #flash[:success] = "today's date #{todaydate} and there are #{noof}" 
     #media found and no campaign playlists found, just go to review
     #for media we use DNIS and State details
         
@@ -388,7 +397,7 @@ campaignlist =  Campaign.where('TRUNC(startdate) <=  ? and TRUNC(enddate) >= ?',
          #based on what product has been selected by the customer 
      
     
-      flash[:error] = "Please select Channel there may be more than one " + @medialist.count.to_s   
+     # flash[:error] = "Please select Channel there may be more than one " + @medialist.count.to_s   
    
     respond_with(@order_master, @order_lines, @customer, @customer_address)
   end
@@ -549,11 +558,11 @@ end
                campaignplaylist = CampaignPlaylist.find(campaignlist.first.id).name
               @order_master.update(campaign_playlist_id: campaignlist.first.id)
               
-              flash[:notice] = " Product #{productvariant} added to playlist #{namecamp} for camp date #{camdate} while today is #{todaydate}" 
-              else
-               namecamp = "Nothing in list" << " Campaign " << camdate
+              #flash[:notice] = " Product #{productvariant} added to playlist #{namecamp} for camp date #{camdate} while today is #{todaydate}" 
+             # else
+              # namecamp = "Nothing in list" << " Campaign " << camdate
 
-              flash[:error] = " Unable to add Product #{productvariant} to any playlist tried for #{namecamp} for camp date #{camdate} while today is #{todaydate}"   
+              #flash[:error] = " Unable to add Product #{productvariant} to any playlist tried for #{namecamp} for camp date #{camdate} while today is #{todaydate}"   
             end
 
 
@@ -577,6 +586,16 @@ end
       @interactiondisposelist =  InteractionCategory.where("sortorder < 100")
       @interactionprioritylist =  InteractionPriority.all
       
+    end
+
+    def neworder
+      @order_master = OrderMaster.create!(calledno: @calledno, order_status_master_id: 10000, 
+        orderdate: Time.zone.now, pieces: 0,subtotal: 0, taxes: 0, codcharges: 0, shipping:0, 
+        total: 0, order_source_id: 10000, employeecode: @empcode, employee_id: @empid, 
+        userip: request.remote_ip, sessionid: session.id,
+        order_for_id: 10000, mobile: @mobile)
+
+      return @order_master.id
     end
 
     def customer
@@ -667,6 +686,11 @@ end
 
       order_id = @order_master.id
 
+      t = Time.zone.now
+          nowhour = t.strftime('%H').to_i
+          #=> returns a 0-padded string of the hour, like "07"
+          nowminute = t.strftime('%M').to_i
+
 
       if @order_master.orderpaymentmode_id == 10000
          customer_credit_card = CustomerCreditCard.where(customer_id: @order_master.customer_id).last
@@ -687,7 +711,8 @@ end
           add3: (@order_master.customer_address.address3.truncate(30).upcase if @order_master.customer_address.address3.present?), 
           landmark: @order_master.customer_address.landmark.truncate(50).upcase, 
           city: @order_master.customer_address.city.truncate(30).upcase, 
-          state: @order_master.customer_address.state.truncate(5).upcase, 
+          mstate: @order_master.customer_address.state.truncate(50).upcase, 
+          state: @order_master.customer_address.st.truncate(5).upcase, 
           pincode: @order_master.customer_address.pincode, 
           mstate: @order_master.customer_address.state.truncate(50).upcase, 
           tel1: @order_master.customer.mobile.truncate(20).upcase, 
@@ -698,13 +723,18 @@ end
           expmonth:  expmonth, 
           expyear:  expyear, 
           cardtype: cardtype,
-          ipadd: (@order_master.userip.truncate(50).upcase if @order_master.userip.present?), 
+          ipadd: (@order_master.userip.truncate(50) if @order_master.userip.present?), 
           dnis: @order_master.calledno,
           channel: @order_master.medium.name.truncate(50).upcase, 
           carddisc: @order_master.creditcardcharges, 
           chqdisc: @order_master.creditcardcharges,
-          totalamt: @order_master.subtotal + @order_master.shipping + @order_master.creditcardcharges + @order_master.codcharges + @order_master.maharastraextra,
-          trandate: Time.zone.now)
+          totalamt: @order_master.subtotal + @order_master.shipping + @order_master.codcharges + @order_master.servicetax + @order_master.maharastracodextra ,
+          trandate: Time.zone.now,
+          username: @order_master.employee.name.truncate(50).upcase,
+          oper_no: @order_master.employeecode,
+          dt_hour: nowhour,
+          dt_min: nowminute,
+          uae_status: @order_master.customer.gender.truncate(50).upcase)
           
          orderline1 = OrderLine.where("orderid = ?", order_id)
           if orderline1.exists?
@@ -743,10 +773,12 @@ end
             customer_order_list.update(prod9: orderline9.first.product_variant.extproductcode, qty9: orderline9.first.pieces)
           end
           orderline10 = OrderLine.where("orderid = ?", order_id).offset(9)
-          if orderline10.exists?
-            customer_order_list.update(prod10: orderline10.first.product_variant.extproductcode, qty10: orderline10.first.pieces)
+          # if orderline10.exists?
+          #   customer_order_list.update(prod10: orderline10.first.product_variant.extproductcode, qty10: orderline10.first.pieces)
+          # end
+          if @order_master.customer_address.st.upcase == "MAH"
+             customer_order_list.update(prod10: 2.5, qty10: 1)
           end
-
           #- Integer update with customer order id
           @order_master.update(external_order_no: customer_order_list.id.to_s, order_status_master_id: 10003) 
 
@@ -780,8 +812,13 @@ end
           channel: @order_master.medium.name.truncate(50).upcase, 
           carddisc: @order_master.creditcardcharges, 
           chqdisc: @order_master.creditcardcharges,
-          totalamt: @order_master.subtotal + @order_master.shipping + @order_master.creditcardcharges + @order_master.codcharges + @order_master.maharastraextra,
-          trandate: Time.zone.now)     
+         totalamt: @order_master.subtotal + @order_master.shipping + @order_master.codcharges + @order_master.servicetax + @order_master.maharastracodextra ,
+          trandate: Time.zone.now,
+          username: @order_master.employee.name.truncate(50).upcase,
+          oper_no: @order_master.employeecode,
+          dt_hour: nowhour,
+          dt_min: nowminute,
+          uae_status: @order_master.customer.gender.truncate(50).upcase)     
 
           
           orderline1 = OrderLine.where("orderid = ?", order_id)
@@ -821,8 +858,11 @@ end
             customer_order_list.update(prod9: orderline9.first.product_variant.extproductcode, qty9: orderline9.first.pieces)
           end
           orderline10 = OrderLine.where("orderid = ?", order_id).offset(9)
-          if orderline10.exists?
-            customer_order_list.update(prod10: orderline10.first.product_variant.extproductcode, qty10: orderline10.first.pieces)
+          # if orderline10.exists?
+          #   customer_order_list.update(prod10: orderline10.first.product_variant.extproductcode, qty10: orderline10.first.pieces)
+          # end
+          if @order_master.customer_address.st.upcase == "MAH"
+             customer_order_list.update(prod10: 2.5, qty10: 1)
           end
 
           #process only that order which is not processed
@@ -858,8 +898,7 @@ end
 
   def check_order
     if params[:order_id].present?
-
-      orderid = params[:order_id] 
+     orderid = params[:order_id] 
 
      order_master =  OrderMaster.find(orderid)
      statusno = order_master.order_status_master_id

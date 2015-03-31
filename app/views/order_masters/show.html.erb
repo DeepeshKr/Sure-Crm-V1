@@ -17,7 +17,9 @@
 <div class="row">
 
 	<div class="col-xs-6">
-		<h4><%= @order_master.customer.fullname%></h4>
+		<h4><%= @order_master.customer.fullname %> 
+		<small> Gender: <%= @order_master.customer.gender %></small>
+		</h4>
 	</div>
 	<div class="col-xs-6">
 	<div class="row">
@@ -66,7 +68,7 @@
 	
 <div class="clearfix"></div>
 	<div class="col-xs-4">
-	<table >
+	<table class="table table-hover">
 		  <tr>
 		<td> <strong>Pieces:</strong>   </td>
 		<td><%= @order_master.pieces %> </td>
@@ -76,21 +78,16 @@
 		<td> <%= @order_master.order_status_master.name rescue nil%></td>
 		</tr>
 		<tr>
-		<td><strong>Payment mode:</strong>  </td>
-		<td><%= @order_master.orderpaymentmode_id rescue nil%> </td>
+		<td><strong>Employee Name:</strong>  </td>
+		<td><%= @order_master.employee.name rescue nil%> </td>
 		   </tr>
-		   <tr>
-		<td> <strong>Play list:</strong></td>
-		<td><%= @order_master.campaign_playlist.name rescue nil%> </td>		   </tr>
-		     <tr>
-		<td><strong>Campaign:</strong> </td>
-		<td><%= @order_master.campaign_playlist.campaign.name rescue nil%> </td>
-		   </tr>
-		   <td><strong>Employee code:</strong> </td>
+		<tr>
+			   <td><strong>Employee code:</strong> </td>
 		<td>  <%= @order_master.employeecode %> </td>
 		   </tr>
-		   <td><strong>Employee:</strong> </td>
-		<td><%= @order_master.employee_id %> </td>
+		   <tr>
+		   <td><strong>IP:</strong> </td>
+		<td><%= @order_master.userip %> </td>
 		   </tr>
 		</table>
    

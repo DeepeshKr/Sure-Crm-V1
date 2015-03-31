@@ -24,7 +24,7 @@ validates :last_name,  presence: true, length: { maximum: 50 }
                           foreign_key: "reporting_to_id"
   
   has_many :interaction_category, foreign_key: "employeeid"
-  has_many :order_master, foreign_key: "employeeid"
+  has_many :order_master, foreign_key: "employee_id"
 
 
 def fullname
@@ -32,7 +32,7 @@ def fullname
 end
 
 def name
-   self.title + " " + self.first_name + " " + self.last_name 
+   self.first_name + " " + self.last_name 
 end
 
 private

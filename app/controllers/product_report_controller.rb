@@ -1,9 +1,26 @@
 class ProductReportController < ApplicationController
 	before_action :get_variables, only: [:list, :search, :details]
+  before_action :dropdowns, only: [:list, :search, :details]
 	respond_to :html
 
   def list
-  	@productmasterlist = ProductMaster.all
+  #prod=TOTS&from_date=02%2F24%2F2015&to_date=02%2F23%2F2015
+  if params[:prod].present? && params[:from_date].present? && params[:to_date].present?
+    prod = params[:prod]
+    from_date = Time.strptime(params[:from_date], '%m/%d/%Y')
+    to_date = Time.strptime(params[:to_date], '%m/%d/%Y')
+    
+    @prod = prod
+    @from_date = from_date.to_formatted_s(:rfc822)
+    @to_date =  to_date.to_formatted_s(:rfc822)
+
+  else
+
+  end
+    @purchases_new = PURCHASES_NEW.all.limit(10)
+    @vpp = VPP.all.limit(10)
+    @newwlsdet = NEWWLSDET.all.limit(10)
+
   end
 
   def search
@@ -15,6 +32,9 @@ class ProductReportController < ApplicationController
   end
 
   private
+    def dropdowns
+        @productmasterlist = ProductMaster.all
+    end
     def get_variables
     	@empcode = current_user.employee_code
     	@empid = current_user.id

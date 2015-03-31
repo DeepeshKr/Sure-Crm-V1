@@ -12,7 +12,7 @@
       <th colspan="4"> </th>
       
      
-      <th colspan="3" class="text-center">COD Charges</th>
+      <th colspan="2" class="text-center">COD Charges</th>
       
       <th colspan="2" class="text-center">Credit Card</th>
       <th></th>
@@ -22,9 +22,8 @@
       <th class="text-right">Pieces</th>
       <th class="text-right">Basic</th>
       <th class="text-right">Shipping</th>
-      <th class="text-right"><small>Mah Surcharge</small></th>
       <th class="text-right"><small>COD Charge</small></th>
-      <th class="text-right"><small>Service Tax </small></th>
+      <th class="text-right"><small>Mah Surcharge</small></th>
       <th class="text-right"><small>Credit Card</small></th>
       <th class="text-right"><small>Mah Surcharge</small></th>
       <th></th>
@@ -45,12 +44,12 @@
        <td class="text-right">
         <% if order_line.maharastracodextra != 0 %>
 
-<%= (order_line.subtotal || 0) + (order_line.shipping || 0) + (order_line.maharastracodextra || 0)  %> 
+<%= (order_line.subtotal || 0) + (order_line.shipping || 0) + (order_line.codcharges || 0)  %> 
 <% else %>
           0.00
         <% end %>
 <hr>
-<small> <%= order_line.maharastracodextra %></small>
+<small> <%= order_line.codcharges %></small>
        </td> 
        <td class="text-right">
         <% if order_line.codcharges != 0 %>
@@ -59,18 +58,9 @@
           0.00
         <% end %>
  <hr>
-      <small> <%= order_line.codcharges %></small>
+      <small> <%= order_line.maharastracodextra %></small>
        </td>
-       <td class="text-right">
-        <% if order_line.servicetax != 0 %>
-
-<%= (order_line.subtotal || 0) + (order_line.shipping || 0) + (order_line.codcharges || 0)   + (order_line.maharastracodextra || 0)  + (order_line.servicetax || 0)  %> 
-<% else %>
-          0.00
-        <% end %>
-<hr>
-<small> <%= order_line.servicetax %></small>
-       </td>  
+        
         <td class="text-right">
 <% if order_line.creditcardcharges != 0 %>
         <%= (order_line.subtotal || 0) + (order_line.shipping || 0)  + (order_line.creditcardcharges || 0) %> 

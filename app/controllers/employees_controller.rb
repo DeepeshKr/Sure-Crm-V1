@@ -41,9 +41,19 @@ class EmployeesController < ApplicationController
   end
 
   def update
+   employeecode = @employee.employeecode
     @employee.update(employee_params)
+     chkuser = User.where(employee_code: employeecode)
 
-     chkuser = User.where(employee_code: @employee.employeecode)
+     if user = User.find(employee_code: employeecode).present?
+      users = User.find(employee_code: employee_params[:employeecode])
+
+      users.each do |u|
+        u.update()
+      end
+     end
+
+    
      if chkuser.present?
       chkuser.first.update(role: @employee.employee_role_id)
      end
@@ -52,7 +62,16 @@ class EmployeesController < ApplicationController
   end
 
   def destroy
+    #check if the username exists for the same employee
+    if user = User.find(employee_code: @employee.employeecode).present?
+      users = User.find(employee_code: @employee.employeecode)
+
+      users.each do |u|
+        u.destroy
+      end
+    end
     @employee.destroy
+    
     respond_with(@employee)
   end
 

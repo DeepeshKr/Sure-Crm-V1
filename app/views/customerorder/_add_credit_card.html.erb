@@ -4,6 +4,7 @@
 <%= bootstrap_form_for @customer_credit_card , url: addcard_path, :method => :POST do |f| %>
 <%= hidden_field_tag :order_id, @order_master.id %>
 <%= hidden_field_tag :order_card_payment_mode_id, @order_card_payment_mode_id %>
+<%= hidden_field_tag :orderpaymentmode_id, @order_card_payment_mode_id %>
  <%= f.hidden_field :customer_id %>
   <div class="row"> 
   <div class="col-xs-12">

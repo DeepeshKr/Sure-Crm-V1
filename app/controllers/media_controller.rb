@@ -4,6 +4,7 @@ class MediaController < ApplicationController
   respond_to :html
 
   def index
+    @showall = true
      @media = Medium.all.order("id DESC").limit(10)
     if params[:telephone].present?
        @media = Medium.where(telephone: params[:telephone])
@@ -13,6 +14,11 @@ class MediaController < ApplicationController
        @media = Medium.where(dnis: params[:dnis])
        @dnis = params[:dnis]
     end
+      if params[:showall].present?
+        if params[:showall] = "true"
+           @media = Medium.all.order("name")
+        end
+      end
    
     respond_with(@media)
   end

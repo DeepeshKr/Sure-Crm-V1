@@ -1,6 +1,6 @@
 class OrderMaster < ActiveRecord::Base
   belongs_to :campaign_playlist, foreign_key: "campaign_playlist_id"
-  belongs_to :employee, foreign_key: "employee_id"
+  belongs_to :employee, foreign_key: "employee_id" 
   belongs_to :order_source
   belongs_to :order_status_master, foreign_key: "order_status_master_id" #, polymorphic: true
   belongs_to :order_source
@@ -116,22 +116,7 @@ def maharastraccextra
  
 end
 
-def totalCODCharges
- productcost = OrderLine.where('orderid = ?', self.id)
-  #return productcost.first.productcost
-  if productcost.exists?
-    total = 0
-    productcost.each do |c|
-      total += c.maharastracodextra || 0
-     total += c.codcharges || 0
-    end
-    return total.round(2)
-    
-  else
-    return 0
-  end
- 
-end
+
 
 
 

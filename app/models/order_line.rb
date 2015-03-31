@@ -78,21 +78,30 @@ def servicetax
     servicetaxid = 10040
     servicetaxrate = Orderpaymentmode.find(servicetaxid).charges 
    
-    cashondeliveryid = 10001
-    cashondeliverycharge = Orderpaymentmode.find(cashondeliveryid).charges
+     maharastracodextraid = 10020
+     maharastracodextrarate = Orderpaymentmode.find(maharastracodextraid).charges
 
+     maharastracodextracharge = self.total * maharastracodextrarate
+
+    cashondeliveryid = 10001
+    cashondeliveryrate = Orderpaymentmode.find(cashondeliveryid).charges
+    cashondeliverycharge = self.total * cashondeliveryrate
+
+     
+    
     #add all charges
-    servicetax = (self.total * (cashondeliverycharge || 0) || 0) * (servicetaxrate || 0)
+    servicetax = ((maharastracodextracharge || 0) + (cashondeliverycharge || 0)) * (servicetaxrate || 0)
 
     #check if address is selected
     if self.order_master.customer_address_id.present?
        #check if state is maharastra
        if self.order_master.customer_address.state.upcase == 'MAHARASHTRA'
-        maharastracodextraid = 10020
-        maharastracodextracharge = Orderpaymentmode.find(maharastracodextraid).charges
+       
+        servicetax = ((maharastracodextracharge || 0) + (cashondeliverycharge || 0)) * (servicetaxrate || 0)
+       else
+        servicetax =  (cashondeliverycharge || 0) * (servicetaxrate || 0)
 
-        #add all charges
-        servicetax = ((self.total * (cashondeliverycharge || 0)  || 0) + (maharastracodextracharge ||0) * (servicetaxrate || 0))
+
        end
     end
 
@@ -116,7 +125,7 @@ def maharastracodextra
 
     maharastracodextra = self.total * maharastracodcharge
       #check if address is selected
-    if self.order_master.customer_address_id.present?
+    if self.order_master.customer_address.present?
      #check if state is maharastra
      if self.order_master.customer_address.state.upcase == 'MAHARASHTRA'
         maharastracodextra = self.total * maharastracodcharge
@@ -150,10 +159,12 @@ def maharastraccextra
   maharastraccextra =  (self.subtotal + creditcardtotal + self.shipping) * surcharge
 
     #check if address is selected
-    if self.order_master.customer_address_id.present?
-     #check if state is maharastra
-     if !self.order_master.customer_address.state.downcase == 'maharashtra'
-        maharastraccextra  = 0
+    if self.order_master.customer_address.present?
+       #check if state is maharastra
+      if self.order_master.customer_address.state.upcase == 'MAHARASHTRA'
+           maharastraccextra =  (self.subtotal + creditcardtotal + self.shipping) * surcharge
+       else
+          maharastraccextra = 0
       end
     end
     

@@ -4,7 +4,7 @@ class CustomerOrderListsController < ApplicationController
   respond_to :html
 
   def index
-    @customer_order_lists = CustomerOrderList.all
+    @customer_order_lists = CustomerOrderList.order("id DESC").limit(50)
     respond_with(@customer_order_lists)
   end
 

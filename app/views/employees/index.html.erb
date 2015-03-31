@@ -28,9 +28,9 @@
         <td><%= employee.mobile %></td>
         <td><%= employee.emailid %></td>
         <td><%= employee.location %></td>
-        <td><%= employee.employment_type.name %></td>
-        <td><%= employee.employee_role.name %></td>
-        <td><%= employee.manager.fullname %></td>
+        <td><%= employee.employment_type.name if employee.employment_type %></td>
+        <td><%= employee.employee_role.name if employee.employee_role %></td>
+        <td><%= employee.manager.fullname if employee.manager %></td>
         <td><%= employee.enablelogin %></td>
         <td><%= link_to 'Show', employee %></td>
         <td><%= link_to 'Edit', edit_employee_path(employee) %></td>

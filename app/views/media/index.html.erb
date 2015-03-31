@@ -16,7 +16,7 @@
   </div>
   </div>
   </div>
-  <div class="col-xs-6">
+  <div class="col-xs-4">
   <div class="well well-sm">
     <div class="row">
       <%= bootstrap_form_tag url: media_path, :method => :GET, :enforce_utf8 => false do |f| %>
@@ -32,7 +32,21 @@
       </div>
     </div>
   </div>
-  
+  <div class="col-xs-2">
+  <div class="well well-sm">
+    
+      <%= bootstrap_form_tag url: media_path, :method => :GET, :enforce_utf8 => false do |f| %>
+     
+      <%= hidden_field_tag :showall, @showall %>
+           
+           
+       
+            <%= submit_tag "Show All", name: nil,  class: "btn btn-primary" %>
+        
+      <% end %>
+     
+    </div>
+  </div>
 </div>
 
 <h3><%= @state_searched %>  Listing of Channel</h3>
