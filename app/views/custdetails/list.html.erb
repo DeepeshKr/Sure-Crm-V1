@@ -1,0 +1,163 @@
+<h1>Cust details => Oracle File list</h1>
+<p id="notice"><%= notice %></p>
+
+<h3>Listing Customer Order Lists</h3>
+
+<table class="table table-hover">
+  <thead>
+    <tr>
+    <th>Identify</th>
+    <th>Name Address</th>
+    <th>Phone / email</th>
+     <th>Card</th>
+      <th>Order Total</th>
+     <th>Ordered Products</th>
+
+     
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @custdetails.each do |c| %>
+   <tr>
+      <td>
+          <table class="table table-hover">
+          <tr>
+            <td colspan="2">
+              <%= c.ordernum %>
+            </td>
+          </tr>
+          <tr>
+            <td colspan="2">
+              <%= c.orderdate %> 
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <%= c.channel %> 
+            </td>
+            <td>
+              <%= c.ipadd %>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <%= c.dnis %>
+            </td>
+          </tr>
+          </table>
+  </td>
+ <td> </td>
+ <td>
+<%= c.title %> <%= c.fname %> <%= c.lname %> <br>
+ <%= c.add1 %> <%= c.add2 %> <%= c.add3 %> <%= c.landmark %> 
+
+ <%= c.city %> <%= c.state %> <%= c.pincode %> <%= c.mstate %>
+ </td>
+<td><%= c.tel1 %> <%= c.tel2 %> <%= c.fax %> <%= c.email %> </td>
+<td>
+
+<%= c.ccnumber %> <%= c.expmonth %> <%= c.expyear %> <%= c.cardtype %> </td>
+<td><%= c.carddisc %> <%= c.totalamt %> <td>
+<td>
+<table class="table table-hover">
+  <tr>
+      <th>
+        Prod
+      </th>
+      <th>
+        Pcs
+      </th>
+    </tr>
+    <tr>
+      <td>
+        <%= c.prod1 %>
+      </td>
+      <td>
+         <%= c.qty1 %>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <%= c.prod2 %>
+      </td>
+      <td>
+         <%= c.qty2 %>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <%= c.prod3 %>
+      </td>
+      <td>
+         <%= c.qty3 %>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <%= c.prod4 %>
+      </td>
+      <td>
+         <%= c.qty4 %>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <%= c.prod5 %>
+      </td>
+      <td>
+         <%= c.qty5 %>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <%= c.prod6 %>
+      </td>
+      <td>
+         <%= c.qty6 %>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <%= c.prod7 %>
+      </td>
+      <td>
+         <%= c.qty7 %>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <%= c.prod8 %>
+      </td>
+      <td>
+         <%= c.qty8 %>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <%= c.prod9 %>
+      </td>
+      <td>
+         <%= c.qty9 %>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <%= c.prod10 %>
+      </td>
+      <td>
+         <%= c.qty10 %>
+      </td>
+    </tr>
+</table>
+  <td>
+        
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Customer order list', new_customer_order_list_path %>
+ 

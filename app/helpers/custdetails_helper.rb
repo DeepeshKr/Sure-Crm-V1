@@ -1,0 +1,2 @@
+module CustdetailsHelper
+end
