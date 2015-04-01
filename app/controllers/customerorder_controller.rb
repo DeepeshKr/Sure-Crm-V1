@@ -27,27 +27,36 @@ before_action :customer, only: [ :upsell, :payment, :channel, :review, :summary]
   end
 
   def offline
-    new_call
     #if order is not null then create orderline with order id
     @user_file_name = 'z:/filename.cli'
-    @order_line = OrderLine.new()
-  
-    if @order_id.present?
-        @order_line.orderid = @order_id  
-        addon_product_lists  
-    end
 
-  respond_with(@order_master, @order_lines, @order_line)
+
   end
+
   def upload
+    File.open("my/file/path", "r").each_line do |line|
+  # name: "Angela"    job: "Writer"    ...
+  data = line.split(/\t/)
+  name, job = data.map{|d| d.split(": ")[1] }.flatten
+end
 
   end
 
   def add_products
+   
+    
+    ## check if order id is present on mobileno and calledno are present
+    #else throw error back
+    if params[:order_id].blank? 
+    if (params[:calledno].blank? and params[:mobile].blank? )
+       flash[:error] = "You are trying to place and invalid order / mobile no and called no"
+     return redirect_to neworder_path
+    end
+    end
+
     new_call
     orderid = 0
-    
-    #check if order id present else create new order id using this process
+         #check if order id present else create new order id using this process
     #check if order created else create new
     if params[:order_id].present?
        @order_id =  order_line_params[:orderid]
@@ -440,6 +449,11 @@ campaignlist =  Campaign.where('TRUNC(startdate) <=  ? and TRUNC(enddate) >= ?',
 end
 
   def review
+    if @order_master.external_order_no.nil?
+#       ActiveRecord::Base.configurations["development"] => 
+# {"encoding"=>"utf8", "username"=>"foo", "adapter"=>"mysql", "database"=>"bar_development", "host"=>"localhost", "password"=> "baz"}
+     
+    end
      @show_process = 0
 
      if @order_master.total < 100
@@ -486,7 +500,7 @@ end
       end
       orderprocessed = update_customer_order_list
 
-     flash[:success] = "The order is successfully processed with id: #{orderprocessed}"
+     
 
      
      redirect_to summary_path(:order_id => @order_master.id) 
@@ -495,6 +509,7 @@ end
   def summary
      customer
      @cust_details_id = @order_master.external_order_no
+     flash[:success] = "The order is successfully processed with id: #{@cust_details_id}"
     respond_with(@order_master, @order_lines, @customer, @customer_address)
   end
 
@@ -719,7 +734,15 @@ end
       end
 
       if @order_master.external_order_no.nil?
-         customer_order_list =  CustomerOrderList.create(orderdate: Time.zone.now,
+        #       ActiveRecord::Base.configurations["development"] => 
+# {"encoding"=>"utf8", "username"=>"foo", "adapter"=>"mysql", "database"=>"bar_development", "host"=>"localhost", "password"=> "baz"}
+ 
+          hash = ActiveRecord::Base.connection.exec_query("select order_seq.nextval from dual")[0]
+          order_num =  hash["nextval"]
+          flash[:notice] = "Order Number is #{order_num}" 
+
+          customer_order_list =  CustomerOrderList.create(ordernum: order_num.to_i,
+          orderdate: Time.zone.now,
           title: @order_master.customer.salute.truncate(5).upcase, 
           fname: @order_master.customer.first_name.truncate(30).upcase, 
           lname: @order_master.customer.last_name.truncate(30).upcase, 
@@ -797,14 +820,17 @@ end
              customer_order_list.update(prod10: 2.5, qty10: 1)
           end
           #- Integer update with customer order id
-          @order_master.update(external_order_no: customer_order_list.id.to_s, order_status_master_id: 10003) 
+          @order_master.update(external_order_no: order_num.to_s, order_status_master_id: 10003) 
 
-          return customer_order_list.ordernum
-          external_order_no - string update with customer order id
-            else
-              customer_order_lists = CustomerOrderList.where(ordernum: order_master.external_order_no.to_i)
+          return order_num.to_s #customer_order_list.ordernum
+          #external_order_no - string update with customer order id
+         else
+          if CustomerOrderList.where(ordernum: @order_master.external_order_no.to_i).present?
+
+
+              customer_order_lists = CustomerOrderList.where(ordernum: @order_master.external_order_no.to_i)
           customer_order_list = customer_order_lists.first
-          customer_order_list.update(ordernum: order_id, orderdate: Time.zone.now,
+          customer_order_list.update(orderdate: Time.zone.now,
           title: @order_master.customer.salute.truncate(5).upcase, 
           fname: @order_master.customer.first_name.truncate(30).upcase,
           lname: @order_master.customer.last_name.truncate(30).upcase,  
@@ -888,7 +914,11 @@ end
             @order_master.update( order_status_master_id:10003 ) 
           end    
 
+         
           return customer_order_list.ordernum
+           else
+            return "No order updated"
+           end
 
             end
 
