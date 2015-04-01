@@ -1,5 +1,17 @@
 Rails.application.routes.draw do
 
+  get 'tempinv_newwlsdet/list'
+
+  get 'tempinv_newwlsdet/search'
+
+  get 'tempinv_newwlsdet/details'
+
+  get 'custdetails/list'
+
+  get 'custdetails/search'
+
+  get 'custdetails/details'
+
   get 'newwlsdet/list'
 
   get 'newwlsdet/search'
@@ -56,6 +68,8 @@ Rails.application.routes.draw do
  
   #step 1
   get 'neworder' => 'customerorder#products'
+  get 'upload' => 'customerorder#upload'
+  get 'offline' => 'customerorder#offline'
   post 'addproducts' => 'customerorder#add_products'
   post 'addbasicupsellproducts' => 'customerorder#add_basic_upsell'
  

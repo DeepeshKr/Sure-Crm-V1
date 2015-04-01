@@ -1,0 +1,162 @@
+<h3>Listing of recent 100 VPP</h3>
+
+<table class="table table-hover">
+  <thead>
+    <tr>
+     <th>Orderdate</th>
+<th>Entrydate</th>
+<th>Ordersource</th>
+<th>Despatch</th>
+<th>Prod</th>
+<th>Quantity</th>
+<th>Trantype</th>
+<th>Title</th>
+<th>Fname</th>
+<th>Lname</th>
+<th>Add1</th>
+<th>Add2</th>
+<th>Add3</th>
+<th>City</th>
+<th>Pincode</th>
+<th>Tel1</th>
+<th>Tel2</th>
+<th>Fax</th>
+<th>Email</th>
+<th>Dept</th>
+<th>Basic</th>
+<th>Postage</th>
+<th>Taxper</th>
+<th>Taxamt</th>
+<th>Manifest</th>
+<th>Invoice</th>
+<th>Shdate</th>
+<th>Invoiceamount</th>
+<th>Paiddate</th>
+<th>Returndate</th>
+<th>Refunddate</th>
+<th>Refundcheck</th>
+<th>Refundcheckdate</th>
+<th>Cfo</th>
+<th>Operator</th>
+<th>Shipped</th>
+<th>Paidamt</th>
+<th>Refundamt</th>
+<th>Dist</th>
+<th>State</th>
+<th>Letter</th>
+<th>Deo</th>
+<th>Modby</th>
+<th>Moddt</th>
+<th>Cou</th>
+<th>Probag</th>
+<th>Notice</th>
+<th>Transfer</th>
+<th>Reason</th>
+<th>Orderno</th>
+<th>Claimdate</th>
+<th>Delvdate</th>
+<th>Channel</th>
+<th>Fsize</th>
+<th>Custref</th>
+<th>Sanction</th>
+<th>Emi</th>
+<th>Trandate</th>
+<th>Status</th>
+<th>Statusdate</th>
+<th>Landmark</th>
+<th>Barcode</th>
+<th>Barcode2</th>
+<th>Barcode3</th>
+<th>Order_Number</th>
+<th>Codamt</th>
+<th>Weight</th>
+<th>Dt_Hour</th>
+<th>Dt_Min</th>
+<th>Convcharges</th>
+
+      
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @vpp.each do |v| %>
+      <tr>
+        <td><%= v.orderdate %></td>
+<td><%= v.entrydate %></td>
+<td><%= v.ordersource %></td>
+<td><%= v.despatch %></td>
+<td><%= v.prod %></td>
+<td><%= v.quantity %></td>
+<td><%= v.trantype %></td>
+<td><%= v.title %></td>
+<td><%= v.fname %></td>
+<td><%= v.lname %></td>
+<td><%= v.add1 %></td>
+<td><%= v.add2 %></td>
+<td><%= v.add3 %></td>
+<td><%= v.city %></td>
+<td><%= v.pincode %></td>
+<td><%= v.tel1 %></td>
+<td><%= v.tel2 %></td>
+<td><%= v.fax %></td>
+<td><%= v.email %></td>
+<td><%= v.dept %></td>
+<td><%= v.basic %></td>
+<td><%= v.postage %></td>
+<td><%= v.taxper %></td>
+<td><%= v.taxamt %></td>
+<td><%= v.manifest %></td>
+<td><%= v.invoice %></td>
+<td><%= v.shdate %></td>
+<td><%= v.invoiceamount %></td>
+<td><%= v.paiddate %></td>
+<td><%= v.returndate %></td>
+<td><%= v.refunddate %></td>
+<td><%= v.refundcheck %></td>
+<td><%= v.refundcheckdate %></td>
+<td><%= v.cfo %></td>
+<td><%= v.operator %></td>
+<td><%= v.shipped %></td>
+<td><%= v.paidamt %></td>
+<td><%= v.refundamt %></td>
+<td><%= v.dist %></td>
+<td><%= v.state %></td>
+<td><%= v.letter %></td>
+<td><%= v.deo %></td>
+<td><%= v.modby %></td>
+<td><%= v.moddt %></td>
+<td><%= v.cou %></td>
+<td><%= v.probag %></td>
+<td><%= v.notice %></td>
+<td><%= v.transfer %></td>
+<td><%= v.reason %></td>
+<td><%= v.orderno %></td>
+<td><%= v.claimdate %></td>
+<td><%= v.delvdate %></td>
+<td><%= v.channel %></td>
+<td><%= v.fsize %></td>
+<td><%= v.custref %></td>
+<td><%= v.sanction %></td>
+<td><%= v.emi %></td>
+<td><%= v.trandate %></td>
+<td><%= v.status %></td>
+<td><%= v.statusdate %></td>
+<td><%= v.landmark %></td>
+<td><%= v.barcode %></td>
+<td><%= v.barcode2 %></td>
+<td><%= v.barcode3 %></td>
+<td><%= v.order_number %></td>
+<td><%= v.codamt %></td>
+<td><%= v.weight %></td>
+<td><%= v.dt_hour %></td>
+<td><%= v.dt_min %></td>
+<td><%= v.convcharges %></td>
+
+        
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+

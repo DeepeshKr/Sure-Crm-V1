@@ -1,0 +1,60 @@
+
+<%= bootstrap_form_for @campaign_playlist, :url => playlistupdatevariant_path , :html => {:method => :post} do |f| %>
+  <% if @campaign_playlist.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@campaign_playlist.errors.count, "error") %> prohibited this campaign_playlist from being saved:</h2>
+
+      <ul>
+      <% @campaign_playlist.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+ <%= f.hidden_field :id %>
+  <%= hidden_field_tag :id, @campaign_playlist.id %>
+ <p id="notice"><%= notice %></p>
+<div class="row">
+<div class="col-xs-6">
+<p><strong>Campaign: <%= @campaign_playlist.campaign.name if @campaign_playlist.campaign %></strong></p>
+<h3> <strong>Name:</strong> <%= @campaign_playlist.name %></h3>
+
+</div>
+
+<div class="col-xs-6">
+<strong>Starttime:</strong> <%= @campaign_playlist.starttime %> &nbsp;
+ <strong>Endtime:</strong> <%= @campaign_playlist.endtime %>
+ <p>
+  <strong>Product Advertised:</strong>
+  <%= @campaign_playlist.product_variant.name || "No Product Selected" if @campaign_playlist.product_variant %>
+</p>
+<p>
+  <strong>Description:</strong>
+  <%= @campaign_playlist.description %>
+</p>
+</div>
+</div>
+
+  <br>
+<div class="field">
+   
+        <%= f.select :productvariantid,  options_from_collection_for_select(@productvariant,
+       :id, :productinfo, selected: @campaign_playlist.productvariantid ),
+             {:prompt => 'No Product Ad', label: "Select the Product Variant if an ad is to be shown or No Product Ad " } %>
+  </div>
+ 
+   
+
+<br>  <div class="row">
+  <div class="col-xs-3 col-md-offset-8">
+    <%= f.primary class: "btn btn-primary" %>
+  </div>
+  </div>
+<% end %>
+<br>
+<% if @campaign_playlist.present? %>
+<div class="alert alert-success" role="alert">You can change the products in the campaign</div>
+<% else %>
+<div class="alert alert-danger" role="alert">This campaign is over you should not change any product!</div>
+
+<% end %>

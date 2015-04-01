@@ -1,0 +1,16 @@
+<div class="row">
+ <%= form_tag("/dailyschedule", method: "get") do  %>
+		<div class="col-xs-9">
+
+
+		<%= text_field_tag(:for_date, '',:data => {:provide => "datepicker"}, :class => "form-control", :required => "true" , :placeholder => "Show for Date") %>
+
+		
+
+		</div>
+
+		<div class="col-xs-3">
+			<%= submit_tag "Show", name: nil, class: "btn btn-primary" %>
+		</div>
+<% end %>
+</div>

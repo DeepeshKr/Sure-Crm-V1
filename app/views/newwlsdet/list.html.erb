@@ -1,0 +1,72 @@
+<h3>Listing of recent 100 Orders</h3>
+
+<table class="table table-hover">
+  <thead>
+    <tr>
+<th>Orderno</th>
+<th>Distcode</th>
+<th>Prod</th>
+<th>Trantype</th>
+<th>Quantity</th>
+<th>Basic</th>
+<th>Tdisper</th>
+<th>Odisper</th>
+<th>Qdisper</th>
+<th>Ddisper</th>
+<th>Sdisper</th>
+<th>Tdisamt</th>
+<th>Odisamt</th>
+<th>Qdisamt</th>
+<th>Ddisamt</th>
+<th>Sdisamt</th>
+<th>Taxper</th>
+<th>Taxamt</th>
+<th>Totamt</th>
+<th>Shdate</th>
+<th>Invoice</th>
+<th>Challan</th>
+<th>Printed</th>
+<th>Cfo</th>
+<th>Deo</th>
+<th>Shpqty</th>
+<th>Remarks</th>
+</tr>
+</thead>
+
+  <tbody>
+    <% @newwlsdet.each do |n| %>
+      <tr>
+<td><%= n.orderno%></td>
+<td><%= n.distcode%></td>
+<td><%= n.prod%></td>
+<td><%= n.trantype%></td>
+<td><%= n.quantity%></td>
+<td><%= n.basic%></td>
+<td><%= n.tdisper%></td>
+<td><%= n.odisper%></td>
+<td><%= n.qdisper%></td>
+<td><%= n.ddisper%></td>
+<td><%= n.sdisper%></td>
+<td><%= n.tdisamt%></td>
+<td><%= n.odisamt%></td>
+<td><%= n.qdisamt%></td>
+<td><%= n.ddisamt%></td>
+<td><%= n.sdisamt%></td>
+<td><%= n.taxper%></td>
+<td><%= n.taxamt%></td>
+<td><%= n.totamt%></td>
+<td><%= n.shdate%></td>
+<td><%= n.invoice%></td>
+<td><%= n.challan%></td>
+<td><%= n.printed%></td>
+<td><%= n.cfo%></td>
+<td><%= n.deo%></td>
+<td><%= n.shpqty%></td>
+<td><%= n.remarks%></td>
+
+</tr>
+       <% end %>
+  </tbody>
+</table>
+
+<br>

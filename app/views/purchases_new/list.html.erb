@@ -1,0 +1,41 @@
+<h3>Listing of recent 100 Purchases (New)</h3>
+
+<table class="table table-hover">
+  <thead>
+    <tr>
+<th>Rdate</th>
+<th>Code</th>
+<th>Invoice</th>
+<th>Invdate</th>
+<th>Prod</th>
+<th>Qty</th>
+<th>Rate</th>
+<th>Total</th>
+<th>Vat</th>
+<th>Vatamt</th>
+<th>Invamt</th>
+<th>Shortqty</th>
+</tr>
+</thead>
+
+  <tbody>
+    <% @purchases_new.each do |p| %>
+      <tr>
+<td><%= p.rdate%></td>
+<td><%= p.code%></td>
+<td><%= p.invoice%></td>
+<td><%= p.invdate%></td>
+<td><%= p.prod%></td>
+<td><%= p.qty%></td>
+<td><%= p.rate%></td>
+<td><%= p.total%></td>
+<td><%= p.vat%></td>
+<td><%= p.vatamt%></td>
+<td><%= p.invamt%></td>
+<td><%= p.shortqty%></td>
+</tr>
+       <% end %>
+  </tbody>
+</table>
+
+<br>

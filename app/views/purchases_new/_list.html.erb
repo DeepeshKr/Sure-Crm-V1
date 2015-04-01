@@ -1,0 +1,38 @@
+<% if (@purchases_new != nil) then %>
+<table class="table table-hover">
+  <thead>
+    <tr>
+<th>Rdate</th>
+<th>Invoice</th>
+<th>Invdate</th>
+<th>Prod</th>
+<th>Qty</th>
+<th>Shortqty</th>
+<th>Rate</th>
+<th>Invamt</th>
+
+</tr>
+</thead>
+
+  <tbody>
+    <% @purchases_new.each do |p| %>
+      <tr>
+<td><%= p.rdate.strftime("%d-%b-%Y") || "NA" if p.rdate %></td>
+<td><%= p.invoice%></td>
+<td><%= p.invdate.strftime("%d-%b-%Y") || "NA" if p.invdate %></td>
+<td><%= p.prod%></td>
+<td><%= p.qty%></td>
+<td><%= p.shortqty%></td>
+<td><%= p.rate%></td>
+<td><%= p.invamt%></td>
+
+</tr>
+       <% end %>
+  </tbody>
+</table>
+<% else %>
+  <div class="well well-lg">
+  No purchases found
+  </div>
+ <% end %>
+<br>

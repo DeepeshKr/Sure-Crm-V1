@@ -1,0 +1,45 @@
+<% if @campaign_playlists.present? then %>
+ <table class="table table-hover">
+  <thead>
+    <tr>
+    <th>Date</th>
+    <th>Channel</th>
+     <th>Product variant</th>
+      <th>Start time</th>
+      <th>End time</th>
+       <th>Air time</th>
+     
+      <th colspan="1"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    
+    <% @campaign_playlists.each do |campaign_playlist| %>
+      <tr>
+      <td><%= campaign_playlist.for_date.strftime("%d-%b-%Y") || "No Date" if campaign_playlist.for_date.present? %></td>
+       <td><%= campaign_playlist.campaign.medium.name %></td>
+        <td><%= campaign_playlist.product_variant.name if campaign_playlist.product_variant  %></td>
+       
+        <td><%= campaign_playlist.starttime %></td>
+        <td><%= campaign_playlist.endtime %></td>
+         <td><%= campaign_playlist.playtime %></td>
+       
+        
+         
+          
+          </td>
+          <td><%= link_to 'Edit', playlistvariant_path(id: campaign_playlist.id), class: "btn btn-primary btn-xs" %></td>
+         
+      </tr>
+    <% end %>
+    
+  </tbody>
+</table>
+<% elsif %>
+    <div class="well">
+    <p>No Schedule for Pvt Channels available for today</p>
+    </div>
+<% end%>
+<%= @datedisp %>
+<br>
