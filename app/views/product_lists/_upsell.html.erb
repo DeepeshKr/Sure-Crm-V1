@@ -1,22 +1,19 @@
-<% if @productaddonlists.present? %>
+<% if @generalproductaddonlists.present? %>
 <div class="well well-lg">
 <p class="lead">Would you like to add these products to the order</p>
 <table class="table table-hover">
-<thead>
-    <tr>
-      
-      <th>Product Can be Added</th>
-     
-      <th></th>
-    </tr>
-  </thead>
    <tbody>
-    <% @productaddonlists.each do |productaddonlist| %>
+    <% @generalproductaddonlists.each do |productaddonlist| %>
       <tr>
-        <td><%= productaddonlist.productlistdetails  %></td>
+        <td lass="col-xs-10"><strong>
+          <%= productaddonlist.productlistdetails  %>
+        </strong> <br>
+        <%= raw(productaddonlist.product_variant.description) if productaddonlist.product_variant %>
+
+        </td>
         
         
-        <td>
+        <td class="col-xs-2">
 <%= form_tag("/addupsell", method: "POST") do |f| %>
 <%= hidden_field_tag :order_id, @order_id %>
 <%= hidden_field_tag :product_list_id, productaddonlist.id %>
@@ -31,6 +28,4 @@
   </tbody>
 </table>
 </div>
-<% else %>
-<p>No Add on available for products ordered </p>
 <% end %>

@@ -4,8 +4,11 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
  
   # before_filter => to prevent back button from browser
+  before_filter :store_location
   before_filter :set_cache_buster
  
+ #after_filter :store_location
+
  def set_cache_buster
     response.headers["Cache-Control"] = "no-cache, no-store, max-age=0, must-revalidate"
     response.headers["Pragma"] = "no-cache"
@@ -30,12 +33,23 @@ class ApplicationController < ActionController::Base
     end
   end
 
+def store_location
+  # store last url as long as it isn't a /users path
+  session[:previous_url] = request.fullpath unless request.fullpath =~ /\/users/
+end
+
+def after_update_path_for(resource)
+  session[:previous_url] || root_path
+end
+ 
+def after_sign_in_path_for(resource)
+  request.env['omniauth.origin'] || stored_location_for(resource) || root_url
+end
+
 def after_sign_in_path_for(resource)
   session[:previous_url] || root_path
 end
-  
-
-  protected
+protected
 
 def confirm_logged_in
     unless session[:id]
@@ -54,7 +68,4 @@ def after_sign_in_path_for(resource)
   session["user_return_to"] || root_path
 end
 
-
- 
-  
 end

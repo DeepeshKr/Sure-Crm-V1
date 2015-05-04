@@ -1,7 +1,7 @@
 <% provide(:title, 'Sign up') %>
 <div class="center jumbotron">
   <h1>Welcome to the Sure CRM App</h1>
-
+<h3>Time now is <%= @timenow %>
   
   <% if logged_in? %>
    <h3>Welcome, <%= current_user.name %> , you are logged in as <%= current_user.employee_role.name %> </h3>

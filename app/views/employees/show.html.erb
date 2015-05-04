@@ -15,7 +15,7 @@
   </div>
   <div class="col-xs-8">
   <strong>Reporting to:</strong>
-  <%= @employee.manager.fullname  rescue nil %>
+  <%= @employee.manager.name  rescue nil %>
   </div>
     <div class="col-xs-4">
       <small> Mobile No <%= @employee.mobile %> </small>
@@ -72,8 +72,10 @@
 <%= link_to 'Edit', edit_employee_path(@employee), class: "btn btn-primary btn-sm" %> |
 <%= link_to 'Back', employees_path, class: "btn btn-primary btn-sm" %>
 <hr>
-
-
+<div class="well">
+<%= @userstatus %>
+</div>
+<br>
 <%= render 'users/create_login' %>
 
 <%= render 'users/change_password' %>

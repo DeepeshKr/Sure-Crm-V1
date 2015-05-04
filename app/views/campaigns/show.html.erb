@@ -42,7 +42,7 @@
 <%= render partial: "campaign_playlists/campaign_playlist" %>
 <hr />
 <h3>Add New Campaign Playlist </h3>
-<%= render partial: "campaign_playlists/form" %>
+<%= render partial: "media_tape_heads/quick_add" %>
 
 <script>
   $(document).ready(function() {
@@ -58,3 +58,25 @@
   });
 </script>
 
+<script>
+  $(document).ready(function() {
+    $('#variants_select').change(function() {
+      $.ajax({
+        url: "<%= update_tapes_path %>",
+        data: {
+          product_variant_id : $('#variants_select').val()
+        },
+        dataType: "script"
+      });
+    });
+    $('#tapes_select').change(function() {
+      $.ajax({
+        url: "<%= tape_list_path %>",
+        data: {
+          media_tape_head_id : $('#tapes_select').val()
+        },
+        dataType: "script"
+      });
+    });
+  });
+</script>

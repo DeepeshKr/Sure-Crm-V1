@@ -14,6 +14,8 @@ gem 'ruby-graphviz'
 #intall luhn for credit card verification => not used for now
 gem 'luhn'
 
+
+
 #get multi form  
 #gem 'wicked'
 #gem for getting csv files
@@ -36,8 +38,17 @@ gem 'bootstrap-sass',       '3.2.0.0'
 #Rails Bootstrap Forms for styling all bootstrap forms
 gem 'bootstrap_form'
 
+#simple form looks better
+gem 'simple_form'
+
 #date picker
 gem 'bootstrap-datepicker-rails'
+
+#date picker option 2
+# first dependecies
+gem 'momentjs-rails', '~> 2.9',  :github => 'derekprior/momentjs-rails'
+#actual gem below
+gem 'datetimepicker-rails', github: 'zpaulovics/datetimepicker-rails', branch: 'master', submodules: true
 
 # Use boostrap for testing
 group :test do
@@ -89,5 +100,5 @@ group :production do
   gem 'rails_12factor', '0.0.2'
   #gem 'unicorn',        '4.8.3'
   #gem 'passenger'
-
+  gem 'puma'
 end

@@ -1,0 +1,29 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Listing India City Lists</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>State</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @india_city_lists.each do |india_city_list| %>
+      <tr>
+        <td><%= india_city_list.name %></td>
+        <td><%= india_city_list.state %></td>
+        <td><%= link_to 'Show', india_city_list %></td>
+        <td><%= link_to 'Edit', edit_india_city_list_path(india_city_list) %></td>
+        <td><%= link_to 'Destroy', india_city_list, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New India city list', new_india_city_list_path %>

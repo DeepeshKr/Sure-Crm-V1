@@ -1,4 +1,11 @@
 GIT
+  remote: git://github.com/derekprior/momentjs-rails.git
+  revision: 4b1b0a64bca3eb5ab8741eb4a4d2c1c5a6fdf04b
+  specs:
+    momentjs-rails (2.9.0)
+      railties (>= 3.1)
+
+GIT
   remote: git://github.com/plataformatec/devise.git
   revision: 885597025af45913aa92e6964fa0e1bfd05950a4
   specs:
@@ -27,6 +34,15 @@ GIT
   branch: rails42
   specs:
     activerecord-oracle_enhanced-adapter (1.5.5)
+
+GIT
+  remote: git://github.com/zpaulovics/datetimepicker-rails.git
+  revision: c5405f3486b57a52416caf93b79fc09d56930a82
+  branch: master
+  submodules: true
+  specs:
+    datetimepicker-rails (4.7.15)
+      momentjs-rails (>= 2.9.0)
 
 GEM
   remote: https://rubygems.org/
@@ -160,6 +176,8 @@ GEM
       coderay (~> 1.1.0)
       method_source (~> 0.8.1)
       slop (~> 3.4)
+    puma (2.10.2)
+      rack (>= 1.1, < 2.0)
     rack (1.6.0)
     rack-test (0.6.3)
       rack (>= 1.0)
@@ -223,6 +241,9 @@ GEM
       json (~> 1.7, >= 1.7.7)
       rdoc (~> 4.0)
     shellany (0.0.1)
+    simple_form (3.1.0)
+      actionpack (~> 4.0)
+      activemodel (~> 4.0)
     slop (3.6.0)
     spring (1.3.3)
     sprockets (2.12.3)
@@ -269,6 +290,7 @@ DEPENDENCIES
   bootstrap-sass (= 3.2.0.0)
   bootstrap_form
   coffee-rails (~> 4.0.0)
+  datetimepicker-rails!
   devise!
   guard-minitest (= 2.3.1)
   jbuilder (~> 2.0)
@@ -277,7 +299,9 @@ DEPENDENCIES
   luhn
   mini_backtrace (= 0.1.3)
   minitest-reporters (= 1.0.5)
+  momentjs-rails (~> 2.9)!
   pg
+  puma
   rails (= 4.2.0)
   rails-erd!
   rails4-autocomplete
@@ -285,6 +309,7 @@ DEPENDENCIES
   ruby-graphviz
   ruby-oci8 (~> 2.1.5)
   sdoc (~> 0.4.0)
+  simple_form
   spring
   therubyracer
   turbolinks

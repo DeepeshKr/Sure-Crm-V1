@@ -1,0 +1,57 @@
+<%= form_for(@product_stock_adjust) do |f| %>
+  <% if @product_stock_adjust.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@product_stock_adjust.errors.count, "error") %> prohibited this product_stock_adjust from being saved:</h2>
+
+      <ul>
+      <% @product_stock_adjust.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :product_master_id %><br>
+    <%= f.number_field :product_master_id %>
+  </div>
+  <div class="field">
+    <%= f.label :product_list_id %><br>
+    <%= f.number_field :product_list_id %>
+  </div>
+  <div class="field">
+    <%= f.label :change_stock %><br>
+    <%= f.text_field :change_stock %>
+  </div>
+  <div class="field">
+    <%= f.label :ext_prod_code %><br>
+    <%= f.text_field :ext_prod_code %>
+  </div>
+  <div class="field">
+    <%= f.label :barcode %><br>
+    <%= f.text_field :barcode %>
+  </div>
+  <div class="field">
+    <%= f.label :created_date %><br>
+    <%= f.date_select :created_date %>
+  </div>
+  <div class="field">
+    <%= f.label :emp_code %><br>
+    <%= f.text_field :emp_code %>
+  </div>
+  <div class="field">
+    <%= f.label :emp_id %><br>
+    <%= f.number_field :emp_id %>
+  </div>
+  <div class="field">
+    <%= f.label :name %><br>
+    <%= f.text_field :name %>
+  </div>
+  <div class="field">
+    <%= f.label :description %><br>
+    <%= f.text_area :description %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

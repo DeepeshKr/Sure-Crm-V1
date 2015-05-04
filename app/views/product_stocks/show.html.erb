@@ -1,0 +1,44 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Product master:</strong>
+  <%= @product_stock.product_master_id %>
+</p>
+
+<p>
+  <strong>Product list:</strong>
+  <%= @product_stock.product_list_id %>
+</p>
+
+<p>
+  <strong>Current stock:</strong>
+  <%= @product_stock.current_stock %>
+</p>
+
+<p>
+  <strong>Ext prod code:</strong>
+  <%= @product_stock.ext_prod_code %>
+</p>
+
+<p>
+  <strong>Barcode:</strong>
+  <%= @product_stock.barcode %>
+</p>
+
+<p>
+  <strong>Checked date:</strong>
+  <%= @product_stock.checked_date %>
+</p>
+
+<p>
+  <strong>Emp code:</strong>
+  <%= @product_stock.emp_code %>
+</p>
+
+<p>
+  <strong>Emp:</strong>
+  <%= @product_stock.emp_id %>
+</p>
+
+<%= link_to 'Edit', edit_product_stock_path(@product_stock) %> |
+<%= link_to 'Back', product_stocks_path %>

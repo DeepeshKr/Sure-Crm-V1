@@ -1,0 +1,56 @@
+ <% if @datesummary.present? %>
+<table class="table table-hover table-bordered" >
+  <thead>
+    <tr>
+      <th>Date</th>
+      <th class="text-right">Sales</th>
+     </tr>
+  </thead>
+
+  <tbody>
+   <% @datesummary.each do |c| %>
+   <tr>
+<td>
+ <%= c[0] %> 
+</td>
+<td class="text-right">
+   <%= c[1] %> 
+</td>
+    
+ <% end %>
+
+ 
+
+  </tbody>
+
+  <% end %>
+  <br>
+<% if @summary.present? %>
+<table class="table table-hover table-bordered" >
+  <thead>
+    <tr>
+      <th>Channel</th>
+      <th class="text-right">Sales</th>
+     </tr>
+  </thead>
+
+  <tbody>
+   <% @summary.each do |c| %>
+   <tr>
+<td>
+ <%= c[0] %> 
+</td>
+<td class="text-right">
+   <%= c[1] %> 
+</td>
+    
+ <% end %>
+
+ 
+
+  </tbody>
+  </table>
+  <% end %>
+
+  </table>
+

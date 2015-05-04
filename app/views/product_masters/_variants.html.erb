@@ -1,0 +1,17 @@
+    
+             <tr>
+             <small>
+            <td> <%= v.name %> </td>
+            <td> <%= v.price %> </td>
+            <td> <%= v.shipping %> </td>
+              <td> <%= v.product_sell_type.name %> </td>
+               <td> <%= v.created_at %> </td>
+              <td>
+                <%= link_to 'Add To List', v  , class: "btn btn-primary btn-xs" %> 
+              </td>
+              <td>
+              <%= link_to 'Edit Variant', edit_product_variant_path(v), class: "btn btn-primary btn-xs" %>
+              </td>
+               </small>
+              </tr>
+              

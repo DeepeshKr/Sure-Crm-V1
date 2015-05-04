@@ -4,8 +4,21 @@ class ProductTrainingManualsController < ApplicationController
   respond_to :html, :xml, :json
 
   def index
-    @product_training_manuals = ProductTrainingManual.all
+    if params[:productid].present?
+       @product_training_manuals = ProductTrainingManual.where("productid = ?", params[:productid])
+       @productid = params[:productid]
+       @trainingfor = ProductMaster.find(params[:productid]).productname + " Training"
+    
+        @product_training_manual = ProductTrainingManual.new(productid: @productid)
+    
+    respond_with(@product_training_manuals, @product_training_manual)
+  else
+    @productid = nil
+     @product_training_manuals = ProductTrainingManual.last(20)
+     @trainingfor = "Showing recently added 20 "
     respond_with(@product_training_manuals)
+    end
+   
      #respond_with(@product_training_manuals.product_master)
     #redirect_to product_master_path(:id => params[:mobile], :called_to => params[:called_to])
   end
@@ -55,6 +68,12 @@ class ProductTrainingManualsController < ApplicationController
 
 
   def edit
+  end
+
+  def inlinecreate
+    @product_training_manual = ProductTrainingManual.new(product_training_manual_params)
+    @product_training_manual.save
+    redirect_to producttrainig(:productid => @product_training_manual.productid)
   end
 
   def create

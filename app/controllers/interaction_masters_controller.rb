@@ -95,12 +95,14 @@ class InteractionMastersController < ApplicationController
       closedon: Time.now)
     
     if params[:orderid].present?
-        flash[:success] = "The disposition is logged, start new call!"
-      respond_with(@interaction_master.customer)
+        flash[:success] = "The disposition is logged with order, you are now ready to start new call, close this window!"
+      #respond_with(@interaction_master.customer)
     else
-      flash[:success] = "The disposition is logged, start new call!"
-      redirect_to root_path
+      flash[:success] = "The disposition is logged, you are now ready to start new call, close this window!"
+      
     end
+    redirect_to root_pathrect_to root_path
+    
     
   end
 

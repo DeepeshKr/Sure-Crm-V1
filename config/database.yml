@@ -37,18 +37,26 @@ development_web:
   password: Well@come123
   database: telebrands_cable_operators
 
+development_testora:
+  <<: *default
+  username: testora
+  password: testora
+  port: 1521
+
 development_ccview:
-  adapter: oracle_enhanced
-  database: TLBRNDDB
-  host: 49.248.13.34
+  <<: *default
   username: CCVIEW
   password: CCVIEW
   port: 1521
 
+development_cccrm:
+  <<: *default
+  username: cccrm
+  password: cccrm
+  port: 1521
+
 development_tuview:
-  adapter: oracle_enhanced
-  database: TLBRNDDB
-  host: 49.248.13.34
+  <<: *default
   username: TUVIEW
   password: TUVIEW
   port: 1521
@@ -114,6 +122,13 @@ production:
   password: testora
   port: 1521
 
+production_testora:
+  adapter: oracle_enhanced
+  database: TLBRNDDB
+  host: 3.0.3.5
+  username: testora
+  password: testora
+  port: 1521
 
 production_web:
   adapter: "sqlserver"
@@ -128,6 +143,14 @@ production_ccview:
   host: 3.0.3.5
   username: CCVIEW
   password: CCVIEW
+  port: 1521
+
+production_cccrm:
+  adapter: oracle_enhanced
+  database: TLBRNDDB
+  host: 3.0.3.5
+  username: cccrm
+  password: cccrm
   port: 1521
 
 production_tuview:

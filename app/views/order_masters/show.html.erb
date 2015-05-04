@@ -14,6 +14,51 @@
 		<strong>Customer Id:</strong>   <%= @order_master.customer_id %>
 	</div>
 </div>
+<div class="well well-sm">
+<div class="row">
+  <div class="col-xs-4">
+    <strong>Mobile:</strong>   <%= @order_master.mobile %> 
+  </div>
+  <div class="col-xs-2">
+    <strong>Billno:</strong>   <%= @order_master.billno %>
+  </div>
+   <div class="col-xs-2">
+    
+  </div>
+  <div class="col-xs-2">
+    <strong>External order no:</strong>   <%= @order_master.external_order_no %>
+  </div>
+ 
+</div>
+<div class="row">
+  <div class="col-xs-4">
+ <strong> Called No </strong>  <%= @order_master.calledno %>
+  </div>
+<div class="col-xs-4">
+<strong> Media </strong> <%= @order_master.medium.name rescue nil%>
+  </div>
+  <div class="col-xs-4">
+  <strong>Play list:</strong> <%= @order_master.campaign_playlist.name rescue nil%>
+  </div>
+
+</div>
+<div class="row">
+  <div class="col-xs-4">
+ <strong>Campaign:</strong>
+<%= @order_master.campaign_playlist.campaign.name rescue nil%> 
+  </div>
+<div class="col-xs-4">
+<strong>Employee code:</strong>
+ <%= @order_master.employeecode %>
+  </div>
+  <div class="col-xs-4">
+<strong>Employee:</strong>  <%= @order_master.employee_id %>
+  </div>
+
+</div>
+</div>
+
+<% if @order_master.customer.present? %>
 <div class="row">
 
 	<div class="col-xs-6">
@@ -33,6 +78,7 @@
 		</div>
 	</div>
 </div>
+<% end %>
 <div class="clearfix"></div>
 <div class="row">
 		<div class="col-xs-12 pull-left"><h2> <div class="text-left">	Customer Address </div> </h2> 

@@ -15,23 +15,38 @@ class ProductList < ActiveRecord::Base
 
   	validates_uniqueness_of :name, :scope => [:product_variant_id, :product_spec_list_id], :message => "Not Saved, a variant has been saved earlier with the same spec! "
 
+
+
   def productinfo
      self.name << " (" << self.extproductcode << ")"
    end
 
    def productlistdetails
-    product_variant = ProductVariant.find(self.product_variant_id)
+    if self.product_variant_id.present?
+
+   if ProductVariant.where(id: self.product_variant_id).present?
+         product_variant = ProductVariant.find(self.product_variant_id)
      self.name << " Price:" << product_variant.price.to_s << " Shipping:" << product_variant.shipping.to_s << " (" << self.extproductcode << ")"
-   end
+    end
+  end
+  end
 
    def price
+     if self.product_variant_id.present?
+    if ProductVariant.where(id: self.product_variant_id).present?
       product_variant = ProductVariant.find(self.product_variant_id)
     return "Basic Price : " << (product_variant.price || 0).to_s << "  Shipping : " << (product_variant.shipping || 0).to_s
+    end
+  end
   end
 
   def shipping
+     if self.product_variant_id.present?
+      if ProductVariant.find(self.product_variant_id).present?
       product_variant = ProductVariant.find(self.product_variant_id)
     return  "Shipping : " << (product_variant.shipping || 0).to_i.to_s
+  end
+end
   end
   
   def codcharges

@@ -1,0 +1,35 @@
+<% if @product_stock.present? %>
+  
+
+<%= bootstrap_form_for(@product_stock) do |f| %>
+  
+  <%= f.hidden_field :product_master_id %>
+  <%= f.hidden_field :ext_prod_code %>
+  <%= f.hidden_field :emp_code %>
+  <%= f.hidden_field :emp_id %>
+  
+  <%= hidden_field_tag 'prod',  @prod %>
+  <%= hidden_field_tag 'from_date',  @or_from_date %>
+  <%= hidden_field_tag 'to_date',  @or_to_date %>
+  
+<div class="row">
+  <div class="col-xs-7">
+           <%= f.date_select :checked_date, :label => "Stock Date" %>
+  </div>
+  <div class="col-xs-3">
+    <%= f.number_field :current_stock, :label => "Pieces", :required => true %>
+  </div>
+</div>
+
+<div class="row">
+ 
+  <div class="col-xs-3 col-xs-offset-8">
+   <%= f.submit "Add open Stock", class:"btn btn-primary" %>
+  </div>
+</div>
+
+<% end %>
+<% else %>
+  <p>Please select a product from above list and for a date range</p>
+
+<% end %>

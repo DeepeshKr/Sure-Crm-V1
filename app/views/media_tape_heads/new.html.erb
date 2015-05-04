@@ -1,0 +1,19 @@
+<h1>New Media Tape Head</h1>
+
+<%= render 'form' %>
+
+<%= link_to 'Back', media_tape_heads_path, class: 'btn btn-primary btn-sm' %>
+
+<script>
+  $(document).ready(function() {
+    $('#media_tape_head_product_variant_id').change(function() {
+        $.ajax({
+           url: "<%= productvariantdetails_path %>",
+           data: {
+               variant_id: $("#media_tape_head_product_variant_id option:selected").val()
+           },
+           dataType: "script"
+       });
+    });
+  });
+</script>

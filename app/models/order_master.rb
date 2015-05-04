@@ -8,6 +8,7 @@ class OrderMaster < ActiveRecord::Base
   belongs_to :customer, foreign_key: "customer_id" #, polymorphic: true
   belongs_to :customer_address, foreign_key: "customer_address_id" #, polymorphic: true
   belongs_to :medium, foreign_key: "media_id"
+
   has_many :order_line, foreign_key: "orderid", :dependent => :destroy
    
   accepts_nested_attributes_for :order_line,  :allow_destroy => true

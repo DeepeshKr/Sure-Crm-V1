@@ -15,7 +15,7 @@
   	
    
      <%= f.select :productid,  options_from_collection_for_select(ProductMaster.all,
-       :id, :productname),
+       :id, :productname, selected: @product_id),
     {prompt: "Please select the Product Master", label: "Product Master"},
 		       { class: "selectpicker" }
 		        %>

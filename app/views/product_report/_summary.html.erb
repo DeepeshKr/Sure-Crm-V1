@@ -1,0 +1,65 @@
+<table class="table table-hover table-bordered" >
+  <thead>
+    <tr>
+      <th colspan="2">Type</th>
+
+      <th class="text-right">Pieces</th>
+      <th class="text-right">Value</th>
+      
+      
+     
+    </tr>
+  </thead>
+
+  <tbody>
+<tr>
+<td colspan="2">
+  Purchases
+</td>
+
+<td class="text-right">
+  <%= @purchasespieces %>
+</td>
+<td class="text-right">
+  <%= @purchasestotal %>
+</td>
+</tr>
+<tr>
+<td>
+  Retail Sales
+</td>
+<td >
+  Combined
+</td>
+<td class="text-right">
+   <%= @retailsalespieces %>
+</td>
+<td class="text-right">
+   <%= @retailsalestotal %>
+</td>
+</tr>
+<% if @summary.present? %>
+  <% @summary.each do |c| %>
+      <tr>
+   <td colspan="2" class="text-right">
+    <%= c[0] %> 
+   </td>
+   <td colspan="2" class="text-left">
+      <%= c[1] %> 
+   </td>
+       </tr>
+  <% end %>
+<% end %>
+<tr>
+<td colspan="2">
+  Wholesale Sales
+</td>
+<td class="text-right">
+   <%= @wholesalespieces %>
+</td>
+<td class="text-right">
+   <%= @wholesalestotal %>
+</td>
+</tr>
+  </tbody>
+  </table>

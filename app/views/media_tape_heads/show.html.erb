@@ -1,0 +1,21 @@
+<p id="notice"><%= notice %></p>
+<div class="well well-sm">
+<h3>
+  
+  <%= @media_tape_head.name %>
+</h3>
+
+<p>
+  <strong>Product Variant:</strong>
+  <%= @media_tape_head.product_variant.name %>
+</p>
+
+<%= link_to 'Edit', edit_media_tape_head_path(@media_tape_head), class: 'btn btn-primary btn-sm' %> |
+<%= link_to 'Back', media_tape_heads_path, class: 'btn btn-primary btn-sm' %>
+</div>
+
+<h3>Existing Media Tapes </h3>
+<%= render 'media_tapes/list' %>
+<h3>Add Media Tapes </h3>
+
+<%= render 'media_tapes/quick_form' %>

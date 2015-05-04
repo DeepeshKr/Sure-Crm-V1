@@ -1,0 +1,31 @@
+<% if @product_stock_adjusts.present? %>
+<table class="table table-hover">
+  <thead>
+    <tr>
+      <th>Date</th>
+      <th>Name</th>
+      <th>Description</th>
+      <th>Change</th>
+      <th colspan="1"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @product_stock_adjusts.each do |product_stock_adjust| %>
+      <tr>
+        <td><%= product_stock_adjust.created_date %></td>
+        <td><%= product_stock_adjust.name %></td>
+        <td><%= product_stock_adjust.description %></td>
+        <td><%= product_stock_adjust.change_stock %></td>
+        <td> <%= link_to 'Destroy', deleteproductstockadjust_path(:id => product_stock_adjust.id, prod:@prod, from_date: @from_date, to_date: @to_date, paid: @paid), data: { confirm: 'Are you sure?' } %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+<% else %>
+  <div class="well well-sm">
+    No Journal Entry found
+    </div>
+<% end %>
+<br>

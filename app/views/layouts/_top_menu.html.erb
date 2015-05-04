@@ -17,17 +17,22 @@
             </ul>
          </li>
         <% end %>
-        <% if (current_user.employee_role.sortorder < 2) %> 
+        <% if (current_user.employee_role.sortorder < 5) %> 
          <li class="dropdown">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
               Reports <b class="caret"></b> </a>
             <ul class="dropdown-menu">
             <li><%= link_to "Product List", "/product_cost/list" %></li>
             <li><%= link_to "Product Sales", "/productreport" %></li>
+              <li class="divider"></li>
+               <li><%= link_to "Sales Report (Mahabharata)", "/productreport" %></li>
+                <li><%= link_to "Sales Stock Book", "/stockbook" %></li>
+                <li class="divider"></li>
             <li><%= link_to "Product Master _B", "/bprodmaster" %></li>
             <li><%= link_to "Product Upsell (Ropupsprod)", "/productupsell"  %></li>
             <li><%= link_to "Channel Tape Ids", "/tapeids/list"  %></li>
-            <li><%= link_to "Customer Order List", "/customer_order_lists"  %></li>
+             <li><%= link_to "Customer Orders (Ora)", "/custdetails/list"  %></li>
+            <li><%= link_to "Customer Orders (Web)", "/customer_order_lists"  %></li>
             <li><%= link_to "Retail Orders", "/vpp/list"  %></li>
             <li><%= link_to "Whole sale Orders", "/newwlsdet/list"  %></li>
             <li><%= link_to "Purchases", "/purchases_new/list"  %></li>
@@ -42,16 +47,21 @@
                 <li><%= link_to "Product Guides (Soon)"  %></li>  
             </ul>
          </li> -->
-          <% if (current_user.employee_role.sortorder < 10) %> 
+         <% if (current_user.employee_role.sortorder < 10) %> 
          <li class="dropdown">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
             	Operations <b class="caret"></b> </a>
             <ul class="dropdown-menu">
               <li><%= link_to "Existing Dealers Old", "/dealers" %></li>
               <li><%= link_to "Existing Dealers New", "/dealers" %></li>
-              <li><%= link_to "New Dealer Request", "/newdealer" %></li>     
-               <li><%= link_to "Interactions", "/interactions" %></li>    
-                          
+              <li><%= link_to "List of Dealer Equiries", "/interaction?category=10020" %></li>    
+              
+              <li class="divider"></li>
+               <li><%= link_to "All Interactions", "/interaction" %></li> 
+              <li><%= link_to "Pincode List", "/india_pincode_lists" %></li>    
+              <li><%= link_to "City List", "/india_city_lists" %></li>    
+              <li class="divider"></li>
+              <li><%= link_to "Interaction Categories", "/interaction_categories" %></li>           
             </ul>
          </li>
          <% end %>
@@ -61,8 +71,10 @@
             	Products <b class="caret"></b> </a>
             <ul class="dropdown-menu">
               <li><%= link_to "Master", "/product_masters" %></li>
+               <li><%= link_to "Training", "/producttraininglist" %></li>
               <li><%= link_to "Variant", "/product_variants" %></li>
                 <li><%= link_to "Product Lists", "/product_lists" %></li>
+                 <li><%= link_to "Basic Upsell Lists", "/product_master_add_ons" %></li>
               
                 <li class="divider">Set up</li>
                  <li><%= link_to "Product Spec List Code", "/product_spec_lists" %></li>
@@ -73,6 +85,7 @@
                   <li><%= link_to "Product Type", "/product_types" %></li>
                    <li><%= link_to "Product Sell Type", "/product_sell_types" %></li>
                   <li><%= link_to "Product Warehouse", "/product_warehouses" %></li>
+                   <li><%= link_to "Product Inventory", "/product_inventories" %></li>
                    <li><%= link_to "Order Payment Mode", "/orderpaymentmodes" %></li>
             </ul>
 

@@ -1,0 +1,42 @@
+<tr>
+  <td><%= product_stock_book.stock_date %></td>
+  <td><%= product_stock_book.product_master_id %></td>
+  <td><%= product_stock_book.product_list_id %></td>
+  <td><%= product_stock_book.ext_prod_code %></td>
+  <td><%= product_stock_book.name %></td>
+  <td><%= product_stock_book.opening_qty %></td>
+  <td><%= product_stock_book.opening_rate %></td>
+  <td><%= product_stock_book.opening_value %></td>
+  <td><%= product_stock_book.purchased_qty %></td>
+  <td><%= product_stock_book.purchased_rate %></td>
+  <td><%= product_stock_book.purchased_value %></td>
+  <td><%= product_stock_book.returned_retail_qty %></td>
+  <td><%= product_stock_book.returned_retail_rate %></td>
+  <td><%= product_stock_book.returned_retail_value %></td>
+  <td><%= product_stock_book.returned_wholesale_qty %></td>
+  <td><%= product_stock_book.returned_wholesale_rate %></td>
+  <td><%= product_stock_book.returned_wholesale_value %></td>
+  <td><%= product_stock_book.returned_others_qty %></td>
+  <td><%= product_stock_book.returned_others_rate %></td>
+  <td><%= product_stock_book.returned_others_value %></td>
+  <td><%= product_stock_book.sold_retail_qty %></td>
+  <td><%= product_stock_book.sold_retail_rate %></td>
+  <td><%= product_stock_book.sold_retail_value %></td>
+  <td><%= product_stock_book.sold_wholesale %></td>
+  <td><%= product_stock_book.sold_wholesale_rate %></td>
+  <td><%= product_stock_book.sold_wholesale_value %></td>
+  <td><%= product_stock_book.sold_branch_qty %></td>
+  <td><%= product_stock_book.sold_branch_rate %></td>
+  <td><%= product_stock_book.sold_branch_value %></td>
+  <td><%= product_stock_book.corrections_qty %></td>
+  <td><%= product_stock_book.corrections_rate %></td>
+  <td><%= product_stock_book.corrections_value %></td>
+  <td><%= product_stock_book.closing_qty %></td>
+  <td><%= product_stock_book.closing_rate %></td>
+  <td><%= product_stock_book.closing_value %></td>
+  <td><%= link_to 'Show', product_stock_book %></td>
+  <td><%= link_to 'Edit', edit_product_stock_book_path(product_stock_book) %></td>
+  <td><%= link_to 'Destroy', product_stock_book, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+</tr>
+
+<%= link_to 'New Product stock book', new_product_stock_book_path %>

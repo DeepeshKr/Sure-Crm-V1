@@ -1,0 +1,56 @@
+<% if @product_stock_adjust.present? %>
+
+<%= bootstrap_form_for(@product_stock_adjust) do |f| %>
+  <%= f.hidden_field :product_master_id %>
+  <%= f.hidden_field :ext_prod_code %>
+  <%= f.hidden_field :emp_code %>
+  <%= f.hidden_field :emp_id %>
+
+  <%= hidden_field_tag 'prod',  @prod %>
+  <%= hidden_field_tag 'from_date',  @or_from_date %>
+  <%= hidden_field_tag 'to_date',  @or_to_date %>
+  
+  <div class="row">
+  <div class="col-xs-7">
+           <%= f.date_select :created_date, :label => "Journal Date" %>
+  </div>
+
+</div>
+ <div class="row">
+          <div class="col-xs-3">
+            <%= f.number_field :rate, :label => "Rate", :placeholder => "3455", :required => true %>
+          </div>
+          <div class="col-xs-3">
+            <%= f.number_field :change_stock, :label => "Pieces", :placeholder => "+ 1 or -1", :required => true %>
+          </div>
+
+          <div class="col-xs-3">
+            <%= f.number_field :total, :label => "Total", :placeholder => "Total", :required => true %>
+          </div>
+  </div>
+  <div class="row">
+  <div class="col-xs-10">
+           <%= f.text_field :name, :label => "Headings", :placeholder => "Damages / Returns etc", :required => true %>
+  </div>
+  
+</div>
+  <div class="row">
+    
+    <div class="col-xs-10">
+    <%= f.text_area :description, :label => "Description", :placeholder => "Give detailes description of the above heading" %>
+  </div>
+    
+  </div>
+  
+<div class="row">
+ 
+  <div class="col-xs-3 col-xs-offset-6">
+   <%= f.submit "Add Journal Entry", class:"btn btn-primary" %>
+  </div>
+</div>
+  
+<% end %>
+<% else %>
+  <p>Please select a product from above list and for a date range</p>
+
+<% end %>

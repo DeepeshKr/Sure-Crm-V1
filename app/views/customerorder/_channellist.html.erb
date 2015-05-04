@@ -1,0 +1,23 @@
+
+<div class="well well-sm">
+<% if @channellist.present? %>
+<div class="row">
+<div class="col-xs-3">
+<h3>Channel</h3>
+</div>
+<div class="col-xs-9">
+<ul class="list-inline">
+ <% @channellist.each do |c| %>
+  <li>
+<%= c.name  %> &nbsp; <%= c.state || "All India" if c.state.present? %> &nbsp;
+  </li>
+  <% end %>
+</ul>
+</div>
+</div>
+<% else %>
+
+<p>No Channels available for this DNIS</p>
+
+<% end %>
+</div>

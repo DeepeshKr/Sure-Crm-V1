@@ -56,28 +56,31 @@
           <%= f.text_field :address2, hide_label: :true,  :class =>"form-control",:maxlength=> "30",  :placeholder => "Address", :required => true %>
       </div>
     <div class="clearfix"></div>
-    
+   
      <div class="col-xs-10">
-        <%= f.text_field :address3, hide_label: :true,  :class =>"form-control",:maxlength=> "30",  :placeholder => "Address" %>
+        <%= f.text_field :address3, hide_label: :true,  :class =>"form-control",:maxlength=> "29",  :placeholder => "District", :required => true %>
       </div>
    <div class="clearfix"></div>
   
  <div class="col-xs-8">
   
-    <%= f.text_field :landmark, hide_label: :true, :maxlength=> "30",   :class =>"form-control", :placeholder => "Landmark" , :required => true %>
+    <%= f.text_field :landmark, :label => "Landmark", :maxlength=> "30", :class =>"form-control", :placeholder => "Landmark" , :required => true %>
   </div>
    <div class="clearfix"></div>
   
  <div class="col-xs-6">
      
      <%= f.select(:state, 
-    options_from_collection_for_select(State.all, :name, :name, selected: @customer_address.state), 
+    options_from_collection_for_select(@states, :name, :name, selected: @customer_address.state), 
     {},:label => "Select State", :class => "form-control")  %>
   </div>
   
  <div class="col-xs-4">
     
-    <%= f.text_field :city, :maxlength=> "30",  :label => "City",  :class =>"form-control", :placeholder => "City" , :required => true %>
+  <label>City</label>
+   <%= f.autocomplete_field :city, autocomplete_india_city_list_name_order_lines_path, :label => "City",  :class =>"form-control", :placeholder => "City" ,  :maxlength=> "30", :required => true %>
+
+ 
   </div>
     <div class="col-xs-2">
       <%= f.text_field :pincode, :label => "Pincode", :maxlength=> "6",  :class =>"form-control", :placeholder => "Pincode" %>
@@ -114,11 +117,11 @@
  
   <div class="row">
    <div class="col-xs-3 col-xs-offset-1">
-  	   <%= link_to "Back and Add Products", neworder_path(:order_id => @order_id), class: "btn btn-info" %>
-  	  </div>
-  	  <div class="col-xs-3 col-xs-offset-4">
-  	  	<%= f.submit "Save Address => Next", class: "btn btn-primary" %>
-  	  </div>
+       <%= link_to "Back and Add Products", neworder_path(:order_id => @order_id), class: "btn btn-info" %>
+      </div>
+      <div class="col-xs-3 col-xs-offset-4">
+        <%= f.submit "Save Address => Next", class: "btn btn-primary" %>
+      </div>
     
   </div>
 </div>
@@ -135,6 +138,7 @@
     
 <div class="panel-footer"><%= render "order_masters/order_footer" %></div>
 </div>
-
+<!-- show process buttons -->
+  <%= render 'allow_processing' %> 
 <!-- bottom menu -->
   <%= render 'call_menu' %> 

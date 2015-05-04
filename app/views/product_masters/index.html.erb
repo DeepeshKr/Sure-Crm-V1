@@ -42,7 +42,26 @@
             <%= product_master.product_inventory_code.name if product_master.product_inventory_code %>
             </div>
             </div>
-         
+
+<br>
+          <!-- <div class="row">
+            <div class="col-xs-12">
+            <% if product_master.product_training_manual %>
+<ul class="list-inline">
+    <% product_master.product_training_manuals.each do |p| %>
+     <li>
+       <%= p.name %>      
+      </li>
+    <% end %>
+</ul>
+
+<% else %>
+<p> No Specific Add on available </p>
+<% end %>
+            </div>
+          </div>
+ -->
+         <br>
         <div class="row">
             <div class="col-xs-6">
               <%= link_to 'Add Variant / Training / Basic Upsell', product_master  , class: "btn btn-primary btn-sm" %> 
@@ -60,7 +79,9 @@
                   <th>Name</th>
                    <th>Basic</th>
                   <th>Shipping</th>
-                  <th colspan="2"></th>
+                  <th>Sell As</th>
+                  <th>Started on</th>
+                  <th colspan="1"></th>
                 
                 </tr>
               </thead>
@@ -72,17 +93,18 @@
             <td> <%= v.name %> </td>
             <td> <%= v.price %> </td>
             <td> <%= v.shipping %> </td>
-             
+              <td> <%= v.product_sell_type.name %> </td>
+               <td> <%= v.created_at %> </td>
               <td>
-                <%= link_to 'Add To List', v  , class: "btn btn-primary btn-xs" %> 
+                <%= link_to 'Add / View List', v  , class: "btn btn-primary btn-xs" %> 
+                <br>
+                <%= link_to 'Edit Variant', edit_product_variant_path(v), class: "btn btn-primary btn-xs" %>
               </td>
-              <td>
-              <%= link_to 'Edit Product Variant', edit_product_variant_path(v), class: "btn btn-primary btn-xs" %>
-              </td>
+              
                </small>
               </tr>
               <tr>
-                 <td colspan="5">
+                 <td colspan="7">
                  
                  <% if v.product_list.exists? %>
                  <div class="alert alert-success">

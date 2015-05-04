@@ -5,22 +5,36 @@ class MediaController < ApplicationController
 
   def index
     @showall = true
-     @media = Medium.all.order("id DESC").limit(10)
+     @media = Medium.all.order("updated_at ASC").limit(50)
     if params[:telephone].present?
        @media = Medium.where(telephone: params[:telephone])
        @telephone = params[:telephone]
     end
-     if params[:dnis].present?
+    if params[:dnis].present?
        @media = Medium.where(dnis: params[:dnis])
+       @dnis = params[:dnis]
+    end
+    if params[:name].present?
+      @search = params[:name]
+       @media = Medium.where("name like ? or ref_name like ?", "#{@search}%", "#{@search}%")
        @dnis = params[:dnis]
     end
       if params[:showall].present?
         if params[:showall] = "true"
+          @showall = "true"
            @media = Medium.all.order("name")
+        respond_to do |format|
+          format.html
+          format.csv do
+            headers['Content-Disposition'] = "attachment; filename=\"media-list\""
+            headers['Content-Type'] ||= 'text/csv'
+            
+          end
+        end
         end
       end
    
-    respond_with(@media)
+    
   end
 
   def show
@@ -35,7 +49,29 @@ class MediaController < ApplicationController
   end
 
   def edit
+    
     dropdowns
+    if  params[:new_channel].present?
+        #code
+        new_name = params[:new_channel]
+        old_name = @medium.name
+        @medium.name = new_name
+       channel, slot = new_name.split(':')
+       
+       if channel.present?
+        #code
+        @medium.channel = channel.strip
+       end
+              
+       if slot.present?
+        #code
+         @medium.slot = slot.strip
+       end
+            
+       @change_name = "Click on update to change channel name from #{old_name} to #{new_name}"
+    end
+    
+    
   end
 
   def create

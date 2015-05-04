@@ -1,32 +1,112 @@
 class ProductReportController < ApplicationController
 	before_action :get_variables, only: [:list, :search, :details]
-  before_action :dropdowns, only: [:list, :search, :details]
+	before_action :dropdowns, only: [:list, :search, :details]
 	respond_to :html
 
   def list
   #prod=TOTS&from_date=02%2F24%2F2015&to_date=02%2F23%2F2015
-  if params[:prod].present? && params[:from_date].present? && params[:to_date].present?
-    prod = params[:prod]
-    from_date = Time.strptime(params[:from_date], '%m/%d/%Y')
-    to_date = Time.strptime(params[:to_date], '%m/%d/%Y')
-    
-    @prod = prod
-    @from_date = from_date.to_formatted_s(:rfc822)
-    @to_date =  to_date.to_formatted_s(:rfc822)
-
-    @purchases_new = PURCHASES_NEW.where(prod: prod).where("TRUNC(rdate) >= ? and TRUNC(rdate) <= ?", from_date, to_date).limit(10)
-    @vpp = VPP.where(prod: prod).where("TRUNC(paiddate) >= ? and TRUNC(paiddate) <= ?", from_date, to_date).limit(100)
-    @newwlsdet = NEWWLSDET.where(prod: prod).where("TRUNC(shdate) >= ? and TRUNC(shdate) <= ?", from_date, to_date).limit(10)
-
-  else
-    @purchases_new = PURCHASES_NEW.all.limit(10)
-    @vpp = VPP.all.limit(10)
-    @newwlsdet = NEWWLSDET.all.limit(10)
+  @type = "Sold "
+	#new product stock
+	#@product_stock = ProductStock.new
+	#new stock adjusts
+	@product_stock_adjust = ProductStockAdjust.new(change_stock: 1)
+	   
+	if params[:prod].present? && params[:from_date].present? && params[:to_date].present?
+	  prod = params[:prod]
+	  
+	  @or_from_date = params[:from_date]
+	  @or_to_date = params[:to_date]
+	  
+	  from_date = Time.strptime(params[:from_date], '%m/%d/%Y')
+	  to_date = Time.strptime(params[:to_date], '%m/%d/%Y')
+	  @product_master_id = @productmasterlist.where(extproductcode: prod).first.id
+	  @prod = prod
+	  @from_date = from_date.to_formatted_s(:rfc822)
+	  @to_date =  to_date.to_formatted_s(:rfc822)
+	  
+	  #Opening Stock level on date
+	  @product_stocks = ProductStock.where(ext_prod_code: prod).where("TRUNC(checked_date) >= ? and TRUNC(checked_date) <= ?", from_date, to_date)
+	   if @product_stocks.present?
+		  #code
+	   end
+	   #new product stock
+	   @product_stock = ProductStock.new(product_master_id: @product_master_id, ext_prod_code: prod, emp_code: @empcode, emp_id: @empid)
+		# params.require(:product_stock).permit(:product_master_id, :product_list_id, :current_stock, :ext_prod_code, :barcode, :checked_date, :emp_code, :emp_id)
+	   
+	  #Stock Journal Entries (Related to returns /  damages / written off etc)
+	  @product_stock_adjusts = ProductStockAdjust.where(ext_prod_code: prod).where("TRUNC(created_date) >= ? and TRUNC(created_date) <= ?", from_date, to_date)
+	   if @product_stock_adjusts.present?
+		  #code
+	   end
+	   #new stock adjusts
+	   @product_stock_adust = ProductStockAdjust.new(product_master_id: @product_master_id, ext_prod_code: prod, emp_code: @empcode, emp_id: @empid)
+	   #params.require(:product_stock_adjust).permit(:product_master_id, :product_list_id, :change_stock, :ext_prod_code, :barcode, :created_date, :emp_code, :emp_id, :name, :description)
+	  #purchases
+	  @purchases_new = PURCHASES_NEW.where(prod: prod).where("TRUNC(rdate) >= ? and TRUNC(rdate) <= ?", from_date, to_date)
+		if @purchases_new.present?
+		  #Purchases
+		  #total
+			@purchasestotal = @purchases_new.sum(:invamt)
+		  #pieces
+		   @purchasespieces = @purchases_new.sum(:qty)
+		end
+  
+	  #retails sales based on paid date
+	  if params[:paid].present?   
+		  if params[:paid] = "yes"
+			  #code
+			  @paid = "yes"
+			  @type = "Paid "
+			  @vpp = VPP.where(prod: prod).where("TRUNC(paiddate) >= ? and TRUNC(paiddate) <= ?", from_date, to_date)	
+		  end
+	  else
+			  @type = "Sold "
+			  @vpp = VPP.where(prod: prod).where("TRUNC(orderdate) >= ? and TRUNC(orderdate) <= ?", from_date, to_date)
+	  end
+  
+	  if @vpp.present?
+		  #Retail Sales
+		  #total
+		  @retailsalestotal = @vpp.sum(:paidamt)
+		  #pieces
+		   @retailsalespieces = @vpp.sum(:quantity)
+			 presummary = @vpp.group(:despatch).sum(:paidamt)
+			@summary = presummary.sort_by{|k,v| v}.reverse
+			#total courier
+		  @retailcouriersalestotal = @vpp.where.not(despatch: "EPP").sum(:paidamt)
+		  #pieces
+		   @retailcouriersalespieces = @vpp.where.not(despatch: "EPP").sum(:quantity)
+  
+			  #total india post
+		  @retailpostsalestotal = @vpp.where(despatch: "EPP").sum(:paidamt)
+		  #pieces
+		   @retailpostsalespieces = @vpp.where(despatch: "EPP").sum(:quantity)
+  
+	  end
+	  
+	  #wholesale sales
+	  @newwlsdet = NEWWLSDET.where(prod: prod).where("TRUNC(shdate) >= ? and TRUNC(shdate) <= ?", from_date, to_date)
+		if @newwlsdet.present?
+		  ##wholesale Sales
+		  #total
+		  @wholesalestotal = @newwlsdet.sum(:totamt)
+		  #pieces
+		  @wholesalespieces = @newwlsdet.sum(:quantity)
+		end
+  
+	  #Branch Transfers
+	  @tempinv_newwlsdet = TEMPINV_NEWWLSDET.where(prod: prod).where("TRUNC(shdate) >= ? and TRUNC(shdate) <= ?", from_date, to_date)
+		if @tempinv_newwlsdet.present?
+		  ##wholesale Sales
+		  #total
+		  @branchsalestotal = @tempinv_newwlsdet.sum(:totamt)
+		  #pieces
+		  @branchsalespieces = @tempinv_newwlsdet.sum(:quantity)
+		end
+	 
+	end
   end
     
-
-  end
-
   def search
 
   end
@@ -41,10 +121,9 @@ class ProductReportController < ApplicationController
     end
     def get_variables
     	@empcode = current_user.employee_code
-    	@empid = current_user.id
+        @empid = Employee.where(employeecode: @empcode).first.id
         @productmaster_id = params[:productmaster_id]
         @from_date = params[:from_date]
         @to_date = params[:to_date]   
-
     end
 end

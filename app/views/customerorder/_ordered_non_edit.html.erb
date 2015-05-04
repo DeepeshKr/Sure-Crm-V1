@@ -33,7 +33,7 @@
      <small><%= order_line.shipping %> </small>   </td>
         
        <td class="text-right">
-        <% if order_line.maharastracodextra != 0 %>
+        <% if order_line.codcharges  != 0 %>
 
 <%= (order_line.subtotal || 0) + (order_line.shipping || 0) + (order_line.codcharges || 0)  %> 
 <% else %>
@@ -43,7 +43,7 @@
 <small> <%= order_line.codcharges %></small>
        </td> 
        <td class="text-right">
-        <% if order_line.codcharges != 0 %>
+        <% if order_line.maharastracodextra != 0 %>
         <%= (order_line.subtotal || 0) + (order_line.shipping || 0) + (order_line.codcharges || 0) + (order_line.maharastracodextra || 0) %>
         <% else %>
           0.00

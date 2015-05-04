@@ -9,6 +9,7 @@ class ProductListsController < ApplicationController
       product_variants = ProductVariant.where("activeid = ? and product_sell_type_id < ?", 10000, 10002).where(productmasterid: product_masters).pluck("id")
       @product_lists = ProductList.where('active_status_id = ?',  10000).where(product_variant_id: product_variants)
     # @product_lists = ProductList.all
+    @noofproducts =  @product_lists.count
     respond_with(@product_lists)
   end
 

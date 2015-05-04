@@ -1,0 +1,21 @@
+<%= form_tag("/updatestockbook", method: "post") do  %>
+  <%= hidden_field_tag 'prod',  @prod %>
+  <%= hidden_field_tag 'from_date',  @or_from_date %>
+  <%= hidden_field_tag 'to_date',  @or_to_date %> 
+  <div class="well well-sm">
+  <div class="row">
+  <div class="col-xs-9">
+  <p class="lead">Add Stock Book for 
+     <%=  @product_name %> between dates
+      <%=  @from_date_text %>
+and
+       <%=  @to_date_text %>.
+
+   </p>
+  </div>
+  <div class="col-xs-3">
+     <%= submit_tag "Create / Update Stock", class:"btn btn-warning" %>
+    </div>
+  </div>
+  </div>
+<% end %>

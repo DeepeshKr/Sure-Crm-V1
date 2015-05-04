@@ -1,15 +1,14 @@
 <p id="notice"><%= notice %></p>
 
-<h1>Listing Product Master Add Ons</h1>
+<h3>List of Product Basic Upsell => Which is only available with specific products!</h3>
 
 <table class="table table-hover">
   <thead>
     <tr>
-      <th>Product master</th>
-      <th>Product list</th>
-      <th>Activeid</th>
-      <th>Change price</th>
-      <th colspan="3"></th>
+      <th>Main Product</th>
+      <th>Basic Upsell Product</th>
+   
+      <th colspan="1"></th>
     </tr>
   </thead>
 
@@ -18,10 +17,7 @@
       <tr>
         <td><%= product_master_add_on.product_master.name if product_master_add_on.product_master %></td>
         <td><%= product_master_add_on.product_list.productlistdetails if product_master_add_on.product_list  %></td>
-        <td><%=  product_master_add_on.product_active_code.name if product_master_add_on.product_active_code %></td>
-        <td><%= product_master_add_on.change_price %></td>
-        <td><%= link_to 'Show', product_master_add_on %></td>
-        <td><%= link_to 'Edit', edit_product_master_add_on_path(product_master_add_on) %></td>
+       
         <td><%= link_to 'Destroy', product_master_add_on, method: :delete, data: { confirm: 'Are you sure?' } %></td>
       </tr>
     <% end %>
@@ -30,4 +26,4 @@
 
 <br>
 
-<%= link_to 'New Product master add on', new_product_master_add_on_path %>
+

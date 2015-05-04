@@ -10,9 +10,13 @@
       </ul>
     </div>
   <% end %>
-
+  <% if @change_name.present? %>
+	<div class="well well-sm">
+	  <%= @change_name %>
+	</div>
+  <% end %>
   <div class="field">
-     <%= f.text_field :name, label: "Name" %>
+     <%= f.text_field :name, label: "Name", required: true  %>
   </div>
   <div class="field">
      <%= f.text_field :ref_name, label: "Reference Name - Please ensure it is unique", placeholder: "Unique general name of Channel" %>
@@ -20,7 +24,7 @@
  
   <div class="field">
    
-    <%= f.text_field :telephone, label: "Incoming Telephone" %>
+    <%= f.text_field :telephone, required: true,  label: "Incoming Telephone" %>
   </div>
   <div class="field">
   
@@ -45,10 +49,10 @@
   </div>
    <div class="row">
     <div class="col-xs-4">
-    <%= f.text_field :dnis, placeholder: "dnis", label: "4 digit dnis" %>
+    <%= f.text_field :dnis, placeholder: "dnis", required: true,  label: "4 digit dnis" %>
     </div>
     <div class="col-xs-6">
-    <%= f.text_field :channel, placeholder: "Chanel", label: "Channel" %>
+    <%= f.text_field :channel, placeholder: "Chanel", required: true, label: "Channel" %>
     </div>
     <div class="col-xs-2">
     <%= f.text_field :slot, placeholder: "Slot", label: "Slot" %>

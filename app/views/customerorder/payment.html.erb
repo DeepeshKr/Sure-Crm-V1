@@ -65,7 +65,7 @@
 
                                   <% else %>
                                     <div class="col-xs-4 col-xs-offset-6">
-                                     <button type="button" class="btn btn-success " data-toggle="modal" data-target="#myModal">Pay by Credit Card</button>
+                                     <button type="button" class="btn btn-success " data-toggle="modal" data-target="#CreditCardModal">Pay by Credit Card</button>
                                     </div>
                                <% end %>     
                     </div>
@@ -83,7 +83,7 @@
           </div>
           <div class="col-xs-4 col-xs-offset-4">
                   <% if @customer_credit_card_o.present?  %>
-                    <button type="button" class="btn btn-danger " data-toggle="modal" data-target="#myModal">Add New Credit Card</button>
+                    <button type="button" class="btn btn-danger " data-toggle="modal" data-target="#CreditCardModal">Add New Credit Card</button>
                   <% end %>
           </div>
           </div>
@@ -103,12 +103,12 @@
 <div class="panel-footer"><%= render "order_masters/order_footer" %></div>
 </div>
  <!-- Modal -->
-<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div class="modal fade" id="CreditCardModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="myModalLabel">Add Credit Card</h4>
+        <h4 class="modal-title" id="CreditCardModal">Add Credit Card</h4>
       </div>
       <div class="modal-body">
            <%= render 'add_credit_card' %>

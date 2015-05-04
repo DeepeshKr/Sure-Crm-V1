@@ -1,6 +1,6 @@
 class EmployeesController < ApplicationController
   before_action :set_employee, only: [:show, :edit, :update, :destroy]
-
+  before_action :reporting_to, only: [:new, :edit, :update, :destroy]
   respond_to :html
 
   def index
@@ -11,16 +11,17 @@ class EmployeesController < ApplicationController
   def show
     chkuser = User.where(employee_code: @employee.employeecode)
 
-
-
     if chkuser.present?
       @addnewlogin = true
       @userpas = chkuser.first
+      @userstatus = "This employee #{chkuser.first.name} has already got a Login Id: #{chkuser.first.employee_code} and password, you may change the password here"
       respond_with(@employee, @userpas)
    else
      @addnewlogin = false
      @user = User.new(name: @employee.name, employee_code: @employee.employeecode, 
       email: @employee.emailid , role: @employee.employee_role_id)
+      @userstatus = "This employee has does not have Login Id"
+    
      respond_with(@employee, @user)
     end
 
@@ -45,12 +46,13 @@ class EmployeesController < ApplicationController
     @employee.update(employee_params)
      chkuser = User.where(employee_code: employeecode)
 
-     if user = User.find(employee_code: employeecode).present?
-      users = User.find(employee_code: employee_params[:employeecode])
-
-      users.each do |u|
-        u.update()
-      end
+     if user = User.where(employee_code: employeecode).present?
+      users = User.where(employee_code: employee_params[:employeecode])
+        if users.present?
+            users.each do |u|
+            u.update(employee_code: employeecode)
+            end
+        end
      end
 
     
@@ -76,6 +78,9 @@ class EmployeesController < ApplicationController
   end
 
   private
+  def reporting_to
+    @reporting = Employee.all.order("first_name").joins(:employee_role).where("employee_roles.sortorder < 9")
+  end
     def set_employee
       @employee = Employee.find(params[:id])
     end

@@ -1,14 +1,32 @@
-<h1>Cust details => Oracle File list</h1>
+<div class="row">
+  <div class="col-xs-6"><h3>Cust details => Oracle File list</h3>
 <p id="notice"><%= notice %></p>
+</div>
+  <div class="col-xs-6"><%= render 'search' %></div>
 
-<h3>Listing Customer Order Lists</h3>
+</div>
 
-<table class="table table-hover">
+<br>
+<div class="well">
+<h4>Report for <%= @prod %> between <%= @from_date %> and <%= @to_date %></h4>
+
+ 
+</div>
+<br>
+<div class="alert alert-danger" role="alert">
+  <div class="row">
+  <div class="col-xs-12">
+<%= render 'summary' %>
+  </div>
+  </div>
+</div>
+<% if @custdetails.present? %>
+<table class="table ">
   <thead>
     <tr>
     <th>Identify</th>
     <th>Name Address</th>
-    <th>Phone / email</th>
+   
      <th>Card</th>
       <th>Order Total</th>
      <th>Ordered Products</th>
@@ -21,14 +39,20 @@
     <% @custdetails.each do |c| %>
    <tr>
       <td>
-          <table class="table table-hover">
+          <table class="table">
           <tr>
-            <td colspan="2">
-              <%= c.ordernum %>
+            <td colspan="3">
+           <strong> Order Num <%= c.ordernum %> </strong>
+            </td>
+          </tr>
+
+          <tr>
+            <td colspan="3">
+              <%= c.orderdate.strftime("%d/%m/%y") %> 
             </td>
           </tr>
           <tr>
-            <td colspan="2">
+            <td colspan="3">
               <%= c.orderdate %> 
             </td>
           </tr>
@@ -37,28 +61,91 @@
               <%= c.channel %> 
             </td>
             <td>
-              <%= c.ipadd %>
+             
+            </td>
+             <td>
+              <%= c.dnis %>
             </td>
           </tr>
           <tr>
             <td>
-              <%= c.dnis %>
+            User  
+            </td>
+            <td>
+             <%= c.username %> 
+            </td>
+             <td>
+             IP <%= c.ipadd %>
             </td>
           </tr>
+         
           </table>
   </td>
- <td> </td>
+
  <td>
-<%= c.title %> <%= c.fname %> <%= c.lname %> <br>
- <%= c.add1 %> <%= c.add2 %> <%= c.add3 %> <%= c.landmark %> 
-
- <%= c.city %> <%= c.state %> <%= c.pincode %> <%= c.mstate %>
- </td>
-<td><%= c.tel1 %> <%= c.tel2 %> <%= c.fax %> <%= c.email %> </td>
+ <table class="table">
+   <tr>
+<td colspan="4">
+<%= c.title %> <%= c.fname %> <%= c.lname %>
+</td>
+</tr>
+<tr>
+<td colspan="4">
+ <%= c.add1 %> <%= c.add2 %> <%= c.add3 %> <%= c.landmark %>
+</td>
+</tr>
+<tr>
 <td>
+  <%= c.city %>
+</td>
+<td>
+ <%= c.pincode %>
+</td>
+<td>
+<%= c.state %>
+</td>
+<td>
+<%= c.mstate %>
+</td>
+<tr>
+  <td>
+    <%= c.tel1 %>
+  </td>
+  <td>
+    <%= c.tel2 %>
+  </td>
+  <td>
+    <%= c.fax %>
+  </td>
+  <td>
+    <%= c.email %>
+  </td>
 
-<%= c.ccnumber %> <%= c.expmonth %> <%= c.expyear %> <%= c.cardtype %> </td>
-<td><%= c.carddisc %> <%= c.totalamt %> <td>
+</tr>
+<tr>
+<td colspan="2">
+<%= c.ccnumber %>
+</td>
+<td>
+ <%= c.expmonth %> <%= c.expyear %>
+</td>
+<td>
+  <%= c.cardtype %>
+</td>
+   </tr>
+<tr>  
+<td colspan="2">
+Amount
+</td>
+<td>
+  <%= c.carddisc %>
+</td>
+<td>
+  <%= c.totalamt %>
+</td>
+</tr>
+ </table>
+ 
 <td>
 <table class="table table-hover">
   <tr>
@@ -151,13 +238,13 @@
     </tr>
 </table>
   <td>
-        
+       
       </tr>
     <% end %>
   </tbody>
 </table>
-
+<% end %>
 <br>
 
-<%= link_to 'New Customer order list', new_customer_order_list_path %>
+ 
  

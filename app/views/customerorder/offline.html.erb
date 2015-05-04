@@ -1,7 +1,7 @@
 <h1>To be used when getting calls on Standard EPABX lines </h1>
 <br>
 <div class="row">
-  <%= form_tag({action: :upload}, multipart: true) do %>
+  <%= form_tag({action: :uploadcall}, multipart: true) do %>
   <div class="col-xs-4">
 <%= file_field_tag 'userfile', accept: 'text', class: 'upload', :multiple => false,  value: @user_file_name %>
   </div>
@@ -11,7 +11,7 @@
 <% end %>  
 </div>
 <div class="well">
-<p>It is important you select the file named: <%= @filename %> else the call would be rejected</p>
+<p>It is important you select the file named: <%= @user_file_name  %> else the call would be rejected</p>
 </div>
 <br/>
 

@@ -1,0 +1,157 @@
+<%= simple_form_for @product_stock_book do |f| %>
+  <% if @product_stock_book.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@product_stock_book.errors.count, "error") %> prohibited this product_stock_book from being saved:</h2>
+
+      <ul>
+      <% @product_stock_book.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :stock_date %><br>
+    <%= f.input :stock_date, as: :date %>
+  </div>
+  <div class="field">
+    <%= f.label :product_master_id %><br>
+    <%= f.association :product_master %>
+  </div>
+  <div class="field">
+    <%= f.label :product_list_id %><br>
+    <%= f.input :product_list_id %>
+  </div>
+  <div class="field">
+    <%= f.label :ext_prod_code %><br>
+    <%= f.input :ext_prod_code %>
+  </div>
+  <div class="field">
+    <%= f.label :name %><br>
+    <%= f.input :name %>
+  </div>
+  <div class="field">
+    <%= f.label :opening_qty %><br>
+    <%= f.input :opening_qty %>
+  </div>
+  <div class="field">
+    <%= f.label :opening_rate %><br>
+    <%= f.text_field :opening_rate %>
+  </div>
+  <div class="field">
+    <%= f.label :opening_value %><br>
+    <%= f.text_field :opening_value %>
+  </div>
+  <div class="field">
+    <%= f.label :purchased_qty %><br>
+    <%= f.number_field :purchased_qty %>
+  </div>
+  <div class="field">
+    <%= f.label :purchased_rate %><br>
+    <%= f.text_field :purchased_rate %>
+  </div>
+  <div class="field">
+    <%= f.label :purchased_value %><br>
+    <%= f.text_field :purchased_value %>
+  </div>
+  <div class="field">
+    <%= f.label :returned_retail_qty %><br>
+    <%= f.number_field :returned_retail_qty %>
+  </div>
+  <div class="field">
+    <%= f.label :returned_retail_rate %><br>
+    <%= f.text_field :returned_retail_rate %>
+  </div>
+  <div class="field">
+    <%= f.label :returned_retail_value %><br>
+    <%= f.text_field :returned_retail_value %>
+  </div>
+  <div class="field">
+    <%= f.label :returned_wholesale_qty %><br>
+    <%= f.number_field :returned_wholesale_qty %>
+  </div>
+  <div class="field">
+    <%= f.label :returned_wholesale_rate %><br>
+    <%= f.text_field :returned_wholesale_rate %>
+  </div>
+  <div class="field">
+    <%= f.label :returned_wholesale_value %><br>
+    <%= f.text_field :returned_wholesale_value %>
+  </div>
+  <div class="field">
+    <%= f.label :returned_others_qty %><br>
+    <%= f.number_field :returned_others_qty %>
+  </div>
+  <div class="field">
+    <%= f.label :returned_others_rate %><br>
+    <%= f.text_field :returned_others_rate %>
+  </div>
+  <div class="field">
+    <%= f.label :returned_others_value %><br>
+    <%= f.text_field :returned_others_value %>
+  </div>
+  <div class="field">
+    <%= f.label :sold_retail_qty %><br>
+    <%= f.number_field :sold_retail_qty %>
+  </div>
+  <div class="field">
+    <%= f.label :sold_retail_rate %><br>
+    <%= f.text_field :sold_retail_rate %>
+  </div>
+  <div class="field">
+    <%= f.label :sold_retail_value %><br>
+    <%= f.text_field :sold_retail_value %>
+  </div>
+  <div class="field">
+    <%= f.label :sold_wholesale %><br>
+    <%= f.number_field :sold_wholesale %>
+  </div>
+  <div class="field">
+    <%= f.label :sold_wholesale_rate %><br>
+    <%= f.text_field :sold_wholesale_rate %>
+  </div>
+  <div class="field">
+    <%= f.label :sold_wholesale_value %><br>
+    <%= f.text_field :sold_wholesale_value %>
+  </div>
+  <div class="field">
+    <%= f.label :sold_branch_qty %><br>
+    <%= f.number_field :sold_branch_qty %>
+  </div>
+  <div class="field">
+    <%= f.label :sold_branch_rate %><br>
+    <%= f.text_field :sold_branch_rate %>
+  </div>
+  <div class="field">
+    <%= f.label :sold_branch_value %><br>
+    <%= f.text_field :sold_branch_value %>
+  </div>
+  <div class="field">
+    <%= f.label :corrections_qty %><br>
+    <%= f.number_field :corrections_qty %>
+  </div>
+  <div class="field">
+    <%= f.label :corrections_rate %><br>
+    <%= f.text_field :corrections_rate %>
+  </div>
+  <div class="field">
+    <%= f.label :corrections_value %><br>
+    <%= f.text_field :corrections_value %>
+  </div>
+  <div class="field">
+    <%= f.label :closing_qty %><br>
+    <%= f.number_field :closing_qty %>
+  </div>
+  <div class="field">
+    <%= f.label :closing_rate %><br>
+    <%= f.text_field :closing_rate %>
+  </div>
+  <div class="field">
+    <%= f.label :closing_value %><br>
+    <%= f.text_field :closing_value %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

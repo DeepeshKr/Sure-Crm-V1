@@ -1,0 +1,2 @@
+module ProductStockAdjustsHelper
+end

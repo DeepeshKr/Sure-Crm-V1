@@ -12,7 +12,7 @@
     <% @interaction_transcripts.each do |interaction_transcript| %>
       <tr>
         <td>
-        <%= interaction_transcript.interaction_user.name %> <br>
+        <%= interaction_transcript.interaction_user.name if interaction_transcript.interaction_user %> <br>
 <small> <%= interaction_transcript.created_at %> </small>
  </td>
         <td><%= interaction_transcript.description %></td>

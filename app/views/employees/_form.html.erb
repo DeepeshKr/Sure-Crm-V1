@@ -66,8 +66,8 @@
   </div>
   <div class="col-xs-4">
      <%= f.select(:reporting_to_id, 
-    options_from_collection_for_select(Employee.all, :id, :fullname, selected: @employee.reporting_to_id), 
-    {:prompt => 'Please Choose', label: " Reporting to"})  %>
+    options_from_collection_for_select(@reporting, :id, :name, selected: @employee.reporting_to_id), 
+    {label: " Reporting to"})  %>
     
   </div>
   <div class="col-xs-4">

@@ -6,6 +6,7 @@ respond_to :html, :xml, :json
 
   def index
     if params.has_key?(:search)
+      
       @search = "Search for " <<  params[:search].upcase
        @searchvalue = params[:search].upcase   
       @product_masters = ProductMaster.where("name like ? OR extproductcode like ? or description like ?", "#{@searchvalue}%", "#{@searchvalue}%", "#{@searchvalue}%")
@@ -38,6 +39,9 @@ respond_to :html, :xml, :json
       
       @product_add_on_lists  = ProductVariant.joins(:product_master)
       .where(product_masters: { product_sell_type_id: 10001 })
+      .where(product_masters: { product_sell_type_id: 10040 })
+       .where(product_sell_type_id: 10001)
+       .where(product_sell_type_id: 10040)
 
       #Author.joins(:articles).where(articles: { author: author })
       

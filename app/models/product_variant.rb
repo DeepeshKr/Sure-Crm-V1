@@ -10,6 +10,7 @@ class ProductVariant < ActiveRecord::Base
   has_many :order_line, foreign_key: "productvariant_id" #, polymorphic: true
   has_many :product_list, foreign_key: "product_variant_id"
   has_many :media_tape, foreign_key: "product_variant_id"
+  has_many :media_tape_head, foreign_key: "product_variant_id"
   #validates_uniqueness_of :emailid, :allow_blank => true
   #validates_uniqueness_of :employeecode, allow_blank: false
 

@@ -3,38 +3,39 @@
 <table class="table table-hover">
   <thead>
     <tr>
-      <th colspan="3"> Name</th>
-        <th>Employeecode</th>
-      <th>Designation</th>
-      <th>Mobile</th>
-      <th>Emailid</th>
-      <th>Location</th>
+    <th>Employeecode</th>
+      <th> Name</th>
+        
+     
+      <th>Mobile  emailid</th>
+     
       <th>Employment type</th>
       <th>Employee role</th>
-      <th>Reporting to</th>
+    
       <th>Enable login</th>
-         <th colspan="3"></th>
+         <th colspan="2"></th>
     </tr>
   </thead>
 
   <tbody>
     <% @employees.each do |employee| %>
       <tr>
-        <td><%= employee.title %></td>
-        <td><%= employee.first_name %></td>
-        <td><%= employee.last_name %></td>
         <td><%= employee.employeecode %></td>
-        <td><%= employee.designation %></td>
-        <td><%= employee.mobile %></td>
-        <td><%= employee.emailid %></td>
-        <td><%= employee.location %></td>
+        <td><%= employee.fullname %> <br>
+        <small>  <%= employee.designation %> <br>
+        Reporting to: <%= employee.manager.fullname if employee.manager %>
+        </small>
+        </td>
+      
+         <td><%= employee.mobile %><br>
+        <small><%= employee.emailid %></small></td>
+        
         <td><%= employee.employment_type.name if employee.employment_type %></td>
         <td><%= employee.employee_role.name if employee.employee_role %></td>
-        <td><%= employee.manager.fullname if employee.manager %></td>
-        <td><%= employee.enablelogin %></td>
+         <td><%= employee.enablelogin %></td>
         <td><%= link_to 'Show', employee %></td>
         <td><%= link_to 'Edit', edit_employee_path(employee) %></td>
-        <td><%= link_to 'Destroy', employee, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        
       </tr>
     <% end %>
   </tbody>

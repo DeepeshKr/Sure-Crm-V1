@@ -1,0 +1,67 @@
+<p id="notice"><%= notice %></p>
+<div class="row">
+<div class="col-xs-2">
+<h3>Indian Cities</h3>
+</div>
+<div class="col-xs-10">
+<div class="row">
+  <div class="col-xs-6"><%= render 'search_city' %></div>
+  <div class="col-xs-6"><%= render 'search' %></div>
+</div>
+
+</div>
+</div>
+<br>
+<table class="table table-hover">
+  <thead>
+    <tr>
+      <th>Officename</th>
+      <th>Pincode</th>
+      <th>Deliverystatus</th>
+      <th>Divisionname</th>
+      <th>Regionname</th>
+      <th>Circlename</th>
+      <th>Taluk</th>
+      <th>Districtname</th>
+      <th>Statename</th>
+      
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @india_pincode_lists.each do |india_pincode_list| %>
+      <tr>
+        <td><%= india_pincode_list.officename %></td>
+        <td><%= india_pincode_list.pincode %></td>
+        <td><%= india_pincode_list.deliverystatus %></td>
+        <td><%= india_pincode_list.divisionname %></td>
+        <td><%= india_pincode_list.regionname %></td>
+        <td><%= india_pincode_list.circlename %></td>
+        <td><%= india_pincode_list.taluk %></td>
+        <td><%= india_pincode_list.districtname %></td>
+        <td><%= india_pincode_list.statename %></td>
+        
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+<div class="row">
+<div class="col-xs-4">
+<%= link_to 'New India pincode list', new_india_pincode_list_path, class: "btn btn-primary btn-sm" %>
+</div>
+<div class="col-xs-6 col-offset-xs-2">
+  <div class="row">
+  <%= form_tag import_india_pincode_lists_path, multipart: true do %>
+    <div class="col-xs-6 col-offset-xs-2">
+        <%= file_field_tag :file %>
+    </div>
+    <div class="col-xs-3">
+        <%= submit_tag "Import CSV", class: "btn btn-warning btn-sm" %>
+    </div>
+  <% end %>
+  </div>
+</div>
+</div>
+

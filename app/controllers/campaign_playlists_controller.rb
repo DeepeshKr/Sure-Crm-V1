@@ -25,7 +25,7 @@ class CampaignPlaylistsController < ApplicationController
     medialist = Medium.where("media_group_id not in 10000")
       campaigns = Campaign.where(mediumid: medialist)
 
-     @showingfor
+     #@showingfor
       @for_date = Time.now
     if(params.has_key?(:for_date))
       str = params[:for_date]
@@ -72,12 +72,12 @@ end
 
 
 
-def show
-    set_media_tape
-  # @campaignlist =  Campaign.joins(:medium).where('media.telephone = ?', @order_master.calledno)
-    @orderlines = OrderLine.joins(:order_master).where("order_masters.campaign_playlist_id = ?", params[:id])
-# Parent.joins(:children).where(children:{favorite:true})
-    respond_with(@campaign_playlist, @orderlines)
+  def show
+      set_media_tape
+    # @campaignlist =  Campaign.joins(:medium).where('media.telephone = ?', @order_master.calledno)
+      @orderlines = OrderLine.joins(:order_master).where("order_masters.campaign_playlist_id = ?", params[:id])
+  # Parent.joins(:children).where(children:{favorite:true})
+      respond_with(@campaign_playlist, @orderlines)
   end
 
   def new
@@ -194,7 +194,7 @@ def show
     def activestatus
      @active_status = CampaignPlayListStatus.all.order('id')
     end
-     def proddropdown
+    def proddropdown
      @productvariant = ProductVariant.where('activeid = 10000').order('name')
     end
     def campaign_playlist_params

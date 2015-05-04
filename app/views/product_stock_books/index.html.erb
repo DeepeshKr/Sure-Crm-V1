@@ -1,0 +1,101 @@
+<p id="notice"><%= notice %></p>
+
+<div class="row">
+  <div class="col-xs-2">
+    <h3>Stock Book</h3>
+
+  </div>
+  <div class="col-xs-10">
+    <div class="row">
+      <div class="col-xs-12"><small>Stock Book as part of Accounting Report
+        (currently showing some default value)</small></div>
+      <div class="col-xs-12"><%= render('search') %> </div>
+    </div>
+
+  </div>
+</div>
+
+<br>
+<% if @product_stock_books.present? %>
+
+
+<table class="table table-hover table-bordered">
+  <thead>
+  <tr>
+    <th rowspan="3" colspan="1">Date</th>
+    <th rowspan="2" colspan="2">Opening</th>
+    <th rowspan="2" colspan="2">Purchased</th>
+    <th colspan="6">Returned </th>
+    <th colspan="6">Sold </th>
+    <th rowspan="2" colspan="2">Corrections</th>
+    <th rowspan="2" colspan="2">Closing</th>
+  </tr>
+  <tr>
+    <th colspan="2">Retail </th>
+    <th colspan="2">wholesale</th>
+    <th colspan="2">Branch</th>
+    <th colspan="2">Retail</th>
+    <th colspan="2">Wholesale</th>
+    <th colspan="2">Branch</th>
+  </tr>
+  <tr>
+    <th>Qty</th>
+    <th>Value</th>
+    <th>Qty</th>
+    <th>Value</th>
+    <th>Qty</th>
+    <th>Value</th>
+    <th>Qty</th>
+    <th>Value</th>
+    <th>Qty</th>
+    <th>Value</th>
+    <th>Qty</th>
+    <th>Value</th>
+    <th>Qty</th>
+    <th>Value</th>
+    <th>Qty</th>
+    <th>Value</th>
+    <th>Qty</th>
+    <th>Value</th>
+    <th>Qty</th>
+    <th>Value</th>
+  </tr>
+  </thead>
+
+  <tbody>
+    <% @product_stock_books.each do |product_stock_book| %>
+      <tr>
+        <td><%= product_stock_book.stock_date.strftime('%d-%b-%y') %></td>
+        <td class="text-right"><%= product_stock_book.opening_qty %></td>
+        <td class="text-right"><%= product_stock_book.opening_value %></td>
+        <td class="text-right"><%= product_stock_book.purchased_qty %></td>
+        <td class="text-right"><%= product_stock_book.purchased_value %></td>
+        <td class="text-right"><%= product_stock_book.returned_retail_qty %></td>
+        <td class="text-right"><%= product_stock_book.returned_retail_value %></td>
+        <td class="text-right"><%= product_stock_book.returned_wholesale_qty %></td>
+        <td class="text-right"><%= product_stock_book.returned_wholesale_value %></td>
+        <td class="text-right"><%= product_stock_book.returned_others_qty %></td>
+        <td class="text-right"><%= product_stock_book.returned_others_value %></td>
+        <td class="text-right"><%= product_stock_book.sold_retail_qty %></td>
+        <td class="text-right"><%= product_stock_book.sold_retail_value %></td>
+        <td class="text-right"><%= product_stock_book.sold_wholesale %></td>
+        <td class="text-right"><%= product_stock_book.sold_wholesale_value %></td>
+        <td class="text-right"><%= product_stock_book.sold_branch_qty %></td>
+        <td class="text-right"><%= product_stock_book.sold_branch_value %></td>
+        <td class="text-right"><%= product_stock_book.corrections_qty %></td>
+        <td class="text-right"><%= product_stock_book.corrections_value %></td>
+        <td class="text-right"><%= product_stock_book.closing_qty %></td>
+        <td class="text-right"><%= product_stock_book.closing_value %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+<% end %>
+<br>
+<%= render('create_list') %>
+
+
+<br>
+<!-- Today's Date <%= @prev_datelist %> -->
+<br>
+<%= @datelist %>

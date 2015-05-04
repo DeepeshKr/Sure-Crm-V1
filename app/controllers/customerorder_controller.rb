@@ -5,6 +5,7 @@ before_action :order_line_params, only: [ :add_products]
 before_action :set_order
 before_action :new_call
 #before_action :check_order, except: [:summary] 
+before_action :allowprocessing, except: [:summary, :new_dealer, :dealers]
 before_action :customer_address, only: [ :upsell, :payment, :channel, :review, :summary]
 before_action :customer, only: [ :upsell, :payment, :channel, :review, :summary]
 
@@ -12,56 +13,66 @@ before_action :customer, only: [ :upsell, :payment, :channel, :review, :summary]
 
 #first Step is where the customer number and called no are shown together
 
-  def products
+def products
     new_call
     #if order is not null then create orderline with order id
-   
     @order_line = OrderLine.new()
   
     if @order_id.present?
         @order_line.orderid = @order_id  
-        addon_product_lists  
+        specific_addon_product_lists  
+        editupsellproducts
     end
 
   respond_with(@order_master, @order_lines, @order_line)
-  end
-
-  def offline
-    #if order is not null then create orderline with order id
-    @user_file_name = 'z:/filename.cli'
-
-
-  end
-
-  def upload
-    File.open("my/file/path", "r").each_line do |line|
-  # name: "Angela"    job: "Writer"    ...
-  data = line.split(/\t/)
-  name, job = data.map{|d| d.split(": ")[1] }.flatten
 end
 
-  end
+def offline
+    #if order is not null then create orderline with order id
+    employee = Employee.where(employeecode: current_user.employee_code)
+    @user_file_name =  employee.last.mobile || "Not Set" << ".cli"
 
-  def add_products
+
+end
+
+def uploadcall
+    userfile = params
+     uploaded_io = params[:userfile]
+  
+            File.open(Rails.root.join('public', 'uploads', uploaded_io.original_filename), 'wb') do |file|
+    file.write(uploaded_io.read)
+                    end
+      file = File.join(Rails.root,  'public', 'uploads', uploaded_io.original_filename)
+      #File.read(file)
+      @filename = uploaded_io.original_filename
+       @filedata = File.read(file)
+
+      @na, @ext, @cli, @dnis = @filedata.split('|')
+        # File.open(file, "r").each_line do |line|
+
+
+        # # name: "Angela"    job: "Writer"    ...
+        # data = line.split(/\t/)
+        # @name, @job = data.map{|d| d.split("|")[1] }.flatten
+      #end
+      @order_id = neworder(10040, @cli.strip, @dnis.strip)
+
+      redirect_to neworder_path(:order_id => @order_id)
+end
+
+def add_products
    
     
-    ## check if order id is present on mobileno and calledno are present
-    #else throw error back
-    if params[:order_id].blank? 
-    if (params[:calledno].blank? and params[:mobile].blank? )
-       flash[:error] = "You are trying to place and invalid order / mobile no and called no"
-     return redirect_to neworder_path
-    end
-    end
-
-    new_call
+     new_call
     orderid = 0
          #check if order id present else create new order id using this process
     #check if order created else create new
     if params[:order_id].present?
        @order_id =  order_line_params[:orderid]
      else
-      @order_id = neworder
+      @cli = params[:mobile]
+      @dnis = params[:calledno]
+      @order_id = neworder(10000, @cli, @dnis)
 
        order_line_params[:orderid] = @order_id
        
@@ -69,6 +80,9 @@ end
     #orderid = @order_id
     #flash[:notice] = "Order id is created #{orderid} called from numer #{@mobile} to number #{@calledno}" 
     #flash[:error] = @order_master.errors.full_messages.join("<br/>")
+    if order_line_params[:product_list_id].present?
+
+
     exproductlist = ProductList.find(order_line_params[:product_list_id])
     exproductvariant = ProductVariant.find(exproductlist.product_variant_id)
     @order_lines = OrderLine.where("product_list_id = ? AND orderid = ?", 
@@ -108,10 +122,12 @@ end
                 flash[:error] = @order_line.errors.full_messages.join("<br/>")
             end
         end    
-
+   else
+       flash[:error] = "You have not selected the correct product try to select from the list"
+    end
 
       redirect_to neworder_path(:order_id => @order_id)
-
+   
   end
 
   def add_basic_upsell
@@ -159,22 +175,17 @@ end
   end
 
   def address
-    
-  #@order_lines = OrderLine.where(orderid: @order_master.id)
-  # @mobile = @order_master.mobile || 99225533
-
-  #@customer = Customer.new(mobile: @order_master.mobile)
-  #use this for nested address
-  #customer_address = @customer.customer_address.build(telephone1: @customer.mobile)
-  if @order_master.customer_id.present?
+      @states = State.all.order("name")
+  
+    if @order_master.customer_id.present?
     @customer = Customer.find(@order_master.customer_id)
       success = "Existing Customer found." 
   elsif Customer.where(mobile: @order_master.mobile).present?
     @customer = Customer.where(mobile: @order_master.mobile).last
-     success = "Existing Customer found." 
+     success = "Earlier purchased Customer found." 
   else
     @customer = Customer.new(mobile: @order_master.mobile)
-    notice = "No customer found." 
+    notice = "Add customer address" 
   end
 
   if @order_master.customer_address_id.present?
@@ -197,6 +208,7 @@ end
   end
 
   def add_address
+          @states = State.all.order("name")
 
     if params[:customer_id].present?
       @customer = Customer.find(params[:customer_id])
@@ -232,13 +244,9 @@ end
   end
 
   def upsell
-    product_list_ids = OrderLine.where(orderid: @order_master.id).pluck(:product_list_id)
-     product_masters = ProductMaster.where("productactivecodeid = ?", 10000).pluck("id")
-     product_variants = ProductVariant.where("activeid = ? and product_sell_type_id = ?", 10000, 10001).where(productmasterid: product_masters).pluck("id")
-     @productaddonlists = ProductList.where('active_status_id = ?',  10000).where(product_variant_id: product_variants).where('id not in (?)',product_list_ids)     
-
-    respond_with(@order_master, @order_lines, @customer, @customer_address, @productaddonlists)
-  end
+    editupsellproducts
+    respond_with(@order_master, @order_lines, @customer, @customer_address, @generalproductaddonlists, @upsell_order_lines)
+    end
 
   def add_upsell
       exproductlist = ProductList.find(params[:product_list_id])
@@ -449,6 +457,8 @@ campaignlist =  Campaign.where('TRUNC(startdate) <=  ? and TRUNC(enddate) >= ?',
 end
 
   def review
+
+   
     if @order_master.external_order_no.nil?
 #       ActiveRecord::Base.configurations["development"] => 
 # {"encoding"=>"utf8", "username"=>"foo", "adapter"=>"mysql", "database"=>"bar_development", "host"=>"localhost", "password"=> "baz"}
@@ -458,24 +468,36 @@ end
 
      if @order_master.total < 100
           @show_process = 1
-          flash[:error] = "The Order value is too low to be processed" 
+          flash[:error] = "The Order value #{@order_master.total} is too low to be processed"
      end
-     if @order_master.customer_address_id.nil?
+     if @order_master.customer_address_id.blank?
           @show_process = 1
           flash[:error] = "Customer Address is missing " 
       end
+      if @order_master.customer_id.blank?
+         flash[:error] = "Customer Name and details are missing " 
+      end
       #check for payment mode
-      if @order_master.orderpaymentmode_id.nil?
+      if @order_master.orderpaymentmode_id.blank?
         @show_process = 1
         flash[:error] = " Payment details are missing!" 
       end
   
-      if @order_master.media_id.nil?
+      if @order_master.media_id.blank?
         @show_process = 1
-        flash[:error] = " Media is missing " 
+        flash[:error] = ' Media is missing '
       end
+        reg_product_variants = ProductVariant.where("activeid = ? and product_sell_type_id = ?", 10000, 10000).pluck("id")
+        upsell_product_variants = ProductVariant.where("activeid = ? and product_sell_type_id <> ?", 10000, 10000).pluck("id")
+      
+      @order_lines_regular = OrderLine.where(productvariant_id: reg_product_variants).where(orderid: @order_id)
+      if @order_lines_regular.blank?
+        @show_process = 1
+        flash[:error] = ' You have not added any regular products '
+      end
+       @order_lines_upsell = OrderLine.where(productvariant_id: upsell_product_variants).where(orderid: @order_id)
 
-    
+      customer_address.address3 = 'DIST-' + (@customer_address.address3.strip[0..18].upcase if @customer_address.address3.present?) + '-' + @customer_address.state[0..5].upcase
     customer
     respond_with(@order_master, @order_lines, @customer, @customer_address)
   end
@@ -552,7 +574,31 @@ end
 
 
   private
-
+    def allowprocessing
+         
+      if !params[:order_id].present?
+        return @allow_processing = 1
+      end
+      if @order_master.total < 100
+          return @allow_processing =  1 
+      end
+      if @order_master.customer_address_id.blank?
+       return @allow_processing = 1
+      end
+       if @order_master.customer_id.blank?
+       return @allow_processing = 1
+      end
+      if @order_master.orderpaymentmode_id.blank?
+       return @allow_processing =  1
+      end
+  
+      if @order_master.media_id.blank?
+        return @allow_processing = 1
+      end
+   
+      return @allow_processing = 0
+    
+    end
     def add_product_to_campaign(mediumid)
 
          product_variant_id = OrderLine.where(orderid: @order_master.id).order("id").pluck(:productvariant_id).first
@@ -604,28 +650,44 @@ end
       set_order
       @calledno = params[:calledno] #|| if params[:calledno].present?
       @mobile = params[:mobile] #|| if params[:mobile].present?
+       @channellist =  Medium.where('dnis = ?',  params[:calledno])
       if params[:order_id].present?
        @order_id = params[:order_id] 
        @customer_id = @order_master.customer_id 
        @calledno = @order_master.calledno
        @mobile = @order_master.mobile
+
+        @channellist =  Medium.where('dnis = ?', @order_master.calledno)
       end
       
-      @empcode = current_user.employee_code
-      @empid = current_user.id
-          
-      @interactioncategorylist =  InteractionCategory.where("sortorder < 100")
+       @empcode = current_user.employee_code
+      #@empid = current_user.id
+      @empid = Employee.where(employeecode: @empcode).first.id
+      
+      #used to report call details
+      @interactioncategorylist =  InteractionCategory.where("sortorder > 100")
+
+      #used to dispose calls
       @interactiondisposelist =  InteractionCategory.where("sortorder < 100")
       @interactionprioritylist =  InteractionPriority.all
       
     end
+    def editupsellproducts
+        product_masters = ProductMaster.where("productactivecodeid = ?", 10000).pluck("id")
+        product_variants = ProductVariant.where("activeid = ? and product_sell_type_id = ?", 10000, 10001).where(productmasterid: product_masters).pluck("id")
+        @generalproductaddonlists = ProductList.where('active_status_id = ?',  10000).where(product_variant_id: product_variants).joins(:product_variant).order("product_variants.name")  
 
-    def neworder
-      @order_master = OrderMaster.create!(calledno: @calledno, order_status_master_id: 10000, 
+        #general_addon_product_list
+        @upsell_order_lines = OrderLine.where(productvariant_id: product_variants).where(orderid: @order_id)
+
+    end
+
+    def neworder(source, cli, dnis)
+      @order_master = OrderMaster.create!(calledno: dnis, order_status_master_id: 10000, 
         orderdate: Time.zone.now, pieces: 0,subtotal: 0, taxes: 0, codcharges: 0, shipping:0, 
-        total: 0, order_source_id: 10000, employeecode: @empcode, employee_id: @empid, 
+        total: 0, order_source_id: source.to_i, employeecode: @empcode, employee_id: @empid, 
         userip: request.remote_ip, sessionid: session.id,
-        order_for_id: 10000, mobile: @mobile)
+        order_for_id: 10000, mobile: cli)
 
       return @order_master.id
     end
@@ -682,33 +744,23 @@ end
     def productlist
       product_masters = ProductMaster.where("productactivecodeid = ?", 10000).pluck("id")
       product_variants = ProductVariant.where("activeid = ? and product_sell_type_id = ?", 10000, 10000).where(productmasterid: product_masters).pluck("id")
-      @productlist = ProductList.where('active_status_id = ?',  10000).where(product_variant_id: product_variants).joins(:product_variant).order("product_variants.name")
+    #  @productlist = ProductList.where('active_status_id = ?',  10000).where(product_variant_id: product_variants).joins(:product_variant).order("product_variants.name")
     
-      specific_addon_product_list
+      @productlist = ProductList.where('active_status_id = ?',  10000).joins(:product_variant).order("product_variants.name")
+    
+     
     end
 
-    def addon_product_list
-      product_masters = ProductMaster.where("productactivecodeid = ?", 10000).pluck("id")
-      product_variants = ProductVariant.where("activeid = ? and product_sell_type_id = ?", 10000, 10001).where(productmasterid: product_masters).pluck("id")
-      @productaddonlist = ProductList.where('active_status_id = ?',  10000).where(product_variant_id: product_variants).joins(:product_variant).order("product_variants.name")  
-
-      @productaddonlists = ProductList.where('active_status_id = ?',  10000).where(product_variant_id: product_variants).where('id not in (?)',product_list_ids)  
+    def specific_addon_product_lists
+         @specificproductaddonlist = nil  
+         if @order_master.present?
+          productid = OrderLine.joins(:product_variant).where("activeid = ?", 10000).where(orderid: @order_master.id).pluck(:product_master_id)
+            if ProductMasterAddOn.where(product_master_id: productid).present? 
+              @specificproductaddonlist = ProductMasterAddOn.where(product_master_id: productid)
+            end
+         end
     end
-
-     def specific_addon_product_list
-      product_masters = ProductMaster.where("productactivecodeid = ?", 10000).pluck("id")
-      product_variants = ProductVariant.where("activeid = ? and product_sell_type_id = ?", 10000, 10040).where(productmasterid: product_masters).pluck("id")
-      @productaddonlist = ProductList.where('active_status_id = ?',  10000).where(product_variant_id: product_variants).joins(:product_variant).order("product_variants.name")     
-    end
-
-    def addon_product_lists
-   # @product_master_add_ons = ProductList.all
-    @product_master_add_ons = nil  
-          productid = OrderLine.where(orderid: @order_master.id).pluck(:product_master_id)
-          if ProductMasterAddOn.where(product_master_id: productid).present? 
-          @product_master_add_ons = ProductMasterAddOn.where(product_master_id: productid)
-          end
-    end
+   
   def update_customer_order_list
       creditcardno =  nil
       expmonth = nil
@@ -723,204 +775,200 @@ end
           #=> returns a 0-padded string of the hour, like "07"
           nowminute = t.strftime('%M').to_i
 
+       creditcardcharges = ''
 
       if @order_master.orderpaymentmode_id == 10000
-         customer_credit_card = CustomerCreditCard.where(customer_id: @order_master.customer_id).last
-
+        customer_credit_card = CustomerCreditCard.where(customer_id: @order_master.customer_id).last
         creditcardno =  customer_credit_card.card_no.truncate(20)
         expmonth = customer_credit_card.expiry_mon.truncate(20)
         expyear = customer_credit_card.expiry_yr_string.truncate(20)
         cardtype = CreditCard.find_type(creditcardno).truncate(20)
+        creditcardcharges = "Y"
       end
 
       if @order_master.external_order_no.nil?
-        #       ActiveRecord::Base.configurations["development"] => 
-# {"encoding"=>"utf8", "username"=>"foo", "adapter"=>"mysql", "database"=>"bar_development", "host"=>"localhost", "password"=> "baz"}
- 
-          hash = ActiveRecord::Base.connection.exec_query("select order_seq.nextval from dual")[0]
-          order_num =  hash["nextval"]
-          flash[:notice] = "Order Number is #{order_num}" 
+         qty1 = 0
+         qty2 = 0
+         qty3 = 0
+         qty4 = 0
+         qty5 = 0
+         qty6 = 0
+         qty7 = 0
+         qty8 = 0
+         qty9 = 0
+         qty10 = 0
+         prod1 = ""
+         prod2 = ""
+         prod3 = ""
+         prod4 = ""
+         prod5 = ""
+         prod6 = ""
+         prod7 = ""
+         prod8 = ""
+         prod9 = ""
+         prod10 = ""
 
-          customer_order_list =  CustomerOrderList.create(ordernum: order_num.to_i,
-          orderdate: Time.zone.now,
-          title: @order_master.customer.salute.truncate(5).upcase, 
-          fname: @order_master.customer.first_name.truncate(30).upcase, 
-          lname: @order_master.customer.last_name.truncate(30).upcase, 
-          add1: @order_master.customer_address.address1.truncate(30).upcase, 
-          add2: @order_master.customer_address.address2.truncate(30).upcase, 
-          add3: (@order_master.customer_address.address3.truncate(30).upcase if @order_master.customer_address.address3.present?), 
-          landmark: @order_master.customer_address.landmark.truncate(50).upcase, 
-          city: @order_master.customer_address.city.truncate(30).upcase, 
-          mstate: @order_master.customer_address.state.truncate(50).upcase, 
-          state: @order_master.customer_address.st.truncate(5).upcase, 
-          pincode: @order_master.customer_address.pincode, 
-          mstate: @order_master.customer_address.state.truncate(50).upcase, 
-          tel1: @order_master.customer.mobile.truncate(20).upcase, 
-          tel2: (@order_master.customer_address.telephone1.truncate(20).upcase if @order_master.customer_address.telephone1.present?),
-          fax: (@order_master.customer_address.fax.truncate(20).upcase if @order_master.customer_address.fax.present?), 
-          email: (@order_master.customer.emailid.truncate(20).upcase if @order_master.customer.emailid.present?), 
-          ccnumber:  creditcardno, 
-          expmonth:  expmonth, 
-          expyear:  expyear, 
-          cardtype: cardtype,
-          ipadd: (@order_master.userip.truncate(50) if @order_master.userip.present?), 
-          dnis: @order_master.calledno,
-          channel: @order_master.medium.name.truncate(50).upcase, 
-          carddisc: @order_master.creditcardcharges, 
-          chqdisc: @order_master.creditcardcharges,
-          totalamt: @order_master.subtotal + @order_master.shipping + @order_master.codcharges + @order_master.servicetax + @order_master.maharastracodextra ,
-          trandate: Time.zone.now,
-          username: @order_master.employee.name.truncate(50).upcase,
-          oper_no: @order_master.employeecode,
-          dt_hour: nowhour,
-          dt_min: nowminute,
-          uae_status: @order_master.customer.gender.truncate(50).upcase)
-          
          orderline1 = OrderLine.where("orderid = ?", order_id)
-          if orderline1.exists?
-            customer_order_list.update(prod1: orderline1.first.product_variant.extproductcode, qty1: orderline1.first.pieces)
+          if orderline1.present?
+            qty1 = orderline1.first.pieces.to_i
+            prod1 = orderline1.first.product_list.extproductcode[0..9].upcase
+            #customer_order_list.update(qty1: qty1, prod1: prod1)
           end
-          orderline2 = OrderLine.where("orderid = ?", order_id).offset(1)
-          if orderline2.exists?
-            customer_order_list.update(prod2: orderline2.first.product_variant.extproductcode, qty2: orderline2.first.pieces)
+          
+          orderline2 = OrderLine.where("orderid = ?", order_id).order("id").offset(1)
+          if orderline2.present?
+            qty2 = orderline2.first.pieces.to_i
+            prod2 = orderline2.first.product_list.extproductcode[0..9].upcase
+            #customer_order_list.update(prod2: prod2, qty2: qty2)
           end
-          orderline3 = OrderLine.where("orderid = ?", order_id).offset(2)
-          if orderline3.exists?
-            customer_order_list.update(prod3: orderline3.first.product_variant.extproductcode, qty3: orderline3.first.pieces)
+          orderline3 = OrderLine.where("orderid = ?", order_id).order("id").offset(2)
+          if orderline3.present?
+            qty3 = orderline3.first.pieces.to_i
+            prod3 = orderline3.first.product_list.extproductcode[0..9].upcase
+            #customer_order_list.update(prod3: orderline3.first.product_list.extproductcode.truncate(10).upcase, qty3: orderline3.first.pieces.to_i)
           end
-          orderline4 = OrderLine.where("orderid = ?", order_id).offset(3)
-          if orderline4.exists?
-            customer_order_list.update(prod4: orderline4.first.product_variant.extproductcode, qty4: orderline4.first.pieces)
+          orderline4 = OrderLine.where("orderid = ?", order_id).order("id").offset(3)
+          if orderline4.present?
+            qty4 = orderline4.first.pieces.to_i
+            prod4 = orderline4.first.product_list.extproductcode[0..9].upcase
+            #customer_order_list.update(prod4: orderline4.first.product_list.extproductcode.truncate(10).upcase, qty4: orderline4.first.pieces.to_i)
           end
           orderline5 = OrderLine.where("orderid = ?", order_id).offset(4)
-          if orderline5.exists?
-            customer_order_list.update(prod5: orderline5.first.product_variant.extproductcode, qty5: orderline5.first.pieces)
+          if orderline5.present?
+            qty5 = orderline5.first.pieces.to_i
+            prod5 = orderline5.first.product_list.extproductcode[0..9].upcase
+            #customer_order_list.update(prod5: orderline5.first.product_list.extproductcode.truncate(10).upcase, qty5: orderline5.first.pieces.to_i)
           end
           orderline6 = OrderLine.where("orderid = ?", order_id).offset(5)
-          if orderline6.exists?
-            customer_order_list.update(prod6: orderline6.first.product_variant.extproductcode, qty6: orderline6.first.pieces)
+          if orderline6.present?
+            qty6 = orderline6.first.pieces.to_i
+            prod6 = orderline6.first.product_list.extproductcode[0..9].upcase
+            #customer_order_list.update(prod6: orderline6.first.product_list.extproductcode.truncate(10).upcase, qty6: orderline6.first.pieces.to_i)
           end
           orderline7 = OrderLine.where("orderid = ?", order_id).offset(6)
-          if orderline7.exists?
-            customer_order_list.update(prod7: orderline7.first.product_variant.extproductcode, qty7: orderline7.first.pieces)
+          if orderline7.present?
+            qty7 = orderline7.first.pieces.to_i
+            prod7 = orderline7.first.product_list.extproductcode[0..9].upcase
+            #customer_order_list.update(prod7: orderline7.first.product_list.extproductcode.truncate(10).upcase, qty7: orderline7.first.pieces.to_i)
           end
           orderline8 = OrderLine.where("orderid = ?", order_id).offset(7)
-          if orderline8.exists?
-            customer_order_list.update(prod8: orderline8.first.product_variant.extproductcode, qty8: orderline8.first.pieces)
+          if orderline8.present?
+            qty8 = orderline8.first.pieces.to_i
+            prod8 = orderline8.first.product_list.extproductcode[0..9].upcase
+            #customer_order_list.update(prod8: orderline8.first.product_list.extproductcode.truncate(10).upcase, qty8: orderline8.first.pieces.to_i)
           end
           orderline9 = OrderLine.where("orderid = ?", order_id).offset(8)
-          if orderline9.exists?
-            customer_order_list.update(prod9: orderline9.first.product_variant.extproductcode, qty9: orderline9.first.pieces)
+          if orderline9.present?
+            qty9 = orderline9.first.pieces.to_i
+            prod9 = orderline9.first.product_list.extproductcode[0..9].upcase
+            #customer_order_list.update(prod9: orderline9.first.product_list.extproductcode.truncate(10).upcase, qty9: orderline9.first.pieces.to_i)
           end
           orderline10 = OrderLine.where("orderid = ?", order_id).offset(9)
           # if orderline10.exists?
           #   customer_order_list.update(prod10: orderline10.first.product_variant.extproductcode, qty10: orderline10.first.pieces)
           # end
           if @order_master.customer_address.st.upcase == "MAH"
-             customer_order_list.update(prod10: 2.5, qty10: 1)
+             qty10 = 1
+            prod10 = "2.5"
+            
           end
+
+
+          ActiveRecord::Base.establish_connection("#{Rails.env}_cccrm")
+          hash =  ActiveRecord::Base.connection.exec_query("select ordernumc.nextval from dual")[0]
+          #order_num =  hash["nextval"]
+
+          ActiveRecord::Base.establish_connection("#{Rails.env}_testora")
+        
+          #hash = ActiveRecord::Base.connection.exec_query("select order_seq.nextval from dual")[0]
+          
+          order_num =  hash["nextval"]
+
+          flash[:notice] = "Order Number is #{order_num}" 
+          #CustomerOrderList
+          customer_order_list = CustomerOrderList.create(ordernum: order_num,
+          orderdate: Time.zone.now,
+          title: @order_master.customer.salute[0..4].upcase, 
+          fname: @order_master.customer.first_name[0..29].upcase, 
+          lname: @order_master.customer.last_name[0..29].upcase, 
+          add1: @order_master.customer_address.address1[0..29].upcase, 
+          add2: @order_master.customer_address.address2[0..29].upcase, 
+          add3: (@order_master.customer_address.address3[0..29].upcase if @order_master.customer_address.address3.present?),
+          landmark: @order_master.customer_address.landmark[0..49].upcase, 
+          city: @order_master.customer_address.city[0..29].upcase, 
+          mstate: @order_master.customer_address.state[0..49].upcase, 
+          state: @order_master.customer_address.st[0..4].upcase, 
+          pincode: @order_master.customer_address.pincode, 
+          mstate: @order_master.customer_address.state[0..49].upcase, 
+          tel1: @order_master.customer.mobile[0..19].upcase, 
+          tel2: (@order_master.customer_address.telephone1[0..19].upcase if @order_master.customer_address.telephone1.present?),
+          fax: (@order_master.customer_address.fax[0..19].upcase if @order_master.customer_address.fax.present?), 
+          email: (@order_master.customer.emailid[0..19].upcase if @order_master.customer.emailid.present?), 
+          ccnumber:  creditcardno, 
+          expmonth:  expmonth, 
+          expyear:  expyear, 
+          cardtype: cardtype,
+          carddisc: creditcardcharges, 
+          ipadd: (@order_master.userip[0..49] if @order_master.userip.present?), 
+          dnis: @order_master.calledno,
+          channel: @order_master.medium.name.strip[0..48].upcase, 
+          chqdisc: @order_master.creditcardcharges,
+          totalamt: @order_master.subtotal + @order_master.shipping + @order_master.codcharges + @order_master.servicetax + @order_master.maharastracodextra ,
+          trandate: Time.zone.now,
+          username: (@order_master.employee.name[0..49].upcase || current_user.name.truncate(50).upcase if @order_master.employee.present?),
+          oper_no: @order_master.employeecode,
+          dt_hour: nowhour,
+          dt_min: nowminute,
+          uae_status: @order_master.customer.gender[0..49].upcase,
+          prod1: prod1, prod2: prod2, prod3: prod3, prod4: prod4, prod5: prod5, prod6: prod6, prod7: prod7, prod8:prod8, prod9: prod9, prod10: prod10,
+          qty1: qty1, qty2: qty2, qty3: qty3, qty4: qty4, qty5: qty5, qty6: qty6, qty7: qty7, qty8: qty8, qty9: qty9, qty10: qty10)
+      
+          #CUSTDETAILS
+          customerdetails = CUSTDETAILS.create(ordernum: order_num,
+          orderdate: Time.zone.now,
+          title: @order_master.customer.salute[0..4].upcase, 
+          fname: @order_master.customer.first_name[0..29].upcase, 
+          lname: @order_master.customer.last_name[0..29].upcase, 
+          add1: @order_master.customer_address.address1[0..29].upcase, 
+          add2: @order_master.customer_address.address2[0..29].upcase, 
+          add3: 'DIST-' + (@order_master.customer_address.address3[0..17].upcase if @order_master.customer_address.address3.present?) + '-' + @order_master.customer_address.state[0..5].upcase,
+          landmark: @order_master.customer_address.landmark[0..49].upcase, 
+          city: @order_master.customer_address.city[0..29].upcase, 
+          mstate: @order_master.customer_address.state[0..49].upcase, 
+          state: @order_master.customer_address.st[0..4].upcase, 
+          pincode: @order_master.customer_address.pincode, 
+          mstate: @order_master.customer_address.state[0..49].upcase, 
+          tel1: @order_master.customer.mobile[0..19].upcase, 
+          tel2: (@order_master.customer_address.telephone1[0..19].upcase if @order_master.customer_address.telephone1.present?),
+          fax: (@order_master.customer_address.fax[0..19].upcase if @order_master.customer_address.fax.present?), 
+          email: (@order_master.customer.emailid[0..19].upcase if @order_master.customer.emailid.present?), 
+          ccnumber:  creditcardno, 
+          expmonth:  expmonth, 
+          expyear:  expyear, 
+          cardtype: cardtype,
+          carddisc: creditcardcharges, 
+          ipadd: (@order_master.userip[0..49] if @order_master.userip.present?), 
+          dnis: @order_master.calledno,
+          channel: @order_master.medium.name.strip[0..48].upcase, 
+          chqdisc: @order_master.creditcardcharges,
+          totalamt: @order_master.subtotal + @order_master.shipping + @order_master.codcharges + @order_master.servicetax + @order_master.maharastracodextra ,
+          trandate: Time.zone.now,
+          username: (@order_master.employee.name[0..49].upcase || current_user.name.truncate(50).upcase if @order_master.employee.present?),
+          oper_no: @order_master.employeecode,
+          dt_hour: nowhour,
+          dt_min: nowminute,
+          uae_status: @order_master.customer.gender[0..49].upcase,
+          prod1: prod1, prod2: prod2, prod3: prod3, prod4: prod4, prod5: prod5, prod6: prod6, prod7: prod7, prod8:prod8, prod9: prod9, prod10: prod10,
+          qty1: qty1, qty2: qty2, qty3: qty3, qty4: qty4, qty5: qty5, qty6: qty6, qty7: qty7, qty8: qty8, qty9: qty9, qty10: qty10)
+      
+          
           #- Integer update with customer order id
           @order_master.update(external_order_no: order_num.to_s, order_status_master_id: 10003) 
 
           return order_num.to_s #customer_order_list.ordernum
-          #external_order_no - string update with customer order id
-         else
-          if CustomerOrderList.where(ordernum: @order_master.external_order_no.to_i).present?
-
-
-              customer_order_lists = CustomerOrderList.where(ordernum: @order_master.external_order_no.to_i)
-          customer_order_list = customer_order_lists.first
-          customer_order_list.update(orderdate: Time.zone.now,
-          title: @order_master.customer.salute.truncate(5).upcase, 
-          fname: @order_master.customer.first_name.truncate(30).upcase,
-          lname: @order_master.customer.last_name.truncate(30).upcase,  
-          add1: @order_master.customer_address.address1.truncate(30).upcase, 
-          add2: @order_master.customer_address.address2.truncate(30).upcase, 
-          add3: (@order_master.customer_address.address3.truncate(30).upcase if @order_master.customer_address.address3.present?), 
-          landmark: @order_master.customer_address.landmark.truncate(50).upcase, 
-          city: @order_master.customer_address.city.truncate(30).upcase, 
-          state: @order_master.customer_address.state.truncate(5).upcase, 
-          pincode: @order_master.customer_address.pincode, 
-          mstate: @order_master.customer_address.state.truncate(50).upcase, 
-          tel1: @order_master.customer.mobile.truncate(20).upcase, 
-          tel2: (@order_master.customer_address.telephone1.truncate(20).upcase if @order_master.customer_address.telephone1.present?),
-          fax: (@order_master.customer_address.fax.truncate(20).upcase if @order_master.customer_address.fax.present?), 
-          email: (@order_master.customer.emailid.truncate(20).upcase if @order_master.customer.emailid.present?), 
-          ccnumber:  creditcardno, 
-          expmonth:  expmonth, 
-          expyear:  expyear, 
-          cardtype: cardtype,
-          ipadd: (@order_master.userip.truncate(50).upcase if @order_master.userip.present?), 
-          dnis: @order_master.calledno,
-          channel: @order_master.medium.name.truncate(50).upcase, 
-          carddisc: @order_master.creditcardcharges, 
-          chqdisc: @order_master.creditcardcharges,
-         totalamt: @order_master.subtotal + @order_master.shipping + @order_master.codcharges + @order_master.servicetax + @order_master.maharastracodextra ,
-          trandate: Time.zone.now,
-          username: @order_master.employee.name.truncate(50).upcase,
-          oper_no: @order_master.employeecode,
-          dt_hour: nowhour,
-          dt_min: nowminute,
-          uae_status: @order_master.customer.gender.truncate(50).upcase)     
-
-          
-          orderline1 = OrderLine.where("orderid = ?", order_id)
-          if orderline1.exists?
-            customer_order_list.update(prod1: orderline1.first.product_variant.extproductcode, qty1: orderline1.first.pieces)
-          end
-          orderline2 = OrderLine.where("orderid = ?", order_id).offset(1)
-          if orderline2.exists?
-            customer_order_list.update(prod2: orderline2.first.product_variant.extproductcode, qty2: orderline2.first.pieces)
-          end
-          orderline3 = OrderLine.where("orderid = ?", order_id).offset(2)
-          if orderline3.exists?
-            customer_order_list.update(prod3: orderline3.first.product_variant.extproductcode, qty3: orderline3.first.pieces)
-          end
-          orderline4 = OrderLine.where("orderid = ?", order_id).offset(3)
-          if orderline4.exists?
-            customer_order_list.update(prod4: orderline4.first.product_variant.extproductcode, qty4: orderline4.first.pieces)
-          end
-          orderline5 = OrderLine.where("orderid = ?", order_id).offset(4)
-          if orderline5.exists?
-            customer_order_list.update(prod5: orderline5.first.product_variant.extproductcode, qty5: orderline5.first.pieces)
-          end
-          orderline6 = OrderLine.where("orderid = ?", order_id).offset(5)
-          if orderline6.exists?
-            customer_order_list.update(prod6: orderline6.first.product_variant.extproductcode, qty6: orderline6.first.pieces)
-          end
-          orderline7 = OrderLine.where("orderid = ?", order_id).offset(6)
-          if orderline7.exists?
-            customer_order_list.update(prod7: orderline7.first.product_variant.extproductcode, qty7: orderline7.first.pieces)
-          end
-          orderline8 = OrderLine.where("orderid = ?", order_id).offset(7)
-          if orderline8.exists?
-            customer_order_list.update(prod8: orderline8.first.product_variant.extproductcode, qty8: orderline8.first.pieces)
-          end
-          orderline9 = OrderLine.where("orderid = ?", order_id).offset(8)
-          if orderline9.exists?
-            customer_order_list.update(prod9: orderline9.first.product_variant.extproductcode, qty9: orderline9.first.pieces)
-          end
-          orderline10 = OrderLine.where("orderid = ?", order_id).offset(9)
-          # if orderline10.exists?
-          #   customer_order_list.update(prod10: orderline10.first.product_variant.extproductcode, qty10: orderline10.first.pieces)
-          # end
-          if @order_master.customer_address.st.upcase == "MAH"
-             customer_order_list.update(prod10: 2.5, qty10: 1)
-          end
-
-          #process only that order which is not processed
        
-           if @order_master.order_status_master_id < 10003
-            @order_master.update( order_status_master_id:10003 ) 
-          end    
 
-         
-          return customer_order_list.ordernum
-           else
-            return "No order updated"
-           end
-
-            end
+      end
 
 
   end

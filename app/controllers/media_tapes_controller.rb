@@ -15,7 +15,11 @@ class MediaTapesController < ApplicationController
   end
 
   def new
-    @media_tape = MediaTape.new(tape_ext_ref_id: last_ext_tape_id, duration_secs: 0)
+   #find_sort_order() 
+          @rand = rand(10000 .. 99999) # this generator a number between 1 to 50
+   
+    @media_tape = MediaTape.new(tape_ext_ref_id: last_ext_tape_id, duration_secs: 0,
+      unique_tape_name: @rand)
     respond_with(@media_tape)
   end
 
@@ -31,6 +35,7 @@ class MediaTapesController < ApplicationController
           rand = rand(10000 .. 99999) # this generator a number between 1 to 50
           tape_params[:unique_tape_name] = rand
         end
+
           tapename = tape_params[:name]
         if params[:file_parts].to_i > 0
           tapename = tapename << "_" << params[:file_parts].to_s
@@ -47,7 +52,7 @@ class MediaTapesController < ApplicationController
            flash[:notice] = @media_tape.errors.full_messages.join("<br/>")
         end
     
-        respond_with(@media_tape)
+        respond_with(@media_tape.media_tape_head)
   end
 
   def update
@@ -133,7 +138,7 @@ class MediaTapesController < ApplicationController
       params.require(:media_tape).permit(:name,:release_date, :duration_secs, 
         :tape_ext_ref_id, :unique_tape_name, 
         :media_id, :product_variant_id, :description, :file_parts, 
-        :file_extenstion)
+        :file_extenstion, :media_tape_head_id, :sort_order)
 
     end
     def last_ext_tape_id
@@ -143,6 +148,21 @@ class MediaTapesController < ApplicationController
           return @last_tape_id = media_tape.tape_ext_ref_id + 1
       else
         return @last_tape_id =  1
+
+      end
+    
+    end
+    def find_sort_order(media_tape_head_id)  
+        media_tape = MediaTape.where('media_tape_head_id = ?', media_tape_head_id).order("sort_order")
+      if media_tape.present?
+        if media_tape.last.sort_order.present?
+          return @sort_order = media_tape.last.sort_order.to_i + 1
+        else
+          return @sort_order =  1
+        end
+          
+      else
+        return @sort_order =  1
 
       end
     

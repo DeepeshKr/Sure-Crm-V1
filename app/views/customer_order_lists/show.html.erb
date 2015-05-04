@@ -1,4 +1,239 @@
 <p id="notice"><%= notice %></p>
+<h3>Listing Customer Order Lists</h3>
 
-<%= link_to 'Edit', edit_customer_order_list_path(@customer_order_list) %> |
-<%= link_to 'Back', customer_order_lists_path %>
+<table class="table table-hover">
+  <thead>
+    <tr>
+    <th>Identify</th>
+    <th>Name Address</th>
+   
+    
+     <th>Ordered Products</th>
+
+    
+    </tr>
+  </thead>
+
+  <tbody>
+    
+   <tr>
+      <td>
+          <table class="table table-hover">
+          <tr>
+            <td colspan="3">
+           <strong> Order Num <%= @customer_order_list.ordernum %> </strong>
+            </td>
+          </tr>
+
+          <tr>
+            <td colspan="3">
+              <%= @customer_order_list.orderdate %> 
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <%= @customer_order_list.channel %> 
+            </td>
+            <td>
+             
+            </td>
+             <td>
+              <%= @customer_order_list.dnis %>
+            </td>
+          </tr>
+          <tr>
+            <td>
+            User  
+            </td>
+            <td>
+             <%= @customer_order_list.username %> 
+            </td>
+             <td>
+             IP <%= @customer_order_list.ipadd %>
+            </td>
+          </tr>
+         
+          </table>
+  </td>
+
+ <td>
+ <table class="table table-hover">
+   <tr>
+<td colspan="4">
+<%= @customer_order_list.title %> <%= @customer_order_list.fname %> <%= @customer_order_list.lname %>
+</td>
+</tr>
+<tr>
+<td colspan="4">
+ <%= @customer_order_list.add1 %> <%= @customer_order_list.add2 %> <%= @customer_order_list.add3 %> <%= @customer_order_list.landmark %>
+</td>
+</tr>
+<tr>
+<td>
+  <%= @customer_order_list.city %>
+</td>
+<td>
+ <%= @customer_order_list.pincode %>
+</td>
+<td>
+<%= @customer_order_list.state %>
+</td>
+<td>
+<%= @customer_order_list.mstate %>
+</td>
+<tr>
+  <td>
+    <%= @customer_order_list.tel1 %>
+  </td>
+  <td>
+    <%= @customer_order_list.tel2 %>
+  </td>
+  <td>
+    <%= @customer_order_list.fax %>
+  </td>
+  <td>
+    <%= @customer_order_list.email %>
+  </td>
+
+</tr>
+<tr>
+<td>
+<%= @customer_order_list.ccnumber %>
+</td>
+<td>
+ <%= @customer_order_list.expmonth %> <%= @customer_order_list.expyear %>
+</td>
+<td>
+  <%= @customer_order_list.cardtype %>
+</td>
+   </tr>
+<tr>  
+<td>
+Amount
+</td>
+<td>
+  <%= @customer_order_list.carddisc %>
+</td>
+<td>
+  <%= @customer_order_list.totalamt %>
+</td>
+</tr>
+ </table>
+ 
+<td>
+<table class="table table-hover">
+  <tr>
+      <th>
+        Prod
+      </th>
+      <th>
+        Pcs
+      </th>
+    </tr>
+    <tr>
+      <td>
+        <%= @customer_order_list.prod1 %>
+      </td>
+      <td>
+         <%= @customer_order_list.qty1 %>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <%= @customer_order_list.prod2 %>
+      </td>
+      <td>
+         <%= @customer_order_list.qty2 %>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <%= @customer_order_list.prod3 %>
+      </td>
+      <td>
+         <%= @customer_order_list.qty3 %>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <%= @customer_order_list.prod4 %>
+      </td>
+      <td>
+         <%= @customer_order_list.qty4 %>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <%= @customer_order_list.prod5 %>
+      </td>
+      <td>
+         <%= @customer_order_list.qty5 %>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <%= @customer_order_list.prod6 %>
+      </td>
+      <td>
+         <%= @customer_order_list.qty6 %>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <%= @customer_order_list.prod7 %>
+      </td>
+      <td>
+         <%= @customer_order_list.qty7 %>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <%= @customer_order_list.prod8 %>
+      </td>
+      <td>
+         <%= @customer_order_list.qty8 %>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <%= @customer_order_list.prod9 %>
+      </td>
+      <td>
+         <%= @customer_order_list.qty9 %>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <%= @customer_order_list.prod10 %>
+      </td>
+      <td>
+         <%= @customer_order_list.qty10 %>
+      </td>
+    </tr>
+</table>
+  <td>
+       
+        
+      </tr>
+ 
+  </tbody>
+</table>
+<br>
+<div class="row">
+<div class="col-xs-1">
+	<%= link_to 'Edit', edit_customer_order_list_path(@customer_order_list), class: "btn btn-primary btn-sm" %> 
+</div>
+<div class="col-xs-1">
+	<%= link_to 'Back', customer_order_lists_path, class: "btn btn-primary btn-sm" %>
+</div>
+
+<div class="col-xs-3 col-xs-offset-7" style="visibility:hidden;">
+	 <%= form_tag("/inoracle", method: "post") do  %>
+	 <%= hidden_field_tag :id, @customer_order_list.id %>
+	
+	 <%= submit_tag "Push to Oracle", name: nil, class: "btn btn-danger" %>
+	 <% end %>
+</div>
+</div>
+
+

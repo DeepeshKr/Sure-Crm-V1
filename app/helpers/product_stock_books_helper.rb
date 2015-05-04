@@ -1,0 +1,2 @@
+module ProductStockBooksHelper
+end

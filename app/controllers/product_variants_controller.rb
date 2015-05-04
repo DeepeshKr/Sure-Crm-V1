@@ -37,7 +37,7 @@ class ProductVariantsController < ApplicationController
         @result = nil
        end
      
-    else
+    else 
        @result = nil
     end
   end

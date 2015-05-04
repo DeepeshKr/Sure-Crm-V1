@@ -1,0 +1,19 @@
+<%= simple_form_for(@india_pincode_list) do |f| %>
+  <%= f.error_notification %>
+
+  <div class="form-inputs">
+    <%= f.input :officename %>
+    <%= f.input :pincode %>
+    <%= f.input :deliverystatus %>
+    <%= f.input :divisionname %>
+    <%= f.input :regionname %>
+    <%= f.input :circlename %>
+    <%= f.input :taluk %>
+    <%= f.input :districtname %>
+    <%= f.input :statename %>
+  </div>
+
+  <div class="form-actions">
+    <%= f.button :submit %>
+  </div>
+<% end %>

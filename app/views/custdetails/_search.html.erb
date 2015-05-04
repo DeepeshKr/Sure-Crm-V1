@@ -1,0 +1,15 @@
+<div class="row">
+ <%= form_tag("/custdetailsreport", method: "get") do  %>
+
+<div class="col-xs-9">
+<div class="input-daterange input-group">
+<%= text_field_tag(:from_date, nil, :data => {:provide => "datepicker"}, :class => "form-control", :required => "true" )   %>
+<span class="input-group-addon">to</span>
+<%= text_field_tag(:to_date, nil, :data => {:provide => "datepicker"}, :class => "form-control", :required => "true" )  %>
+</div>
+</div>
+<div class="col-xs-3">
+	<%= submit_tag "Ok", name: nil, class: "btn btn-primary" %>
+</div>
+<% end %>
+</div>

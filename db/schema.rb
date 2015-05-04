@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150327061310) do
+ActiveRecord::Schema.define(version: 20150503081422) do
 
   create_table "address_types", force: true do |t|
     t.string   "name"
@@ -292,6 +292,27 @@ ActiveRecord::Schema.define(version: 20150327061310) do
     t.datetime "updated_at"
   end
 
+  create_table "india_city_lists", force: true do |t|
+    t.string   "name"
+    t.string   "state"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "india_pincode_lists", force: true do |t|
+    t.string   "officename"
+    t.string   "pincode"
+    t.string   "deliverystatus"
+    t.string   "divisionname"
+    t.string   "regionname"
+    t.string   "circlename"
+    t.string   "taluk"
+    t.string   "districtname"
+    t.string   "statename"
+    t.datetime "created_at",     null: false
+    t.datetime "updated_at",     null: false
+  end
+
   create_table "interaction_categories", force: true do |t|
     t.string   "name"
     t.integer  "sortorder",       limit: nil, precision: 38
@@ -402,6 +423,14 @@ ActiveRecord::Schema.define(version: 20150327061310) do
     t.datetime "updated_at"
   end
 
+  create_table "media_tape_heads", force: true do |t|
+    t.string   "name"
+    t.string   "description"
+    t.datetime "created_at",                                    null: false
+    t.datetime "updated_at",                                    null: false
+    t.integer  "product_variant_id", limit: nil, precision: 38
+  end
+
   create_table "media_tapes", force: true do |t|
     t.string   "name"
     t.integer  "duration_secs",      limit: nil, precision: 38
@@ -413,6 +442,8 @@ ActiveRecord::Schema.define(version: 20150327061310) do
     t.datetime "created_at",                                    null: false
     t.datetime "updated_at",                                    null: false
     t.datetime "release_date"
+    t.integer  "media_tape_head_id", limit: nil, precision: 38
+    t.integer  "sort_order",         limit: nil, precision: 38
   end
 
   create_table "order_fors", force: true do |t|
@@ -607,6 +638,76 @@ ActiveRecord::Schema.define(version: 20150327061310) do
     t.datetime "updated_at",  null: false
   end
 
+  create_table "product_stock_adjusts", force: true do |t|
+    t.integer  "product_master_id", limit: nil, precision: 38
+    t.integer  "product_list_id",   limit: nil, precision: 38
+    t.integer  "change_stock",      limit: nil, precision: 38
+    t.string   "ext_prod_code"
+    t.string   "barcode"
+    t.datetime "created_date"
+    t.string   "emp_code"
+    t.integer  "emp_id",            limit: nil, precision: 38
+    t.string   "name"
+    t.text     "description"
+    t.datetime "created_at",                                   null: false
+    t.datetime "updated_at",                                   null: false
+    t.integer  "total",             limit: nil, precision: 38
+    t.integer  "rate",              limit: nil, precision: 38
+  end
+
+  create_table "product_stock_books", force: true do |t|
+    t.datetime "stock_date"
+    t.integer  "product_master_id",        limit: nil, precision: 38
+    t.integer  "product_list_id",          limit: nil, precision: 38
+    t.string   "ext_prod_code"
+    t.string   "name"
+    t.integer  "opening_qty",              limit: nil, precision: 38
+    t.integer  "opening_rate",             limit: nil, precision: 38
+    t.integer  "opening_value",            limit: nil, precision: 38
+    t.integer  "purchased_qty",            limit: nil, precision: 38
+    t.integer  "purchased_rate",           limit: nil, precision: 38
+    t.integer  "purchased_value",          limit: nil, precision: 38
+    t.integer  "returned_retail_qty",      limit: nil, precision: 38
+    t.integer  "returned_retail_rate",     limit: nil, precision: 38
+    t.integer  "returned_retail_value",    limit: nil, precision: 38
+    t.integer  "returned_wholesale_qty",   limit: nil, precision: 38
+    t.integer  "returned_wholesale_rate",  limit: nil, precision: 38
+    t.integer  "returned_wholesale_value", limit: nil, precision: 38
+    t.integer  "returned_others_qty",      limit: nil, precision: 38
+    t.integer  "returned_others_rate",     limit: nil, precision: 38
+    t.integer  "returned_others_value",    limit: nil, precision: 38
+    t.integer  "sold_retail_qty",          limit: nil, precision: 38
+    t.integer  "sold_retail_rate",         limit: nil, precision: 38
+    t.integer  "sold_retail_value",        limit: nil, precision: 38
+    t.integer  "sold_wholesale",           limit: nil, precision: 38
+    t.integer  "sold_wholesale_rate",      limit: nil, precision: 38
+    t.integer  "sold_wholesale_value",     limit: nil, precision: 38
+    t.integer  "sold_branch_qty",          limit: nil, precision: 38
+    t.integer  "sold_branch_rate",         limit: nil, precision: 38
+    t.integer  "sold_branch_value",        limit: nil, precision: 38
+    t.integer  "corrections_qty",          limit: nil, precision: 38
+    t.integer  "corrections_rate",         limit: nil, precision: 38
+    t.integer  "corrections_value",        limit: nil, precision: 38
+    t.integer  "closing_qty",              limit: nil, precision: 38
+    t.integer  "closing_rate",             limit: nil, precision: 38
+    t.integer  "closing_value",            limit: nil, precision: 38
+    t.datetime "created_at",                                          null: false
+    t.datetime "updated_at",                                          null: false
+  end
+
+  create_table "product_stocks", force: true do |t|
+    t.integer  "product_master_id", limit: nil, precision: 38
+    t.integer  "product_list_id",   limit: nil, precision: 38
+    t.integer  "current_stock",     limit: nil, precision: 38
+    t.string   "ext_prod_code"
+    t.string   "barcode"
+    t.datetime "checked_date"
+    t.string   "emp_code"
+    t.integer  "emp_id",            limit: nil, precision: 38
+    t.datetime "created_at",                                   null: false
+    t.datetime "updated_at",                                   null: false
+  end
+
   create_table "product_training_headings", force: true do |t|
     t.string   "name"
     t.integer  "sortorder",  limit: nil, precision: 38
@@ -669,6 +770,12 @@ ActiveRecord::Schema.define(version: 20150327061310) do
     t.string   "name"
     t.datetime "created_at"
     t.datetime "updated_at"
+  end
+
+  create_table "sequence_check", id: false, force: true do |t|
+    t.integer "ordernum",      limit: nil, precision: 10
+    t.string  "customer_name", limit: 50
+    t.string  "city",          limit: 50
   end
 
   create_table "sessions", force: true do |t|

@@ -4,7 +4,7 @@ class ProductMasterAddOnsController < ApplicationController
   respond_to :html, :xml, :json
 
   def index
-    @product_master_add_ons = ProductMasterAddOn.all
+    @product_master_add_ons = ProductMasterAddOn.all.order("product_master_id")
     #@product_master_add_ons = ProductMasterAddOn.where(product_master_id: product_master_id)
     respond_with(@product_master_add_ons)
   end

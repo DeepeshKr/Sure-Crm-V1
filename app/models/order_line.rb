@@ -29,17 +29,17 @@ codcharges = 0
     cashondeliveryid = 10001
     cashondeliverycharge = Orderpaymentmode.find(cashondeliveryid).charges
 
-    maharastracodextraid = 10020
-    maharastracodcharge = Orderpaymentmode.find(maharastracodextraid).charges
-    maharastracodextra = self.total * maharastracodcharge
-    #add all charges
-    codcharges = ((self.total || 0 ) + (maharastracodextra ||0)) * (cashondeliverycharge || 0) 
+    # maharastracodextraid = 10020
+    # maharastracodcharge = Orderpaymentmode.find(maharastracodextraid).charges
+    # maharastracodextra = self.total * maharastracodcharge
+    # #add all charges
+    codcharges = ((self.total || 0 )) * (cashondeliverycharge || 0) 
     
     #check if address is selected
     if self.order_master.customer_address_id.present?
      #check if state is maharastra
       if self.order_master.customer_address.state.upcase == 'MAHARASHTRA'
-         codcharges = ((self.total || 0 ) + (maharastracodextra ||0)) * (cashondeliverycharge || 0) 
+         codcharges = ((self.total || 0 )) * (cashondeliverycharge || 0) 
       else
         codcharges = ((self.total || 0 )) * (cashondeliverycharge || 0) 
       end
@@ -123,12 +123,16 @@ def maharastracodextra
     surchargeid = 10020
     maharastracodcharge = Orderpaymentmode.find(surchargeid).charges
 
-    maharastracodextra = self.total * maharastracodcharge
+    cashondeliveryid = 10001
+    cashondeliverycharge = Orderpaymentmode.find(cashondeliveryid).charges
+     codcharges = ((self.total || 0 )) * (cashondeliverycharge || 0) 
+
+    maharastracodextra = (self.total + codcharges) * maharastracodcharge
       #check if address is selected
     if self.order_master.customer_address.present?
      #check if state is maharastra
      if self.order_master.customer_address.state.upcase == 'MAHARASHTRA'
-        maharastracodextra = self.total * maharastracodcharge
+        maharastracodextra = (self.total + codcharges) * maharastracodcharge
      else
         maharastracodextra = 0
      end

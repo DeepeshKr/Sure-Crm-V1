@@ -1,0 +1,21 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  product_master_id: 1
+  product_list_id: 1
+  current_stock: 1
+  ext_prod_code: MyString
+  barcode: MyString
+  checked_date: 2015-04-08
+  emp_code: MyString
+  emp_id: 1
+
+two:
+  product_master_id: 1
+  product_list_id: 1
+  current_stock: 1
+  ext_prod_code: MyString
+  barcode: MyString
+  checked_date: 2015-04-08
+  emp_code: MyString
+  emp_id: 1

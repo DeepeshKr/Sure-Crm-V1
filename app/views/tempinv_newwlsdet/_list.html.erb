@@ -1,0 +1,39 @@
+<% if (@tempinv_newwlsdet != nil) then %>
+  <table class="table table-hover">
+    <thead>
+      <tr>
+  <th>Orderno</th>
+  <th>Distcode</th>
+  <th>Prod</th>
+  <th>Trantype</th>
+  <th>Quantity</th>
+  <th>Totamt</th>
+  <th>Shdate</th>
+  <th>Invoice</th>
+  
+  
+  </tr>
+  </thead>
+  
+    <tbody>
+      <% @tempinv_newwlsdet.each do |n| %>
+  <tr>
+  <td><%= n.orderno%></td>
+  <td><%= n.distcode%></td>
+  <td><%= n.prod%></td>
+  <td><%= n.trantype%></td>
+  <td><%= n.quantity%></td>
+  <td><%= n.totamt%></td>
+  <td><%= n.shdate.strftime("%d-%b-%Y") || "NA" if n.shdate %></td>
+  <td><%= n.invoice%></td>
+  </tr>
+         <% end %>
+    </tbody>
+  </table>
+  
+   <% else %>
+      <div class="well well-lg">
+      No Branch Sale / Transfers found
+      </div>
+ <% end %>
+ <br>

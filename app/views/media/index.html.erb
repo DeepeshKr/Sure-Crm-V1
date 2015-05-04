@@ -1,13 +1,12 @@
 
 <div class="row">
-  <div class="col-xs-6">
+  <div class="col-xs-4">
   <div class="well well-sm">
   <div class="row">
     <%= bootstrap_form_tag url: media_path, :method => :GET, :enforce_utf8 => false do |f| %>
-     <label class="col-sm-2 control-label" for="formGroupInputLarge">Telephone</label>
-      <div class="col-xs-8">
+      <div class="col-xs-10">
           <%= text_field_tag(:telephone, @telephone,
-          {:class => "form-control", :placeholder => "Please enter the telephone number"})  %>
+          {:class => "form-control", :placeholder => "Search Telephone"})  %>
       </div>
       <div class="col-xs-2">
           <%= submit_tag "Ok", name: nil,  class: "btn btn-primary" %>
@@ -16,14 +15,30 @@
   </div>
   </div>
   </div>
-  <div class="col-xs-4">
+  <div class="col-xs-3">
   <div class="well well-sm">
     <div class="row">
       <%= bootstrap_form_tag url: media_path, :method => :GET, :enforce_utf8 => false do |f| %>
-      <label class="col-sm-2 control-label" for="formGroupInputLarge">DNIS</label>
-      <div class="col-xs-8">
+      
+      <div class="col-xs-9">
             <%= text_field_tag(:dnis, @dnis,
-            {:class => "form-control", :placeholder => "Please enter the DNIS number"})  %>
+            {:class => "form-control", :placeholder => "Search DNI"})  %>
+        </div>
+        <div class="col-xs-3">
+            <%= submit_tag "Ok", name: nil,  class: "btn btn-primary" %>
+        </div>
+      <% end %>
+      </div>
+    </div>
+  </div>
+ <div class="col-xs-4">
+  <div class="well well-sm">
+    <div class="row">
+      <%= bootstrap_form_tag url: media_path, :method => :GET, :enforce_utf8 => false do |f| %>
+      
+      <div class="col-xs-10">
+            <%= text_field_tag(:name, @dnis,
+            {:class => "form-control", :value => @search,  :placeholder => "Search by Name"})  %>
         </div>
         <div class="col-xs-2">
             <%= submit_tag "Ok", name: nil,  class: "btn btn-primary" %>
@@ -32,7 +47,7 @@
       </div>
     </div>
   </div>
-  <div class="col-xs-2">
+  <div class="col-xs-1">
   <div class="well well-sm">
     
       <%= bootstrap_form_tag url: media_path, :method => :GET, :enforce_utf8 => false do |f| %>
@@ -41,15 +56,24 @@
            
            
        
-            <%= submit_tag "Show All", name: nil,  class: "btn btn-primary" %>
+            <%= submit_tag "All", name: nil,  class: "btn btn-primary" %>
         
       <% end %>
      
     </div>
   </div>
 </div>
+<div class="row">
+  <div class="col-xs-8">
+   <h3><%= @state_searched %>  Listing of Channel</h3>
+  </div>
+  <div class="col-xs-4 text-right">
+    <% if @showall=="true" %>
+      <%= link_to 'Download CSV list', media_path(showall: "true", format: :csv), class: "btn btn-success btn-sm" %>
+    <% end %>
+  </div>
+</div>
 
-<h3><%= @state_searched %>  Listing of Channel</h3>
 
 <table class="table table-hover">
   <thead>
@@ -67,7 +91,7 @@
       <th>Channel </th>
       <th>Slot</th>
      
-      <th colspan="3"></th>
+      <th colspan="1"></th>
     </tr>
   </thead>
 
@@ -86,14 +110,24 @@
         <td><%= medium.dnis %></td>
         <td><%= medium.channel %></td>
         <td><%= medium.slot %></td>
-        <td><%= link_to 'Show', medium %></td>
+        
         <td><%= link_to 'Edit', edit_medium_path(medium) %></td>
-        <td><%= link_to 'Destroy', medium, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        
       </tr>
     <% end %>
   </tbody>
 </table>
 
 <br>
+<div class="row">
+  <div class="col-xs-6">
+    <%= link_to 'New Medium', new_medium_path , class: "btn btn-info btn-lg" %>
+  </div>
+  <div class="col-xs-6 text-right">
+   
+  </div>
+</div>
 
-<%= link_to 'New Medium', new_medium_path , class: "btn btn-info btn-lg" %>
+
+
+

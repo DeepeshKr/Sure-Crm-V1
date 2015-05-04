@@ -1,5 +1,7 @@
 class User < ActiveRecord::Base
  belongs_to :employee_role, foreign_key: "role"
+ belongs_to :employee, foreign_key: "employee_code"
+
 
 #enum role: [:user, :manager, :accounts, :admin]
 

@@ -1,12 +1,33 @@
-<h1>Listing product_training_manuals</h1>
 
+<div class="row">
+<div class="col-xs-4">
+<h3> <%= @trainingfor %></h3>
+</div>
+<div class="col-xs-8">
+<%= form_tag("/producttraining", method: "get") do  %>
+      <div class="row">
+        <div class="col-xs-10">
+        <%= select_tag(:productid, 
+                options_from_collection_for_select(ProductMaster.all, :id, :productname, selected: @productid), 
+                {:class => "form-control"} )  %>
+          
+        </div>
+        <div class="col-xs-2">
+      <%= submit_tag "Show", name: nil, class: "btn btn-primary" %>
+          </div>
+
+      </div>
+<% end %>
+</div>
+</div>
 <table class="table table-hover">
   <thead>
     <tr>
-      <th>Product</th>
-      <th>Name</th>
-      <th>Description</th>
-      <th>Quicknotes</th>
+      <th>Name <br>
+      <small>Product Name</small>
+      </th>
+      <th>Description <br>
+      <small>Quicknotes </small></th>
       <th colspan="3"></th>
     </tr>
   </thead>
@@ -14,10 +35,12 @@
   <tbody>
     <% @product_training_manuals.each do |product_training_manual| %>
       <tr>
-        <td><%= product_training_manual.product_master.name %></td>
-        <td><%= product_training_manual.name %></td>
-        <td><%= product_training_manual.description %></td>
-        <td><%= product_training_manual.quicknotes %></td>
+       
+        <td> <strong><%= product_training_manual.name %></strong> <br>
+        <small><%= product_training_manual.product_master.productname %></small>
+        </td>
+        <td><%= product_training_manual.description %> <br>
+        <small><%= product_training_manual.quicknotes %></small> </td>
         <td><%= link_to 'Show', product_training_manual %></td>
         <td><%= link_to 'Edit', edit_product_training_manual_path(product_training_manual) %></td>
         <td><%= link_to 'Destroy', product_training_manual, method: :delete, data: { confirm: 'Are you sure?' } %></td>
@@ -27,5 +50,13 @@
 </table>
 
 <br>
+<% if @productid %> 
 
+ 
+<h4>Add New <%= @trainingfor %></h4>
+<%= render partial: "product_training_manuals/inline_create" %>
+
+<br>
+ <% else %>
 <%= link_to 'New Product training manual', new_product_training_manual_path, class: "btn btn-primary" %>
+<% end %>

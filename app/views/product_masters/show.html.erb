@@ -60,18 +60,27 @@
 <hr />
 <%= render partial: "product_variants/list" %>
 <hr />
+<div class="well">
 <h4>Add New Product Variant for <%= @product_master.name %> </h4>
 <%= render partial: "product_variants/form" %>
+
+</div>
 <br/>
 
 <h4>Product Training for <%= @product_master.name %> </h4>
 <hr />
 <%= render partial: "product_training_manuals/listing" %>
+<br>
+<div class="well">
 <h4>Add New Product Training for <%= @product_master.name %></h4>
 <%= render partial: "product_training_manuals/quick_create" %>
 <br/>
+</div>
+<br>
  <h4>Product Add On - Which can be ordered with <strong> ONLY WITH <%= @product_master.name %></strong> </h4>
 
 <%= render partial: "product_master_add_ons/list" %>
 <br/>
+<div class="well">
 <%= render partial: "product_master_add_ons/quick_add" %> 
+</div>

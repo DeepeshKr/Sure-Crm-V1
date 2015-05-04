@@ -1,0 +1,23 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  officename: MyString
+  pincode: MyString
+  deliverystatus: MyString
+  divisionname: MyString
+  regionname: MyString
+  circlename: MyString
+  taluk: MyString
+  districtname: MyString
+  statename: MyString
+
+two:
+  officename: MyString
+  pincode: MyString
+  deliverystatus: MyString
+  divisionname: MyString
+  regionname: MyString
+  circlename: MyString
+  taluk: MyString
+  districtname: MyString
+  statename: MyString

@@ -1,0 +1,38 @@
+ <%= form_tag("/create_playlist", method: "post") do  %>
+<div class="row">
+<div class="col-xs-2">
+	<%= text_field_tag(:for_date, nil, :data => {:provide => "datepicker"}, :class => "form-control", :required => "true" )   %>
+
+</div>
+	<div class="col-xs-10">
+		<%= collection_select(nil, :product_variant_id,  @productvariantlist,  :id, :name, {:prompt   => "Select a Product Variant"}, {:id => 'variants_select', :class => "form-control"}) %>
+
+	</div>
+
+</div>
+
+<br/>
+<div class="row">
+	<div class="col-xs-12">
+		<%= collection_select(nil, :media_tape_head_id, @media_tape_head_list, :id, :name, {:prompt   => "Select an Media Tape Head"}, {:id => 'tapes_select', :class => "form-control"}) %>
+
+	</div>
+
+</div>
+<hr>
+<div id='tape_list'></div>
+<br/>
+
+<div class="row">
+	<div class="col-xs-3 col-xs-offset-9">
+	<%= submit_tag "Ok", name: nil, class: "btn btn-primary" %>
+		</div>
+
+</div>
+
+
+<% end %>
+
+
+
+ 

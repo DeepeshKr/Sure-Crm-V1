@@ -1,11 +1,11 @@
 class OrderLinesController < ApplicationController
-  before_action :set_order_line, only: [:show, :edit, :update, :destroy, :update_description]
+  before_action :set_order_line, only: [:show, :edit, :update, :destroy, :deleteupsell, :update_description]
 
   respond_to :html
 
   autocomplete :product_variant, :name, :extra_data => [:total, :price, :taxes], full: true, :display_value => :productinfo
-
-  autocomplete :product_list, :name, full: true, :display_value => :name
+     
+  autocomplete :product_list, :name, full: true, :display_value => :name, :where => { :active_status_id => 10000} 
 
   autocomplete :product_variant, :description, :extra_data => [:total, :name], full: true
 
@@ -76,6 +76,13 @@ class OrderLinesController < ApplicationController
     @order_line.destroy
     #respond_with(@order_line.order_master)
     redirect_to neworder_path(:order_id => @order_line.orderid)  
+  end
+
+  def deleteupsell
+
+    @order_line.destroy
+    #respond_with(@order_line.order_master)
+    redirect_to upsell_path(:order_id => @order_line.orderid)  
   end
 
   private

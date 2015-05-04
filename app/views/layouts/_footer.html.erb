@@ -9,7 +9,12 @@
 
     <% if logged_in? %>
   
-  <p><small> You are logged in as <%= current_user.name %> with role of <%= current_user.employee_role.name %> </small></p>
+ <p><small> You are logged in as <%= current_user.name %> with role of <%= current_user.employee_role.name %>  &nbsp;
+Today's Date: <%= Date.today.in_time_zone %> or  <%= Date.current %> 
+
+ </small>
+  </p>
+
 
  
 <% else %>

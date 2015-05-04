@@ -1,48 +1,56 @@
 Rails.application.routes.draw do
 
+ 
+  resources :media_tape_heads
+
+  resources :india_city_lists
+
   get 'tempinv_newwlsdet/list'
-
   get 'tempinv_newwlsdet/search'
-
   get 'tempinv_newwlsdet/details'
-
+  get 'custdetailsreport' => 'custdetails#list'
   get 'custdetails/list'
-
   get 'custdetails/search'
-
   get 'custdetails/details'
-
   get 'newwlsdet/list'
-
   get 'newwlsdet/search'
-
   get 'newwlsdet/details'
-
   get 'purchases_new/list'
-
   get 'purchases_new/search'
-
   get 'purchases_new/details'
-
   get 'vpp/list'
-
   get 'vpp/search'
-
   get 'vpp/details'
-
   get 'customerorder/products'
   get 'customerorder/address'
   get 'customerorder/payment'
   get 'customerorder/channel'
   get 'customerorder/review'
   get 'customerorder/summary'
-
-  resources :product_master_add_ons
-
   get 'dnismaster/list'
   get 'dnismaster/search'
   get 'dnismaster/details'
 
+  get 'stockbook' => 'product_stock_books#index'
+
+  resources :india_city_lists  
+  resources :india_city_lists do
+    get :autocomplete_india_city_list_city, :on => :collection
+  end
+
+  resources :india_pincode_lists
+  resources :india_pincode_lists do
+    collection { post :import }
+    get :autocomplete_india_pincode_list_pincode, :on => :collection
+    get :autocomplete_pindia_pincode_list_taluk, :on => :collection
+    get :autocomplete_tindia_pincode_list_districtname, :on => :collection
+    get :autocomplete_india_pincode_list_regionname, :on => :collection
+  end
+
+  resources :product_stock_books
+  resources :product_stock_adjusts
+  resources :product_stocks
+  resources :product_master_add_ons
   resources :campaign_play_list_statuses
   resources :product_lists
   resources :media_cost_masters
@@ -53,7 +61,7 @@ Rails.application.routes.draw do
   get 'tapeiddet/search'
   get 'tapeiddet/details'
   get 'tapeids/list'
-  get 'tapeids/search'
+  get 'tapeids/search' 
   get 'tapeids/details'
   get 'purchase/list'
   get 'purchase/search'
@@ -68,8 +76,8 @@ Rails.application.routes.draw do
  
   #step 1
   get 'neworder' => 'customerorder#products'
-  get 'upload' => 'customerorder#upload'
   get 'offline' => 'customerorder#offline'
+  post 'uploadcall' => 'customerorder#uploadcall'
   post 'addproducts' => 'customerorder#add_products'
   post 'addbasicupsellproducts' => 'customerorder#add_basic_upsell'
  
@@ -80,7 +88,7 @@ Rails.application.routes.draw do
     #step 3
   get 'upsell' => 'customerorder#upsell'
   post 'addupsell' => 'customerorder#add_upsell'
-  
+  get 'deleteupsell' => 'order_lines#deleteupsell'
   #step 3
   get 'payment' => 'customerorder#payment'
   post 'addpayment' => 'customerorder#add_payment'
@@ -102,17 +110,22 @@ Rails.application.routes.draw do
   post 'processorder' => 'customerorder#process_order'
   get 'summary' => 'customerorder#summary'
 
-
+  get 'orderlist' => 'order_masters#list'
+  
   get 'dailyschedule' => 'campaign_playlists#perday' 
   #other activities
   get 'dealersearch' => 'customerorder#dealers'
   get 'newdealer' =>  'customerorder#new_dealer'
 
+  post 'inoracle' => 'customer_order_lists#inoracle'
+
+  get 'producttraininglist' => 'product_training_manuals#index'
+  post 'inlinetraining' => 'product_training_manuals#inlinecreate'
   # get 'dealersearch' => 'address_dealer#list'
   # get 'newdealer' =>  'address_dealer#new_dealer'
 
   post 'newdealerenquiry' =>  'address_dealer#dealer_enquiry'
-
+  post 'updatestockbook' => 'product_stock_books#create'
   #this is a duplication of interaction below
   post 'disposition' => 'customerorder#new_interaction'
   #post 'disposition' => 'interaction_masters#new_interaction'
@@ -120,41 +133,45 @@ Rails.application.routes.draw do
 
   post 'updatedescription' => 'order_line#update_description'
 
+  get 'update_tapes' => 'media_tape_heads#update_tapes'
+  get 'tape_list' => 'media_tape_heads#tape_list'
+
+  post 'create_playlist' => 'media_tape_heads#create_playlist'
   #post 'neworder' => 'create_order#index'
 
   #get 'recentorders' => 'create_order#show_recentorders'
 
-    get 'create' => 'customers#createnew'
-    post   'add' => 'customers#add'
+  get 'create' => 'customers#createnew'
+  post   'add' => 'customers#add'
 
-    get 'createc' => 'corporates#createnew'
-    post   'addc' => 'corporates#add'
+  get 'createc' => 'corporates#createnew'
+  post   'addc' => 'corporates#add'
 
-    post 'addmedia_togroup' => 'media_groups#addmedia'
-    post 'addmedia_tocomission' => 'media_commisions#addmedia'
+  post 'addmedia_togroup' => 'media_groups#addmedia'
+  post 'addmedia_tocomission' => 'media_commisions#addmedia'
     
     # get 'address_dealer/list'
     # get 'newdealer' =>  'address_dealer#new_dealer'
     # post 'newdealerenquiry' =>  'address_dealer#dealer_enquiry'
 
-    get 'interaction' => 'interaction_masters#index'
-    get 'newinteraction' => 'interaction_masters#new_ticket'
-    post 'newticket' => 'interaction_masters#new_interaction'
-     post 'disposecall' => 'interaction_masters#dispose_call'
-    post 'newcomments' => 'interaction_transcripts#quick_create'
+  get 'interaction' => 'interaction_masters#index'
+  get 'newinteraction' => 'interaction_masters#new_ticket'
+  post 'newticket' => 'interaction_masters#new_interaction'
+  post 'disposecall' => 'interaction_masters#dispose_call'
+  post 'newcomments' => 'interaction_transcripts#quick_create'
 
-    get 'corporateorder/list'
-    get 'corporateorder/new'
-    get 'corporateorder/create'
-    get 'corporateorder/products'
-    get 'corporateorder/payment'
-    get 'corporateorder/review'
-    get 'corporateorder/process'
+  get 'corporateorder/list'
+  get 'corporateorder/new'
+  get 'corporateorder/create'
+  get 'corporateorder/products'
+  get 'corporateorder/payment'
+  get 'corporateorder/review'
+  get 'corporateorder/process'
 
-    get 'b_prodmaster/list'
-    get 'b_prodmaster/search'
-    get 'b_prodmaster/details'
-    get 'bprodmaster' => 'b_prodmaster#list'
+  get 'b_prodmaster/list'
+  get 'b_prodmaster/search'
+  get 'b_prodmaster/details'
+  get 'bprodmaster' => 'b_prodmaster#list'
 
     get 'duplicate_playlist' => 'campaign_playlists#duplicate'
     post 'create_duplicate_playlist' => 'campaign_playlists#create_duplicate'
@@ -174,6 +191,9 @@ Rails.application.routes.draw do
     get 'product_cost/search'
     get 'product_cost/details'
     get 'productcost' => 'product_cost#details'
+    
+    get 'deleteproductstock' => 'product_stocks#deletestock'
+    get 'deleteproductstockadjust' => 'product_stock_adjusts#deletestockadjust'
 
     resources :user_roles
     resources :customer_order_lists
