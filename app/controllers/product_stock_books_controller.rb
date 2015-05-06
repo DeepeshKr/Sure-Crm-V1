@@ -209,8 +209,9 @@ end
           @product_stock_book.update(returned_retail_rate: 0)
           @product_stock_book.update(returned_retail_value: @returned_vpp.sum(:invoiceamount))
             #update closing
-        closing_qty += @returned_vpp.sum(:quantity)
-        closing_value += @returned_vpp.sum(:invoiceamount)
+
+        closing_qty += @returned_vpp.sum(:quantity) if @returned_vpp.sum(:quantity) > 0
+        closing_value += @returned_vpp.sum(:invoiceamount) if @returned_vpp.sum(:invoiceamount) > 0
         else
           @product_stock_book.update(returned_retail_qty: 0)
           @product_stock_book.update(returned_retail_rate: 0)

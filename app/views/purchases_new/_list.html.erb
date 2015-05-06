@@ -1,15 +1,15 @@
 <% if (@purchases_new != nil) then %>
-<table class="table table-hover">
+<table class="table table-hover table-bordered">
   <thead>
     <tr>
-<th>Rdate</th>
+<th>Date</th>
 <th>Invoice</th>
-<th>Invdate</th>
+
 <th>Prod</th>
-<th>Qty</th>
-<th>Shortqty</th>
-<th>Rate</th>
-<th>Invamt</th>
+<th class="text-right">Qty</th>
+<th class="text-right">Shortqty</th>
+<th class="text-right">Rate</th>
+<th class="text-right">Invamt</th>
 
 </tr>
 </thead>
@@ -19,19 +19,34 @@
       <tr>
 <td><%= p.rdate.strftime("%d-%b-%Y") || "NA" if p.rdate %></td>
 <td><%= p.invoice%></td>
-<td><%= p.invdate.strftime("%d-%b-%Y") || "NA" if p.invdate %></td>
-<td><%= p.prod%></td>
-<td><%= p.qty%></td>
-<td><%= p.shortqty%></td>
-<td><%= p.rate%></td>
-<td><%= p.invamt%></td>
+
+<td ><%= p.prod%></td>
+<td class="text-right"><%= p.qty%></td>
+<td class="text-right"><%= p.shortqty%></td>
+<td class="text-right"><%= p.rate%></td>
+<td class="text-right"><%= p.invamt%></td>
 
 </tr>
        <% end %>
   </tbody>
+  
+  <thead>
+        <tr>
+<td><strong>Total :</strong></td>
+<td></td>
+
+<td ></td>
+<td class="text-right"><strong><%=  @purchasespieces %> </strong></td>
+<td class="text-right"><strong><%=  @purchasesshortqty %></strong></td>
+<td class="text-right"></td>
+<td class="text-right"><strong><%=  @purchasestotal %></strong></td>
+
+</tr>
+  <thead>
+  
 </table>
 <% else %>
-  <div class="well well-lg">
+  <div class="well well-sm">
   No purchases found
   </div>
  <% end %>

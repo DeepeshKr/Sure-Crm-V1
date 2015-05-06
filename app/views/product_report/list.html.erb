@@ -14,7 +14,7 @@
 </div>
 
 <br>
-<div class="well">
+<div class="well well-sm">
 <h4><%= @type %> Report for <%= @prod %> between <%= @from_date %> and <%= @to_date %></h4>
 </div>
 <br>
@@ -28,17 +28,17 @@
 	<br>
 <br>
 
-<div class="well">
+<div class="well well-sm">
 		<div class="row">
-		<div class="col-xs-6">
-		<h3>	Opening Stock  </h3> 
+		<div class="col-xs-4">
+		<h4>	Opening Stock  </h4> 
 			
 		</div>
-		<div class="col-xs-3">
+		<div class="col-xs-2">
 			 <button type="button" class="btn btn-success " data-toggle="modal" data-target="#OpeningStockModal">Add Stock Entry</button>
 		</div>
-		<div class="col-xs-3">
-		Total Opening Stock: <%= @opening_stock %>
+		<div class="col-xs-6">
+		<h4>Total Opening Stock: <%= @opening_stock %> </h4>
 		</div>
 		
 		</div>
@@ -51,17 +51,18 @@
    
 <br>
 
-<div class="well">
+<div class="well well-sm">
 		<div class="row">
-		<div class="col-xs-6">
-		<h3>	Journal Entries </h3> 
+		<div class="col-xs-4">
+		<h4>	Journal Entries </h4> 
 			
 		</div>
 		<div class="col-xs-3">
 		 <button type="button" class="btn btn-success " data-toggle="modal" data-target="#JournalModal">Add Journal Entry</button>
 		</div>
 		<div class="col-xs-3">
-		Journal Total: <%= @journal_total %>
+		<h4>
+		Journal Total: <%= number_with_delimiter(@journal_total, locale: :en) %> </h4>
 		</div>
 		
 		</div>
@@ -75,17 +76,17 @@
 <br>
 
 
-	<div class="well">
+	<div class="well well-sm">
 		<div class="row">
-		<div class="col-xs-6 pull-left">
-		<h3> 	Purchases <small>Rdate in Purchase_New</small>  </h3> 
+		<div class="col-xs-4 pull-left">
+		<h4> 	Purchases <small>Rdate in Purchase_New</small>  </h4> 
 		
 		</div>
-		<div class="col-xs-3">
-		Total Pieces Bought: <%= @purchasespieces %>
+		<div class="col-xs-4">
+		<h4> Total Pieces Bought: <%= @purchasespieces %> </h4>
 		</div>
-		<div class="col-xs-3">
-		Total Amount: <%= @purchasestotal %>
+		<div class="col-xs-4">
+		<h4> Total Amount: <%= number_with_delimiter(@purchasestotal, locale: :en) %> </h4>
 		</div>
 		
 		</div>
@@ -100,17 +101,17 @@
 <br>
 
 
-	<div class="well">
+	<div class="well well-sm">
 		<div class="row">
-		<div class="col-xs-6">
-		<h3> 	Customer Sales <small>Orderdate / Paiddate in VPP</small> </h3> 
+		<div class="col-xs-4">
+		<h4> 	Customer Sales <small>Orderdate / Paiddate in VPP</small> </h4> 
 			
 		</div>
-		<div class="col-xs-3">
-		Total Pieces Sold: <%= @retailsalespieces %>
+		<div class="col-xs-4">
+		<h4> Total Pieces Sold: <%= @retailsalespieces %> </h4> 
 		</div>
-		<div class="col-xs-3">
-		Total Amount: <%= @retailsalestotal %> 
+		<div class="col-xs-4">
+		<h4> Total Amount: <%= number_with_delimiter(@retailsalestotal, locale: :en) %> </h4> 
 		</div>
 		
 		</div>
@@ -118,17 +119,17 @@
    <%= render 'vpp/list' %>
 <br>
 
-<div class="well">
+<div class="well well-sm">
 		<div class="row">
-		<div class="col-xs-6">
-		<h3>	Wholesale Sales <small>Shdate in NewWlsDet</small>  </h3> 
+		<div class="col-xs-4">
+		<h4>	Wholesale Sales <small>Shdate in NewWlsDet</small>  </h4>
 			
 		</div>
-		<div class="col-xs-3">
-		Total Pieces Sold: <%= @wholesalespieces %>
+		<div class="col-xs-4">
+		<h4>Total Pieces Sold: <%= @wholesalespieces %></h4>
 		</div>
-		<div class="col-xs-3">
-		Total Amount: <%= @wholesalestotal %>
+		<div class="col-xs-4">
+		<h4>Total Amount: <%= number_with_delimiter(@wholesalestotal, locale: :en) %></h4>
 		</div>
 		
 		</div>
@@ -137,17 +138,17 @@
 
 <br>
 
-<div class="well">
+<div class="well well-sm">
 		<div class="row">
 		<div class="col-xs-6">
-		<h3>	Branch Sale / Transfer <small>Shdate in TEMPINV_NEWWLSDET</small>  </h3> 
+		<h4>	Branch Sale / Transfer <small>Shdate in TEMPINV_NEWWLSDET</small>  </h4> 
 			
 		</div>
 		<div class="col-xs-3">
-		Total Pieces Sold: <%= @branchsalespieces %>
+		<h4>Total Pieces Sold: <%= @branchsalespieces %></h4>
 		</div>
 		<div class="col-xs-3">
-		Total Amount: <%= @branchsalestotal %>
+		<h4>Total Amount: <%= number_with_delimiter(@branchsalestotal, locale: :en) %></h4>
 		</div>
 		
 		</div>

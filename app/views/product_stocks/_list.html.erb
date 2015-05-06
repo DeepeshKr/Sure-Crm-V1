@@ -13,14 +13,16 @@
   <tbody>
     <% @product_stocks.each do |product_stock| %>
       <tr>
-         <td><%= product_stock.checked_date %></td>
+         <td><%= product_stock.checked_date.strftime("%d-%b-%Y") %></td>
        
         <td><%= product_stock.current_stock %></td>
       
        
      
    
-        <td>  <%= link_to 'Destroy', deleteproductstock_path(:id => product_stock.id, prod:@prod, from_date: @from_date, to_date: @to_date, paid: @paid), data: { confirm: 'Are you sure?' } %>
+        <td>
+       
+         <%= link_to 'Destroy', deleteproductstock_path(:id => product_stock.id, prod:@prod, from_date:  @or_from_date, to_date: @or_to_date, paid: @paid), data: { confirm: 'Are you sure?' }, method: :delete %>
         </td>
       </tr>
     <% end %>

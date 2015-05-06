@@ -56,7 +56,14 @@ class ProductStockAdjustsController < ApplicationController
   def destroy
     @product_stock_adjust.destroy
     respond_to do |format|
-      format.html { redirect_to product_stock_adjusts_url, notice: 'Product Journal was successfully destroyed.' }
+      format.html { 
+        if params[:paid].present?   
+         redirect_to productreport_path(prod: params[:prod], from_date: params[:from_date], to_date: params[:to_date],
+          paid: params[:paid]), notice: 'Product Journal was successfully removed.' 
+        else
+         redirect_to productreport_path(prod: params[:prod], from_date: params[:from_date], 
+          to_date: params[:to_date]), notice: 'Product Journal entry was successfully removed.' 
+      end
       format.json { head :no_content }
     end
   end

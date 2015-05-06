@@ -208,8 +208,9 @@ Rails.application.routes.draw do
     get 'product_cost/details'
     get 'productcost' => 'product_cost#details'
     
-    get 'deleteproductstock' => 'product_stocks#deletestock'
-    get 'deleteproductstockadjust' => 'product_stock_adjusts#deletestockadjust'
+    delete 'deleteproductstock' => 'product_stocks#destroy'
+    # get 'deleteproductstock' => 'product_stocks#deletestock'
+    delete 'deleteproductstockadjust' => 'product_stock_adjusts#delete'
 
     resources :user_roles
     resources :customer_order_lists

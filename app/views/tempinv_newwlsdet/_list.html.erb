@@ -1,34 +1,40 @@
 <% if (@tempinv_newwlsdet != nil) then %>
-  <table class="table table-hover">
-    <thead>
-      <tr>
+  <table class="table table-hover table-bordered">
+  <thead>
+    <tr>
+    <th>Shdate</th>
   <th>Orderno</th>
+  <th>Invoice</th>
   <th>Distcode</th>
   <th>Prod</th>
   <th>Trantype</th>
-  <th>Quantity</th>
-  <th>Totamt</th>
-  <th>Shdate</th>
-  <th>Invoice</th>
-  
-  
-  </tr>
-  </thead>
-  
-    <tbody>
-      <% @tempinv_newwlsdet.each do |n| %>
+  <th class="text-right">Quantity</th>
+  <th class="text-right">Totamt</th>
+</tr>
+</thead>
+
+  <tbody>
+    <% @tempinv_newwlsdet.each do |n| %>
   <tr>
-  <td><%= n.orderno%></td>
-  <td><%= n.distcode%></td>
-  <td><%= n.prod%></td>
-  <td><%= n.trantype%></td>
-  <td><%= n.quantity%></td>
-  <td><%= n.totamt%></td>
-  <td><%= n.shdate.strftime("%d-%b-%Y") || "NA" if n.shdate %></td>
-  <td><%= n.invoice%></td>
+    <td><%= n.shdate.strftime("%d-%b-%Y") || "NA" if n.shdate %></td>
+    <td><%= n.orderno%></td>
+    <td><%= n.invoice%></td>
+    <td><%= n.distcode%></td>
+    <td><%= n.prod%></td>
+    <td><%= n.trantype%></td>
+    <td class="text-right"><%= n.quantity%></td>
+    <td class="text-right"><%= n.totamt%></td>
   </tr>
-         <% end %>
-    </tbody>
+       <% end %>
+  </tbody>
+     <tfoot>
+    <tr>
+    <th colspan="6"><strong>Total :</strong></th>
+  
+  <th class="text-right"><strong><%= @branchsalespieces %></strong></th>
+  <th class="text-right"><strong><%= number_with_delimiter(@branchsalestotal, locale: :en) %></strong></th>
+</tr>
+</tfoot>
   </table>
   
    <% else %>

@@ -9,7 +9,7 @@ class ProductReportController < ApplicationController
 	#new product stock
 	#@product_stock = ProductStock.new
 	#new stock adjusts
-	@product_stock_adjust = ProductStockAdjust.new(change_stock: 1)
+	#@product_stock_adjust = ProductStockAdjust.new(change_stock: 1)
 	   
 	if params[:prod].present? && params[:from_date].present? && params[:to_date].present?
 	  prod = params[:prod]
@@ -39,12 +39,13 @@ class ProductReportController < ApplicationController
 		  #code
 	   end
 	   #new stock adjusts
-	   @product_stock_adust = ProductStockAdjust.new(product_master_id: @product_master_id, ext_prod_code: prod, emp_code: @empcode, emp_id: @empid)
+	   @product_stock_adjust = ProductStockAdjust.new(product_master_id: @product_master_id, ext_prod_code: prod, emp_code: @empcode, emp_id: @empid)
 	   #params.require(:product_stock_adjust).permit(:product_master_id, :product_list_id, :change_stock, :ext_prod_code, :barcode, :created_date, :emp_code, :emp_id, :name, :description)
 	  #purchases
 	  @purchases_new = PURCHASES_NEW.where(prod: prod).where("TRUNC(rdate) >= ? and TRUNC(rdate) <= ?", from_date, to_date)
 		if @purchases_new.present?
 		  #Purchases
+		  @purchasesshortqty = @purchases_new.sum(:shortqty)
 		  #total
 			@purchasestotal = @purchases_new.sum(:invamt)
 		  #pieces
@@ -103,8 +104,40 @@ class ProductReportController < ApplicationController
 		  #pieces
 		  @branchsalespieces = @tempinv_newwlsdet.sum(:quantity)
 		end
-	 
+	
+	else
+	#show recent 10 entries 
+	@product_stock_adjusts = ProductStockAdjust.limit(10)
+	@purchases_new = PURCHASES_NEW.limit(10)
+	if @purchases_new.present?
+		  #Purchases
+		  @purchasesshortqty = @purchases_new.sum(:shortqty)
+		  #total
+			@purchasestotal = @purchases_new.sum(:invamt)
+		  #pieces
+		   @purchasespieces = @purchases_new.sum(:qty)
+		end
+	@vpp = VPP.limit(10)
+		  #total
+		  @retailsalestotal = @vpp.sum(:paidamt)
+		  #pieces
+		   @retailsalespieces = @vpp.sum(:quantity)
+
+	@newwlsdet = NEWWLSDET.limit(10)
+
+		 #total
+		  @wholesalestotal = @newwlsdet.sum(:totamt)
+		  #pieces
+		  @wholesalespieces = @newwlsdet.sum(:quantity)
+
+	@tempinv_newwlsdet = TEMPINV_NEWWLSDET.limit(10)
+
+		  #total
+		  @branchsalestotal = @tempinv_newwlsdet.sum(:totamt)
+		  #pieces
+		  @branchsalespieces = @tempinv_newwlsdet.sum(:quantity)
 	end
+
   end
     
   def search
