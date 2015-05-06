@@ -15,7 +15,7 @@
     <% @media_tape_heads.each do |media_tape_head| %>
       <tr>
         <td><%= media_tape_head.name %></td>
-       <td><%= media_tape_head.product_variant.name if media_tape_head.product_variant? %></td>
+       <td><%= media_tape_head.product_variant.name if media_tape_head.product_variant.present? %></td>
         <td><%= link_to 'Show', media_tape_head %></td>
         <td><%= link_to 'Edit', edit_media_tape_head_path(media_tape_head) %></td>
         <td><%= link_to 'Destroy', media_tape_head, method: :delete, data: { confirm: 'Are you sure?' } %></td>
