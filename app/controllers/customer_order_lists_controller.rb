@@ -8,6 +8,10 @@ class CustomerOrderListsController < ApplicationController
         if params[:complete] = 'yes'
            @customer_order_lists = CustomerOrderList.where("ordernum is not null").order("id DESC").limit(200)
         end
+    elsif params[:ordernum].present?
+        
+           @customer_order_lists = CustomerOrderList.where("ordernum = ?", params[:ordernum]).order("id DESC").limit(200)
+       
    else
      @customer_order_lists = CustomerOrderList.where(ordernum: nil).order("id DESC").limit(200)
     #    @customer_order_lists = CustomerOrderList.order("id DESC").limit(100)

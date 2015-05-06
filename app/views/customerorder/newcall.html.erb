@@ -1,0 +1,73 @@
+<!-- channel list -->
+  <%= render 'channellist' %> 
+<br>
+<div class="row">
+  
+        <div class="col-xs-8">
+         <div class="clearfix"></div>
+         <div class="well">
+          <div class="row">
+              <div class="col-xs-12">
+                <%= render 'add_products_text' %>
+              </div>
+          </div>
+       
+      <hr>
+          
+          <div class="row"> 
+          <div class="col-xs-12">
+                       <%= render 'add_products_list' %>
+                      </div>
+
+            </div>
+            </div>
+            <br>
+
+            
+
+            <div class="row">
+<div class="col-xs-12">
+              <%= render 'product_master_add_ons/sale_list' %>
+            </div>
+
+            </div>
+            <br>
+            <div class="clearfix"></div>
+              <%= render 'order_lines/orderlines' %>
+            <div class="clearfix"></div>
+            <div class="row">
+              <%= render 'order_masters/order_footer' %>
+            </div>
+      
+    <div class="clearfix"></div>
+     <%= render 'btn_add_address' %> 
+     <div class="clearfix"></div>
+     
+      </div>
+
+        <div class="col-xs-4">
+        <!-- bottom menu -->
+          <%= render 'dealer_menu' %> 
+          <br>
+        <!-- bottom menu -->
+        <%= render 'training_script' %>
+         <!-- panel end -->
+        </div>  
+</div>
+
+<!-- bottom menu -->
+  <%= render 'call_menu' %> 
+
+  <script>
+  $(document).ready(function() {
+    $('#productlist').change(function() {
+      $.ajax({
+        url: "<%= update_product_list_path %>",
+        data: {
+          searchvalue : $('#productlist').val()
+        },
+        dataType: "script"
+      });
+    });
+  });
+</script>

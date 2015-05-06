@@ -58,13 +58,16 @@
     <div class="clearfix"></div>
    
      <div class="col-xs-10">
-        <%= f.text_field :address3, hide_label: :true,  :class =>"form-control",:maxlength=> "29",  :placeholder => "District", :required => true %>
+        
+         <label>District</label>
+   <%= f.autocomplete_field :address3, autocomplete_india_pincode_list_districtname_order_lines_path, :label => "District",  :class =>"form-control", :placeholder => "District" ,  :maxlength=> "30", :required => true %>
+
       </div>
    <div class="clearfix"></div>
   
- <div class="col-xs-8">
-  
-    <%= f.text_field :landmark, :label => "Landmark", :maxlength=> "30", :class =>"form-control", :placeholder => "Landmark" , :required => true %>
+ <div class="col-xs-10">
+    <label>Landmark</label>
+    <%= f.text_field :landmark, hide_label: :true, :maxlength=> "30",   :class =>"form-control", :placeholder => "Landmark" , :required => true, :label => "Landmark" %>
   </div>
    <div class="clearfix"></div>
   
@@ -76,22 +79,26 @@
   </div>
   
  <div class="col-xs-4">
-    
   <label>City</label>
    <%= f.autocomplete_field :city, autocomplete_india_city_list_name_order_lines_path, :label => "City",  :class =>"form-control", :placeholder => "City" ,  :maxlength=> "30", :required => true %>
 
- 
+  
+
+
   </div>
     <div class="col-xs-2">
-      <%= f.text_field :pincode, :label => "Pincode", :maxlength=> "6",  :class =>"form-control", :placeholder => "Pincode" %>
+
+         <label>Pincode</label>
+   <%= f.autocomplete_field :pincode, autocomplete_india_pincode_list_pincode_order_lines_path, :label => "Pincode",  :class =>"form-control", :placeholder => "Pincode" ,  :maxlength=> "6", :required => true %>
+  
   </div>
  </div>
  
 
   <div class="row">
  <div class="col-xs-4">
-   
-    <%= f.text_field :district, :maxlength=> "30",  :label => "District",  :class =>"form-control", :placeholder => "District"  %>
+   <label>District</label>
+    <%= f.autocomplete_field :district, autocomplete_india_pincode_list_officename_order_lines_path,   :label => "District",  :class =>"form-control", :placeholder => "District", :maxlength=> "30"  %>
   </div>
   
   <div class="col-xs-4">

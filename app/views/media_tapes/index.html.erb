@@ -5,6 +5,7 @@
 <table class="table table-hover">
   <thead>
     <tr>
+    <th>Tape Head</th>
       <th>Tape Name</th>
        <th>Release Date</th>
       <th>Duration secs</th>
@@ -20,6 +21,7 @@
   <tbody>
     <% @media_tapes.each do |media_tape| %>
       <tr>
+       <td><%= media_tape.media_tape_head.name if media_tape.media_tape_head %></td>
         <td><%= media_tape.name %></td>
         <td><%= media_tape.release_date.strftime("%d/%m/%Y") %></td>
         <td><%= media_tape.duration_secs %></td>

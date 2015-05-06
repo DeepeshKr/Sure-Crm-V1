@@ -1,3 +1,4 @@
+ <% if @order_lines_regular.present? %>
 <table class="table table-striped table-bordered">
   <thead>
   <tr>
@@ -22,9 +23,9 @@
   </thead>
 
   <tbody>
-    <% @order_lines.each do |order_line| %>
+    <% @order_lines_regular.each do |order_line| %>
       <tr>
-        <td><%= order_line.description %></td>
+        <td><%= order_line.description %> </td>
         <td class="text-right"><%= order_line.pieces %></td>
        <td class="text-right"><%= order_line.subtotal %></td>
         <td class="text-right">
@@ -73,5 +74,11 @@
        </td>  
       </tr>
     <% end %>
+     <%= render "ordered_upsell_non_edit" %>
   </tbody>
 </table>
+<% else %>
+<div class="alert alert-danger" role="alert">
+<h3>No Regular products found, you cannot process this order </h3>
+</div>
+<% end %>

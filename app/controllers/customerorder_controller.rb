@@ -12,6 +12,41 @@ before_action :customer, only: [ :upsell, :payment, :channel, :review, :summary]
   respond_to :html
 
 #first Step is where the customer number and called no are shown together
+def newcall
+    new_call
+    #if order is not null then create orderline with order id
+    @order_line = OrderLine.new()
+  
+    if @order_id.present?
+        @order_line.orderid = @order_id  
+        specific_addon_product_lists  
+        editupsellproducts
+    end
+     
+    @newproductlist = ProductList.take(0)
+    
+
+ #@newproductlist = productlist.map{|a| [a.name, a.id]}
+  respond_with(@order_master, @order_lines, @order_line)
+end
+
+def update_product_list
+    #http://pullmonkey.com/2012/08/11/dynamic-select-boxes-ruby-on-rails-3/
+     #if media_tapes.present?
+    @searchvalue = params[:searchvalue]
+     @searchvalue =  @searchvalue.upcase
+    # map to name and id for use in our options_for_select
+    #product_masters = ProductMaster.where("productactivecodeid = ?", 10000).where("name like ? OR extproductcode like ? or description like ?", "#{@searchvalue}%", "#{@searchvalue}%", "#{@searchvalue}%").pluck("id")
+    #product_variants = ProductVariant.where("activeid = ? and product_sell_type_id = ?", 10000, 10000).where(productmasterid: product_masters).where("name like ? OR extproductcode like ? or description like ?", "#{@searchvalue}%", "#{@searchvalue}%", "#{@searchvalue}%").pluck("id")
+    #@productlist = ProductList.where('active_status_id = ?',  10000).where(product_variant_id: product_variants).joins(:product_variant).order("product_variants.name")
+    
+    #product_list = ProductList.where(active_status_id: 10000).where("productlist.name like ? ", "#{@searchvalue}%").joins(:product_variant).order("product_variants.name")
+    product_list = ProductList.where(active_status_id: 10000).where("name like ? ", "#{@searchvalue}%")
+    
+      found  = product_list.count
+      @newproductlist = product_list.map{|s| [s.name, s.id]}.insert(0, "Select a Product found: #{found}")
+    #end
+end
 
 def products
     new_call

@@ -26,7 +26,7 @@ class MediaTapeHeadsController < ApplicationController
   end
 
   def update_tapes
-
+    #http://pullmonkey.com/2012/08/11/dynamic-select-boxes-ruby-on-rails-3/
     media_tapes = MediaTapeHead.where('product_variant_id = ?' ,params[:product_variant_id])
     #if media_tapes.present?
     # map to name and id for use in our options_for_select

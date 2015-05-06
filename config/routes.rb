@@ -75,7 +75,9 @@ Rails.application.routes.draw do
   end
  
   #step 1
-  get 'neworder' => 'customerorder#products'
+  get 'neworder' => 'customerorder#newcall'
+  get 'update_product_list' => 'customerorder#update_product_list'
+  get 'products' => 'customerorder#products'
   get 'offline' => 'customerorder#offline'
   post 'uploadcall' => 'customerorder#uploadcall'
   post 'addproducts' => 'customerorder#add_products'

@@ -68,7 +68,8 @@
 <div class="row">
  
   <div class="col-xs-4">
-      <%= f.text_field :city,  :class =>"form-control", :placeholder => "City", :required => true %>
+  <label>City</label>
+      <%= f.autocomplete_field :city, autocomplete_india_city_list_name_order_lines_path, :label => "City",  :class =>"form-control", :placeholder => "City" ,  :maxlength=> "30", :required => true %>
   </div>
   <div class="col-xs-4">
   <%= f.select(:state, 
