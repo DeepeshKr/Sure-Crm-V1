@@ -4,7 +4,7 @@ before_action :productlist, only: [:products, :offline, :add_products]
 before_action :order_line_params, only: [ :add_products]
 before_action :set_order
 before_action :new_call
-#before_action :check_order, except: [:summary] 
+before_action :check_order, except: [:summary] 
 before_action :allowprocessing, except: [:summary, :new_dealer, :dealers]
 before_action :customer_address, only: [ :upsell, :payment, :channel, :review, :summary]
 before_action :customer, only: [ :upsell, :payment, :channel, :review, :summary]
@@ -815,8 +815,8 @@ end
       if @order_master.orderpaymentmode_id == 10000
         customer_credit_card = CustomerCreditCard.where(customer_id: @order_master.customer_id).last
         creditcardno =  customer_credit_card.card_no.truncate(20)
-        expmonth = customer_credit_card.expiry_mon.truncate(20)
-        expyear = customer_credit_card.expiry_yr_string.truncate(20)
+        expmonth = customer_credit_card.expiry_mon.truncate(20).rjust(2, '0')
+        expyear = customer_credit_card.expiry_yr_string.truncate(20).rjust(4, '0')
         cardtype = CreditCard.find_type(creditcardno).truncate(20)
         creditcardcharges = "Y"
       end
