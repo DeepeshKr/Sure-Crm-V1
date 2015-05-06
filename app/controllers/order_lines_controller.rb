@@ -3,11 +3,16 @@ class OrderLinesController < ApplicationController
 
   respond_to :html
 
-  autocomplete :product_variant, :name, :extra_data => [:total, :price, :taxes], full: true, :display_value => :productinfo
-     
-  autocomplete :product_list, :name, full: true, :display_value => :name, :where => { :active_status_id => 10000} 
+  autocomplete :india_pincode_list, :pincode, :extra_data => [:pinname] 
+  autocomplete :india_pincode_list, :taluk, :full => true
+  autocomplete :india_pincode_list, :officename, :full => true
+  
+  autocomplete :india_pincode_list, :districtname, :extra_data => [:officename] , :full => true
+  autocomplete :india_pincode_list, :regionname, :full => true
 
-  autocomplete :product_variant, :description, :extra_data => [:total, :name], full: true
+ # autocomplete :product_variant, :name, :extra_data => [:total, :price, :taxes], full: true, :display_value => :productinfo
+  autocomplete :india_city_list, :name, full: true
+  autocomplete :product_list, :name, full: true, :display_value => :name, :where => { :active_status_id => 10000} 
 
   def index
     @order_lines = OrderLine.all.order("id DESC").limit(20)

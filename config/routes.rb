@@ -33,19 +33,38 @@ Rails.application.routes.draw do
 
   get 'stockbook' => 'product_stock_books#index'
 
-  resources :india_city_lists  
+   resources :india_city_lists  
+  resources :india_pincode_lists
+
   resources :india_city_lists do
-    get :autocomplete_india_city_list_city, :on => :collection
+    get :autocomplete_india_city_list_name, :on => :collection
   end
 
-  resources :india_pincode_lists
   resources :india_pincode_lists do
     collection { post :import }
     get :autocomplete_india_pincode_list_pincode, :on => :collection
-    get :autocomplete_pindia_pincode_list_taluk, :on => :collection
-    get :autocomplete_tindia_pincode_list_districtname, :on => :collection
+    get :autocomplete_india_pincode_list_taluk, :on => :collection
+     get :autocomplete_india_pincode_list_officename, :on => :collection
+    get :autocomplete_india_pincode_list_districtname, :on => :collection
     get :autocomplete_india_pincode_list_regionname, :on => :collection
+
   end
+
+  #auto fill details from here
+  resources :order_lines do
+      get :autocomplete_india_pincode_list_pincode, :on => :collection
+      get :autocomplete_india_pincode_list_taluk, :on => :collection
+      get :autocomplete_india_pincode_list_officename, :on => :collection
+      get :autocomplete_india_pincode_list_districtname, :on => :collection
+      get :autocomplete_india_pincode_list_regionname, :on => :collection
+      get :autocomplete_india_city_list_name, :on => :collection
+
+      get :autocomplete_product_variant_name, on: :collection
+      get :autocomplete_product_variant_description, on: :collection
+      get :autocomplete_product_list_name, on: :collection
+  end
+
+  
 
   resources :product_stock_books
   resources :product_stock_adjusts
@@ -67,12 +86,7 @@ Rails.application.routes.draw do
   get 'purchase/search'
   get 'purchase/details'
 
-  #auto fill details from here
-  resources :order_lines do
-      get :autocomplete_product_variant_name, on: :collection
-      get :autocomplete_product_variant_description, on: :collection
-      get :autocomplete_product_list_name, on: :collection
-  end
+
  
   #step 1
   get 'neworder' => 'customerorder#newcall'

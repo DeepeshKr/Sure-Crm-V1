@@ -41,6 +41,9 @@ gem 'bootstrap_form'
 #simple form looks better
 gem 'simple_form'
 
+#paginate gem
+gem 'kaminari'
+
 #date picker
 gem 'bootstrap-datepicker-rails'
 
