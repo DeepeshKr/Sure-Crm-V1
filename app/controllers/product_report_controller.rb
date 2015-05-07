@@ -159,7 +159,7 @@ class ProductReportController < ApplicationController
 		  @product_master_name = ProductMaster.where(extproductcode: @prod).first.name
 
 			   #Opening Stock level on date
-		  	@product_stocks = ProductStock.where(ext_prod_code: @prod).where("TRUNC(checked_date) = ?", params[:for_date])
+		  	@product_stocks = ProductStock.where(ext_prod_code: @prod).where("(checked_date) = ?", for_date)
 		   if @product_stocks.present?
 			  #code
 			  @opening_stock = @product_stocks.sum(:current_stock)
@@ -178,7 +178,7 @@ class ProductReportController < ApplicationController
 		  @product_master_name = ProductMaster.where(extproductcode: @prod).first.name
 
 		   #purchases
-		  	@purchases_new = PURCHASES_NEW.where(prod: @prod).where("TRUNC(rdate) = ?", params[:for_date])
+		  	@purchases_new = PURCHASES_NEW.where(prod: @prod).where("(rdate) = ?", for_date)
 			if @purchases_new.present?
 			  #Purchases
 			  @purchasesshortqty = @purchases_new.sum(:shortqty)
@@ -202,10 +202,10 @@ class ProductReportController < ApplicationController
 		  @product_master_name = ProductMaster.where(extproductcode: @prod).first.name
 
 		   #retails retuned
-		  	@vpp = VPP.where(prod: @prod).where("TRUNC(returndate) = ?", params[:for_date])
+		  	@vpp = VPP.where(prod: @prod).where("returndate = ?", for_date)
 			if @vpp.present?
 			   #total
-			  @retailsalestotal = @vpp.sum(:paidamt)
+			  @retailsalestotal = @vpp.sum(:invoiceamount)
 			  #pieces
 			   @retailsalespieces = @vpp.sum(:quantity)
 			end
@@ -214,16 +214,16 @@ class ProductReportController < ApplicationController
 	end
 
 	def retail_sold_stock_report
-			@reportname = "Retails Sold Report"
+			@reportname = "Retail Sales Report"
 	  	if params[:prod].present? && params[:for_date].present? 
-		  @or_for_date = params[:for_date]		  
+		 	  
 		  @prod = params[:prod]
 		  for_date =  Date.strptime(params[:for_date], "%m/%d/%Y")
 		  @for_date = for_date.strftime('%d-%b-%y')
 		  @product_master_name = ProductMaster.where(extproductcode: @prod).first.name
 	
 		   #retail sales
-		  	@vpp = VPP.where(prod: @prod).where("TRUNC(orderdate) = ?",for_date)
+		  	@vpp = VPP.where(prod: @prod).where("(orderdate) = ?",for_date)
 			if @vpp.present?
 			   #total
 			  @retailsalestotal = @vpp.sum(:paidamt)
@@ -244,7 +244,7 @@ class ProductReportController < ApplicationController
 		  @product_master_name = ProductMaster.where(extproductcode: @prod).first.name
 
 		   #Sold wholesale
-      	@newwlsdet = NEWWLSDET.where(prod: prod).where("TRUNC(shdate) = ? ", params[:for_date])
+      	@newwlsdet = NEWWLSDET.where(prod: prod).where("(shdate) = ? ", for_date)
 			if @newwlsdet.present?
 			#total
 		  @wholesalestotal = @newwlsdet.sum(:totamt)
@@ -265,7 +265,7 @@ class ProductReportController < ApplicationController
 		  @product_master_name = ProductMaster.where(extproductcode: @prod).first.name
 
 			#Sold branch
-			@tempinv_newwlsdet = TEMPINV_NEWWLSDET.where(prod: prod).where("TRUNC(shdate) = ? ", params[:for_date])
+			@tempinv_newwlsdet = TEMPINV_NEWWLSDET.where(prod: prod).where("(shdate) = ? ", for_date)
 			if @tempinv_newwlsdet.present?
 				 #total
 			  @branchsalestotal = @tempinv_newwlsdet.sum(:totamt)
@@ -286,7 +286,7 @@ class ProductReportController < ApplicationController
 		  @product_master_name = ProductMaster.where(extproductcode: @prod).first.name
 
 		   #stock adjust journal
-		  	@product_stock_adjusts = ProductStockAdjust.where(ext_prod_code: prod).where("TRUNC(created_date) = ?", params[:for_date]) 
+		  	@product_stock_adjusts = ProductStockAdjust.where(ext_prod_code: prod).where("(created_date) = ?", for_date) 
 		  	if @product_stock_adjusts.present?
 		  		#code
 		  		@journal_total = @product_stock_adjusts.sum(:change_stock)
