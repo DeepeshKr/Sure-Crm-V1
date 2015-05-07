@@ -1,0 +1,22 @@
+<%= render 'report_heading' %>
+
+<br>
+
+<div class="well well-sm">
+		<div class="row">
+		<div class="col-xs-6">
+		<h4>	Branch Sale / Transfer <small>Shdate in TEMPINV_NEWWLSDET</small>  </h4> 
+			
+		</div>
+		<div class="col-xs-3">
+		<h4>Total Pieces Sold: <%= @branchsalespieces %></h4>
+		</div>
+		<div class="col-xs-3">
+		<h4>Total Amount: <%= number_with_delimiter(@branchsalestotal, locale: :en) %></h4>
+		</div>
+		
+		</div>
+</div>
+
+<%= render 'tempinv_newwlsdet/list' %>
+<br>

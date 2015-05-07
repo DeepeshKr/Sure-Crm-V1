@@ -1,0 +1,24 @@
+<%= render 'report_heading' %>
+
+<div class="well well-sm">
+		<div class="row">
+		<div class="col-xs-4 pull-left">
+		<h4> 	Purchases <small>Rdate in Purchase_New</small>  </h4> 
+		
+		</div>
+		<div class="col-xs-4">
+		<h4> Total Pieces Bought: <%= @purchasespieces %> </h4>
+		</div>
+		<div class="col-xs-4">
+		<h4> Total Amount: <%= number_with_delimiter(@purchasestotal, locale: :en) %> </h4>
+		</div>
+		
+		</div>
+	</div>
+	<div class="row">
+<div class="col-xs-12">
+<%= render 'purchases_new/list' %>
+</div>
+</div>
+   
+<br>

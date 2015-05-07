@@ -28,6 +28,7 @@ class ProductReportController < ApplicationController
 	  @product_stocks = ProductStock.where(ext_prod_code: prod).where("TRUNC(checked_date) >= ? and TRUNC(checked_date) <= ?", from_date, to_date)
 	   if @product_stocks.present?
 		  #code
+		  @opening_stock = @product_stocks.sum(:current_stock)
 	   end
 	   #new product stock
 	   @product_stock = ProductStock.new(product_master_id: @product_master_id, ext_prod_code: prod, emp_code: @empcode, emp_id: @empid)
@@ -37,6 +38,7 @@ class ProductReportController < ApplicationController
 	  @product_stock_adjusts = ProductStockAdjust.where(ext_prod_code: prod).where("TRUNC(created_date) >= ? and TRUNC(created_date) <= ?", from_date, to_date)
 	   if @product_stock_adjusts.present?
 		  #code
+		  @journal_total = @product_stock_adjusts.sum(:change_stock)
 	   end
 	   #new stock adjusts
 	   @product_stock_adjust = ProductStockAdjust.new(product_master_id: @product_master_id, ext_prod_code: prod, emp_code: @empcode, emp_id: @empid)
@@ -147,6 +149,151 @@ class ProductReportController < ApplicationController
   def details
 
   end
+  	def opening_stock_report
+	  	@reportname = "Opening Stock Report"
+	  	if params[:prod].present? && params[:for_date].present? 
+		  @or_for_date = params[:for_date]		  
+		  @prod = params[:prod]
+		  for_date =  Date.strptime(params[:for_date], "%m/%d/%Y")
+		  @for_date = for_date.strftime('%d-%b-%y')
+		  @product_master_name = ProductMaster.where(extproductcode: @prod).first.name
+
+			   #Opening Stock level on date
+		  	@product_stocks = ProductStock.where(ext_prod_code: @prod).where("TRUNC(checked_date) = ?", params[:for_date])
+		   if @product_stocks.present?
+			  #code
+			  @opening_stock = @product_stocks.sum(:current_stock)
+		   end
+		 
+		end
+	end
+
+	def purchased_stock_report
+		@reportname = "Purchased Stock Report"
+	  	if params[:prod].present? && params[:for_date].present? 
+		  @or_for_date = params[:for_date]		  
+		  @prod = params[:prod]
+		  for_date =  Date.strptime(params[:for_date], "%m/%d/%Y")
+		  @for_date = for_date.strftime('%d-%b-%y')
+		  @product_master_name = ProductMaster.where(extproductcode: @prod).first.name
+
+		   #purchases
+		  	@purchases_new = PURCHASES_NEW.where(prod: @prod).where("TRUNC(rdate) = ?", params[:for_date])
+			if @purchases_new.present?
+			  #Purchases
+			  @purchasesshortqty = @purchases_new.sum(:shortqty)
+			  #total
+				@purchasestotal = @purchases_new.sum(:invamt)
+			  #pieces
+			   @purchasespieces = @purchases_new.sum(:qty)
+			end
+	  
+		 
+		end
+	end
+
+	def retail_returned_stock_report
+			@reportname = "Retail Returned Report"
+	  	if params[:prod].present? && params[:for_date].present? 
+		 @or_for_date = params[:for_date]		  
+		  @prod = params[:prod]
+		  for_date =  Date.strptime(params[:for_date], "%m/%d/%Y")
+		  @for_date = for_date.strftime('%d-%b-%y')
+		  @product_master_name = ProductMaster.where(extproductcode: @prod).first.name
+
+		   #retails retuned
+		  	@vpp = VPP.where(prod: @prod).where("TRUNC(returndate) = ?", params[:for_date])
+			if @vpp.present?
+			   #total
+			  @retailsalestotal = @vpp.sum(:paidamt)
+			  #pieces
+			   @retailsalespieces = @vpp.sum(:quantity)
+			end
+		 
+		end
+	end
+
+	def retail_sold_stock_report
+			@reportname = "Retails Sold Report"
+	  	if params[:prod].present? && params[:for_date].present? 
+		  @or_for_date = params[:for_date]		  
+		  @prod = params[:prod]
+		  for_date =  Date.strptime(params[:for_date], "%m/%d/%Y")
+		  @for_date = for_date.strftime('%d-%b-%y')
+		  @product_master_name = ProductMaster.where(extproductcode: @prod).first.name
+	
+		   #retail sales
+		  	@vpp = VPP.where(prod: @prod).where("TRUNC(orderdate) = ?",for_date)
+			if @vpp.present?
+			   #total
+			  @retailsalestotal = @vpp.sum(:paidamt)
+			  #pieces
+			   @retailsalespieces = @vpp.sum(:quantity)
+			end
+		 
+		end
+	end
+
+	def wholesale_sold_stock_report
+			@reportname = "Wholesale Sales Report"
+	  	if params[:prod].present? && params[:for_date].present? 
+		 @or_for_date = params[:for_date]		  
+		  @prod = params[:prod]
+		  for_date =  Date.strptime(params[:for_date], "%m/%d/%Y")
+		  @for_date = for_date.strftime('%d-%b-%y')
+		  @product_master_name = ProductMaster.where(extproductcode: @prod).first.name
+
+		   #Sold wholesale
+      	@newwlsdet = NEWWLSDET.where(prod: prod).where("TRUNC(shdate) = ? ", params[:for_date])
+			if @newwlsdet.present?
+			#total
+		  @wholesalestotal = @newwlsdet.sum(:totamt)
+		  #pieces
+		  @wholesalespieces = @newwlsdet.sum(:quantity)
+			end
+		 
+		end
+	end
+
+	def branch_sold_stock_report
+		@reportname = "Branch Sales Report"
+	  	if params[:prod].present? && params[:for_date].present? 
+		 @or_for_date = params[:for_date]		  
+		  @prod = params[:prod]
+		  for_date =  Date.strptime(params[:for_date], "%m/%d/%Y")
+		  @for_date = for_date.strftime('%d-%b-%y')
+		  @product_master_name = ProductMaster.where(extproductcode: @prod).first.name
+
+			#Sold branch
+			@tempinv_newwlsdet = TEMPINV_NEWWLSDET.where(prod: prod).where("TRUNC(shdate) = ? ", params[:for_date])
+			if @tempinv_newwlsdet.present?
+				 #total
+			  @branchsalestotal = @tempinv_newwlsdet.sum(:totamt)
+			  #pieces
+			  @branchsalespieces = @tempinv_newwlsdet.sum(:quantity)
+			end
+		 
+		end
+	end
+
+	def corrections_stock_report
+		@reportname = "Journal Report"
+	  	if params[:prod].present? && params[:for_date].present? 
+		  @or_for_date = params[:for_date]		  
+		  @prod = params[:prod]
+		  for_date =  Date.strptime(params[:for_date], "%m/%d/%Y")
+		  @for_date = for_date.strftime('%d-%b-%y')
+		  @product_master_name = ProductMaster.where(extproductcode: @prod).first.name
+
+		   #stock adjust journal
+		  	@product_stock_adjusts = ProductStockAdjust.where(ext_prod_code: prod).where("TRUNC(created_date) = ?", params[:for_date]) 
+		  	if @product_stock_adjusts.present?
+		  		#code
+		  		@journal_total = @product_stock_adjusts.sum(:change_stock)
+		  	end	 
+		end
+	end
+
 
   private
     def dropdowns

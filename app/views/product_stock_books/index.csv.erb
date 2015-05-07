@@ -1,0 +1,5 @@
+<% headers = ['Date', 'Opening Qty', 'Purchased Qty', 'Purchased Value', 'Returned Retail Qty', 'Returned Retail Value', 'Returned wholesale Qty', 'Returned wholesale Value', 'Returned Branch Qty', 'Returned Branch Value', 'Sold Retail Qty', 'Sold Retail Value', 'Sold Wholesale Qty', 'Sold Wholesale Value', 'Sold Branch Qty', 'Sold Branch Value', 'Corrections Qty', 'Corrections Value', 'Closing Qty'] %>
+<%= CSV.generate_line headers %>
+	 <% @product_stock_books.each do |c| %>
+	 <%= CSV.generate_line([c.stock_date.strftime('%d-%b-%y'), c.opening_qty, c.purchased_qty, c.purchased_value, c.returned_retail_qty, c.returned_retail_value, c.returned_wholesale_qty, c.returned_wholesale_value, c.returned_others_qty, c.returned_others_value, c.sold_retail_qty, c.sold_retail_value, c.sold_wholesale, c.sold_wholesale_value, c.sold_branch_qty, c.sold_branch_value, c.corrections_qty, c.corrections_value, c.closing_qty]).html_safe.strip  %>
+	<% end %>

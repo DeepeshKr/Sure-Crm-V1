@@ -1,0 +1,25 @@
+<%= render 'report_heading' %>
+
+<div class="well well-sm">
+		<div class="row">
+		<div class="col-xs-4">
+		<h4>	Journal Entries </h4> 
+			
+		</div>
+		<div class="col-xs-3">
+		
+		</div>
+		<div class="col-xs-3">
+		<h4>
+		Journal Total: <%= number_with_delimiter(@journal_total, locale: :en) %> </h4>
+		</div>
+		
+		</div>
+</div>
+	<div class="row">
+<div class="col-xs-12">
+<%= render 'product_stock_adjusts/list' %>
+</div>
+</div>
+   
+<br>

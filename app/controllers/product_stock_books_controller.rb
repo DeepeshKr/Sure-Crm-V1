@@ -8,7 +8,7 @@ class ProductStockBooksController < ApplicationController
      @prev_datelist = Date.today.in_time_zone,
     #@prev_datelist = "last checked for " + (Date.today - 1.day).strftime('%d-%b-%y')
     if params[:prod].present? && params[:from_date].present? && params[:to_date].present?
-     
+      @show_add_update = 1
       #posting params
       @prod = params[:prod]
       @or_from_date = params[:from_date]
@@ -29,6 +29,16 @@ class ProductStockBooksController < ApplicationController
         @to_date_text = to_date.strftime('%d-%b-%y')
           @product_stock_books = ProductStockBook.where(ext_prod_code: @prod).where("TRUNC(stock_date) >= ? AND TRUNC(stock_date) <= ?", from_date, to_date)
          
+          respond_to do |format|
+            format.html
+            format.csv do
+              headers['Content-Disposition'] = "attachment; filename=\"stock-book\""
+              headers['Content-Type'] ||= 'text/csv'
+            end
+          end
+      
+    else
+      @show_add_update = 0
     end
    # @product_stock_books = ProductStockBook.all.limit(100)
    
@@ -254,7 +264,7 @@ end
       #Sold Branch
       @tempinv_newwlsdet = TEMPINV_NEWWLSDET.where(prod: prod).where("TRUNC(shdate) = ?", for_date)
       if @tempinv_newwlsdet.present?
-        ##wholesale Sales
+        ##Branch Sales
         
         @product_stock_book.update(sold_branch_qty: @tempinv_newwlsdet.sum(:quantity))
         @product_stock_book.update(sold_branch_rate: 0)

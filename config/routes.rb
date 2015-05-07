@@ -201,6 +201,24 @@ Rails.application.routes.draw do
     get 'productreport' => 'product_report#list'
     get 'product_report/search'
     get 'productdetails' => 'product_report#details'
+     #stock report opening stock
+    get 'openingstockreport' => 'product_report#opening_stock_report'
+     #stock report purchases
+    get 'purchasedstockreport' => 'product_report#purchased_stock_report'
+     #stock report retail returns
+    get 'retailreturnedreport' => 'product_report#retail_returned_stock_report'
+
+    #stock report retail sold
+    get 'retailsoldreport' => 'product_report#retail_sold_stock_report'
+    #stock report wholesale sold
+    get 'wholesalesoldreport' => 'product_report#wholesale_sold_stock_report'
+    #stock report branch sold
+    get 'branchsoldreport' => 'product_report#branch_sold_stock_report'
+
+    #stock correction report
+    get 'correctionstockreport' => 'product_report#corrections_stock_report'
+
+
 
     get 'product_cost/list'
     get 'product_cost/cost'
@@ -211,6 +229,8 @@ Rails.application.routes.draw do
     delete 'deleteproductstock' => 'product_stocks#destroy'
     # get 'deleteproductstock' => 'product_stocks#deletestock'
     delete 'deleteproductstockadjust' => 'product_stock_adjusts#delete'
+
+
 
     resources :user_roles
     resources :customer_order_lists

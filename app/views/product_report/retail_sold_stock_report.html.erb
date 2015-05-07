@@ -1,0 +1,21 @@
+<%= render 'report_heading' %>
+<br>
+
+
+	<div class="well well-sm">
+		<div class="row">
+		<div class="col-xs-4">
+		<h4> 	Customer Sales <small>Orderdate / Paiddate in VPP</small> </h4> 
+			
+		</div>
+		<div class="col-xs-4">
+		<h4> Total Pieces Sold: <%= @retailsalespieces %> </h4> 
+		</div>
+		<div class="col-xs-4">
+		<h4> Total Amount: <%= number_with_delimiter(@retailsalestotal, locale: :en) %> </h4> 
+		</div>
+		
+		</div>
+	</div>
+   <%= render 'vpp/list' %>
+<br>

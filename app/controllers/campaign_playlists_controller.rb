@@ -17,7 +17,7 @@ class CampaignPlaylistsController < ApplicationController
             headers['Content-Type'] ||= 'text/csv'
           end
       end
-    end
+    end 
     
   end
 
