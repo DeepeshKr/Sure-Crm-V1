@@ -244,7 +244,7 @@ class ProductReportController < ApplicationController
 		  @product_master_name = ProductMaster.where(extproductcode: @prod).first.name
 
 		   #Sold wholesale
-      	@newwlsdet = NEWWLSDET.where(prod: prod).where("(shdate) = ? ", for_date)
+      	@newwlsdet = NEWWLSDET.where(prod: @prod).where("(shdate) = ? ", for_date)
 			if @newwlsdet.present?
 			#total
 		  @wholesalestotal = @newwlsdet.sum(:totamt)
@@ -265,7 +265,7 @@ class ProductReportController < ApplicationController
 		  @product_master_name = ProductMaster.where(extproductcode: @prod).first.name
 
 			#Sold branch
-			@tempinv_newwlsdet = TEMPINV_NEWWLSDET.where(prod: prod).where("(shdate) = ? ", for_date)
+			@tempinv_newwlsdet = TEMPINV_NEWWLSDET.where(prod: @prod).where("(shdate) = ? ", for_date)
 			if @tempinv_newwlsdet.present?
 				 #total
 			  @branchsalestotal = @tempinv_newwlsdet.sum(:totamt)
@@ -286,7 +286,7 @@ class ProductReportController < ApplicationController
 		  @product_master_name = ProductMaster.where(extproductcode: @prod).first.name
 
 		   #stock adjust journal
-		  	@product_stock_adjusts = ProductStockAdjust.where(ext_prod_code: prod).where("(created_date) = ?", for_date) 
+		  	@product_stock_adjusts = ProductStockAdjust.where(ext_prod_code: @prod).where("(created_date) = ?", for_date) 
 		  	if @product_stock_adjusts.present?
 		  		#code
 		  		@journal_total = @product_stock_adjusts.sum(:change_stock)

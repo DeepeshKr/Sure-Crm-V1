@@ -19,6 +19,10 @@ class ProductMaster < ActiveRecord::Base
    self.barcode + " - " + self.name  + " Basic " + self.price.to_s + " Shipping " + self.shipping.to_s 
   end
 
+  def productlistname
+  self.name + " - " + self.barcode + " Basic " + self.price.to_s + " Shipping " + self.shipping.to_s 
+  end
+
   def fullproductname
    self.barcode  + " - " +  self.extproductcode + " - " + self.name  + " Basic " + self.price.to_s + " Shipping " + self.shipping.to_s 
   end

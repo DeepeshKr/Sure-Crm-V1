@@ -3,13 +3,14 @@ class CustomerOrderListsController < ApplicationController
 
   respond_to :html
 
-  def index
+  def index 
+    @complete = 'yes'
     if params[:complete].present?
         if params[:complete] = 'yes'
            @customer_order_lists = CustomerOrderList.where("ordernum is not null").order("id DESC").limit(200)
         end
     elsif params[:ordernum].present?
-        
+        @ordernum
            @customer_order_lists = CustomerOrderList.where("ordernum = ?", params[:ordernum]).order("id DESC").limit(200)
        
    else
@@ -21,6 +22,15 @@ class CustomerOrderListsController < ApplicationController
   end
 
   def show
+    order_masters = OrderMaster.where(external_order_no: @customer_order_list.ordernum)
+    if order_masters.present?
+      #if @order_master.customer_address_id.present?
+        @customer_address = CustomerAddress.find(order_masters.first.customer_address_id)
+        @order_master = order_masters.first
+        @order_lines = OrderLine.where(orderid: @order_master.id)
+      #end 
+    end  
+
     respond_with(@customer_order_list)
   end
 

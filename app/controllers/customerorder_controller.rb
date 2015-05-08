@@ -843,7 +843,7 @@ end
          prod9 = ""
          prod10 = ""
 
-         orderline1 = OrderLine.where("orderid = ?", order_id)
+         orderline1 = OrderLine.where("orderid = ?", order_id).order("id")
           if orderline1.present?
             qty1 = orderline1.first.pieces.to_i
             prod1 = orderline1.first.product_list.extproductcode[0..9].upcase

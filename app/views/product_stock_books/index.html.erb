@@ -65,7 +65,7 @@
   <tbody>
     <% @product_stock_books.each do |product_stock_book| %>
       <tr>
-        <td><%= product_stock_book.stock_date.strftime('%d-%b-%Y') %></td>
+        <td><%= product_stock_book.stock_date.strftime('%d-%b-%Y') %>         </td>
         <td class="text-right">
          <%= link_to product_stock_book.opening_qty, openingstockreport_path(prod: @prod, for_date: product_stock_book.stock_date.strftime('%m/%d/%Y')), :target => "_blank" %>
      </td>

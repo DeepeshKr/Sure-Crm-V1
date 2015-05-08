@@ -27,7 +27,7 @@ class ProductStockBooksController < ApplicationController
         end
         @from_date_text = from_date.strftime('%d-%b-%y')
         @to_date_text = to_date.strftime('%d-%b-%y')
-          @product_stock_books = ProductStockBook.where(ext_prod_code: @prod).where("TRUNC(stock_date) >= ? AND TRUNC(stock_date) <= ?", from_date, to_date)
+          @product_stock_books = ProductStockBook.where(ext_prod_code: @prod).where("TRUNC(stock_date) >= ? AND TRUNC(stock_date) <= ?", from_date, to_date).order("stock_date")
          
           respond_to do |format|
             format.html
@@ -138,15 +138,18 @@ end
 
     #create row for prod for each date
     def create_update(for_date, prod)
+      @closing_qty = 0
+      @closing_value = 0
 
        @product_stock_book = ProductStockBook.new(stock_date: for_date, :ext_prod_code => prod)
       #check if product listing found for date
         if (ProductStockBook.where("TRUNC(stock_date) = ?", for_date).where(ext_prod_code: prod)).present?
-         @product_stock_book = ProductStockBook.where("TRUNC(stock_date) = ?", for_date).where(ext_prod_code: prod).last
-         else
-         @product_stock_book.save
-         closing_qty = 0
-         closing_value = 0
+           @product_stock_book = ProductStockBook.where("TRUNC(stock_date) = ?", for_date).where(ext_prod_code: prod).last
+            @closing_qty = @product_stock_book.opening_qty
+            @closing_value = 0
+           else
+           @product_stock_book.save
+          
         end
       
         # if !@product_stock_book.present?
@@ -175,8 +178,9 @@ end
         @product_stock_book.update(opening_value: 0)
 
         #update closing
-        closing_qty = (@product_stocks.sum(:current_stock))
-        closing_value = 0
+        past_product_stock =  @product_stocks.sum(:current_stock) || 0 if  @product_stocks.sum(:current_stock).present?
+        @closing_qty += past_product_stock
+        @closing_value += 0
 
       else
         #get stock from previous stock date if available
@@ -188,8 +192,16 @@ end
           @product_stock_book.update(opening_value: @old_product_stocks.first.closing_value)
 
          #update closing
-        closing_qty = (@old_product_stocks.first.opening_qty)
-        closing_value = (@old_product_stocks.first.opening_value)
+          past_product_stock_qty = @old_product_stocks.first.opening_qty 
+          if past_product_stock_qty.present? && past_product_stock_qty > 0
+            @closing_qty += (past_product_stock_qty || 0 )
+          end
+          # past_product_stock_val = @old_product_stocks.first.opening_value || 0 if @old_product_stocks.first.opening_value.present?
+          
+          # if past_product_stock_val.present? && past_product_stock_val > 0
+          #   @closing_value += (past_product_stock_val || 0 )
+          # end
+          #
         #end
 
        end
@@ -203,8 +215,8 @@ end
           @product_stock_book.update(purchased_value: @purchases_new.sum(:invamt))
 
            #update closing
-          closing_qty += @purchases_new.sum(:qty)
-          closing_value += @purchases_new.sum(:invamt)
+          @closing_qty += @purchases_new.sum(:qty)
+          @closing_value += @purchases_new.sum(:invamt)
 
         else
           @product_stock_book.update(purchased_qty: 0)
@@ -219,9 +231,15 @@ end
           @product_stock_book.update(returned_retail_rate: 0)
           @product_stock_book.update(returned_retail_value: @returned_vpp.sum(:invoiceamount))
             #update closing
-
-        closing_qty += @returned_vpp.sum(:quantity) if @returned_vpp.sum(:quantity) > 0
-        closing_value += @returned_vpp.sum(:invoiceamount) if @returned_vpp.sum(:invoiceamount) > 0
+            return_vpp_qty = @returned_vpp.sum(:quantity) if @returned_vpp.sum(:quantity) > 0
+            if return_vpp_qty.present? && return_vpp_qty > 0 
+              @closing_qty += return_vpp_qty
+            end
+          return_vpp_val =  @returned_vpp.sum(:invoiceamount) if @returned_vpp.sum(:invoiceamount) > 0
+          if return_vpp_val.present? && return_vpp_val > 0
+              @closing_value += return_vpp_val
+          end       
+      
         else
           @product_stock_book.update(returned_retail_qty: 0)
           @product_stock_book.update(returned_retail_rate: 0)
@@ -236,8 +254,8 @@ end
           @product_stock_book.update(sold_retail_value: @sold_vpp.sum(:invoiceamount))
          
          #update closing
-        closing_qty -= @sold_vpp.sum(:quantity)
-        closing_value -= @sold_vpp.sum(:invoiceamount)
+        @closing_qty -= @sold_vpp.sum(:quantity)
+        @closing_value -= @sold_vpp.sum(:invoiceamount)
         else
            @product_stock_book.update(sold_retail_qty: 0)
           @product_stock_book.update(sold_retail_rate: 0)
@@ -253,8 +271,8 @@ end
         @product_stock_book.update(sold_wholesale_value: @newwlsdet.sum(:totamt))
 
          #update closing
-        closing_qty -= @newwlsdet.sum(:quantity)
-        closing_value -= @newwlsdet.sum(:totamt)
+        @closing_qty -= @newwlsdet.sum(:quantity)
+        @closing_value -= @newwlsdet.sum(:totamt)
       else
         @product_stock_book.update(sold_wholesale: 0)
         @product_stock_book.update(sold_wholesale_rate: 0)
@@ -271,8 +289,8 @@ end
         @product_stock_book.update(sold_branch_value: @tempinv_newwlsdet.sum(:totamt))
 
         #update closing
-        closing_qty -= @tempinv_newwlsdet.sum(:quantity)
-        closing_value -= @tempinv_newwlsdet.sum(:totamt)
+        @closing_qty -= @tempinv_newwlsdet.sum(:quantity)
+        @closing_value -= @tempinv_newwlsdet.sum(:totamt)
       else
         @product_stock_book.update(sold_branch_qty: 0)
         @product_stock_book.update(sold_branch_rate: 0)
@@ -288,8 +306,8 @@ end
         @product_stock_book.update(corrections_value: @product_stock_adjusts.sum(:total))
 
         #update closing
-        closing_qty += @product_stock_adjusts.sum(:change_stock)
-        closing_value += @product_stock_adjusts.sum(:total)
+        @closing_qty += @product_stock_adjusts.sum(:change_stock)
+        @closing_value += @product_stock_adjusts.sum(:total)
 
       else
         @product_stock_book.update(corrections_qty: 0)
@@ -306,9 +324,9 @@ end
       @product_stock_book.update(returned_others_rate: 0)
       @product_stock_book.update(returned_others_value: 0)
            
-      @product_stock_book.update(closing_qty: closing_qty)
+      @product_stock_book.update(closing_qty: @closing_qty)
       @product_stock_book.update(closing_rate: 0)
-      @product_stock_book.update(closing_value: closing_value)
+      @product_stock_book.update(closing_value: @closing_value)
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.
