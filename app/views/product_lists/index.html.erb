@@ -17,6 +17,7 @@
       <th>Product variant</th>
       <th>Specs</th>
       <th>Extproductcode</th>
+      
       <th>List barcode</th>
         <th>Active</th>
       <th colspan="1"></th>
@@ -31,6 +32,7 @@
         <td><%= product_list.product_variant.productinfo if product_list.product_variant %></td>
        <td><%= product_list.product_spec_list.name if product_list.product_spec_list %></td>
         <td><%= product_list.extproductcode %></td>
+       
         <td><%= product_list.list_barcode %></td>
         
         <td>  <%= product_list.product_active_code.name if product_list.product_active_code %> </td>

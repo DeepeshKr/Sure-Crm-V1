@@ -229,7 +229,7 @@ Amount
 	<%= link_to 'Back', customer_order_lists_path, class: "btn btn-primary btn-sm" %>
 </div>
 
-<div class="col-xs-3 col-xs-offset-7" style="visibility:hidden;">
+<div class="col-xs-3 col-xs-offset-7" >
 	 <%= form_tag("/inoracle", method: "post") do  %>
 	 <%= hidden_field_tag :id, @customer_order_list.id %>
 	

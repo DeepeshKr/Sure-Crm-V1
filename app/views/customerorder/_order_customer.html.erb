@@ -1,24 +1,24 @@
 <div class="well">
-  <small>Customer Id <%= @order_master.customer_id%></small> &nbsp;<small>Order Id <%= @order_master.id %></small>
-  &nbsp;<small> <strong>Date:</strong>   <%= @order_master.orderdate %> </small>
-&nbsp;  <small><strong>Employee Id:</strong>   <%= @order_master.employee_id %></small>   
-&nbsp; <small><strong>Employee Code:</strong>   <%= @order_master.employeecode %> </small>
-&nbsp; <small><strong>DNIS:</strong>   <%= @order_master.calledno %> </small>
+  <small>Customer Id <%= @order_master.customer_id rescue nil  %></small> &nbsp;<small>Order Id <%= @order_master.id rescue nil %></small>
+  &nbsp;<small> <strong>Date:</strong>   <%= @order_master.orderdate rescue nil %> </small>
+&nbsp;  <small><strong>Employee Id:</strong>   <%= @order_master.employee_id rescue nil %></small>   
+&nbsp; <small><strong>Employee Code:</strong>   <%= @order_master.employeecode rescue nil %> </small>
+&nbsp; <small><strong>DNIS:</strong>   <%= @order_master.calledno rescue nil %> </small>
 <div class="row">
 
 
   <div class="col-xs-6">
-   <h3><%= @order_master.customer.fullname  if @order_master.customer %> </h3>
+   <h3><%= @order_master.customer.fullname  if @order_master.customer rescue nil %> </h3>
   </div>
   <div class="col-xs-6">
   <div class="row">
     <div class="col-xs-6">
-      <small> Mobile No <%= @order_master.customer.mobile if @order_master.customer %> </small><br/>
-      <small> Mobile No <%= @order_master.customer.alt_mobile if @order_master.customer %></small> 
+      <small> Mobile No <%= @order_master.customer.mobile if @order_master.customer rescue nil %> </small><br/>
+      <small> Mobile No <%= @order_master.customer.alt_mobile if @order_master.customer rescue nil %></small> 
     </div>
     <div class="col-xs-6">
-    <small> Email Id  <%= @order_master.customer.emailid if @order_master.customer %> </small><br/>
-    <small> Email Id  <%= @order_master.customer.alt_emailid if @order_master.customer %></small>
+    <small> Email Id  <%= @order_master.customer.emailid if @order_master.customer rescue nil %> </small><br/>
+    <small> Email Id  <%= @order_master.customer.alt_emailid if @order_master.customer rescue nil %></small>
     </div>
   </div>
 </div>

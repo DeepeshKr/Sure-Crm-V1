@@ -64,6 +64,7 @@ class ProductStockAdjustsController < ApplicationController
          redirect_to productreport_path(prod: params[:prod], from_date: params[:from_date], 
           to_date: params[:to_date]), notice: 'Product Journal entry was successfully removed.' 
       end
+      }
       format.json { head :no_content }
     end
   end

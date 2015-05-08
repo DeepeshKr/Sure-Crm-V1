@@ -3,7 +3,7 @@ class Employee < ActiveRecord::Base
  before_save :downcase
  
  validates :first_name,  presence: true, length: { maximum: 50 }
-validates :last_name,  presence: true, length: { maximum: 50 }
+#validates :last_name,  presence: true, length: { maximum: 50 }
  validates :employeecode,  presence: true, uniqueness: true, length:  { maximum: 50 }
    
  VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
@@ -30,7 +30,7 @@ validates :last_name,  presence: true, length: { maximum: 50 }
 
 
 def fullname
-  self.title + " " + self.first_name  + " " + self.last_name + " (" + self.designation + ")"
+  (self.title || "NA") + " " + (self.first_name || "NA" )  + " " + (self.last_name || "NA" ) + " (" + (self.designation || "NA" ) + ")"
 end
 
 def name
