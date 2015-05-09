@@ -34,7 +34,7 @@ def fullname
 end
 
 def name
-   self.first_name + " " + self.last_name 
+   (self.first_name || "NA") + " " + (self.last_name || "NA") 
 end
 
 private
