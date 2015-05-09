@@ -127,6 +127,8 @@ Rails.application.routes.draw do
   get 'summary' => 'customerorder#summary'
 
   get 'orderlist' => 'order_masters#list'
+
+  get 'dailyreport' => 'order_masters#daily_report'
   
   get 'dailyschedule' => 'campaign_playlists#perday' 
   #other activities

@@ -9,23 +9,95 @@ class OrderMastersController < ApplicationController
   end
 
   def list
+    #<br>      <small>About <%= time_ago_in_words(order_master.orderdate + 330.minutes) %> ago </small>
+    @sno = 1
     @employees = Employee.all.order("first_name").joins(:employee_role).where("employee_roles.sortorder > 8")
 
     if params[:employee_id].present?
       @employee_id = params[:employee_id]
-      @order_masters = OrderMaster.where(employee_id: @employee_id).order("id DESC").limit(100)
+      employee = Employee.find(@employee_id).fullname
+      if params[:completed].present?
+        # all completed orders only
+         if params[:for_date].present? 
+          for_date =  Date.strptime(params[:for_date], "%m/%d/%Y")
+
+          @order_masters = OrderMaster.where('ORDER_STATUS_MASTER_ID > 10002').where('TRUNC(orderdate) = ?',for_date).where(employee_id: @employee_id)
+         @orderdesc = "#{@order_masters.count()} orders of #{employee} for #{for_date}"
+         else
+          @orderdesc = "Recent 500 completed orders of #{employee} "
+          @order_masters = OrderMaster.where('ORDER_STATUS_MASTER_ID > 10002').where(employee_id: @employee_id).limit(500)
+         
+         end
+      else
+         @orderdesc = "Recent 1000 all orders of #{employee} "
+          @order_masters = OrderMaster.where(employee_id: @employee_id).order("id DESC").limit(1000)
+      end
+
     elsif params[:completed].present?
       if params[:completed] = 'yes'
-        @order_masters = OrderMaster.where('external_order_no IS NOT NULL').order("id DESC").limit(400)
+        @orderdesc = "Showing Completed 1000 orders"
+        @order_masters = OrderMaster.where('external_order_no IS NOT NULL').order("id DESC").limit(1000)
       end
     else
-        
+      @orderdesc = "Showing Recent 100 orders"
        @order_masters = OrderMaster.order("id DESC").limit(100)
     end
 
    
      
     respond_with(@order_masters)
+  end
+
+  def daily_report
+     @sno = 1
+      #@order_master.orderpaymentmode_id == 10000 #paid over CC
+      #@order_master.orderpaymentmode_id == 10001 #paid over COD
+    if params[:for_date].present? 
+      #@summary ||= []
+      @or_for_date = params[:for_date]
+      for_date =  Date.strptime(params[:for_date], "%m/%d/%Y")
+      order_masters = OrderMaster.where('TRUNC(orderdate) = ?',for_date).where('ORDER_STATUS_MASTER_ID > 10002').select(:employee_id).distinct
+      
+      @orderdate = "Searched for #{for_date} found #{order_masters.count} agents!"
+      employeeunorderlist ||= []
+      num = 1
+      order_masters.each do |o|
+        e = o.employee_id
+       
+        name = (Employee.find(e).first_name  || "NA" if Employee.find(e).first_name.present?)
+        orderlist = OrderMaster.where('ORDER_STATUS_MASTER_ID > 10002').where('TRUNC(orderdate) = ?',for_date).where(employee_id: e)
+        timetaken = orderlist.sum(:codcharges)
+        ccvalue = orderlist.where(orderpaymentmode_id: 10000).sum(:total)
+        ccorders = orderlist.where(orderpaymentmode_id: 10000).count()
+        codorders = orderlist.where(orderpaymentmode_id: 10001).count()
+        codvalue = orderlist.where(orderpaymentmode_id: 10001).sum(:total)
+        totalorders = orderlist.sum(:total)
+        noorders = orderlist.count()
+        employeeunorderlist << {:total => totalorders,
+           :id => e, :employee => name, :for_date =>  @or_for_date,
+          :nos => noorders, :codorders => codorders, :codvalue => codvalue,
+           :ccorders => ccorders, :ccvalue => ccvalue  }
+        end
+        @employeeorderlist = employeeunorderlist.sort_by{|c| c[:total]}.reverse 
+    # else
+    #   for_date = Date.strptime(@orderdate, "%m/%d/%Y")
+    #   order_masters = OrderMaster.where('ORDER_STATUS_MASTER_ID > 10002').where('orderdate = ?',for_date).order("id DESC").distinct
+         
+    #   @employeeorderlist ||= []
+    #   num = 1
+    #   order_masters.each do |o|
+    #     e = o.employee_id
+       
+    #     name = (Employee.find(e).first_name  || "NA" if Employee.find(e).first_name.present?)
+    #     orderlist = OrderMaster.where('ORDER_STATUS_MASTER_ID > 10002').where(employee_id: e)
+    #     totalorders = orderlist.sum(:total)
+    #     noorders = orderlist.count()
+    #     @employeeorderlist << {:sno => num, :id => e, :employee => name, :total => totalorders.to_s, :nos => noorders}
+    #     num += 1
+    #    end
+
+    end
+
   end
 
   def show

@@ -34,6 +34,13 @@ after_destroy :updateOrder
   attributes[:id].blank?
   end
 
+  def timetaken
+    ended_on = self.updated_at.to_f
+    started_at = self.created_at.to_f
+    return (ended_on - started_at).to_i 
+  end
+
+
   def codcharges
   productcost = OrderLine.where('orderid = ?', self.id)
   #return productcost.first.productcost
@@ -116,7 +123,6 @@ def maharastraccextra
   end
  
 end
-
 
 
 

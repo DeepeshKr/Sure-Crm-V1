@@ -1,6 +1,7 @@
 <table class="table table-hover table-bordered">
   <thead>
     <tr>
+    <th>S No</th>
       <th>Orderdate</th>
       <th>Employee</th>
       <th>Customer</th>
@@ -18,10 +19,13 @@
   </thead>
 
   <tbody>
+  
     <% @order_masters.each do |order_master| %>
       <tr>
-        <td><%= order_master.orderdate.strftime('%d-%m-%Y') %>
+      <td><%= @sno %></td>
+        <td><%= (order_master.orderdate + 330.minutes).strftime('%d-%m-%Y %H:%M %P') %>
        <strong><%= order_master.id %></strong> 
+
         </td>
         <td><%= order_master.employee.name if order_master.employee %> 
         <small><strong><%= order_master.employeecode %> </strong></small>
@@ -35,10 +39,11 @@
          <td><%= order_master.total %></td>
         <td><%= order_master.order_status_master.name %></td>
         <td><%= order_master.orderpaymentmode.name if order_master.orderpaymentmode %></td>
-         <td><%= (order_master.updated_at - order_master.created_at) %></td>
+         <td><%= (order_master.timetaken) %></td>
        
        
       </tr>
+       <% @sno += 1 %>
     <% end %>
   </tbody>
 </table>

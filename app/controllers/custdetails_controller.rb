@@ -16,7 +16,7 @@ class CustdetailsController < ApplicationController
 			#@datesummary = @custdetails.group("DATE(orderdate)").sum(:totalamt)
 			#@datesummary =  CUSTDETAILS.where("TRUNC(orderdate) >= ? and TRUNC(orderdate) <= ?", from_date, to_date).group(:orderdate).sum(:totalamt)
 			# @hoursummary =  CUSTDETAILS.where("TRUNC(orderdate) >= ? and TRUNC(orderdate) <= ?", from_date, to_date).group('EXTRACT(HOUR FROM orderdate)').order('EXTRACT(HOUR from orderdate)').count.sum(:totalamt)
-			 @summary = presummary.sort_by{|k,v| v}.reverse
+			 @summary = presummary.sort_by{|k,v| v}.reverse 
 			end
 
     elsif params[:ordernum].present?
