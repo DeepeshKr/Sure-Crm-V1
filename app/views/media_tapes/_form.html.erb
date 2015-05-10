@@ -58,10 +58,14 @@
        <%= f.number_field :tape_ext_ref_id, :label => "External Tape No" , :required => true %>
        <small> No duplicates allowed </small>
    </div>
+    <div class="col-xs-2">
+       <%= f.number_field :sort_order, :label => "Order" , :required => true %>
+       <small> Sort the listings </small>
+   </div>
    <div class="col-xs-4">
    
-    <%= f.text_field :unique_tape_name, :label => "Unique Tape Name (System Generated)"  %>
-    <small> If you leave this blank then the unique numeric tape id would be added after saving </small>
+    <%= f.text_field :unique_tape_name, :label => "Unique Tape Number"  %>
+    <small>System Generated If you leave this blank then the unique numeric tape id would be added after saving </small>
   
   </div>
   </div>

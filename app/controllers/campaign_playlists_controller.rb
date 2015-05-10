@@ -119,7 +119,7 @@ end
     end
 
   end
-
+ 
   def update
     set_media_tape
     if campaign_playlist_params[:cost].to_f != @campaign_playlist.cost
@@ -177,6 +177,94 @@ end
         end
 
        respond_with(@new_campaign_playlist.campaign)
+  end
+
+  def create_playlist_with_media_tape_head
+    # media_tape_params params.require(:media_tape).permit(:name,:release_date, 
+      #:duration_secs, :tape_ext_ref_id, :unique_tape_name, :media_id,
+      # :product_variant_id, :description, :file_parts, 
+    # :file_extenstion, :media_tape_head_id, :sort_order)
+  media_tape_head_id = params[:media_tape_head_id]
+   campaignid = params[:campaignid]
+   if media_tape_head_id.present? 
+      #step 1 get all the media tapes with media tape id in the same sort order
+      media_tapes = MediaTape.where(media_tape_head_id: media_tape_head_id).order("sort_order ASC")
+      
+      for_date =  Date.strptime(params[:for_date], "%m/%d/%Y")
+     
+      #step 2 add campaign playlist to the for the campaign id
+      if media_tapes.present?
+        #add media tapes to campaign playlist
+        #time_slot => "auto" / "specific"
+        begin_hr = 0
+        begin_min = 0
+        begin_sec = 0
+
+        
+        media_tapes.each do |m|
+        if params[:time_slot] == "auto"
+          if CampaignPlaylist.where(campaignid: campaignid).present?
+            campaign_playlist = CampaignPlaylist.where(campaignid: campaignid).order("end_hr, end_min, end_sec")
+            begin_hr = campaign_playlist.last.end_hr
+            begin_min = campaign_playlist.last.end_min
+            begin_sec = campaign_playlist.last.end_sec
+          end
+        elsif params[:time_slot] == "specific"
+         begin_hr = params[:time_slot]
+         begin_min = params[:begin_min]
+         begin_sec = 0
+        end
+
+        list_status_id = 10001
+        if m.sort_order == 1
+          list_status_id = 10000
+        end
+        #ref name is combination of media tape head and media tape name
+        ref_name = MediaTapeHead.find(media_tape_head_id).name 
+          hour_min_sec(begin_hr, begin_min, begin_sec, m.duration_secs)
+          end_hr = @end_hr
+          end_min = @end_min
+          end_sec = @end_sec
+
+          CampaignPlaylist.create(name: m.name, 
+            campaignid: campaignid, 
+            start_hr: begin_hr, 
+            start_min: begin_min, 
+            start_sec: begin_sec, 
+            ref_name: ref_name,
+            list_status_id: list_status_id,
+            end_hr: end_hr, 
+            end_min: end_min, 
+            end_sec: end_sec,
+            cost: 0, 
+            channeltapeid: m.tape_ext_ref_id, 
+            internaltapeid: m.unique_tape_name, 
+            productvariantid: m.product_variant_id, 
+            filename: m.name, 
+            description: m.description, 
+            duration_secs: m.duration_secs, 
+            tape_id: m.tape_ext_ref_id,
+            for_date: for_date)
+
+        end
+
+        flash[:success] = "Campaign Playlists updated with #{media_tapes.count()} tapes"
+        #showcampaign_page(campaign_id)
+        @campaign = Campaign.find(campaignid)
+        respond_with(@campaign)
+
+      else
+        flash[:error] = "You cannot add anything unless you select any valid media tape list!"
+        redirect_to campaigns_path(:id => campaignid)
+      end
+
+      
+  else
+      flash[:error] = "You cannot add anything unless you select any valid media tape list!"
+      redirect_to campaigns_path(:id => campaignid)
+  end
+    
+
   end
 
   def destroy
@@ -242,5 +330,35 @@ end
            n_str_sec = @end_sec
 
       end
+    end
+
+    def showcampaign_page(campaign_id)
+      recent_campaigns
+    proddropdown
+      @campaign_playlists = CampaignPlaylist.where("campaignid = ?", campaign_id).order(:start_hr, :start_min, :start_sec)
+       @campaign_id = params[:id]
+     if @campaign.enddate >= DateTime.now
+              start_hour = 0
+              start_minute = 0
+              start_second = 0
+      if @campaign_playlists.present?
+              start_hour = @campaign_playlists.last.end_hr
+              start_minute = @campaign_playlists.last.end_min
+              start_second = @campaign_playlists.last.end_sec
+      end
+       media_tapes_s = MediaTape.where("product_variant_id is null")
+        
+      @campaign_playlist = CampaignPlaylist.new(campaignid: params[:id],
+       cost: 0, start_hr: start_hour,
+       start_min: start_minute, start_sec: start_second,
+       name: media_tapes_s.first.name,
+       internaltapeid: media_tapes_s.first.unique_tape_name,
+       filename: media_tapes_s.first.name,
+       duration_secs: media_tapes_s.first.duration_secs)
+     end
+     
+     @campaignid = params[:id]
+
+    respond_with(@campaign, @campaign_playlists,  @campaign_playlist)
     end
 end

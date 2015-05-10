@@ -7,7 +7,7 @@ class OrderMastersController < ApplicationController
     @order_masters = OrderMaster.all.order("id DESC").limit(100)
     respond_with(@order_masters)
   end
-
+ 
   def list
     #<br>      <small>About <%= time_ago_in_words(order_master.orderdate + 330.minutes) %> ago </small>
     @sno = 1
@@ -35,8 +35,8 @@ class OrderMastersController < ApplicationController
 
     elsif params[:completed].present?
       if params[:completed] = 'yes'
-        @orderdesc = "Showing Completed 1000 orders"
-        @order_masters = OrderMaster.where('external_order_no IS NOT NULL').order("id DESC").limit(1000)
+        @orderdesc = "Showing Completed 10 orders"
+        @order_masters = OrderMaster.where('external_order_no IS NOT NULL').order("id DESC").limit(10)
       end
     else
       @orderdesc = "Showing Recent 100 orders"
@@ -49,6 +49,7 @@ class OrderMastersController < ApplicationController
   end
 
   def daily_report
+    
      @sno = 1
       #@order_master.orderpaymentmode_id == 10000 #paid over CC
       #@order_master.orderpaymentmode_id == 10001 #paid over COD
@@ -79,22 +80,7 @@ class OrderMastersController < ApplicationController
            :ccorders => ccorders, :ccvalue => ccvalue  }
         end
         @employeeorderlist = employeeunorderlist.sort_by{|c| c[:total]}.reverse 
-    # else
-    #   for_date = Date.strptime(@orderdate, "%m/%d/%Y")
-    #   order_masters = OrderMaster.where('ORDER_STATUS_MASTER_ID > 10002').where('orderdate = ?',for_date).order("id DESC").distinct
-         
-    #   @employeeorderlist ||= []
-    #   num = 1
-    #   order_masters.each do |o|
-    #     e = o.employee_id
-       
-    #     name = (Employee.find(e).first_name  || "NA" if Employee.find(e).first_name.present?)
-    #     orderlist = OrderMaster.where('ORDER_STATUS_MASTER_ID > 10002').where(employee_id: e)
-    #     totalorders = orderlist.sum(:total)
-    #     noorders = orderlist.count()
-    #     @employeeorderlist << {:sno => num, :id => e, :employee => name, :total => totalorders.to_s, :nos => noorders}
-    #     num += 1
-    #    end
+  
 
     end
 

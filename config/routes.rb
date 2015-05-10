@@ -1,6 +1,14 @@
 Rails.application.routes.draw do
 
- 
+#sales report  
+  get 'sales_report/summary'
+  get 'sales_report/hourly'
+  get 'sales_report/daily'
+  get 'sales_report/channel'
+  get 'sales_report/employee'
+  get 'sales_report/product'
+  get 'sales_report/show'
+
   resources :media_tape_heads
 
   resources :india_city_lists
@@ -154,7 +162,8 @@ Rails.application.routes.draw do
   get 'update_tapes' => 'media_tape_heads#update_tapes'
   get 'tape_list' => 'media_tape_heads#tape_list'
 
-  post 'create_playlist' => 'media_tape_heads#create_playlist'
+  #post 'campaign_playlists/create_playlist_with_media_tape_head'
+  post 'create_playlist' => 'campaign_playlists#create_playlist_with_media_tape_head'
   #post 'neworder' => 'create_order#index'
 
   #get 'recentorders' => 'create_order#show_recentorders'

@@ -1,28 +1,27 @@
  <div class="row">
 	 <div class="col-xs-6">
 
-	 <h4>Daily Sales Report </h4>
+	 <h4>Hourly Orders</h4>
 	 </div>
 	 <div class="col-xs-6">
 
-	 		 <%= render ('date_search') %>
+	 		
 	</div>
  </div>
-<div class="well well-sm">
-<h4>Showing for Date <%=  @orderdate %> </h4>
-</div>
+
 <% if @employeeorderlist.present? %>
 <table class="table table-hover table-bordered">
   <thead>
     <tr>
-     <th>No</th>
-     <th>Employee</th>
-     <th>CC Orders</th>
-       <th>CC Value</th>
-      <th>COD Orders</th>
-       <th>COD Value</th>
-       <th>Total Orders</th>
-     <th>Total Value</th>
+     <th class="text-right">No</th>
+     <th class="text-right">Start Time</th>
+     <th class="text-right">End Time</th>
+     <th class="text-right">CC Orders</th>
+       <th class="text-right">CC Value</th>
+      <th class="text-right">COD Orders</th>
+       <th class="text-right">COD Value</th>
+       <th class="text-right">Total Orders</th>
+     <th class="text-right">Total Value</th>
     
      </tr>
   </thead>
@@ -31,10 +30,8 @@
    <tr>
    <td><%= @sno %></td>
 
-<td>
- <%= link_to c[:employee], orderlist_path(employee_id: c[:id], for_date: c[:for_date], completed: 'yes'), :target => "_blank" %>
-
-</td>
+ <td><%= c[:starttime] %></td>
+ <td><%= c[:endtime] %></td>
 <td class="text-right">
    <%= c[:ccorders] %> 
 </td>
@@ -70,3 +67,6 @@
   </div>
   <% end %>
  <br>
+
+
+<%= @hourlist %>

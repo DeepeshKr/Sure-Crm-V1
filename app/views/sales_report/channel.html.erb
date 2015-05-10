@@ -1,11 +1,11 @@
  <div class="row">
 	 <div class="col-xs-6">
 
-	 <h4>Daily Sales Report </h4>
+	 <h4>Channel Sales Report </h4>
 	 </div>
 	 <div class="col-xs-6">
 
-	 		 <%= render ('date_search') %>
+	 		
 	</div>
  </div>
 <div class="well well-sm">
@@ -16,7 +16,7 @@
   <thead>
     <tr>
      <th>No</th>
-     <th>Employee</th>
+     <th>Channel</th>
      <th>CC Orders</th>
        <th>CC Value</th>
       <th>COD Orders</th>
@@ -32,8 +32,8 @@
    <td><%= @sno %></td>
 
 <td>
- <%= link_to c[:employee], orderlist_path(employee_id: c[:id], for_date: c[:for_date], completed: 'yes'), :target => "_blank" %>
-
+ <%=  c[:channel] %>
+ 
 </td>
 <td class="text-right">
    <%= c[:ccorders] %> 
@@ -70,3 +70,4 @@
   </div>
   <% end %>
  <br>
+

@@ -1,8 +1,57 @@
- <%= form_tag("/create_playlist", method: "post") do  %>
+<%= form_tag("/create_playlist", method: "post") do |f| %>
 <div class="row">
-<div class="col-xs-2">
-	<%= text_field_tag(:for_date, nil, :data => {:provide => "datepicker"}, :class => "form-control", :required => "true" )   %>
+<div class="col-xs-4">
+	<div class="well well-sm">
+		<div class="row">
 
+			<div class="col-xs-1 text-right">
+			 <%= radio_button_tag 'time_slot', "auto", true  %>
+			</div>
+			<div class="col-xs-6">
+			<label>Auto Append (HBN)</label>	
+			</div>
+		</div>
+	</div>
+</div>
+<div class="col-xs-8">
+	<div class="well well-sm">
+		<div class="row">
+			<div class="col-xs-1 text-right">
+				<%= radio_button_tag 'time_slot', "specific"  %>
+			</div>
+			<div class="col-xs-6">
+			<label>Specific Time Pvt Channels only (Hour:Min)</label>
+			</div>
+
+			<div class="col-xs-2">
+
+			   <%= select_tag :begin_hr, options_for_select(0..23), :class => "form-control"  %>
+
+
+			</div>
+			<div class="col-xs-1">:</div>
+			<div class="col-xs-2">
+
+			   <%= select_tag :begin_min, options_for_select(0..59), :class => "form-control"  %>
+			</div>
+		</div>
+
+
+	</div>
+</div>
+</div>
+
+
+
+<br>
+<div class="row">
+ <%= hidden_field_tag :campaignid, @campaignid %>
+ 
+ 
+
+<div class="col-xs-2">
+	
+  <%= text_field_tag(:for_date, nil, :data => {:provide => "datepicker"}, :class => "form-control", :required => "true", :placeholder => "Select Date" )   %>
 </div>
 	<div class="col-xs-10">
 		<%= collection_select(nil, :product_variant_id,  @productvariantlist,  :id, :name, {:prompt   => "Select a Product Variant"}, {:id => 'variants_select', :class => "form-control"}) %>
@@ -20,15 +69,11 @@
 
 </div>
 <hr>
-<div id='tape_list'></div>
-<br/>
+<div id='tape_list'>
 
-<div class="row">
-	<div class="col-xs-3 col-xs-offset-9">
-	<%= submit_tag "Ok", name: nil, class: "btn btn-primary" %>
-		</div>
 
 </div>
+
 
 
 <% end %>

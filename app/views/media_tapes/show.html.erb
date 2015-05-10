@@ -36,6 +36,11 @@
   <%= @media_tape.tape_ext_ref_id %> <br>
        <small> No duplicates allowed </small>
    </div>
+       <div class="col-xs-2">
+       <strong>Sort Order:</strong>
+  <%= @media_tape.sort_order %> <br>
+       <small> Tapes are sorted in ascening, only No 1 is active </small>
+   </div>
    <div class="col-xs-4">
     <strong>Unique Tape Name (System Generated):</strong>
   <%= @media_tape.unique_tape_name %> <br>
