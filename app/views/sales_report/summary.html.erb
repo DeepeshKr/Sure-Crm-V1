@@ -21,7 +21,9 @@
        <th class="text-right">COD Value</th>
        <th class="text-right">Total Orders</th>
      <th class="text-right">Total Value</th>
-    
+    <th class="text-right">Employee</th>
+    <th class="text-right">Hourly</th>
+    <th class="text-right">Channel</th>
      </tr>
   </thead>
 <tbody>
@@ -49,13 +51,19 @@
 <td class="text-right">
    <%= c[:total] %> 
 </td>
+<td>
+<%= link_to "View", employee_report_path(employee_id: c[:id], for_date: c[:for_date]), :target => "_blank" %>
+</td>
+<td>
+<%= link_to "View", hourly_report_path(employee_id: c[:id], for_date: c[:for_date]), :target => "_blank" %>
+</td>
 
+<td>
+<%= link_to "View", channel_report_path(employee_id: c[:id], for_date: c[:for_date]), :target => "_blank" %>
+</td>
   </tr> 
   <% @sno += 1 %> 
  <% end %>
-
- 
-
   </tbody>
 
   </table>

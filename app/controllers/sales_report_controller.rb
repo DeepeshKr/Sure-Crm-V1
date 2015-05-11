@@ -4,13 +4,22 @@ class SalesReportController < ApplicationController
         @sno = 1
         @datelist ||= []
         employeeunorderlist ||= []
-        from_date = Date.current - 10.days
-        to_date = Date.current
-
-        to_date.downto(from_date).each do |day|
+        # if params[:for_date].present? 
+        #   for_date =  Date.strptime(params[:for_date], "%m/%d/%Y")
+        #   from_date = Date.current - 30.days
+        #   to_date = Date.current
+        # else
+        #   from_date = Date.current - 30.days
+        #   to_date = Date.current
+        # end
+        
+          from_date = Date.current - 30.days
+          to_date = Date.current
+          to_date.downto(from_date).each do |day|
           @datelist <<  day.strftime('%d-%b-%y')
-      
-          for_date = day # Date.strptime(day, "%m/%d/%Y")
+          web_date = day
+          web_date = web_date.strftime()
+          for_date = day # Date.
           @or_for_date = for_date
            
           orderlist = OrderMaster.where('ORDER_STATUS_MASTER_ID > 10002').where('TRUNC(orderdate) = ?',for_date)
@@ -21,7 +30,7 @@ class SalesReportController < ApplicationController
           totalorders = orderlist.sum(:total)
           noorders = orderlist.count()
           employeeunorderlist << {:total => totalorders,
-          :for_date =>  @or_for_date,
+          :for_date =>  web_date,
           :nos => noorders, :codorders => codorders, :codvalue => codvalue,
            :ccorders => ccorders, :ccvalue => ccvalue  }
         end
@@ -36,7 +45,7 @@ class SalesReportController < ApplicationController
     if params[:for_date].present? 
       #@summary ||= []
       @or_for_date = params[:for_date]
-      for_date =  Date.strptime(params[:for_date], "%m/%d/%Y")
+      for_date =  Date.strptime(params[:for_date], "%Y-%m-%d")
     
       #for_date = for_date - 330.minutes
         @hourlist ||= []
@@ -117,7 +126,7 @@ class SalesReportController < ApplicationController
     if params[:for_date].present? 
       #@summary ||= []
       @or_for_date = params[:for_date]
-      for_date =  Date.strptime(params[:for_date], "%m/%d/%Y")
+      for_date =  Date.strptime(params[:for_date], "%Y-%m-%d")
       order_masters = OrderMaster.where('TRUNC(orderdate) = ?',for_date).where('ORDER_STATUS_MASTER_ID > 10002').select(:media_id).distinct
       
       @orderdate = "Searched for #{for_date} found #{order_masters.count} Channel with orders!"
@@ -154,7 +163,7 @@ class SalesReportController < ApplicationController
     if params[:for_date].present? 
       #@summary ||= []
       @or_for_date = params[:for_date]
-      for_date =  Date.strptime(params[:for_date], "%m/%d/%Y")
+      for_date =  Date.strptime(params[:for_date], "%Y-%m-%d")
       order_masters = OrderMaster.where('TRUNC(orderdate) = ?',for_date).where('ORDER_STATUS_MASTER_ID > 10002').select(:employee_id).distinct
       
       @orderdate = "Searched for #{for_date} found #{order_masters.count} agents!"

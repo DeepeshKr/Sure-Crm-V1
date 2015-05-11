@@ -1,11 +1,15 @@
 Rails.application.routes.draw do
 
-#sales report  
+#sales report 
+  get 'sales_report' => 'sales_report#summary' 
   get 'sales_report/summary'
   get 'sales_report/hourly'
+  get 'hourly_report' => 'sales_report#hourly'
   get 'sales_report/daily'
   get 'sales_report/channel'
+  get 'channel_report' => 'sales_report#channel'
   get 'sales_report/employee'
+  get 'employee_report' => 'sales_report#employee'
   get 'sales_report/product'
   get 'sales_report/show'
 

@@ -35,8 +35,8 @@ class OrderMastersController < ApplicationController
 
     elsif params[:completed].present?
       if params[:completed] = 'yes'
-        @orderdesc = "Showing Completed 10 orders"
-        @order_masters = OrderMaster.where('external_order_no IS NOT NULL').order("id DESC").limit(10)
+        @orderdesc = "Showing Completed 1000 orders"
+        @order_masters = OrderMaster.where('external_order_no IS NOT NULL').order("id DESC").limit(1000)
       end
     else
       @orderdesc = "Showing Recent 100 orders"

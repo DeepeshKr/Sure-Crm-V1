@@ -121,7 +121,7 @@ def add_products
     exproductlist = ProductList.find(order_line_params[:product_list_id])
     exproductvariant = ProductVariant.find(exproductlist.product_variant_id)
     @order_lines = OrderLine.where("product_list_id = ? AND orderid = ?", 
-    order_line_params[:product_list_id], @order_id)
+    order_line_params[:product_list_id], @order_id).order("id")
 
     product_name = exproductlist.name 
         
@@ -287,7 +287,7 @@ def add_products
       exproductlist = ProductList.find(params[:product_list_id])
       exproductvariant = ProductVariant.find(exproductlist.product_variant_id)
       @order_lines = OrderLine.where("product_list_id = ? AND orderid = ?", 
-      params[:product_list_id], params[:order_id])
+      params[:product_list_id], params[:order_id]).order("id")
 
       product_name = exproductlist.productlistdetails 
         
@@ -525,7 +525,7 @@ end
         reg_product_variants = ProductVariant.where("activeid = ? and product_sell_type_id = ?", 10000, 10000).pluck("id")
         upsell_product_variants = ProductVariant.where("activeid = ? and product_sell_type_id <> ?", 10000, 10000).pluck("id")
       
-      @order_lines_regular = OrderLine.where(productvariant_id: reg_product_variants).where(orderid: @order_id)
+      @order_lines_regular = OrderLine.where(productvariant_id: reg_product_variants).where(orderid: @order_id).order("id")
       if @order_lines_regular.blank?
         @show_process = 1
         flash[:error] = ' You have not added any regular products '
@@ -713,7 +713,7 @@ end
         @generalproductaddonlists = ProductList.where('active_status_id = ?',  10000).where(product_variant_id: product_variants).joins(:product_variant).order("product_variants.name")  
 
         #general_addon_product_list
-        @upsell_order_lines = OrderLine.where(productvariant_id: product_variants).where(orderid: @order_id)
+        @upsell_order_lines = OrderLine.where(productvariant_id: product_variants).where(orderid: @order_id).order("id")
 
     end
 
@@ -742,7 +742,7 @@ end
     def set_order
       if params[:order_id].present?
           @order_master = OrderMaster.find(params[:order_id])
-          @order_lines = OrderLine.where(orderid: params[:order_id])
+          @order_lines = OrderLine.where(orderid: params[:order_id]).order("id")
       end
     end
 

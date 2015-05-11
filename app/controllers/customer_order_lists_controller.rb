@@ -27,7 +27,7 @@ class CustomerOrderListsController < ApplicationController
       #if @order_master.customer_address_id.present?
         @customer_address = CustomerAddress.find(order_masters.first.customer_address_id)
         @order_master = order_masters.first
-        @order_lines = OrderLine.where(orderid: @order_master.id)
+        @order_lines = OrderLine.where(orderid: @order_master.id).order("id")
       #end 
     end  
 
