@@ -214,7 +214,7 @@ class SalesReportController < ApplicationController
            :ccorders => ccorders, :ccvalue => ccvalue  }
         end
         @employeeorderlist = employeeunorderlist.sort_by{|c| c[:total]}.reverse 
-  
+    end
   end
 
   def show
