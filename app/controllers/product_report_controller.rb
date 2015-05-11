@@ -163,6 +163,15 @@ class ProductReportController < ApplicationController
 		   if @product_stocks.present?
 			  #code
 			  @opening_stock = @product_stocks.sum(:current_stock)
+
+			  	respond_to do |format|
+		            format.html
+		            format.csv do
+		              headers['Content-Disposition'] = "attachment; filename=\"opening-stock-report\""
+		              headers['Content-Type'] ||= 'text/csv'
+		            end
+          		end
+
 		   end
 		 
 		end
@@ -186,6 +195,16 @@ class ProductReportController < ApplicationController
 				@purchasestotal = @purchases_new.sum(:invamt)
 			  #pieces
 			   @purchasespieces = @purchases_new.sum(:qty)
+
+			   #view format start
+			   respond_to do |format|
+		            format.html
+		            format.csv do
+		              headers['Content-Disposition'] = "attachment; filename=\"purchased_stock_report\""
+		              headers['Content-Type'] ||= 'text/csv'
+		            end
+          		end
+          		#format end
 			end
 	  
 		 
@@ -208,6 +227,16 @@ class ProductReportController < ApplicationController
 			  @retailsalestotal = @vpp.sum(:invoiceamount)
 			  #pieces
 			   @retailsalespieces = @vpp.sum(:quantity)
+
+			   #view format start
+			   respond_to do |format|
+		            format.html
+		            format.csv do
+		              headers['Content-Disposition'] = "attachment; filename=\"retail_returned_stock_report\""
+		              headers['Content-Type'] ||= 'text/csv'
+		            end
+          		end
+          		#format end
 			end
 		 
 		end
@@ -229,6 +258,15 @@ class ProductReportController < ApplicationController
 			  @retailsalestotal = @vpp.sum(:paidamt)
 			  #pieces
 			   @retailsalespieces = @vpp.sum(:quantity)
+			   #view format start
+			   respond_to do |format|
+		            format.html
+		            format.csv do
+		              headers['Content-Disposition'] = "attachment; filename=\"retail_sold_stock_report\""
+		              headers['Content-Type'] ||= 'text/csv'
+		            end
+          		end
+          		#format end
 			end
 		 
 		end
@@ -246,10 +284,20 @@ class ProductReportController < ApplicationController
 		   #Sold wholesale
       	@newwlsdet = NEWWLSDET.where(prod: @prod).where("(shdate) = ? ", for_date)
 			if @newwlsdet.present?
-			#total
-		  @wholesalestotal = @newwlsdet.sum(:totamt)
-		  #pieces
-		  @wholesalespieces = @newwlsdet.sum(:quantity)
+				#total
+			  	@wholesalestotal = @newwlsdet.sum(:totamt)
+			  	#pieces
+			  	@wholesalespieces = @newwlsdet.sum(:quantity)
+
+			  	 #view format start
+			   	respond_to do |format|
+		            format.html
+		            format.csv do
+		              headers['Content-Disposition'] = "attachment; filename=\"wholesale_sold_stock_report\""
+		              headers['Content-Type'] ||= 'text/csv'
+		            end
+          		end
+          		#format end
 			end
 		 
 		end
@@ -271,6 +319,16 @@ class ProductReportController < ApplicationController
 			  @branchsalestotal = @tempinv_newwlsdet.sum(:totamt)
 			  #pieces
 			  @branchsalespieces = @tempinv_newwlsdet.sum(:quantity)
+
+			   #view format start
+			   	respond_to do |format|
+		            format.html
+		            format.csv do
+		              headers['Content-Disposition'] = "attachment; filename=\"branch_sold_stock_report\""
+		              headers['Content-Type'] ||= 'text/csv'
+		            end
+          		end
+          		#format end
 			end
 		 
 		end
@@ -290,6 +348,17 @@ class ProductReportController < ApplicationController
 		  	if @product_stock_adjusts.present?
 		  		#code
 		  		@journal_total = @product_stock_adjusts.sum(:change_stock)
+
+		  		#view format start
+			   	respond_to do |format|
+		            format.html
+		            format.csv do
+		              headers['Content-Disposition'] = "attachment; filename=\"corrections_stock_report\""
+		              headers['Content-Type'] ||= 'text/csv'
+		            end
+          		end
+          		#format end
+          		
 		  	end	 
 		end
 	end
