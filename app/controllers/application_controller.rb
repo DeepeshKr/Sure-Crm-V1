@@ -6,9 +6,13 @@ class ApplicationController < ActionController::Base
   # before_filter => to prevent back button from browser
   before_filter :store_location
   before_filter :set_cache_buster
- 
- #after_filter :store_location
-
+  # before_filter :authenticate_user!
+  #after_filter :store_location
+  # "Before" filters may halt the request cycle. 
+  # A common "before" filter is one which requires that a user is 
+  # logged in for an action to be run
+   before_action :require_login
+   
  def set_cache_buster
     response.headers["Cache-Control"] = "no-cache, no-store, max-age=0, must-revalidate"
     response.headers["Pragma"] = "no-cache"
@@ -20,52 +24,65 @@ class ApplicationController < ActionController::Base
 
   # this for to create sessions 
   include SessionsHelper
-  #"Before" filters may halt the request cycle. 
-  #A common "before" filter is one which requires that a user is 
-  #logged in for an action to be run
-  before_action :require_login
+ 
   
   def require_login
     unless logged_in?
+      store_location
       flash[:error] = "You must be logged in to access this section"
       redirect_to login_url # halts request cycle
       
     end
   end
 
-def store_location
-  # store last url as long as it isn't a /users path
-  session[:previous_url] = request.fullpath unless request.fullpath =~ /\/users/
-end
+# def store_location
+#   # store last url as long as it isn't a /users path
+#   session[:previous_url] = request.fullpath unless request.fullpath =~ /\/users/
+# end
 
-def after_update_path_for(resource)
-  session[:previous_url] || root_path
-end
- 
-def after_sign_in_path_for(resource)
-  request.env['omniauth.origin'] || stored_location_for(resource) || root_url
-end
-
-def after_sign_in_path_for(resource)
-  session[:previous_url] || root_path
-end
-protected
-
-def confirm_logged_in
-    unless session[:id]
-        flash[:notice] = "Please log in"
-        redirect_to :root
-        return false
-    else
-      after_sign_in_path_for(user)
-        return true
+  def store_location
+    # store last url - this is needed for post-login redirect to whatever the user last visited.
+    return unless request.get? 
+    if (request.path != "/users/sign_in" &&
+        request.path != "/users/sign_up" &&
+        request.path != "/users/password/new" &&
+        request.path != "/users/password/edit" &&
+        request.path != "/users/confirmation" &&
+        request.path != "/users/sign_out" &&
+        !request.xhr?) # don't store ajax calls
+      session[:previous_url] = request.fullpath 
     end
-end
+  end
+
+  def after_update_path_for(resource)
+    session[:previous_url] || root_path
+  end
+   
+  def after_sign_in_path_for(resource)
+    request.env['omniauth.origin'] || stored_location_for(resource) || root_url
+  end
+
+  def after_sign_in_path_for(resource)
+    session[:previous_url] || root_path
+  end
+
+  protected
+
+  def confirm_logged_in
+      unless session[:id]
+          flash[:notice] = "Please log in"
+          redirect_to :root
+          return false
+      else
+        after_sign_in_path_for(user)
+          return true
+      end
+  end
 
 
-# If your model is called User
-def after_sign_in_path_for(resource)
-  session["user_return_to"] || root_path
+  # If your model is called User
+  def after_sign_in_path_for(resource)
+    session["user_return_to"] || root_path
 end
 
 end

@@ -11,6 +11,7 @@ Rails.application.routes.draw do
   get 'sales_report/employee'
   get 'employee_report' => 'sales_report#employee'
   get 'sales_report/product'
+  get 'product_report' => 'sales_report#product'
   get 'sales_report/show'
 
   resources :media_tape_heads

@@ -40,15 +40,15 @@ class CampaignsController < ApplicationController
               start_minute = @campaign_playlists.last.end_min
               start_second = @campaign_playlists.last.end_sec
       end
-       media_tapes_s = MediaTape.where("product_variant_id is null")
-        
+       #media_tapes_s = MediaTape.where("product_variant_id is null")
+      # name: media_tapes_s.first.name,
+       # internaltapeid: media_tapes_s.first.unique_tape_name,
+       # filename: media_tapes_s.first.name,
+       # duration_secs: media_tapes_s.first.duration_secs
+
       @campaign_playlist = CampaignPlaylist.new(campaignid: params[:id],
        cost: 0, start_hr: start_hour,
-       start_min: start_minute, start_sec: start_second,
-       name: media_tapes_s.first.name,
-       internaltapeid: media_tapes_s.first.unique_tape_name,
-       filename: media_tapes_s.first.name,
-       duration_secs: media_tapes_s.first.duration_secs)
+       start_min: start_minute, start_sec: start_second)
      end
      
      @campaignid = params[:id]
@@ -94,7 +94,7 @@ class CampaignsController < ApplicationController
      def proddropdown
       #product_sell_type_id
      @productvariant = ProductVariant.where('activeid = ? and product_sell_type_id <= ?', 10000, 10001).order('name')
-    end
+    end 
      def activestatus
      @active_status = CampaignPlayListStatus.all.order('id')
     end

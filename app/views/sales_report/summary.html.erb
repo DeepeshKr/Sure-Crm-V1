@@ -24,6 +24,7 @@
     <th class="text-right">Employee</th>
     <th class="text-right">Hourly</th>
     <th class="text-right">Channel</th>
+     <th class="text-right">Product</th>
      </tr>
   </thead>
 <tbody>
@@ -52,14 +53,17 @@
    <%= c[:total] %> 
 </td>
 <td>
-<%= link_to "View", employee_report_path(employee_id: c[:id], for_date: c[:for_date]), :target => "_blank" %>
+<%= link_to "View", employee_report_path(for_date: c[:for_date]), :target => "_blank" %>
 </td>
 <td>
-<%= link_to "View", hourly_report_path(employee_id: c[:id], for_date: c[:for_date]), :target => "_blank" %>
+<%= link_to "View", hourly_report_path(for_date: c[:for_date]), :target => "_blank" %>
 </td>
 
 <td>
-<%= link_to "View", channel_report_path(employee_id: c[:id], for_date: c[:for_date]), :target => "_blank" %>
+<%= link_to "View", channel_report_path(for_date: c[:for_date]), :target => "_blank" %>
+</td>
+<td>
+<%= link_to "View", product_report_path(for_date: c[:for_date]), :target => "_blank" %>
 </td>
   </tr> 
   <% @sno += 1 %> 

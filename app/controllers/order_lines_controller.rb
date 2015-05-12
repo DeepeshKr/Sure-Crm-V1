@@ -96,10 +96,13 @@ class OrderLinesController < ApplicationController
     end
 
     def order_line_params
-      params.require(:order_line).permit(:orderid, :orderdate, :employeecode, :employee_id, 
+      params.require(:order_line).permit(:orderid, :orderdate, :employeecode, 
+        :employee_id, 
         :external_ref_no, :productvariant_id, :pieces, :subtotal, :taxes, 
-        :shipping, :codcharges, :total, :orderlinestatusmaster_id, :productline_id,
-         :description, :estimatedshipdate, :estimatedarrivaldate, :orderchecked,
+        :shipping, :codcharges, :total, :orderlinestatusmaster_id, 
+        :productline_id,
+         :description, :estimatedshipdate, :estimatedarrivaldate, 
+         :orderchecked,
           :actualshippate, :product_list_id)
     end
 end

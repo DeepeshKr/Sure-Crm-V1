@@ -127,12 +127,22 @@ class SalesReportController < ApplicationController
       #@summary ||= []
       @or_for_date = params[:for_date]
       for_date =  Date.strptime(params[:for_date], "%Y-%m-%d")
-      order_masters = OrderMaster.where('TRUNC(orderdate) = ?',for_date).where('ORDER_STATUS_MASTER_ID > 10002').select(:media_id).distinct
+      #media segregation
+      hbnlist = Medium.where(media_group_id: 10000)
+      paid = Medium.where(media_commision_id: 10000).where("media_group_id IS NULL OR media_group_id <> 10000")
+      others = Medium.where('media_commision_id IS NULL').where("media_group_id IS NULL OR media_group_id <> 10000")
+
+
+      hbn_order_masters = OrderMaster.where('TRUNC(orderdate) = ?',for_date).where('ORDER_STATUS_MASTER_ID > 10002').where(media_id: hbnlist).select(:media_id).distinct
+      paid_order_masters = OrderMaster.where('TRUNC(orderdate) = ?',for_date).where('ORDER_STATUS_MASTER_ID > 10002').where(media_id: paid).select(:media_id).distinct
+      other_order_masters = OrderMaster.where('TRUNC(orderdate) = ?',for_date).where('ORDER_STATUS_MASTER_ID > 10002').where(media_id: others).select(:media_id).distinct
+
+
+      @orderdate = "Orders for #{for_date}: #{hbn_order_masters.count} HBN Channel, #{paid_order_masters.count} Paid Channel and #{other_order_masters.count} Other Channel!"
       
-      @orderdate = "Searched for #{for_date} found #{order_masters.count} Channel with orders!"
-      employeeunorderlist ||= []
+      hbn_order_list ||= []
       num = 1
-      order_masters.each do |o|
+      hbn_order_masters.each do |o|
         e = o.media_id
        
         name = (Medium.find(e).name  || "NA" if Medium.find(e).name.present?)
@@ -144,13 +154,56 @@ class SalesReportController < ApplicationController
         codvalue = orderlist.where(orderpaymentmode_id: 10001).sum(:total)
         totalorders = orderlist.sum(:total)
         noorders = orderlist.count()
-        employeeunorderlist << {:total => totalorders,
+        hbn_order_list << {:total => totalorders,
            :id => e, :channel => name, :for_date =>  @or_for_date,
           :nos => noorders, :codorders => codorders, :codvalue => codvalue,
            :ccorders => ccorders, :ccvalue => ccvalue  }
         end
-        @employeeorderlist = employeeunorderlist.sort_by{|c| c[:total]}.reverse 
+        @hbn_order_list = hbn_order_list.sort_by{|c| c[:total]}.reverse 
+
+        paid_order_list ||= []
+        
+        paid_order_masters.each do |o|
+        e = o.media_id
+       
+        name = (Medium.find(e).name  || "NA" if Medium.find(e).name.present?)
+        orderlist = OrderMaster.where('ORDER_STATUS_MASTER_ID > 10002').where('TRUNC(orderdate) = ?',for_date).where(media_id: e)
+        timetaken = orderlist.sum(:codcharges)
+        ccvalue = orderlist.where(orderpaymentmode_id: 10000).sum(:total)
+        ccorders = orderlist.where(orderpaymentmode_id: 10000).count()
+        codorders = orderlist.where(orderpaymentmode_id: 10001).count()
+        codvalue = orderlist.where(orderpaymentmode_id: 10001).sum(:total)
+        totalorders = orderlist.sum(:total)
+        noorders = orderlist.count()
+        paid_order_list << {:total => totalorders,
+           :id => e, :channel => name, :for_date =>  @or_for_date,
+          :nos => noorders, :codorders => codorders, :codvalue => codvalue,
+           :ccorders => ccorders, :ccvalue => ccvalue  }
+        end
+        @paid_order_list = paid_order_list.sort_by{|c| c[:total]}.reverse 
+      
+        other_order_list ||= []
+       
+        other_order_masters.each do |o|
+        e = o.media_id
+       
+        name = (Medium.find(e).name  || "NA" if Medium.find(e).name.present?)
+        orderlist = OrderMaster.where('ORDER_STATUS_MASTER_ID > 10002').where('TRUNC(orderdate) = ?',for_date).where(media_id: e)
+        timetaken = orderlist.sum(:codcharges)
+        ccvalue = orderlist.where(orderpaymentmode_id: 10000).sum(:total)
+        ccorders = orderlist.where(orderpaymentmode_id: 10000).count()
+        codorders = orderlist.where(orderpaymentmode_id: 10001).count()
+        codvalue = orderlist.where(orderpaymentmode_id: 10001).sum(:total)
+        totalorders = orderlist.sum(:total)
+        noorders = orderlist.count()
+        other_order_list << {:total => totalorders,
+           :id => e, :channel => name, :for_date =>  @or_for_date,
+          :nos => noorders, :codorders => codorders, :codvalue => codvalue,
+           :ccorders => ccorders, :ccvalue => ccvalue  }
+        end
+        @other_order_list = other_order_list.sort_by{|c| c[:total]}.reverse 
   
+
 
     end
 
@@ -199,30 +252,83 @@ class SalesReportController < ApplicationController
     if params[:for_date].present? 
       #@summary ||= []
       @or_for_date = params[:for_date]
-      for_date =  Date.strptime(params[:for_date], "%m/%d/%Y")
-      order_masters = OrderLine.where('TRUNC(orderdate) = ?',for_date).where('ORDER_STATUS_MASTER_ID > 10002').select(:employee_id).distinct
+       for_date =  Date.strptime(params[:for_date], "%Y-%m-%d")
+       @orderdate = params[:for_date]
+
+      order_masters = OrderMaster.where('TRUNC(orderdate) = ?',for_date).where('ORDER_STATUS_MASTER_ID > 10002').select(:id).distinct
+      order_masters_cod = OrderMaster.where(orderpaymentmode_id: 10001).where('TRUNC(orderdate) = ?',for_date).where('ORDER_STATUS_MASTER_ID > 10002').select(:id).distinct
+      order_masters_cc = OrderMaster.where(orderpaymentmode_id: 10000).where('TRUNC(orderdate) = ?',for_date).where('ORDER_STATUS_MASTER_ID > 10002').select(:id).distinct
+
+      regular_product_variant_list = ProductVariant.where(product_sell_type_id: 10000)
+      common_sell_product_variant_list = ProductVariant.where(product_sell_type_id: 10001)
+      basic_sell_product_variant_list =  ProductVariant.where(product_sell_type_id: 10040)
+
+      reg_order_lines = OrderLine.where(orderid: order_masters).where(productvariant_id: regular_product_variant_list).select(:product_list_id).distinct
+      common_order_lines = OrderLine.where(orderid: order_masters).where(productvariant_id: common_sell_product_variant_list).select(:product_list_id).distinct
+      basic_order_lines = OrderLine.where(orderid: order_masters).where(productvariant_id: basic_sell_product_variant_list).select(:product_list_id).distinct
       
-      @orderdate = "Searched for #{for_date} found #{order_masters.count} agents!"
-      employeeunorderlist ||= []
-      num = 1
-      order_masters.each do |o|
-        e = o.employee_id
+      #@orderdate = "Searched for #{for_date} found #{order_masters.count} agents!"
+        main_product_list_orderlist ||= []
+        num = 1
+        reg_order_lines.each do |o|
+        e = o.product_list_id
        
-        name = (ProductMaster.find(e).name  || "NA" if ProductMaster.find(e).name.present?)
-        orderlist = OrderMaster.where('ORDER_STATUS_MASTER_ID > 10002').where('TRUNC(orderdate) = ?',for_date).where(employee_id: e)
+        name = (ProductList.find(e).productlistdetails  || "NA" if ProductList.find(e).productlistdetails.present?)
+        orderlist = OrderLine.where(orderid: order_masters).where(product_list_id: e)
         timetaken = orderlist.sum(:codcharges)
-        ccvalue = orderlist.where(orderpaymentmode_id: 10000).sum(:total)
-        ccorders = orderlist.where(orderpaymentmode_id: 10000).count()
-        codorders = orderlist.where(orderpaymentmode_id: 10001).count()
-        codvalue = orderlist.where(orderpaymentmode_id: 10001).sum(:total)
+        ccvalue = OrderLine.where(orderid: order_masters_cc).where(product_list_id: e).sum(:total)
+        ccorders = OrderLine.where(orderid: order_masters_cc).where(product_list_id: e).count()
+        codorders = OrderLine.where(orderid: order_masters_cod).where(product_list_id: e).count()
+        codvalue = OrderLine.where(orderid: order_masters_cod).where(product_list_id: e).sum(:total)
         totalorders = orderlist.sum(:total)
         noorders = orderlist.count()
-        employeeunorderlist << {:total => totalorders,
+        main_product_list_orderlist << {:total => totalorders,
            :id => e, :product => name, :for_date =>  @or_for_date,
           :nos => noorders, :codorders => codorders, :codvalue => codvalue,
            :ccorders => ccorders, :ccvalue => ccvalue  }
         end
-        @employeeorderlist = employeeunorderlist.sort_by{|c| c[:total]}.reverse 
+        @main_product_list = main_product_list_orderlist.sort_by{|c| c[:total]}.reverse 
+
+        common_product_list_orderlist ||= []
+        common_order_lines.each do |o|
+        e = o.product_list_id
+       
+        name = (ProductList.find(e).productlistdetails  || "NA" if ProductList.find(e).productlistdetails.present?)
+        orderlist = OrderLine.where(orderid: order_masters).where(product_list_id: e)
+        timetaken = orderlist.sum(:codcharges)
+        ccvalue = OrderLine.where(orderid: order_masters_cc).where(product_list_id: e).sum(:total)
+        ccorders = OrderLine.where(orderid: order_masters_cc).where(product_list_id: e).count()
+        codorders = OrderLine.where(orderid: order_masters_cod).where(product_list_id: e).count()
+        codvalue = OrderLine.where(orderid: order_masters_cod).where(product_list_id: e).sum(:total)
+        totalorders = orderlist.sum(:total)
+        noorders = orderlist.count()
+        common_product_list_orderlist << {:total => totalorders,
+           :id => e, :product => name, :for_date =>  @or_for_date,
+          :nos => noorders, :codorders => codorders, :codvalue => codvalue,
+           :ccorders => ccorders, :ccvalue => ccvalue  }
+        end
+        @common_product_list_orderlist = common_product_list_orderlist.sort_by{|c| c[:total]}.reverse 
+
+
+       basic_product_list_orderlist ||= []
+        basic_order_lines.each do |o|
+        e = o.product_list_id
+       
+        name = (ProductList.find(e).productlistdetails  || "NA" if ProductList.find(e).productlistdetails.present?)
+        orderlist = OrderLine.where(orderid: order_masters).where(product_list_id: e)
+        timetaken = orderlist.sum(:codcharges)
+        ccvalue = OrderLine.where(orderid: order_masters_cc).where(product_list_id: e).sum(:total)
+        ccorders = OrderLine.where(orderid: order_masters_cc).where(product_list_id: e).count()
+        codorders = OrderLine.where(orderid: order_masters_cod).where(product_list_id: e).count()
+        codvalue = OrderLine.where(orderid: order_masters_cod).where(product_list_id: e).sum(:total)
+        totalorders = orderlist.sum(:total)
+        noorders = orderlist.count()
+        basic_product_list_orderlist << {:total => totalorders,
+           :id => e, :product => name, :for_date =>  @or_for_date,
+          :nos => noorders, :codorders => codorders, :codvalue => codvalue,
+           :ccorders => ccorders, :ccvalue => ccvalue  }
+        end
+        @basic_product_list_orderlist = basic_product_list_orderlist.sort_by{|c| c[:total]}.reverse  
     end
   end
 

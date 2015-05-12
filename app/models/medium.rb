@@ -8,7 +8,11 @@ class Medium < ActiveRecord::Base
    belongs_to :media_commision,  foreign_key: "media_commision_id"
    belongs_to :media_group,  foreign_key: "media_group_id"
    def mediainfo
-     self.name << " -- " << self.dnis << " -- " << " -- " << self.telephone << " -- " << self.state ||= 'All States'
+      if self.media_group_id.present?
+          self.media_group.name << "--" <<  self.name << " -- " << self.dnis << " -- " << " -- " << self.telephone << " -- " << self.state ||= 'All States'
+      else
+          self.name << " -- " << self.dnis << " -- " << " -- " << self.telephone << " -- " << self.state ||= 'All States'
+      end
    end
    
 end
