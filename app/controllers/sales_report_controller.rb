@@ -1,5 +1,6 @@
 class SalesReportController < ApplicationController
    respond_to :html
+  # before_filter :authenticate_user!
   def summary
         @sno = 1
         @datelist ||= []

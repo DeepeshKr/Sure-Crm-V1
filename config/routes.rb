@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
 
+  devise_for :logins
 #sales report 
   get 'sales_report' => 'sales_report#summary' 
   get 'sales_report/summary'

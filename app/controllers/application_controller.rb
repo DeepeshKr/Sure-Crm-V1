@@ -6,13 +6,14 @@ class ApplicationController < ActionController::Base
   # before_filter => to prevent back button from browser
   before_filter :store_location
   before_filter :set_cache_buster
+  #before_filter :authenticate_user!
   # before_filter :authenticate_user!
   #after_filter :store_location
   # "Before" filters may halt the request cycle. 
-  # A common "before" filter is one which requires that a user is 
-  # logged in for an action to be run
-   before_action :require_login
-   
+  # A common "before" filter is one which requires that a user is logged in for an action to be run
+  #before_action :store_location
+  before_action :require_login
+
  def set_cache_buster
     response.headers["Cache-Control"] = "no-cache, no-store, max-age=0, must-revalidate"
     response.headers["Pragma"] = "no-cache"
@@ -28,10 +29,8 @@ class ApplicationController < ActionController::Base
   
   def require_login
     unless logged_in?
-      store_location
       flash[:error] = "You must be logged in to access this section"
-      redirect_to login_url # halts request cycle
-      
+      redirect_to login_url(return_to: request.original_url) # halts request cycle  
     end
   end
 

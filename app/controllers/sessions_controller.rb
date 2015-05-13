@@ -2,8 +2,10 @@ class SessionsController < ApplicationController
   skip_before_action :require_login, only: [:new, :create]
  
   def new
-
-    @return_page = session[:previous_url]
+    if params[:calledno].present? && params[:mobile].present
+        
+      end
+    @return_page = params[:return_to]
   end
   
   def create
@@ -35,7 +37,12 @@ class SessionsController < ApplicationController
      
       log_in user
       
-      redirect_to root_path
+      if params[:return_to].present?
+        redirect_to params[:return_to]
+      else
+        redirect_to root_path
+      end
+      
     else
       # Create an error message.
        flash.now[:error] = 'Invalid employee code password combination'
@@ -65,7 +72,7 @@ end
   
   private
     def session_params
-      params.require(:session).permit(:employee_code, :emailid, :userip, :sessionid)
+      params.require(:session).permit(:employee_code, :emailid, :userip, :sessionid, :return_to)
     end
 
     # If your model is called User

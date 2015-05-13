@@ -6,6 +6,11 @@
 	        <div class="alert alert-danger">
 				<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 	        <%= message %></div>
+<% elsif message_type == 'alert' %>
+	
+	 		<div class="alert alert-warning">
+<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+	 		<%= message %></div>
 	<% elsif message_type == 'notice' %>
 	
 	 		<div class="alert alert-info">

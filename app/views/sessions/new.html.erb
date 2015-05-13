@@ -4,7 +4,7 @@
 <div class="row">
   <div class="col-md-6 col-md-offset-3">
     <%= form_for(:session, url: login_path) do |f| %>
-
+     <%= hidden_field_tag :return_to, @return_page %>
       <%= f.label :email %>
       <%= f.text_field :email, class: 'form-control' %>
       
@@ -20,4 +20,6 @@
     <!-- <p>New user? <%= link_to "Sign up now!", signup_path %></p> -->
   </div>
 </div>
-<p><%= @return_page %> </p>
+<br>
+
+<p><small><%= @return_page %></small> </p>
