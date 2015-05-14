@@ -43,7 +43,7 @@ class MediaTapesController < ApplicationController
           tapename = tapename << params[:file_extension]
           media_tape_params[:name] = tapename
 
-          @media_tape = MediaTape.new(tape_params)
+          #@media_tape = MediaTape.new(tape_params)
 
           @media_tape = MediaTape.create(name: "Test",
             description: tapename,
