@@ -84,10 +84,10 @@ class CampaignsController < ApplicationController
     respond_with(@campaign)
   end
 
-  private
+  private 
     def dropdown
      @medialist = Medium.where('media_commision_id = ?',  10000).order('name')
-     @media_tape_head_list = MediaTapeHead.all
+     @media_tape_head_list = MediaTapeHead.take(0)
      @productvariantlist = ProductVariant.where('product_variants.activeid = ? and product_variants.product_sell_type_id < ?', 10000, 10002).joins(:product_master)
      .where("product_masters.productactivecodeid = ?", 10000)
     end

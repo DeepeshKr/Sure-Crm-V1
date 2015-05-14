@@ -48,11 +48,13 @@ class MediaTapeHeadsController < ApplicationController
   # GET /media_tape_heads/1/edit
   def edit
   end 
-
+ 
   # POST /media_tape_heads
   # POST /media_tape_heads.json
   def create
+    #menu.to_s.encode('UTF-8', {:invalid => :replace, :undef => :replace, :replace => '?'})
     tapename = media_tape_head_params[:name]
+    #tapename = tapename.to_s.encode('UTF-8', {:invalid => :replace, :undef => :replace, :replace => '?'})
         if params[:file_parts].to_i > 0
           tapename = tapename << "_" << params[:file_parts].to_s
         end

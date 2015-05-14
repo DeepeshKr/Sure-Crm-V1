@@ -284,6 +284,7 @@ mount Upmin::Engine => '/admin'
   #get "project/update_text", as: "update_text"
   get "productdetails" => 'product_masters#details'
   get "producttraining" => 'product_training_manuals#training'
+  get "producttraining_text" => 'product_training_manuals#training_text'  
   get "productvariantdetails" => 'product_variants#details'
   get "productvariantcombined" => 'product_variants#combined'
   get "mediatapesforproducts" => 'media_tapes#productwise'

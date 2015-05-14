@@ -1,25 +1,31 @@
-<div class="well well-sm">
-
 <%= bootstrap_form_for(@media_tape) do |f| %>
-  
-<%= f.hidden_field :product_variant_id %>
+  <%= f.hidden_field :product_variant_id %>
 <%= f.hidden_field :media_tape_head_id %>
-  
-  <div class="row">
-    <div class="col-xs-10">
-      <%= f.text_field :name,  :label => "Tape File Name", :required => true, :placeholder => "Please select the product above for name or for non product videos type in names like HBN logo etc"  %>
-
-      
-        
-    </div>
+<div class="field">
+    <%= f.select(:product_variant_id, 
+    options_from_collection_for_select(@productvariantlist, :id, :productinfo, selected: @media_tape.product_variant_id), 
+    {prompt: "Please select the Product Variant", label: "Product Variant"}, :class => "form-control")  %>
    
+     <small> The tapes would be generally created for a product variant only, but if there are no products like HBN Logo, then dont select any product above.  </small>
+  </div>
+  <div class="row">
+    <div class="col-xs-8">
+      <%= f.text_field :name,  :label => "Tape File Name", :required => true, :placeholder => "Please select the product above for name or for non product videos type in names like HBN logo etc"  %>
+       
+    </div>
+    <div class="col-xs-2">
+    <label>File Parts</label> <br>
+     <%=  select_tag "file_parts", options_for_select(0..10), {:class => "form-control"}
+     %>
+
+    </div>
     <div class="col-xs-2">
 <label>File Extension</label> <br>
      <%=   select_tag "file_extension", options_for_select([ ".avi", ".mcx" ], ".avi"), {:class => "form-control"} %>
     </div>
      <div class="row">
     <div class="col-xs-12">
-    <small> What does this tape contain? Give detailed information about the contents like logo etc </small>
+    <small> What would you like this tape to be called is you are making this for a product variant the name would appear after you select from above else, enter the details like if this is for HBN Logo, coming up next etc? </small>
     </div>
     </div>
 
@@ -59,12 +65,13 @@
   
   
   
- 
+  <div class="field">
+   
+    <%= f.text_area :description %>
+  </div>
   <div class="row">
     <div class="col-xs-3 col-md-offset-8">
       <%= f.submit class:"btn btn-primary" %>
     </div>
   </div>
 <% end %>
-
-</div>

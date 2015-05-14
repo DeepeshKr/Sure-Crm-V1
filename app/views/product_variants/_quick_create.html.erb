@@ -23,13 +23,17 @@
   </div>
   
   <%= f.hidden_field :variantbarcode %>
-   <%= f.hidden_field :extproductcode %>
+
 
     <div class="field">   
     <%= f.text_field :name, label: "Product Name", required: true %> 
     
     </div>
-  
+    
+    <div class="field">
+  <%= f.text_field :extproductcode, label: "Product Code", help: "Use the product code to be used for Channels" %>
+  </div>
+
   <div class="field">
   	
    

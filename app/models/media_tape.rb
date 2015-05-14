@@ -1,11 +1,12 @@
 class MediaTape < ActiveRecord::Base
 #CAMPAIGN_PLAYLIST => TAPE_ID
+
 validates :name, :release_date, :duration_secs, presence: true
 validates_uniqueness_of :name, { case_sensitive: false }
+validates_uniqueness_of :tape_ext_ref_id, :scope => :media_id, message: "You cannot have the same tape id for same channel"
 
 #validates_uniqueness_of :tape_ext_ref_id, numericality: true, allow_blank: true
 
-validates_uniqueness_of :tape_ext_ref_id, :scope => :media_id, message: "You cannot have the same tape id for same channel"
 
 #belongs to product variant, medium, 
 belongs_to :product_variant, foreign_key: "product_variant_id"
