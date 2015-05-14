@@ -27,39 +27,30 @@ class MediaTapesController < ApplicationController
   end
 
   def create  
-   # @media_tape.release_date = params[:release_date]
-   #media_tape_params = media_tape_params.force_encoding(Encoding::UTF_8)
           
-          media_tape_params[:release_date] = Date.strptime(media_tape_params[:release_date], '%m/%d/%Y')
+          release_date = Date.strptime(media_tape_params[:release_date], '%m/%d/%Y')
         if media_tape_params[:unique_tape_name].empty?
           rand = rand(10000 .. 99999) # this generator a number between 1 to 50
           media_tape_params[:unique_tape_name] = rand
         end
 
           tapename = media_tape_params[:name]
-        if params[:file_parts].to_i > 0
-          tapename = tapename << "_" << params[:file_parts].to_s
-        end
           tapename = tapename << params[:file_extension]
           media_tape_params[:name] = tapename
 
-          #@media_tape = MediaTape.new(tape_params)
-
-          @media_tape = MediaTape.create(name: "Test",
+          @media_tape = MediaTape.create(name: tapename,
             description: tapename,
-            release_date: media_tape_params[:release_date],
+            release_date: release_date,
             duration_secs: media_tape_params[:duration_secs], 
             tape_ext_ref_id: media_tape_params[:tape_ext_ref_id],
             unique_tape_name: media_tape_params[:unique_tape_name],
             media_id: media_tape_params[:media_id],
             product_variant_id: media_tape_params[:product_variant_id],
-            file_parts: media_tape_params[:file_parts],
-            file_extenstion: media_tape_params[:file_extenstion],
             media_tape_head_id: media_tape_params[:media_tape_head_id],
             sort_order: media_tape_params[:sort_order])
           
         if @media_tape.valid?
-          flash[:notice] = "The tape details have been saved, now you can create."
+          flash[:notice] = "The tape details have been saved, now you can add these in campaigns."
           @media_tape.save
         else
            flash[:notice] = @media_tape.errors.full_messages.join("<br/>")
@@ -70,12 +61,12 @@ class MediaTapesController < ApplicationController
 
   def update
     @media_tape.update(media_tape_params)
-    respond_with(@media_tape)
+    respond_with(@media_tape.media_tape_head)
   end
 
   def destroy
     @media_tape.destroy
-    respond_with(@media_tape)
+    respond_with(@media_tape.media_tape_head)
   end
 
   #get "mediatapesforproducts" => 'media_tapes#productwise'
