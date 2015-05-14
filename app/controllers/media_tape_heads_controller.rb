@@ -4,7 +4,7 @@ class MediaTapeHeadsController < ApplicationController
   # GET /media_tape_heads
   # GET /media_tape_heads.json
   def index
-    @media_tape_heads = MediaTapeHead.all
+    @media_tape_heads = MediaTapeHead.all.order("name")
   end
 
   # GET /media_tape_heads/1

@@ -34,3 +34,11 @@ $ ->
 	        type: 'GET'
 	        dataType: 'script'
 	        data: {id: $('#id').val()} 
+
+$ ->
+    $(document).on 'change', '#productlist', (evt) ->
+      $.ajax '/update_product_list',
+        type: 'GET'
+        dataType: 'script'
+        data: {id: $("#productlist").val()}
+        

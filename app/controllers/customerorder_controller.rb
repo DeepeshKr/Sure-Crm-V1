@@ -12,6 +12,7 @@ before_action :customer, only: [ :upsell, :payment, :channel, :review, :summary]
   respond_to :html
 
 #first Step is where the customer number and called no are shown together
+#first Step is where the customer number and called no are shown together
 def newcall
     new_call
     #if order is not null then create orderline with order id
@@ -116,12 +117,12 @@ def add_products
     #flash[:notice] = "Order id is created #{orderid} called from numer #{@mobile} to number #{@calledno}" 
     #flash[:error] = @order_master.errors.full_messages.join("<br/>")
     if order_line_params[:product_list_id].present?
-
+      
 
     exproductlist = ProductList.find(order_line_params[:product_list_id])
     exproductvariant = ProductVariant.find(exproductlist.product_variant_id)
     @order_lines = OrderLine.where("product_list_id = ? AND orderid = ?", 
-    order_line_params[:product_list_id], @order_id).order("id")
+    order_line_params[:product_list_id], @order_id)
 
     product_name = exproductlist.name 
         
@@ -287,7 +288,7 @@ def add_products
       exproductlist = ProductList.find(params[:product_list_id])
       exproductvariant = ProductVariant.find(exproductlist.product_variant_id)
       @order_lines = OrderLine.where("product_list_id = ? AND orderid = ?", 
-      params[:product_list_id], params[:order_id]).order("id")
+      params[:product_list_id], params[:order_id])
 
       product_name = exproductlist.productlistdetails 
         
@@ -525,14 +526,15 @@ end
         reg_product_variants = ProductVariant.where("activeid = ? and product_sell_type_id = ?", 10000, 10000).pluck("id")
         upsell_product_variants = ProductVariant.where("activeid = ? and product_sell_type_id <> ?", 10000, 10000).pluck("id")
       
-      @order_lines_regular = OrderLine.where(productvariant_id: reg_product_variants).where(orderid: @order_id).order("id")
+      @order_lines_regular = OrderLine.where(productvariant_id: reg_product_variants).where(orderid: @order_id)
       if @order_lines_regular.blank?
         @show_process = 1
-        flash[:error] = ' You have not added any regular products '
+        flash[:error] = 'You have not added any regular products '
       end
        @order_lines_upsell = OrderLine.where(productvariant_id: upsell_product_variants).where(orderid: @order_id)
+     
+     #@customer_address.address3 = 'DIST-' + @customer_address.address3.strip[0..18].upcase if @customer_address.address3.present?) + '-' + (@customer_address.state[0..5].upcase 
 
-      customer_address.address3 = 'DIST-' + (@customer_address.address3.strip[0..18].upcase if @customer_address.address3.present?) + '-' + @customer_address.state[0..5].upcase
     customer
     respond_with(@order_master, @order_lines, @customer, @customer_address)
   end
@@ -555,6 +557,16 @@ end
         flash[:error] = "Media is missing " 
         redirect_to orderreview_path(:order_id => @order_master.id) 
       end
+
+        reg_product_variants = ProductVariant.where("activeid = ? and product_sell_type_id = ?", 10000, 10000).pluck("id")
+        upsell_product_variants = ProductVariant.where("activeid = ? and product_sell_type_id <> ?", 10000, 10000).pluck("id")
+     
+       @order_lines_regular = OrderLine.where(productvariant_id: reg_product_variants).where(orderid: @order_master.id)
+      if @order_lines_regular.blank?
+        flash[:error] = 'You have not added any regular products '
+        redirect_to orderreview_path(:order_id => @order_master.id) 
+      end
+      
       orderprocessed = update_customer_order_list
 
      
@@ -713,11 +725,12 @@ end
         @generalproductaddonlists = ProductList.where('active_status_id = ?',  10000).where(product_variant_id: product_variants).joins(:product_variant).order("product_variants.name")  
 
         #general_addon_product_list
-        @upsell_order_lines = OrderLine.where(productvariant_id: product_variants).where(orderid: @order_id).order("id")
+        @upsell_order_lines = OrderLine.where(productvariant_id: product_variants).where(orderid: @order_id)
 
     end
 
     def neworder(source, cli, dnis)
+
       @order_master = OrderMaster.create!(calledno: dnis, order_status_master_id: 10000, 
         orderdate: Time.zone.now, pieces: 0,subtotal: 0, taxes: 0, codcharges: 0, shipping:0, 
         total: 0, order_source_id: source.to_i, employeecode: @empcode, employee_id: @empid, 
@@ -742,7 +755,7 @@ end
     def set_order
       if params[:order_id].present?
           @order_master = OrderMaster.find(params[:order_id])
-          @order_lines = OrderLine.where(orderid: params[:order_id]).order("id")
+          @order_lines = OrderLine.where(orderid: params[:order_id])
       end
     end
 
@@ -805,11 +818,11 @@ end
       
       order_id = @order_master.id
 
-      t = Time.zone.now
+      t = Time.zone.now + 330.minutes
           nowhour = t.strftime('%H').to_i
           #=> returns a 0-padded string of the hour, like "07"
           nowminute = t.strftime('%M').to_i
-
+          nowtoday = Date.today.in_time_zone.strftime('%d/%m/%y')
        creditcardcharges = ''
 
       if @order_master.orderpaymentmode_id == 10000
@@ -920,9 +933,9 @@ end
           order_num =  hash["nextval"]
 
           flash[:notice] = "Order Number is #{order_num}" 
-          #CustomerOrderList
+               #CustomerOrderList Date.current Date.today.in_time_zone Time.zone.now
           customer_order_list = CustomerOrderList.create(ordernum: order_num,
-          orderdate: Time.zone.now,
+          orderdate: Date.today.in_time_zone + 330.minutes,
           title: @order_master.customer.salute[0..4].upcase, 
           fname: @order_master.customer.first_name[0..29].upcase, 
           lname: @order_master.customer.last_name[0..29].upcase, 
@@ -960,13 +973,13 @@ end
       
           #CUSTDETAILS
           customerdetails = CUSTDETAILS.create(ordernum: order_num,
-          orderdate: Time.zone.now,
+          orderdate: Date.current,
           title: @order_master.customer.salute[0..4].upcase, 
           fname: @order_master.customer.first_name[0..29].upcase, 
           lname: @order_master.customer.last_name[0..29].upcase, 
           add1: @order_master.customer_address.address1[0..29].upcase, 
           add2: @order_master.customer_address.address2[0..29].upcase, 
-          add3: 'DIST-' + (@order_master.customer_address.address3[0..17].upcase if @order_master.customer_address.address3.present?) + '-' + @order_master.customer_address.state[0..5].upcase,
+          add3: (@order_master.customer_address.address3[0..29].upcase if @order_master.customer_address.address3.present?),
           landmark: @order_master.customer_address.landmark[0..49].upcase, 
           city: @order_master.customer_address.city[0..29].upcase, 
           mstate: @order_master.customer_address.state[0..49].upcase, 
@@ -974,7 +987,7 @@ end
           pincode: @order_master.customer_address.pincode, 
           mstate: @order_master.customer_address.state[0..49].upcase, 
           tel1: @order_master.customer.mobile[0..19].upcase, 
-          tel2: (@order_master.customer_address.telephone1[0..19].upcase if @order_master.customer_address.telephone1.present?),
+          tel2: (@order_master.customer_address.telephone1[0..17].upcase if @order_master.customer_address.telephone1.present?),
           fax: (@order_master.customer_address.fax[0..19].upcase if @order_master.customer_address.fax.present?), 
           email: (@order_master.customer.emailid[0..19].upcase if @order_master.customer.emailid.present?), 
           ccnumber:  creditcardno, 
@@ -996,7 +1009,7 @@ end
           prod1: prod1, prod2: prod2, prod3: prod3, prod4: prod4, prod5: prod5, prod6: prod6, prod7: prod7, prod8:prod8, prod9: prod9, prod10: prod10,
           qty1: qty1, qty2: qty2, qty3: qty3, qty4: qty4, qty5: qty5, qty6: qty6, qty7: qty7, qty8: qty8, qty9: qty9, qty10: qty10)
       
-          
+               
           #- Integer update with customer order id
           @order_master.update(external_order_no: order_num.to_s, order_status_master_id: 10003) 
 
