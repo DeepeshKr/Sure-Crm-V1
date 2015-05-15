@@ -935,7 +935,7 @@ end
           flash[:notice] = "Order Number is #{order_num}" 
                #CustomerOrderList Date.current Date.today.in_time_zone Time.zone.now
           customer_order_list = CustomerOrderList.create(ordernum: order_num,
-          orderdate: Date.today.in_time_zone + 330.minutes,
+          orderdate: (330.minutes).from_now.to_date,
           title: @order_master.customer.salute[0..4].upcase, 
           fname: @order_master.customer.first_name[0..29].upcase, 
           lname: @order_master.customer.last_name[0..29].upcase, 
@@ -973,7 +973,7 @@ end
       
           #CUSTDETAILS
           customerdetails = CUSTDETAILS.create(ordernum: order_num,
-          orderdate: Date.current,
+          orderdate: (330.minutes).from_now.to_date,
           title: @order_master.customer.salute[0..4].upcase, 
           fname: @order_master.customer.first_name[0..29].upcase, 
           lname: @order_master.customer.last_name[0..29].upcase, 

@@ -10,8 +10,15 @@
 <% else %>
   <h3>Welcome</h3>
 
-
 <small>Only Authorised people are allowed to move ahead form here</small>
   <!--  <%= link_to "Sign up now!", signup_path, class: "btn btn-xs btn-primary" %> -->
    <% end %>
+</div>
+<div class="well well-sm">
+<h4>1) Time Now: <%= @timenow %></h4> <br>
+<hr>
+	<h4>2) Time: <%= @dateandtime %></h4> <br>
+	<hr>
+	<h4>3) Date: <%= @datewithouttime %></h4> <br>
+
 </div>

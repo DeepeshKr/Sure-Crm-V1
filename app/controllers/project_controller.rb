@@ -2,6 +2,9 @@ class ProjectController < ApplicationController
      skip_before_action :require_login, only: [:home, :help, :contact]
   def home
     @timenow = Time.zone.now + 330.minutes
+    @dateandtime = Date.today.in_time_zone + 330.minutes
+    @datewithouttime = Date.today.in_time_zone + 330.minutes
+    @datewithouttime = (330.minutes).from_now.to_date
   end
 
   def help
