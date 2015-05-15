@@ -52,8 +52,8 @@ class SalesReportController < ApplicationController
         @hourlist ||= []
         employeeunorderlist ||= []
     
-        from_date = for_date.beginning_of_day
-        to_date = for_date.end_of_day
+        from_date = for_date.beginning_of_day - 300.minutes
+        to_date = for_date.end_of_day - 300.minutes
         #start loop
         
         (from_date.to_datetime.to_i .. to_date.to_datetime.to_i).step(30.minutes) do |date|
@@ -214,7 +214,7 @@ class SalesReportController < ApplicationController
       @sno = 1
       #@order_master.orderpaymentmode_id == 10000 #paid over CC
       #@order_master.orderpaymentmode_id == 10001 #paid over COD
-    if params[:for_date].present? 
+    if params[:for_date].present?  
       #@summary ||= []
       @or_for_date = params[:for_date]
       for_date =  Date.strptime(params[:for_date], "%Y-%m-%d")
