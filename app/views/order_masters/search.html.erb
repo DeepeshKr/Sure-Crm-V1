@@ -7,16 +7,19 @@
  
 <%= render ('order_summary') %>
 <br>
-<h4>Order as processed</h4>
-<br>
-<% if @custdetails.present? %>
+
+ <div class="panel panel-primary">
+  <div class="panel-heading">
+    <h3 class="panel-title">Order as processed</h3>
+  </div>
+  <% if @custdetails.present? %>
 
 <table class="table table-hover"> 
   <thead>
     <tr>
-    	<th>Identify</th>
-    	<th>Name Address</th>
-    	<th>Ordered Products</th>    
+      <th>Identify</th>
+      <th>Name Address</th>
+      <th>Ordered Products</th>    
     </tr>
   </thead>
 
@@ -24,26 +27,27 @@
   <% @custdetails.each do |c| %>
   <tr><td><table class="table table-hover">
   <tr><td colspan="3"><strong> Order Num <%= c.ordernum %> </strong></td></tr>
-  <tr><td colspan="3"><%= c.orderdate.strftime("%d/%m/%y") %> </td></tr>
-  <tr><td colspan="3"><%= c.orderdate %></td>  </tr><tr>
-  <td><%= c.channel %></td><td></td><td><%= c.dnis %></td></tr>
-  <tr><td>User</td><td><%= c.username %></td><td>IP <%= c.ipadd %></td></tr>
+  <tr><td colspan="3"><%= c.orderdate.strftime("%d-%b-%y") %>
+  - <%= c.dt_hour.to_s.rjust(2, '0') %>:<%= c.dt_min.to_s.rjust(2, '0') %>  </td></tr>
+  <tr><td colspan="3"><%= c.channel %></td>  </tr><tr>
+  <td>IP</td><td><%= c.ipadd %> </td><td><%= c.dnis %></td></tr>
+  <tr><td>User</td><td colspan="2"><%= c.username %></td></tr>
   </table> </td>
   <td>
  <table class="table table-hover">  <tr><td colspan="4"><%= c.title %> <%= c.fname %> <%= c.lname %></td></tr><tr><td colspan="4"><%= c.add1 %> <%= c.add2 %> <%= c.add3 %> <%= c.landmark %></td></tr>
-<tr><td><%= c.city %></td>
-<td><%= c.pincode %></td>
-<td><%= c.state %></td>
-<td><%= c.mstate %></td><tr>
-<td><%= c.tel1 %></td>
-<td><%= c.tel2 %></td>
-<td><%= c.fax %></td>
-<td><%= c.email %></td></tr>
-<tr><td colspan="2"><%= c.ccnumber %></td>
-<td><%= c.expmonth %> <%= c.expyear %></td>
-<td><%= c.cardtype %></td></tr>
-<tr>
-<td colspan="2">Amount</td><td><%= c.carddisc %></td><td><%= c.totalamt %></td></tr>
+    <tr><td><%= c.city %></td>
+    <td><%= c.pincode %></td>
+    <td><%= c.state %></td>
+    <td><%= c.mstate %></td><tr>
+    <td><%= c.tel1 %></td>
+    <td><%= c.tel2 %></td>
+    <td><%= c.fax %></td>
+    <td><%= c.email %></td></tr>
+    <tr><td colspan="2"><%= c.ccnumber %></td>
+    <td><%= c.expmonth %> <%= c.expyear %></td>
+    <td><%= c.cardtype %></td></tr>
+    <tr>
+    <td colspan="2">Amount</td><td><%= c.carddisc %></td><td><%= c.totalamt %></td></tr>
  </table>
  
 <td><table class="table table-hover">
@@ -68,10 +72,17 @@
 <h4>Try to search another <%= @ordersearchresults %></h4>
 </div>
 <% end %>
+</div>
+
+<h4></h4>
 <br>
-<h4>Order in Dispatch / Paid / Returned</h4>
+
 <br>
-<% if @vpp.present? %>
+ <div class="panel panel-primary">
+  <div class="panel-heading">
+    <h3 class="panel-title">Order in Dispatch / Paid / Returned</h3>
+  </div>
+  <% if @vpp.present? %>
  <%= render 'vpp' %>
 
 <% else %>
@@ -79,5 +90,7 @@
 <h4><%= @vppsearch %></h4>
 </div>
 <% end %>
- 
+</div>
+
 <br>
+

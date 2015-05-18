@@ -18,3 +18,11 @@
 <%= render 'newwlsdet/list' %>
 
 <br>
+
+<br>
+<br>
+
+<%= link_to 'Download CSV', wholesalesoldreport_path(prod: @prod, for_date: @or_for_date, format: :csv), class: "btn btn-info btn-sm" %>
+<!-- Today's Date <%= @prev_datelist %> -->
+
+<br>

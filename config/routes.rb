@@ -27,6 +27,7 @@ Rails.application.routes.draw do
   get 'custdetails/search'
   # get 'custordersearch' => 'custdetails#search'
   get 'custordersearch' => 'order_masters#search'
+  get 'detailedordersearch' => 'order_masters#detailed_search'
   get 'custdetails/details'
   get 'newwlsdet/list'
   get 'newwlsdet/search'

@@ -1,3 +1,4 @@
+<% if @order_masters.present? %>
 <table class="table table-hover table-bordered">
   <thead>
     <tr>
@@ -36,7 +37,8 @@
         <td><%= order_master.customer.first_name rescue nil %> <%= order_master.customer.last_name rescue nil %></td>
         <td><%= order_master.customer_address.state  rescue nil %></td>
         <td><%= order_master.mobile %></td>
-          <td><strong><%= order_master.external_order_no %></strong> <br>
+          <td><strong>
+          <%= link_to order_master.external_order_no, custordersearch_path(ordernum: order_master.external_order_no), :target => "_blank" %></strong> <br>
            <small>Ref: <%= order_master.id %></small> 
           </td>
         <td><%= order_master.pieces %></td>
@@ -54,3 +56,9 @@
     <% end %>
   </tbody>
 </table>
+<% else %>
+<div class="well well-sm">
+<h4>@ordersearch</h4>
+
+</div>
+<% end %>

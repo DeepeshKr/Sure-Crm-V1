@@ -13,7 +13,7 @@ class ProductReportController < ApplicationController
 	   
 	if params[:prod].present? && params[:from_date].present? && params[:to_date].present?
 	  prod = params[:prod]
-	  
+	   
 	  @or_from_date = params[:from_date]
 	  @or_to_date = params[:to_date]
 	  
@@ -245,7 +245,7 @@ class ProductReportController < ApplicationController
 	def retail_sold_stock_report
 			@reportname = "Retail Sales Report"
 	  	if params[:prod].present? && params[:for_date].present? 
-		 	  
+		 	 @or_for_date = params[:for_date]	  
 		  @prod = params[:prod]
 		  for_date =  Date.strptime(params[:for_date], "%m/%d/%Y")
 		  @for_date = for_date.strftime('%d-%b-%y')

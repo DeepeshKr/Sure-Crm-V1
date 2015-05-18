@@ -171,10 +171,20 @@ class OrderMastersController < ApplicationController
     end
   end
 
-  def search_mobile
-    @mobile = params[:mobile]
-    customer_addresses = CustomerAddresses.where('telephone1 = ? OR telephone2 = ?', @mobile, @mobile).pluck("id")
-    @order_masters = OrderMaster.where(customer_address_id: customer_addresses)      
+  def detailed_search
+    @sno = 1
+     @mobile = nil
+      @emailid = nil
+     @ordersearch = "Please search for any of the above details!"
+    if params[:mobile].present?
+        @mobile = params[:mobile]
+        customer_addresses = CustomerAddress.where('telephone1 = ? OR telephone2 = ?', @mobile, @mobile).pluck("id")
+        @order_masters = OrderMaster.where(customer_address_id: customer_addresses)  
+    elsif params[:emailid].present?
+        @emailid = params[:emailid]
+        customers = Customer.where('emailid = ? OR alt_emailid = ?', @emailid, @emailid).pluck("id")
+        @order_masters = OrderMaster.where(customer_id: customers)  
+    end
   end
 
   def new

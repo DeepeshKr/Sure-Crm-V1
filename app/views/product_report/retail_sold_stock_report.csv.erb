@@ -1,0 +1,5 @@
+<% headers = ['Shdate', 'Order No', 'Invoice', 'Distcode', 'Prod', 'Trantype', 'Quantity', 'Invoice Amount'] %>
+<%= CSV.generate_line headers %>
+	 <% @vpp.each do |c| %>
+	 <%= CSV.generate_line([c.shdate.strftime('%d-%b-%y'), c.orderno, c.invoice, c.dist, c.prod, c.trantype, c.quantity, c.invoiceamount]).html_safe.strip  %>
+	<% end %>

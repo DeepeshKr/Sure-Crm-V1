@@ -8,7 +8,7 @@
     <%= hidden_field_tag :employee_id, @empid %>
   <%= hidden_field_tag :employee_code, @empcode %>
    <div class="row">
-                            
+                             
                              <div class="col-xs-8">  
          <%=  select_tag "interaction_category_id", options_from_collection_for_select(@interactioncategorylist, "id", "name"), {:label => "Priority", :class => "form-control"}  %>
 

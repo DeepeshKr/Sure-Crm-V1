@@ -1,0 +1,5 @@
+<% headers = ['Date', 'Invoice', 'Prod', 'Quantity', 'Shortqty', 'Rate', 'Totamt'] %>
+<%= CSV.generate_line headers %>
+	 <% @purchases_new.each do |c| %>
+	 <%= CSV.generate_line([c.rdate.strftime('%d-%b-%y'), c.invoice, c.prod, c.qty, c.shortqty, c.rate, c.invamt]).html_safe.strip  %>
+	<% end %>
