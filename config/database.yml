@@ -61,6 +61,12 @@ development_tuview:
   password: TUVIEW
   port: 1521
 
+tuview:
+  <<: *default
+  username: TUVIEW
+  password: TUVIEW
+  port: 1521
+
   # The specified database role being used to connect to postgres.
   # To create additional roles in postgres see `$ createuser --help`.
   # When left blank, postgres will use the default role. This is
@@ -161,3 +167,10 @@ production_tuview:
   password: TUVIEW
   port: 1521
 
+# tuview:
+#   adapter: oracle_enhanced
+#   database: TLBRNDDB
+#   host: 3.0.3.5
+#   username: TUVIEW
+#   password: TUVIEW
+#   port: 1521

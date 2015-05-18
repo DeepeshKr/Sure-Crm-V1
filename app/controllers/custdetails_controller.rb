@@ -20,16 +20,33 @@ class CustdetailsController < ApplicationController
 			end
 
     elsif params[:ordernum].present?
-           @custdetails = CUSTDETAILS.where("ordernum = ?", params[:ordernum]).order("id DESC").limit(200)     
+           @custdetails = CUSTDETAILS.where("ORDERNUM = ?", params[:ordernum])
 	 end	
     respond_with(@custdetails)
   end
   
 
   def search
-  
+    if params[:ordernum].present?
+      @ordernum = params[:ordernum]
+      @custdetails = CUSTDETAILS.where("ORDERNUM = ?", params[:ordernum])
+      
+      if @custdetails.present?
+        order_masters = OrderMaster.where(external_order_no: params[:ordernum])
+        if order_masters.present?
+          #if @order_master.customer_address_id.present?
+            @customer_address = CustomerAddress.find(order_masters.first.customer_address_id)
+            @order_master = order_masters.first
+            @order_lines = OrderLine.where(orderid: @order_master.id).order("id")
+          #end 
+        end  
+      else
+        @ordersearchresults = "No Results found for search #{@ordernum}"
+      end
+    end
+    @ordersearchresults = "Please search for Order Results shown in Oracle and Sure CRM"
   end
- 
+  
   def details
   
   end

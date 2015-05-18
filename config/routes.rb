@@ -25,6 +25,8 @@ Rails.application.routes.draw do
   get 'custdetailsreport' => 'custdetails#list'
   get 'custdetails/list'
   get 'custdetails/search'
+  # get 'custordersearch' => 'custdetails#search'
+  get 'custordersearch' => 'order_masters#search'
   get 'custdetails/details'
   get 'newwlsdet/list'
   get 'newwlsdet/search'

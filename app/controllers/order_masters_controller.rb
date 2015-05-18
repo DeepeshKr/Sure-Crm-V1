@@ -22,7 +22,7 @@ class OrderMastersController < ApplicationController
           for_date =  Date.strptime(params[:for_date], "%m-%d-%Y")
 
           @order_masters = OrderMaster.where('ORDER_STATUS_MASTER_ID > 10002').where('TRUNC(orderdate) = ?',for_date).where(employee_id: @employee_id).order("id")
-         @orderdesc = "#{@order_masters.count()} orders of #{employee} for #{for_date}"
+          @orderdesc = "#{@order_masters.count()} orders of #{employee} for #{for_date}"
          else
           @orderdesc = "Recent 500 completed orders of #{employee} "
           @order_masters = OrderMaster.where('ORDER_STATUS_MASTER_ID > 10002').where(employee_id: @employee_id).limit(500)
@@ -118,35 +118,63 @@ class OrderMastersController < ApplicationController
 
     alldropdowns 
     if @order_master.customer_id.present?
-      @customer = Customer.find(@order_master.customer_id)
-            
+      @customer = Customer.find(@order_master.customer_id)      
     end
-        @customer_address = CustomerAddress.new
+
+    @customer_address = CustomerAddress.new
 
     if @order_master.customer_address_id.present?
       @customer_address = CustomerAddress.find(@order_master.customer_address_id) 
     end
 
-     if @order_master.campaign_playlist_id.present?
-    @campaign_playlist = CampaignPlaylist.find(@order_master.campaign_playlist_id)
-  end
+    if @order_master.campaign_playlist_id.present?
+      @campaign_playlist = CampaignPlaylist.find(@order_master.campaign_playlist_id)
+    end
 
-      @order_lines = OrderLine.where(orderid: @order_master.id)
-
-     @order_line = OrderLine.new
-     @order_line.orderid = @order_master.id
-    
-     @customer_credit_cards = CustomerCreditCard.where(customer_id: @order_master.customer_id)
+    @order_lines = OrderLine.where(orderid: @order_master.id)
+    @order_line = OrderLine.new
+    @order_line.orderid = @order_master.id
+    @customer_credit_cards = CustomerCreditCard.where(customer_id: @order_master.customer_id)
     @customer_credit_card = CustomerCreditCard.new
     @customer_credit_card.customer_id = @order_master.customer_id
     if @customer_credit_cards.present?
       @customer_credit_card = @customer_credit_cards.last
-    
     end
 
     respond_with(@order_master, @customer, @customer_address, @order_line, @order_lines, @customer_credit_card)
 
 
+  end
+
+  def search
+    @ordersearchresults = "Please search for Order, Results across Ordering, Processing and Dispatch"
+    @vppsearch = "Please search for Order, Results across Ordering, Processing and Dispatch"
+    if params[:ordernum].present?
+      @ordernum = params[:ordernum]
+      @custdetails = CUSTDETAILS.where("ORDERNUM = ?", @ordernum)
+      @ordersearchresults = "No Results found in processing search #{@ordernum}"
+      @vppsearch = "No results found in Dispatch, we searched order number #{@ordernum}"
+      if @custdetails.present?
+        order_masters = OrderMaster.where(external_order_no: @ordernum)
+        if order_masters.present?
+          #if @order_master.customer_address_id.present?
+            @customer_address = CustomerAddress.find(order_masters.first.customer_address_id)
+            @order_master = order_masters.first
+            @order_lines = OrderLine.where(orderid: @order_master.id).order("id")
+          #end 
+        end
+        #custref related to 
+        if VPP.where(custref: @ordernum).present?
+          @vpp = VPP.where(custref: @ordernum)
+        end 
+      end
+    end
+  end
+
+  def search_mobile
+    @mobile = params[:mobile]
+    customer_addresses = CustomerAddresses.where('telephone1 = ? OR telephone2 = ?', @mobile, @mobile).pluck("id")
+    @order_masters = OrderMaster.where(customer_address_id: customer_addresses)      
   end
 
   def new
@@ -191,7 +219,6 @@ class OrderMastersController < ApplicationController
         :customer_id, :customer_address_id, :billno, :external_order_no, :pieces, 
         :subtotal, :taxes, :shipping, :codcharges, :total, :order_status_master_id, 
         :orderpaymentmode_id, :campaign_playlist_id, :notes, :order_source_id,
-        :media_id, :corporate_id, :order_for_id, :userip, :sessionid, :calledno
-        )
+        :media_id, :corporate_id, :order_for_id, :userip, :sessionid, :calledno)
     end
 end

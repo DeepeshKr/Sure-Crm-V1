@@ -822,7 +822,7 @@ end
           nowhour = t.strftime('%H').to_i
           #=> returns a 0-padded string of the hour, like "07"
           nowminute = t.strftime('%M').to_i
-          nowtoday = Date.today.in_time_zone.strftime('%d/%m/%y')
+         
        creditcardcharges = ''
 
       if @order_master.orderpaymentmode_id == 10000
@@ -949,7 +949,7 @@ end
           pincode: @order_master.customer_address.pincode, 
           mstate: @order_master.customer_address.state[0..49].upcase, 
           tel1: @order_master.customer.mobile[0..19].upcase, 
-          tel2: (@order_master.customer_address.telephone1[0..19].upcase if @order_master.customer_address.telephone1.present?),
+          tel2: (@order_master.customer_address.telephone2[0..19].upcase if @order_master.customer_address.telephone2.present?),
           fax: (@order_master.customer_address.fax[0..19].upcase if @order_master.customer_address.fax.present?), 
           email: (@order_master.customer.emailid[0..19].upcase if @order_master.customer.emailid.present?), 
           ccnumber:  creditcardno, 
@@ -987,7 +987,7 @@ end
           pincode: @order_master.customer_address.pincode, 
           mstate: @order_master.customer_address.state[0..49].upcase, 
           tel1: @order_master.customer.mobile[0..19].upcase, 
-          tel2: (@order_master.customer_address.telephone1[0..17].upcase if @order_master.customer_address.telephone1.present?),
+          tel2: (@order_master.customer_address.telephone2[0..17].upcase if @order_master.customer_address.telephone2.present?),
           fax: (@order_master.customer_address.fax[0..19].upcase if @order_master.customer_address.fax.present?), 
           email: (@order_master.customer.emailid[0..19].upcase if @order_master.customer.emailid.present?), 
           ccnumber:  creditcardno, 
