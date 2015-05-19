@@ -45,7 +45,7 @@ def update_product_list
     product_list = ProductList.where(active_status_id: 10000).where("name like ? ", "#{@searchvalue}%")
     
       found  = product_list.count
-      @newproductlist = product_list.map{|s| [s.name, s.id]}.insert(0, "Select a Product found: #{found}")
+      @newproductlist = product_list.map{|s| [s.name, s.id]}
     #end
 end
 

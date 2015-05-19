@@ -13,23 +13,25 @@
 
   <div class="field">
    
-    <%= f.text_field :name %>
+    <%= f.text_field :name, placeholder: "e.g. 2 minuter, 12 minutes, 30 minutes", label: "Named Duration of show " %>
   </div>
-  <div class="field">
+  <div class="row">
+  <div class="col-xs-2">
   
-    <%= f.select :duration_secs, 1..1, label: "Duration in Sec" %>
-  
+    <%= f.text_field :duration_secs, placeholder: "e.g. 5660",  label: "Total Duration in Sec" %>
+   <small> h x 60 + m x 60 + s  </small>
   </div>
-  <div class="field">
-       <%= f.text_field :cost_per_sec %>
+  <div class="col-xs-3">
+       <%= f.text_field :cost_per_sec, placeholder: "e.g. 5000.30", label: "Total Cost in Rupees"  %>
   </div>
-  <div class="field">
+  <div class="col-xs-7">
        <%= f.select(:media_id, 
     options_from_collection_for_select(@medialist, :id, :mediainfo, selected: @media_cost_master.media_id), 
     {:label => "Select Media"}, :class => "form-control")  %>
     <small> Only media which we pay in advance show up here </small>
   </div>
-  <div class="row">
+  </div>
+<!--   <div class="row">
  <div class="col-xs-1 col-xs-offset-2">
  <%= f.select :str_hr, 0..23, label: "Start Hr" %>
  </div>
@@ -49,7 +51,7 @@
   <div class="col-xs-1">
    <%= f.select :end_sec, 0..59, label: "End Sec" %>
  </div>
- </div>
+ </div> -->
  
   <div class="field">
   

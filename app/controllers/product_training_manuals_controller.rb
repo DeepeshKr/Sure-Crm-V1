@@ -67,8 +67,7 @@ class ProductTrainingManualsController < ApplicationController
       
       @training =  "updated at " + DateTime.now.to_s 
       @heading = "No Script for " << @searchvalue
-
-       productlists = ProductList.where(active_status_id: 10000).where("name like ? ", "#{@searchvalue}%").pluck(:product_variant_id).first
+    productlists = ProductList.where(active_status_id: 10000).where("name like ? ", "#{@searchvalue}%").pluck(:product_variant_id).first
        if productlists.present?
           #exiting
 
@@ -78,25 +77,25 @@ class ProductTrainingManualsController < ApplicationController
 
          @traininglist = ProductTrainingManual.where('productid = ?', @productid)
                   
-          product_list_id = productlists
+          
          if @traininglist.empty?
            @training = "No script for " + product_list_id.to_s + "product id " + @productid.to_s
            @heading = "Searched for " << @searchvalue
          end         
           
-          productlist = ProductList.find(product_list_id)
+          product_listed = ProductList.where(active_status_id: 10000).where("name like ? ", "#{@searchvalue}%")
 
-          @heading = productlist.productinfo
+          @heading = product_listed.first.productinfo
           
-          @basic =  productlist.price
+          @basic =  product_listed.first.price
            #@shipping =  productlist.shipping.to_i.to_s
            
-          @cod =  productlist.codcharges.to_i.to_s
-          @mahcod =  productlist.maharastracodextra.to_i.to_s
+          @cod =  product_listed.first.codcharges.to_i.to_s
+          @mahcod =  product_listed.first.maharastracodextra.to_i.to_s
            #@servicetx =  productlist.servicetax.to_i.to_s
 
-          @cc =  productlist.creditcardcharges.to_i.to_s
-          @mahcc =  productlist.maharastraccextra.to_i.to_s
+          @cc =  product_listed.first.creditcardcharges.to_i.to_s
+          @mahcc =  product_listed.first.maharastraccextra.to_i.to_s
        end
      end
   end

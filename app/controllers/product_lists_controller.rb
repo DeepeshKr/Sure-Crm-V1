@@ -11,6 +11,12 @@ class ProductListsController < ApplicationController
     # @product_lists = ProductList.all
     @noofproducts =  @product_lists.count
     respond_with(@product_lists)
+
+    # if params[:search].present?
+    #   @search = params[:search]
+    #    @media = Medium.where("name like ? or ref_name like ?", "#{@search}%", "#{@search}%")
+    #    @dnis = params[:dnis]
+    # end
   end
 
   # def retail
