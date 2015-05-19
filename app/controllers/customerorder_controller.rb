@@ -215,10 +215,12 @@ def add_products
   
     if @order_master.customer_id.present?
     @customer = Customer.find(@order_master.customer_id)
-      success = "Existing Customer found." 
+      success = "Existing Customer found #{@customer.id}" 
+       @customer_id = @customer.id
   elsif Customer.where(mobile: @order_master.mobile).present?
     @customer = Customer.where(mobile: @order_master.mobile).last
-     success = "Earlier purchased Customer found." 
+     success = "Earlier purchased Customer found #{@customer.id}" 
+     @customer_id = @customer.id
   else
     @customer = Customer.new(mobile: @order_master.mobile)
     notice = "Add customer address" 

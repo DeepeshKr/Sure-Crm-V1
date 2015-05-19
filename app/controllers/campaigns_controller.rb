@@ -107,7 +107,8 @@ class CampaignsController < ApplicationController
     end
 
     def campaign_params
-      params.require(:campaign).permit(:name, :startdate, :enddate, :mediumid, :description, :campaignstageid, :stage, :media)
+      params.require(:campaign).permit(:name, :startdate, :enddate,
+        :mediumid, :description, :campaignstageid, :stage, :media)
     end
     def set_media_tape
       @media_tapes = MediaTape.where('product_variant_id is null')

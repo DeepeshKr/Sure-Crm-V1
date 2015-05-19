@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150512142038) do
+ActiveRecord::Schema.define(version: 20150519084315) do
 
   create_table "address_types", force: :cascade do |t|
     t.string   "name"
@@ -427,6 +427,8 @@ ActiveRecord::Schema.define(version: 20150512142038) do
     t.string   "dnis"
     t.string   "channel"
     t.string   "slot"
+    t.integer  "daily_charges",      limit: 16, precision: 38
+    t.integer  "paid_correction",    limit: 16, precision: 38
   end
 
   create_table "media_commisions", force: :cascade do |t|

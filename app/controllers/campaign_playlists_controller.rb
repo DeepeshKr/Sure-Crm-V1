@@ -290,8 +290,10 @@ end
         :start_hr, :start_min, :start_sec, 
         :end_hr, :end_min, :end_sec,
         :cost, :channeltapeid, :internaltapeid, 
-        :productvariantid, :filename, :description, :duration_secs, 
-        :tape_id, :old_campaign_id, :ref_name, :list_status_id, :for_date)
+        :productvariantid, :filename, :description, 
+        :duration_secs, 
+        :tape_id, :old_campaign_id, :ref_name, 
+        :list_status_id, :for_date)
     end
     def set_media_tape
       @media_tapes = MediaTape.all

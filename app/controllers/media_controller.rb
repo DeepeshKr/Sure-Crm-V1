@@ -102,7 +102,7 @@ class MediaController < ApplicationController
 
     def medium_params
       params.require(:medium).permit(:name, :telephone, :alttelephone, :state, :active, 
-        :corporateid, :description, :ref_name, :media_commision_id, 
-        :value, :media_group_id, :dnis, :channel, :slot)
+        :corporateid, :description, :ref_name, :media_commision_id,  :value, 
+        :media_group_id, :dnis, :channel, :slot, :daily_charges, :paid_correction)
     end
 end

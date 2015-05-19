@@ -7,7 +7,7 @@
    <div class="row">
 <%= hidden_field_tag :calledno, @calledno %>
 <%= hidden_field_tag :mobile, @mobile %>
-<%= hidden_field_tag :customer_id, @customer.id %>
+<%= hidden_field_tag :customer_id, @customer_id %>
   <div class="col-xs-2">
      <%= select_tag "customer_salute", 
     options_from_collection_for_select(Salute.all, :name, :name, :selected => @customer.salute), 
