@@ -87,16 +87,19 @@ class MediaTapesController < ApplicationController
         @cost = 0
     end  
   end
-
+ 
 # get "addonproducts" => 'product_master_add_ons#productlist'
   def product_lists
+     # product_masters = ProductMaster.where("productactivecodeid = ?", 10000).pluck("id")
+     #  product_variants = ProductVariant.where("activeid = ? and product_sell_type_id < ?", 10000, 10002).where(productmasterid: product_masters).pluck("id")
+     # @product_lists = ProductList.where('active_status_id = ?',  10000).where(product_variant_id: product_variants)
     #@productlists = ProductList.all
     @product_master_add_ons = nil
     if ProductList.find(params[:product_list_id]).present?
-    productvariantid = ProductList.find(params[:product_list_id]).product_variant_id
+    productvariantid = ProductList.where('active_status_id = ?',  10000.find(params[:product_list_id]).product_variant_id
       id = params[:product_list_id]
-      if ProductVariant.find(productvariantid).present?
-          productid = ProductVariant.find(productvariantid).productmasterid
+      if ProductVariant.where("activeid = ?",10000).find(productvariantid).present?
+          productid = ProductVariant.where("activeid = ?",10000).find(productvariantid).productmasterid
           if ProductMasterAddOn.where(product_master_id: productid).present? 
           @productlists = ProductMasterAddOn.where(product_master_id: productid)
            else

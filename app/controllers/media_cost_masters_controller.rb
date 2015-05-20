@@ -35,7 +35,7 @@ class MediaCostMastersController < ApplicationController
   def destroy
     @media_cost_master.destroy
     respond_with(@media_cost_master)
-  end
+  end 
 
   private
     def set_media_cost_master

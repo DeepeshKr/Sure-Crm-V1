@@ -47,6 +47,7 @@ class MediaTapeHeadsController < ApplicationController
 
   # GET /media_tape_heads/1/edit
   def edit
+    @new_name || @media_tape_head.name.to_s.split('.')[0]
   end 
  
   # POST /media_tape_heads
