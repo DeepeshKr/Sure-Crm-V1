@@ -7,16 +7,20 @@ respond_to :html, :xml, :json
   def index
     if params.has_key?(:search)
       
-      @search = "Search for " <<  params[:search].upcase
-       @searchvalue = params[:search].upcase   
-      @product_masters = ProductMaster.where("name like ? OR extproductcode like ? or description like ?", "#{@searchvalue}%", "#{@searchvalue}%", "#{@searchvalue}%")
-      
+      @search = "Search for " +  params[:search].upcase
+      @searchvalue = params[:search].upcase   
+      @product_masters = ProductMaster.where('productactivecodeid = 10000').where("name like ? OR extproductcode like ? or description like ?", "#{@searchvalue}%", "#{@searchvalue}%", "#{@searchvalue}%")
+      @inactive_product_masters = ProductMaster.where('productactivecodeid <> 10000').where("name like ? OR extproductcode like ? or description like ?", "#{@searchvalue}%", "#{@searchvalue}%", "#{@searchvalue}%")
       @found = @product_masters.count
+    
     else
       @search = "Product Master List"
-     @searchvalue = nil
-      @product_masters = ProductMaster.all
-       @found = nil
+      @searchvalue = nil
+      @product_masters = ProductMaster.all.limit(10)
+      @inactive_product_masters = ProductMaster.where('productactivecodeid <> 10000').limit(10)
+      
+      @found = nil
+    
     end
 
     respond_with(@product_masters)
@@ -143,8 +147,10 @@ respond_to :html, :xml, :json
     end
 
     def product_master_params
-      params.require(:product_master).permit(:name, :productcategoryid, :productinventorycodeid, 
-      :barcode, :price, :taxes,  :shipping, :extproductcode, :description, :productactivecodeid, 
+      params.require(:product_master).permit(:name, :productcategoryid, 
+        :productinventorycodeid, 
+      :barcode, :price, :taxes,  :shipping, :extproductcode, :description, 
+      :productactivecodeid, 
       :product_sell_type_id)
     end
 end

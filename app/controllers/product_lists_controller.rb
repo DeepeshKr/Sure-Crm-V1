@@ -5,18 +5,35 @@ class ProductListsController < ApplicationController
   respond_to :html
 
   def index
-     product_masters = ProductMaster.where("productactivecodeid = ?", 10000).pluck("id")
-      product_variants = ProductVariant.where("activeid = ? and product_sell_type_id < ?", 10000, 10002).where(productmasterid: product_masters).pluck("id")
-      @product_lists = ProductList.where('active_status_id = ?',  10000).where(product_variant_id: product_variants)
-    # @product_lists = ProductList.all
-    @noofproducts =  @product_lists.count
-    respond_with(@product_lists)
+    if params.has_key?(:search)
+      
+      @search = "Search for " +  params[:search].upcase
+      @searchvalue = params[:search].upcase   
+      
+      # @product_masters = ProductMaster.where('productactivecodeid = 10000').where("name like ? OR extproductcode like ? or list_barcode like ?", "#{@searchvalue}%", "#{@searchvalue}%", "#{@searchvalue}%")
+      # @inactive_product_masters = ProductMaster.where('productactivecodeid <> 10000').where("name like ? OR extproductcode like ? or list_barcode like ?", "#{@searchvalue}%", "#{@searchvalue}%", "#{@searchvalue}%")
+      
+      @product_lists = ProductList.where('active_status_id = ?',  10000).where("name like ? OR extproductcode like ? or list_barcode like ?", "#{@searchvalue}%", "#{@searchvalue}%", "#{@searchvalue}%")
+      @inactive_product_lists = ProductList.where('active_status_id <> ?',  10000).where("name like ? OR extproductcode like ? or list_barcode like ?", "#{@searchvalue}%", "#{@searchvalue}%", "#{@searchvalue}%")
 
-    # if params[:search].present?
-    #   @search = params[:search]
-    #    @media = Medium.where("name like ? or ref_name like ?", "#{@search}%", "#{@search}%")
-    #    @dnis = params[:dnis]
-    # end
+
+      @found = @product_lists.count
+      
+
+    else
+      @search = "Product Sell List"
+      @searchvalue = nil
+      #product_masters = ProductMaster.where("productactivecodeid = ?", 10000).pluck("id")
+      #product_variants = ProductVariant.where("activeid = ? and product_sell_type_id < ?", 10000, 10002).where(productmasterid: product_masters).pluck("id")
+      @product_lists = ProductList.where('active_status_id = ?',  10000).limit(10)
+      @inactive_product_lists = ProductList.where('active_status_id <> ?',  10000)
+
+      @found = nil
+    
+    end
+       #respond_with(@product_lists)
+
+  
   end
 
   # def retail
@@ -89,6 +106,8 @@ class ProductListsController < ApplicationController
     end
 
     def product_list_params
-      params.require(:product_list).permit(:name, :product_variant_id, :product_spec_list_id, :extproductcode, :list_barcode, :active_status_id)
+      params.require(:product_list).permit(:name, :product_variant_id,
+       :product_spec_list_id, :extproductcode, 
+       :list_barcode, :active_status_id)
     end
 end

@@ -82,7 +82,19 @@ class MediaController < ApplicationController
 
   def update
     @medium.update(medium_params)
-    respond_with(@medium)
+    if params[:next].present?
+      if params[:next] == "next"
+      new_id = params[:id]
+        if Medium.where('id > ?', params[:id]).present?
+          @new_medium = Medium.where('id > ?', params[:id]).first
+         return redirect_to edit_medium_path(@new_medium) 
+        else
+          flash[:error] = "You have reached last media <br/>"
+        end
+       end   
+    end
+      respond_with(@medium)
+  
   end
 
   def destroy
