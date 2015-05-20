@@ -80,12 +80,22 @@ class CampaignsController < ApplicationController
   def create
     proddropdown
     @campaign = Campaign.new(campaign_params)
+    
+    if Medium.find(@campaign.mediumid).cost.present?
+      campaign_cost = Medium.find(@campaign.mediumid).cost
+      @Campaign.update(total_cost: campaign_cost)
+    end
+    
     #@campaign.cost = 0
     @campaign.save
     respond_with(@campaign)
   end
 
   def update
+    if Medium.find(@campaign.mediumid).cost.present?
+      campaign_cost = Medium.find(@campaign.mediumid).cost
+      @Campaign.update(total_cost: campaign_cost)
+    end
     @campaign.update(campaign_params)
     respond_with(@campaign)
   end
@@ -120,8 +130,8 @@ class CampaignsController < ApplicationController
     end
 
     def campaign_params
-      params.require(:campaign).permit(:name, :startdate, :enddate,
-        :mediumid, :description, :campaignstageid, :stage, :media)
+      params.require(:campaign).permit(:name, :startdate, :enddate, :mediumid, 
+        :description, :campaignstageid, :stage, :media,:total_cost, :total_revenue)
     end
     def set_media_tape
       @media_tapes = MediaTape.where('product_variant_id is null')

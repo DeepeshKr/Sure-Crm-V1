@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150519084315) do
+ActiveRecord::Schema.define(version: 20150520073312) do
 
   create_table "address_types", force: :cascade do |t|
     t.string   "name"
@@ -63,6 +63,7 @@ ActiveRecord::Schema.define(version: 20150519084315) do
     t.string   "ref_name"
     t.integer  "list_status_id",   limit: 16, precision: 38
     t.datetime "for_date"
+    t.integer  "total_revenue",    limit: 16, precision: 38
   end
 
   create_table "campaign_stages", force: :cascade do |t|
@@ -76,11 +77,13 @@ ActiveRecord::Schema.define(version: 20150519084315) do
     t.string   "name"
     t.datetime "startdate"
     t.datetime "enddate"
-    t.integer  "mediumid",    limit: 16, precision: 38
+    t.integer  "mediumid",      limit: 16, precision: 38
     t.text     "description"
     t.decimal  "cost"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "total_cost",    limit: 16, precision: 38
+    t.integer  "total_revenue", limit: 16, precision: 38
   end
 
   create_table "change_log_trails", force: :cascade do |t|
