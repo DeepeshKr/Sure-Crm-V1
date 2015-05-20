@@ -52,6 +52,17 @@ class CampaignsController < ApplicationController
      end
      
      @campaignid = params[:id]
+     #check if media belongs to HBN Group
+     media_check = Medium.find(@campaign.mediumid)
+     if media_check.media_group_id != 10000
+        @hbnchecked = true
+        @pvtchannelchecked = false
+        @media_name = "HBN"
+     else
+        @hbnchecked = false
+        @pvtchannelchecked = true
+        @media_name = "Pvt Channel"
+     end
 
     respond_with(@campaign, @campaign_playlists,  @campaign_playlist)
   end

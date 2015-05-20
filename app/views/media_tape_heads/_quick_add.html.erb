@@ -1,49 +1,50 @@
 <%= form_tag("/create_playlist", method: "post") do |f| %>
-<div class="row">
-<div class="col-xs-4">
+<h4> <%= @media_name %></h4>
+
 	<div class="well well-sm">
+	<% if @hbnchecked == TRUE %>
 		<div class="row">
 
 			<div class="col-xs-4">
-			 <%= radio_button_tag 'time_slot', "auto", true  %>
+			 <%= radio_button_tag 'time_slot', "auto", @hbnchecked  %>
 			</div>
 			<div class="col-xs-8">
 			<label>Auto Append (HBN)</label>	
 			</div>
 		</div>
-	</div>
-</div>
-<div class="col-xs-8">
-	<div class="well well-sm">
+	
+
+	<% elsif @pvtchannelchecked == TRUE %>
+		
+	
 		<div class="row">
 			<div class="col-xs-1 text-right">
-				<%= radio_button_tag 'time_slot', "specific"  %>
+				<%= radio_button_tag 'time_slot', "specific", @pvtchannelchecked  %>
 			</div>
-			<div class="col-xs-6">
-			 <%=  select_tag "media_tape_type_id",options_from_collection_for_select(@media_cost_master, :id,  :media_tape_type, selected: @campaign.mediumid) , {:class => "form-control",:label => "Select tape"}
+			<div class="col-xs-8">
+			 <%=  select_tag "media_tape_type_id",options_from_collection_for_select(@media_cost_master, :id,  :media_tape_type, selected: @campaign.mediumid) , {:class => "form-control",:label => "Select tape", include_blank: 'Select Relevant Cost and Time'}
      %>
     	 
     <small> Only media which we pay in advance show up here </small>
 			</div>
 
-			<div class="col-xs-2">
+			<div class="col-xs-1">
 
 			   <%= select_tag :begin_hr, options_for_select(0..23), :class => "form-control"  %>
 
 <small> Start Hr </small>
 			</div>
 			<div class="col-xs-1">:</div>
-			<div class="col-xs-2">
+			<div class="col-xs-1">
 
 			   <%= select_tag :begin_min, options_for_select(0..59), :class => "form-control"  %>
 			   <small> Start Min </small>
 			</div>
 		</div>
 
-
+		<% end %>
 	</div>
-</div>
-</div>
+
 
 
 

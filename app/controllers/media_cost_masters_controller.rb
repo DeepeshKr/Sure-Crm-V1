@@ -42,7 +42,8 @@ class MediaCostMastersController < ApplicationController
       @media_cost_master = MediaCostMaster.find(params[:id])
     end
      def dropdown
-     @medialist = Medium.where('media_commision_id = ?',  10000).order('name')
+      #.where(media_group_id: 10000)
+     @medialist = Medium.where('media_commision_id = ? AND (media_group_id <> ? OR media_group_id IS NULL)',10000,  10000).order('name')
     end
     def media_cost_master_params
       params.require(:media_cost_master).permit(:name, :duration_secs, 
