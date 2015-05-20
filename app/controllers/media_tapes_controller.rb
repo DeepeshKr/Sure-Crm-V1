@@ -96,14 +96,14 @@ class MediaTapesController < ApplicationController
     #@productlists = ProductList.all
     @product_master_add_ons = nil
     if ProductList.find(params[:product_list_id]).present?
-    productvariantid = ProductList.where('active_status_id = ?',  10000.find(params[:product_list_id]).product_variant_id
+      productvariantid = ProductList.where('active_status_id = ?',  10000).find(params[:product_list_id]).product_variant_id
       id = params[:product_list_id]
       if ProductVariant.where("activeid = ?",10000).find(productvariantid).present?
           productid = ProductVariant.where("activeid = ?",10000).find(productvariantid).productmasterid
           if ProductMasterAddOn.where(product_master_id: productid).present? 
-          @productlists = ProductMasterAddOn.where(product_master_id: productid)
+            @productlists = ProductMasterAddOn.where(product_master_id: productid)
            else
-          @product_master_add_ons = nil
+            @product_master_add_ons = nil
           end
       end
     end  

@@ -21,23 +21,27 @@
   <div class="field">
      <%= f.text_field :ref_name, label: "Reference Name - Please ensure it is unique", placeholder: "Unique general name of Channel" %>
   </div>
- 
-  <div class="field">
+ <div class="row">
+    <div class="col-xs-2">
+    <%= f.text_field :dnis, placeholder: "dnis", required: true,  label: "4 digit dnis" %>
+    </div>
+  <div class="col-xs-3">
    
     <%= f.text_field :telephone, required: true,  label: "Incoming Telephone" %>
   </div>
-  <div class="field">
+    <div class="col-xs-4">
+    <%= f.select(:state, 
+        content_tag(:option,'All India',:value=>"")+options_from_collection_for_select(@statelist, :name, :name, @medium.state), 
+        {:prompt => 'All India'}, :class => "form-control col-xs-1")  %>
+  </div>
+  <div class="col-xs-3">
   
     <%= f.text_field :alttelephone, label: "Alternate Telephone" %>
   </div>
-  <div class="field">
-  
-   	<%= f.select(:state, 
-		    content_tag(:option,'All India',:value=>"")+options_from_collection_for_select(@statelist, :name, :name, @medium.state), 
-		    {:prompt => 'All India'}, :class => "form-control col-xs-1")  %>
+
   </div>
-  <br>
-  <br>
+
+ 
   <div class="row">
   <div class="col-xs-4 col-offset-xs-2">
     <%= f.select(:media_commision_id, 
@@ -62,24 +66,18 @@
         options_from_collection_for_select(@media_group, :id, :name, @medium.media_group_id), 
         {:prompt => 'None', include_blank: 'None'}, :class => "form-control col-xs-1")  %>
     </div>
-    <div class="col-xs-3">
-    <%= f.text_field :dnis, placeholder: "dnis", required: true,  label: "4 digit dnis" %>
-    </div>
+ 
     <div class="col-xs-4">
     <%= f.text_field :channel, placeholder: "Chanel", required: true, label: "Channel" %>
     </div>
-    <div class="col-xs-2">
+    <div class="col-xs-1">
     <%= f.text_field :slot, placeholder: "Slot", label: "Slot" %>
     </div>
-   
-  </div>
-  <div class="row">
-    
-    <div class="col-xs-2">
+      <div class="col-xs-2">
           <%= f.number_field :corporateid, label: "Corporate Id", placeholder: "Ignore if you dont know" %>
     </div>
-
-    </div>
+  </div>
+ 
  
   <div class="field">
    
@@ -92,7 +90,11 @@
 	</div>
 
  	<div class="row">
-  		<div class="col-xs-2 col-md-offset-5">
+  <div class="col-xs-2 col-md-offset-6">
+  <%= check_box_tag 'Go to Next', 'yes', true %>
+     <%= check_box_tag 'time_slot', "auto", @hbnchecked  %>
+  </div>
+  		<div class="col-xs-2 ">
   			
     		<%= f.submit  class: "btn btn-primary" %>
   
