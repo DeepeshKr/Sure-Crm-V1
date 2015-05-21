@@ -78,12 +78,12 @@ class MediaTapeHeadsController < ApplicationController
   # PATCH/PUT /media_tape_heads/1
   # PATCH/PUT /media_tape_heads/1.json
   def update
-    tapename = media_tape_head_params[:name]
-        if params[:file_parts].to_i > 0
-          tapename = tapename << "_" << params[:file_parts].to_s
-        end
-    tapename = tapename << params[:file_extension]
-    media_tape_head_params[:name] = tapename
+    # tapename = media_tape_head_params[:name]
+    #     if params[:file_parts].to_i > 0
+    #       tapename = tapename << "_" << params[:file_parts].to_s
+    #     end
+    # tapename = tapename << params[:file_extension]
+    # media_tape_head_params[:name] = tapename
 
     respond_to do |format|
       if @media_tape_head.update(media_tape_head_params)
