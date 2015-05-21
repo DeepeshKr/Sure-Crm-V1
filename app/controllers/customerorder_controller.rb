@@ -439,7 +439,7 @@ end
         end
 
         if Medium.where(active: 1).where('dnis = ? and state = ?', @order_master.calledno, @order_master.customer_address.state.upcase).present?
-          @newmedialist = Medium.where(active: = 1).where('dnis = ? and state = ?', @order_master.calledno, @order_master.customer_address.state.upcase)  
+          @newmedialist = Medium.where(active: 1).where('dnis = ? and state = ?', @order_master.calledno, @order_master.customer_address.state.upcase)  
           @order_master.update(media_id: @newmedialist.first.id)
           medianame = @newmedialist.first.name
 
