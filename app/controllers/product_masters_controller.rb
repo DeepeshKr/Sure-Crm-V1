@@ -26,6 +26,10 @@ respond_to :html, :xml, :json
     respond_with(@product_masters)
   end
 
+   def listofproducts
+
+   end
+
   def show
   #  respond_with(@product_master)
      @product_variants = ProductVariant.where("productmasterid = ?" ,  @product_master.id)
