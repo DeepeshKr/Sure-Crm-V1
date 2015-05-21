@@ -18,8 +18,8 @@
   <thead>
     <tr>
       <th>Name</th>
-      <th>Start date</th>
-      <th>End date</th>
+      <th>For date</th>
+      
       <th>Media</th>
       <th>Media Spends </th>
       <th>Sales</th>
@@ -35,7 +35,7 @@
       <tr>
         <td><%= campaign.name %></td>
         <td><%= campaign.startdate.strftime("%d-%b-%Y") %></td>
-        <td><%= campaign.enddate.strftime("%d-%b-%Y") %></td>
+       
         <td><%= campaign.medium.mediainfo if campaign.medium %></td>
         <td><%= campaign.cost %></td>
         <td><%= campaign.sales %></td>
