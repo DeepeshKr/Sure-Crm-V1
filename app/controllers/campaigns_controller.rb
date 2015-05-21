@@ -12,12 +12,12 @@ class CampaignsController < ApplicationController
      @campaigns =  Campaign.where('startdate = ?', (330.minutes).from_now.to_date)
     case a = params[:stage]
       when "old"
-         @campaigns =  Campaign.where('startdate <= ?', (330.minutes).from_now.to_date )
+         @campaigns =  Campaign.where('startdate < ?', (330.minutes).from_now.to_date )
            @stagename = "Recent Old Campaigns"
       when "curent"
          @stagename = "All Current Campaigns"
       when "new"
-         @campaigns =  Campaign.where('startdate >= ? ', (330.minutes).from_now.to_date)
+         @campaigns =  Campaign.where('startdate > ? ', (330.minutes).from_now.to_date)
         @stagename = "All new Campaigns"
       else
         @stagename = "All Current Campaigns"
