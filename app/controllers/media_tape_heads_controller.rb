@@ -56,11 +56,11 @@ class MediaTapeHeadsController < ApplicationController
     #menu.to_s.encode('UTF-8', {:invalid => :replace, :undef => :replace, :replace => '?'})
     tapename = media_tape_head_params[:name]
     #tapename = tapename.to_s.encode('UTF-8', {:invalid => :replace, :undef => :replace, :replace => '?'})
-        if params[:file_parts].to_i > 0
-          tapename = tapename << "_" << params[:file_parts].to_s
-        end
-    tapename = tapename << params[:file_extension]
-    media_tape_head_params[:name] = tapename
+    #     if params[:file_parts].to_i > 0
+    #       tapename = tapename << "_" << params[:file_parts].to_s
+    #     end
+    # tapename = tapename << params[:file_extension]
+    # media_tape_head_params[:name] = tapename
 
     @media_tape_head = MediaTapeHead.new(media_tape_head_params)
 
