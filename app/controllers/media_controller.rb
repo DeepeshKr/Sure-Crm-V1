@@ -23,7 +23,7 @@ class MediaController < ApplicationController
       if params[:showall].present?
         if params[:showall] = "true"
           @showall = "true"
-           @media = Medium.all.order("id")
+           @media = Medium.all.order("name")
         respond_to do |format|
           format.html
           format.csv do
