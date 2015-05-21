@@ -1,5 +1,6 @@
 <%= form_tag("/create_playlist", method: "post") do |f| %>
-<h4> <%= @media_name %></h4>
+
+<%= hidden_field_tag :for_date, @for_date %>
 
 	<div class="well well-sm">
 	<% if @hbnchecked == TRUE %>
@@ -54,10 +55,7 @@
  
  
 
-<div class="col-xs-2">
-	
-  <%= text_field_tag(:for_date, nil, :data => {:provide => "datepicker"}, :class => "form-control", :required => "true", :placeholder => "Select Date" )   %>
-</div>
+
 	<div class="col-xs-10">
 		<%= collection_select(nil, :product_variant_id,  @productvariantlist,  :id, :name, {:prompt   => "Select a Product Variant"}, {:id => 'variants_select', :class => "form-control"}) %>
 

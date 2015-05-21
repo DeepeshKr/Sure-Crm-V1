@@ -1,0 +1,16 @@
+
+<h3>Create a new Playlist for Date</h3>
+<div class="row">
+ <%= form_tag("/create_new_quick_playlist", method: "post") do  %>
+ <%= hidden_field_tag :campaignid, @campaignid %>
+<div class="col-xs-2">
+ <%= text_field_tag(:for_date, nil, :data => {:provide => "datepicker"}, :class => "form-control", :required => "true", :placeholder => "Select Date" )   %>
+</div>
+<div class="col-xs-6">
+ <%= text_field_tag(:playlist_name, nil, :class => "form-control", :required => "true", :placeholder => "Campaign Name" )   %>
+</div>
+<div class="col-xs-2">
+	<%= submit_tag "Create New", name: nil, class: "btn btn-primary" %>
+</div>
+<% end %> 
+</div>

@@ -6,14 +6,11 @@
 
 <div class="row">
 	<div class="col-xs-2">
-		 <strong>Start date:</strong>
+		 <strong>For date:</strong>
   <%= @campaign.startdate.strftime("%d-%b-%Y") %>
 	</div>
-	<div class="col-xs-2">
-		 <strong>End date:</strong>
-  <%= @campaign.enddate.strftime("%d-%b-%Y") %>
-	</div>
-	<div class="col-xs-4">
+	
+	<div class="col-xs-6">
 		 <strong>Media:</strong>
   <%= @campaign.medium.mediainfo %>
 	</div>

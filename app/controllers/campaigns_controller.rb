@@ -9,15 +9,15 @@ class CampaignsController < ApplicationController
 
   def index
     #@campaigns = Campaign.all
-     @campaigns =  Campaign.where('startdate <= ? and enddate >= ?', DateTime.now, DateTime.now )
+     @campaigns =  Campaign.where('startdate = ?', (330.minutes).from_now.to_date)
     case a = params[:stage]
       when "old"
-         @campaigns =  Campaign.where('enddate <= ?', DateTime.now )
+         @campaigns =  Campaign.where('startdate <= ?', (330.minutes).from_now.to_date )
            @stagename = "Recent Old Campaigns"
       when "curent"
          @stagename = "All Current Campaigns"
       when "new"
-         @campaigns =  Campaign.where('startdate >= ? ', DateTime.now)
+         @campaigns =  Campaign.where('startdate >= ? ', (330.minutes).from_now.to_date)
         @stagename = "All new Campaigns"
       else
         @stagename = "All Current Campaigns"
@@ -29,6 +29,8 @@ class CampaignsController < ApplicationController
   def show
     recent_campaigns
     proddropdown
+
+    @for_date = @campaign.startdate
       @campaign_playlists = CampaignPlaylist.where("campaignid = ?", params[:id]).order(:start_hr, :start_min, :start_sec)
        @campaign_id = params[:id]
      if @campaign.enddate >= DateTime.now
@@ -80,20 +82,18 @@ class CampaignsController < ApplicationController
   def create
     proddropdown
     @campaign = Campaign.new(campaign_params)
-    
-    if Medium.find(@campaign.mediumid).cost.present?
-      campaign_cost = Medium.find(@campaign.mediumid).cost
-      @Campaign.update(total_cost: campaign_cost)
-    end
-    
     #@campaign.cost = 0
     @campaign.save
+     if Medium.find(@campaign.mediumid).daily_charges.present?
+      campaign_cost = Medium.find(@campaign.mediumid).daily_charges
+      @Campaign.update(total_cost: campaign_cost)
+    end
     respond_with(@campaign)
   end
 
   def update
-    if Medium.find(@campaign.mediumid).cost.present?
-      campaign_cost = Medium.find(@campaign.mediumid).cost
+    if Medium.find(@campaign.mediumid).daily_charges.present?
+      campaign_cost = Medium.find(@campaign.mediumid).daily_charges
       @Campaign.update(total_cost: campaign_cost)
     end
     @campaign.update(campaign_params)

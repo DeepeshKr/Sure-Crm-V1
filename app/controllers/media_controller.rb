@@ -5,7 +5,7 @@ class MediaController < ApplicationController
 
   def index
     @showall = true
-     @media = Medium.all.order("updated_at ASC").limit(50)
+     @media = Medium.all.order("updated_at DESC").limit(50)
     if params[:telephone].present?
        @media = Medium.where(telephone: params[:telephone])
        @telephone = params[:telephone]

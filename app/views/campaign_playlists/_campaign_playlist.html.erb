@@ -7,8 +7,10 @@
 <%= link_to 'Download CSV list', campaign_playlists_path(campaignid: @campaign_id , format: :csv), class: "btn btn-info btn-sm" %>
 
 <% elsif %>
+    <div class="well well-sm">
+    <h4>Please create a campaign playlist</h4>
+    </div>
     
-    <%= render 'campaign_playlists/duplicate' %>
 <% end%>
 
 <br>

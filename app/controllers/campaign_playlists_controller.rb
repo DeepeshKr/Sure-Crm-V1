@@ -149,6 +149,19 @@ end
     end
   end
  
+ #post create_duplicate_playlist
+  def quick_create
+   campaign_name = params[:playlist_name]
+   for_date = params[:for_date]
+   for_date = for_date.strptime('%m/%d/%Y')
+campaignid = params[:campaignid]
+
+     @campaign_playlist = CampaignPlaylist.create(name:campaign_name, 
+      campaignid: campaignid,
+                          for_date: for_date)
+    respond_with(@campaign_playlist.campaign)
+  end
+
   #post create_duplicate_playlist
   def create_duplicate
      old_campaign_playlists = CampaignPlaylist.where(campaignid: params[:old_campaign_id])
@@ -190,7 +203,8 @@ end
       #step 1 get all the media tapes with media tape id in the same sort order
       media_tapes = MediaTape.where(media_tape_head_id: media_tape_head_id).order("sort_order ASC")
       
-      for_date =  Date.strptime(params[:for_date], "%m/%d/%Y")
+     # for_date =  Date.strptime(params[:for_date], "%m/%d/%Y")
+      for_date =  params[:for_date]
      
       #step 2 add campaign playlist to the for the campaign id
       if media_tapes.present?
@@ -205,35 +219,35 @@ end
         
         media_tapes.each do |m|
         if params[:time_slot] == "auto"
-          if CampaignPlaylist.where(campaignid: campaignid).present?
-            campaign_playlist = CampaignPlaylist.where(campaignid: campaignid).order("end_hr, end_min, end_sec")
-            begin_hr = campaign_playlist.last.end_hr
-            begin_min = campaign_playlist.last.end_min
-            begin_sec = campaign_playlist.last.end_sec
-          end
+            if CampaignPlaylist.where(campaignid: campaignid).present?
+              campaign_playlist = CampaignPlaylist.where(campaignid: campaignid).order("end_hr, end_min, end_sec")
+              begin_hr = campaign_playlist.last.end_hr
+              begin_min = campaign_playlist.last.end_min
+              begin_sec = campaign_playlist.last.end_sec
+            end
         elsif params[:time_slot] == "specific"
-         begin_hr = params[:time_slot]
-         begin_min = params[:begin_min]
-         begin_sec = 0
+           begin_hr = params[:time_slot]
+           begin_min = params[:begin_min]
+           begin_sec = 0
 
-         #media tape cost head
-          if params[:media_tape_type_id].present?
-            media_tape_type_id = params[:media_tape_type_id]
-            media_tape_cost = MediaCostMaster.find(media_tape_type_id)
-            cost = media_tape_cost.cost_per_sec
+           #media tape cost head
+            if params[:media_tape_type_id].present?
+              media_tape_type_id = params[:media_tape_type_id]
+              media_tape_cost = MediaCostMaster.find(media_tape_type_id)
+              cost = media_tape_cost.cost_per_sec
+            end
+        end
+
+          list_status_id = 10001
+          if m.sort_order == 1
+            list_status_id = 10000
           end
-        end
-
-        list_status_id = 10001
-        if m.sort_order == 1
-          list_status_id = 10000
-        end
-        #ref name is combination of media tape head and media tape name
-        ref_name = MediaTapeHead.find(media_tape_head_id).name 
-          hour_min_sec(begin_hr, begin_min, begin_sec, m.duration_secs)
-          end_hr = @end_hr
-          end_min = @end_min
-          end_sec = @end_sec
+          #ref name is combination of media tape head and media tape name
+          ref_name = MediaTapeHead.find(media_tape_head_id).name 
+            hour_min_sec(begin_hr, begin_min, begin_sec, m.duration_secs)
+            end_hr = @end_hr
+            end_min = @end_min
+            end_sec = @end_sec
 
           CampaignPlaylist.create(name: m.name, 
             campaignid: campaignid, 

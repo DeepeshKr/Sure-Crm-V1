@@ -211,7 +211,8 @@ Rails.application.routes.draw do
 
     get 'duplicate_playlist' => 'campaign_playlists#duplicate'
     post 'create_duplicate_playlist' => 'campaign_playlists#create_duplicate'
-
+    post 'create_new_quick_playlist' => 'campaign_playlists#quick_create'
+    
     get 'product_upsell/list'
     get 'product_upsell/search'
     get 'product_upsell/details'
