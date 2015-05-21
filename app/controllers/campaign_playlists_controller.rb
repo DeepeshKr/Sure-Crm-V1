@@ -201,12 +201,7 @@ end
         begin_sec = 0
 
         cost = 0
-        #media tape cost head
-        if params[:media_tape_type_id].present?
-          media_tape_type_id = params[:media_tape_type_id]
-          media_tape_cost = MediaCostMaster.find(media_tape_type_id)
-          cost = media_tape_cost.cost_per_sec
-        end
+        
         
         media_tapes.each do |m|
         if params[:time_slot] == "auto"
@@ -220,6 +215,13 @@ end
          begin_hr = params[:time_slot]
          begin_min = params[:begin_min]
          begin_sec = 0
+
+         #media tape cost head
+          if params[:media_tape_type_id].present?
+            media_tape_type_id = params[:media_tape_type_id]
+            media_tape_cost = MediaCostMaster.find(media_tape_type_id)
+            cost = media_tape_cost.cost_per_sec
+          end
         end
 
         list_status_id = 10001
