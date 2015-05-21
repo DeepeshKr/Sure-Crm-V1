@@ -27,7 +27,7 @@ respond_to :html, :xml, :json
   end
 
    def listofproducts
-
+    
    end
 
   def show

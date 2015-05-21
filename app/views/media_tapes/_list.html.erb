@@ -17,6 +17,7 @@
   </thead>
 
   <tbody>
+
     <% @media_tapes.each do |media_tape| %>
       <tr>
         <td><%= media_tape.sort_order %></td>
@@ -33,6 +34,7 @@
        
         <td><%= link_to 'Destroy', media_tape, method: :delete, data: { confirm: 'Are you sure?' } %></td>
       </tr>
+     
     <% end %>
   </tbody>
     <thead>
@@ -41,7 +43,7 @@
       
        
       <th> <%= @totalsecs %></th>
-      <th colspan="7">Tape ext ref</th>
+      <th colspan="7"></th>
       
     </tr>
   </thead>
