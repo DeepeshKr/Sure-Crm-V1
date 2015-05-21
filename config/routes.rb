@@ -1,5 +1,16 @@
 Rails.application.routes.draw do
 
+  resources :tax_rates
+
+  get 'packing_cost/list'
+  get 'packing_cost/search'
+
+  get 'packing_cost/details'
+
+  get 'listofproducts' => 'product_masters#listofproducts'
+
+
+
   devise_for :logins
 #sales report 
   get 'sales_report' => 'sales_report#summary' 

@@ -27,6 +27,38 @@ class ProductMaster < ActiveRecord::Base
    self.barcode  + " - " +  self.extproductcode + " - " + self.name  + " Basic " + self.price.to_s + " Shipping " + self.shipping.to_s 
   end
 
+  def productrevenue
+  #pcode = self.product_variant.product_master.extproductcode
+ ropmaster = ROPMASTER_NEW.where("prod = ?", self.extproductcode).first
+ if ropmaster.present?
+    return ropmaster.totalrevenue || 0
+ else
+    return 0
+ end
+  
+end
+
+def productcost
+  #pcode = self.product_variant.product_master.extproductcode
+  ropmaster =  ROPMASTER_NEW.where("prod = ?", self.extproductcode).first
+  if ropmaster.present?
+    return ropmaster.totalcost || 0
+ else
+    return 0
+ end
+end
+
+ def packagingcost
+  #pcode = self.product_variant.product_master.extproductcode
+  ropmaster =  ROPMASTER_NEW.where("prod = ?", self.extproductcode).first
+  if ropmaster.present?
+    return ropmaster.totalcost || 0
+ else
+    return 0
+ end
+  
+end
+
   def variants
     ProductVariant.where("productmasterid = ?", self.id)
   end

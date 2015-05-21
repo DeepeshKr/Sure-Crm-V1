@@ -16,18 +16,22 @@ respond_to :html, :xml, :json
     else
       @search = "Product Master List"
       @searchvalue = nil
-      @product_masters = ProductMaster.all.limit(10)
+      @product_masters = ProductMaster.all.where('productactivecodeid = 10000').limit(10)
       @inactive_product_masters = ProductMaster.where('productactivecodeid <> 10000').limit(10)
       
       @found = nil
     
     end
 
-    respond_with(@product_masters)
+    
   end
 
    def listofproducts
     
+      @product_masters = ProductMaster.all.where('productactivecodeid = 10000')
+      @inactive_product_masters = ProductMaster.where('productactivecodeid <> 10000').limit(10)
+      
+     
    end
 
   def show
