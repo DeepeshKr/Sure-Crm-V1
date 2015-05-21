@@ -213,14 +213,14 @@ def add_products
   def address
       @states = State.all.order("name")
   
-    if @order_master.customer_id.present?
+  if @order_master.customer_id.present?
     @customer = Customer.find(@order_master.customer_id)
-      success = "Existing Customer found #{@customer.id}" 
-       @customer_id = @customer.id
+    success = "Existing Customer found #{@customer.id}" 
+    @customer_id = @customer.id
   elsif Customer.where(mobile: @order_master.mobile).present?
     @customer = Customer.where(mobile: @order_master.mobile).last
-     success = "Earlier purchased Customer found #{@customer.id}" 
-     @customer_id = @customer.id
+    success = "Earlier purchased Customer found #{@customer.id}" 
+    @customer_id = @customer.id
   else
     @customer = Customer.new(mobile: @order_master.mobile)
     notice = "Add customer address" 
@@ -228,10 +228,10 @@ def add_products
 
   if @order_master.customer_address_id.present?
     @customer_address = CustomerAddress.find(@order_master.customer_address_id)
-     success = " Existing address is available" 
+    success = " Existing address is available" 
   elsif CustomerAddress.where(telephone1: @order_master.mobile).present?
     @customer_address = CustomerAddress.where(telephone1: @order_master.mobile).last
-     success = "Existing address found." 
+    success = "Existing address found." 
   else
     @customer_address = CustomerAddress.new(telephone1: @order_master.mobile)
      notice = "No address found." 
@@ -427,7 +427,7 @@ def add_payment
 end
 
   def channel
-      @medialist =  Medium.where('dnis = ?', @order_master.calledno)
+       @medialist =  Medium.where(active: = 1).where('dnis = ?', @order_master.calledno)
 
         if @medialist.count == 1   #&& @all_calllist.empty?
           @order_master.update(media_id: @medialist.first.id)
@@ -438,8 +438,8 @@ end
           return redirect_to review_path(:order_id => @order_master.id)
         end
 
-        if Medium.where('dnis = ? and state = ?', @order_master.calledno, @order_master.customer_address.state.upcase).present?
-          @newmedialist = Medium.where('dnis = ? and state = ?', @order_master.calledno, @order_master.customer_address.state.upcase)  
+        if Medium.where(active: = 1).where('dnis = ? and state = ?', @order_master.calledno, @order_master.customer_address.state.upcase).present?
+          @newmedialist = Medium.where(active: = 1).where('dnis = ? and state = ?', @order_master.calledno, @order_master.customer_address.state.upcase)  
           @order_master.update(media_id: @newmedialist.first.id)
           medianame = @newmedialist.first.name
 
