@@ -6,7 +6,7 @@ class Campaign < ActiveRecord::Base
    
   validates :name, length: { maximum: 500 }
   validates_presence_of :description
-  validates_presence_of :startdate, :enddate
+  validates_presence_of :startdate #, :enddate
 
 
   def sales 
