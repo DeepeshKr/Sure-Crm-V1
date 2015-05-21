@@ -427,7 +427,7 @@ def add_payment
 end
 
   def channel
-       @medialist =  Medium.where(active: = 1).where('dnis = ?', @order_master.calledno)
+       @medialist =  Medium.where(active: 1).where('dnis = ?', @order_master.calledno)
 
         if @medialist.count == 1   #&& @all_calllist.empty?
           @order_master.update(media_id: @medialist.first.id)
@@ -438,7 +438,7 @@ end
           return redirect_to review_path(:order_id => @order_master.id)
         end
 
-        if Medium.where(active: = 1).where('dnis = ? and state = ?', @order_master.calledno, @order_master.customer_address.state.upcase).present?
+        if Medium.where(active: 1).where('dnis = ? and state = ?', @order_master.calledno, @order_master.customer_address.state.upcase).present?
           @newmedialist = Medium.where(active: = 1).where('dnis = ? and state = ?', @order_master.calledno, @order_master.customer_address.state.upcase)  
           @order_master.update(media_id: @newmedialist.first.id)
           medianame = @newmedialist.first.name

@@ -16,13 +16,14 @@ class MediaController < ApplicationController
     end
     if params[:name].present?
       @search = params[:name]
+      @search = @search.upcase
        @media = Medium.where("name like ? or ref_name like ?", "#{@search}%", "#{@search}%")
        @dnis = params[:dnis]
     end
       if params[:showall].present?
         if params[:showall] = "true"
           @showall = "true"
-           @media = Medium.all.order("name")
+           @media = Medium.all.order("id")
         respond_to do |format|
           format.html
           format.csv do
@@ -111,7 +112,7 @@ class MediaController < ApplicationController
     def set_medium
       @medium = Medium.find(params[:id])
     end
-
+ 
     def medium_params
       params.require(:medium).permit(:name, :telephone, :alttelephone, :state,
        :active, :corporateid, :description, :ref_name, :media_commision_id, 
