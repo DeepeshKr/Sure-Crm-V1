@@ -1,3 +1,4 @@
+<%= render 'search' %>
 <p id="notice"><%= notice %></p>
 
 <p>
@@ -23,6 +24,15 @@
 <p>
   <strong>Active:</strong>
   <%= @medium.active %>
+</p>
+
+<p>
+  <strong>Daily Charges:</strong>
+  <%= @medium.daily_charges %>
+</p>
+<p>
+  <strong>Shipped Correction:</strong>
+  <%= @medium.paid_correction %>
 </p>
 <p>
   <strong>Group:</strong>

@@ -17,11 +17,13 @@
      <th>Reference Name</th>
       <th>Name</th>
       <th>Telephone</th>
-      <th>Alt telephone</th>
+    
       <th>State</th>
       <th>Active</th>
       <th>Group</th>
       <th>Commission</th>
+      <th>Daily Charges</th>
+      <th>Correction</th>
       <th>Percent </th>
       <th>DNIS </th>
       <th>Channel </th>
@@ -37,12 +39,13 @@
         <td><%= medium.ref_name %></td>
         <td><%= medium.name %></td>
         <td><%= medium.telephone %></td>
-        <td><%= medium.alttelephone %></td>
         <td><%= medium.state %></td>
         <td><%= medium.active %></td>
         <td><%= medium.media_group.name if medium.media_group %></td>
         <td><%= medium.media_commision.name if medium.media_commision %></td>
-         <td><%= medium.value %></td>
+        <td><%= medium.value %></td>
+        <td><%= medium.daily_charges  %></td>
+        <td><%= medium.paid_correction %></td>
         <td><%= medium.dnis %></td>
         <td><%= medium.channel %></td>
         <td><%= medium.slot %></td>
