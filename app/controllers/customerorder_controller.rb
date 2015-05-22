@@ -447,27 +447,6 @@ end
           flash[:success] = " Media #{medianame} added added " 
           return redirect_to review_path(:order_id => @order_master.id)
         end
-
-      if @medialist.count > 1 
-        #check for state here
-        # if @medialist.where("state <> '' or state is not null")
-        #  @medialist = @medialist.where('state = ?', @order_master.customer_address.state.upcase)
-        # end
-      end
-
-campaignlist =  Campaign.where('TRUNC(startdate) <=  ? and TRUNC(enddate) >= ?', Date.today, Date.today)
-  
-  noof = campaignlist.count || "None" if campaignlist.present?
-  
-     todaydate = Date.today
- #flash[:success] = "today's date #{todaydate} and there are #{noof}" 
-    #media found and no campaign playlists found, just go to review
-    #for media we use DNIS and State details
-        
-         # the new code goes here with the details of the products and last played 
-         #once the media has been fixed then make sure the campaign is selected 
-         #based on what product has been selected by the customer 
-     
     
      # flash[:error] = "Please select Channel there may be more than one " + @medialist.count.to_s   
    
@@ -652,16 +631,17 @@ end
 
          product_variant_id = OrderLine.where(orderid: @order_master.id).order("id").pluck(:productvariant_id).first
 
-     # product_variant_id = productvariants
-
-          t = Time.zone.now
+          # product_variant_id = productvariants
+          t = Time.zone.now + 330.minutes
           nowhour = t.strftime('%H').to_i
           #=> returns a 0-padded string of the hour, like "07"
           nowminute = t.strftime('%M').to_i
+          todaydate = (330.minutes).from_now.to_date
+          
           #=> returns a 0-padded string of the minute, like "03"
           #flash[:notice] = "Hours #{nowhour} and minutes #{nowminute}"
           #campaignlist =  Campaign.where('mediumid = ? and startdate <= ? and enddate >= ?',  mediumid, Time.zone.now.to_date, Time.zone.now.to_date)
-         
+          
           campaignlist =  Campaign.where(mediumid: mediumid).where('TRUNC(startdate) <=  ? and TRUNC(enddate) >= ?', Date.today, Date.today)
             #time_range = (Time.now.midnight - 1.day)..Time.now.midnight 
             #list_status_id = ?, 1000
@@ -674,8 +654,8 @@ end
 
           all_calllist = CampaignPlaylist.where({campaignid: campaignlist}).where(list_status_id: 10000).order("id DESC").where("start_hr <= ? and start_min <= ?", nowhour, nowminute).where(productvariantid: product_variant_id)
 
-        camdate = "No list found"
-         todaydate = Date.today
+          camdate = "No list found"
+         
         
           productvariant = ProductVariant.find(product_variant_id).name
 

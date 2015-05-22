@@ -4,9 +4,7 @@ Rails.application.routes.draw do
 
   get 'packing_cost/list'
   get 'packing_cost/search'
-
   get 'packing_cost/details'
-
   get 'listofproducts' => 'product_masters#listofproducts'
 
 

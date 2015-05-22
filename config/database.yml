@@ -173,7 +173,7 @@ production_tuview:
   password: TUVIEW
   port: 1521
 
-development_tlbrndu1:
+production_tlbrndu1:
   adapter: oracle_enhanced
   database: TLBRNDDB
   host: 3.0.3.5
