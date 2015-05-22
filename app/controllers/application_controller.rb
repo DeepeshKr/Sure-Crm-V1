@@ -65,6 +65,18 @@ class ApplicationController < ActionController::Base
     session[:previous_url] || root_path
   end
 
+  def protect_controllers(authorised_for)
+   currentrolsortno = current_user.employee_role.sortorder
+   userrole = current_user.employee_role.name
+    if current_user.employee_role.sortorder < authorised_for
+      flash[:notice] = "Authorised to view as #{userrole}"
+    else
+     flash[:notice] = "Not Authorised to view as #{userrole}"
+     redirect_to login_url(return_to: request.original_url) # halts request cycle  
+    end
+
+  end
+
   protected
 
   def confirm_logged_in

@@ -1,5 +1,6 @@
 class CustomerorderController < ApplicationController
 
+before_action { protect_controllers(20) } 
 before_action :productlist, only: [:products, :offline, :add_products]
 before_action :order_line_params, only: [ :add_products]
 before_action :set_order
@@ -638,40 +639,28 @@ end
           nowminute = t.strftime('%M').to_i
           todaydate = (330.minutes).from_now.to_date
           
-          #=> returns a 0-padded string of the minute, like "03"
-          #flash[:notice] = "Hours #{nowhour} and minutes #{nowminute}"
-          #campaignlist =  Campaign.where('mediumid = ? and startdate <= ? and enddate >= ?',  mediumid, Time.zone.now.to_date, Time.zone.now.to_date)
-          
-          campaignlist =  Campaign.where(mediumid: mediumid).where('TRUNC(startdate) <=  ? and TRUNC(enddate) >= ?', Date.today, Date.today)
-            #time_range = (Time.now.midnight - 1.day)..Time.now.midnight 
-            #list_status_id = ?, 1000
-            # .where('campaigns.startdate = ?', Time.zone.now.to_date)
-            # 
-            # .joins(:campaign).where('campaigns.startdate <= ? and enddate >= ?', Time.zone.now.to_date)
-            #   
-            #  
-            # .joins(:campaign).where("campaign.mediumid = ? ", mediumid)
+          # check if media is part of HBN group
 
-          all_calllist = CampaignPlaylist.where({campaignid: campaignlist}).where(list_status_id: 10000).order("id DESC").where("start_hr <= ? and start_min <= ?", nowhour, nowminute).where(productvariantid: product_variant_id)
-
-          camdate = "No list found"
-         
-        
+          # once you have product variant and media
           productvariant = ProductVariant.find(product_variant_id).name
 
+          # check if media is part of HBN group, if yes, update the HBN group 
+          # campaign playlist id both ways
+          # on order and agains the campaign playlis
+          if Medium.find(mediumid).media_group_id == 10000
+            #select the campaign from HBN Master Campaign List
+
+          else         
+            campaignlist =  Campaign.where(mediumid: mediumid).where('TRUNC(startdate) =  ?', todaydate).id
+           end 
+           if campaignlist.present?
+            all_calllist = CampaignPlaylist.where({campaignid: campaignlist}).where(list_status_id: 10000).order("id DESC").where("start_hr <= ? and start_min <= ?", nowhour, nowminute).where(productvariantid: product_variant_id)
+       
             if all_calllist.count > 0
-              camdate = campaignlist.first.startdate
-               namecamp = all_calllist.first.name << " " << campaignlist.first.name
-               campaignplaylist = CampaignPlaylist.find(campaignlist.first.id).name
+              campaignplaylist = CampaignPlaylist.find(campaignlist.first.id).name
               @order_master.update(campaign_playlist_id: campaignlist.first.id)
-              
-              #flash[:notice] = " Product #{productvariant} added to playlist #{namecamp} for camp date #{camdate} while today is #{todaydate}" 
-             # else
-              # namecamp = "Nothing in list" << " Campaign " << camdate
-
-              #flash[:error] = " Unable to add Product #{productvariant} to any playlist tried for #{namecamp} for camp date #{camdate} while today is #{todaydate}"   
             end
-
+          end
 
     end
 
@@ -679,17 +668,17 @@ end
       set_order
       @calledno = params[:calledno] #|| if params[:calledno].present?
       @mobile = params[:mobile] #|| if params[:mobile].present?
-       @channellist =  Medium.where('dnis = ?',  params[:calledno])
+       @channellist =  Medium.where(active: 1).where('dnis = ?',  params[:calledno]).where('active = 1')
       if params[:order_id].present?
        @order_id = params[:order_id] 
        @customer_id = @order_master.customer_id 
        @calledno = @order_master.calledno
        @mobile = @order_master.mobile
 
-        @channellist =  Medium.where('dnis = ?', @order_master.calledno)
+        @channellist =  Medium.where(active: 1).where('dnis = ?', @order_master.calledno).where('active = 1')
       end
       
-       @empcode = current_user.employee_code
+      @empcode = current_user.employee_code
       #@empid = current_user.id
       @empid = Employee.where(employeecode: @empcode).first.id
       
@@ -701,6 +690,7 @@ end
       @interactionprioritylist =  InteractionPriority.all
       
     end
+
     def editupsellproducts
         product_masters = ProductMaster.where("productactivecodeid = ?", 10000).pluck("id")
         product_variants = ProductVariant.where("activeid = ? and product_sell_type_id = ?", 10000, 10001).where(productmasterid: product_masters).pluck("id")
@@ -914,7 +904,7 @@ end
           
           order_num =  hash["nextval"]
 
-          flash[:notice] = "Order Number is #{order_num}" 
+          #flash[:notice] = "Order Number is #{order_num}" 
                #CustomerOrderList Date.current Date.today.in_time_zone Time.zone.now
           customer_order_list = CustomerOrderList.create(ordernum: order_num,
           orderdate: (330.minutes).from_now.to_date,

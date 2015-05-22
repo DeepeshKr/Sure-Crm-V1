@@ -1,4 +1,6 @@
 class ProjectController < ApplicationController
+  
+  before_action { protect_controllers(20) } 
      skip_before_action :require_login, only: [:home, :help, :contact]
   def home
     @timenow = Time.zone.now + 330.minutes
