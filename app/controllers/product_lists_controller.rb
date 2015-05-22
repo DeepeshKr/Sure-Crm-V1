@@ -5,6 +5,7 @@ class ProductListsController < ApplicationController
   respond_to :html
 
   def index
+    @showall = true
     if params.has_key?(:search)
       
       @search = "Search for " +  params[:search].upcase
@@ -19,17 +20,24 @@ class ProductListsController < ApplicationController
 
       @found = @product_lists.count
       
-
-    else
-      @search = "Product Sell List"
+      elsif params[:showall] == 'true'
+        
+       @search = "All Product Sell List"
       @searchvalue = nil
-      #product_masters = ProductMaster.where("productactivecodeid = ?", 10000).pluck("id")
-      #product_variants = ProductVariant.where("activeid = ? and product_sell_type_id < ?", 10000, 10002).where(productmasterid: product_masters).pluck("id")
-      @product_lists = ProductList.where('active_status_id = ?',  10000).limit(10)
-      @inactive_product_lists = ProductList.where('active_status_id <> ?',  10000)
+      @product_lists = ProductList.where('active_status_id = ?',  10000).order('name')
+      @inactive_product_lists = ProductList.where('active_status_id <> ?',  10000).order('name')
 
-      @found = nil
-    
+
+      else
+        @search = "Product Sell List (only 10)"
+        @searchvalue = nil
+        #product_masters = ProductMaster.where("productactivecodeid = ?", 10000).pluck("id")
+        #product_variants = ProductVariant.where("activeid = ? and product_sell_type_id < ?", 10000, 10002).where(productmasterid: product_masters).pluck("id")
+        @product_lists = ProductList.where('active_status_id = ?',  10000).order('updated_at DESC').limit(10)
+        @inactive_product_lists = ProductList.where('active_status_id <> ?',  10000).order('updated_at DESC').limit(10)
+
+        @found = nil
+      
     end
        #respond_with(@product_lists)
 

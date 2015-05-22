@@ -41,7 +41,6 @@
     <tr>
       <th>Name</th>
       <th>Code</th>
-      <th>Price</th>
       <th>Taxes</th>
       <th>Total</th>
       <th>Cost</th>
@@ -52,7 +51,7 @@
   </thead>
 
   <tbody>
-    <% @product_masters.each do |product_master| %>
+    <% @inactive_product_masters.each do |product_master| %>
       <tr>
         
         <td><%= product_master.name %></td>

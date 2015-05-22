@@ -1,5 +1,5 @@
 <div class="row">
- <%= form_tag("/product_lists", method: "get") do  %>
+ <%= bootstrap_form_tag url: product_variants_path, :method => :GET, :enforce_utf8 => false do |f| %>
 <div class="col-xs-8">
 <%= text_field_tag(:search, nil, :class => "form-control", :required => "true", :placeholder => "Search Product Name", :value => @searchvalue  )   %>
 </div>
@@ -9,7 +9,7 @@
 </div>
 <% end %>
   <div class="col-xs-2">   
-      <%= bootstrap_form_tag url: product_lists_path, :method => :GET, :enforce_utf8 => false do |f| %>
+      <%= bootstrap_form_tag url: product_variants_path, :method => :GET, :enforce_utf8 => false do |f| %>
       <%= hidden_field_tag :showall, @showall %>
             <%= submit_tag "All", name: nil,  class: "btn btn-primary" %>
       <% end %>

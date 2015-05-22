@@ -8,6 +8,7 @@ class Campaign < ActiveRecord::Base
   validates_presence_of :description
   validates_presence_of :startdate #, :enddate
 
+  validates_uniqueness_of :mediumid, :scope => [:mediumid, :startdate], :message => "Not Saved, you have already created a campaign for date for the Media! "
 
   def sales 
   	campaignlist =  CampaignPlaylist.where('campaignid = ?', self.id)

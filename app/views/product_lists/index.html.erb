@@ -27,7 +27,7 @@
   <tbody>
     <% @product_lists.each do |product_list| %>
       <tr>
-       <td><%= product_list.product_variant.product_sell_type.name %></td>
+       <td><%= product_list.product_variant.product_sell_type.name if product_list.product_variant %></td>
        <td><%= product_list.name %></td>
         <td><%= product_list.product_variant.productinfo if product_list.product_variant %></td>
        <td><%= product_list.product_spec_list.name if product_list.product_spec_list %></td>

@@ -5,6 +5,7 @@ before_action :dropdownlist
 respond_to :html, :xml, :json
 
   def index
+     @showall = true
     if params.has_key?(:search)
       
       @search = "Search for " +  params[:search].upcase
@@ -12,12 +13,18 @@ respond_to :html, :xml, :json
       @product_masters = ProductMaster.where('productactivecodeid = 10000').where("name like ? OR extproductcode like ? or description like ?", "#{@searchvalue}%", "#{@searchvalue}%", "#{@searchvalue}%")
       @inactive_product_masters = ProductMaster.where('productactivecodeid <> 10000').where("name like ? OR extproductcode like ? or description like ?", "#{@searchvalue}%", "#{@searchvalue}%", "#{@searchvalue}%")
       @found = @product_masters.count
-    
+     
+     elsif params[:showall] == 'true'
+        
+       @search = "All Product Sell List"
+      @searchvalue = nil
+     @product_masters = ProductMaster.all.where('productactivecodeid = 10000')
+      @inactive_product_masters = ProductMaster.where('productactivecodeid <> 10000')
     else
       @search = "Product Master List"
       @searchvalue = nil
-      @product_masters = ProductMaster.all.where('productactivecodeid = 10000').limit(10)
-      @inactive_product_masters = ProductMaster.where('productactivecodeid <> 10000').limit(10)
+      @product_masters = ProductMaster.all.where('productactivecodeid = 10000').order('updated_at DESC').limit(10)
+      @inactive_product_masters = ProductMaster.where('productactivecodeid <> 10000').order('updated_at DESC').limit(10)
       
       @found = nil
     

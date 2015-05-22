@@ -220,22 +220,22 @@ def add_products
     @customer_id = @customer.id
   elsif Customer.where(mobile: @order_master.mobile).present?
     @customer = Customer.where(mobile: @order_master.mobile).last
-    success = "Earlier purchased Customer found #{@customer.id}" 
+    notice = "Earlier called Customer found #{@customer.id}" 
     @customer_id = @customer.id
   else
     @customer = Customer.new(mobile: @order_master.mobile)
-    notice = "Add customer address" 
+    notice = "Add Customer Name" 
   end
 
   if @order_master.customer_address_id.present?
     @customer_address = CustomerAddress.find(@order_master.customer_address_id)
-    success = " Existing address is available" 
+    success = " An address has been added for the customer" 
   elsif CustomerAddress.where(telephone1: @order_master.mobile).present?
     @customer_address = CustomerAddress.where(telephone1: @order_master.mobile).last
-    success = "Existing address found." 
+    success = " Existing address is available for the number #{@order_master.mobile}" 
   else
     @customer_address = CustomerAddress.new(telephone1: @order_master.mobile)
-     notice = "No address found." 
+     notice = "Add Customer Address." 
   end
 
   flash[:notice] = "#{notice}"
@@ -336,16 +336,13 @@ def add_products
       flash[:error] = "No Address found you need to add / save address before you process payment " << Time.zone.now.to_s
         return redirect_to address_path(:order_id => @order_master.id) 
     end
-    # @orderpaymentlists = Orderpaymentmode.all
-    # productlist
+   
+    if @order_master.customer_id.present?
+        @customer_credit_card_o = CustomerCreditCard.where(customer_id: @order_master.customer_id).last
+    end
     
-    @customer_credit_card_o = CustomerCreditCard.where(customer_id: @order_master.customer_id).last
     @customer_credit_card = CustomerCreditCard.new(customer_id:  @order_master.customer_id)
-    #@customer_credit_card.name_on_card = @order_master.customer.name
-    # if @customer_credit_card_o.present?
-    #   @customer_credit_card.name_on_card = @order_master.customer.fullname
-    # end
-    
+       
     @cashondeliveryid = 10001
     orderpaymentmode_1 = Orderpaymentmode.find(@cashondeliveryid).charges
 
@@ -630,9 +627,9 @@ end
     end
     def add_product_to_campaign(mediumid)
 
-         product_variant_id = OrderLine.where(orderid: @order_master.id).order("id").pluck(:productvariant_id).first
-
-          # product_variant_id = productvariants
+        product_variant_id = OrderLine.where(orderid: @order_master.id).order("id").pluck(:productvariant_id).first
+        
+         # product_variant_id = productvariants
           t = Time.zone.now + 330.minutes
           nowhour = t.strftime('%H').to_i
           #=> returns a 0-padded string of the hour, like "07"
@@ -648,17 +645,17 @@ end
           # campaign playlist id both ways
           # on order and agains the campaign playlis
           if Medium.find(mediumid).media_group_id == 10000
+            #HBN Master Media Id 11200
             #select the campaign from HBN Master Campaign List
-
+            campaignlist =  Campaign.where(mediumid: 11200).where('TRUNC(startdate) =  ?', todaydate)
           else         
-            campaignlist =  Campaign.where(mediumid: mediumid).where('TRUNC(startdate) =  ?', todaydate).id
-           end 
-           if campaignlist.present?
-            all_calllist = CampaignPlaylist.where({campaignid: campaignlist}).where(list_status_id: 10000).order("id DESC").where("start_hr <= ? and start_min <= ?", nowhour, nowminute).where(productvariantid: product_variant_id)
+            campaignlist =  Campaign.where(mediumid: mediumid).where('TRUNC(startdate) =  ?', todaydate)
+          end 
+          if campaignlist.present?
+            campaign_playlist = CampaignPlaylist.where({campaignid: campaignlist}).where(list_status_id: 10000).order("id DESC").where("start_hr <= ? and start_min <= ?", nowhour, nowminute).where(productvariantid: product_variant_id)
        
-            if all_calllist.count > 0
-              campaignplaylist = CampaignPlaylist.find(campaignlist.first.id).name
-              @order_master.update(campaign_playlist_id: campaignlist.first.id)
+            if campaign_playlist.count > 0
+              @order_master.update(campaign_playlist_id: campaign_playlist.first.id)
             end
           end
 
