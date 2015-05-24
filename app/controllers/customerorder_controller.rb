@@ -627,20 +627,16 @@ end
     end
     def add_product_to_campaign(mediumid)
 
-        product_variant_id = OrderLine.where(orderid: @order_master.id).order("id").pluck(:productvariant_id).first
+        product_variant_id = OrderLine.where(orderid: @order_master.id)
+        .order("id").pluck(:productvariant_id).first
         
          # product_variant_id = productvariants
-          t = Time.zone.now + 330.minutes
+          t = (330.minutes).from_now #Time.zone.now + 330.minutes
           nowhour = t.strftime('%H').to_i
-          #=> returns a 0-padded string of the hour, like "07"
           nowminute = t.strftime('%M').to_i
           todaydate = (330.minutes).from_now.to_date
           
           # check if media is part of HBN group
-
-          # once you have product variant and media
-          productvariant = ProductVariant.find(product_variant_id).name
-
           # check if media is part of HBN group, if yes, update the HBN group 
           # campaign playlist id both ways
           # on order and agains the campaign playlis
@@ -652,8 +648,10 @@ end
             campaignlist =  Campaign.where(mediumid: mediumid).where('TRUNC(startdate) =  ?', todaydate)
           end 
           if campaignlist.present?
-            campaign_playlist = CampaignPlaylist.where({campaignid: campaignlist}).where(list_status_id: 10000).order("id DESC").where("start_hr <= ? and start_min <= ?", nowhour, nowminute).where(productvariantid: product_variant_id)
-       
+            campaign_playlist = CampaignPlaylist.where({campaignid: campaignlist})
+            .where(list_status_id: 10000).where(productvariantid: product_variant_id)
+            .where("start_hr <= ? and start_min <= ?", nowhour, nowminute)
+            .order("start_hr, start_min DESC")
             if campaign_playlist.count > 0
               @order_master.update(campaign_playlist_id: campaign_playlist.first.id)
             end

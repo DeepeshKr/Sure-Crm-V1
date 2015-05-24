@@ -365,6 +365,7 @@ class SalesReportController < ApplicationController
   end
 
   def orders
+    @t = (330.minutes).from_now
     @sno = 1
     for_date = (330.minutes).from_now.to_date
     
@@ -384,10 +385,10 @@ class SalesReportController < ApplicationController
     if params.has_key?(:media)
       if params[:media] == 'hbn'
           hbnlist = Medium.where(media_group_id: 10000)
-          @order_masters = @order_masters.where(media_id: hbnlist).order("orderdate")
+          @order_masters = @order_masters.where(media_id: hbnlist).order("orderdate").limit(10)
           @orderlistabout = "for selected playlist HBN"
           if params.has_key?(:missed)
-            @order_masters = @order_masters.where('campaign_playlist_id IS NULL').order("orderdate")
+            @order_masters = @order_masters.where('campaign_playlist_id IS NULL').order("orderdate").limit(10)
             @orderlistabout = "for selected playlist HBN Missed orders"
           end
       end

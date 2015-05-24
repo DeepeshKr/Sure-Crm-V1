@@ -4,16 +4,12 @@
     <tr>
     <th>No</th>
     <th>Channel / Show</th>
-      <th>Orderdate</th>
-      <th>Employee</th>
+      <th>Orderdate / Employee</th>
       <th>Customer / Mobile</th>
       <th>City / State</th>
-      <th>Products</th>
-      <th>Order no</th>
-      <th>Pieces</th>
-      <th>Total</th>
-      <th>Order status</th>
-      <th>Order payment mode</th>
+      <th colspan="8">Products</th>
+     
+    
        <th>Time Taken</th>
       
      
@@ -26,40 +22,52 @@
       <tr>
       <td><%= @sno %></td>
       <td><%= order_master.medium.name if order_master.medium %> <br>
-      <%= order_master.campaign_playlist.name || "No Show" if order_master.campaign_playlist %>
+      <%= order_master.campaign_playlist.product_variant.name || "No Show" if order_master.campaign_playlist.present? %>
        </td>
         <td><%= (order_master.orderdate).strftime('%d-%b-%Y') %>
     <small><%= Time.at(order_master.orderdate).strftime('%H:%M %P %Z') %></small>
-
-        </td>
-        <td><%= order_master.employee.name if order_master.employee %> 
+<br>
+<%= order_master.employee.name if order_master.employee %> 
         <small><strong><%= order_master.employeecode %> </strong></small>
  <small><%= order_master.employee_id %> </small>
         </td>
+       
         <td><%= order_master.customer.first_name rescue nil %> <%= order_master.customer.last_name rescue nil %> <br>
           <%= order_master.mobile %>
         </td>
         <td><%= order_master.customer_address.city  rescue nil %>
         <%= order_master.customer_address.state  rescue nil %></td>
-        <td>
-          <table>
+        <td  colspan="8">
+          <table class="table table-hover table-bordered">
+          <tr>
+          <td colspan="2"><strong>
+          <%= link_to order_master.external_order_no, custordersearch_path(ordernum: order_master.external_order_no), :target => "_blank" %></strong> 
+           <small>Ref: <%= order_master.id %></small> 
+          </td>
+          </tr>
             <% order_master.order_line.each do |line| %>
 
             <tr>
-              <%= line.description  rescue nil %></td>
+             <td colspan="2"> <%= line.description  rescue nil %></td>
             </tr>
             <% end %>
+            <tr>
+              <td>Pieces: <%= order_master.pieces %></td>
+         <td>Total: <%= order_master.total %></td>
+            </tr>
+            <tr>
+              <td colspan="2"><%= order_master.order_status_master.name %></td>
+            </tr>
+            <tr >
+              <td colspan="2"><%= order_master.orderpaymentmode.name if order_master.orderpaymentmode %></td>
+            </tr>
           </table>
 
         </td>
-          <td><strong>
-          <%= link_to order_master.external_order_no, custordersearch_path(ordernum: order_master.external_order_no), :target => "_blank" %></strong> <br>
-           <small>Ref: <%= order_master.id %></small> 
-          </td>
-        <td><%= order_master.pieces %></td>
-         <td><%= order_master.total %></td>
-        <td><%= order_master.order_status_master.name %></td>
-        <td><%= order_master.orderpaymentmode.name if order_master.orderpaymentmode %></td>
+          
+        
+        
+        
          <td><small><%= (order_master.timetaken) %> Secs</small>  <br>
          
            
@@ -75,13 +83,11 @@
   <tfoot>
    
     <tr>
-    <th colspan="8">
-    </th>
-      <th> <%= totalnos %> </th>
-      <th colspan="4"><%= totalvalue %></th>
+    <th colspan="7">Total</th>  
+      <th colspan="2">Pieces: <%= totalnos %> </th>   
+       <th colspan="2"> Value: <%= totalvalue %></th>
       
-      
-     
+
     </tr>
   
 
