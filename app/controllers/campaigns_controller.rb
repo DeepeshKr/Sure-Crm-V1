@@ -13,7 +13,7 @@ class CampaignsController < ApplicationController
     case a = params[:stage]
       when "old"
          @campaigns =  Campaign.where('startdate < ?', (330.minutes).from_now.to_date )
-           @stagename = "Recent Old Campaigns"
+         @stagename = "Recent Old Campaigns"
       when "curent"
          @stagename = "All Current Campaigns"
       when "new"
@@ -29,11 +29,12 @@ class CampaignsController < ApplicationController
   def show
     recent_campaigns
     proddropdown
-
+   
+    
     @for_date = @campaign.startdate
       @campaign_playlists = CampaignPlaylist.where("campaignid = ?", params[:id]).order(:start_hr, :start_min, :start_sec)
        @campaign_id = params[:id]
-     if @campaign.startdate >= DateTime.now
+     if @campaign.startdate > (330.minutes).from_now.to_date
               start_hour = 0
               start_minute = 0
               start_second = 0
@@ -60,15 +61,24 @@ class CampaignsController < ApplicationController
         @hbnchecked = true
         @pvtchannelchecked = false
         @media_name = "HBN"
+
+
      else
         @hbnchecked = false
         @pvtchannelchecked = true
         @media_name = "Pvt Channel"
      end
+     #allow edit only for date more than today
+     @llowedit = 0
+     if @campaign.startdate > (330.minutes).from_now.to_date
+      @allowedit = 1
+    end
+
+   
 
     respond_with(@campaign, @campaign_playlists,  @campaign_playlist)
   end
-
+ 
   def new 
     proddropdown
     @campaign = Campaign.new

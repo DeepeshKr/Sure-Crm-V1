@@ -43,7 +43,11 @@
          <td><%= campaign_playlist.campaign_play_list_status.name if campaign_playlist.campaign_play_list_status%></td>
       
 
-        <td><%= link_to 'Show', campaign_playlist %></td>
+        <td>
+        <div class="<%= show_div_class(campaign_playlist.campaign_play_list_status.name) %>">
+            <%= link_to 'Show', campaign_playlist, class: "btn btn-info btn-xs" %>
+          </div>
+        </td>
         <td><%= link_to 'Edit', edit_campaign_playlist_path(campaign_playlist) %></td>
         <td><%= link_to 'Destroy', campaign_playlist, method: :delete, data: { confirm: 'Are you sure?' } %></td>
       </tr>

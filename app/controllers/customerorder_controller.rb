@@ -670,7 +670,7 @@ end
        @order_id = params[:order_id] 
        @customer_id = @order_master.customer_id 
        @calledno = @order_master.calledno
-       @mobile = @order_master.mobile
+       @mobile = @order_master.mobile 
 
         @channellist =  Medium.where(active: 1).where('dnis = ?', @order_master.calledno).where('active = 1')
       end

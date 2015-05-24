@@ -138,8 +138,11 @@ class SalesReportController < ApplicationController
       paid_order_masters = OrderMaster.where('TRUNC(orderdate) = ?',for_date).where('ORDER_STATUS_MASTER_ID > 10002').where(media_id: paid).select(:media_id).distinct
       other_order_masters = OrderMaster.where('TRUNC(orderdate) = ?',for_date).where('ORDER_STATUS_MASTER_ID > 10002').where(media_id: others).select(:media_id).distinct
 
-
-      @orderdate = "Orders for #{for_date}: #{hbn_order_masters.count} HBN Channel, #{paid_order_masters.count} Paid Channel and #{other_order_masters.count} Other Channel!"
+      total_hbn_order_masters = OrderMaster.where('TRUNC(orderdate) = ?',for_date).where('ORDER_STATUS_MASTER_ID > 10002').where(media_id: hbnlist)
+      total_paid_order_masters = OrderMaster.where('TRUNC(orderdate) = ?',for_date).where('ORDER_STATUS_MASTER_ID > 10002').where(media_id: paid)
+      total_other_order_masters = OrderMaster.where('TRUNC(orderdate) = ?',for_date).where('ORDER_STATUS_MASTER_ID > 10002').where(media_id: others)
+      
+      @orderdate = "Orders for #{for_date}: #{total_hbn_order_masters.count} HBN Channel, #{total_paid_order_masters.count} Paid Channel and #{total_other_order_masters.count} Other Channel!"
       
       hbn_order_list ||= []
       num = 1
@@ -334,5 +337,61 @@ class SalesReportController < ApplicationController
   end
 
   def show
+    for_date = (330.minutes).from_now.to_date
+    
+    if params.has_key?(:for_date)
+     for_date =  Date.strptime(params[:for_date], "%m/%d/%Y")
+    end
+    @orderdate = for_date
+    @searchaction = 'show'
+      #@for_date = @campaign.startdate
+     @campaign_playlists =  CampaignPlaylist.joins(:campaign).where("campaigns.startdate = ?", for_date).order(:start_hr, :start_min, :start_sec).where(list_status_id: 10000)
+     
+      hbnlist = Medium.where(media_group_id: 10000)
+      paid = Medium.where(media_commision_id: 10000).where("media_group_id IS NULL OR media_group_id <> 10000")
+      others = Medium.where('media_commision_id IS NULL').where("media_group_id IS NULL OR media_group_id <> 10000")
+
+
+      hbn_order_masters = OrderMaster.joins(:medium).where('TRUNC(orderdate) = ?',for_date).where('ORDER_STATUS_MASTER_ID > 10002').where(media_id: hbnlist)
+    
+      @hbn_ccvalue = hbn_order_masters.where(orderpaymentmode_id: 10000).sum(:total)
+      @hbn_ccorders = hbn_order_masters.where(orderpaymentmode_id: 10000).count()
+      @hbn_codorders = hbn_order_masters.where(orderpaymentmode_id: 10001).count()
+      @hbn_codvalue = hbn_order_masters.where(orderpaymentmode_id: 10001).sum(:total)
+      @hbn_totalorders = hbn_order_masters.sum(:total)
+      @hbn_noorders = hbn_order_masters.count()
+
+  
+  end
+
+  def orders
+    @sno = 1
+    for_date = (330.minutes).from_now.to_date
+    
+    if params.has_key?(:for_date)
+     for_date =  Date.strptime(params[:for_date], "%Y-%m-%d")
+    end
+
+    @orderlistabout = "for date #{for_date}"
+    @order_masters =  OrderMaster.where('TRUNC(orderdate) = ?',for_date).where('ORDER_STATUS_MASTER_ID > 10002')
+    
+    if params.has_key?(:playlist_id)
+     campaign_id =  params[:playlist_id]
+     @order_masters = @order_masters.where('campaign_playlist_id = ?', campaign_id).order("orderdate")
+      @orderlistabout = "for selected playlist #{for_date}"
+    end
+     
+    if params.has_key?(:media)
+      if params[:media] == 'hbn'
+          hbnlist = Medium.where(media_group_id: 10000)
+          @order_masters = @order_masters.where(media_id: hbnlist).order("orderdate")
+          @orderlistabout = "for selected playlist HBN"
+          if params.has_key?(:missed)
+            @order_masters = @order_masters.where('campaign_playlist_id IS NULL').order("orderdate")
+            @orderlistabout = "for selected playlist HBN Missed orders"
+          end
+      end
+    end
+
   end
 end

@@ -29,9 +29,12 @@ class CampaignPlaylist < ActiveRecord::Base
  # validates :starttime 
  # validates :endtime
   #http://guides.rubyonrails.org/v3.2.19/active_record_querying.html#array-conditions
-
   def sales 
-      OrderMaster.where('campaign_playlist_id = ?', self.id).sum(:total) || 0
+      OrderMaster.where('campaign_playlist_id = ?', self.id).where('ORDER_STATUS_MASTER_ID > 10002').sum(:total) || 0
+  end
+
+  def pieces 
+      OrderMaster.where('campaign_playlist_id = ?', self.id).where('ORDER_STATUS_MASTER_ID > 10002').sum(:pieces) || 0
   end
 
   def time_validation
@@ -91,7 +94,7 @@ def productrevenue
 
 
   def productcost 
-      ordercost =  OrderMaster.where(campaign_playlist_id: self.id)
+      ordercost =  OrderMaster.where(campaign_playlist_id: self.id).where('ORDER_STATUS_MASTER_ID > 10002')
 
       if ordercost.present?
         total = 0

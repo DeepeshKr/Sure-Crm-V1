@@ -23,6 +23,9 @@ Rails.application.routes.draw do
   get 'sales_report/product'
   get 'product_report' => 'sales_report#product'
   get 'sales_report/show'
+  get 'show_report' => 'sales_report#show'
+  get 'sales_report/orders'
+  get 'orders_list' => 'sales_report#orders'
 
   resources :media_tape_heads
 
@@ -184,6 +187,7 @@ Rails.application.routes.draw do
   post 'create_playlist' => 'campaign_playlists#create_playlist_with_media_tape_head'
   #post 'neworder' => 'create_order#index'
 
+  #get 'showcampaign' => 'campaigns#show'
   #get 'recentorders' => 'create_order#show_recentorders'
 
   get 'create' => 'customers#createnew'

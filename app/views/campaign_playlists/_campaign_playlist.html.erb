@@ -1,10 +1,21 @@
 <% if @campaign_playlists.present? then %>
-  <%= render 'campaign_playlists/quick_list' %>
 
-<br>
+<% if  @showeditableform == 1 %>
+	 <%= render 'campaign_playlists/editable_playlist' %>
+<% else %>
+	
+<% end %>
+ 
+<br> 
 
 
 <%= link_to 'Download CSV list', campaign_playlists_path(campaignid: @campaign_id , format: :csv), class: "btn btn-info btn-sm" %>
+
+
+
+ 
+
+
 
 <% elsif %>
     <div class="well well-sm">

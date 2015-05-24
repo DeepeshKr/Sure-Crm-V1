@@ -1,0 +1,45 @@
+
+
+<table class="table table-hover">
+  <thead>
+    <tr>
+    <th>Date</th>
+    <th>Ref Name (Clubbed Names)</th>
+    <th>Name</th>
+     <th>Product variant</th>
+      <th>Start time</th>
+      <th>End time</th>
+       <th>Air time</th>
+     
+      <th>Cost</th>
+      <th>Sales</th>
+       <th>Profitability</th>
+        <th>Status</th>
+      <th colspan="2"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+  	
+    <% @campaign_playlists.each do |campaign_playlist| %>
+      <tr class="<%= category_table_row_class(campaign_playlist.campaign_play_list_status.name) %>">
+      <td><%= campaign_playlist.for_date.strftime("%d-%b-%Y") || "No Date" if campaign_playlist.for_date.present? %></td>
+       <td><%= campaign_playlist.ref_name %></td>
+        <td><%= campaign_playlist.product_variant.name if campaign_playlist.product_variant  %></td>
+        <td><%= campaign_playlist.name %></td>
+        <td><%= campaign_playlist.starttime %></td>
+        <td><%= campaign_playlist.endtime %></td>
+         <td><%= campaign_playlist.playtime %></td>
+       
+        <td><%= campaign_playlist.cost %></td>
+         <td><%= campaign_playlist.sales %></td>
+        <td><%= (campaign_playlist.productrevenue + campaign_playlist.productcost) rescue nil %> </td>
+         <td><%= campaign_playlist.campaign_play_list_status.name if campaign_playlist.campaign_play_list_status%></td>
+          
+          <td><%= link_to 'Edit', edit_campaign_playlist_path(campaign_playlist) %></td>
+          <td><%= link_to 'Destroy', campaign_playlist, method: :delete, data: { confirm: 'Are you sure?' }, class: "btn btn-info btn-xs" %></td>
+      </tr>
+    <% end %>
+    
+  </tbody>
+</table>

@@ -3,12 +3,12 @@
   <thead>
     <tr>
     <th>No</th>
-    <th>Channel</th>
+    <th>Channel / Show</th>
       <th>Orderdate</th>
       <th>Employee</th>
-      <th>Customer</th>
-      <th>State</th>
-        <th>Mobile</th>
+      <th>Customer / Mobile</th>
+      <th>City / State</th>
+      <th>Products</th>
       <th>Order no</th>
       <th>Pieces</th>
       <th>Total</th>
@@ -21,11 +21,13 @@
   </thead>
 
   <tbody>
-  
+  <% @sno = 1 %> <% totalnos = 0 %> <% totalvalue = 0 %>
     <% @order_masters.each do |order_master| %>
       <tr>
       <td><%= @sno %></td>
-      <td><%= order_master.medium.name if order_master.medium %> </td>
+      <td><%= order_master.medium.name if order_master.medium %> <br>
+      <%= order_master.campaign_playlist.name || "No Show" if order_master.campaign_playlist %>
+       </td>
         <td><%= (order_master.orderdate).strftime('%d-%b-%Y') %>
     <small><%= Time.at(order_master.orderdate).strftime('%H:%M %P %Z') %></small>
 
@@ -34,9 +36,22 @@
         <small><strong><%= order_master.employeecode %> </strong></small>
  <small><%= order_master.employee_id %> </small>
         </td>
-        <td><%= order_master.customer.first_name rescue nil %> <%= order_master.customer.last_name rescue nil %></td>
-        <td><%= order_master.customer_address.state  rescue nil %></td>
-        <td><%= order_master.mobile %></td>
+        <td><%= order_master.customer.first_name rescue nil %> <%= order_master.customer.last_name rescue nil %> <br>
+          <%= order_master.mobile %>
+        </td>
+        <td><%= order_master.customer_address.city  rescue nil %>
+        <%= order_master.customer_address.state  rescue nil %></td>
+        <td>
+          <table>
+            <% order_master.order_line.each do |line| %>
+
+            <tr>
+              <%= line.description  rescue nil %></td>
+            </tr>
+            <% end %>
+          </table>
+
+        </td>
           <td><strong>
           <%= link_to order_master.external_order_no, custordersearch_path(ordernum: order_master.external_order_no), :target => "_blank" %></strong> <br>
            <small>Ref: <%= order_master.id %></small> 
@@ -53,8 +68,24 @@
        
       </tr>
        <% @sno += 1 %>
+       <% totalnos += order_master.pieces %> 
+       <% totalvalue += order_master.total %>
     <% end %>
   </tbody>
+  <tfoot>
+   
+    <tr>
+    <th colspan="8">
+    </th>
+      <th> <%= totalnos %> </th>
+      <th colspan="4"><%= totalvalue %></th>
+      
+      
+     
+    </tr>
+  
+
+  </tfoot>
 </table>
 <% else %>
 <div class="well well-sm">
