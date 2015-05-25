@@ -1,7 +1,7 @@
 <% headers = ['START TIME ', 'DURATION', 'END TIME', 'PRODUCT', 'FILENAME WITH PATH'] %>
 <%= CSV.generate_line headers %>
 	 <% @campaign_playlists.each do |c| %>
-	  <%= CSV.generate_line([c.starttime, c.playtime, c.endtime, c.name, c.filename]).html_safe.strip  %>
+	  <%= CSV.generate_line([c.starttime, c.playtime, c.endtime, c.product_variant.name, c.filename]).html_safe.strip  %>
 	<% end %>
 
 

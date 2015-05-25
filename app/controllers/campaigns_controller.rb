@@ -10,6 +10,10 @@ class CampaignsController < ApplicationController
   def index
     #@campaigns = Campaign.all
      @campaigns =  Campaign.where('startdate = ?', (330.minutes).from_now.to_date)
+
+     if params.has_key(:for_date)
+      @campaigns =  Campaign.where('startdate = ?', params[:for_date])      
+     end
     case a = params[:stage]
       when "old"
          @campaigns =  Campaign.where('startdate < ?', (330.minutes).from_now.to_date )

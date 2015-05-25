@@ -2,14 +2,8 @@
 <div class="col-xs-6">
 <h3><%= @stagename %></h3>
 </div>
-<div class="col-xs-2">
-<%= link_to 'Older Campaign', campaigns_path(:stage => "old"), class: "btn btn-info btn-sm" %>
-</div>
-<div class="col-xs-2">
-<%= link_to 'Current Campaign', campaigns_path(:stage => "current"), class: "btn btn-info btn-sm" %>
-</div>
-<div class="col-xs-2">
-<%= link_to 'Upcoming Campaign', campaigns_path(:stage => "new"), class: "btn btn-info btn-sm" %>
+<div class="col-xs-4">
+<%= render('date_search') %>
 </div>
 </div>
 <hr>
@@ -21,11 +15,6 @@
       <th>For date</th>
       
       <th>Media</th>
-      <th>Media Spends </th>
-      <th>Sales</th>
-      <th>Product Revenue*</th>
-      <th>Product Cost*</th>
-      <th>Profitability</th>
       <th colspan="1"></th>
     </tr>
   </thead>
@@ -37,11 +26,6 @@
         <td><%= campaign.startdate.strftime("%d-%b-%Y") %></td>
        
         <td><%= campaign.medium.mediainfo if campaign.medium %></td>
-        <td><%= campaign.cost %></td>
-        <td><%= campaign.sales %></td>
-        <td><%= campaign.productrevenue %></td>
-        <td><%= campaign.productcost %></td>
-        <td><%= campaign.productrevenue - (campaign.cost + campaign.productcost) rescue nil %>  </td>
         <td><%= link_to 'Show', campaign %></td>
        <!--  <td><%= link_to 'Edit', edit_campaign_path(campaign) %></td>
         <td><%= link_to 'Destroy', campaign, method: :delete, data: { confirm: 'Are you sure?' } %></td> -->

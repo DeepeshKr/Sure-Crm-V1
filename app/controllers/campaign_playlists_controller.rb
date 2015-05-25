@@ -11,9 +11,10 @@ class CampaignPlaylistsController < ApplicationController
     if(params.has_key?(:campaignid))
       @campaign_playlists = CampaignPlaylist.where("campaignid = ?" , params[:campaignid]).order(:start_hr, :start_min, :start_sec)
        respond_to do |format|
+        csv_file_name = @campaign_playlists.first.campaign.name
           format.html
           format.csv do
-            headers['Content-Disposition'] = "attachment; filename=\"campaign-playlist\""
+            headers['Content-Disposition'] = "attachment; filename=\"#{csv_file_name}\""
             headers['Content-Type'] ||= 'text/csv'
           end
       end

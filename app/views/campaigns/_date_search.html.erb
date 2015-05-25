@@ -1,0 +1,13 @@
+<div class="row">
+ <%= bootstrap_form_tag url: campaigns_path, :method => :GET do |f| %>
+<div class="col-xs-9">
+<%= text_field_tag(:for_date, nil, :data => {:provide => "datepicker"}, :class => "form-control", :required => "true", :placeholder => "Search Campaign Date", :value => @searchvalue  )   %>
+
+</div>
+
+<div class="col-xs-3">
+	<%= submit_tag "Search", name: nil, class: "btn btn-primary" %>
+</div>
+<% end %>
+  
+</div>
