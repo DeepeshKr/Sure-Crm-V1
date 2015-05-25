@@ -16,6 +16,7 @@ class CampaignsController < ApplicationController
     end
    
    @showing_for_date = "Showing campaigns for date #{for_date}"
+   
    @campaigns =  Campaign.where('startdate = ?', for_date)
 
     case a = params[:stage]
