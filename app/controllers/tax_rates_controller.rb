@@ -69,6 +69,6 @@ class TaxRatesController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def tax_rate_params
-      params.require(:tax_rate).permit(:name, :value, :reverse, :description)
+      params.require(:tax_rate).permit(:name, :tax_rate, :reverse_rate, :description)
     end
 end

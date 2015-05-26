@@ -45,7 +45,7 @@
             <li><%= link_to "Retail Orders", "/vpp/list"  %></li>
             <li><%= link_to "Whole sale Orders", "/newwlsdet/list"  %></li>
             <li><%= link_to "Purchases", "/purchases_new/list"  %></li>
-            <li><%= link_to "Tax Rates", "/tax_rates"  %></li>
+           
 
             </ul>
          </li>
@@ -106,7 +106,7 @@
 
          </li>
          <% end %>
-          <% if (current_user.employee_role.sortorder < 5) %> 
+          <% if (current_user.employee_role.sortorder < 6) %> 
         <li class="dropdown">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
             	Campaign <b class="caret"></b> </a>
@@ -114,6 +114,7 @@
             <li><%= link_to "Daily Schedule", "/dailyschedule" %></li>
               <li><%= link_to "Campaign", "/campaigns" %></li>
               <li><%= link_to "Media", "/media" %></li>
+              <% if (current_user.employee_role.sortorder < 5) %> 
                <li class="divider">Set up</li>
                <li><%= link_to "Media Group", "/media_groups" %></li>
                 <li><%= link_to "Commision Type", "/media_commisions" %></li>
@@ -122,8 +123,9 @@
                 <li><%= link_to "Media Cost Master", "/media_cost_masters" %></li>
                  <li><%= link_to "Playlist Status", "/campaign_play_list_statuses" %></li>
               <li class="divider"></li>
-
+              <li><%= link_to "Tax Rates", "/tax_rates"  %></li>
                   <li><%= link_to "Campaign Stages", "/campaign_stages" %></li>
+                  <% end %>
             </ul>
          </li>
          <% end %>

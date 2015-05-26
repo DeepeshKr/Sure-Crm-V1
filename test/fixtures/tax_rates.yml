@@ -2,12 +2,12 @@
 
 one:
   name: MyString
-  value: 9.99
-  reverse: 9.99
+  tax_rate: 9.99
+  reverse_rate: 9.99
   description: MyText
 
 two:
   name: MyString
-  value: 9.99
-  reverse: 9.99
+  tax_rate: 9.99
+  reverse_rate: 9.99
   description: MyText

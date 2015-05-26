@@ -18,7 +18,7 @@ class TaxRatesControllerTest < ActionController::TestCase
 
   test "should create tax_rate" do
     assert_difference('TaxRate.count') do
-      post :create, tax_rate: { description: @tax_rate.description, name: @tax_rate.name, reverse: @tax_rate.reverse, value: @tax_rate.value }
+      post :create, tax_rate: { description: @tax_rate.description, name: @tax_rate.name, reverse_rate: @tax_rate.reverse_rate, tax_rate: @tax_rate.tax_rate }
     end
 
     assert_redirected_to tax_rate_path(assigns(:tax_rate))
@@ -35,7 +35,7 @@ class TaxRatesControllerTest < ActionController::TestCase
   end
 
   test "should update tax_rate" do
-    patch :update, id: @tax_rate, tax_rate: { description: @tax_rate.description, name: @tax_rate.name, reverse: @tax_rate.reverse, value: @tax_rate.value }
+    patch :update, id: @tax_rate, tax_rate: { description: @tax_rate.description, name: @tax_rate.name, reverse_rate: @tax_rate.reverse_rate, tax_rate: @tax_rate.tax_rate }
     assert_redirected_to tax_rate_path(assigns(:tax_rate))
   end
 

@@ -20,11 +20,12 @@
       <th>State</th>
       <th>Active</th>
       <th>Group</th>
+       <% if (current_user.employee_role.sortorder < 5) %> 
       <th>Commission Type</th>
        <th>Percent </th>
       <th>Daily Charges</th>
       <th>Correction</th>
-     
+     <% end %>
       <th>DNIS </th>
       <th>Channel </th>
       <th>Slot</th>
@@ -42,10 +43,12 @@
         <td><%= medium.state %></td>
         <td><%= medium.active %></td>
         <td><%= medium.media_group.name if medium.media_group %></td>
+         <% if (current_user.employee_role.sortorder < 5) %> 
         <td><%= medium.media_commision.name if medium.media_commision %></td>
          <td><%= medium.value %></td>
         <td><%= medium.daily_charges  %></td>
         <td><%= medium.paid_correction %></td>
+        <% end %>
         <td><%= medium.dnis %></td>
         <td><%= medium.channel %></td>
         <td><%= medium.slot %></td>
