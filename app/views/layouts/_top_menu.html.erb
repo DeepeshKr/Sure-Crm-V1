@@ -5,7 +5,7 @@
        <!--   <li>          <p style="margin-top:12px;">   <%= link_to "Customer",  new_customer_path, class: "btn btn-info btn-sm" %>  </p>         </li> -->
          <% if logged_in? %>
          <li>          <p style="margin-top:12px;">         <%= link_to "Customer",  neworder_path, class: "btn btn-success btn-sm" %>         </p>         </li>
-       <% if (current_user.employee_role.sortorder < 5) %> 
+       <% if (current_user.employee_role.sortorder < 8) %> 
          
           <li class="dropdown">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
@@ -20,32 +20,37 @@
             </ul>
          </li>
         <% end %>
-        <% if (current_user.employee_role.sortorder < 5) %> 
+        <% if (current_user.employee_role.sortorder < 8) %> 
          <li class="dropdown">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
               Reports <b class="caret"></b> </a>
             <ul class="dropdown-menu">
              <li><%= link_to "Sales Summary Report", "/sales_report" %></li>
+              <% if (current_user.employee_role.sortorder < 5) %> 
                <li><%= link_to "Daily Show Report", "/show_report" %></li>
-             
+            
              <li class="divider"></li>
               <li><%= link_to "Account Report (Mahabharata)", "/productreport" %></li>
                 <li><%= link_to "Stock Book", "/stockbook" %></li>
                 <li class="divider"></li>
             <li><%= link_to "Product List", "/product_cost/list" %></li>
             <li><%= link_to "Product Sales", "/productreport" %></li>
-              <li class="divider"></li>
+            <% end %>
+              
+             <li><%= link_to "Customer Orders (Ora)", "/custdetails/list"  %></li>
+             <li><%= link_to "Customer Orders (Search)", "/custordersearch"  %></li>
+            <li><%= link_to "Customer Orders (Details Search)", "/detailedordersearch"  %></li>
+            <% if (current_user.employee_role.sortorder < 5) %> 
+            <li class="divider"></li>
               
             <li><%= link_to "Product Master _B", "/bprodmaster" %></li>
             <li><%= link_to "Product Upsell (Ropupsprod)", "/productupsell"  %></li>
             <li><%= link_to "Channel Tape Ids", "/tapeids/list"  %></li>
-             <li><%= link_to "Customer Orders (Ora)", "/custdetails/list"  %></li>
-             <li><%= link_to "Customer Orders (Search)", "/custordersearch"  %></li>
-            <li><%= link_to "Customer Orders (Details Search)", "/detailedordersearch"  %></li>
+            <li class="divider"></li>
             <li><%= link_to "Retail Orders", "/vpp/list"  %></li>
             <li><%= link_to "Whole sale Orders", "/newwlsdet/list"  %></li>
             <li><%= link_to "Purchases", "/purchases_new/list"  %></li>
-           
+           <% end %>
 
             </ul>
          </li>
@@ -76,7 +81,7 @@
             </ul>
          </li>
          <% end %>
-          <% if (current_user.employee_role.sortorder < 5) %> 
+          <% if (current_user.employee_role.sortorder < 8) %> 
         <li class="dropdown">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
             	Products <b class="caret"></b> </a>
@@ -88,7 +93,6 @@
                  <li><%= link_to "Basic Upsell Lists", "/product_master_add_ons" %></li>
               
                 <li class="divider">Set up</li>
-                <li><%= link_to "Product with Costs", "/listofproducts" %></li>
                  <li><%= link_to "Product Spec List Code", "/product_spec_lists" %></li>
                   <li><%= link_to "Product Active Code", "/product_active_codes" %></li>
                   <li><%= link_to "Product Categories", "/product_categories" %></li>
@@ -96,17 +100,20 @@
                   <li><%= link_to "Product Training", "/product_training_headings" %></li>
                   <li><%= link_to "Product Type", "/product_types" %></li>
                    <li><%= link_to "Product Sell Type", "/product_sell_types" %></li>
-
+                   <% if (current_user.employee_role.sortorder < 5) %> 
+                    <li class="divider">Set up</li>
+                <li><%= link_to "Product with Costs", "/listofproducts" %></li>
                     <li><%= link_to "Product Packaging Costs", "/packing_cost/list" %></li>
-
-                  <li><%= link_to "Product Warehouse", "/product_warehouses" %></li>
+                     <li><%= link_to "Product Warehouse", "/product_warehouses" %></li>
                    <li><%= link_to "Product Inventory", "/product_inventories" %></li>
+                    <% end %>
+                 
                    <li><%= link_to "Order Payment Mode", "/orderpaymentmodes" %></li>
             </ul>
 
          </li>
          <% end %>
-          <% if (current_user.employee_role.sortorder < 6) %> 
+          <% if (current_user.employee_role.sortorder < 8) %> 
         <li class="dropdown">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
             	Campaign <b class="caret"></b> </a>

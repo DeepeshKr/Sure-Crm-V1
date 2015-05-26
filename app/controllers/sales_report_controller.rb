@@ -1,4 +1,5 @@
 class SalesReportController < ApplicationController
+  before_action { protect_controllers(5) } 
    respond_to :html
   # before_filter :authenticate_user!
   def summary

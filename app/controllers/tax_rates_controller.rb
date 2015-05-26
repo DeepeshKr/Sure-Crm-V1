@@ -1,4 +1,5 @@
 class TaxRatesController < ApplicationController
+  before_action { protect_controllers(5) } 
   before_action :set_tax_rate, only: [:show, :edit, :update, :destroy]
 
   # GET /tax_rates
@@ -6,7 +7,7 @@ class TaxRatesController < ApplicationController
   def index
     @tax_rates = TaxRate.all
   end
-
+ 
   # GET /tax_rates/1
   # GET /tax_rates/1.json
   def show
