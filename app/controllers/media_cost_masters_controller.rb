@@ -1,4 +1,5 @@
 class MediaCostMastersController < ApplicationController
+  before_action { protect_controllers(5) } 
   before_action :set_media_cost_master, only: [:show, :edit, :update, :destroy]
   before_action :dropdown, only: [:new, :edit, :destroy]
 
@@ -8,7 +9,7 @@ class MediaCostMastersController < ApplicationController
     @media_cost_masters = MediaCostMaster.all
     respond_with(@media_cost_masters)
   end
-
+ 
   def show
     respond_with(@media_cost_master)
   end
@@ -43,12 +44,14 @@ class MediaCostMastersController < ApplicationController
     end
      def dropdown
       #.where(media_group_id: 10000)
-     @medialist = Medium.where('media_commision_id = ? AND (media_group_id <> ? OR media_group_id IS NULL)',10000,  10000).order('name')
+        @medialist = Medium.where('media_commision_id = ?',  10000).where('media_group_id IS NULL or media_group_id <> 10000 or id = 11200').order('name')
+   
+     #@medialist = Medium.where('media_commision_id = ? AND (media_group_id <> ? OR media_group_id IS NULL)',10000,  10000).order('name')
     end
     def media_cost_master_params
       params.require(:media_cost_master).permit(:name, :duration_secs, 
-        :cost_per_sec, :media_id, :str_hr, :str_min,
+        :total_cost, :media_id, :str_hr, :str_min,
          :str_sec, :end_hr, :end_min, :end_sec, 
-         :description)
+         :description, :slot_percent)
     end
 end

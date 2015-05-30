@@ -1,4 +1,5 @@
 class VppController < ApplicationController
+  
 	respond_to :html
   def list
   	#order_number

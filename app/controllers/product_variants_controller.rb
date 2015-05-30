@@ -4,8 +4,34 @@ class ProductVariantsController < ApplicationController
   respond_to :html, :xml, :json
 
   def index
-    @product_variants = ProductVariant.all
-    respond_with(@product_variants)
+
+      @showall = true
+    if params.has_key?(:search)
+      
+      @search = "Search for " +  params[:search].upcase
+      @searchvalue = params[:search].upcase   
+       @product_variants = ProductVariant.where('activeid = 10000').where("name like ? OR extproductcode like ? or description like ? or variantbarcode like ?", "#{@searchvalue}%", "#{@searchvalue}%", "#{@searchvalue}%", "#{@searchvalue}%")
+      @inactive_product_variants = ProductVariant.where('activeid <> 10000').where("name like ? OR extproductcode like ? or description like ? or variantbarcode like ?", "#{@searchvalue}%", "#{@searchvalue}%", "#{@searchvalue}%", "#{@searchvalue}%")
+      @found = @product_variants.count
+     
+     elsif params[:showall] == 'true'
+        
+       @search = "All Product Variant List"
+      @searchvalue = nil
+     @product_variants = ProductVariant.all.where('activeid = 10000')
+      @inactive_product_variants = ProductVariant.where('activeid <> 10000')
+    else
+      @search = "Product Variant List"
+      @searchvalue = nil
+       @product_variants = ProductVariant.all.where('activeid = 10000').order('updated_at DESC').limit(10)
+      @inactive_product_variants = ProductVariant.where('activeid <> 10000').order('updated_at DESC').limit(10)
+      
+      @found = nil
+    
+    end
+
+    # @product_variants = ProductVariant.all
+    # respond_with(@product_variants)
   end
 
   def show

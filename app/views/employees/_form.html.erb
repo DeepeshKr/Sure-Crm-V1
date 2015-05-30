@@ -60,9 +60,9 @@
   </div>
   <div class="col-xs-4">
      <%= f.select(:employee_role_id, 
-    options_from_collection_for_select(EmployeeRole.all, :id, :name, selected: @employee.employee_role_id), 
+    options_from_collection_for_select(@employeeroles, :id, :name, selected: @employee.employee_role_id), 
     {:prompt => 'Please Choose', label: " Employee Role"})  %>
-   
+
   </div>
   <div class="col-xs-4">
      <%= f.select(:reporting_to_id, 

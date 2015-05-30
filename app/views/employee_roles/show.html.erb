@@ -9,6 +9,8 @@
   <strong>Sortorder:</strong>
   <%= @employee_role.sortorder %>
 </p>
-
+<br>
+<%= render('employees/list') %>
+<br>
 <%= link_to 'Edit', edit_employee_role_path(@employee_role) %> |
 <%= link_to 'Back', employee_roles_path %>

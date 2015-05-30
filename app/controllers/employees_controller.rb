@@ -1,11 +1,38 @@
 class EmployeesController < ApplicationController
+   before_action { protect_controllers_specific(9) } 
   before_action :set_employee, only: [:show, :edit, :update, :destroy]
   before_action :reporting_to, only: [:new, :edit, :update, :destroy]
   respond_to :html
 
+#:first_name, :last_name, :employeecode, :designation, :mobile, :emailid,
+# :location, :employment_type_id, :employee_role_id, :reporting_to_id, 
+#:enablelogin, :description
   def index
-    @employees = Employee.all
-    respond_with(@employees)
+     @showall = 'true'    
+    if params.has_key?(:search)
+      @search = "Search for " +  params[:search].upcase
+      @searchvalue = params[:search].upcase   
+      @employees = Employee.where("UPPER(first_name) like ? OR UPPER(last_name) like ? or 
+        UPPER(employeecode) like ? or UPPER(description) like ?", "#{@searchvalue}%", 
+        "#{@searchvalue}%", "#{@searchvalue}%", "#{@searchvalue}%")
+      @found = @employees.count
+     
+     elsif params[:showall] == 'true'
+        
+      @search = "All Employees"
+      @searchvalue = nil
+      @employees = Employee.all
+      @found = @employees.count
+    else
+      @search = "Recently Added / Updated Employees"
+      @searchvalue = nil
+      @employees = Employee.order("updated_at DESC").limit(10)
+      @found = @employees.count
+    
+    end
+
+    # @employees = Employee.order("updated_at DESC").limit(10)
+    # respond_with(@employees)
   end
 
   def show
@@ -28,20 +55,25 @@ class EmployeesController < ApplicationController
   end
 
   def new
+    @employeeroles = EmployeeRole.where('sortorder >= ?', current_user.employee_role.sortorder)
     @employee = Employee.new
     respond_with(@employee)
   end
 
   def edit
+    @employeeroles = EmployeeRole.where('sortorder >= ?', current_user.employee_role.sortorder)
+  
   end
 
   def create
+    @employeeroles = EmployeeRole.where('sortorder >= ?', current_user.employee_role.sortorder)
     @employee = Employee.new(employee_params)
     @employee.save
     respond_with(@employee)
   end
 
   def update
+   @userroles = EmployeeRole.where('sortorder >= ?', current_user.employee_role.sortorder)
    employeecode = @employee.employeecode
     @employee.update(employee_params)
      chkuser = User.where(employee_code: employeecode)

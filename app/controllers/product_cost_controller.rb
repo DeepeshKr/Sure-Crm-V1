@@ -1,4 +1,5 @@
 class ProductCostController < ApplicationController
+    before_action { protect_controllers_specific(4) } 
 	respond_to :html
   def list
 	@prodmasters = PRODMASTER.order(:prodname).all

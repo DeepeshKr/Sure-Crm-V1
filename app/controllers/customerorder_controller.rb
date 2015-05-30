@@ -626,7 +626,7 @@ end
     
     end
     def add_product_to_campaign(mediumid)
-
+      updates = "Trying to update order master with show for media #{mediumid}"
         product_variant_id = OrderLine.where(orderid: @order_master.id)
         .order("id").pluck(:productvariant_id).first
         
@@ -640,23 +640,32 @@ end
           # check if media is part of HBN group, if yes, update the HBN group 
           # campaign playlist id both ways
           # on order and agains the campaign playlis
+          if Medium.where(id: mediumid).present?
+             channelname = Medium.find(mediumid).name
+          end
+          
           if Medium.find(mediumid).media_group_id == 10000
             #HBN Master Media Id 11200
             #select the campaign from HBN Master Campaign List
+            channel = "HBN Shows on #{channelname}"
             campaignlist =  Campaign.where(mediumid: 11200).where('TRUNC(startdate) =  ?', todaydate)
-          else         
+          else 
+            channel = "#{channelname} Private Channel Shows"        
             campaignlist =  Campaign.where(mediumid: mediumid).where('TRUNC(startdate) =  ?', todaydate)
           end 
+          updates = "Updated at #{t} order for #{channel} without any specific show at Hour:#{nowhour}  Minutes:#{nowminute}"
           if campaignlist.present?
             campaign_playlist = CampaignPlaylist.where({campaignid: campaignlist})
             .where(list_status_id: 10000).where(productvariantid: product_variant_id)
             .where("start_hr <= ? and start_min <= ?", nowhour, nowminute)
             .order("start_hr, start_min DESC")
+             updates = "Updated at #{t} order for #{channel} without any relevant show name at Hour:#{nowhour}  Minutes:#{nowminute}"
             if campaign_playlist.count > 0
               @order_master.update(campaign_playlist_id: campaign_playlist.first.id)
+              updates = "Updated at #{t} order for #{channel} with show #{campaign_playlist.name} at Hour:#{nowhour}  Minutes:#{nowminute}"
             end
           end
-
+          @order_master.update(notes: updates)
     end
 
     def new_call

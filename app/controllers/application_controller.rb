@@ -69,11 +69,26 @@ class ApplicationController < ActionController::Base
     if logged_in?
       currentrolsortno = current_user.employee_role.sortorder || 20
       userrole = current_user.employee_role.name
-      if current_user.employee_role.sortorder > authorised_for
+      if current_user.employee_role.sortorder >= authorised_for
         #   flash[:notice] = "Authorised to view as #{userrole}"
         # else
         flash[:notice] = "Not Authorised to view as #{userrole}"
         redirect_to login_url(return_to: request.original_url) # halts request cycle  
+      end
+    end
+  end
+
+  def protect_controllers_specific(authorised_for)
+    if logged_in?
+      currentrolsortno = current_user.employee_role.sortorder || 20
+      userrole = current_user.employee_role.name
+      if current_user.employee_role.sortorder == authorised_for || current_user.employee_role.sortorder > 3
+        #  
+        flash[:notice] = "Not Authorised to view as #{userrole}"
+        redirect_to login_url(return_to: request.original_url) # halts request cycle  
+       # else
+       #  flash[:notice] = "Authorised to view as #{userrole}"
+         
       end
     end
   end

@@ -1,4 +1,5 @@
 class TempinvNewwlsdetController < ApplicationController
+	
 	  respond_to :html
 
   def list

@@ -1,4 +1,5 @@
 class EmployeeRolesController < ApplicationController
+   before_action { protect_controllers_specific(2) } 
   before_action :set_employee_role, only: [:show, :edit, :update, :destroy]
 
   respond_to :html
@@ -9,7 +10,8 @@ class EmployeeRolesController < ApplicationController
   end
 
   def show
-    respond_with(@employee_role)
+    @employees = Employee.where(employee_role_id: @employee_role.id)
+    respond_with(@employee_role, @employees)
   end
 
   def new

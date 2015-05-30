@@ -1,4 +1,5 @@
 class ProductStocksController < ApplicationController
+    before_action { protect_controllers_specific(4) } 
   before_action :set_product_stock, only: [:show, :edit, :update, :destroy]
 
   # GET /product_stocks

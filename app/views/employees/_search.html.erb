@@ -1,0 +1,17 @@
+<div class="row">
+ <%= bootstrap_form_tag url: employees_path, :method => :GET, :enforce_utf8 => false do |f| %>
+<div class="col-xs-8">
+<%= text_field_tag(:search, nil, :class => "form-control", :required => "true", :placeholder => "Search Employee Name", :value => @searchvalue  )   %>
+</div>
+
+<div class="col-xs-2">
+	<%= submit_tag "Search", name: nil, class: "btn btn-primary" %>
+</div>
+<% end %>
+  <div class="col-xs-2">   
+      <%= bootstrap_form_tag url: employees_path, :method => :GET, :enforce_utf8 => false do |f| %>
+      <%= hidden_field_tag :showall, @showall %>
+            <%= submit_tag "All", name: nil,  class: "btn btn-primary" %>
+      <% end %>
+  </div>
+</div>

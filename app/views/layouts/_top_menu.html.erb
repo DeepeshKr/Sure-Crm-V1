@@ -26,26 +26,19 @@
               Reports <b class="caret"></b> </a>
             <ul class="dropdown-menu">
              <li><%= link_to "Sales Summary Report", "/sales_report" %></li>
-              <% if (current_user.employee_role.sortorder < 5) %> 
+              <% if (current_user.employee_role.sortorder < 3) %> 
                <li><%= link_to "Daily Show Report", "/show_report" %></li>
             
-             <li class="divider"></li>
-              <li><%= link_to "Account Report (Mahabharata)", "/productreport" %></li>
-                <li><%= link_to "Stock Book", "/stockbook" %></li>
-                <li class="divider"></li>
-            <li><%= link_to "Product List", "/product_cost/list" %></li>
-            <li><%= link_to "Product Sales", "/productreport" %></li>
+             
             <% end %>
               
-             <li><%= link_to "Customer Orders (Ora)", "/custdetails/list"  %></li>
-             <li><%= link_to "Customer Orders (Search)", "/custordersearch"  %></li>
-            <li><%= link_to "Customer Orders (Details Search)", "/detailedordersearch"  %></li>
+           
             <% if (current_user.employee_role.sortorder < 5) %> 
             <li class="divider"></li>
               
             <li><%= link_to "Product Master _B", "/bprodmaster" %></li>
             <li><%= link_to "Product Upsell (Ropupsprod)", "/productupsell"  %></li>
-            <li><%= link_to "Channel Tape Ids", "/tapeids/list"  %></li>
+           
             <li class="divider"></li>
             <li><%= link_to "Retail Orders", "/vpp/list"  %></li>
             <li><%= link_to "Whole sale Orders", "/newwlsdet/list"  %></li>
@@ -71,8 +64,14 @@
               <li><%= link_to "Existing Dealers Old", "/dealers" %></li>
               <li><%= link_to "Existing Dealers New", "/dealers" %></li>
               <li><%= link_to "List of Dealer Equiries", "/interaction?category=10020" %></li>    
-              
+                <% if (current_user.employee_role.sortorder < 5) %> 
               <li class="divider"></li>
+            
+                <li><%= link_to "Customer Orders (Ora)", "/custdetails/list"  %></li>
+             <li><%= link_to "Customer Orders (Search)", "/custordersearch"  %></li>
+            <li><%= link_to "Customer Orders (Details Search)", "/detailedordersearch"  %></li>
+            <% end %>
+            <li class="divider"></li>
                <li><%= link_to "All Interactions", "/interaction" %></li> 
               <li><%= link_to "Pincode List", "/india_pincode_lists" %></li>    
               <li><%= link_to "City List", "/india_city_lists" %></li>    
@@ -102,8 +101,8 @@
                    <li><%= link_to "Product Sell Type", "/product_sell_types" %></li>
                    <% if (current_user.employee_role.sortorder < 5) %> 
                     <li class="divider">Set up</li>
-                <li><%= link_to "Product with Costs", "/listofproducts" %></li>
-                    <li><%= link_to "Product Packaging Costs", "/packing_cost/list" %></li>
+               
+                    
                      <li><%= link_to "Product Warehouse", "/product_warehouses" %></li>
                    <li><%= link_to "Product Inventory", "/product_inventories" %></li>
                     <% end %>
@@ -113,6 +112,27 @@
 
          </li>
          <% end %>
+           <% if (current_user.employee_role.sortorder < 5) %> 
+        <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+              Accounts <b class="caret"></b> </a>
+            <ul class="dropdown-menu">
+           
+              <li><%= link_to "Account Report (Mahabharata)", "/productreport" %></li>
+                <li><%= link_to "Stock Book", "/stockbook" %></li>
+                <li class="divider"></li>
+            <li><%= link_to "Product List", "/product_cost/list" %></li>
+            <li><%= link_to "Product Sales", "/productreport" %></li>
+            <li><%= link_to "Tax Rates", "/tax_rates"  %></li> 
+               
+              <li class="divider"></li>
+               <li><%= link_to "Product with Costs", "/listofproducts" %></li>
+                  <li><%= link_to "Product Packaging Costs", "/packing_cost/list" %></li>
+                 
+            </ul>
+         </li>
+         <% end %>
+
           <% if (current_user.employee_role.sortorder < 8) %> 
         <li class="dropdown">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
@@ -121,8 +141,10 @@
             <li><%= link_to "Daily Schedule", "/dailyschedule" %></li>
               <li><%= link_to "Campaign", "/campaigns" %></li>
               <li><%= link_to "Media", "/media" %></li>
-              <% if (current_user.employee_role.sortorder < 5) %> 
+               <li><%= link_to "Channel Tape Ids", "/tapeids/list"  %></li>
+              <% if (current_user.employee_role.sortorder < 6) %> 
                <li class="divider">Set up</li>
+
                <li><%= link_to "Media Group", "/media_groups" %></li>
                 <li><%= link_to "Commision Type", "/media_commisions" %></li>
                  <li><%= link_to "Media Tapes Heads", "/media_tape_heads" %></li>
@@ -130,7 +152,7 @@
                 <li><%= link_to "Media Cost Master", "/media_cost_masters" %></li>
                  <li><%= link_to "Playlist Status", "/campaign_play_list_statuses" %></li>
               <li class="divider"></li>
-              <li><%= link_to "Tax Rates", "/tax_rates"  %></li>
+              
                   <li><%= link_to "Campaign Stages", "/campaign_stages" %></li>
                   <% end %>
             </ul>

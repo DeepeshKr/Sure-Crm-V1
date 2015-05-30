@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150525174510) do
+ActiveRecord::Schema.define(version: 20150528064822) do
 
   create_table "address_types", force: :cascade do |t|
     t.string   "name"
@@ -431,7 +431,7 @@ ActiveRecord::Schema.define(version: 20150525174510) do
     t.string   "channel"
     t.string   "slot"
     t.integer  "daily_charges",      limit: 16, precision: 38
-    t.integer  "paid_correction",    limit: 16, precision: 38
+    t.decimal  "paid_correction",               precision: 6,  scale: 5
   end
 
   create_table "media_commisions", force: :cascade do |t|
@@ -444,7 +444,7 @@ ActiveRecord::Schema.define(version: 20150525174510) do
   create_table "media_cost_masters", force: :cascade do |t|
     t.string   "name"
     t.integer  "duration_secs", limit: 16, precision: 38
-    t.integer  "cost_per_sec",  limit: 16, precision: 38
+    t.decimal  "total_cost",               precision: 10, scale: 2
     t.integer  "media_id",      limit: 16, precision: 38
     t.integer  "str_hr",        limit: 16, precision: 38
     t.integer  "str_min",       limit: 16, precision: 38
@@ -453,8 +453,9 @@ ActiveRecord::Schema.define(version: 20150525174510) do
     t.integer  "end_min",       limit: 16, precision: 38
     t.integer  "end_sec",       limit: 16, precision: 38
     t.text     "description"
-    t.datetime "created_at",                              null: false
-    t.datetime "updated_at",                              null: false
+    t.datetime "created_at",                                        null: false
+    t.datetime "updated_at",                                        null: false
+    t.decimal  "slot_percent",             precision: 5,  scale: 4
   end
 
   create_table "media_groups", force: :cascade do |t|

@@ -1,7 +1,7 @@
 <div class="row">
  <%= bootstrap_form_tag url: product_variants_path, :method => :GET, :enforce_utf8 => false do |f| %>
 <div class="col-xs-8">
-<%= text_field_tag(:search, nil, :class => "form-control", :required => "true", :placeholder => "Search Product Name", :value => @searchvalue  )   %>
+<%= text_field_tag(:search, nil, :class => "form-control", :required => "true", :placeholder => "Search name / Code", :value => @searchvalue  )   %>
 </div>
 
 <div class="col-xs-2">

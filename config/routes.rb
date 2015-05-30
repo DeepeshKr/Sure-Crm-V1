@@ -8,7 +8,7 @@ Rails.application.routes.draw do
   get 'listofproducts' => 'product_masters#listofproducts'
 
 
-
+ 
   devise_for :logins
 #sales report 
   get 'sales_report' => 'sales_report#summary' 

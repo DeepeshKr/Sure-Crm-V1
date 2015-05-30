@@ -14,11 +14,11 @@
    <%= f.text_field :employee_code,  label: "Employee Code", :class => "form-control", :readonly => true %>
   
 </p>
- <%  if current_user.employee_role.sortorder < 5 %>
+ <%  if current_user.employee_role.sortorder < 9 %>
 <p>
  
    <%= f.select(:role, 
-    options_from_collection_for_select(EmployeeRole.all, :id, :name, :selected => @user.role), 
+    options_from_collection_for_select(@userroles, :id, :name, :selected => @user.role), 
     {label: "User Role"}, :class => "form-control")  %>
 
  

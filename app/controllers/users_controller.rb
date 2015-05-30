@@ -6,6 +6,7 @@ class UsersController < ApplicationController
   def show
     
     @user = User.find(params[:id])
+    @userroles = EmployeeRole.where('sortorder >= ?', current_user.employee_role.sortorder)
      #debugger
   end
   
@@ -31,7 +32,7 @@ class UsersController < ApplicationController
          
   end
   def update   
-    if current_user.employee_role.sortorder < 5
+    if current_user.employee_role.sortorder < 8
       @user.update(user_params)   
       # if @user.update(user_params)
        flash[:success] = 'You have sucessfully changed the user details!'
