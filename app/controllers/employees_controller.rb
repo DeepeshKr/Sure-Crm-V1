@@ -1,5 +1,5 @@
 class EmployeesController < ApplicationController
-   before_action { protect_controllers_specific(9) } 
+   before_action { protect_controllers(9) } 
   before_action :set_employee, only: [:show, :edit, :update, :destroy]
   before_action :reporting_to, only: [:new, :edit, :update, :destroy]
   respond_to :html
