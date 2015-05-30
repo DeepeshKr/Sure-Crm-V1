@@ -52,7 +52,7 @@
   </div>
   <div role="tabpanel" class="tab-pane fade" id="profile">
    <div class="row">
- <div class="col-xs-1 col-xs-offset-1">
+ <div class="col-xs-1">
  <%= f.select :str_hr, 0..23, label: "Start Hr" %>
  </div>
   <div class="col-xs-1">
@@ -71,8 +71,8 @@
   <div class="col-xs-1">
    <%= f.select :end_sec, 0..59, label: "End Sec" %>
  </div>
-<div class="col-xs-3">
-       <%= f.text_field :slot_percent, placeholder: "0.15", label: "Percent Cost of this 1/2 hour slot"  %>
+<div class="col-xs-2 col-xs-offset-1">
+       <%= f.text_field :slot_percent, placeholder: "0.15", label: "Percent Cost of slot"  %>
   </div>
 
  </div>

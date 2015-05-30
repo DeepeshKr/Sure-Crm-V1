@@ -40,9 +40,17 @@
         <td  colspan="8">
           <table class="table table-hover table-bordered">
           <tr>
-          <td colspan="2"><strong>
-          <%= link_to order_master.external_order_no, custordersearch_path(ordernum: order_master.external_order_no), :target => "_blank" %></strong> 
-           <small>Ref: <%= order_master.id %></small> 
+          <td><strong>
+          <% if order_master.external_order_no.present? %>
+          <%= link_to order_master.external_order_no, custordersearch_path(ordernum: order_master.external_order_no), :target => "_blank" %>
+          <% else %>
+          Un processed order
+          <% end %>
+          </strong> 
+          </td>
+          <td>Ref No: 
+          <%= link_to order_master.id, review_path(order_id: order_master.id), :target => "_blank" %>
+           
           </td>
           </tr>
             <% order_master.order_line.each do |line| %>
