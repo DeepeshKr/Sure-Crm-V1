@@ -150,17 +150,67 @@ end
     end
   end
  
- #post create_duplicate_playlist
-  def quick_create
+ #post insert_playlist
+  def campaign_playlist_insert
    campaign_name = params[:playlist_name]
    for_date = params[:for_date]
-   for_date = for_date.strptime('%m/%d/%Y')
-campaignid = params[:campaignid]
+   #for_date = for_date.strptime('%m/%d/%Y')
+    campaignid = campaign_playlist_params[:campaignid]
+    
+    media_tapes = MediaTape.find(campaign_playlist_params[:tape_id])
+     
+    
+           begin_hr = campaign_playlist_params[:start_hr]
+           begin_min = campaign_playlist_params[:start_min]
+           begin_sec = campaign_playlist_params[:start_sec]
 
-     @campaign_playlist = CampaignPlaylist.create(name:campaign_name, 
-      campaignid: campaignid,
-                          for_date: for_date)
-    respond_with(@campaign_playlist.campaign)
+           #media tape cost head
+       
+          list_status_id = 10001
+                   
+         
+            hour_min_sec(begin_hr, begin_min, begin_sec, media_tapes.duration_secs)
+            end_hr = @end_hr
+            end_min = @end_min
+            end_sec = @end_sec
+
+     @campaign_playlist = CampaignPlaylist.create(name: media_tapes.name, 
+            campaignid: campaignid, 
+            start_hr: begin_hr, 
+            start_min: begin_min, 
+            start_sec: begin_sec, 
+            ref_name: "Inserted Playlist",
+            list_status_id: list_status_id,
+            end_hr: end_hr, 
+            end_min: end_min, 
+            end_sec: end_sec,
+            cost: 0, 
+            channeltapeid: media_tapes.tape_ext_ref_id, 
+            internaltapeid: media_tapes.unique_tape_name, 
+            productvariantid: media_tapes.product_variant_id, 
+            filename: media_tapes.name, 
+            description: (media_tapes.description || " ") + " Inserted Playlist on " + (Date.today).to_s, 
+            duration_secs: media_tapes.duration_secs, 
+            tape_id: media_tapes.tape_ext_ref_id,
+            for_date: for_date)
+
+ #respond_with(@media_cost_master)
+      if @campaign_playlist.valid?
+          update_timings(campaignid)
+          flash[:success] = "Playlist Inserted successfully added " 
+           @campaign_playlist.save
+          respond_with(@campaign_playlist.campaign)
+      else
+          flash[:error] = @campaign_playlist.errors.full_messages.join("<br/>")
+
+          redirect_to campaigns_path(:campaign_id => campaignid)
+      end
+       
+     
+
+   
+     #respond_with(@campaign)
+
   end
 
   #post create_duplicate_playlist
@@ -341,21 +391,25 @@ campaignid = params[:campaignid]
     def update_timings(campaign_id)
       campaigns = CampaignPlaylist.where(campaignid: campaign_id).order(:start_hr, :start_min, :start_sec)
 
-          n_str_hr = campaigns.first.start_hr
-          n_str_min = campaigns.first.start_min
-          n_str_sec = campaigns.first.start_sec
+          n_str_hr = 0
+          n_str_min = 0
+          n_str_sec = 0
 
+          totalnos = 0
       campaigns.each do |c|
-            
+          #start with first or previous listing timings
+          c.update(start_hr: n_str_hr, start_min: n_str_min, start_sec: n_str_sec)
+          #get the ent time with start timing adding duration
           hour_min_sec(c.start_hr, c.start_min, c.start_sec, c.duration_secs)
-          campaign_playlist.update(start_hr: n_str_hr, start_min: n_str_min, start_sec: n_str_sec)
-          campaign_playlist.update(end_hr: @end_hr, end_min: @end_min, end_sec: @end_sec)
-
+          #update new endn timing
+          c.update(end_hr: @end_hr, end_min: @end_min, end_sec: @end_sec)
+           #use the end timings as start timings for the next show
            n_str_hr = @end_hr
            n_str_min = @end_min
            n_str_sec = @end_sec
-
+           totalnos += 1
       end
+      flash[:notice] = "Timings of #{totalnos} playlists were reset successfully"
     end
 
     def showcampaign_page(campaign_id)

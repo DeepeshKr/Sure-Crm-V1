@@ -43,22 +43,24 @@ class CampaignsController < ApplicationController
     @for_date = @campaign.startdate
       @campaign_playlists = CampaignPlaylist.where("campaignid = ?", params[:id]).order(:start_hr, :start_min, :start_sec)
        @campaign_id = params[:id]
-     if @campaign.startdate > (330.minutes).from_now.to_date
+    
               start_hour = 0
               start_minute = 0
               start_second = 0
+
         if @campaign_playlists.present?
                 start_hour = @campaign_playlists.last.end_hr
                 start_minute = @campaign_playlists.last.end_min
                 start_second = @campaign_playlists.last.end_sec
         end
-       #media_tapes_s = MediaTape.where("product_variant_id is null")
-      # name: media_tapes_s.first.name,
-       # internaltapeid: media_tapes_s.first.unique_tape_name,
-       # filename: media_tapes_s.first.name,
-       # duration_secs: media_tapes_s.first.duration_secs
+         
+         #remove after testing
+         @campaign_playlist = CampaignPlaylist.new(campaignid: params[:id],
+         cost: 0, start_hr: start_hour,
+         start_min: start_minute, start_sec: start_second)
 
-        @campaign_playlist = CampaignPlaylist.new(campaignid: params[:id],
+     if @campaign.startdate > (330.minutes).from_now.to_date
+         @campaign_playlist = CampaignPlaylist.new(campaignid: params[:id],
          cost: 0, start_hr: start_hour,
          start_min: start_minute, start_sec: start_second)
      end
@@ -70,18 +72,16 @@ class CampaignsController < ApplicationController
         @hbnchecked = true
         @pvtchannelchecked = false
         @media_name = "HBN"
-
-
      else
         @hbnchecked = false
         @pvtchannelchecked = true
         @media_name = "Pvt Channel"
      end
-     #allow edit only for date more than today
-     @llowedit = 0
-     if @campaign.startdate > (330.minutes).from_now.to_date
-      @allowedit = 1
-    end
+    #  #allow edit only for date more than today
+    #  @llowedit = 0
+    #  if @campaign.startdate > (330.minutes).from_now.to_date
+    #   @allowedit = 1
+    # end
 
    
 

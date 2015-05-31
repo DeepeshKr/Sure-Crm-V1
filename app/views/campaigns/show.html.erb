@@ -38,7 +38,48 @@
 
 <hr />  
 <h3>Add New Campaign Playlist </h3>
-<%= render partial: "media_tape_heads/quick_add" %>
+ <div role="tabpanel">
+
+  <!-- Nav tabs -->
+  <ul class="nav nav-tabs" role="tablist">
+    <li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">HBN Auto Playlist </a></li>
+    <li role="presentation"><a href="#profile" aria-controls="profile" role="tab" data-toggle="tab">HBN Single Playlist</a></li>
+    <li role="presentation"><a href="#pvt" aria-controls="profile" role="tab" data-toggle="tab">Private Channel Single Playlist</a></li>
+    
+  </ul>
+
+  <!-- Tab panes -->
+<div class="tab-content">
+  <div role="tabpanel" class="tab-pane fade in active" id="home">
+    
+      <% if @hbnchecked == TRUE %>
+  <%= render partial: "media_tape_heads/hbn_auto_add" %>
+     <% else %>
+     <h3>You cant add HBN channels Listing when you have selected private channel </h3>
+     <% end %>
+
+  </div>
+  <div role="tabpanel" class="tab-pane fade" id="profile">
+    <% if @hbnchecked == TRUE %>
+  <%= render partial: "campaign_playlists/insert_playlist" %>
+<% else %>
+<h3>You cant add HBN channels Listing when you have selected private channel </h3>
+<% end %>
+   
+  </div>
+    <div role="tabpanel" class="tab-pane fade" id="pvt">
+    <% if @pvtchannelchecked == TRUE %>
+      <%= render partial: "media_tape_heads/pvt_single_add" %>
+  <% else %>
+     <h3>You cant add private channel Listing when you have selected HBN channels </h3>
+     <% end %>
+  </div>
+  
+</div> <!-- Tab panes end-->
+
+</div>
+ <!-- Nav tabs end -->
+
 
 
 <script>

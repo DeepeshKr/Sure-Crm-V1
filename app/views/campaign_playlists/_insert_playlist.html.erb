@@ -1,0 +1,54 @@
+<div class="alert alert-warning" role="alert">Modifcations here would Reset the Entire List</div>
+<% if @campaign_playlist.present? %>
+ <%= bootstrap_form_for @campaign_playlist, url: insert_playlist_path, :method => :POST do |f| %>
+
+  
+ <%= hidden_field_tag :for_date, @for_date %>
+ <%= f.hidden_field :campaignid %>
+  <%= f.hidden_field :for_date %>
+
+<div class="field">
+   
+        <%= f.select :productvariantid,  options_from_collection_for_select(@productvariant,
+       :id, :productinfo, selected: @campaign_playlist.productvariantid ),
+		         {:prompt => 'No Product Ad', label: "Select the Product Variant if an ad is to be shown or No Product Ad " } %>
+  </div>
+ 
+   <div class="field">
+      <%= f.select :tape_id,  options_from_collection_for_select(@media_tapes,
+       :id, :name, selected: @campaign_playlist.tape_id), { label: "Select the Media Tape, this is mandatory field" } %>
+           <small>In case you dont find tapes listed here add the tape details </small>
+  </div>
+
+ 
+  
+
+  
+  <div class="row">
+ <div class="col-xs-1 col-xs-offset-1">
+ <%= f.select :start_hr, 0..23, label: "Start Hr", :selected => @campaign_playlist.start_hr %>
+ </div>
+  <div class="col-xs-1">
+   <%= f.select :start_min, 0..59, label: "Start Min", :selected => @campaign_playlist.start_min  %>
+ </div>
+  <div class="col-xs-1">
+   <%= f.select :start_sec, 0..59, label: "Start Sec", :selected => @campaign_playlist.start_sec  %>
+ </div>
+ <div class="col-xs-1 col-xs-offset-1">
+   <%= f.text_field :duration_secs, :label => "Duration in Sec:", :placeholder => 'Duration in Seconds', required: true %>
+ </div>
+
+ </div>
+
+ 
+
+<br>  <div class="row">
+  <div class="col-xs-3 col-md-offset-8">
+    <%= f.primary class: "btn btn-primary" %>
+  </div>
+  </div>
+<% end %>
+<% else %>
+<div class="alert alert-danger" role="alert">This campaign is over you cant add any playlist</div>
+
+<% end %>

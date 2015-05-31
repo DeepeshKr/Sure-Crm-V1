@@ -14,46 +14,47 @@
 <table class="table table-hover">
   <thead>
     <tr>
-     <th>Reference Name</th>
+    
       <th>Name</th>
       <th>Telephone</th>
+      <th>DNIS </th>
       <th>State</th>
       <th>Active</th>
       <th>Group</th>
-       <% if (current_user.employee_role.sortorder < 5) %> 
+       <% if (current_user.employee_role.sortorder < 6) %> 
       <th>Commission Type</th>
        <th>Percent </th>
       <th>Daily Charges</th>
       <th>Correction</th>
      <% end %>
-      <th>DNIS </th>
-      <th>Channel </th>
-      <th>Slot</th>
-     
-      <th colspan="1"></th>
+    
+       <% if (current_user.employee_role.sortorder < 6) %> 
+       <th>Ads</th>
+      <% end %>
+      <th colspan=""></th>
     </tr>
   </thead>
 
   <tbody>
     <% @media.each do |medium| %>
       <tr>
-        <td><%= medium.ref_name %></td>
+       
         <td><%= medium.name %></td>
         <td><%= medium.telephone %></td>
+        <td><%= medium.dnis %></td>
         <td><%= medium.state %></td>
         <td><%= medium.active %></td>
         <td><%= medium.media_group.name if medium.media_group %></td>
-         <% if (current_user.employee_role.sortorder < 5) %> 
+         <% if (current_user.employee_role.sortorder < 6) %> 
         <td><%= medium.media_commision.name if medium.media_commision %></td>
          <td><%= medium.value %></td>
         <td><%= medium.daily_charges  %></td>
         <td><%= medium.paid_correction %></td>
-        <% end %>
-        <td><%= medium.dnis %></td>
-        <td><%= medium.channel %></td>
-        <td><%= medium.slot %></td>
-        
-        <td><%= link_to 'Edit', edit_medium_path(medium) %></td>
+        <% end %>     
+         <% if (current_user.employee_role.sortorder < 6) %> 
+        <td><%= link_to 'Add Ad Slots', media_cost_masters_path(media_id: medium.id), class: "btn btn-primary btn-xs" %></td>
+         <% end %>
+        <td><%= link_to 'Edit', edit_medium_path(medium), class: "btn btn-info btn-xs" %></td>
         
       </tr>
     <% end %>

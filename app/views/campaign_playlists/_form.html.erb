@@ -1,3 +1,4 @@
+<div class="alert alert-danger" role="alert">Modifcations using this would Reset the Entire List</div>
 <% if @campaign_playlist.present? %>
 <%= bootstrap_form_for(@campaign_playlist) do |f| %>
   <% if @campaign_playlist.errors.any? %>
@@ -97,7 +98,7 @@
         <label>Auto Re Align Playlist</label>
       </div>
      <div class="col-xs-8">
-      <small>This would ensure playlist order is sequentially saved, not recommended for Private Channels</small>
+      <small>This would ensure playlist order is sequentially saved FROM <strong>ZERO HOURS,</strong> not recommended for Private Channels</small>
      </div>
 </div>
 </div>

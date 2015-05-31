@@ -1,0 +1,59 @@
+
+
+
+ <table class="table table-hover">
+  <thead>
+    <tr>
+    <th>Date</th>
+     <th>Product variant</th>
+
+      <th>Start</th>
+     
+      
+       
+      
+    </tr>
+  </thead>
+
+  <tbody>
+  <% if @old_campaign_playlists.present? then %>
+    <% @old_campaign_playlists.each do |campaign_playlist| %>
+        <tr >
+         <td><%= @earlier_day %></td>
+         
+          <td><%= campaign_playlist.product_variant.name if campaign_playlist.product_variant  %>
+
+          </td>
+          <td><%= campaign_playlist.starttime %></td>
+         
+          
+
+          
+        </tr>
+       
+      <% end %>
+  <% end %>
+  <% if @campaign_playlists.present? then %>
+    <% @campaign_playlists.each do |campaign_playlist| %>
+      <tr >
+       <td><%= @show_date %></td>
+       
+        <td><%= campaign_playlist.product_variant.name if campaign_playlist.product_variant  %>        </td>
+        <td><%= campaign_playlist.starttime %></td>
+       
+       
+
+        
+      </tr>
+      <% end %>
+     <% else %>
+        <tr ><td colspan="4">
+        <h4>No playlist found </h4></td>
+        </tr>
+
+  <% end %> 
+  </tbody>
+  
+</table>
+
+   

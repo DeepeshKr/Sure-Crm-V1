@@ -72,11 +72,19 @@ class MediaTapesController < ApplicationController
   #get "mediatapesforproducts" => 'media_tapes#productwise'
   def productwise
     @media_tapes = MediaTape.where("product_variant_id is null")
+      if @media_tapes.present?
         @name = @media_tapes.first.name
         @internaltapeid = @media_tapes.first.unique_tape_name
         @filename = @media_tapes.first.name
         @duration_secs = @media_tapes.first.duration_secs
         @cost = 0
+      else
+         @name = "No Tape found"
+        @internaltapeid = "No Tape found"
+        @filename = "No Tape found"
+        @duration_secs = "No Tape found"
+        @cost = 0
+      end
     #if params.has_key?[:product_variant_id] 
    if MediaTape.where("product_variant_id = ?", params[:product_variant_id]).present?    
         @media_tapes = MediaTape.where("product_variant_id = ?", params[:product_variant_id])

@@ -35,7 +35,7 @@ class MediaController < ApplicationController
         end
       end
    
-    
+     
   end
 
   def show

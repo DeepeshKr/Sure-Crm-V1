@@ -1,7 +1,7 @@
  <div class="row">
 	 <div class="col-xs-6">
 
-	 <h4>Hourly Orders</h4>
+	 <h4>HBN Hourly Orders</h4>
 	 </div>
 	 <div class="col-xs-6">
 
@@ -52,7 +52,7 @@
    <%= c[:total] %> 
 </td>
 <td >
-<%= link_to "View", orders_list_path(for_date: @or_for_date, start_time: c[:start_time], end_time: c[:end_time]), :target => "_blank" %>
+<%= link_to "View", order_summary_path(for_date: @or_for_date, start_time: c[:start_time], end_time: c[:end_time]), :target => "_blank" %>
 </td>
   </tr> 
   <% @sno += 1 %> 

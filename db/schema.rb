@@ -47,7 +47,7 @@ ActiveRecord::Schema.define(version: 20150528064822) do
     t.integer  "productvariantid", limit: 16, precision: 38
     t.string   "filename"
     t.text     "description"
-    t.decimal  "cost"
+    t.decimal  "cost",                  precision: 16,  scale: 2
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "channeltapeid"
@@ -79,7 +79,7 @@ ActiveRecord::Schema.define(version: 20150528064822) do
     t.datetime "enddate"
     t.integer  "mediumid",      limit: 16, precision: 38
     t.text     "description"
-    t.decimal  "cost"
+    t.decimal  "cost",                  precision: 16,  scale: 2
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "total_cost",    limit: 16, precision: 38
@@ -239,7 +239,7 @@ ActiveRecord::Schema.define(version: 20150528064822) do
     t.string   "dnis",       limit: 50
     t.string   "landmark",   limit: 50
     t.string   "chqdisc",    limit: 50
-    t.integer  "totalamt",   limit: 16,  precision: 38
+    t.integer  "totalamt",   precision: 16,  scale: 2
     t.datetime "trandate"
     t.string   "uae_status", limit: 50
     t.string   "emischeme",  limit: 50
@@ -425,7 +425,7 @@ ActiveRecord::Schema.define(version: 20150528064822) do
     t.datetime "updated_at"
     t.string   "ref_name"
     t.integer  "media_commision_id", limit: 16, precision: 38
-    t.decimal  "value"
+    t.decimal  "value",              precision: 16,  scale: 8
     t.integer  "media_group_id",     limit: 16, precision: 38
     t.string   "dnis"
     t.string   "channel"
@@ -510,11 +510,11 @@ ActiveRecord::Schema.define(version: 20150528064822) do
     t.string   "external_ref_no"
     t.integer  "productvariant_id",        limit: 16, precision: 38
     t.integer  "pieces",                   limit: 16, precision: 38
-    t.decimal  "subtotal"
-    t.decimal  "taxes"
-    t.decimal  "shipping"
-    t.decimal  "codcharges"
-    t.decimal  "total"
+    t.decimal  "subtotal",                  precision: 16,  scale: 2
+    t.decimal  "taxes",                     precision: 16,  scale: 2                      
+    t.decimal  "shipping",                  precision: 16,  scale: 2
+    t.decimal  "codcharges",                precision: 16,  scale: 2
+    t.decimal  "total",                     precision: 16,  scale: 2
     t.integer  "orderlinestatusmaster_id", limit: 16, precision: 38
     t.integer  "productline_id",           limit: 16, precision: 38
     t.text     "description"
@@ -537,11 +537,11 @@ ActiveRecord::Schema.define(version: 20150528064822) do
     t.string   "billno"
     t.string   "external_order_no"
     t.integer  "pieces",                 limit: 16, precision: 38
-    t.decimal  "subtotal"
-    t.decimal  "taxes"
-    t.decimal  "shipping"
-    t.decimal  "codcharges"
-    t.decimal  "total"
+    t.decimal  "subtotal",               precision: 16,  scale: 2
+    t.decimal  "taxes",                  precision: 16,  scale: 2
+    t.decimal  "shipping",               precision: 16,  scale: 2
+    t.decimal  "codcharges",             precision: 16,  scale: 2
+    t.decimal  "total",                  precision: 16,  scale: 2
     t.integer  "order_status_master_id", limit: 16, precision: 38
     t.integer  "orderpaymentmode_id",    limit: 16, precision: 38
     t.integer  "campaign_playlist_id",   limit: 16, precision: 38
@@ -587,7 +587,7 @@ ActiveRecord::Schema.define(version: 20150528064822) do
     t.text     "description"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.decimal  "charges"
+    t.decimal  "charges",                  precision: 16,  scale: 2
   end
 
   create_table "product_active_codes", force: :cascade do |t|
@@ -599,7 +599,7 @@ ActiveRecord::Schema.define(version: 20150528064822) do
 
   create_table "product_categories", force: :cascade do |t|
     t.string   "name"
-    t.decimal  "vatpercent"
+    t.decimal  "vatpercent",                  precision: 16,  scale: 2
     t.string   "description"
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -646,18 +646,18 @@ ActiveRecord::Schema.define(version: 20150528064822) do
     t.integer  "productcategoryid",      limit: 16, precision: 38
     t.integer  "productinventorycodeid", limit: 16, precision: 38
     t.string   "barcode"
-    t.decimal  "price"
-    t.decimal  "taxes"
-    t.decimal  "total"
+    t.decimal  "price",                  precision: 16,  scale: 2
+    t.decimal  "taxes",                  precision: 16,  scale: 2
+    t.decimal  "total",                  precision: 16,  scale: 2
     t.string   "extproductcode"
     t.text     "description"
     t.integer  "productactivecodeid",    limit: 16, precision: 38
-    t.decimal  "costprice"
-    t.decimal  "costtaxes"
-    t.decimal  "costtotal"
+    t.decimal  "costprice",                  precision: 16,  scale: 2
+    t.decimal  "costtaxes",                  precision: 16,  scale: 2
+    t.decimal  "costtotal",                  precision: 16,  scale: 2
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.decimal  "shipping"
+    t.decimal  "shipping",                  precision: 16,  scale: 2
     t.integer  "product_sell_type_id",   limit: 16, precision: 38
   end
 
@@ -752,7 +752,7 @@ ActiveRecord::Schema.define(version: 20150528064822) do
 
   create_table "product_training_headings", force: :cascade do |t|
     t.string   "name"
-    t.integer  "sortorder",  limit: 16, precision: 38
+    t.integer  "sortorder",  limit: 3, precision: 6
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -777,13 +777,13 @@ ActiveRecord::Schema.define(version: 20150528064822) do
     t.string   "name"
     t.integer  "productmasterid",      limit: 16, precision: 38
     t.string   "variantbarcode"
-    t.decimal  "price"
-    t.decimal  "taxes"
-    t.decimal  "total"
+    t.decimal  "price",                  precision: 16,  scale: 2
+    t.decimal  "taxes",                  precision: 16,  scale: 2
+    t.decimal  "total",                  precision: 16,  scale: 2
     t.string   "extproductcode"
     t.text     "description"
     t.integer  "activeid",             limit: 16, precision: 38
-    t.decimal  "shipping"
+    t.decimal  "shipping",                  precision: 16,  scale: 2
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "product_sell_type_id", limit: 16, precision: 38
@@ -813,7 +813,7 @@ ActiveRecord::Schema.define(version: 20150528064822) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
-
+  #not required
   create_table "sequence_check", id: false, force: :cascade do |t|
     t.integer "ordernum",      limit: 8,  precision: 10
     t.string  "customer_name", limit: 50

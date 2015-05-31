@@ -1,0 +1,36 @@
+<%= bootstrap_form_for(@media_cost_master) do |f| %>
+  <div class="field">
+   
+    <%= f.text_field :name, placeholder: "e.g. 2 minuter, 12 minutes, 30 minutes", label: "Named Duration of show ", :required => 'true' %>
+  </div>
+   <div class="field">
+     <%= f.select(:media_id, 
+    options_from_collection_for_select(@pvtmedialist, :id, :mediainfo, selected: @media_cost_master.media_id), 
+    {:label => "Select Media"}, :class => "form-control")  %>
+    <small> Only media which we pay in advance show up here </small>
+   </div>
+ <div class="row">
+  <div class="col-xs-2">
+  
+    <%= f.text_field :duration_secs, placeholder: "e.g. 5660",  label: "Total Duration in Sec", :required => 'true' %>
+   <small> h x 60 x 60 + m x 60 + s  </small>
+  </div>
+  <div class="col-xs-3">
+       <%= f.text_field :total_cost, placeholder: "e.g. 5000.30", label: "Total Cost in Rupees", :required => 'true'  %>
+  </div>
+  <div class="col-xs-7">
+      
+  </div>
+  </div>
+
+  <div class="field">
+  
+    <%= f.text_area :description %>
+  </div>
+  <div class="row">
+  <div class="col-xs-3 col-md-offset-7">
+    <%= f.submit class:"btn btn-primary" %>
+  </div>
+  </div>
+
+<% end %>

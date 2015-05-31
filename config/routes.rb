@@ -16,6 +16,7 @@ Rails.application.routes.draw do
   get 'sales_report/hourly'
   get 'hourly_report' => 'sales_report#hourly'
   get 'sales_report/daily'
+  get 'daily_report' => 'sales_report#daily'
   get 'sales_report/channel'
   get 'channel_report' => 'sales_report#channel'
   get 'sales_report/employee'
@@ -24,6 +25,8 @@ Rails.application.routes.draw do
   get 'product_report' => 'sales_report#product'
   get 'sales_report/show'
   get 'show_report' => 'sales_report#show'
+  get 'sales_report/order_summary'
+  get 'order_summary' => 'sales_report#order_summary'
   get 'sales_report/orders'
   get 'orders_list' => 'sales_report#orders'
 
@@ -184,7 +187,8 @@ Rails.application.routes.draw do
   get 'tape_list' => 'media_tape_heads#tape_list'
 
   #post 'campaign_playlists/create_playlist_with_media_tape_head'
-  post 'create_playlist' => 'campaign_playlists#create_playlist_with_media_tape_head'
+  post 'insert_playlist' => 'campaign_playlists#campaign_playlist_insert'
+   post 'create_playlist' => 'campaign_playlists#create_playlist_with_media_tape_head'
   #post 'neworder' => 'create_order#index'
 
   #get 'showcampaign' => 'campaigns#show'
@@ -315,6 +319,6 @@ mount Upmin::Engine => '/admin'
   get    'login'   => 'sessions#new'
   post   'login'   => 'sessions#create'
   delete 'logout'  => 'sessions#destroy'
-
+ 
  
 end

@@ -1,0 +1,58 @@
+<%= form_tag("/create_playlist", method: "post") do |f| %>
+
+<%= hidden_field_tag :for_date, @for_date %>
+
+	<div class="well well-sm">
+	
+		<div class="row">
+
+			<div class="col-xs-4">
+			 <%= radio_button_tag 'time_slot', "auto", @hbnchecked  %>
+			</div>
+			<div class="col-xs-8">
+			<label>HBN Auto Add</label>	
+			</div>
+		</div>
+	
+
+	
+	</div>
+
+
+
+
+<br>
+<div class="row">
+ <%= hidden_field_tag :campaignid, @campaignid %>
+ 
+ 
+
+
+	<div class="col-xs-12">
+		<%= collection_select(nil, :product_variant_id,  @productvariantlist,  :id, :name, {:prompt   => "Select a Product Variant"}, {:id => 'variants_select', :class => "form-control"}) %>
+
+	</div>
+
+</div>
+
+<br/>
+<div class="row">
+	<div class="col-xs-12">
+		<%= collection_select(nil, :media_tape_head_id, @media_tape_head_list, :id, :name, {:prompt   => "Select an Media Tape Head"}, {:id => 'tapes_select', :class => "form-control"}) %>
+
+	</div>
+
+</div>
+<hr>
+<div id='tape_list'>
+
+
+</div>
+
+
+
+<% end %>
+
+
+
+ 

@@ -6,15 +6,10 @@ class SalesReportController < ApplicationController
         @sno = 1
         @datelist ||= []
         employeeunorderlist ||= []
-        # if params[:for_date].present? 
-        #   for_date =  Date.strptime(params[:for_date], "%m/%d/%Y")
-        #   from_date = Date.current - 30.days
-        #   to_date = Date.current
-        # else
-        #   from_date = Date.current - 30.days
-        #   to_date = Date.current
-        # end
-        
+       
+         #media segregation only HBN
+          media_segments
+
           from_date = Date.current - 3.days #30.days
           to_date = Date.current
           to_date.downto(from_date).each do |day|
@@ -24,7 +19,8 @@ class SalesReportController < ApplicationController
           for_date = day # Date.
           @or_for_date = for_date
            
-          orderlist = OrderMaster.where('ORDER_STATUS_MASTER_ID > 10002').where('TRUNC(orderdate) = ?',for_date)
+          orderlist = OrderMaster.where('ORDER_STATUS_MASTER_ID > 10002')
+          .where('TRUNC(orderdate) = ?',for_date)
           ccvalue = orderlist.where(orderpaymentmode_id: 10000).sum(:total)
           ccorders = orderlist.where(orderpaymentmode_id: 10000).count()
           codorders = orderlist.where(orderpaymentmode_id: 10001).count()
@@ -55,13 +51,16 @@ class SalesReportController < ApplicationController
     
         from_date = for_date.beginning_of_day - 300.minutes
         to_date = for_date.end_of_day - 300.minutes
+        #media segregation only HBN
+        media_segments
+
         #start loop
         
         (from_date.to_datetime.to_i .. to_date.to_datetime.to_i).step(30.minutes) do |date|
          
          halfhourago = Time.at(date - 30.minutes) 
 
-          orderlist = OrderMaster.where('ORDER_STATUS_MASTER_ID > 10002').where('orderdate >= ? AND orderdate <= ?', halfhourago, Time.at(date))
+          orderlist = OrderMaster.where('ORDER_STATUS_MASTER_ID > 10002').where(media_id: @hbnlist).where('orderdate >= ? AND orderdate <= ?', halfhourago, Time.at(date))
           ccvalue = orderlist.where(orderpaymentmode_id: 10000).sum(:total)
           ccorders = orderlist.where(orderpaymentmode_id: 10000).count()
           codorders = orderlist.where(orderpaymentmode_id: 10001).count()
@@ -83,17 +82,20 @@ class SalesReportController < ApplicationController
   def daily
 
        @datelist ||= []
-       from_date = Date.current - 10.days
+       from_date = Date.current - 30.days
       (from_date..to_date).each do |day|
         @datelist <<  day.strftime('%d-%b-%y')
       end
+
+      #media segregation only HBN
+      media_segments
 
       @sno = 1
     if params[:for_date].present? 
       #@summary ||= []
       @or_for_date = params[:for_date]
       for_date =  Date.strptime(params[:for_date], "%m/%d/%Y")
-      order_masters = OrderMaster.where('TRUNC(orderdate) = ?',for_date).where('ORDER_STATUS_MASTER_ID > 10002').select(:employee_id).distinct
+      order_masters = OrderMaster.where('TRUNC(orderdate) = ?',for_date).where('ORDER_STATUS_MASTER_ID > 10002').where(media_id: @hbnlist).select(:employee_id).distinct
       
       @orderdate = "Searched for #{for_date} found #{order_masters.count} agents!"
       employeeunorderlist ||= []
@@ -102,7 +104,7 @@ class SalesReportController < ApplicationController
         e = o.employee_id
        
         name = (Employee.find(e).first_name  || "NA" if Employee.find(e).first_name.present?)
-        orderlist = OrderMaster.where('ORDER_STATUS_MASTER_ID > 10002').where('TRUNC(orderdate) = ?',for_date).where(employee_id: e)
+        orderlist = OrderMaster.where('ORDER_STATUS_MASTER_ID > 10002').where('TRUNC(orderdate) = ?',for_date).where(media_id: @hbnlist).where(employee_id: e)
         timetaken = orderlist.sum(:codcharges)
         ccvalue = orderlist.where(orderpaymentmode_id: 10000).sum(:total)
         ccorders = orderlist.where(orderpaymentmode_id: 10000).count()
@@ -131,20 +133,18 @@ class SalesReportController < ApplicationController
       @or_for_date = params[:for_date]
       for_date =  Date.strptime(params[:for_date], "%Y-%m-%d")
       #media segregation
-      hbnlist = Medium.where(media_group_id: 10000)
-      paid = Medium.where(media_commision_id: 10000).where("media_group_id IS NULL OR media_group_id <> 10000")
-      others = Medium.where('media_commision_id IS NULL').where("media_group_id IS NULL OR media_group_id <> 10000")
+      media_segments
 
+      hbn_order_masters = OrderMaster.where('TRUNC(orderdate) = ?',for_date).where('ORDER_STATUS_MASTER_ID > 10002').where(media_id: @hbnlist).select(:media_id).distinct
+      paid_order_masters = OrderMaster.where('TRUNC(orderdate) = ?',for_date).where('ORDER_STATUS_MASTER_ID > 10002').where(media_id: @paid).select(:media_id).distinct
+      other_order_masters = OrderMaster.where('TRUNC(orderdate) = ?',for_date).where('ORDER_STATUS_MASTER_ID > 10002').where(media_id: @others).select(:media_id).distinct
 
-      hbn_order_masters = OrderMaster.where('TRUNC(orderdate) = ?',for_date).where('ORDER_STATUS_MASTER_ID > 10002').where(media_id: hbnlist).select(:media_id).distinct
-      paid_order_masters = OrderMaster.where('TRUNC(orderdate) = ?',for_date).where('ORDER_STATUS_MASTER_ID > 10002').where(media_id: paid).select(:media_id).distinct
-      other_order_masters = OrderMaster.where('TRUNC(orderdate) = ?',for_date).where('ORDER_STATUS_MASTER_ID > 10002').where(media_id: others).select(:media_id).distinct
-
-      total_hbn_order_masters = OrderMaster.where('TRUNC(orderdate) = ?',for_date).where('ORDER_STATUS_MASTER_ID > 10002').where(media_id: hbnlist)
-      total_paid_order_masters = OrderMaster.where('TRUNC(orderdate) = ?',for_date).where('ORDER_STATUS_MASTER_ID > 10002').where(media_id: paid)
-      total_other_order_masters = OrderMaster.where('TRUNC(orderdate) = ?',for_date).where('ORDER_STATUS_MASTER_ID > 10002').where(media_id: others)
+      total_hbn_order_masters = OrderMaster.where('TRUNC(orderdate) = ?',for_date).where('ORDER_STATUS_MASTER_ID > 10002').where(media_id: @hbnlist)
+      total_paid_order_masters = OrderMaster.where('TRUNC(orderdate) = ?',for_date).where('ORDER_STATUS_MASTER_ID > 10002').where(media_id: @paid)
+      total_other_order_masters = OrderMaster.where('TRUNC(orderdate) = ?',for_date).where('ORDER_STATUS_MASTER_ID > 10002').where(media_id: @others)
       
-      @orderdate = "Orders for #{for_date}: #{total_hbn_order_masters.count} HBN Channel, #{total_paid_order_masters.count} Paid Channel and #{total_other_order_masters.count} Other Channel!"
+
+      @orderdate = "Orders for #{for_date}: HBN Channel #{total_hbn_order_masters.count} for Rs. #{total_hbn_order_masters.sum(:total)}, Paid channels #{total_paid_order_masters.count} for Rs. #{total_paid_order_masters.sum(:total)} and Free Channel #{total_other_order_masters.count} for Rs. #{total_other_order_masters.sum(:total)}!"
       
       hbn_order_list ||= []
       num = 1
@@ -268,12 +268,9 @@ class SalesReportController < ApplicationController
       #@for_date = @campaign.startdate
      @campaign_playlists =  CampaignPlaylist.joins(:campaign).where("campaigns.startdate = ?", for_date).order(:start_hr, :start_min, :start_sec).where(list_status_id: 10000)
      
-      hbnlist = Medium.where(media_group_id: 10000)
-      paid = Medium.where(media_commision_id: 10000).where("media_group_id IS NULL OR media_group_id <> 10000")
-      others = Medium.where('media_commision_id IS NULL').where("media_group_id IS NULL OR media_group_id <> 10000")
+     media_segments
 
-
-      hbn_order_masters = OrderMaster.joins(:medium).where('TRUNC(orderdate) = ?',for_date).where('ORDER_STATUS_MASTER_ID > 10002').where(media_id: hbnlist)
+      hbn_order_masters = OrderMaster.joins(:medium).where('TRUNC(orderdate) = ?',for_date).where('ORDER_STATUS_MASTER_ID > 10002').where(media_id: @hbnlist)
     
       @hbn_ccvalue = hbn_order_masters.where(orderpaymentmode_id: 10000).sum(:total)
       @hbn_ccorders = hbn_order_masters.where(orderpaymentmode_id: 10000).count()
@@ -285,7 +282,15 @@ class SalesReportController < ApplicationController
   
   end
 
-  def orders
+  def order_summary
+    #aggregation based on products 
+   @sno = 1
+    showproducts
+    shows_between
+  
+  end #end of def  
+
+  def orderlisting
     @t = (330.minutes).from_now
     @sno = 1
     for_date = (330.minutes).from_now.to_date
@@ -306,7 +311,7 @@ class SalesReportController < ApplicationController
     if params.has_key?(:media)
       if params[:media] == 'hbn'
           hbnlist = Medium.where(media_group_id: 10000)
-          @order_masters = @order_masters.where(media_id: hbnlist).order("orderdate")
+          @order_masters = @order_masters.where(media_id: @hbnlist).order("orderdate")
           @orderlistabout = "for selected playlist HBN"
           if params.has_key?(:missed)
             @order_masters = @order_masters.where('campaign_playlist_id IS NULL').order("orderdate")
@@ -327,8 +332,6 @@ class SalesReportController < ApplicationController
   
   end #end of def  
 
- 
-
  private
 
  def shows_between
@@ -338,26 +341,51 @@ class SalesReportController < ApplicationController
      for_date =  Date.strptime(params[:for_date], "%Y-%m-%d")
     end
 
-    if params.has_key?(:start_time) && params.has_key?(:end_time)
-      start_time = Time.strptime(params[:start_time], "%Y-%m-%d %H:%M") 
-      end_time = Time.strptime(params[:end_time], "%Y-%m-%d %H:%M") 
+    #media segregation only HBN
+    media_segments
 
-       @campaign_playlists =  CampaignPlaylist.joins(:campaign).where('campaigns.startdate = ?', for_date)
-       .where("start_hr >= ? and start_min >= ? and end_hr <= ? end_min <= ?", start_time.hour, start_time.min, end_time.hour, end_time.min)
-       .order(:start_hr, :start_min, :start_sec).where(list_status_id: 10000)
-     
-      if start_time.hour < 2
+    @show_date = for_date.strftime("%d-%b-%Y")
+
+    if params.has_key?(:start_time) && params.has_key?(:end_time)
+      
+       start_time = Time.strptime(params[:start_time], "%Y-%m-%d %H:%M") 
+        end_time = Time.strptime(params[:end_time], "%Y-%m-%d %H:%M") 
+
+        
+        if start_time.hour < 2
         #show previous day shows as well
-        previous_start_hr = 22
+        previous_start_hr = 21
         previous_start_min = 0 
         previous_end_hr = 23
         previous_end_min = 59
         previous_day = for_date - 1.day
-        @campaign_playlists =  CampaignPlaylist.joins(:campaign).where('campaigns.startdate = ?', previous_day)
-        .where("start_hr >= ? and start_min >= ? and end_hr <= ? end_min <= ?", previous_start_hr, previous_start_min, previous_end_hour, previous_end_min)
-        .order(:start_hr, :start_min, :start_sec).where(list_status_id: 10000)   
-      end
+
+        @earlier_day = previous_day.strftime("%d-%b-%Y")
+
+        @old_campaign_playlists =  CampaignPlaylist.joins(:campaign)
+        .where("campaigns.startdate = ?", for_date)
+       .where("start_hr >= ? and start_min >= ? and end_hr <= ? and end_min <= ?", previous_start_hr, previous_start_min, previous_end_hr, previous_end_min)
+       .order(:start_hr, :start_min, :start_sec).where(list_status_id: 10000)
+        
+        else
+        start_time = Time.strptime(params[:start_time], "%Y-%m-%d %H:%M") 
+        end_time = Time.strptime(params[:end_time], "%Y-%m-%d %H:%M") 
+
+        start_time = start_time - 2.hours
+        end_time = end_time - 3.hours 
+        end
      
+
+      @Show_start_time = start_time.strftime("%H:%M")
+      @Show_end_time = end_time.strftime("%H:%M")
+
+      # @campaign_playlists =  CampaignPlaylist.where(list_status_id: 10000).limit(10)
+
+       @campaign_playlists =  CampaignPlaylist.where("start_hr >= ? and start_min >= ? and end_hr <= ? and end_min <= ?", start_time.hour, start_time.min, end_time.hour, end_time.min)
+       .joins(:campaign).where("campaigns.startdate = ?", for_date).where('campaigns.mediumid IN (?)', @hbnlist)
+      .order(:start_hr, :start_min, :start_sec).where(list_status_id: 10000)
+     
+      
 
     end
    
@@ -372,16 +400,26 @@ class SalesReportController < ApplicationController
        for_date =  Date.strptime(params[:for_date], "%Y-%m-%d")
        @orderdate = params[:for_date]
 
-      order_masters = OrderMaster.where('TRUNC(orderdate) = ?',for_date).where('ORDER_STATUS_MASTER_ID > 10002').select(:id).distinct
-      order_masters_cod = OrderMaster.where(orderpaymentmode_id: 10001).where('TRUNC(orderdate) = ?',for_date).where('ORDER_STATUS_MASTER_ID > 10002').select(:id).distinct
-      order_masters_cc = OrderMaster.where(orderpaymentmode_id: 10000).where('TRUNC(orderdate) = ?',for_date).where('ORDER_STATUS_MASTER_ID > 10002').select(:id).distinct
+       @show_date = for_date
+
+      #media segregation only HBN
+      media_segments
+
+      order_masters = OrderMaster.where('TRUNC(orderdate) = ?',for_date).where('ORDER_STATUS_MASTER_ID > 10002').select(:id).where(media_id: @hbnlist).distinct
+      order_masters_cod = OrderMaster.where(orderpaymentmode_id: 10001).where('TRUNC(orderdate) = ?',for_date).where('ORDER_STATUS_MASTER_ID > 10002').where(media_id: @hbnlist).select(:id).distinct
+      order_masters_cc = OrderMaster.where(orderpaymentmode_id: 10000).where('TRUNC(orderdate) = ?',for_date).where('ORDER_STATUS_MASTER_ID > 10002').where(media_id: @hbnlist).select(:id).distinct
       
        if params.has_key?(:start_time) && params.has_key?(:end_time)
         start_time = Time.strptime(params[:start_time], "%Y-%m-%d %H:%M") 
         end_time = Time.strptime(params[:end_time], "%Y-%m-%d %H:%M") 
-        order_masters = OrderMaster.where('orderdate >= ? AND orderdate <= ?', start_time, end_time).where('ORDER_STATUS_MASTER_ID > 10002').select(:id).distinct
-        order_masters_cod = OrderMaster.where(orderpaymentmode_id: 10001).where('orderdate >= ? AND orderdate <= ?', start_time, end_time).where('ORDER_STATUS_MASTER_ID > 10002').select(:id).distinct
-        order_masters_cc = OrderMaster.where(orderpaymentmode_id: 10000).where('orderdate >= ? AND orderdate <= ?', start_time, end_time).where('ORDER_STATUS_MASTER_ID > 10002').select(:id).distinct
+
+        @Show_start_time = start_time.strftime("%H:%M")
+        @Show_end_time = end_time.strftime("%H:%M")
+
+
+        order_masters = OrderMaster.where('orderdate >= ? AND orderdate <= ?', start_time, end_time).where('ORDER_STATUS_MASTER_ID > 10002').where(media_id: @hbnlist).select(:id).distinct
+        order_masters_cod = OrderMaster.where(orderpaymentmode_id: 10001).where('orderdate >= ? AND orderdate <= ?', start_time, end_time).where('ORDER_STATUS_MASTER_ID > 10002').where(media_id: @hbnlist).select(:id).distinct
+        order_masters_cc = OrderMaster.where(orderpaymentmode_id: 10000).where('orderdate >= ? AND orderdate <= ?', start_time, end_time).where('ORDER_STATUS_MASTER_ID > 10002').where(media_id: @hbnlist).select(:id).distinct
        end
 
       regular_product_variant_list = ProductVariant.where(product_sell_type_id: 10000)
@@ -455,5 +493,13 @@ class SalesReportController < ApplicationController
         end
         @basic_product_list_orderlist = basic_product_list_orderlist.sort_by{|c| c[:total]}.reverse  
      end
+ end
+ private
+
+ def media_segments
+  @hbnlist = Medium.where(media_group_id: 10000).pluck(:id)
+  @paid = Medium.where(media_commision_id: 10000).where("media_group_id IS NULL OR media_group_id <> 10000").select("id")
+  @others = Medium.where('media_commision_id IS NULL').where("media_group_id IS NULL OR media_group_id <> 10000").select("id")
+
  end
 end
