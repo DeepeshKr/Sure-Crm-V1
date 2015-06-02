@@ -198,7 +198,9 @@ Rails.application.routes.draw do
 
   #post 'campaign_playlists/create_playlist_with_media_tape_head'
   post 'insert_playlist' => 'campaign_playlists#campaign_playlist_insert'
-   post 'create_playlist' => 'campaign_playlists#create_playlist_with_media_tape_head'
+  post 'create_playlist' => 'campaign_playlists#create_playlist_with_media_tape_head'
+   post 'updatecampaigntimings' => 'campaign_playlists#updatecampaigntimings'
+
   #post 'neworder' => 'create_order#index'
 
   #get 'showcampaign' => 'campaigns#show'

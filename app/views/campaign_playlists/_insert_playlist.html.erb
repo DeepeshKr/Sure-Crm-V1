@@ -48,6 +48,16 @@
   </div>
   </div>
 <% end %>
+<br>
+<br>  
+<div class="row">
+ <%= bootstrap_form_tag url: updatecampaigntimings, :method => :POST do |f| %>
+  <%= hidden_field_tag :campaignid, @campaignid %>
+  <div class="col-xs-3 col-md-offset-8">
+    <%= submit_tag "Reset Playlist", name: nil,  class: "btn btn-warning" %>
+  
+  </div>
+</div>
 <% else %>
 <div class="alert alert-danger" role="alert">This campaign is over you cant add any playlist</div>
 
