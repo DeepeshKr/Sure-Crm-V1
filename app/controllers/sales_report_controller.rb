@@ -372,7 +372,7 @@ class SalesReportController < ApplicationController
         end_time = Time.strptime(params[:end_time], "%Y-%m-%d %H:%M") 
 
         start_time = start_time - 2.hours
-        end_time = end_time - 3.hours 
+        end_time = end_time 
         end
      
 
