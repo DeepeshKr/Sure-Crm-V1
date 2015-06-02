@@ -1,5 +1,5 @@
 class ProductReportController < ApplicationController
-	before_action { protect_controllers_specific(4) } 
+	#before_action { protect_controllers_specific(4) } 
 	before_action :get_variables, only: [:list, :search, :details]
 	before_action :dropdowns, only: [:list, :search, :details]
 	respond_to :html
