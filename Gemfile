@@ -95,6 +95,21 @@ gem 'upmin-admin'
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
 
+#rails charting http://ankane.github.io/chartkick/
+#gem "chartkick"
+
+#dependencies for gruff
+# need to install on ubuntu sudo apt-get install libmagickwand-dev imagemagick
+gem 'rmagick', '~> 2.15.1'
+# gem 'rake-compiler', '~> 0.9.5'
+# gem 'rspec', '~> 3.2.0'
+# gem 'rubocop', '~> 0.31.0'
+
+#https://github.com/topfunky/gruff
+gem 'gruff'
+#to group https://github.com/ankane/groupdate
+#gem 'groupdate'
+
 # Use debugger
 # gem 'debugger', group: [:development, :test]
 #gem 'request-log-analyzer'

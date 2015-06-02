@@ -1,5 +1,15 @@
 Rails.application.routes.draw do
 
+  get 'sales_ppo_report/summary'
+
+  get 'sales_ppo_report/daily'
+
+  get 'sales_ppo_report/hourly'
+
+  get 'sales_ppo_report/show'
+
+  get 'sales_ppo_report/channel'
+
   resources :tax_rates
 
   get 'packing_cost/list'
