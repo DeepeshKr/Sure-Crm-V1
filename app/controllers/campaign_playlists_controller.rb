@@ -340,7 +340,7 @@ end
  end
 
  def updatecampaigntimings
-   if params.has_key?
+   if params.has_key?(:campaignid)
     campaignid = params[:campaignid]
     update_timings(campaignid)
      @campaign = Campaign.find(campaignid)
