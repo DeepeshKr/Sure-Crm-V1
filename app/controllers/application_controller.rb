@@ -69,7 +69,7 @@ class ApplicationController < ActionController::Base
     if logged_in?
       currentrolsortno = current_user.employee_role.sortorder || 20
       userrole = current_user.employee_role.name
-      if current_user.employee_role.sortorder >= authorised_for
+      if current_user.employee_role.sortorder.to_i >= authorised_for.to_i
         #   flash[:notice] = "Authorised to view as #{userrole}"
         # else
         flash[:notice] = "Not Authorised to view as #{userrole}"
@@ -82,14 +82,18 @@ class ApplicationController < ActionController::Base
     if logged_in?
       currentrolsortno = current_user.employee_role.sortorder || 20
       userrole = current_user.employee_role.name
-      if current_user.employee_role.sortorder == authorised_for || current_user.employee_role.sortorder > 3
+      if currentrolsortno.to_i != authorised_for.to_i #|| current_user.employee_role.sortorder.to_i > 3
         #  
         flash[:notice] = "Not Authorised to view as #{userrole}"
-        redirect_to login_url(return_to: request.original_url) # halts request cycle  
+        return redirect_to login_url(return_to: request.original_url) # halts request cycle  
        # else
        #  flash[:notice] = "Authorised to view as #{userrole}"
-         
       end
+      # if currentrolsortno.to_i > 3
+      #       flash[:notice] = "Not Authorised to view as #{userrole}"
+      #   return redirect_to login_url(return_to: request.original_url) # halts request cycle  
+     
+      # end
     end
   end
 
