@@ -435,19 +435,19 @@ end
           flash[:success] = " Media #{medianame} added " 
           return redirect_to review_path(:order_id => @order_master.id)
         end
+       
+        if @order_master.customer_address.state.present?
+          @medialist = @medialist.where(state: @order_master.customer_address.state)
+           
+           if @medialist.present? 
+            @order_master.update(media_id: @medialist.first.id)
+            medianame = @medialist.first.name
+            add_product_to_campaign(@medialist.first.id)
 
-        @medialist = @medialist.where(state: @order_master.customer_address.state)
-          
-        if @medialist.present?  
-          @order_master.update(media_id: @medialist.first.id)
-          medianame = @medialist.first.name
-            
-          add_product_to_campaign(@medialist.first.id)
-
-          flash[:success] = " Media #{medianame} with state #{@order_master.customer_address.state.upcase} added " 
-          return redirect_to review_path(:order_id => @order_master.id)
-
-        end 
+            flash[:success] = " Media #{medianame} with state #{@order_master.customer_address.state.upcase} added " 
+            return redirect_to review_path(:order_id => @order_master.id)
+          end 
+        end
 
         # if Medium.where(active:1).where('dnis = ? and state = ?', @order_master.calledno, @order_master.customer_address.state.upcase).present?
         #   @newmedialist = Medium.where(active: 1).where('dnis = ? and state = ?', @order_master.calledno, @order_master.customer_address.state.upcase)  
