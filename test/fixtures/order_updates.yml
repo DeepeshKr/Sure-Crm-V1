@@ -1,0 +1,21 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  order_id: 1
+  orderno: MyString
+  order_date: 2015-06-04
+  process_date: 2015-06-04
+  shipped_date: 2015-06-04
+  return_date: 2015-06-04
+  cancel_date: 2015-06-04
+  paid_date: 2015-06-04
+
+two:
+  order_id: 1
+  orderno: MyString
+  order_date: 2015-06-04
+  process_date: 2015-06-04
+  shipped_date: 2015-06-04
+  return_date: 2015-06-04
+  cancel_date: 2015-06-04
+  paid_date: 2015-06-04

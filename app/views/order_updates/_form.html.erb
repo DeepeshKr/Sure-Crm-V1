@@ -1,0 +1,18 @@
+<%= simple_form_for(@order_update) do |f| %>
+  <%= f.error_notification %>
+
+  <div class="form-inputs">
+    <%= f.input :order_id %>
+    <%= f.input :orderno %>
+    <%= f.input :order_date %>
+    <%= f.input :process_date %>
+    <%= f.input :shipped_date %>
+    <%= f.input :return_date %>
+    <%= f.input :cancel_date %>
+    <%= f.input :paid_date %>
+  </div>
+
+  <div class="form-actions">
+    <%= f.button :submit %>
+  </div>
+<% end %>

@@ -56,17 +56,17 @@ class ProductReportController < ApplicationController
 		end
   
 	  #retails sales based on paid date
-	  if params[:paid].present?   
-		  if params[:paid] = "yes"
-			  #code
-			  @paid = "yes"
-			  @type = "Paid "
-			  @vpp = VPP.where(prod: prod).where("TRUNC(paiddate) >= ? and TRUNC(paiddate) <= ?", from_date, to_date)	
-		  end
-	  else
-			  @type = "Sold "
-			  @vpp = VPP.where(prod: prod).where("TRUNC(orderdate) >= ? and TRUNC(orderdate) <= ?", from_date, to_date)
-	  end
+	  # if params[:paid].present?   
+		 #  if params[:paid] = "yes"
+			#   #code
+			#   @paid = "yes"
+			#   @type = "Paid "
+			#   @vpp = VPP.where(prod: prod).where("TRUNC(paiddate) >= ? and TRUNC(paiddate) <= ?", from_date, to_date)	
+		 #  end
+	  # else
+			  @type = "Shipped Date "
+			  @vpp = VPP.where(prod: prod).where("TRUNC(shdate) >= ? and TRUNC(shdate) <= ?", from_date, to_date)
+	  # end
   
 	  if @vpp.present?
 		  #Retail Sales
@@ -107,6 +107,14 @@ class ProductReportController < ApplicationController
 		  #pieces
 		  @branchsalespieces = @tempinv_newwlsdet.sum(:quantity)
 		end
+
+		#retail returns
+
+
+		#wholesale returns
+
+
+		#branchsale returns
 	
 	else
 	#show recent 10 entries 
@@ -367,7 +375,7 @@ class ProductReportController < ApplicationController
 
   private
     def dropdowns
-        @productmasterlist = ProductMaster.all
+        @productmasterlist = ProductMaster.all.order("name, extproductcode")
     end
     def get_variables
     	@empcode = current_user.employee_code

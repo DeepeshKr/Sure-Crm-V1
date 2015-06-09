@@ -6,7 +6,7 @@
     
       <th>Date</th>
       <th>stock</th>
-      <th colspan="1"></th>
+      
     </tr>
   </thead>
 
@@ -17,13 +17,6 @@
        
         <td><%= product_stock.current_stock %></td>
       
-       
-     
-   
-        <td>
-       
-         <%= link_to 'Destroy', deleteproductstock_path(:id => product_stock.id, prod:@prod, from_date:  @or_from_date, to_date: @or_to_date, paid: @paid), data: { confirm: 'Are you sure?' }, method: :delete %>
-        </td>
       </tr>
     <% end %>
   </tbody>

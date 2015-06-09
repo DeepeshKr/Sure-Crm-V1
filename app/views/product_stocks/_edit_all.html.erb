@@ -1,0 +1,27 @@
+<% content_for :title do %>  
+  Edit Individual  
+<% end %>  
+  
+<% form_tag updateproductstock_path, :method => :put do %>  
+<table>
+	<thead>
+		<th>Product</th>
+		<th>Date</th>
+		<th>Opening Stock</th>
+	</thead>
+
+
+
+  <% @product_stocks.each do |product| %>  
+
+    <% fields_for "products[]", product do |f| %>  
+      <h2><%= h product.name %></h2>  
+
+      <%= render "fields", :f => f %>  
+    <% end %>  
+  <% end %>  
+  </table>
+   <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %> 

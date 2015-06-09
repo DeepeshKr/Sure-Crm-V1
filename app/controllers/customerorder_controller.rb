@@ -425,29 +425,36 @@ def add_payment
 end
 
   def channel
-       @medialist =  Medium.where(active: 1).where('dnis = ?', @order_master.calledno)
+      @medialist =  Medium.where(active:1).where('dnis = ?', @order_master.calledno).order("updated_at DESC")
 
         if @medialist.count == 1   #&& @all_calllist.empty?
           @order_master.update(media_id: @medialist.first.id)
           medianame = @medialist.first.name
 
           add_product_to_campaign(@medialist.first.id)
-          flash[:success] = " Media #{medianame} added added " 
+          flash[:success] = " Media #{medianame} added " 
           return redirect_to review_path(:order_id => @order_master.id)
         end
 
-        if Medium.where(active: 1).where('dnis = ? and state = ?', @order_master.calledno, @order_master.customer_address.state.upcase).present?
-          @newmedialist = Medium.where(active: 1).where('dnis = ? and state = ?', @order_master.calledno, @order_master.customer_address.state.upcase)  
-          @order_master.update(media_id: @newmedialist.first.id)
-          medianame = @newmedialist.first.name
+        @medialist = @medialist.where(state: @order_master.customer_address.state)
+          
+        if @medialist.present?  
+          @order_master.update(media_id: @medialist.first.id)
+          medianame = @medialist.first.name
+            
+          add_product_to_campaign(@medialist.first.id)
 
-          add_product_to_campaign(@newmedialist.first.id)
-          flash[:success] = " Media #{medianame} added added " 
+          flash[:success] = " Media #{medianame} with state #{@order_master.customer_address.state.upcase} added " 
           return redirect_to review_path(:order_id => @order_master.id)
-        end
-    
-     # flash[:error] = "Please select Channel there may be more than one " + @medialist.count.to_s   
-   
+
+        end 
+
+        # if Medium.where(active:1).where('dnis = ? and state = ?', @order_master.calledno, @order_master.customer_address.state.upcase).present?
+        #   @newmedialist = Medium.where(active: 1).where('dnis = ? and state = ?', @order_master.calledno, @order_master.customer_address.state.upcase)  
+        #   @order_master.update(media_id: @newmedialist.first.id)
+        #   medianame = @newmedialist.first.name
+        # end
+
     respond_with(@order_master, @order_lines, @customer, @customer_address)
   end
 

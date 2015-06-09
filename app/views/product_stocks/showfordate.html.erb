@@ -1,0 +1,17 @@
+<p id="notice"><%= notice %></p>
+
+<h3>List of all Existing Opening Product Stocks</h3>
+
+
+
+
+<%= form_tag updateproductstock_path, :method => :put do %>  
+  <% for product in @product_stocks %>  
+  <label>it this showing?</label>
+    <%= fields_for "products[]", product do |f| %>  
+      <h2><%= h product.ext_prod_code %></h2>  
+      <%= render "fields", :f => f %>  
+    <% end %>  
+  <% end %>  
+  <p><%= submit_tag "Submit" %></p>  
+<% end %> 

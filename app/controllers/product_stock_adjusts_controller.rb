@@ -4,7 +4,22 @@ class ProductStockAdjustsController < ApplicationController
   # GET /product_stock_adjusts
   # GET /product_stock_adjusts.json
   def index
-    @product_stock_adjusts = ProductStockAdjust.all
+    if params[:for_date].present?
+      for_date =  Date.strptime(params[:for_date], "%m/%d/%Y")
+      @product_stock_adjusts = ProductStockAdjust.where('TRUNC(created_date) = ?',for_date)
+
+        @product_stock_adjust = ProductStockAdjust.new(created_date: for_date)
+        @for_date_display = for_date.strftime("%d-%b-%Y")
+
+    else
+       @product_stock_adjust = ProductStockAdjust.new
+      @for_date_display = "No Date selected showing 100 Recently changed"
+      @product_stock_adjusts = ProductStockAdjust.all.limit(100).order("updated_at DESC")
+    end
+
+  @productmasterlist = ProductMaster.all.order("name, extproductcode")
+      
+    #@product_stock_adjusts = ProductStockAdjust.all
   end
 
   # GET /product_stock_adjusts/1
@@ -14,11 +29,13 @@ class ProductStockAdjustsController < ApplicationController
 
   # GET /product_stock_adjusts/new
   def new
+    @productmasterlist = ProductMaster.all.order("name, extproductcode")
     @product_stock_adjust = ProductStockAdjust.new
   end
 
   # GET /product_stock_adjusts/1/edit
   def edit
+    @productmasterlist = ProductMaster.all.order("name, extproductcode")
   end
 
   # POST /product_stock_adjusts
@@ -28,7 +45,10 @@ class ProductStockAdjustsController < ApplicationController
 
     respond_to do |format|
       if @product_stock_adjust.save
-        format.html { redirect_to @product_stock_adjust, notice: 'Product Journal was successfully created.' }
+          product_master = ProductMaster.find(@product_stock_adjust.product_master_id)
+        @product_stock_adjust.update(ext_prod_code: product_master.extproductcode)
+       
+        format.html { redirect_to product_stock_adjusts_url, notice: 'Product Journal was successfully created.' }
         format.json { render :show, status: :created, location: @product_stock_adjust }
       else
         format.html { render :new }
@@ -42,7 +62,10 @@ class ProductStockAdjustsController < ApplicationController
   def update
     respond_to do |format|
       if @product_stock_adjust.update(product_stock_adjust_params)
-        format.html { redirect_to @product_stock_adjust, notice: 'Product stock adjust was successfully updated.' }
+         product_master = ProductMaster.find(@product_stock_adjust.product_master_id)
+        @product_stock_adjust.update(ext_prod_code: product_master.extproductcode)
+       
+        format.html { redirect_to product_stock_adjusts_url, notice: 'Product stock adjust was successfully updated.' }
         format.json { render :show, status: :ok, location: @product_stock_adjust }
       else
         format.html { render :edit }
@@ -56,15 +79,7 @@ class ProductStockAdjustsController < ApplicationController
   def destroy
     @product_stock_adjust.destroy
     respond_to do |format|
-      format.html { 
-        if params[:paid].present?   
-         redirect_to productreport_path(prod: params[:prod], from_date: params[:from_date], to_date: params[:to_date],
-          paid: params[:paid]), notice: 'Product Journal was successfully removed.' 
-        else
-         redirect_to productreport_path(prod: params[:prod], from_date: params[:from_date], 
-          to_date: params[:to_date]), notice: 'Product Journal entry was successfully removed.' 
-      end
-      }
+      format.html {redirect_to product_stock_adjusts_url, notice: 'Product Journal was successfully removed.' }
       format.json { head :no_content }
     end
   end

@@ -1,0 +1,14 @@
+<div class="row">
+ <%= bootstrap_form_tag url: product_stock_adjusts_path, :method => :GET, :enforce_utf8 => false do |f| %>
+
+
+<div class="col-xs-8">
+
+<%= text_field_tag(:for_date, nil, :data => {:provide => "datepicker"}, :class => "form-control", :required => "true" )   %>
+
+</div>
+<div class="col-xs-4">
+	<%= submit_tag "Show ", name: nil, class: "btn btn-primary" %>
+</div>
+<% end %>
+</div>

@@ -7,14 +7,18 @@
   <%= f.hidden_field :ext_prod_code %>
   <%= f.hidden_field :emp_code %>
   <%= f.hidden_field :emp_id %>
-  
+ <%= f.hidden_field :checked_date %>
+
   <%= hidden_field_tag 'prod',  @prod %>
   <%= hidden_field_tag 'from_date',  @or_from_date %>
   <%= hidden_field_tag 'to_date',  @or_to_date %>
   
 <div class="row">
   <div class="col-xs-7">
-           <%= f.date_select :checked_date, :label => "Stock Date" %>
+  <%= f.select(:product_master_id, 
+                options_from_collection_for_select(@productmasterlist, :id, :productname), 
+                {:class => "form-control"} )  %>
+          
   </div>
   <div class="col-xs-3">
     <%= f.number_field :current_stock, :label => "Pieces", :required => true %>
@@ -30,6 +34,6 @@
 
 <% end %>
 <% else %>
-  <p>Please select a product from above list and for a date range</p>
+  <p>Please select a date </p>
 
 <% end %>

@@ -6,24 +6,29 @@ class MediaController < ApplicationController
   def index
     @showall = true
      @media = Medium.all.order("updated_at DESC").limit(50)
+      @inactivemedia = Medium.where(active:0).order("updated_at DESC").limit(50)
     if params[:telephone].present?
        @media = Medium.where(telephone: params[:telephone])
        @telephone = params[:telephone]
+        @inactivemedia = Medium.where(active:0).where(telephone: params[:telephone])
     end
     if params[:dnis].present?
-       @media = Medium.where(dnis: params[:dnis])
+       @media = Medium.where(dnis: params[:dnis]).order("updated_at DESC")
        @dnis = params[:dnis]
+       @inactivemedia = Medium.where(active:0).where(dnis: params[:dnis]).order("updated_at DESC")
     end
     if params[:name].present?
       @search = params[:name]
       @search = @search.upcase
-       @media = Medium.where("name like ? or ref_name like ?", "#{@search}%", "#{@search}%")
+      @media = Medium.where("name like ? or ref_name like ?", "#{@search}%", "#{@search}%").order("updated_at DESC")
+      @inactivemedia = Medium.where(active:0).where("name like ? or ref_name like ?", "#{@search}%", "#{@search}%").order("updated_at DESC")
        @dnis = params[:dnis]
     end
       if params[:showall].present?
         if params[:showall] = "true"
           @showall = "true"
-           @media = Medium.all.order("name")
+           @media = Medium.all.order("name updated_at DESC")
+           @inactivemedia = Medium.where(active:0).order("name updated_at DESC")
         respond_to do |format|
           format.html
           format.csv do

@@ -1,13 +1,20 @@
 Rails.application.routes.draw do
 
+  get 'wholesale_distributors/list'
+  get 'wholesale_distributors/search'
+  get 'wholesale_distributors/details'
+  get 'wholesale_returns/list'
+  get 'wholesale_returns/search'
+  get 'wholesale_returns/details'
+  get 'wholesale_sales' => 'tempinv_newwlsdet/list'
+  get 'branch_sales' => 'newwlsdet/list'
+
+  resources :order_updates
+
   get 'sales_ppo_report/summary'
-
   get 'sales_ppo_report/daily'
-
   get 'sales_ppo_report/hourly'
-
   get 'sales_ppo_report/show'
-
   get 'sales_ppo_report/channel'
 
   resources :tax_rates
@@ -251,6 +258,9 @@ Rails.application.routes.draw do
     get 'productreport' => 'product_report#list'
     get 'product_report/search'
     get 'productdetails' => 'product_report#details'
+
+    get 'showproductstock' => 'product_stocks#showfordate'
+    put 'updateproductstock' => 'product_stocks#updatefordate'
      #stock report opening stock
     get 'openingstockreport' => 'product_report#opening_stock_report'
      #stock report purchases

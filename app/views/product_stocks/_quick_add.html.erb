@@ -1,0 +1,12 @@
+<%= bootstrap_form_for(@product_stock) do |f| %>
+         <%= f.hidden_field :checked_date %>
+   <div class="field">
+       <%=  f.number_field :product_masters %>
+  </div>
+  <div class="field">
+        <%= f.number_field :current_stock %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

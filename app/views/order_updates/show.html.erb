@@ -1,0 +1,44 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Order:</strong>
+  <%= @order_update.order_id %>
+</p>
+
+<p>
+  <strong>Orderno:</strong>
+  <%= @order_update.orderno %>
+</p>
+
+<p>
+  <strong>Order date:</strong>
+  <%= @order_update.order_date %>
+</p>
+
+<p>
+  <strong>Process date:</strong>
+  <%= @order_update.process_date %>
+</p>
+
+<p>
+  <strong>Shipped date:</strong>
+  <%= @order_update.shipped_date %>
+</p>
+
+<p>
+  <strong>Return date:</strong>
+  <%= @order_update.return_date %>
+</p>
+
+<p>
+  <strong>Cancel date:</strong>
+  <%= @order_update.cancel_date %>
+</p>
+
+<p>
+  <strong>Paid date:</strong>
+  <%= @order_update.paid_date %>
+</p>
+
+<%= link_to 'Edit', edit_order_update_path(@order_update) %> |
+<%= link_to 'Back', order_updates_path %>

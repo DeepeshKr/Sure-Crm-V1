@@ -1,0 +1,176 @@
+<h1>Wholesale Distributors#list</h1>
+<hr>
+<table class="table table-hover table-bordered">
+	<thead>
+		<tr>
+			<th>	Acc_code	</th>
+		<th>	Acc_internal_code	</th>
+		<th>	Acc_name	</th>
+		<th>	Acc_alias	</th>
+		<th>	Internal_code	</th>
+		<th>	Acc_reserved	</th>
+		<th>	Acc_type	</th>
+		<th>	Acc_cindex	</th>
+		<th>	Acc_levelno	</th>
+		<th>	Acc_grpflag	</th>
+		<th>	Acc_grpno	</th>
+		<th>	Acc_ltype	</th>
+		<th>	Bill_balance	</th>
+		<th>	Acc_text	</th>
+		<th>	Currency_internal_code	</th>
+		<th>	Acc_balance	</th>
+		<th>	Acc_opening	</th>
+		<th>	Acc_opening_sign	</th>
+		<th>	Acc_opening_dr	</th>
+		<th>	Acc_opening_cr	</th>
+		<th>	Yr_to_dt_dr	</th>
+		<th>	Yr_to_dt_cr	</th>
+		<th>	Dract1	</th>
+		<th>	Dract2	</th>
+		<th>	Dract3	</th>
+		<th>	Dract4	</th>
+		<th>	Dract5	</th>
+		<th>	Dract6	</th>
+		<th>	Dract7	</th>
+		<th>	Dract8	</th>
+		<th>	Dract9	</th>
+		<th>	Dract10	</th>
+		<th>	Dract11	</th>
+		<th>	Dract12	</th>
+		<th>	Cract1	</th>
+		<th>	Cract2	</th>
+		<th>	Cract3	</th>
+		<th>	Cract4	</th>
+		<th>	Cract5	</th>
+		<th>	Cract6	</th>
+		<th>	Cract7	</th>
+		<th>	Cract8	</th>
+		<th>	Cract9	</th>
+		<th>	Cract10	</th>
+		<th>	Cract11	</th>
+		<th>	Cract12	</th>
+		<th>	Credit_days	</th>
+		<th>	Crlimit	</th>
+		<th>	Status	</th>
+		<th>	Comp_id	</th>
+		<th>	Bank_cash	</th>
+		<th>	Trading_yn	</th>
+		<th>	Tds_yn	</th>
+		<th>	Tds_perc	</th>
+		<th>	Dep_it	</th>
+		<th>	Dep_ca	</th>
+		<th>	Party_type_code	</th>
+		<th>	Tds_type_code	</th>
+		<th>	Int_loan_taken	</th>
+		<th>	Int_loan_given	</th>
+		<th>	P_l	</th>
+		<th>	P_l_amount	</th>
+		<th>	Party_state	</th>
+		<th>	Reference	</th>
+		<th>	Schedule	</th>
+		<th>	Deposit	</th>
+		<th>	Narration	</th>
+		<th>	Surcharge	</th>
+		<th>	Pl	</th>
+		<th>	Acc_remarks	</th>
+		<th>	Acc_schedule	</th>
+		<th>	Lastyear_opening	</th>
+		<th>	Lastyear_opening_sign	</th>
+		<th>	Acc_flat_name	</th>
+		<th>	Profit_perc	</th>
+		<th>	Dep_amount	</th>
+		<th>	Gross_block	</th>
+		<th>	Net_block	</th>
+
+		</tr>
+
+	</thead>
+<tbody>
+ <% @tbpl2003acc.each do |t| %>
+<tr>
+	<td> <%= t.acc_code %> </td>
+<td> <%= t.acc_internal_code %> </td>
+<td> <%= t.acc_name %> </td>
+<td> <%= t.acc_alias %> </td>
+<td> <%= t.internal_code %> </td>
+<td> <%= t.acc_reserved %> </td>
+<td> <%= t.acc_type %> </td>
+<td> <%= t.acc_cindex %> </td>
+<td> <%= t.acc_levelno %> </td>
+<td> <%= t.acc_grpflag %> </td>
+<td> <%= t.acc_grpno %> </td>
+<td> <%= t.acc_ltype %> </td>
+<td> <%= t.bill_balance %> </td>
+<td> <%= t.acc_text %> </td>
+<td> <%= t.currency_internal_code %> </td>
+<td> <%= t.acc_balance %> </td>
+<td> <%= t.acc_opening %> </td>
+<td> <%= t.acc_opening_sign %> </td>
+<td> <%= t.acc_opening_dr %> </td>
+<td> <%= t.acc_opening_cr %> </td>
+<td> <%= t.yr_to_dt_dr %> </td>
+<td> <%= t.yr_to_dt_cr %> </td>
+<td> <%= t.dract1 %> </td>
+<td> <%= t.dract2 %> </td>
+<td> <%= t.dract3 %> </td>
+<td> <%= t.dract4 %> </td>
+<td> <%= t.dract5 %> </td>
+<td> <%= t.dract6 %> </td>
+<td> <%= t.dract7 %> </td>
+<td> <%= t.dract8 %> </td>
+<td> <%= t.dract9 %> </td>
+<td> <%= t.dract10 %> </td>
+<td> <%= t.dract11 %> </td>
+<td> <%= t.dract12 %> </td>
+<td> <%= t.cract1 %> </td>
+<td> <%= t.cract2 %> </td>
+<td> <%= t.cract3 %> </td>
+<td> <%= t.cract4 %> </td>
+<td> <%= t.cract5 %> </td>
+<td> <%= t.cract6 %> </td>
+<td> <%= t.cract7 %> </td>
+<td> <%= t.cract8 %> </td>
+<td> <%= t.cract9 %> </td>
+<td> <%= t.cract10 %> </td>
+<td> <%= t.cract11 %> </td>
+<td> <%= t.cract12 %> </td>
+<td> <%= t.credit_days %> </td>
+<td> <%= t.crlimit %> </td>
+<td> <%= t.status %> </td>
+<td> <%= t.comp_id %> </td>
+<td> <%= t.bank_cash %> </td>
+<td> <%= t.trading_yn %> </td>
+<td> <%= t.tds_yn %> </td>
+<td> <%= t.tds_perc %> </td>
+<td> <%= t.dep_it %> </td>
+<td> <%= t.dep_ca %> </td>
+<td> <%= t.party_type_code %> </td>
+<td> <%= t.tds_type_code %> </td>
+<td> <%= t.int_loan_taken %> </td>
+<td> <%= t.int_loan_given %> </td>
+<td> <%= t.p_l %> </td>
+<td> <%= t.p_l_amount %> </td>
+<td> <%= t.party_state %> </td>
+<td> <%= t.reference %> </td>
+<td> <%= t.schedule %> </td>
+<td> <%= t.deposit %> </td>
+<td> <%= t.narration %> </td>
+<td> <%= t.surcharge %> </td>
+<td> <%= t.pl %> </td>
+<td> <%= t.acc_remarks %> </td>
+<td> <%= t.acc_schedule %> </td>
+<td> <%= t.lastyear_opening %> </td>
+<td> <%= t.lastyear_opening_sign %> </td>
+<td> <%= t.acc_flat_name %> </td>
+<td> <%= t.profit_perc %> </td>
+<td> <%= t.dep_amount %> </td>
+<td> <%= t.gross_block %> </td>
+<td> <%= t.net_block %> </td>
+
+	
+</tr>
+<% end %>
+</tbody>
+
+</table>
+

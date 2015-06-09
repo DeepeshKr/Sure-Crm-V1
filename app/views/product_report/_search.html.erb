@@ -2,7 +2,7 @@
  <%= form_tag("/productreport", method: "get") do  %>
 <div class="col-xs-5">
 <%= select_tag(:prod, 
-                options_from_collection_for_select(@productmasterlist, :extproductcode, :fullproductname), 
+                options_from_collection_for_select(@productmasterlist, :extproductcode, :productname), 
                 {:class => "form-control"} )  %>
 </div>
 <div class="col-xs-4">

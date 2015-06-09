@@ -2,7 +2,7 @@
 <table class="table table-hover table-bordered">
   <thead>
     <tr>
-     <th>Orderdate</th>
+     <th>Ship Date</th>
      <th>Paid date</th>
      <th>Return date</th>
      <th>Invoice No</th>
@@ -20,7 +20,7 @@
   <tbody>
     <% @vpp.each do |v| %>
       <tr>
-        <td><%= v.orderdate.strftime("%d-%b-%Y") || "NA" if v.orderdate %></td>
+        <td><%= v.shdate.strftime("%d-%b-%Y") || "NA" if v.shdate %></td>
         <td><%= v.paiddate.strftime("%d-%b-%Y") || "NA" if v.paiddate %></td>
         <td><%= v.returndate.strftime("%d-%b-%Y") || "NA" if v.returndate  %></td>
         <td><%= v.invoice %></td>

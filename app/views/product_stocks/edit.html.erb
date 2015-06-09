@@ -1,6 +1,44 @@
-<h1>Editing Product Stock</h1>
+<h2>Editing Product Stock</h2>
 
-<%= render 'form' %>
+<% if @product_stock.present? %>
+  
 
-<%= link_to 'Show', @product_stock %> |
-<%= link_to 'Back', product_stocks_path %>
+<%= bootstrap_form_for(@product_stock) do |f| %>
+  
+  <%= f.hidden_field :product_master_id %>
+  <%= f.hidden_field :ext_prod_code %>
+  <%= f.hidden_field :emp_code %>
+  <%= f.hidden_field :emp_id %>
+ <%= f.hidden_field :checked_date %>
+
+  <%= hidden_field_tag 'prod',  @prod %>
+  <%= hidden_field_tag 'from_date',  @or_from_date %>
+  <%= hidden_field_tag 'to_date',  @or_to_date %>
+  
+<div class="row">
+<div class="col-xs-2"> 
+<label>For Date</label> <br>
+<%= @for_date_display %></div>
+  <div class="col-xs-7">
+  <%= f.select(:product_master_id, 
+                options_from_collection_for_select(@productmasterlist, :id, :productname), 
+                {:class => "form-control"} )  %>
+          
+  </div>
+  <div class="col-xs-2">
+    <%= f.number_field :current_stock, :label => "Pieces", :required => true %>
+  </div>
+</div>
+
+<div class="row">
+ 
+  <div class="col-xs-3 col-xs-offset-8">
+   <%= f.submit "Edit opening Stock", class:"btn btn-primary" %>
+  </div>
+</div>
+
+<% end %>
+<% else %>
+  <p>Please select a date </p>
+
+<% end %>

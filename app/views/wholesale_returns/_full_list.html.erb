@@ -1,0 +1,79 @@
+<h1>WholesaleReturns#list</h1>
+<table class="table table-hover table-bordered">
+	<thead>
+		<tr>
+			 <th>	RDATE	</th>
+			 <th>	DISTNAME	</th>
+			 <th>	RECD_DOCS	</th>
+			 <th>	PEND_DOCS 	</th>
+			 <th>	SINV_DATE 	</th>
+			 <th>	ACTUAL_RETURN_DATE	</th>
+			 <th>	PROD 	</th>
+			 <th>	PROD_ID 	</th>
+			 <th>	MKTG_REMARKS	</th>
+			 <th>	PROBLEM	</th>
+			 <th>	DEFECT_TYPE	</th>
+			 <th>	DEFECT_STATUS	</th>
+			 <th>	PART_NAME	</th>
+			 <th>	ACTION_TAKEN	</th>
+			 <th>	CASE_STATUS	</th>
+			 <th>	CHARGES	</th>
+			 <th>	REMARKS	</th>
+			 <th>	TYPE	</th>
+			 <th>	STORE_REMARKS	</th>
+			 <th>	QTY	</th>
+			 <th>	SP_1	</th>
+			 <th>	SP_2	</th>
+			 <th>	SP_3	</th>
+			 <th>	SP_4	</th>
+			 <th>	SP_5 	</th>
+			 <th>	SP_6 	</th>
+			 <th>	SP_7 	</th>
+			 <th>	SP_8	</th>
+			 <th>	SP_9	</th>
+			 <th>	SP_10	</th>
+			 <th>	SRNO	</th>
+
+		</tr>
+
+	</thead>
+<tbody>
+ <% @new_dept.each do |n| %>
+<tr>
+	<td>	<%=n.rdate%>	</td>
+	<td>	<%=n.distname%>	</td>
+	<td>	<%=n.recd_docs%>	</td>
+	<td>	<%=n.pend_docs %>	</td>
+	<td>	<%=n.sinv_date %>	</td>
+	<td>	<%=n.actual_return_date%>	</td>
+	<td>	<%=n.prod %>	</td>
+	<td>	<%=n.prod_id %>	</td>
+	<td>	<%=n.mktg_remarks%>	</td>
+	<td>	<%=n.problem%>	</td>
+	<td>	<%=n.defect_type%>	</td>
+	<td>	<%=n.defect_status%>	</td>
+	<td>	<%=n.part_name%>	</td>
+	<td>	<%=n.action_taken%>	</td>
+	<td>	<%=n.case_status%>	</td>
+	<td>	<%=n.charges%>	</td>
+	<td>	<%=n.remarks%>	</td>
+	<td>	<%=n.type %>	</td>
+	<td>	<%=n.store_remarks%>	</td>
+	<td>	<%=n.qty%>	</td>
+	<td>	<%=n.sp_1%>	</td>
+	<td>	<%=n.sp_2%>	</td>
+	<td>	<%=n.sp_3%>	</td>
+	<td>	<%=n.sp_4%>	</td>
+	<td>	<%=n.sp_5 %>	</td>
+	<td>	<%=n.sp_6 %>	</td>
+	<td>	<%=n.sp_7 %>	</td>
+	<td>	<%=n.sp_8%>	</td>
+	<td>	<%=n.sp_9%>	</td>
+	<td>	<%=n.sp_10%>	</td>
+	<td>	<%=n.srno%>	</td>
+
+</tr>
+<% end %>
+</tbody>
+
+</table>
