@@ -27,8 +27,8 @@ class MediaController < ApplicationController
       if params[:showall].present?
         if params[:showall] = "true"
           @showall = "true"
-           @media = Medium.all.order("name updated_at DESC")
-           @inactivemedia = Medium.where(active:0).order("name updated_at DESC")
+           @media = Medium.all.order("name, updated_at DESC")
+           @inactivemedia = Medium.where(active:0).order("name, updated_at DESC")
         respond_to do |format|
           format.html
           format.csv do
