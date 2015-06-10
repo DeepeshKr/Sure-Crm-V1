@@ -1,4 +1,5 @@
 class CampaignPlayListStatusesController < ApplicationController
+  before_action { protect_controllers(8) } 
   before_action :set_campaign_play_list_status, only: [:show, :edit, :update, :destroy]
 
   respond_to :html

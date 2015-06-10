@@ -227,6 +227,7 @@ Rails.application.routes.draw do
     # post 'newdealerenquiry' =>  'address_dealer#dealer_enquiry'
 
   get 'interaction' => 'interaction_masters#index'
+  get 'dealer_enquiry' => 'interaction_masters#dealer_enquiry'
   get 'newinteraction' => 'interaction_masters#new_ticket'
   post 'newticket' => 'interaction_masters#new_interaction'
   post 'disposecall' => 'interaction_masters#dispose_call'

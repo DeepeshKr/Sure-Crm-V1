@@ -1,4 +1,5 @@
 class OrderMastersController < ApplicationController
+  before_action { protect_controllers(7) } 
   before_action :set_order_master, only: [:show, :edit, :update, :destroy]
 
   respond_to :html
@@ -184,6 +185,11 @@ class OrderMastersController < ApplicationController
         @emailid = params[:emailid]
         customers = Customer.where('emailid = ? OR alt_emailid = ?', @emailid, @emailid).pluck("id")
         @order_masters = OrderMaster.where(customer_id: customers)  
+    elsif params[:order_id].present?
+        @order_id = params[:order_id]
+        @order_masters = OrderMaster.where(id: @order_id)  
+
+ 
     end
   end
 

@@ -1,31 +1,66 @@
 class InteractionMastersController < ApplicationController
-  before_action :set_interaction_master, only: [:show, :new_ticket, :edit, :update, :destroy, :dealer_enquiry]
+    before_action { protect_controllers(12) } 
+  before_action :set_interaction_master, only: [:show, :new_ticket, :edit, :update, :destroy]
 
 
   respond_to :html
 
   def index
-    @categoryid = params[:category]
    
-    @category =  InteractionCategory.all
-    if @categoryid.present?
-      @interaction_masters = InteractionMaster.where("interaction_category_id = ?", params[:category])
+   
+   dropdowns
+    if params.has_key?(:category) and params.has_key?(:status)
+
+       @categoryid = params[:category]
+      @interaction_masters = InteractionMaster.where("interaction_category_id = ? and interaction_status_id = ?", params[:category], params[:status])
+      #.joins(:interaction_status).where('interaction_statuses.sortorder < 4')
        @category_name = InteractionCategory.find(params[:category]).name
-
-      respond_with(@interaction_masters)
-
-    else
-       @category_name = "Select any category"
+      if params[:status].present?
+         @statusid = params[:status]
+      end
+      #respond_with(@interaction_masters)
+       @category_name = "Search for Category and Status selected above"
+    elsif params.has_key?(:for_date)
+       for_date =  Date.strptime(params[:for_date], "%m-%d-%Y")
+        @interaction_masters = InteractionMaster.where("TRUNC(created_at) = ?", for_date)
+       @category_name = "Searched for order for #{for_date}"
+    elsif params.has_key?(:mobile)
+      @mobile = params[:mobile]
+      @mobile = @mobile.strip
+        @interaction_masters = InteractionMaster.where(mobile: @mobile)
+       @category_name = "Searched for order for mobile #{params[:mobile]} and found #{@interaction_masters.count()}"
+      else
+       @category_name = "Search for date / mobile or Category"
     end
 
     
   end
+  def dealer_enquiry
+     @interactioncategorylist =  InteractionCategory.where("id = 10020").order("sortorder")
+        @interactionstatuslist =  InteractionStatus.all.order("sortorder")
+     if params.has_key?(:category)
+
+      @categoryid = params[:category]
+   
+    @category =  InteractionCategory.all
+    if @categoryid.present?
+      @interaction_masters = InteractionMaster.where("interaction_category_id = ?", 10020)
+       @category_name = InteractionCategory.find(params[:category]).name
+
+      respond_with(@interaction_masters)
+    end
+    else
+       @category_name = "Select any category"
+    end
+  end
 
   def show
-    
+    @empcode = current_user.employee_code
+      #@empid = current_user.id
+      @empid = Employee.where(employeecode: @empcode).first.id
     @interaction_status = InteractionStatus.all
-    @em_interaction_transcript = InteractionTranscript.new(:interactionid => params[:id], :interactionuserid => 10001)
-    @cm_interaction_transcript = InteractionTranscript.new(:interactionid => params[:id], :interactionuserid => 10000)
+    @em_interaction_transcript = InteractionTranscript.new(:interactionid => params[:id], :interactionuserid => 10001, employee_id: @empid, ip: request.remote_ip)
+    @cm_interaction_transcript = InteractionTranscript.new(:interactionid => params[:id], :interactionuserid => 10000, employee_id: @empid, ip: request.remote_ip)
      @interaction_transcripts = InteractionTranscript.where("interactionid = ?", params[:id]).order(:created_at)
     respond_with(@interaction_master, @interaction_transcripts, @em_interaction_transcript, @cm_interaction_transcript)
   end
@@ -39,19 +74,39 @@ class InteractionMastersController < ApplicationController
   end
 
   def new_ticket
-    
+    t = Time.zone.now + 330.minutes
       dropdowns
-    #'this is get'
-      customer_id = params[:customer_id]
-      @customer = Customer.find(customer_id)
-      @interaction_master = InteractionMaster.new(interaction_status_id: 10000, 
-        customer_id: customer_id)
-      flash[:error] = "Customer Id is missing!" 
-      respond_with(@interaction_master, @customer)
-
+      @interaction_master = InteractionMaster.create(customer_id: params[:customer_id],
+       callednumber: params[:callednumber], orderid: params[:orderid],
+       interaction_category_id: params[:interaction_category_id],
+       state: params[:state], mobile: params[:mobile],
+       employee_id: params[:employee_id], employee_code: params[:employee_code],
+       interaction_status_id: 10000, interaction_priority_id: 10000, 
+       createdon: t, resolveby: t + 10.days)
+        #customer_id: interaction_master_params[:customer_id], interaction_category_id: interaction_master_params[:interaction_category_id], interaction_priority_id: interaction_master_params[:interaction_priority_id]
+        #@interaction_transcript = InteractionTranscript.new(interactionid: @interaction_master.id, interactionuserid: 10000, description: params[:description])
+      @interaction_transcript = @interaction_master.interaction_transcript.create(interactionuserid: 10000, 
+        description: params[:description], 
+        employee_id: params[:employee_id],
+        callednumber: params[:callednumber],
+        ip: request.remote_ip )
+  
     
-      
-    
+     # if @interaction_master.interaction_category.sortorder > 100
+     # mobile, description, problem, interactionid
+        MailerAlerts.customer_request("vipin@telebrandsindia.com", params[:mobile], @interaction_transcript.description, @interaction_master.interaction_category.name, @interaction_master.id ).deliver_now
+        MailerAlerts.customer_request("naushad@telebrandsindia.com", params[:mobile], @interaction_transcript.description, @interaction_master.interaction_category.name, @interaction_master.id ).deliver_now
+        MailerAlerts.customer_request("prem@telebrandsindia.com", params[:mobile], @interaction_transcript.description, @interaction_master.interaction_category.name, @interaction_master.id ).deliver_now
+        MailerAlerts.customer_request("mis@telebrandsindia.com", params[:mobile], @interaction_transcript.description, @interaction_master.interaction_category.name, @interaction_master.id ).deliver_now
+        #MailerAlerts.customer_request("cronupdatedata@gmail.com", params[:mobile], @interaction_transcript.description, @interaction_master.interaction_category.name, @interaction_master.id ).deliver_now
+      #end
+      if params[:orderid].present?
+        flash[:success] = "The order details are logged with order, you are now ready to start new call, close this window!"
+          #respond_with(@interaction_master.customer)
+        else
+          flash[:success] = "The details are logged, you are now ready to start new call, close this window!"  
+        end
+    redirect_to root_path
   end
 
   def create
@@ -130,9 +185,9 @@ class InteractionMastersController < ApplicationController
     end
 
     def dropdowns
-
-        @interactioncategorylist =  InteractionCategory.where("sortorder >= 10")
-        @interactionprioritylist =  InteractionPriority.all
+        # @category =  InteractionCategory.all
+        @interactioncategorylist =  InteractionCategory.where("sortorder > 100").order("sortorder")
+        @interactionstatuslist =  InteractionStatus.all.order("sortorder")
     end
 
     def interaction_master_params

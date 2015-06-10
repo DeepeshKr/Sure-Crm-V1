@@ -1,4 +1,5 @@
 class InteractionTranscriptsController < ApplicationController
+    before_action { protect_controllers(12) } 
   before_action :set_interaction_transcript, only: [:show, :edit, :update, :destroy]
 
   respond_to :html
@@ -21,12 +22,22 @@ class InteractionTranscriptsController < ApplicationController
   end
 
   def quick_create
+    @empcode = current_user.employee_code
+      #@empid = current_user.id
+      @empid = Employee.where(employeecode: @empcode).first.id
 
-    description = interaction_transcript_params[:description]
-    description += "-- update by user: " << current_user.name << " from ip:" << request.remote_ip 
-    @interaction_transcript = InteractionTranscript.new(interaction_transcript_params)
-    @interaction_transcript.save
-    @interaction_transcript.update(description: description)
+    @interaction_transcript = InteractionTranscript.create(interaction_transcript_params) 
+        # description: params[:description], 
+        # employee_id: ,
+        # callednumber: params[:callednumber],
+        #  )
+  
+
+    #description = interaction_transcript_params[:description]
+    #description += "-- update by user: " << current_user.name << " from ip:" << request.remote_ip 
+    #@interaction_transcript = InteractionTranscript.new(interaction_transcript_params)
+    #@interaction_transcript.save
+    #@interaction_transcript.update(employee_id: @empid, ip: request.remote_ip)
 
     interaction_status_id = params[:interaction_status_id]
     interaction_master = InteractionMaster.find(@interaction_transcript.interactionid)
@@ -57,6 +68,6 @@ class InteractionTranscriptsController < ApplicationController
     end
 
     def interaction_transcript_params
-      params.require(:interaction_transcript).permit(:interactionid, :interactionuserid, :description, :interaction_status_id)
+      params.require(:interaction_transcript).permit(:interactionid, :interactionuserid, :description, :interaction_status_id, :employee_id, :ip)
     end
 end

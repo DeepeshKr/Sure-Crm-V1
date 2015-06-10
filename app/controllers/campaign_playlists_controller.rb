@@ -1,4 +1,5 @@
 class CampaignPlaylistsController < ApplicationController
+ before_action { protect_controllers(8) }  
  before_action :set_campaign_playlist, only: [:show, :duplicate, :edit, :update, :destroy] #before_action :dropdown, only: [:show, :new,  :edit, :update]
  before_action :proddropdown, only: [:show, :new, :create, :update,  :edit, :update, :showproductvariant]
  before_action :set_media_tape, only: [:show, :new, :create, :update,  :edit, :update]

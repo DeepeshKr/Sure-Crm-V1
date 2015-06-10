@@ -27,7 +27,8 @@ class Employee < ActiveRecord::Base
   
   has_many :interaction_category, foreign_key: "employeeid"
   has_many :order_master, foreign_key: "employee_id"
-
+  has_many :interaction_master, foreign_key: "employee_id"
+   has_many :interaction_transcript, foreign_key: "employee_id"
 
 def fullname
   (self.title || "NA") + " " + (self.first_name || "NA" )  + " " + (self.last_name || "NA" ) + " (" + (self.designation || "NA" ) + ")"

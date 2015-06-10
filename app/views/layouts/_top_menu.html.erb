@@ -63,14 +63,14 @@
             <ul class="dropdown-menu">
               <li><%= link_to "Existing Dealers Old", "/dealers" %></li>
               <li><%= link_to "Existing Dealers New", "/dealers" %></li>
-              <li><%= link_to "List of Dealer Equiries", "/interaction?category=10020" %></li>    
-                <% if (current_user.employee_role.sortorder < 5) %> 
+              <li><%= link_to "List of Dealer Enquiries", "/dealer_enquiry?category=10020&status=10000" %></li>    
+                
               <li class="divider"></li>
             
                 <li><%= link_to "Customer Orders (Ora)", "/custdetails/list"  %></li>
              <li><%= link_to "Customer Orders (Search)", "/custordersearch"  %></li>
             <li><%= link_to "Customer Orders (Details Search)", "/detailedordersearch"  %></li>
-            <% end %>
+           
             <li class="divider"></li>
                <li><%= link_to "All Interactions", "/interaction" %></li> 
               <li><%= link_to "Pincode List", "/india_pincode_lists" %></li>    

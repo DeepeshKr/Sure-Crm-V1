@@ -1,32 +1,55 @@
 <% if @interaction_masters.present? %>
 
 <table class="table table-hover">
-  <thead>
-    <tr>
-      <th>Created on</th>
-      <th>Resolve by</th>
-      <th>status</th>
-      <th>category</th>
-      <th>priority</th>
-     
-     
+  
     
-      <th colspan="1"></th>
-    </tr>
-  </thead>
+ 
 
-  <tbody>
+ <thead>
     <% @interaction_masters.each do |interaction_master| %>
       <tr>
-        <td><%= interaction_master.createdon.strftime("%d-%b-%Y") rescue nil %></td>
-        <td><%= interaction_master.resolveby.strftime("%d-%b-%Y") rescue nil %></td>
-        <td><%= interaction_master.interaction_status.internal_description %></td>
-        <td><%= interaction_master.interaction_category.name %></td>
-         <td><%= interaction_master.interaction_priority.name %></td>  
-        
-        <td><%= link_to 'More...', interaction_master %></td>
+        <th>Created: <%= interaction_master.createdon.strftime("%d-%b-%Y") rescue nil %></th>
+        <th>Resolve by: <%= interaction_master.resolveby.strftime("%d-%b-%Y") rescue nil %></th>
+        <th>Status:<%= interaction_master.interaction_status.internal_description %></th>
+        <th>Category: <%= interaction_master.interaction_category.name %></th>
+        <th>By: <%= interaction_master.employee.name %></th>  
+        <th>Mobile: <%= interaction_master.mobile%></th>
+
+        <th><%= link_to 'More...', interaction_master, class: "btn btn-primary btn-xs" %></th>
        
        
+      </tr>
+       </thead>
+       <tbody>
+      <tr>
+      <td colspan="6">
+         <% if interaction_master.interaction_transcript.present? %>
+          <table class="table table-bordered">
+            <thead>
+              <tr>
+                <th>Comments by</th>
+                <th>Details</th>
+                
+              </tr>
+            </thead>
+
+            <tbody>
+              <% interaction_master.interaction_transcript.each do |interaction_transcript| %>
+                <tr>
+                  <td>
+                  <%= interaction_transcript.interaction_user.name if interaction_transcript.interaction_user %> <br>
+          <small> <%= interaction_transcript.created_at + 330.minutes %> </small> <br>
+
+          <%= interaction_transcript.employee.name if interaction_transcript.employee %>
+           </td>
+                  <td><%= interaction_transcript.description %></td>
+                  
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+<% end %>
+      </td>
       </tr>
     <% end %>
   </tbody>

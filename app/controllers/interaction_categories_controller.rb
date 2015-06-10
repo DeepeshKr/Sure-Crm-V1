@@ -4,8 +4,14 @@ class InteractionCategoriesController < ApplicationController
   respond_to :html
 
   def index
-    @interaction_categories = InteractionCategory.all
-    respond_with(@interaction_categories)
+    #call disposing < 100
+    @call_disposing_interaction_categories = InteractionCategory.where('sortorder < 100').order("sortorder")
+    #customer request > 100 < 200
+     @customer_request_interaction_categories = InteractionCategory.where('sortorder > 100 and sortorder < 200').order("sortorder")
+    #customer support > 200 < 500
+    @customer_support_interaction_categories = InteractionCategory.where('sortorder > 200 and sortorder < 500').order("sortorder")
+    
+    #respond_with(@interaction_categories)
   end
 
   def show

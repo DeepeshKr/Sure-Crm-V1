@@ -43,8 +43,9 @@
 
 	<% if @interaction_master.orderid.present? %>
 			<div class="col-xs-2">
-				 <strong>Order:</strong>
-		  <%= @interaction_master.orderid %>
+				 <strong>View Order:</strong>
+				 <%= link_to @interaction_master.orderid, detailedordersearch_path(order_id: @interaction_master.orderid), :target => "_blank" %>
+		  <%=  %>
 			</div>
 	<% end %>
 

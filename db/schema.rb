@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150604092257) do
+ActiveRecord::Schema.define(version: 20150610063107) do
 
   create_table "address_types", force: :cascade do |t|
     t.string   "name"
@@ -387,6 +387,8 @@ ActiveRecord::Schema.define(version: 20150604092257) do
     t.string   "callednumber"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "employee_id",       limit: 16, precision: 38
+    t.string   "ip"
   end
 
   create_table "interaction_users", force: :cascade do |t|

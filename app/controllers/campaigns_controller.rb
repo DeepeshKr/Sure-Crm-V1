@@ -1,4 +1,5 @@
 class CampaignsController < ApplicationController
+  before_action { protect_controllers(8) } 
   before_action :set_campaign, only: [:show,  :edit, :update, :destroy]
   before_action :dropdown, only: [:show, :new, :edit, :create, :update]
   before_action :proddropdown, only: [:show, :new, :edit, :create, :update, :destroy]

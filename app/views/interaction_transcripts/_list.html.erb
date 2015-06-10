@@ -13,9 +13,16 @@
       <tr>
         <td>
         <%= interaction_transcript.interaction_user.name if interaction_transcript.interaction_user %> <br>
-<small> <%= interaction_transcript.created_at %> </small>
+ <small> <%= interaction_transcript.created_at + 330.minutes %> </small> <br>
+
+          <%= interaction_transcript.employee.name if interaction_transcript.employee  %>
  </td>
-        <td><%= interaction_transcript.description %></td>
+        <td><%= interaction_transcript.description %> <br>
+       
+        <%= link_to "Search Order", detailedordersearch_path(mobile: interaction_transcript.interaction_master.mobile), :target => "_blank" %>
+         &nbsp;
+       <small> Called from Mobile  <%= interaction_transcript.interaction_master.mobile %><small>
+        </td>
         
       </tr>
     <% end %>
