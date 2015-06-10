@@ -21,7 +21,7 @@ class InteractionMastersController < ApplicationController
       #respond_with(@interaction_masters)
        @category_name = "Search for Category and Status selected above"
     elsif params.has_key?(:for_date)
-       for_date =  Date.strptime(params[:for_date], "%m-%d-%Y")
+       for_date =  Date.strptime(params[:for_date], "%m/%d/%Y")
         @interaction_masters = InteractionMaster.where("TRUNC(created_at) = ?", for_date)
        @category_name = "Searched for order for #{for_date}"
     elsif params.has_key?(:mobile)
@@ -36,22 +36,22 @@ class InteractionMastersController < ApplicationController
     
   end
   def dealer_enquiry
-     @interactioncategorylist =  InteractionCategory.where("id = 10020").order("sortorder")
-        @interactionstatuslist =  InteractionStatus.all.order("sortorder")
-     if params.has_key?(:category)
-
-      @categoryid = params[:category]
-   
-    @category =  InteractionCategory.all
-    if @categoryid.present?
-      @interaction_masters = InteractionMaster.where("interaction_category_id = ?", 10020)
-       @category_name = InteractionCategory.find(params[:category]).name
-
-      respond_with(@interaction_masters)
-    end
+      @interactioncategorylist =  InteractionCategory.where("id = 10020").order("sortorder")
+      @interactionstatuslist =  InteractionStatus.all.order("sortorder")
+      @category =  InteractionCategory.all
+    if params.has_key?(:category)
+        @categoryid = params[:category]
+        @interaction_masters = InteractionMaster.where("interaction_category_id = ?", 10020)
+        @category_name = InteractionCategory.find(params[:category]).name
+        respond_with(@interaction_masters)
+    elsif params.has_key?(:for_date)
+        for_date =  Date.strptime(params[:for_date], "%m/%d/%Y")
+        @interaction_masters = InteractionMaster.where("TRUNC(created_at) = ?", for_date).where("interaction_category_id = ?", 10020)
+        @category_name = "Searched for order for #{for_date}"
     else
-       @category_name = "Select any category"
+        @category_name = "Select any category"
     end
+ 
   end
 
   def show
