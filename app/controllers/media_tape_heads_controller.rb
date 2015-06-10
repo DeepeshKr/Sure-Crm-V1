@@ -1,4 +1,5 @@
 class MediaTapeHeadsController < ApplicationController
+   before_action { protect_controllers(8) } 
   before_action :set_media_tape_head, only: [:show, :edit, :update, :destroy]
   before_action :last_ext_tape_id, only: [:show]
   # GET /media_tape_heads

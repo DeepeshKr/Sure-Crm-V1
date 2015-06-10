@@ -1,4 +1,5 @@
 class OrderStatusMastersController < ApplicationController
+   before_action { protect_controllers(6) } 
   before_action :set_order_status_master, only: [:show, :edit, :update, :destroy]
 
   respond_to :html

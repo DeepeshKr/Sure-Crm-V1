@@ -1,4 +1,5 @@
 class ProductUpsellController < ApplicationController
+   before_action { protect_controllers(8) } 
   respond_to :html
   def list
 	@ropupsprod = ROPUPSPROD.all

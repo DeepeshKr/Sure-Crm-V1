@@ -1,4 +1,5 @@
 class ProductTrainingManualsController < ApplicationController
+   before_action { protect_controllers(8) } 
   before_action :set_product_training_manual, only: [:show, :edit, :update, :destroy]
 
   respond_to :html, :xml, :json

@@ -1,4 +1,5 @@
 class ChangeLogTrailsController < ApplicationController
+   before_action { protect_controllers(8) } 
   before_action :set_change_log_trail, only: [:show, :edit, :update, :destroy]
 
   respond_to :html

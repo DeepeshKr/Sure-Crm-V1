@@ -1,4 +1,5 @@
 class OrderUpdatesController < ApplicationController
+   before_action { protect_controllers(6) } 
   before_action :set_order_update, only: [:show, :edit, :update, :destroy]
 
   # GET /order_updates

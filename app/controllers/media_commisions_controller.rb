@@ -1,4 +1,5 @@
 class MediaCommisionsController < ApplicationController
+   before_action { protect_controllers(6) } 
   before_action :set_media_commision, only: [:show, :edit, :addmedia, :addnewmedia, :update, :destroy]
 
   respond_to :html

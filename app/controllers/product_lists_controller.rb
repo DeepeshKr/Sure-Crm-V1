@@ -1,4 +1,5 @@
 class ProductListsController < ApplicationController
+   before_action { protect_controllers(8) } 
   before_action :set_product_list, only: [:show, :edit, :update, :destroy]
    before_action :dropdowns, only: [:new, :edit]
 

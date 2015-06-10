@@ -1,4 +1,5 @@
 class ProductWarehousesController < ApplicationController
+   before_action { protect_controllers(8) } 
   before_action :set_product_warehouse, only: [:show, :edit, :update, :destroy]
 
   respond_to :html

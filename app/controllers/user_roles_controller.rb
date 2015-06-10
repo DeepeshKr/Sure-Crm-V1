@@ -1,5 +1,5 @@
 class UserRolesController < ApplicationController
- # before_action { protect_controllers_specific(2) } 
+   before_action { protect_controllers(8) } 
   before_action :set_user_role, only: [:show, :edit, :update, :destroy]
 
   respond_to :html

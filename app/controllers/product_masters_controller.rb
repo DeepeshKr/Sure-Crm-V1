@@ -1,4 +1,5 @@
 class ProductMastersController < ApplicationController
+   before_action { protect_controllers(8) } 
   before_action :set_product_master, only: [:show, :edit, :update, :destroy]
 before_action :dropdownlist
   #respond_to :html

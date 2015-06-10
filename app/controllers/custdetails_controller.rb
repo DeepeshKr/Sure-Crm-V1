@@ -1,4 +1,5 @@
 class CustdetailsController < ApplicationController
+   before_action { protect_controllers(8) } 
 	respond_to :html
   def list
   	if params[:from_date].present? && params[:to_date].present?

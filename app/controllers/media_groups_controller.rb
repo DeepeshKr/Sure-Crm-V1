@@ -1,4 +1,5 @@
 class MediaGroupsController < ApplicationController
+   before_action { protect_controllers(8) } 
   before_action :set_media_group, only: [:show, :edit, :addmedia, :update, :destroy]
 
   respond_to :html

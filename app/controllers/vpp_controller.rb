@@ -1,5 +1,5 @@
 class VppController < ApplicationController
-  
+   before_action { protect_controllers(6) } 
 	respond_to :html
   def list
   	#order_number

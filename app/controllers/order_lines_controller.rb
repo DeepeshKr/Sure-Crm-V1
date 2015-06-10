@@ -1,4 +1,5 @@
 class OrderLinesController < ApplicationController
+   before_action { protect_controllers(8) } 
   before_action :set_order_line, only: [:show, :edit, :update, :destroy, :deleteupsell, :update_description]
 
   respond_to :html

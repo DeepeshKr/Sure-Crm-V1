@@ -1,4 +1,5 @@
 class UsersController < ApplicationController
+   before_action { protect_controllers(8) } 
   before_action :set_user, only: [:show, :edit, :update, :destroy]
   # skip_before_action :require_login, only: [:new, :create]
   respond_to :html

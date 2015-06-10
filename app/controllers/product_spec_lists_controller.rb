@@ -1,4 +1,5 @@
 class ProductSpecListsController < ApplicationController
+   before_action { protect_controllers(8) } 
   before_action :set_product_spec_list, only: [:show, :edit, :update, :destroy]
 
   respond_to :html

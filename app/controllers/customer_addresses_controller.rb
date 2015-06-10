@@ -1,4 +1,5 @@
 class CustomerAddressesController < ApplicationController
+   before_action { protect_controllers(8) } 
   before_action :set_customer_address, only: [:show, :edit, :update, :destroy]
 
   respond_to :html
