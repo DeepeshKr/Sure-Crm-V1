@@ -78,7 +78,8 @@
         <td class="text-right"><%= link_to product_stock_book.returned_retail_qty, retailreturnedreport_path(prod: @prod, for_date: product_stock_book.stock_date.strftime('%m/%d/%Y')), :target => "_blank" %>
         </td>
         <td class="text-right"><%= product_stock_book.returned_retail_value %></td>
-        <td class="text-right"><%= product_stock_book.returned_wholesale_qty %></td>
+        <td class="text-right"><%= link_to product_stock_book.returned_wholesale_qty, wholesalereturnreport_path(prod: @prod, for_date: product_stock_book.stock_date.strftime('%m/%d/%Y')), :target => "_blank" %>
+        </td>
         <td class="text-right"><%= product_stock_book.returned_wholesale_value %></td>
         <td class="text-right"><%= product_stock_book.returned_others_qty %></td>
         <td class="text-right"><%= product_stock_book.returned_others_value %></td>

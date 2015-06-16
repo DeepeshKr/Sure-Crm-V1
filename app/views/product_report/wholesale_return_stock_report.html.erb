@@ -1,0 +1,28 @@
+<%= render 'report_heading' %>
+<br>
+<div class="well well-sm">
+		<div class="row">
+		<div class="col-xs-4">
+		<h4>	Wholesale Returns <small>rdate in NEW_DEPT</small>  </h4>
+			
+		</div>
+		<div class="col-xs-4">
+		<h4>Total Pieces: <%= @wholesalespieces %></h4>
+		</div>
+		<div class="col-xs-4">
+		<h4>Total Amount: <%= number_with_delimiter(@wholesalestotal, locale: :en) %></h4>
+		</div>
+		
+		</div>
+</div>
+<%= render 'wholesale_returns/list_min' %>
+
+<br>
+
+<br>
+<br>
+
+<%= link_to 'Download CSV', wholesalereturnreport_path(prod: @prod, for_date: @or_for_date, format: :csv), class: "btn btn-info btn-sm" %>
+<!-- Today's Date <%= @prev_datelist %> -->
+
+<br>

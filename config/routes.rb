@@ -258,7 +258,7 @@ Rails.application.routes.draw do
 
     get 'productreport' => 'product_report#list'
     get 'product_report/search'
-    get 'productdetails' => 'product_report#details'
+    get 'productdetails' => 'product_report#details' 
 
     get 'showproductstock' => 'product_stocks#showfordate'
     put 'updateproductstock' => 'product_stocks#updatefordate'
@@ -268,9 +268,10 @@ Rails.application.routes.draw do
     get 'purchasedstockreport' => 'product_report#purchased_stock_report'
      #stock report retail returns
     get 'retailreturnedreport' => 'product_report#retail_returned_stock_report'
-
     #stock report retail sold
     get 'retailsoldreport' => 'product_report#retail_sold_stock_report'
+    #stock report wholesale returned
+     get 'wholesalereturnreport' => 'product_report#wholesale_return_stock_report'
     #stock report wholesale sold
     get 'wholesalesoldreport' => 'product_report#wholesale_sold_stock_report'
     #stock report branch sold

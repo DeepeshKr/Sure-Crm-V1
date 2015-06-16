@@ -55,18 +55,10 @@ class ProductReportController < ApplicationController
 		   @purchasespieces = @purchases_new.sum(:qty)
 		end
   
-	  #retails sales based on paid date
-	  # if params[:paid].present?   
-		 #  if params[:paid] = "yes"
-			#   #code
-			#   @paid = "yes"
-			#   @type = "Paid "
-			#   @vpp = VPP.where(prod: prod).where("TRUNC(paiddate) >= ? and TRUNC(paiddate) <= ?", from_date, to_date)	
-		 #  end
-	  # else
-			  @type = "Shipped Date "
-			  @vpp = VPP.where(prod: prod).where("TRUNC(shdate) >= ? and TRUNC(shdate) <= ?", from_date, to_date)
-	  # end
+	  
+		 @type = "Shipped Date "
+		 @vpp = VPP.where(prod: prod).where("TRUNC(shdate) >= ? and TRUNC(shdate) <= ?", from_date, to_date).where("CFO != 'Y'")
+	  
   
 	  if @vpp.present?
 		  #Retail Sales
@@ -89,7 +81,7 @@ class ProductReportController < ApplicationController
 	  end
 	  
 	  #wholesale sales
-	  @newwlsdet = NEWWLSDET.where(prod: prod).where("TRUNC(shdate) >= ? and TRUNC(shdate) <= ?", from_date, to_date)
+	  @newwlsdet = NEWWLSDET.where(prod: prod).where("TRUNC(shdate) >= ? and TRUNC(shdate) <= ?", from_date, to_date).where("CFO != 'Y'")
 		if @newwlsdet.present?
 		  ##wholesale Sales
 		  #total
@@ -99,7 +91,7 @@ class ProductReportController < ApplicationController
 		end
   
 	  #Branch Transfers
-	  @tempinv_newwlsdet = TEMPINV_NEWWLSDET.where(prod: prod).where("TRUNC(shdate) >= ? and TRUNC(shdate) <= ?", from_date, to_date)
+	  @tempinv_newwlsdet = TEMPINV_NEWWLSDET.where(prod: prod).where("TRUNC(shdate) >= ? and TRUNC(shdate) <= ?", from_date, to_date).where("CFO != 'Y'")
 		if @tempinv_newwlsdet.present?
 		  ##wholesale Sales
 		  #total
@@ -116,37 +108,37 @@ class ProductReportController < ApplicationController
 
 		#branchsale returns
 	
-	else
-	#show recent 10 entries 
-	@product_stock_adjusts = ProductStockAdjust.limit(10)
-	@purchases_new = PURCHASES_NEW.limit(10)
-	if @purchases_new.present?
-		  #Purchases
-		  @purchasesshortqty = @purchases_new.sum(:shortqty)
-		  #total
-			@purchasestotal = @purchases_new.sum(:invamt)
-		  #pieces
-		   @purchasespieces = @purchases_new.sum(:qty)
-		end
-	@vpp = VPP.limit(10)
-		  #total
-		  @retailsalestotal = @vpp.sum(:paidamt)
-		  #pieces
-		   @retailsalespieces = @vpp.sum(:quantity)
+	# else
+	# #show recent 10 entries 
+	# @product_stock_adjusts = ProductStockAdjust.limit(10)
+	# @purchases_new = PURCHASES_NEW.limit(10)
+	# if @purchases_new.present?
+	# 	  #Purchases
+	# 	  @purchasesshortqty = @purchases_new.sum(:shortqty)
+	# 	  #total
+	# 		@purchasestotal = @purchases_new.sum(:invamt)
+	# 	  #pieces
+	# 	   @purchasespieces = @purchases_new.sum(:qty)
+	# 	end
+	# @vpp = VPP.limit(10)
+	# 	  #total
+	# 	  @retailsalestotal = @vpp.sum(:paidamt)
+	# 	  #pieces
+	# 	   @retailsalespieces = @vpp.sum(:quantity)
 
-	@newwlsdet = NEWWLSDET.limit(10)
+	# @newwlsdet = NEWWLSDET.limit(10)
 
-		 #total
-		  @wholesalestotal = @newwlsdet.sum(:totamt)
-		  #pieces
-		  @wholesalespieces = @newwlsdet.sum(:quantity)
+	# 	 #total
+	# 	  @wholesalestotal = @newwlsdet.sum(:totamt)
+	# 	  #pieces
+	# 	  @wholesalespieces = @newwlsdet.sum(:quantity)
 
-	@tempinv_newwlsdet = TEMPINV_NEWWLSDET.limit(10)
+	# @tempinv_newwlsdet = TEMPINV_NEWWLSDET.limit(10)
 
-		  #total
-		  @branchsalestotal = @tempinv_newwlsdet.sum(:totamt)
-		  #pieces
-		  @branchsalespieces = @tempinv_newwlsdet.sum(:quantity)
+	# 	  #total
+	# 	  @branchsalestotal = @tempinv_newwlsdet.sum(:totamt)
+	# 	  #pieces
+	# 	  @branchsalespieces = @tempinv_newwlsdet.sum(:quantity)
 	end
 
   end
@@ -230,7 +222,7 @@ class ProductReportController < ApplicationController
 		  @product_master_name = ProductMaster.where(extproductcode: @prod).first.name
 
 		   #retails retuned
-		  	@vpp = VPP.where(prod: @prod).where("returndate = ?", for_date)
+		  	@vpp = VPP.where(prod: @prod).where("returndate = ?", for_date).where("CFO != 'Y'")
 			if @vpp.present?
 			   #total
 			  @retailsalestotal = @vpp.sum(:invoiceamount)
@@ -261,7 +253,7 @@ class ProductReportController < ApplicationController
 		  @product_master_name = ProductMaster.where(extproductcode: @prod).first.name
 	
 		   #retail sales
-		  	@vpp = VPP.where(prod: @prod).where("(orderdate) = ?",for_date)
+		  	@vpp = VPP.where(prod: @prod).where("(orderdate) = ?",for_date).where("CFO != 'Y'")
 			if @vpp.present?
 			   #total
 			  @retailsalestotal = @vpp.sum(:paidamt)
@@ -280,6 +272,33 @@ class ProductReportController < ApplicationController
 		 
 		end
 	end
+	def wholesale_return_stock_report
+		@reportname = "Wholesale Return Report"
+		if params[:prod].present? && params[:for_date].present? 
+		 	@or_for_date = params[:for_date]		  
+		  	@prod = params[:prod]
+		  	for_date =  Date.strptime(params[:for_date], "%m/%d/%Y")
+		  	@for_date = for_date.strftime('%d-%b-%y')
+		  	@product_master_name = ProductMaster.where(extproductcode: @prod).first.name
+			#Returned whole sales
+       		@new_dept = NEW_DEPT.where(prod: @prod).where("TRUNC(rdate) = ?", for_date) #.where("CFO != 'Y'")
+			    if @new_dept.present?  
+				    #total
+				  	@wholesalestotal = 0 #@newwlsdet.sum(:totamt)
+				  	#pieces
+				  	@wholesalespieces = @new_dept.sum(:qty)  
+			    end
+			     #view format start
+			   	respond_to do |format|
+		            format.html
+		            format.csv do
+		              headers['Content-Disposition'] = "attachment; filename=\"wholesale_sold_return_report\""
+		              headers['Content-Type'] ||= 'text/csv'
+		            end
+          		end
+          		#format end
+		end
+	end
 
 	def wholesale_sold_stock_report
 			@reportname = "Wholesale Sales Report"
@@ -291,7 +310,7 @@ class ProductReportController < ApplicationController
 		  @product_master_name = ProductMaster.where(extproductcode: @prod).first.name
 
 		   #Sold wholesale
-      	@newwlsdet = NEWWLSDET.where(prod: @prod).where("(shdate) = ? ", for_date)
+      	@newwlsdet = NEWWLSDET.where(prod: @prod).where("(shdate) = ? ", for_date).where("CFO != 'Y'")
 			if @newwlsdet.present?
 				#total
 			  	@wholesalestotal = @newwlsdet.sum(:totamt)
@@ -322,7 +341,7 @@ class ProductReportController < ApplicationController
 		  @product_master_name = ProductMaster.where(extproductcode: @prod).first.name
 
 			#Sold branch
-			@tempinv_newwlsdet = TEMPINV_NEWWLSDET.where(prod: @prod).where("(shdate) = ? ", for_date)
+			@tempinv_newwlsdet = TEMPINV_NEWWLSDET.where(prod: @prod).where("(shdate) = ? ", for_date).where("CFO != 'Y'")
 			if @tempinv_newwlsdet.present?
 				 #total
 			  @branchsalestotal = @tempinv_newwlsdet.sum(:totamt)

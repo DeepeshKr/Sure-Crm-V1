@@ -1,6 +1,6 @@
 <% headers = ['Shdate', 'Order No', 'Invoice', 'Distcode', 'Prod', 'Trantype', 'Quantity', 'Totamt'] %>
 <%= CSV.generate_line headers %>
 	 <% @newwlsdet.each do |c| %>
-	 <%= CSV.generate_line([c.shdate.strftime('%d-%b-%y'), c.orderno, c.invoice, c.distcode, c.prod, c.trantype, c.quantity, c.totamt]).html_safe.strip  %>
+	 <%= CSV.generate_line([c.shdate.strftime('%d-%b-%y'), c.orderno, c.invoice, c.distributor_name, c.prod, c.trantype, c.quantity, c.totamt]).html_safe.strip  %>
 	<% end %>
 

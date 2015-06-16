@@ -225,7 +225,7 @@ end
         end
 
       #Returned Retail
-      @returned_vpp = VPP.where(prod: prod).where("TRUNC(returndate) = ?", for_date)
+      @returned_vpp = VPP.where(prod: prod).where("TRUNC(returndate) = ?", for_date).where("CFO != 'Y'")
       if @returned_vpp.present?
           @product_stock_book.update(returned_retail_qty: @returned_vpp.sum(:quantity))
           @product_stock_book.update(returned_retail_rate: 0)
@@ -249,7 +249,7 @@ end
       end
 
        #Returned whole sales
-       @new_dept = NEW_DEPT.where(prod: prod).where("TRUNC(rdate) = ?", for_date)
+       @new_dept = NEW_DEPT.where(prod: prod).where("TRUNC(rdate) = ?", for_date) #.where("CFO != 'Y'")
       if @new_dept.present?
           @product_stock_book.update(returned_wholesale_qty: @new_dept.sum(:qty))
           @product_stock_book.update(returned_wholesale_rate: 0)
@@ -273,7 +273,7 @@ end
       end
 
       #Sold Retail
-      @sold_vpp = VPP.where(prod: prod).where("TRUNC(shdate) = ?", for_date)
+      @sold_vpp = VPP.where(prod: prod).where("TRUNC(shdate) = ?", for_date).where("CFO != 'Y'")
       if @sold_vpp.present?
           @product_stock_book.update(sold_retail_qty: @sold_vpp.sum(:quantity))
           @product_stock_book.update(sold_retail_rate: 0)
@@ -289,7 +289,7 @@ end
       end
 
       #Sold wholesale
-      @newwlsdet = NEWWLSDET.where(prod: prod).where("TRUNC(shdate) = ? ", for_date)
+      @newwlsdet = NEWWLSDET.where(prod: prod).where("TRUNC(shdate) = ? ", for_date).where("CFO != 'Y'")
       if @newwlsdet.present?
         ##wholesale Sales
         @product_stock_book.update(sold_wholesale: @newwlsdet.sum(:quantity))
@@ -306,7 +306,7 @@ end
       end
 
       #Sold Branch
-      @tempinv_newwlsdet = TEMPINV_NEWWLSDET.where(prod: prod).where("TRUNC(shdate) = ?", for_date)
+      @tempinv_newwlsdet = TEMPINV_NEWWLSDET.where(prod: prod).where("TRUNC(shdate) = ?", for_date).where("CFO != 'Y'")
       if @tempinv_newwlsdet.present?
         ##Branch Sales
         

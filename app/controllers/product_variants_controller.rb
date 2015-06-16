@@ -128,6 +128,7 @@ class ProductVariantsController < ApplicationController
 
     def product_variant_params
       params.require(:product_variant).permit(:name, :productmasterid, :variantbarcode, 
-      :price, :taxes,  :shipping, :extproductcode, :description, :activeid, :product_sell_type_id)
+      :price, :taxes,  :shipping, :extproductcode, :description, :activeid, 
+      :product_sell_type_id)
     end
 end

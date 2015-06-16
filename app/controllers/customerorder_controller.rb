@@ -904,12 +904,22 @@ end
             
           end
 
-
-          ActiveRecord::Base.establish_connection("#{Rails.env}_cccrm")
+          if Rails.env == "development"
+            establish_connection :development_cccrm
+          elsif Rails.env == "production"
+            establish_connection :production_cccrm
+          end
+ 
+          #ActiveRecord::Base.establish_connection("#{Rails.env}_cccrm")
           hash =  ActiveRecord::Base.connection.exec_query("select ordernumc.nextval from dual")[0]
           #order_num =  hash["nextval"]
 
-          ActiveRecord::Base.establish_connection("#{Rails.env}_testora")
+          if Rails.env == "development"
+            establish_connection :development_testora
+          elsif Rails.env == "production"
+            establish_connection :production_testora
+          end
+          #ActiveRecord::Base.establish_connection("#{Rails.env}_testora")
         
           #hash = ActiveRecord::Base.connection.exec_query("select order_seq.nextval from dual")[0]
           

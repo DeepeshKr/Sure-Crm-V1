@@ -71,6 +71,11 @@ class SalesPpoReportController < ApplicationController
          halfhourago = Time.at(date - 30.minutes) 
 
           orderlist = OrderMaster.where('ORDER_STATUS_MASTER_ID > 10002').where(media_id: @hbnlist).where('orderdate >= ? AND orderdate <= ?', halfhourago, Time.at(date))
+          #add orders of each cable tv operator
+
+          #split the fixed cost across the hour
+
+          #ppo for each hour
           ccvalue = orderlist.where(orderpaymentmode_id: 10000).sum(:total)
           ccorders = orderlist.where(orderpaymentmode_id: 10000).count()
           codorders = orderlist.where(orderpaymentmode_id: 10001).count()
@@ -80,8 +85,11 @@ class SalesPpoReportController < ApplicationController
           employeeunorderlist << {:total => totalorders,
           :starttime =>  halfhourago.strftime("%d-%b %H:%M %p"),
           :endtime => Time.at(date).strftime("%d-%b %H:%M %p"),
-          :start_time => halfhourago.strftime("%Y-%m-%d %H:%M"), :end_time => Time.at(date).strftime("%Y-%m-%d %H:%M"),
-          :nos => noorders, :codorders => codorders, :codvalue => codvalue,
+          :start_time => halfhourago.strftime("%Y-%m-%d %H:%M"), 
+          :end_time => Time.at(date).strftime("%Y-%m-%d %H:%M"),
+          :nos => noorders,
+           :codorders => codorders, 
+          :codvalue => codvalue,
            :ccorders => ccorders, :ccvalue => ccvalue  }
         end
        @employeeorderlist = employeeunorderlist #.sort_by{|c| c[:total]}.reverse 

@@ -5,11 +5,11 @@
 <%= link_to 'Back', product_variants_path %>
 <script>
   $(document).ready(function() {
-    $('#product_variant_productmasterid').change(function() {
+    $('#media_tape_head_product_variant_id').change(function() {
         $.ajax({
            url: "<%= productdetails_path %>",
            data: {
-               id: $("#product_variant_productmasterid option:selected").val()
+               id: $("#media_tape_head_product_variant_id option:selected").val()
            },
            dataType: "script"
         });

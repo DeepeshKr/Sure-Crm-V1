@@ -32,7 +32,9 @@ after_save :updator
      self.name + " -- Basic: Rs." + (self.price.to_s ||= 'No Price') + " -- Total: Rs."  + (self.total.to_s ||= 'No Price')
    end
 
-
+   def productdetails
+     self.name + " -- Basic: Rs." + (self.price.to_s ||= 'No Price') + " -- Total: Rs."  + (self.total.to_s ||= 'No Price') + " " + (self.extproductcode ||= 'No Code')
+   end
 
 private
   def creator

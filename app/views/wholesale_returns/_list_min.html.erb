@@ -2,53 +2,59 @@
 <table class="table table-hover table-bordered">
 	<thead>
 		<tr>
-			 <th>	SRNO	</th>
-			 <th>	RDATE	</th>
-			 <th>	DISTNAME	</th>
-			 <th>	RECD_DOCS	<br>	 	PEND_DOCS 	</th>
-			 <th>	SINV_DATE 	</th>
-			 <th>	ACTUAL RETURN DATE	</th>
-			 <th>	PROD 	</th>
-			
-			 <th>DEFECT_TYPE <br>	PROBLEM <br> MKTG_REMARKS	</th>
-			
-			 <th>	DEFECT_STATUS	</th>
-			 <th>	PART_NAME	</th>
-			 <th>	ACTION_TAKEN	</th>
-			 <th>	CASE_STATUS	</th>
-			 <th>	CHARGES	</th>
-			 <th>	REMARKS	</th>
-			 <th>	TYPE	</th>
-			 <th>	STORE REMARKS	</th>
-			 <th>	QTY	</th>
-			 
-
+			 <th>	RDate	</th>
+			 <th>	Distributor	</th>
+			 <th>	Sinv_date 	<br>Actual Return Date
+			 <th>	Prod 	</th>
+			 <th>	Qty	</th>
+			 <th> 	Defect Type <br>	Problem <br> mktg_remarks	</th>
+			 <th>	Defect_status	</th>
+			 <th>	Part_name	</th>
+			 <th>	Action_taken	</th>
+			 <th>	Case_status	</th>
+			 <th>	Charges	</th>
+			 <th>	Store remarks	</th>
 		</tr>
 
 	</thead>
 <tbody>
+<% @totalqty = 0 %> <% @totalcharges = 0 %>
  <% @new_dept.each do |n| %>
 <tr>
-	<td>	<%=n.srno %>	</td>
 	<td>	<%=n.rdate.strftime("%d-%b-%Y") %>	</td>
 	<td>	<%=n.distname%>	</td>
 	<td>	<%=n.recd_docs%>	<br>	<%=n.pend_docs %>	</td>
-	<td>	<%=n.sinv_date.strftime("%d-%b-%Y") if n.sinv_date %>	</td>
-	<td>	<%=n.actual_return_date.strftime("%d-%b-%Y") if n.actual_return_date %>	</td>
+	<td>	<%=n.sinv_date.strftime("%d-%b-%Y") if n.sinv_date %>	<br>	<%=n.actual_return_date.strftime("%d-%b-%Y") if n.actual_return_date %>	</td>
 	<td>	<%=n.prod %>	</td>
+	<td>	<%=n.qty%>	<% @totalqty += n.qty %>  </td>
 	<td>	<%=n.defect_type%>	<br> <%=n.problem%> <br> <%=n.mktg_remarks%></td>
 	<td>	<%=n.defect_status%>	</td>
 	<td>	<%=n.part_name%>	</td>
 	<td>	<%=n.action_taken%>	</td>
 	<td>	<%=n.case_status%>	</td>
-	<td>	<%=n.charges%>	</td>
-	<td>	<%=n.remarks%>	</td>
-	<td>	<%=n.type %>	</td>
+	<td>	<%=n.charges %>	<% @totalcharges += n.charges %> </td>
+	
 	<td>	<%=n.store_remarks%>	</td>
-	<td>	<%=n.qty%>	</td>
+	
 	
 </tr>
 <% end %>
 </tbody>
+<thead>
+	<tr>
+			 <th colspan="4">	Total	</th>
+			
+			 <th>	<%= @totalqty %>	</th>
+			 <th> 	 	</th>
+			  <th>		</th>
+			  <th>		</th>
+			 <th colspan="2">	Total Charges	</th>
+			
+			 
+			
+			 <th colspan="2">	<%= @totalcharges %>	</th>
+			 
+		</tr>
+</thead>
 
 </table>

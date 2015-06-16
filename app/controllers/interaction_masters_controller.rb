@@ -22,8 +22,8 @@ class InteractionMastersController < ApplicationController
        @category_name = "Search for Category and Status selected above"
     elsif params.has_key?(:for_date)
        for_date =  Date.strptime(params[:for_date], "%m/%d/%Y")
-        @interaction_masters = InteractionMaster.where("TRUNC(created_at) = ?", for_date)
-       @category_name = "Searched for order for #{for_date}"
+        @interaction_masters = InteractionMaster.where("TRUNC(INTERACTION_MASTERS.created_at) = ?", for_date).joins(:interaction_category).where('interaction_categories.sortorder > 100 and interaction_categories.sortorder < 300')
+       @category_name = "Searched for order for #{for_date} and found #{@interaction_masters.count()}"
     elsif params.has_key?(:mobile)
       @mobile = params[:mobile]
       @mobile = @mobile.strip

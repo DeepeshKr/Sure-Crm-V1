@@ -2,6 +2,7 @@ class MediaTapeHeadsController < ApplicationController
    before_action { protect_controllers(8) } 
   before_action :set_media_tape_head, only: [:show, :edit, :update, :destroy]
   before_action :last_ext_tape_id, only: [:show]
+  before_action :dropdowns, only: [:new, :edit, :update]
   # GET /media_tape_heads
   # GET /media_tape_heads.json
   def index
@@ -95,7 +96,7 @@ class MediaTapeHeadsController < ApplicationController
         format.json { render json: @media_tape_head.errors, status: :unprocessable_entity }
       end
     end
-  end
+  end 
 
   # DELETE /media_tape_heads/1
   # DELETE /media_tape_heads/1.json
@@ -113,6 +114,9 @@ class MediaTapeHeadsController < ApplicationController
       @media_tape_head = MediaTapeHead.find(params[:id])
     end
 
+    def dropdowns
+      @productvariants = ProductVariant.all.order("name")
+    end
     # Never trust parameters from the scary internet, only allow the white list through.
     def media_tape_head_params
       params.require(:media_tape_head).permit(:name, :description, :product_variant_id)

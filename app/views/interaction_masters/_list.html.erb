@@ -12,7 +12,7 @@
         <th>Resolve by: <%= interaction_master.resolveby.strftime("%d-%b-%Y") rescue nil %></th>
         <th>Status:<%= interaction_master.interaction_status.internal_description %></th>
         <th>Category: <%= interaction_master.interaction_category.name %></th>
-        <th>By: <%= interaction_master.employee.name %></th>  
+        <th>By: <%= interaction_master.employee.name || "Na" if interaction_master.employee %></th>  
         <th>Mobile: <%= interaction_master.mobile%></th>
 
         <th><%= link_to 'More...', interaction_master, class: "btn btn-primary btn-xs" %></th>
