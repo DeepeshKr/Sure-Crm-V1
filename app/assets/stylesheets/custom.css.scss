@@ -4,6 +4,10 @@
 /* mixins, variables, etc. */
 
 $gray-medium-light: #eaeaea;
+$gray-light: #eaeaea;
+$gray: #d3d3d3;
+$gray-lighter: #eaeaea;
+$state-danger-text: #FF0000;
 
 @mixin box_sizing {
   -moz-box-sizing:    border-box;
