@@ -139,6 +139,7 @@ class ProductTrainingManualsController < ApplicationController
     end
 
     def product_training_manual_params
-      params.require(:product_training_manual).permit(:productid, :name, :description, :quicknotes)
+      params.require(:product_training_manual).permit(:productid, 
+        :name, :description, :quicknotes, :bootsy_image_gallery_id)
     end
 end

@@ -1,4 +1,4 @@
-<%= bootstrap_form_for(@product_training_manual, layout: :horizontal, label_col: "col-sm-2", control_col: "col-sm-10") do |f| %>
+<%=  simple_form_for(@product_training_manual, layout: :horizontal, label_col: "col-sm-2", control_col: "col-sm-10") do |f| %>
   <% if @product_training_manual.errors.any? %>
     <div id="error_explanation">
       <h2><%= pluralize(@product_training_manual.errors.count, "error") %> prohibited this product_training_manual from being saved:</h2>
@@ -16,24 +16,20 @@
      <%= f.hidden_field :productid %>
 
   <div class="field">
-  	 <%= f.select :name,  options_from_collection_for_select(ProductTrainingHeading.all,
-       :name, :name),
-    { label: "Heading"},
-		       { class: "selectpicker" }
-		        %>
+  	  <%= f.association :product_training_heading, { label: "Heading"} %>
   	
   </div>
   <div class="field">
    
-    <%= f.text_area :description, label:"Description" %>
+     <%= f.bootsy_area :description, as: :bootsy, :rows => 10, label:"Description ", placeholder:"You can use tables and various formatting options" %>
   </div>
   <div class="field">
    
-    <%= f.text_area :quicknotes, label:"Quick Notes", placeholder:"Optional Quick Notes" %>
+    <%= f.input :quicknotes, label:"Quick Notes", placeholder:"Optional Quick Notes in TEXT only" %>
   </div>
   <div class="row">
   <div class="col-xs-2 col-md-offset-5">
-    <%= f.primary class: "btn btn-primary" %>
+   <%= f.button :submit, class: "btn btn-primary" %>
   </div>
   </div>
 <% end %>

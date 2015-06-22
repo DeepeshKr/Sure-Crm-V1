@@ -16,7 +16,11 @@
 </strong>
 <br>
  <%= p.product_list.product_variant.description if p.product_list.product_variant %>
-   
+   <br>
+   <strong>
+      <%= p.replace_products if p.replace_products.present? %>
+   </strong>
+  
     
    </td>
         

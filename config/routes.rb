@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
 
+  mount Bootsy::Engine => '/bootsy', as: 'bootsy'
   get 'wholesale_distributors/list'
   get 'wholesale_distributors/search'
   get 'wholesale_distributors/details'

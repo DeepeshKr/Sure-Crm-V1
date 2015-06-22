@@ -73,6 +73,8 @@ class ProductMasterAddOnsController < ApplicationController
     end
 
     def product_master_add_on_params
-      params.require(:product_master_add_on).permit(:product_master_id, :product_list_id, :activeid, :change_price)
+      params.require(:product_master_add_on).permit(:product_master_id, 
+        :product_list_id, :activeid, :change_price,
+        :sort_order, :replace_by_product_id)
     end
 end

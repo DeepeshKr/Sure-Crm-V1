@@ -1,7 +1,8 @@
-<% if @order_lines_upsell.present? %>
+
+<% if @order_lines_basic.present? %>
 
 
-    <% @order_lines_upsell.each do |order_line| %>
+    <% @order_lines_basic.each do |order_line| %>
       <tr>
         <td><%= order_line.description %></td>
         <td class="text-right"><%= order_line.pieces %></td>

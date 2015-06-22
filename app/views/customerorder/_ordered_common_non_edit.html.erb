@@ -1,6 +1,9 @@
-    <% @order_lines_regular.each do |order_line| %>
+<% if @order_lines_common.present? %>
+
+
+    <% @order_lines_common.each do |order_line| %>
       <tr>
-        <td><%= order_line.description %> </td>
+        <td><%= order_line.description %></td>
         <td class="text-right"><%= order_line.pieces %></td>
        <td class="text-right"><%= order_line.subtotal %></td>
         <td class="text-right">
@@ -49,4 +52,13 @@
        </td>  
       </tr>
     <% end %>
-  
+    
+<% else %>
+ <tr>
+ <td colspan="8">
+<div class="alert alert-warning" role="alert">
+<h4>There are no upsells in this order, to add upsell click below!</h4>
+</div>
+</td>
+</tr>
+<% end %>

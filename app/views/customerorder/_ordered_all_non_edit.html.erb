@@ -1,0 +1,65 @@
+<table class="table table-striped table-bordered">
+  <thead>
+  <tr>
+      <th colspan="4"> </th>
+      
+     
+      <th colspan="2" class="text-center">COD Charges</th>
+      
+      <th colspan="2" class="text-center">Credit Card</th>
+      
+    </tr>
+    <tr>
+      <th>Product Description </th>
+      <th class="text-right">Pieces</th>
+      <th class="text-right">Basic</th>
+      <th class="text-right">Shipping</th>
+      <th class="text-right"><small>COD Charge</small></th>
+      <th class="text-right"><small>Mah Surcharge</small></th>
+      <th class="text-right"><small>Credit Card</small></th>
+      <th class="text-right"><small>Mah Surcharge</small></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+   <th colspan="8">Main Products </th>
+      
+   </tr>
+   <% if @order_lines_regular.present? %>
+    <%= render "ordered_regular_non_edit" %>
+   <% else %>
+  <tr>
+<td> No Products Ordered</td>
+  </tr>
+  <% end %>
+
+     <tr>
+   <th colspan="8">Basic Upsell Products </th>
+      
+   </tr>
+   <% if @order_lines_basic.present? %>
+    <%= render "ordered_basic_non_edit" %>
+   <% else %>
+  <tr>
+<td> No Basic Upsell Products Ordered</td>
+  </tr>
+  <% end %>
+    
+        <tr>
+     <th colspan="8">Common Upsell Products </th>
+        
+     </tr>
+  <% if @order_lines_common.present? %>
+   <%= render "ordered_common_non_edit" %>
+   <% else %>
+      <tr>
+    <td> No Common Upsell Products Ordered</td>
+      </tr>
+  <% end %>
+    
+  
+
+
+  </tbody>
+</table>

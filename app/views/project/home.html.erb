@@ -18,12 +18,14 @@
     <div class="panel-body">
       <p>Coming soon...</p>
     </div>
-  </div>
+  
   <% else %>
      <div class="panel-body">
      <h5>You are not logged in</h5>
     </div>
   <% end %>
+
+  </div>
 </div>
 
 <div class="col-xs-4">
@@ -34,7 +36,7 @@
     <div class="panel-body">
       <p>Coming soon...</p>
     </div>
-  </div>
+  
   <% else %>
   <div class="panel-body">
      <h5>You are not logged in</h5>
@@ -42,10 +44,50 @@
   
   <% end %>
   </div>
+  </div>
 </div>
 
-
+<div class="row">
+<div class="col-xs-8">
+<div class="ui-widget">
+  <label for="tags">Tags: </label>
+  <input id="tags">
+</div>
+</div>
+</div>
 
 <div class="well">
 <!-- <%= image_tag("/project/home/exciting.png", :alt => "Image missing") %> -->
 </div>
+
+<script>
+  $(function() {
+    var availableTags = [
+      "ActionScript",
+      "AppleScript",
+      "Asp",
+      "BASIC",
+      "C",
+      "C++",
+      "Clojure",
+      "COBOL",
+      "ColdFusion",
+      "Erlang",
+      "Fortran",
+      "Groovy",
+      "Haskell",
+      "Java",
+      "JavaScript",
+      "Lisp",
+      "Perl",
+      "PHP",
+      "Python",
+      "Ruby",
+      "Scala",
+      "Scheme"
+    ];
+    $( "#tags" ).autocomplete({
+      source: availableTags
+    });
+  });
+  </script>

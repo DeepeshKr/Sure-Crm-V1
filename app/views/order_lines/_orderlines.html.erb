@@ -29,9 +29,15 @@
       <th></th>
     </tr>
   </thead>
-
+ 
   <tbody>
-    <% @order_lines.each do |order_line| %>
+   <tr>
+   <th colspan="9">Main Products </th>
+      
+   </tr>
+    <% if @order_lines_regular.present? %>
+<!-- Regular Products -->
+     <% @order_lines_regular.each do |order_line| %>
       <tr>
         <td><%= order_line.description %></td>
         <td class="text-right"><%= order_line.pieces %></td>
@@ -82,6 +88,125 @@
        </td>  
         <td><%= link_to 'Destroy', order_line, method: :delete, data: { confirm: 'Are you sure?' } %></td>
       </tr>
+    <% end %>
+    <% end %>
+    <tr>
+   <th colspan="9">Basic Upsell Products </th>
+      
+   </tr>
+    <% if @order_lines_basic.present? %>
+    <!-- Basic Upsell Products -->
+     <% @order_lines_basic.each do |order_line| %>
+      <tr>
+        <td><%= order_line.description %></td>
+        <td class="text-right"><%= order_line.pieces %></td>
+       <td class="text-right"><%= order_line.subtotal %></td>
+        <td class="text-right">
+            <%= order_line.subtotal + order_line.shipping %>
+              <hr>
+              <small><%= order_line.shipping %> </small>   </td>
+        
+       <td class="text-right">
+        <% if order_line.maharastracodextra != 0 %>
+
+              <%= (order_line.subtotal || 0) + (order_line.shipping || 0) + (order_line.codcharges || 0)  %> 
+        <% else %>
+          0.00
+        <% end %>
+      <hr>
+        <small> <%= order_line.codcharges %></small>
+       </td> 
+       <td class="text-right">
+        <% if order_line.codcharges != 0 %>
+        <%= (order_line.subtotal || 0) + (order_line.shipping || 0) + (order_line.codcharges || 0) + (order_line.maharastracodextra || 0) %>
+        <% else %>
+          0.00
+        <% end %>
+      <hr>
+      <small> <%= order_line.maharastracodextra %></small>
+       </td>
+        
+        <td class="text-right">
+      <% if order_line.creditcardcharges != 0 %>
+        <%= (order_line.subtotal || 0) + (order_line.shipping || 0)  + (order_line.creditcardcharges || 0) %> 
+        <% else %>
+          0.00
+        <% end %>
+      <hr>
+        <small> <%= order_line.creditcardcharges %></small>
+        </td>
+        <td class="text-right">
+          <% if order_line.maharastraccextra != 0 %>
+
+            <%= (order_line.subtotal || 0) + (order_line.shipping || 0) + (order_line.creditcardcharges || 0)  + (order_line.maharastraccextra || 0)  %> 
+          <% else %>
+            0.00
+          <% end %>
+          <hr>
+          <small> <%= order_line.maharastraccextra %></small>
+       </td>  
+        <td><%= link_to 'Destroy', order_line, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+     <% end %>
+    <tr>
+   <th colspan="9">Common Upsell Products </th>
+      
+   </tr>
+    <% if @order_lines_common.present? %>
+    <!-- Common Upsell Products -->
+     <% @order_lines_common.each do |order_line| %>
+      <tr>
+        <td><%= order_line.description %></td>
+        <td class="text-right"><%= order_line.pieces %></td>
+       <td class="text-right"><%= order_line.subtotal %></td>
+        <td class="text-right">
+            <%= order_line.subtotal + order_line.shipping %>
+              <hr>
+              <small><%= order_line.shipping %> </small>   </td>
+        
+       <td class="text-right">
+        <% if order_line.maharastracodextra != 0 %>
+
+              <%= (order_line.subtotal || 0) + (order_line.shipping || 0) + (order_line.codcharges || 0)  %> 
+        <% else %>
+          0.00
+        <% end %>
+      <hr>
+        <small> <%= order_line.codcharges %></small>
+       </td> 
+       <td class="text-right">
+        <% if order_line.codcharges != 0 %>
+        <%= (order_line.subtotal || 0) + (order_line.shipping || 0) + (order_line.codcharges || 0) + (order_line.maharastracodextra || 0) %>
+        <% else %>
+          0.00
+        <% end %>
+      <hr>
+      <small> <%= order_line.maharastracodextra %></small>
+       </td>
+        
+        <td class="text-right">
+      <% if order_line.creditcardcharges != 0 %>
+        <%= (order_line.subtotal || 0) + (order_line.shipping || 0)  + (order_line.creditcardcharges || 0) %> 
+        <% else %>
+          0.00
+        <% end %>
+      <hr>
+        <small> <%= order_line.creditcardcharges %></small>
+        </td>
+        <td class="text-right">
+          <% if order_line.maharastraccextra != 0 %>
+
+            <%= (order_line.subtotal || 0) + (order_line.shipping || 0) + (order_line.creditcardcharges || 0)  + (order_line.maharastraccextra || 0)  %> 
+          <% else %>
+            0.00
+          <% end %>
+          <hr>
+          <small> <%= order_line.maharastraccextra %></small>
+       </td>  
+        <td><%= link_to 'Destroy', order_line, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
     <% end %>
   </tbody>
 </table>

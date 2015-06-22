@@ -187,8 +187,11 @@ class OrderMastersController < ApplicationController
         @order_masters = OrderMaster.where(customer_id: customers)  
     elsif params[:order_id].present?
         @order_id = params[:order_id]
-        @order_masters = OrderMaster.where(id: @order_id)  
+        @order_masters = OrderMaster.where(id: @order_id) 
 
+     elsif params[:calledno].present?
+        @calledno = params[:calledno]
+        @order_masters = OrderMaster.where(calledno: @calledno)  
  
     end
   end
@@ -235,6 +238,7 @@ class OrderMastersController < ApplicationController
         :customer_id, :customer_address_id, :billno, :external_order_no, :pieces, 
         :subtotal, :taxes, :shipping, :codcharges, :total, :order_status_master_id, 
         :orderpaymentmode_id, :campaign_playlist_id, :notes, :order_source_id,
-        :media_id, :corporate_id, :order_for_id, :userip, :sessionid, :calledno)
+        :media_id, :corporate_id, :order_for_id, :userip, :sessionid, :calledno,
+        :original_order_id)
     end
 end

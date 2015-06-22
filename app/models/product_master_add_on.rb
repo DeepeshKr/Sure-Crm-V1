@@ -10,4 +10,12 @@ class ProductMasterAddOn < ActiveRecord::Base
 	 def ProductMaster
 	 	ProductMaster.find("id = ?", self.product_master_id).productname
 	 end
+
+	 def replace_products
+	 	if self.replace_by_product_id.present?
+	 		orginal_product = ProductList.find(self.product_list_id).name
+	 		replace_by_product = ProductList.find(self.replace_by_product_id).name
+	 		return "This #{orginal_product} would be replaced by #{replace_by_product}"
+	 	end
+	 end
 end

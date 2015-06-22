@@ -16,11 +16,15 @@
     <%= f.hidden_field :product_master_id %>
 
  
-  <div class="field">
+  <div class="row">
+    <div class="col-xs-9">
      <%= f.select :product_list_id,  options_from_collection_for_select(@productspecificaddonlist,
        :id, :productlistdetails),
              { label: "Select these product which can be sold as Specific Add Ons" } %>
- 
+    </div>
+    <div class="col-xs-3">
+      <%= f.number_field :sort_order, :label => "Sort order (Lowest comes First)", :placeholder => "1 / 2 / 3" %>
+    </div>
   </div>
   <div class="field">
      <%= f.select :activeid,  options_from_collection_for_select(@productactivecode,
@@ -28,7 +32,14 @@
              { label: "Select the Product Active Status" } %>
  
   </div>
+
+<div class="field">
+     <%= f.select :product_list_id,  options_from_collection_for_select(@productreplaceaddonlist,
+       :id, :productlistdetails),
+             { label: "Select these product which would be replaced on Specific Add Ons", prompt: "Please select if you need to replace the product"} %>
  
+  </div>
+
     <%= f.hidden_field :change_price %>
   
  <div class="row">

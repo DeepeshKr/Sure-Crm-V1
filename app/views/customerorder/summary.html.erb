@@ -1,21 +1,22 @@
 <div class="clearfix"></div>
 <blockquote>
-  <p class="lead">Awesome, your order is processed, the id for this 
-  <strong> order id # <%= @cust_details_id.to_s %> </strong>
+  <p class="lead"> <strong><%= @order_message %> </strong>
   </p>
-   <footer>Please close this window and wait for next call</footer>
+   <footer><%= @order_processed_next_steps %>   </footer>
 </blockquote>
 
+ <% @order_masters.each do |customer| %>
 <div class="clearfix"></div>
 
      <div class="panel panel-primary">
   <div class="panel-heading">
-    <h3 class="panel-title">Customer Order Summary</h3>
+   <h3 class="panel-title">Customer Order Summary</h3>
   </div>
   <%= render "order_customer" %>
 
   <%= render "order_address" %>
-    <%= render "ordered_non_edit" %>
+    <%= render "ordered_all_non_edit" %>
+
 
 
     
@@ -24,6 +25,6 @@
   
 
 <br>
-
+<% end %>
 <!-- bottom menu -->
   <%= render 'call_menu' %> 

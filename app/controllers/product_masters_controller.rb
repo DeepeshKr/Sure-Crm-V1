@@ -152,7 +152,9 @@ respond_to :html, :xml, :json
       @productactivecode = ProductActiveCode.all.order("id")
       @productselltype = ProductSellType.all.order("id")
       @productspecificaddonlist = ProductList.joins(:product_variant).where("product_variants.product_sell_type_id = ? ", 10040)
-
+      @productreplaceaddonlist = ProductList.joins(:product_variant)
+      .where("product_variants.product_sell_type_id = ? ", 10000)
+      .order("product_variants.name")
     end 
 
     def product_sell_type

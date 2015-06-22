@@ -1,9 +1,9 @@
 class CustomerorderController < ApplicationController
 
 before_action { protect_controllers(20) } 
-before_action :productlist, only: [:products, :offline, :add_products]
+#before_action :productlist, only: [:products, :offline, :add_products]
 before_action :order_line_params, only: [ :add_products]
-before_action :set_order
+before_action :set_order, except: [:summary] 
 before_action :new_call
 before_action :check_order, except: [:summary] 
 before_action :allowprocessing, except: [:summary, :new_dealer, :dealers]
@@ -22,7 +22,7 @@ def newcall
     if @order_id.present?
         @order_line.orderid = @order_id  
         specific_addon_product_lists  
-        editupsellproducts
+        #editupsellproducts
     end
      
     @newproductlist = ProductList.take(0)
@@ -110,8 +110,7 @@ def add_products
       @cli = params[:mobile]
       @dnis = params[:calledno]
       @order_id = neworder(10000, @cli, @dnis)
-
-       order_line_params[:orderid] = @order_id
+      order_line_params[:orderid] = @order_id
        
     end
     #orderid = @order_id
@@ -119,130 +118,69 @@ def add_products
     #flash[:error] = @order_master.errors.full_messages.join("<br/>")
     if order_line_params[:product_list_id].present?
       
-
-    exproductlist = ProductList.find(order_line_params[:product_list_id])
-    exproductvariant = ProductVariant.find(exproductlist.product_variant_id)
-    @order_lines = OrderLine.where("product_list_id = ? AND orderid = ?", 
-    order_line_params[:product_list_id], @order_id)
-
-    product_name = exproductlist.name 
-        
-        if @order_lines.exists?
-            pieces = @order_lines.first.pieces + order_line_params[:pieces].to_i
-            @order_lines.first.update(pieces: pieces,
-             subtotal: exproductvariant.price * pieces, 
-                taxes: exproductvariant.taxes * pieces,
-                codcharges: 0,
-                shipping: exproductvariant.shipping * pieces,
-               total: exproductvariant.total * pieces)
-          
-            flash[:success] = " #{pieces} Piece/s of #{product_name} successfully added " 
-          else
-                pieces = order_line_params[:pieces].to_f
-                @order_line = OrderLine.create(orderid: @order_id,
-                orderdate: Time.zone.now, 
-                employeecode: @empcode, employee_id: @empid,
-                subtotal: exproductvariant.price * pieces, 
-                taxes: exproductvariant.taxes * pieces,
-                codcharges: 0,
-                shipping: exproductvariant.shipping * pieces,
-                pieces:  order_line_params[:pieces],
-                total: exproductvariant.total * pieces,
-                description: product_name,
-                productvariant_id: exproductlist.product_variant_id,
-                product_master_id: exproductvariant.productmasterid,
-                product_list_id: order_line_params[:product_list_id],
-                orderlinestatusmaster_id: 10000)
-            if @order_line.valid?
-                flash[:success] = "#{product_name} successfully added " 
-            else
-                flash[:error] = @order_line.errors.full_messages.join("<br/>")
-            end
-        end    
-   else
-       flash[:error] = "You have not selected the correct product try to select from the list"
+      addproducts_to_order(@order_id, order_line_params[:product_list_id], order_line_params[:pieces])
+    else
+         flash[:error] = "You have not selected the correct product try to select from the list"
     end
 
-      redirect_to neworder_path(:order_id => @order_id)
+    redirect_to neworder_path(:order_id => @order_id)
    
-  end
+    end
 
   def add_basic_upsell
-     exproductlist = ProductList.find(params[:product_list_id])
-      exproductvariant = ProductVariant.find(exproductlist.product_variant_id)
-      @order_lines = OrderLine.where("product_list_id = ? AND orderid = ?", 
-      params[:product_list_id], params[:order_id])
-
-      product_name = exproductlist.productlistdetails 
         
-        if @order_lines.exists?
-            pieces = @order_lines.first.pieces + params[:pieces].to_i
-            @order_lines.first.update(pieces: pieces,
-             subtotal: exproductvariant.price * pieces, 
-                taxes: exproductvariant.taxes * pieces,
-                codcharges: 0,
-                shipping: exproductvariant.shipping * pieces,
-               total: exproductvariant.total * pieces)
-          
-            flash[:success] = " #{pieces} Piece/s of #{product_name} successfully added " 
-          else
-                pieces = params[:pieces].to_f
-                @order_line = OrderLine.create(orderid: params[:order_id],
-                orderdate: Time.zone.now, 
-                employeecode: @empcode, employee_id: @empid,
-                subtotal: exproductvariant.price * pieces, 
-                taxes: exproductvariant.taxes * pieces,
-                codcharges: 0,
-                shipping: exproductvariant.shipping * pieces,
-                pieces:  params[:pieces],
-                total: exproductvariant.total * pieces,
-                description: product_name,
-                productvariant_id: exproductlist.product_variant_id,
-                product_master_id: exproductvariant.productmasterid,
-                product_list_id: params[:product_list_id],
-                orderlinestatusmaster_id: 10000)
-            if @order_line.valid?
-                flash[:success] = "#{product_name} successfully added " 
-            else
-                flash[:error] = @order_line.errors.full_messages.join("<br/>")
-            end
-        end    
-      redirect_to neworder_path(:order_id => @order_master.id) 
+     if params[:product_list_id].present?
+      product_list_id = params[:product_list_id]
+      #code to replace product if it meant to be replaced 
+      #check product master add on for column replace_by_product_id
+      if ProductMasterAddOn.where('product_list_id ? and replace_by_product_id IS NOT NULL', product_list_id)
+        #destroy the line
+        order_line = OrderLine.where("product_list_id = ? AND orderid = ?", 
+        product_list_id, params[:order_id]).first
+        order_line.destroy
+        product_list_id = ProductMasterAddOn.where('product_list_id ? and replace_by_product_id IS NOT NULL', product_list_id).first.replace_by_product_id
+      end
 
+      addproducts_to_order(params[:order_id], params[:product_list_id], params[:pieces])
+    else
+      flash[:error] = "You have not selected the correct product try to select from the list"
+    end
+    redirect_to neworder_path(:order_id => @order_id)   
+    
   end
 
   def address
       @states = State.all.order("name")
   
-  if @order_master.customer_id.present?
-    @customer = Customer.find(@order_master.customer_id)
-    success = "Existing Customer found #{@customer.id}" 
-    @customer_id = @customer.id
-  elsif Customer.where(mobile: @order_master.mobile).present?
-    @customer = Customer.where(mobile: @order_master.mobile).last
-    notice = "Earlier called Customer found #{@customer.id}" 
-    @customer_id = @customer.id
-  else
-    @customer = Customer.new(mobile: @order_master.mobile)
-    notice = "Add Customer Name" 
-  end
+      if @order_master.customer_id.present?
+        @customer = Customer.find(@order_master.customer_id)
+        success = "Existing Customer found #{@customer.id}" 
+        @customer_id = @customer.id
+      elsif Customer.where(mobile: @order_master.mobile).present?
+        @customer = Customer.where(mobile: @order_master.mobile).last
+        notice = "Earlier called Customer found #{@customer.id}" 
+        @customer_id = @customer.id
+      else
+        @customer = Customer.new(mobile: @order_master.mobile)
+        notice = "Add Customer Name" 
+      end
 
-  if @order_master.customer_address_id.present?
-    @customer_address = CustomerAddress.find(@order_master.customer_address_id)
-    success = " An address has been added for the customer" 
-  elsif CustomerAddress.where(telephone1: @order_master.mobile).present?
-    @customer_address = CustomerAddress.where(telephone1: @order_master.mobile).last
-    success = " Existing address is available for the number #{@order_master.mobile}" 
-  else
-    @customer_address = CustomerAddress.new(telephone1: @order_master.mobile)
-     notice = "Add Customer Address." 
-  end
+      if @order_master.customer_address_id.present?
+        @customer_address = CustomerAddress.find(@order_master.customer_address_id)
+        success = " An address has been added for the customer" 
+      elsif CustomerAddress.where(telephone1: @order_master.mobile).present?
+        @customer_address = CustomerAddress.where(telephone1: @order_master.mobile).last
+        success = " Existing address is available for the number #{@order_master.mobile}" 
+      else
+        @customer_address = CustomerAddress.new(telephone1: @order_master.mobile)
+         notice = "Add Customer Address." 
+      end
 
-  flash[:notice] = "#{notice}"
+      flash[:notice] = "#{notice}"
 
-  flash[:success] = "#{success}"
+      flash[:success] = "#{success}"
 
-  respond_with(@order_master, @order_lines, @customer_address, @customer)
+      #respond_with(@order_master, @order_lines, @customer_address, @customer)
 
   end
 
@@ -284,50 +222,20 @@ def add_products
 
   def upsell
     editupsellproducts
-    respond_with(@order_master, @order_lines, @customer, @customer_address, @generalproductaddonlists, @upsell_order_lines)
-    end
+    #respond_with(@order_master, @order_lines, @customer, @customer_address, @generalproductaddonlists, @upsell_order_lines)
+  end
 
   def add_upsell
-      exproductlist = ProductList.find(params[:product_list_id])
-      exproductvariant = ProductVariant.find(exproductlist.product_variant_id)
-      @order_lines = OrderLine.where("product_list_id = ? AND orderid = ?", 
-      params[:product_list_id], params[:order_id])
+    #this is common upsell
+     if params[:product_list_id].present?
+      product_list_id = params[:product_list_id]
+      
+      addproducts_to_order(params[:order_id], params[:product_list_id], params[:pieces])
+    else
+      flash[:error] = "You have not selected the correct product try to select from the list"
+    end
+    redirect_to upsell_path(:order_id => @order_id)   
 
-      product_name = exproductlist.productlistdetails 
-        
-        if @order_lines.exists?
-            pieces = @order_lines.first.pieces + params[:pieces].to_i
-            @order_lines.first.update(pieces: pieces,
-             subtotal: exproductvariant.price * pieces, 
-                taxes: exproductvariant.taxes * pieces,
-                codcharges: 0,
-                shipping: exproductvariant.shipping * pieces,
-               total: exproductvariant.total * pieces)
-          
-            flash[:success] = " #{pieces} Piece/s of #{product_name} successfully added " 
-          else
-                pieces = params[:pieces].to_f
-                @order_line = OrderLine.create(orderid: params[:order_id],
-                orderdate: Time.zone.now, 
-                employeecode: @empcode, employee_id: @empid,
-                subtotal: exproductvariant.price * pieces, 
-                taxes: exproductvariant.taxes * pieces,
-                codcharges: 0,
-                shipping: exproductvariant.shipping * pieces,
-                pieces:  params[:pieces],
-                total: exproductvariant.total * pieces,
-                description: product_name,
-                productvariant_id: exproductlist.product_variant_id,
-                product_master_id: exproductvariant.productmasterid,
-                product_list_id: params[:product_list_id],
-                orderlinestatusmaster_id: 10000)
-            if @order_line.valid?
-                flash[:success] = "#{product_name} successfully added " 
-            else
-                flash[:error] = @order_line.errors.full_messages.join("<br/>")
-            end
-        end    
-      redirect_to upsell_path(:order_id => @order_master.id) 
   end
 
   def payment
@@ -386,26 +294,26 @@ def add_products
   end
 
   def add_credit_card
-  @customer_credit_card = CustomerCreditCard.new( customer_id: customer_credit_card_params[:customer_id],
-  card_no: customer_credit_card_params[:card_no], 
-  name_on_card: customer_credit_card_params[:name_on_card],
-  expiry_mon: customer_credit_card_params[:expiry_mon],
-  expiry_yr_string:  customer_credit_card_params[:expiry_yr_string])
-    #check if card is valid
-    result = CreditCard.luhn(customer_credit_card_params[:card_no]) #enter credit card details
-    if result == 'valid'
-      #update payment as credit card for order
-      @order_master.update(orderpaymentmode_id: params[:orderpaymentmode_id])
-      #recalculate on the basis of COD charges as well
-      #save card details
-      @customer_credit_card.save
-      flash[:success] = "Credit Card saved successfully " 
-      redirect_to channel_path(:order_id => @order_master.id)
-    else
-       flash[:error] = "Credit Card no is in-valid " 
-       redirect_to payment_path(:order_id => @order_master.id)
-    end
-end
+      @customer_credit_card = CustomerCreditCard.new( customer_id: customer_credit_card_params[:customer_id],
+      card_no: customer_credit_card_params[:card_no], 
+      name_on_card: customer_credit_card_params[:name_on_card],
+      expiry_mon: customer_credit_card_params[:expiry_mon],
+      expiry_yr_string:  customer_credit_card_params[:expiry_yr_string])
+        #check if card is valid
+        result = CreditCard.luhn(customer_credit_card_params[:card_no]) #enter credit card details
+        if result == 'valid'
+          #update payment as credit card for order
+          @order_master.update(orderpaymentmode_id: params[:orderpaymentmode_id])
+          #recalculate on the basis of COD charges as well
+          #save card details
+          @customer_credit_card.save
+          flash[:success] = "Credit Card saved successfully " 
+          redirect_to channel_path(:order_id => @order_master.id)
+        else
+           flash[:error] = "Credit Card no is in-valid " 
+           redirect_to payment_path(:order_id => @order_master.id)
+        end
+  end
 
 def add_payment
   #mode = params[:orderpaymentmode_id]
@@ -455,7 +363,7 @@ end
         #   medianame = @newmedialist.first.name
         # end
 
-    respond_with(@order_master, @order_lines, @customer, @customer_address)
+    #respond_with(@order_master, @order_lines, @customer, @customer_address)
   end
 
   def add_channel
@@ -480,12 +388,6 @@ end
 
   def review
 
-   
-    if @order_master.external_order_no.nil?
-#       ActiveRecord::Base.configurations["development"] => 
-# {"encoding"=>"utf8", "username"=>"foo", "adapter"=>"mysql", "database"=>"bar_development", "host"=>"localhost", "password"=> "baz"}
-     
-    end
      @show_process = 0
 
      if @order_master.total < 100
@@ -509,22 +411,22 @@ end
         @show_process = 1
         flash[:error] = ' Media is missing '
       end
-        reg_product_variants = ProductVariant.where("activeid = ? and product_sell_type_id = ?", 10000, 10000).pluck("id")
-        upsell_product_variants = ProductVariant.where("activeid = ? and product_sell_type_id <> ?", 10000, 10000).pluck("id")
-      
-      @order_lines_regular = OrderLine.where(productvariant_id: reg_product_variants).where(orderid: @order_id)
-      if @order_lines_regular.blank?
+       
+       if @order_lines_regular.blank?
         @show_process = 1
-        flash[:error] = 'You have not added any regular products '
-      end
-       @order_lines_upsell = OrderLine.where(productvariant_id: upsell_product_variants).where(orderid: @order_id)
-     
-     #@customer_address.address3 = 'DIST-' + @customer_address.address3.strip[0..18].upcase if @customer_address.address3.present?) + '-' + (@customer_address.state[0..5].upcase 
+        flash[:error] = 'You have not added any regular products, this order cannot be processed!'
+       end
 
-    customer
-    respond_with(@order_master, @order_lines, @customer, @customer_address)
+       if @order_lines_regular.count > 1
+        @review_message = "There are #{@order_lines_regular.count} products, this order would be split into #{@order_lines_regular.count} orders."
+        flash[:error] = 'This order would be split in #{}'
+       end
+        
+      
+      
+    #respond_with(@order_master, @order_lines, @customer, @customer_address)
   end
-
+  
   def process_order
         #this is post 
 
@@ -544,28 +446,76 @@ end
         redirect_to orderreview_path(:order_id => @order_master.id) 
       end
 
-        reg_product_variants = ProductVariant.where("activeid = ? and product_sell_type_id = ?", 10000, 10000).pluck("id")
-        upsell_product_variants = ProductVariant.where("activeid = ? and product_sell_type_id <> ?", 10000, 10000).pluck("id")
-     
-       @order_lines_regular = OrderLine.where(productvariant_id: reg_product_variants).where(orderid: @order_master.id)
+
       if @order_lines_regular.blank?
-        flash[:error] = 'You have not added any regular products '
-        redirect_to orderreview_path(:order_id => @order_master.id) 
-      end
-      
-      orderprocessed = update_customer_order_list
+        @show_process = 1
+        flash[:error] = 'You have not added any regular products, this order cannot be processed!'
+         redirect_to orderreview_path(:order_id => @order_master.id) 
+       end
 
-     
+       if @order_lines_regular.count > 1
+        @review_message = "There are #{@order_lines_regular.count} products, this order would be split into #{@order_lines_regular.count} orders."
+          # use this to duplicate_order
+          # move the relevant order line to new order
+        new_reg_order_lines =  @order_lines_regular.offset(1)
 
-     
+        new_reg_order_lines.each do |order|
+            #create a new order
+            new_order =  duplicate_order(@order_master.id)
+            orderprocessed = update_customer_order_list(new_order)
+            #switch the order line to new order master
+            #first the regular product
+            order.update(orderid: new_order)
+            if @order_lines_basic.count > 1
+              #find any related upsell product
+             
+              list_of_upsells = ProductMasterAddOn.where(product_master_id: order.product_master_id).pluck(:product_list_id)
+           
+              sold_upsells = @order_lines_basic.where(product_list_id: list_of_upsells)
+                if sold_upsells.count > 0
+                  sold_upsell = sold_upsells.first
+                  sold_upsell.update(orderid: new_order)
+                end #checked if basic upsell is found to be matching
+            end #check if upsell if found
+
+            orderprocessed = update_customer_order_list(@order_master.id)
+          end #loop through the order lines Regular 
+
+           flash[:notice] = 'This order has been be split in #{@order_lines_regular.count} orders'
+       
+        else #IF ONLY one regular product found
+
+          # after this is done complete the ordering
+          orderprocessed = update_customer_order_list(@order_master.id)
+
+
+       end
+  
      redirect_to summary_path(:order_id => @order_master.id) 
 
   end
   def summary
      customer
      @cust_details_id = @order_master.external_order_no
-     flash[:success] = "The order is successfully processed with id: #{@cust_details_id}"
-    respond_with(@order_master, @order_lines, @customer, @customer_address)
+
+    #mix the orders to add all the related orders
+      @order_masters = OrderMaster.where('id = ? OR original_order_id = ?', @order_id, @order_id)
+   if @order_masters.first.external_order_no.blank?
+      @order_message = "The orders are not processed"
+     @order_processed_next_steps = "Please go back and process the order"
+     flash[:error] = "The order is not processed"
+   else
+    ordernos = []
+    #if @order_masters.count > 0
+      @order_masters.each do |ord|
+        ordernos << ord.external_order_no + " "
+      end
+    #end
+    @order_message = "Awesome, order(s) successfully processed: #{ordernos}"
+     @order_processed_next_steps = "Please close this window and wait for next call"
+     flash[:success] = "Awesome,this order is successfully processed"
+
+   end
   end
 
   #other menus
@@ -583,26 +533,26 @@ end
 
   def dealers
 
- #@customer = Customer.find(@order_master.customer_id)
- @states = ADDRESS_DEALER.select(:state).distinct
+       #@customer = Customer.find(@order_master.customer_id)
+       @states = ADDRESS_DEALER.select(:state).distinct
 
-if params[:from_state].present?
-  @state = params[:from_state]
-  @address_dealer = ADDRESS_DEALER.where(state: @state)
-  state_c = @state.capitalize
-  nos = @address_dealer.count
-  @state_searched = "Search for #{state_c} and found #{nos}"
-  @cities = @address_dealer.select(:add3).distinct
-  if params[:city].present?
-    @address_dealer = @address_dealer.where(add3:params[:city])
-    state_c = params[:city].capitalize << " in " << @state.capitalize 
-    nos = @address_dealer.count
-    @state_searched = "#{state_c} and found #{nos}"    
-  end
+      if params[:from_state].present?
+        @state = params[:from_state]
+        @address_dealer = ADDRESS_DEALER.where(state: @state)
+        state_c = @state.capitalize
+        nos = @address_dealer.count
+        @state_searched = "Search for #{state_c} and found #{nos}"
+        @cities = @address_dealer.select(:add3).distinct
+        if params[:city].present?
+          @address_dealer = @address_dealer.where(add3:params[:city])
+          state_c = params[:city].capitalize << " in " << @state.capitalize 
+          nos = @address_dealer.count
+          @state_searched = "#{state_c} and found #{nos}"    
+        end
 
-end
-    respond_with(@cities, @address_dealer)
-  end
+      end
+          #respond_with(@cities, @address_dealer)
+    end
 
 
 
@@ -723,6 +673,72 @@ end
       return @order_master.id
     end
 
+    def duplicate_order(old_order_id)
+      @old_order_master = OrderMaster.find(old_order_id)
+
+      @new_order_master = OrderMaster.create!(calledno: @old_order_master.dnis, 
+        order_status_master_id: 10000, 
+        orderdate: Time.zone.now, 
+        customer_address_id: @old_order_master.customer_address_id,
+        pieces: 0,subtotal: 0, 
+        taxes: 0, codcharges: 0, shipping:0, 
+        orderpaymentmode_id:  @old_order_master.orderpaymentmode_id,
+        total: 0, order_source_id: @old_order_master.source.to_i, 
+        campaign_playlist_id: @old_order_master.campaign_playlist_id,
+        media_id: @old_order_master.media_id,
+        employeecode: @empcode, employee_id: @empid, 
+        userip: request.remote_ip, sessionid: session.id,
+        order_for_id: 10000, mobile: @old_order_master.cli,
+        original_order_id: old_order_id,
+        notes: @old_order_master.notes + " Duplicated Order for #{old_order_id}")
+      
+
+      @old_order_master.update(original_order_id: old_order_id)
+
+      return @new_order_master.id
+    end
+
+    def addproducts_to_order(order_id, product_list_id, pieces)
+      exproductlist = ProductList.find(product_list_id)
+      exproductvariant = ProductVariant.find(exproductlist.product_variant_id)
+      @order_lines = OrderLine.where("product_list_id = ? AND orderid = ?", 
+      product_list_id, order_id)
+      product_name = exproductlist.name 
+        
+        if @order_lines.exists?
+            pieces = @order_lines.first.pieces + pieces.to_i
+            @order_lines.first.update(pieces: pieces,
+             subtotal: exproductvariant.price * pieces, 
+                taxes: exproductvariant.taxes * pieces,
+                codcharges: 0,
+                shipping: exproductvariant.shipping * pieces,
+               total: exproductvariant.total * pieces)
+          
+            flash[:success] = " #{pieces} Piece/s of #{product_name} successfully added " 
+          else
+                pieces = pieces.to_i
+                @order_line = OrderLine.create(orderid: @order_id,
+                orderdate: Time.zone.now, 
+                employeecode: @empcode, employee_id: @empid,
+                subtotal: exproductvariant.price * pieces, 
+                taxes: exproductvariant.taxes * pieces,
+                codcharges: 0,
+                shipping: exproductvariant.shipping * pieces,
+                pieces:  pieces,
+                total: exproductvariant.total * pieces,
+                description: product_name,
+                productvariant_id: exproductlist.product_variant_id,
+                product_master_id: exproductvariant.productmasterid,
+                product_list_id: product_list_id,
+                orderlinestatusmaster_id: 10000)
+            if @order_line.valid?
+                flash[:success] = "#{product_name} successfully added " 
+            else
+                flash[:error] = @order_line.errors.full_messages.join("<br/>")
+            end
+        end    
+     
+    end
     def customer
       if @order_master.customer_id.present?
         @customer = Customer.find(@order_master.customer_id)
@@ -734,11 +750,25 @@ end
         @customer_address = CustomerAddress.find(@order_master.customer_address_id)
       end       
     end
-
+ 
     def set_order
       if params[:order_id].present?
-          @order_master = OrderMaster.find(params[:order_id])
-          @order_lines = OrderLine.where(orderid: params[:order_id])
+        @order_id = params[:order_id]
+          @order_master = OrderMaster.find(@order_id)
+          @order_lines = OrderLine.where(orderid: @order_id)
+
+           @order_lines_regular = OrderLine.where(orderid: @order_id)
+            .joins(:product_variant)
+            .where('PRODUCT_VARIANTS.product_sell_type_id = ?', 10000)
+
+         @order_lines_basic = OrderLine.where(orderid: @order_id)
+         .joins(:product_variant)
+         .where('product_variants.product_sell_type_id = ?', 10040)
+
+         @order_lines_common = OrderLine.where(orderid: @order_id)
+         .joins(:product_variant)
+         .where('product_variants.product_sell_type_id = ?', 10001)
+
       end
     end
 
@@ -785,21 +815,19 @@ end
     def specific_addon_product_lists
          @specificproductaddonlist = nil  
          if @order_master.present?
-          productid = OrderLine.joins(:product_variant).where("activeid = ?", 10000).where(orderid: @order_master.id).pluck(:product_master_id)
-            if ProductMasterAddOn.where(product_master_id: productid).present? 
-              @specificproductaddonlist = ProductMasterAddOn.where(product_master_id: productid)
-            end
+          product_master_id = OrderLine.where(orderid: @order_master.id).pluck(:product_master_id)
+          @specificproductaddonlist = ProductMasterAddOn.where(product_master_id: product_master_id)
          end
     end
    
-  def update_customer_order_list
+  def update_customer_order_list(order_id)
       creditcardno =  nil
       expmonth = nil
       expyear = nil
       name_on_card = nil
       cardname = nil
       
-      order_id = @order_master.id
+      #order_id = @order_master.id
 
       t = Time.zone.now + 330.minutes
           nowhour = t.strftime('%H').to_i

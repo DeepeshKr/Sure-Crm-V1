@@ -104,6 +104,6 @@ class OrderLinesController < ApplicationController
         :productline_id,
          :description, :estimatedshipdate, :estimatedarrivaldate, 
          :orderchecked,
-          :actualshippate, :product_list_id)
+          :actualshippate, :product_list_id, :product_master_id)
     end
 end

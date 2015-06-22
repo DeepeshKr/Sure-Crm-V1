@@ -1,11 +1,19 @@
 
+<% if @review_message.present? %>
+<blockquote>
+  <p class="lead"> <strong><%= @review_message %> </strong>
+  </p>
+   
+</blockquote>
+<% end %>
+
  <div class="panel panel-primary">
   <div class="panel-heading">
     <h3 class="panel-title">Customer Order Summary</h3>
   </div>
   <%= render "order_customer" %>
   <%= render "order_address" %>
-  <%= render "ordered_non_edit" %>
+ <%= render "ordered_all_non_edit" %>
 
 
     
