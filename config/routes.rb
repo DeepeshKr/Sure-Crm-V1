@@ -42,11 +42,12 @@ Rails.application.routes.draw do
   get 'sales_report/product'
   get 'product_report' => 'sales_report#product'
   get 'sales_report/show'
-  get 'show_report' => 'sales_report#show'
+  get 'show_report' => 'sales_ppo_report#show'
   get 'sales_report/order_summary'
   get 'order_summary' => 'sales_report#order_summary'
   get 'sales_report/orders'
   get 'orders_list' => 'sales_report#orders'
+   get 'ppo_report' => 'sales_ppo_report#hourly'
 
   resources :media_tape_heads
 

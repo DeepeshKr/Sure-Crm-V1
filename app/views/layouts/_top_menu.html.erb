@@ -28,7 +28,7 @@
              <li><%= link_to "Sales Summary Report", "/sales_report" %></li>
               <% if (current_user.employee_role.sortorder < 3) %> 
                <li><%= link_to "Daily Show Report", "/show_report" %></li>
-            
+                 <li><%= link_to "PPO Report", "/ppo_report" %></li>
              
             <% end %>
               
@@ -186,7 +186,8 @@
               	 	<li><%= link_to "Interaction Priorities", "/interaction_priorities" %></li>
               	 	<li><%= link_to "Interaction Status", "/interaction_statuses" %></li>
               	 	<li><%= link_to "Interaction Users", "/interaction_users" %></li>
-              	 	
+                  <li class="divider"></li>
+              	 	<li><%= link_to "Change Log Type", "/change_log_types" %></li>
             </ul>
           </li>
           <% end %>

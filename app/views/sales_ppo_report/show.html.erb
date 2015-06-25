@@ -1,2 +1,84 @@
-<h1>SalesPpoReport#show</h1>
-<p>Find me in app/views/sales_ppo_report/show.html.erb</p>
+ <div class="row">
+	 <div class="col-xs-8">
+
+	 <h4>HBN Daily Sales Report </h4>
+	 </div>
+	 <div class="col-xs-4">
+	 <%= render('date_search') %>
+	 		
+	</div>
+ </div>
+
+<% if @campaign_playlists.present? then %>
+ <table class="table table-hover">
+  <thead>
+    <tr>
+     <th>Product variant</th>
+      <th>Start time</th>
+      <th>Pieces</th>
+      <th>Sales</th>
+       
+      
+    </tr>
+  </thead>
+
+  <tbody>
+  	<% totalpieces = 0 %>
+    <% totalvalue = 0 %>
+    <% @campaign_playlists.each do |campaign_playlist| %>
+      <tr class="<%= category_table_row_class(campaign_playlist.campaign_play_list_status.name) %>">
+        <td><%= campaign_playlist.product_variant.name if campaign_playlist.product_variant  %>
+
+        </td>
+        <td><%= campaign_playlist.starttime %></td>
+       
+        <td><%= campaign_playlist.pieces %></td>
+
+        <td><strong>
+<%= link_to campaign_playlist.sales, orders_list_path(for_date:  @orderdate, playlist_id: campaign_playlist.id), :target => "_blank" %>
+        <%= %></strong></td>
+        
+          <td>
+          
+          
+          </td>
+          
+      </tr>
+      <% totalpieces += campaign_playlist.pieces %>
+    <% totalvalue += campaign_playlist.sales %>
+    <% end %>
+    
+  </tbody>
+  <tfoot>
+      <tr >
+     <th colspan="2">Total</th>
+      
+      <th><%= totalpieces %></th>
+      <th><%= totalvalue %></th>
+       
+      
+    </tr>
+  </tfoot>
+</table>
+
+
+   <% else %>
+  <div class="well well-sm">
+  <h5>Please select a date to generate the report or No sales in Other Channels </h5>
+  </div>
+  <% end %>
+ <br>
+ <div class="well well-sm">
+ <div class="row">
+ <div class="col-xs-2"><h4>Date: <%=  @orderdate %> </h4> </div>
+  <div class="col-xs-3"><h4>Nos: <%=  @hbn_noorders %> 
+  <small><%= totalpieces %> </small> </h4> </div>
+ <div class="col-xs-3"><h4>Total: <%=  @hbn_totalorders %>
+ <small> <%= totalvalue %> </small> </h4> </div>
+<div class="col-xs-2"><%= link_to "Show Missed", orders_list_path(for_date:  @orderdate, media: 'hbn', missed: 'true'), :target => "_blank", class: "btn btn-danger btn-xs" %>
+        <%= %></div>
+ <div class="col-xs-2"><%= link_to "Show All", orders_list_path(for_date:  @orderdate, media: 'hbn'), :target => "_blank", class: "btn btn-info btn-xs" %>
+        <%= %></div>
+ </div>
+
+</div>

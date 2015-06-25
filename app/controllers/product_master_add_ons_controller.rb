@@ -5,7 +5,7 @@ class ProductMasterAddOnsController < ApplicationController
   respond_to :html, :xml, :json
 
   def index
-    @product_master_add_ons = ProductMasterAddOn.all.order("product_master_id")
+    @product_master_add_ons = ProductMasterAddOn.all.order("product_master_id, sort_order")
     #@product_master_add_ons = ProductMasterAddOn.where(product_master_id: product_master_id)
     respond_with(@product_master_add_ons)
   end
@@ -21,20 +21,24 @@ class ProductMasterAddOnsController < ApplicationController
   end
 
   def new
+    dropdownlist
     @product_master_add_on = ProductMasterAddOn.new
     respond_with(@product_master_add_on)
   end
 
   def edit
+    dropdownlist
   end
 
   def create
+    dropdownlist
     @product_master_add_on = ProductMasterAddOn.new(product_master_add_on_params)
     @product_master_add_on.save
     respond_with(@product_master_add_on.product_master)
   end
 
   def update
+    dropdownlist
     @product_master_add_on.update(product_master_add_on_params)
     respond_with(@product_master_add_on.product_master)
   end
@@ -68,6 +72,14 @@ class ProductMasterAddOnsController < ApplicationController
   end
 
   private
+  def dropdownlist
+      @productactivecode = ProductActiveCode.all.order("id")
+      @productselltype = ProductSellType.all.order("id")
+      @productspecificaddonlist = ProductList.joins(:product_variant).where("product_variants.product_sell_type_id = ? ", 10040)
+      @productreplaceaddonlist = ProductList.joins(:product_variant)
+      .where("product_variants.product_sell_type_id = ? ", 10000)
+      .order("product_variants.name")
+    end 
     def set_product_master_add_on
       @product_master_add_on = ProductMasterAddOn.find(params[:id])
     end
@@ -75,6 +87,6 @@ class ProductMasterAddOnsController < ApplicationController
     def product_master_add_on_params
       params.require(:product_master_add_on).permit(:product_master_id, 
         :product_list_id, :activeid, :change_price,
-        :sort_order, :replace_by_product_id)
+        :sort_order, :replace_by_product_id) 
     end
 end

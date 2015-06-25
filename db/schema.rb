@@ -110,7 +110,7 @@ ActiveRecord::Schema.define(version: 20150618065056) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
-
+ 
   create_table "change_log_types", force: :cascade do |t|
     t.string   "name"
     t.text     "description"

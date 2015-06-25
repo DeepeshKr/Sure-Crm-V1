@@ -6,9 +6,10 @@
   <thead>
     <tr>
       <th>Main Product</th>
+      <th>Sort Order </th>
       <th>Basic Upsell Product</th>
-   
-      <th colspan="1"></th>
+      <th>Replace</th>
+      <th colspan="2"></th>
     </tr>
   </thead>
 
@@ -16,8 +17,10 @@
     <% @product_master_add_ons.each do |product_master_add_on| %>
       <tr>
         <td><%= product_master_add_on.product_master.name if product_master_add_on.product_master %></td>
+        <td><%= product_master_add_on.sort_order if product_master_add_on.sort_order  %></td>
         <td><%= product_master_add_on.product_list.productlistdetails if product_master_add_on.product_list  %></td>
-       
+        <td><%= product_master_add_on.replace_products if product_master_add_on.replace_by_product_id  %></td>
+         <td><%= link_to 'Edit', edit_product_master_add_on_path(product_master_add_on), class: "btn btn-info btn-xs" %></td>
         <td><%= link_to 'Destroy', product_master_add_on, method: :delete, data: { confirm: 'Are you sure?' } %></td>
       </tr>
     <% end %>

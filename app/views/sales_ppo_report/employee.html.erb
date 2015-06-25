@@ -1,7 +1,7 @@
  <div class="row">
-	 <div class="col-xs-6">
+	 <div class="col-xs-8">
 
-	 <h4><strong>All</strong> Order Summary for past few days</h4>
+	 <h4>Sales Report for day <%=  @orderdate %> </h4>
 	 </div>
 	 <div class="col-xs-6">
 
@@ -13,16 +13,15 @@
 <table class="table table-hover table-bordered">
   <thead>
     <tr>
-     <th class="text-right">No</th>
-     <th class="text-right">Date</th>
-     <th class="text-right">CC Orders</th>
-       <th class="text-right">CC Value</th>
-      <th class="text-right">COD Orders</th>
-       <th class="text-right">COD Value</th>
-       <th class="text-right">Total Orders</th>
-     <th class="text-right">Total Value</th>
-    <th class="text-right">PPO</th>
-   
+     <th>No</th>
+     <th>Employee</th>
+     <th>CC Orders</th>
+       <th>CC Value</th>
+      <th>COD Orders</th>
+       <th>COD Value</th>
+       <th>Total Orders</th>
+     <th>Total Value</th>
+    
      </tr>
   </thead>
 <tbody>
@@ -30,7 +29,10 @@
    <tr>
    <td><%= @sno %></td>
 
- <td><%= c[:for_date] %></td>
+<td>
+ <%= link_to c[:employee], orderlist_path(employee_id: c[:id], for_date: c[:for_date], completed: 'yes'), :target => "_blank" %>
+
+</td>
 <td class="text-right">
    <%= c[:ccorders] %> 
 </td>
@@ -51,14 +53,12 @@
    <%= c[:total] %> 
 </td>
 
-<td>
-<%= link_to "View PPO", ppo_report_path(for_date: c[:for_date]), :target => "_blank" %>
-</td>
-
-
   </tr> 
   <% @sno += 1 %> 
  <% end %>
+
+ 
+
   </tbody>
 
   </table>

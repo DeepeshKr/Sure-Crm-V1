@@ -130,16 +130,18 @@ end
 # 10000 Airtime Purchased Airtime is purchased from the media / operator
 # 10040 Daily Fixed and Percent on Paid Orders  For cable TV operators based on fixed daily and Paid Orders
 # 10045 Fixed Daily Charges   Only fixed daily charges
-def media_cost
-  if self.media_id.present?
-    media_variable = Medium.where('id = ?  and value is not null and media_commission_id IN [10020, 10021, 10040, 10041, 10060]', self.media_id).pluck(:value)
-    if media_variable.present?
+def mediacost
+    if self.media_id.present?
+     media_variable = Medium.where('id = ? AND value is not null', self.media_id)
+      .where(:media_commision_id => [10020, 10021, 10040, 10041, 10060]) #.pluck(:value)
+      if media_variable.present?
       #discount the total value by 50% as correction
       correction = 0.5
-      if media_variable.paid_correction.present?
-        correction = paid_correction
-      end
-     return (self.subtotal * media_variable.first.to_f) * correction
+      #PAID_CORRECTION
+       if media_variable.first.paid_correction.present?
+          correction = media_variable.first.paid_correction #||= 0.5
+       end
+        return (med.subtotal * media_variable.first.value.to_f) * correction
     end
   else
     return 0
@@ -153,7 +155,9 @@ def productcost
   if productcost.exists?
     total = 0
     productcost.each do |c|
-      total += c.productcost
+      if c.total > 0
+        total += c.productcost
+      end
     end
     return total
     
@@ -165,10 +169,12 @@ end
 def productrevenue
   productrevenue = OrderLine.where('orderid = ?', self.id)
 
-  if productrevenue.exists?
+  if productrevenue.present?
     total = 0
     productrevenue.each do |c|
+      if c.total > 0
       total += c.productrevenue
+      end
     end
     return total
     

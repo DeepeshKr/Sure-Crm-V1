@@ -2,6 +2,36 @@ class SalesPpoReportController < ApplicationController
   before_action { protect_controllers(2) } 
   before_action :media_segments, only: [:daily, :hourly, :show, :channel]
   def summary
+     @sno = 1
+        @datelist ||= []
+        employeeunorderlist ||= []
+       
+         #media segregation only HBN
+          media_segments
+
+          from_date = Date.current - 30.days #30.days
+          to_date = Date.current
+          to_date.downto(from_date).each do |day|
+          @datelist <<  day.strftime('%d-%b-%y')
+          web_date = day
+          web_date = web_date.strftime()
+          for_date = day # Date.
+          @or_for_date = for_date
+           
+          orderlist = OrderMaster.where('ORDER_STATUS_MASTER_ID > 10002')
+          .where('TRUNC(orderdate) = ?',for_date)
+          ccvalue = orderlist.where(orderpaymentmode_id: 10000).sum(:total)
+          ccorders = orderlist.where(orderpaymentmode_id: 10000).count()
+          codorders = orderlist.where(orderpaymentmode_id: 10001).count()
+          codvalue = orderlist.where(orderpaymentmode_id: 10001).sum(:total)
+          totalorders = orderlist.sum(:total)
+          noorders = orderlist.count()
+          employeeunorderlist << {:total => totalorders,
+          :for_date =>  web_date,
+          :nos => noorders, :codorders => codorders, :codvalue => codvalue,
+           :ccorders => ccorders, :ccvalue => ccvalue  }
+        end
+        @employeeorderlist = employeeunorderlist #.sort_by{|c| c[:total]}.reverse 
   end
 
   def daily
@@ -54,7 +84,13 @@ class SalesPpoReportController < ApplicationController
       #@summary ||= []
       @or_for_date = Date.strptime(params[:for_date], "%Y-%m-%d")
       for_date =  Date.strptime(params[:for_date], "%Y-%m-%d")
-    
+      
+        @total_nos = 0
+        @total_var_cost = 0
+         @total_fixed_cost = 0
+         @total_sales = 0
+         @total_profit = 0
+          @total_revenue = 0
       #for_date = for_date - 330.minutes
         @hourlist ||= []
         employeeunorderlist ||= []
@@ -69,17 +105,42 @@ class SalesPpoReportController < ApplicationController
         (from_date.to_datetime.to_i .. to_date.to_datetime.to_i).step(30.minutes) do |date|
          
          halfhourago = Time.at(date - 30.minutes) 
-
+        
           orderlist = OrderMaster.where('ORDER_STATUS_MASTER_ID > 10002').where(media_id: @hbnlist).where('orderdate >= ? AND orderdate <= ?', halfhourago, Time.at(date))
           #add orders of each cable tv operator
 
           #split the fixed cost across the hour
+           revenue = 0
+            media_var_cost = 0
+             product_cost = 0
 
+          orderlist.each do |med |
+            revenue += OrderMaster.find(med.id).productrevenue ||= 0
+           # media_var_cost += OrderMaster.find(med.id).mediacost ||= 0
+            product_cost += OrderMaster.find(med.id).productcost ||= 0
+            media_variable = Medium.where('id = ? AND value is not null', med.media_id)
+            .where(:media_commision_id => [10020, 10021, 10040, 10041, 10060]) #.pluck(:value)
+              if media_variable.present?
+                #discount the total value by 50% as correction
+                correction = 0.5
+                #PAID_CORRECTION
+                 if media_variable.first.paid_correction.present?
+                   correction = media_variable.first.paid_correction #||= 0.5
+                 end
+               media_var_cost += (med.subtotal * media_variable.first.value.to_f) * correction
+              end
+          end
+         
+         
+        #   params.require(:media_cost_master).permit(:name, :duration_secs, 
+        # :total_cost, :media_id, :str_hr, :str_min,
+        #  :str_sec, :end_hr, :end_min, :end_sec, 
+        #  :description, :slot_percent)
+          
+           fixed_cost = Medium.where(media_group_id: 10000).sum(:daily_charges)
+          fixed_cost = fixed_cost / 48
           #ppo for each hour
-          ccvalue = orderlist.where(orderpaymentmode_id: 10000).sum(:total)
-          ccorders = orderlist.where(orderpaymentmode_id: 10000).count()
-          codorders = orderlist.where(orderpaymentmode_id: 10001).count()
-          codvalue = orderlist.where(orderpaymentmode_id: 10001).sum(:total)
+         
           totalorders = orderlist.sum(:total)
           noorders = orderlist.count()
           employeeunorderlist << {:total => totalorders,
@@ -88,9 +149,10 @@ class SalesPpoReportController < ApplicationController
           :start_time => halfhourago.strftime("%Y-%m-%d %H:%M"), 
           :end_time => Time.at(date).strftime("%Y-%m-%d %H:%M"),
           :nos => noorders,
-           :codorders => codorders, 
-          :codvalue => codvalue,
-           :ccorders => ccorders, :ccvalue => ccvalue  }
+          :revenue => revenue,
+          :variable_cost => media_var_cost.to_i,
+          :fixed_cost => fixed_cost.to_i,
+          :profitability => revenue - (fixed_cost + media_var_cost) }
         end
        @employeeorderlist = employeeunorderlist #.sort_by{|c| c[:total]}.reverse 
      end

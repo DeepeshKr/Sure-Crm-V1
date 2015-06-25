@@ -1,4 +1,4 @@
-<%= form_for(@product_master_add_on) do |f| %>
+<%= bootstrap_form_for(@product_master_add_on) do |f| %>
   <% if @product_master_add_on.errors.any? %>
     <div id="error_explanation">
       <h2><%= pluralize(@product_master_add_on.errors.count, "error") %> prohibited this product_master_add_on from being saved:</h2>
@@ -11,23 +11,40 @@
     </div>
   <% end %>
 
-  <div class="field">
-    <%= f.label :product_master_id %><br>
-    <%= f.number_field :product_master_id %>
+
+   
+    <%= f.hidden_field :product_master_id %>
+
+ 
+  <div class="row">
+    <div class="col-xs-9">
+     <%= f.select :product_list_id,  options_from_collection_for_select(@productspecificaddonlist,
+       :id, :productlistdetails, :selected => @product_master_add_on.product_list_id),
+             { label: "Select these product which can be sold as Specific Add Ons" } %>
+    </div>
+    <div class="col-xs-3">
+      <%= f.number_field :sort_order, :label => "Sort order (Lowest comes First)", :placeholder => "1 / 2 / 3" %>
+    </div>
   </div>
   <div class="field">
-    <%= f.label :product_list_id %><br>
-    <%= f.number_field :product_list_id %>
+     <%= f.select :activeid,  options_from_collection_for_select(@productactivecode,
+       :id, :name),
+             { label: "Select the Product Active Status" } %>
+ 
   </div>
-  <div class="field">
-    <%= f.label :activeid %><br>
-    <%= f.number_field :activeid %>
+
+<div class="field">
+     <%= f.select :replace_by_product_id,  options_from_collection_for_select(@productreplaceaddonlist,
+       :id, :productlistdetails, :selected => @product_master_add_on.replace_by_product_id),
+             { label: "Select these product which would be replaced on Specific Add Ons", prompt: "Please select if you need to replace the product"} %>
+ 
   </div>
-  <div class="field">
-    <%= f.label :change_price %><br>
-    <%= f.text_field :change_price %>
+
+    <%= f.hidden_field :change_price %>
+  
+ <div class="row">
+  <div class="col-xs-3 col-md-offset-8">
+    <%= f.primary class: "btn btn-primary" %>
   </div>
-  <div class="actions">
-    <%= f.submit %>
   </div>
 <% end %>

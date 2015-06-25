@@ -16,11 +16,13 @@ class OrderLine < ActiveRecord::Base
 #auto fill requirement
 #delegate :product, to: :product_variant, prefix: true
 
-  after_create :updateOrder # :creator
+  after_create :updateorder # :creator
 
-  after_save :updateOrder # :updator
+  after_save :updateorder # :updator
 
-  after_destroy :updateOrder  
+  after_update :updateorder
+
+  after_destroy :updateorder  
 
 def codcharges
 codcharges = 0
@@ -188,7 +190,12 @@ def productrevenue
   pcode = self.product_variant.product_master.extproductcode
  ropmaster = ROPMASTER_NEW.where("prod = ?", pcode).first
  if ropmaster.present?
-    return ropmaster.totalrevenue * self.pieces || 0
+    if subtotal > 0
+      return ropmaster.totalrevenue * self.pieces || 0
+    else
+      return 0
+    end
+    
  else
     return 0
  end
@@ -199,7 +206,7 @@ def productcost
   pcode = self.product_variant.product_master.extproductcode
   ropmaster =  ROPMASTER_NEW.where("prod = ?", pcode).first
   if ropmaster.present?
-    return ropmaster.totalcost * self.pieces || 0
+      return ropmaster.totalcost * self.pieces || 0
  else
     return 0
  end
@@ -237,7 +244,7 @@ def updator
     self.update(description: productlist.productlistdetails)
 end
 
-def updateOrder
+def updateorder
     if (self.orderid).present? 
       order_master = OrderMaster.find(self.orderid)
     
