@@ -39,6 +39,8 @@ Rails.application.routes.draw do
   get 'channel_report' => 'sales_report#channel'
   get 'sales_report/employee'
   get 'employee_report' => 'sales_report#employee'
+  get 'sales_report/city'
+  get 'city_report' => 'sales_report#city'
   get 'sales_report/product'
   get 'product_report' => 'sales_report#product'
   get 'sales_report/show'

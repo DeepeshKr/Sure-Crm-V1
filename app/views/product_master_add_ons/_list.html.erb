@@ -1,13 +1,32 @@
 
 <% if @product_master_add_ons.present? %>
-<ul class="list-inline">
-    <% @product_master_add_ons.each do |product_master_add_on| %>
-     <li>
-       <%= product_master_add_on.product_list.productlistdetails %>      
-     <%= link_to 'Destroy', product_master_add_on, method: :delete, data: { confirm: 'Are you sure?' } , class: "btn btn-link btn-xs" %> </li>
-    <% end %>
-</ul>
 
+<table class="table table-hover">
+  <thead>
+    <tr>
+    
+      <th>Sort Order </th>
+      <th>Basic Upsell Product</th>
+      <th>Replace</th>
+      <th colspan="2"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @product_master_add_ons.each do |product_master_add_on| %>
+      <tr>
+       
+        <td><%= product_master_add_on.sort_order if product_master_add_on.sort_order  %></td>
+        <td><%= product_master_add_on.product_list.productlistdetails if product_master_add_on.product_list  %></td>
+        <td><%= product_master_add_on.replace_products if product_master_add_on.replace_by_product_id  %></td>
+         <td><%= link_to 'Edit', edit_product_master_add_on_path(product_master_add_on), class: "btn btn-info btn-xs" %></td>
+        <td><%= link_to 'Destroy', product_master_add_on, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
 <% else %>
-<p> No Specific Add on available </p>
+<p> No Basic Add on available </p>
 <% end %>

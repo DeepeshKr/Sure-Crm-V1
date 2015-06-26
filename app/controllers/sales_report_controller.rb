@@ -259,27 +259,42 @@ class SalesReportController < ApplicationController
       #@summary ||= []
       @or_for_date = params[:for_date]
       for_date =  Date.strptime(params[:for_date], "%Y-%m-%d")
-      order_masters = OrderMaster.where('TRUNC(orderdate) = ?',for_date).where('ORDER_STATUS_MASTER_ID > 10002').joins(:customer_address).select(:employee_id).distinct
-      
-      @orderdate = "Searched for #{for_date} found #{order_masters.count} agents!"
+       
+      if params.has_key?(:media_id)
+         order_masters = OrderMaster.where('TRUNC(orderdate) = ?',for_date)
+         .where(media_id: params[:media_id])
+      .where('ORDER_STATUS_MASTER_ID > 10002').where('customer_address_id IS NOT NULL')
+      .joins(:customer_address).select("customer_addresses.city").distinct
+
+        from_channel = Medium.find(params[:media_id]).name
+      else
+         order_masters = OrderMaster.where('TRUNC(orderdate) = ?',for_date)
+      .where('ORDER_STATUS_MASTER_ID > 10002').where('customer_address_id IS NOT NULL')
+      .joins(:customer_address).select("customer_addresses.city").distinct
+       end
+
+      @orderdate = "Searched for #{for_date} #{from_channel} found #{order_masters.count} cities!"
       employeeunorderlist ||= []
       num = 1
       order_masters.each do |o|
-        e = o.employee_id
-       
-        name = (Employee.find(e).first_name  || "NA" if Employee.find(e).first_name.present?)
-        orderlist = OrderMaster.where('ORDER_STATUS_MASTER_ID > 10002').where('TRUNC(orderdate) = ?',for_date).where(employee_id: e)
-        timetaken = orderlist.sum(:codcharges)
-        ccvalue = orderlist.where(orderpaymentmode_id: 10000).sum(:total)
-        ccorders = orderlist.where(orderpaymentmode_id: 10000).count()
-        codorders = orderlist.where(orderpaymentmode_id: 10001).count()
-        codvalue = orderlist.where(orderpaymentmode_id: 10001).sum(:total)
-        totalorders = orderlist.sum(:total)
-        noorders = orderlist.count()
-        employeeunorderlist << {:total => totalorders,
-           :id => e, :employee => name, :for_date =>  @or_for_date,
-          :nos => noorders, :codorders => codorders, :codvalue => codvalue,
-           :ccorders => ccorders, :ccvalue => ccvalue  }
+        city = o.city
+          if city.present?
+            #city = CustomerAddress.find(e).city  #  || "NA" if Employee.find(e).first_name.present?)
+            
+            orderlist = OrderMaster.where('ORDER_STATUS_MASTER_ID > 10002').where('TRUNC(orderdate) = ?',for_date).joins(:customer_address).where("customer_addresses.city = ?", city)
+            timetaken = orderlist.sum(:codcharges)
+            ccvalue = orderlist.where(orderpaymentmode_id: 10000).sum(:total)
+            ccorders = orderlist.where(orderpaymentmode_id: 10000).count()
+            codorders = orderlist.where(orderpaymentmode_id: 10001).count()
+            codvalue = orderlist.where(orderpaymentmode_id: 10001).sum(:total)
+            totalorders = orderlist.sum(:total)
+            noorders = orderlist.count()
+            employeeunorderlist << {:total => totalorders,
+                :employee => city, :for_date =>  @or_for_date,
+              :nos => noorders, :codorders => codorders, :codvalue => codvalue,
+               :ccorders => ccorders, :ccvalue => ccvalue  }
+
+          end
         end
         @employeeorderlist = employeeunorderlist.sort_by{|c| c[:total]}.reverse 
   
