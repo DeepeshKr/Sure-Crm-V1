@@ -69,10 +69,11 @@ class ApplicationController < ActionController::Base
     if logged_in?
       currentrolsortno = current_user.employee_role.sortorder || 20
       userrole = current_user.employee_role.name
-      if current_user.employee_role.sortorder.to_i >= authorised_for.to_i
+      if current_user.employee_role.sortorder.to_i > authorised_for.to_i
         #   flash[:notice] = "Authorised to view as #{userrole}"
         # else
         flash[:notice] = "Not Authorised to view as #{userrole}"
+        #flash[:success] = "You are #{current_user.employee_role.sortorder} auth is for less than #{authorised_for}"
         redirect_to login_url(return_to: request.original_url) # halts request cycle  
       end
     end

@@ -1,5 +1,5 @@
 class SalesReportController < ApplicationController
-  before_action { protect_controllers(6) } 
+  before_action { protect_controllers(7) } 
    respond_to :html
   # before_filter :authenticate_user!
   def summary
@@ -33,7 +33,7 @@ class SalesReportController < ApplicationController
            :ccorders => ccorders, :ccvalue => ccvalue  }
         end
         @employeeorderlist = employeeunorderlist #.sort_by{|c| c[:total]}.reverse 
-
+        # flash[:notice] = "remove restrictions of 10"
   end
    def daily
 
@@ -399,11 +399,11 @@ class SalesReportController < ApplicationController
 
     if params.has_key?(:start_time) && params.has_key?(:end_time)
       
-       start_time = Time.strptime(params[:start_time], "%Y-%m-%d %H:%M") 
-        end_time = Time.strptime(params[:end_time], "%Y-%m-%d %H:%M") 
+       @start_time = Time.strptime(params[:start_time], "%Y-%m-%d %H:%M") 
+        @end_time = Time.strptime(params[:end_time], "%Y-%m-%d %H:%M") 
 
         
-        if start_time.hour < 2
+        if @start_time.hour < 2
         #show previous day shows as well
         previous_start_hr = 21
         previous_start_min = 0 
@@ -419,22 +419,26 @@ class SalesReportController < ApplicationController
        .order(:start_hr, :start_min, :start_sec).where(list_status_id: 10000)
         
         else
-        start_time = Time.strptime(params[:start_time], "%Y-%m-%d %H:%M") 
-        end_time = Time.strptime(params[:end_time], "%Y-%m-%d %H:%M") 
+        @start_time = Time.strptime(params[:start_time], "%Y-%m-%d %H:%M") 
+        @end_time = Time.strptime(params[:end_time], "%Y-%m-%d %H:%M") 
 
-        start_time = start_time - 2.hours
-        end_time = end_time 
+        @start_time = @start_time - 2.hours
+        @end_time = @end_time 
         end
      
 
-      @Show_start_time = start_time.strftime("%H:%M")
-      @Show_end_time = end_time.strftime("%H:%M")
+      @Show_start_time = @start_time.strftime("%H:%M")
+      @Show_end_time = @end_time.strftime("%H:%M")
 
       # @campaign_playlists =  CampaignPlaylist.where(list_status_id: 10000).limit(10)
 
-       @campaign_playlists =  CampaignPlaylist.where("start_hr >= ? and start_min >= ? and end_hr <= ? and end_min <= ?", start_time.hour, start_time.min, end_time.hour, end_time.min)
-       .joins(:campaign).where("campaigns.startdate = ?", for_date).where('campaigns.mediumid IN (?)', @hbnlist)
-      .order(:start_hr, :start_min, :start_sec).where(list_status_id: 10000)
+       @campaign_playlists =  CampaignPlaylist.where("start_hr >= ? and 
+        start_min >= ? and end_hr <= ? and end_min <= ?", 
+        @start_time.hour, @start_time.min, @end_time.hour, @end_time.min)
+       .joins(:campaign).where("campaigns.startdate = ?", for_date)
+       .where('campaigns.mediumid IN (?)', @hbnlist)
+      .order(:start_hr, :start_min, :start_sec)
+      .where(list_status_id: 10000)
      
       
 

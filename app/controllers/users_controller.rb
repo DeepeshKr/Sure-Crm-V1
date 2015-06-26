@@ -7,7 +7,7 @@ class UsersController < ApplicationController
   def show
     
     @user = User.find(params[:id])
-    @userroles = EmployeeRole.where('sortorder >= ?', current_user.employee_role.sortorder)
+    @userroles = EmployeeRole.where('sortorder <= ?', current_user.employee_role.sortorder)
      #debugger
   end
   
