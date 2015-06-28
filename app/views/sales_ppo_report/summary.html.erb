@@ -1,7 +1,7 @@
  <div class="row">
 	 <div class="col-xs-6">
 
-	 <h4><strong>All</strong> Order Summary for past few days</h4>
+	 <h4><strong>All</strong>HBN Order Summary for past few days</h4>
 	 </div>
 	 <div class="col-xs-6">
 
@@ -15,12 +15,12 @@
     <tr>
      <th class="text-right">No</th>
      <th class="text-right">Date</th>
-     <th class="text-right">CC Orders</th>
-       <th class="text-right">CC Value</th>
-      <th class="text-right">COD Orders</th>
-       <th class="text-right">COD Value</th>
-       <th class="text-right">Total Orders</th>
+     <th class="text-right">Total Orders</th>
      <th class="text-right">Total Value</th>
+      <th class="text-right">Revenue</th>
+       <th class="text-right">Variable Cost</th>
+     <th class="text-right">Fixed Cost</th>
+     <th class="text-right">Profitability</th>
     <th class="text-right">PPO</th>
    
      </tr>
@@ -31,28 +31,33 @@
    <td><%= @sno %></td>
 
  <td><%= c[:for_date] %></td>
-<td class="text-right">
-   <%= c[:ccorders] %> 
-</td>
-<td class="text-right">
-   <%= c[:ccvalue] %> 
-</td>
-<td class="text-right">
-   <%= c[:codorders] %> 
-</td>
-<td class="text-right">
-   <%= c[:codvalue] %> 
-</td>
 
 <td class="text-right">
    <%= c[:nos] %> 
+  
 </td>
 <td class="text-right">
    <%= c[:total] %> 
+   
 </td>
+<td class="text-right">
+   <%= c[:revenue] %> 
+  
+</td>
+<td class="text-right">
+   <%= c[:variable_cost] %> 
+  
+</td>
+<td class="text-right">
+   <%= c[:fixed_cost] %> 
+  
+</td>
+<td class="text-right">   <%= c[:profitability] %>
+
+<td >
 
 <td>
-<%= link_to "View PPO", ppo_report_path(for_date: c[:for_date]), :target => "_blank" %>
+<%= link_to "View PPO", hourly_ppo_path(for_date: c[:for_date]), :target => "_blank" %>
 </td>
 
 

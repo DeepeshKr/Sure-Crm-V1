@@ -13,10 +13,19 @@ Rails.application.routes.draw do
   resources :order_updates
 
   get 'sales_ppo_report/summary'
+  get 'ppo_report' => 'sales_ppo_report#summary'
   get 'sales_ppo_report/daily'
+  get 'daily_ppo' => 'sales_ppo_report#daily'
   get 'sales_ppo_report/hourly'
+  get 'hourly_ppo' => 'sales_ppo_report#hourly'
   get 'sales_ppo_report/show'
+  get 'show_ppo' => 'sales_ppo_report#show'
   get 'sales_ppo_report/channel'
+  get 'channel_ppo' => 'sales_ppo_report#channel'
+  get 'sales_ppo_report/ppo_summary'
+  get 'ppo_summary' => 'sales_ppo_report#ppo_summary'
+  get 'sales_ppo_report/orders'
+  get 'ppo_orders' => 'sales_ppo_report#orders'
 
   resources :tax_rates
 
@@ -44,12 +53,12 @@ Rails.application.routes.draw do
   get 'sales_report/product'
   get 'product_report' => 'sales_report#product'
   get 'sales_report/show'
-  get 'show_report' => 'sales_ppo_report#show'
+  get 'show_report' => 'sales_report#show'
   get 'sales_report/order_summary'
   get 'order_summary' => 'sales_report#order_summary'
   get 'sales_report/orders'
   get 'orders_list' => 'sales_report#orders'
-   get 'ppo_report' => 'sales_ppo_report#hourly'
+  
 
   resources :media_tape_heads
 

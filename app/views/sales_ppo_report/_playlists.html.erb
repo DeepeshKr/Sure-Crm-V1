@@ -1,6 +1,3 @@
-
-
-
  <table class="table table-hover">
   <thead>
     <tr>
@@ -9,10 +6,7 @@
 
       <th>Start</th>
      
-      
-       
-      
-    </tr>
+      </tr>
   </thead>
 
   <tbody>
@@ -25,11 +19,7 @@
 
           </td>
           <td><%= campaign_playlist.starttime %></td>
-         
-          
-
-          
-        </tr>
+           </tr>
        
       <% end %>
   <% end %>
@@ -40,20 +30,14 @@
        
         <td><%= campaign_playlist.product_variant.name if campaign_playlist.product_variant  %>        </td>
         <td><%= campaign_playlist.starttime %></td>
-       
-       
-
-        
-      </tr>
+        </tr>
       <% end %>
      <% else %>
         <tr ><td colspan="4">
-        <h4>No playlist found </h4></td>
+        <h4>No current playlist found </h4></td>
         </tr>
 
   <% end %> 
   </tbody>
   
 </table>
-
-   

@@ -338,7 +338,7 @@ class SalesReportController < ApplicationController
    @sno = 1
     showproducts
     shows_between
-  
+   
   end #end of def  
 
   def orderlisting
@@ -403,26 +403,35 @@ class SalesReportController < ApplicationController
         @end_time = Time.strptime(params[:end_time], "%Y-%m-%d %H:%M") 
 
         
-        if @start_time.hour < 2
+        if @start_time.hour < 4
         #show previous day shows as well
-        previous_start_hr = 21
-        previous_start_min = 0 
-        previous_end_hr = 23
-        previous_end_min = 59
+        previous_start_hr = 20
+        case @start_time.hour # a_variable is the variable we want to compare
+          when 3   #compare to 1
+            previous_start_hr = 23
+          when 2    #compare to 2
+           previous_start_hr = 22
+          when 1
+           previous_start_hr = 21
+          end
+        
+        
+        previous_startsecs = (previous_start_hr * 60 * 60) 
+        previous_endsecs = (23 * 60 * 60) + (59 * 60)
         previous_day = for_date - 1.day
 
         @earlier_day = previous_day.strftime("%d-%b-%Y")
 
-        @old_campaign_playlists =  CampaignPlaylist.joins(:campaign)
-        .where("campaigns.startdate = ?", for_date)
-       .where("start_hr >= ? and start_min >= ? and end_hr <= ? and end_min <= ?", previous_start_hr, previous_start_min, previous_end_hr, previous_end_min)
-       .order(:start_hr, :start_min, :start_sec).where(list_status_id: 10000)
+        @old_campaign_playlists =  CampaignPlaylist.where("(start_hr * 60 * 60) + (start_min * 60) >= ? and (end_hr * 60 *60 )  + (end_min *60) <= ?", previous_startsecs, previous_endsecs)
+       .joins(:campaign).where("campaigns.startdate = ?", previous_day)
+       .where('campaigns.mediumid IN (?)', @hbnlist)
+      .order(:start_hr, :start_min, :start_sec).where(list_status_id: 10000)
         
         else
         @start_time = Time.strptime(params[:start_time], "%Y-%m-%d %H:%M") 
         @end_time = Time.strptime(params[:end_time], "%Y-%m-%d %H:%M") 
 
-        @start_time = @start_time - 2.hours
+        @start_time = @start_time - 4.hours
         @end_time = @end_time 
         end
      
@@ -431,14 +440,13 @@ class SalesReportController < ApplicationController
       @Show_end_time = @end_time.strftime("%H:%M")
 
       # @campaign_playlists =  CampaignPlaylist.where(list_status_id: 10000).limit(10)
+      startsecs = (@start_time.hour * 60 * 60) + (@start_time.min * 60)
+      endsecs = (@end_time.hour * 60 * 60) + (@end_time.min * 60) + (15 * 60)
 
-       @campaign_playlists =  CampaignPlaylist.where("start_hr >= ? and 
-        start_min >= ? and end_hr <= ? and end_min <= ?", 
-        @start_time.hour, @start_time.min, @end_time.hour, @end_time.min)
+       @campaign_playlists =  CampaignPlaylist.where("(start_hr * 60 * 60) + (start_min * 60) >= ? and (end_hr * 60 *60 )  + (end_min *60) <= ?", startsecs, endsecs)
        .joins(:campaign).where("campaigns.startdate = ?", for_date)
        .where('campaigns.mediumid IN (?)', @hbnlist)
-      .order(:start_hr, :start_min, :start_sec)
-      .where(list_status_id: 10000)
+      .order(:start_hr, :start_min, :start_sec).where(list_status_id: 10000)
      
       
 

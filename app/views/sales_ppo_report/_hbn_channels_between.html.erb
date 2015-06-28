@@ -1,0 +1,44 @@
+<% if @hbn_order_list.present? %>
+<table class="table table-hover table-bordered">
+  <thead>
+    <tr>
+    
+     <th>Channel</th>
+    
+       <th>Nos</th>
+     <th>Value</th>
+    
+     </tr>
+  </thead>
+<tbody>
+   <% @hbn_order_list.each do |c| %>
+   <tr>
+  
+
+<td>
+ <%=  c[:channel] %>
+ 
+</td>
+
+
+<td class="text-right">
+   <%= c[:nos] %> 
+</td>
+<td class="text-right">
+   <%= c[:total] %> 
+</td>
+
+  </tr> 
+
+ <% end %>
+
+ 
+
+  </tbody>
+
+  </table>
+  <% else %>
+  <div class="well well-sm">
+  <h5>Please select a date to generate the report or No sales in HBN </h5>
+  </div>
+  <% end %>

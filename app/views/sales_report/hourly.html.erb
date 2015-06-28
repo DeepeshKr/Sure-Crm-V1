@@ -22,7 +22,7 @@
        <th class="text-right">COD Value</th>
        <th class="text-right">Total Orders</th>
      <th class="text-right">Total Value</th>
-    <th></th>
+    
      </tr>
   </thead>
 <tbody>
@@ -51,9 +51,7 @@
 <td class="text-right">
    <%= c[:total] %> 
 </td>
-<td >
-<%= link_to "View", order_summary_path(for_date: @or_for_date, start_time: c[:start_time], end_time: c[:end_time]), :target => "_blank" %>
-</td>
+
   </tr> 
   <% @sno += 1 %> 
  <% end %>

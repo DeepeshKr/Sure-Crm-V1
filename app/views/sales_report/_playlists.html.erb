@@ -1,6 +1,3 @@
-
-
-
  <table class="table table-hover">
   <thead>
     <tr>
@@ -9,10 +6,7 @@
 
       <th>Start</th>
      
-      
-       
-      
-    </tr>
+      </tr>
   </thead>
 
   <tbody>
@@ -25,11 +19,7 @@
 
           </td>
           <td><%= campaign_playlist.starttime %></td>
-         
-          
-
-          
-        </tr>
+           </tr>
        
       <% end %>
   <% end %>
@@ -40,11 +30,7 @@
        
         <td><%= campaign_playlist.product_variant.name if campaign_playlist.product_variant  %>        </td>
         <td><%= campaign_playlist.starttime %></td>
-       
-       
-
-        
-      </tr>
+        </tr>
       <% end %>
      <% else %>
         <tr ><td colspan="4">
@@ -55,13 +41,3 @@
   </tbody>
   
 </table>
-
-   
-<div class="well well-sm">
-<small>
-Start Hour:<%= @start_time.hour %> <br>
-Start Min <%=  @start_time.min %> <br>
-End Hour <%= @end_time.hour %> <br>
-End Min <%=  @end_time.min %> <br>
-</small>
-</div>
