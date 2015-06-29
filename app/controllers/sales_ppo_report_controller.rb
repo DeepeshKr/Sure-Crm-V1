@@ -3,14 +3,17 @@ class SalesPpoReportController < ApplicationController
   before_action :media_segments, only: [:daily, :hourly, :show, :channel]
   def summary
      @sno = 1
-
+     @searchaction = "summary"
         @datelist ||= []
         employeeunorderlist ||= []
-       
+
+      #  @or_for_date = Date.strptime(params[:for_date], "%d-%m-%Y")
+      #for_date =  Date.strptime(params[:for_date], "%d-%m-%Y")
+     
          #media segregation only HBN
           media_segments
 
-          from_date = Date.current - 3.days #30.days
+          from_date = Date.current - 30.days #30.days
           to_date = Date.current
           to_date.downto(from_date).each do |day|
           @datelist <<  day.strftime('%d-%b-%y')
@@ -27,22 +30,22 @@ class SalesPpoReportController < ApplicationController
           media_var_cost = 0
           product_cost = 0
 
-          orderlist.each do |med |
-            revenue += OrderMaster.find(med.id).productrevenue ||= 0
-           # media_var_cost += OrderMaster.find(med.id).mediacost ||= 0
-            product_cost += OrderMaster.find(med.id).productcost ||= 0
-            media_variable = Medium.where('id = ? AND value is not null', med.media_id)
-            .where(:media_commision_id => [10020, 10021, 10040, 10041, 10060]) #.pluck(:value)
-              if media_variable.present?
-                #discount the total value by 50% as correction
-                correction = 0.5
-                #PAID_CORRECTION
-                 if media_variable.first.paid_correction.present?
-                   correction = media_variable.first.paid_correction #||= 0.5
-                 end
-               media_var_cost += (med.subtotal * media_variable.first.value.to_f) * correction
-              end
-          end
+          # orderlist.each do |med |
+          #   revenue += OrderMaster.find(med.id).productrevenue ||= 0
+          #  # media_var_cost += OrderMaster.find(med.id).mediacost ||= 0
+          #   product_cost += OrderMaster.find(med.id).productcost ||= 0
+          #   media_variable = Medium.where('id = ? AND value is not null', med.media_id)
+          #   .where(:media_commision_id => [10020, 10021, 10040, 10041, 10060]) #.pluck(:value)
+          #     if media_variable.present?
+          #       #discount the total value by 50% as correction
+          #       correction = 0.5
+          #       #PAID_CORRECTION
+          #        if media_variable.first.paid_correction.present?
+          #          correction = media_variable.first.paid_correction #||= 0.5
+          #        end
+          #      media_var_cost += (med.subtotal * media_variable.first.value.to_f) * correction
+          #     end
+          # end
           fixed_cost = Medium.where(media_group_id: 10000).sum(:daily_charges)
           #fixed_cost = fixed_cost / 48
           #ppo for each hour
@@ -103,6 +106,7 @@ class SalesPpoReportController < ApplicationController
   end
 
   def hourly
+    #@searchaction = "hourly"
      #/sales_report/hourly?for_date=05%2F09%2F2015
     @hourlist = "Time UTC is your zone #{Time.zone.now} while actual time is #{Time.now}"  
     @sno = 1
