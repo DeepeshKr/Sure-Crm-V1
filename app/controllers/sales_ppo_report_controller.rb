@@ -10,7 +10,7 @@ class SalesPpoReportController < ApplicationController
          #media segregation only HBN
           media_segments
 
-          from_date = Date.current - 15.days #30.days
+          from_date = Date.current - 5.days #30.days
           to_date = Date.current
           to_date.downto(from_date).each do |day|
           @datelist <<  day.strftime('%d-%b-%y')
