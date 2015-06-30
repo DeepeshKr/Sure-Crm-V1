@@ -355,7 +355,19 @@ end
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def product_stock_book_params
-      params.require(:product_stock_book).permit(:stock_date, :product_master_id, :product_list_id, :ext_prod_code, :name, :opening_qty, :opening_rate, :opening_value, :purchased_qty, :purchased_rate, :purchased_value, :returned_retail_qty, :returned_retail_rate, :returned_retail_value, :returned_wholesale_qty, :returned_wholesale_rate, :returned_wholesale_value, :returned_others_qty, :returned_others_rate, :returned_others_value, :sold_retail_qty, :sold_retail_rate, :sold_retail_value, :sold_wholesale, :sold_wholesale_rate, :sold_wholesale_value, :sold_branch_qty, :sold_branch_rate, :sold_branch_value, :corrections_qty, :corrections_rate, :corrections_value, :closing_qty, :closing_rate, :closing_value)
+      params.require(:product_stock_book).permit(:stock_date, :product_master_id, 
+        :product_list_id, :ext_prod_code, 
+        :name, :opening_qty, :opening_rate, :opening_value, :purchased_qty, 
+        :purchased_rate, :purchased_value, :returned_retail_qty, 
+        :returned_retail_rate, :returned_retail_value, 
+        :returned_wholesale_qty, :returned_wholesale_rate, 
+        :returned_wholesale_value, :returned_others_qty, 
+        :returned_others_rate, :returned_others_value, 
+        :sold_retail_qty, :sold_retail_rate, :sold_retail_value, 
+        :sold_wholesale, :sold_wholesale_rate, :sold_wholesale_value, 
+        :sold_branch_qty, :sold_branch_rate, :sold_branch_value, 
+        :corrections_qty, :corrections_rate, :corrections_value, 
+        :closing_qty, :closing_rate, :closing_value)
     end
 
 end

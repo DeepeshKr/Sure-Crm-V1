@@ -522,7 +522,7 @@ def shows_between
 
         @earlier_day = previous_day.strftime("%d-%b-%Y")
 
-        @old_campaign_playlists =  CampaignPlaylist.where("(start_hr * 60 * 60) + (start_min * 60) >= ? and (end_hr * 60 *60 )  + (end_min *60) <= ?", previous_startsecs, previous_endsecs)
+        @old_campaign_playlists =  CampaignPlaylist.where("(start_hr * 60 * 60) + (start_min * 60) >= ? and (start_hr * 60 *60 )  + (start_min *60) <= ?", previous_startsecs, previous_endsecs)
        .joins(:campaign).where("campaigns.startdate = ?", previous_day)
        .where('campaigns.mediumid IN (?)', @hbnlist)
       .order(:start_hr, :start_min, :start_sec).where(list_status_id: 10000)
@@ -540,10 +540,10 @@ def shows_between
       @Show_end_time = @end_time.strftime("%H:%M")
 
       # @campaign_playlists =  CampaignPlaylist.where(list_status_id: 10000).limit(10)
-      startsecs = (@start_time.hour * 60 * 60) + (@start_time.min * 60)
-      endsecs = (@end_time.hour * 60 * 60) + (@end_time.min * 60) + (15 * 60)
+      startsecs = ((@start_time.hour) || 0 * 60 * 60) + ((@start_time.min) || 0 * 60)
+      endsecs = (@end_time.hour * 60 * 60) + (@end_time.min * 60) 
 
-       @campaign_playlists =  CampaignPlaylist.where("(start_hr * 60 * 60) + (start_min * 60) >= ? and (end_hr * 60 *60 )  + (end_min *60) <= ?", startsecs, endsecs)
+       @campaign_playlists =  CampaignPlaylist.where("(start_hr * 60 * 60) + (start_min * 60) >= ? and (start_hr * 60 *60 )  + (start_min *60) <= ?", startsecs, endsecs)
        .joins(:campaign).where("campaigns.startdate = ?", for_date)
        .where('campaigns.mediumid IN (?)', @hbnlist)
       .order(:start_hr, :start_min, :start_sec).where(list_status_id: 10000)

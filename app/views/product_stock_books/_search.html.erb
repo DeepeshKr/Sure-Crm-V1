@@ -2,8 +2,8 @@
   <%= form_tag("/stockbook", method: "get") do  %>
       <div class="col-xs-6">
         <%= select_tag(:prod,
-                       options_from_collection_for_select(@productmasterlist, :extproductcode, :productname, selected: @prod), {:class => "form-control"} )  %>
-      </div>
+                       options_from_collection_for_select(@productmasterlist, :barcode, :productname, selected: @prod), {:class => "form-control"} )  %>
+      </div> 
       <div class="col-xs-4">
         <div class="input-daterange input-group">
           <%= text_field_tag(:from_date, nil, :data => {:provide => "datepicker"}, :class => "form-control", :required => "true" )   %>
