@@ -367,7 +367,7 @@ end
         :sold_wholesale, :sold_wholesale_rate, :sold_wholesale_value, 
         :sold_branch_qty, :sold_branch_rate, :sold_branch_value, 
         :corrections_qty, :corrections_rate, :corrections_value, 
-        :closing_qty, :closing_rate, :closing_value)
+        :closing_qty, :closing_rate, :closing_value, :list_barcode)
     end
 
 end
