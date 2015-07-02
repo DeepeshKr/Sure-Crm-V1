@@ -12,7 +12,9 @@ class OrderMastersController < ApplicationController
   def list
     #<br>      <small>About <%= time_ago_in_words(order_master.orderdate + 330.minutes) %> ago </small>
     @sno = 1
-    @employees = Employee.all.order("first_name").joins(:employee_role).where("employee_roles.sortorder > 8")
+    @employees = Employee.all.order("first_name")
+    .joins(:employee_role)
+    .where("employee_roles.sortorder > 8")
 
     if params[:employee_id].present?
       @employee_id = params[:employee_id]
@@ -36,7 +38,8 @@ class OrderMastersController < ApplicationController
          end
       else
          @orderdesc = "Recent 1000 all orders of #{employee} "
-          @order_masters = OrderMaster.where(employee_id: @employee_id).order("id DESC").limit(1000)
+          @order_masters = OrderMaster.where(employee_id: @employee_id)
+          .order("id DESC").limit(1000).paginate(:page => params[:page])
       end
 
     elsif params[:completed].present?
@@ -47,7 +50,8 @@ class OrderMastersController < ApplicationController
       end
     else
       @orderdesc = "Showing Recent 100 orders"
-       @order_masters = OrderMaster.order("id DESC").limit(100).paginate(:page => params[:page])
+       @order_masters = OrderMaster.order("id DESC").limit(100)
+       .paginate(:page => params[:page])
     end
 
    

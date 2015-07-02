@@ -14,19 +14,19 @@ class EmployeesController < ApplicationController
       @searchvalue = params[:search].upcase   
       @employees = Employee.where("UPPER(first_name) like ? OR UPPER(last_name) like ? or 
         UPPER(employeecode) like ? or UPPER(description) like ?", "#{@searchvalue}%", 
-        "#{@searchvalue}%", "#{@searchvalue}%", "#{@searchvalue}%")
+        "#{@searchvalue}%", "#{@searchvalue}%", "#{@searchvalue}%").paginate(:page => params[:page])
       @found = @employees.count
      
      elsif params[:showall] == 'true'
         
       @search = "All Employees"
       @searchvalue = nil
-      @employees = Employee.all
+      @employees = Employee.all.paginate(:page => params[:page])
       @found = @employees.count
     else
       @search = "Recently Added / Updated Employees"
       @searchvalue = nil
-      @employees = Employee.order("updated_at DESC").limit(10)
+      @employees = Employee.order("updated_at DESC").limit(10).paginate(:page => params[:page])
       @found = @employees.count
     
     end
