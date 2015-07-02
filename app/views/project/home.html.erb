@@ -48,18 +48,122 @@
 </div>
 
 <div class="row">
-<div class="col-xs-8">
+<div class="col-xs-6">
 <div class="ui-widget">
   <label for="tags">Tags: </label>
   <input id="tags">
 </div>
 </div>
+<div class="col-xs-6">
+ <p>Modified Behavior </p><br>
+ <div class="row">
+ <div class="col-xs-6">
+    <input id="autocomplete2" type="text" placeholder="U.S. state name"> </div>
+    <div class="col-xs-6"><input id="autocomplete2-value" type="text" name="code"></div>
+   
+    </div>
+</div>
+</div>
+ <div class="row">
+ <%= bootstrap_form_tag url: product_variants_path, :method => :GET, :enforce_utf8 => false do |f| %>
+<div class="col-xs-8">
+<%= text_field_tag(:search, nil, :class => "form-control", :required => "true", :placeholder => "Search name / Code", :value => @searchvalue  )   %>
 </div>
 
+<div class="col-xs-2">
+  <%= submit_tag "Search", name: nil, class: "btn btn-primary", data: { confirm: 'Are you sure? #{@timenow}' } %>
+</div>
+<% end %>
+  <div class="col-xs-2">   
+      <%= bootstrap_form_tag url: product_variants_path, :method => :GET, :enforce_utf8 => false do |f| %>
+      <%= hidden_field_tag :showall, @showall %>
+            <%= submit_tag "All", name: nil,  class: "btn btn-primary" , data: { confirm: @timenow } %>
+      <% end %>
+  </div>
+</div> 
 <div class="well">
 <!-- <%= image_tag("/project/home/exciting.png", :alt => "Image missing") %> -->
 </div>
 
+  <script>
+    /*
+     * jQuery UI Autocomplete: Using Label-Value Pairs
+     * http://salman-w.blogspot.com/2013/12/jquery-ui-autocomplete-examples.html
+     */
+    var data = [
+      { value: "AL", label: "Alabama" },
+      { value: "AK", label: "Alaska" },
+      { value: "AZ", label: "Arizona" },
+      { value: "AR", label: "Arkansas" },
+      { value: "CA", label: "California" },
+      { value: "CO", label: "Colorado" },
+      { value: "CT", label: "Connecticut" },
+      { value: "DE", label: "Delaware" },
+      { value: "FL", label: "Florida" },
+      { value: "GA", label: "Georgia" },
+      { value: "HI", label: "Hawaii" },
+      { value: "ID", label: "Idaho" },
+      { value: "IL", label: "Illinois" },
+      { value: "IN", label: "Indiana" },
+      { value: "IA", label: "Iowa" },
+      { value: "KS", label: "Kansas" },
+      { value: "KY", label: "Kentucky" },
+      { value: "LA", label: "Louisiana" },
+      { value: "ME", label: "Maine" },
+      { value: "MD", label: "Maryland" },
+      { value: "MA", label: "Massachusetts" },
+      { value: "MI", label: "Michigan" },
+      { value: "MN", label: "Minnesota" },
+      { value: "MS", label: "Mississippi" },
+      { value: "MO", label: "Missouri" },
+      { value: "MT", label: "Montana" },
+      { value: "NE", label: "Nebraska" },
+      { value: "NV", label: "Nevada" },
+      { value: "NH", label: "New Hampshire" },
+      { value: "NJ", label: "New Jersey" },
+      { value: "NM", label: "New Mexico" },
+      { value: "NY", label: "New York" },
+      { value: "NC", label: "North Carolina" },
+      { value: "ND", label: "North Dakota" },
+      { value: "OH", label: "Ohio" },
+      { value: "OK", label: "Oklahoma" },
+      { value: "OR", label: "Oregon" },
+      { value: "PA", label: "Pennsylvania" },
+      { value: "RI", label: "Rhode Island" },
+      { value: "SC", label: "South Carolina" },
+      { value: "SD", label: "South Dakota" },
+      { value: "TN", label: "Tennessee" },
+      { value: "TX", label: "Texas" },
+      { value: "UT", label: "Utah" },
+      { value: "VT", label: "Vermont" },
+      { value: "VA", label: "Virginia" },
+      { value: "WA", label: "Washington" },
+      { value: "WV", label: "West Virginia" },
+      { value: "WI", label: "Wisconsin" },
+      { value: "WY", label: "Wyoming" }
+    ];
+    $(function() {
+      $("#autocomplete1").autocomplete({
+        source: data
+      });
+      $("#autocomplete2").autocomplete({
+        source: data,
+        focus: function(event, ui) {
+          // prevent autocomplete from updating the textbox
+          event.preventDefault();
+          // manually update the textbox
+          $(this).val(ui.item.label);
+        },
+        select: function(event, ui) {
+          // prevent autocomplete from updating the textbox
+          event.preventDefault();
+          // manually update the textbox and hidden field
+          $(this).val(ui.item.label);
+          $("#autocomplete2-value").val(ui.item.value);
+        }
+      });
+    });
+  </script>
 <script>
   $(function() {
     var availableTags = [

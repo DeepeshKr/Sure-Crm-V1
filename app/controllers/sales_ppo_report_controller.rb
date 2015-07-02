@@ -174,8 +174,8 @@ class SalesPpoReportController < ApplicationController
           totalorders = orderlist.sum(:total)
           noorders = orderlist.count()
           employeeunorderlist << {:total => totalorders,
-          :starttime =>  halfhourago.strftime("%d-%b %H:%M %p"),
-          :endtime => Time.at(date).strftime("%d-%b %H:%M %p"),
+          :starttime =>  halfhourago.strftime("%H:%M %p"),
+          :endtime => Time.at(date).strftime("%H:%M %p"),
           :start_time => halfhourago.strftime("%Y-%m-%d %H:%M"), 
           :end_time => Time.at(date).strftime("%Y-%m-%d %H:%M"),
           :nos => noorders,
@@ -189,6 +189,7 @@ class SalesPpoReportController < ApplicationController
   end
 
   def show
+    @searchaction = "show_ppo"
     for_date = (330.minutes).from_now.to_date
     
     if params.has_key?(:for_date)
@@ -201,6 +202,28 @@ class SalesPpoReportController < ApplicationController
      
      hbn_order_masters = OrderMaster.joins(:medium).where('TRUNC(orderdate) = ?',for_date).where('ORDER_STATUS_MASTER_ID > 10002').where(media_id: @hbnlist)
     
+     #split the fixed cost across the hour
+          revenue = 0
+          media_var_cost = 0
+          product_cost = 0
+
+          hbn_order_masters.each do |med |
+            revenue += OrderMaster.find(med.id).productrevenue ||= 0
+           # media_var_cost += OrderMaster.find(med.id).mediacost ||= 0
+            product_cost += OrderMaster.find(med.id).productcost ||= 0
+            media_variable = Medium.where('id = ? AND value is not null', med.media_id)
+            .where(:media_commision_id => [10020, 10021, 10040, 10041, 10060]) #.pluck(:value)
+              if media_variable.present?
+                #discount the total value by 50% as correction
+                correction = 0.5
+                #PAID_CORRECTION
+                 if media_variable.first.paid_correction.present?
+                   correction = media_variable.first.paid_correction #||= 0.5
+                 end
+               media_var_cost += (med.subtotal * media_variable.first.value.to_f) * correction
+              end
+          end
+
       @hbn_ccvalue = hbn_order_masters.where(orderpaymentmode_id: 10000).sum(:total)
       @hbn_ccorders = hbn_order_masters.where(orderpaymentmode_id: 10000).count()
       @hbn_codorders = hbn_order_masters.where(orderpaymentmode_id: 10001).count()

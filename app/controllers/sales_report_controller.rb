@@ -148,18 +148,21 @@ class SalesReportController < ApplicationController
       
       hbn_order_list ||= []
       num = 1
-      hbn_order_masters.each do |o|
+        #hbn channels
+        hbn_order_masters.each do |o|
         e = o.media_id
        
         name = (Medium.find(e).name  || "NA" if Medium.find(e).name.present?)
-        orderlist = OrderMaster.where('ORDER_STATUS_MASTER_ID > 10002').where('TRUNC(orderdate) = ?',for_date).where(media_id: e)
+
+        orderlist = OrderMaster.where('ORDER_STATUS_MASTER_ID > 10002')
+        .where('TRUNC(orderdate) = ?',for_date).where(media_id: e)
         timetaken = orderlist.sum(:codcharges)
         ccvalue = orderlist.where(orderpaymentmode_id: 10000).sum(:total)
         ccorders = orderlist.where(orderpaymentmode_id: 10000).count()
         codorders = orderlist.where(orderpaymentmode_id: 10001).count()
         codvalue = orderlist.where(orderpaymentmode_id: 10001).sum(:total)
         totalorders = orderlist.sum(:total)
-        noorders = orderlist.count()
+        noorders = orderlist.count(:id)
         hbn_order_list << {:total => totalorders,
            :id => e, :channel => name, :for_date =>  @or_for_date,
           :nos => noorders, :codorders => codorders, :codvalue => codvalue,
@@ -173,7 +176,8 @@ class SalesReportController < ApplicationController
         e = o.media_id
        
         name = (Medium.find(e).name  || "NA" if Medium.find(e).name.present?)
-        orderlist = OrderMaster.where('ORDER_STATUS_MASTER_ID > 10002').where('TRUNC(orderdate) = ?',for_date).where(media_id: e)
+        orderlist = OrderMaster.where('ORDER_STATUS_MASTER_ID > 10002')
+        .where('TRUNC(orderdate) = ?',for_date).where(media_id: e)
         timetaken = orderlist.sum(:codcharges)
         ccvalue = orderlist.where(orderpaymentmode_id: 10000).sum(:total)
         ccorders = orderlist.where(orderpaymentmode_id: 10000).count()
@@ -232,7 +236,8 @@ class SalesReportController < ApplicationController
         e = o.employee_id
        
         name = (Employee.find(e).first_name  || "NA" if Employee.find(e).first_name.present?)
-        orderlist = OrderMaster.where('ORDER_STATUS_MASTER_ID > 10002').where('TRUNC(orderdate) = ?',for_date).where(employee_id: e)
+        orderlist = OrderMaster.where('ORDER_STATUS_MASTER_ID > 10002')
+        .where('TRUNC(orderdate) = ?',for_date).where(employee_id: e)
         timetaken = orderlist.sum(:codcharges)
         ccvalue = orderlist.where(orderpaymentmode_id: 10000).sum(:total)
         ccorders = orderlist.where(orderpaymentmode_id: 10000).count()
@@ -281,7 +286,12 @@ class SalesReportController < ApplicationController
           if city.present?
             #city = CustomerAddress.find(e).city  #  || "NA" if Employee.find(e).first_name.present?)
             
-            orderlist = OrderMaster.where('ORDER_STATUS_MASTER_ID > 10002').where('TRUNC(orderdate) = ?',for_date).joins(:customer_address).where("customer_addresses.city = ?", city)
+            orderlist = OrderMaster.where('ORDER_STATUS_MASTER_ID > 10002')
+            .where('TRUNC(orderdate) = ?',for_date).joins(:customer_address)
+            .where("customer_addresses.city = ?", city)
+             if params.has_key?(:media_id)
+              orderlist = orderlist.where(media_id: params[:media_id])
+             end
             timetaken = orderlist.sum(:codcharges)
             ccvalue = orderlist.where(orderpaymentmode_id: 10000).sum(:total)
             ccorders = orderlist.where(orderpaymentmode_id: 10000).count()
@@ -365,23 +375,47 @@ class SalesReportController < ApplicationController
           @order_masters = @order_masters.where(media_id: @hbnlist).order("orderdate")
           @orderlistabout = "for selected playlist HBN"
           if params.has_key?(:missed)
-            @order_masters = @order_masters.where('campaign_playlist_id IS NULL').order("orderdate")
+            @order_masters = @order_masters.where('campaign_playlist_id IS NULL')
+            .order("orderdate")
             @orderlistabout = "for selected playlist HBN Missed orders"
           end
       end
     end
+    if params.has_key?(:employee_id).present?
+      @employee_id = params[:employee_id]
+      employee = Employee.find(@employee_id).fullname
+      if params[:completed].present?
+        # all completed orders only
+         if params[:for_date].present? 
+          for_date =  Date.strptime(params[:for_date], "%m-%d-%Y")
+
+          @order_masters = OrderMaster.where('ORDER_STATUS_MASTER_ID > 10002')
+          .where('TRUNC(orderdate) = ?',for_date)
+          .where(employee_id: @employee_id).order("id")
+          @orderdesc = "#{@order_masters.count()} orders of #{employee} for #{for_date}"
+
+         end
+      else
+         @orderdesc = "Recent 1000 all orders of #{employee} "
+          @order_masters = OrderMaster.where(employee_id: @employee_id).order("id DESC").limit(1000)
+      end
+
+    end
+
     if params.has_key?(:start_time) && params.has_key?(:end_time)
       start_time = Time.strptime(params[:start_time], "%Y-%m-%d %H:%M") 
       end_time = Time.strptime(params[:end_time], "%Y-%m-%d %H:%M") 
      
      
-     @order_masters = OrderMaster.where('ORDER_STATUS_MASTER_ID > 10002').where('orderdate >= ? AND orderdate <= ?', start_time, end_time)
+     @order_masters = OrderMaster.where('ORDER_STATUS_MASTER_ID > 10002')
+     .where('orderdate >= ? AND orderdate <= ?', start_time, end_time)
      @orderlistabout = "for selected playlist #{for_date} between #{start_time} and #{end_time} "
     end
     
 
   
   end #end of def  
+  
 
  private
 
