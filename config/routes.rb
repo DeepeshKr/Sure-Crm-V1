@@ -187,7 +187,7 @@ Rails.application.routes.draw do
   post 'processorder' => 'customerorder#process_order'
   get 'summary' => 'customerorder#summary'
 
-  get 'orderlist' => 'order_masters#list'
+  get 'orderlist' => 'order_masters#list' 
 
   get 'dailyreport' => 'order_masters#daily_report'
   

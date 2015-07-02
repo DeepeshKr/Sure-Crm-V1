@@ -189,7 +189,7 @@ class SalesPpoReportController < ApplicationController
   end
 
   def show
-    @searchaction = "show_ppo"
+    @searchaction = "show"
     for_date = (330.minutes).from_now.to_date
     
     if params.has_key?(:for_date)

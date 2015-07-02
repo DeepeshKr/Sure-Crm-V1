@@ -22,11 +22,16 @@ class OrderMastersController < ApplicationController
          if params[:for_date].present? 
           for_date =  Date.strptime(params[:for_date], "%m-%d-%Y")
 
-          @order_masters = OrderMaster.where('ORDER_STATUS_MASTER_ID > 10002').where('TRUNC(orderdate) = ?',for_date).where(employee_id: @employee_id).order("id")
+          @order_masters = OrderMaster.where('ORDER_STATUS_MASTER_ID > 10002')
+          .where('TRUNC(orderdate) = ?',for_date)
+          .where(employee_id: @employee_id)
+          .order("id").paginate(:page => params[:page])
           @orderdesc = "#{@order_masters.count()} orders of #{employee} for #{for_date}"
          else
           @orderdesc = "Recent 500 completed orders of #{employee} "
-          @order_masters = OrderMaster.where('ORDER_STATUS_MASTER_ID > 10002').where(employee_id: @employee_id).limit(500)
+          @order_masters = OrderMaster.where('ORDER_STATUS_MASTER_ID > 10002')
+          .where(employee_id: @employee_id).limit(500)
+          .paginate(:page => params[:page])
          
          end
       else
@@ -37,11 +42,12 @@ class OrderMastersController < ApplicationController
     elsif params[:completed].present?
       if params[:completed] = 'yes'
         @orderdesc = "Showing Completed 1000 orders"
-        @order_masters = OrderMaster.where('external_order_no IS NOT NULL').order("id DESC").limit(1000)
+        @order_masters = OrderMaster.where('external_order_no IS NOT NULL')
+        .order("id DESC").limit(1000).paginate(:page => params[:page])
       end
     else
       @orderdesc = "Showing Recent 100 orders"
-       @order_masters = OrderMaster.order("id DESC").limit(100)
+       @order_masters = OrderMaster.order("id DESC").limit(100).paginate(:page => params[:page])
     end
 
    

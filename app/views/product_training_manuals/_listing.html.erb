@@ -12,7 +12,7 @@
     <% @product_training_manuals.each do |product_training_manual| %>
       <tr>
          <td><%= product_training_manual.name %></td>
-        <td><%= product_training_manual.description %></td>
+        <td><%== product_training_manual.description %></td>
        
         <td><%= link_to 'Show', product_training_manual %></td>
         <td><%= link_to 'Edit', edit_product_training_manual_path(product_training_manual) %></td>

@@ -14,7 +14,8 @@ gem 'ruby-graphviz'
 #intall luhn for credit card verification => not used for now
 gem 'luhn'
 
-
+## Gemfile for Rails 3+, Sinatra, and Merb
+gem 'will_paginate', '~> 3.0.6'
 
 #get multi form  
 #gem 'wicked'

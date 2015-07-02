@@ -39,7 +39,7 @@
         <td> <strong><%= product_training_manual.name %></strong> <br>
         <small><%= product_training_manual.product_master.productname %></small>
         </td>
-        <td><%= product_training_manual.description %> <br>
+        <td><%== product_training_manual.description %> <br>
         <small><%= product_training_manual.quicknotes %></small> </td>
         <td><%= link_to 'Show', product_training_manual %></td>
         <td><%= link_to 'Edit', edit_product_training_manual_path(product_training_manual) %></td>

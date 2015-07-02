@@ -1,4 +1,7 @@
 <% if @order_masters.present? %>
+<br>
+<%= will_paginate @order_masters %>
+<br>
 <table class="table table-hover table-bordered">
   <thead>
     <tr>
@@ -101,6 +104,9 @@
 
   </tfoot>
 </table>
+<br>
+<%= will_paginate @order_masters %>
+<br>
 <% else %>
 <div class="well well-sm">
 <h4> <%= @ordersearch %></h4>
