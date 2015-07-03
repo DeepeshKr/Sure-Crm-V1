@@ -11,6 +11,8 @@ gem 'rails-erd', github: 'ready4god2513/rails-erd', branch: 'rails-4.2-support-f
 #visual view of models dependecy
 gem 'ruby-graphviz'
 
+#gem 'thin'
+
 #intall luhn for credit card verification => not used for now
 gem 'luhn'
 
@@ -122,6 +124,7 @@ group :production do
   gem 'rails_12factor', '0.0.2'
   #gem 'unicorn',        '4.8.3'
   #gem 'passenger'
-  #gem 'puma'
-  gem 'unicorn'
+  #gem 'thin'
+  gem 'puma'
+  #gem 'unicorn'
 end
