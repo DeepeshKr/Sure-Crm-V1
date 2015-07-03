@@ -269,6 +269,7 @@ end
           cost = 0
           
           
+          
           media_tapes.each do |m|
           if params[:time_slot] == "auto"
               if CampaignPlaylist.where(campaignid: campaignid).present?

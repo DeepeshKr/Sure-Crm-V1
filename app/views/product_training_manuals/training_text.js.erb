@@ -1,5 +1,5 @@
 $('#product-script').html('<%= j render :partial => 'product_training_manuals/traininglist', :formats => :html %>');
-$('#product-script-id').html('<%= @training.html_safe %>');
+$('#product-script-id').html('<%== @training %>');
 $('#product-heading_id').html('<%= @heading %>');
 
 $('#product-basic_id').html('<%= @basic %>');
