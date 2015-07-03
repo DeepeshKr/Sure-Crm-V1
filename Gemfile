@@ -12,6 +12,7 @@ gem 'rails-erd', github: 'ready4god2513/rails-erd', branch: 'rails-4.2-support-f
 gem 'ruby-graphviz'
 
 #gem 'thin'
+gem "rack-timeout"
 
 #intall luhn for credit card verification => not used for now
 gem 'luhn'
