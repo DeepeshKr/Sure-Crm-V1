@@ -4,7 +4,7 @@
 	 <h4>HBN Hourly Orders for Date: <%= @or_for_date %></h4>
 	 </div>
 	 <div class="col-xs-6">
-   
+    <%= render('date_search') %>
 	 		
 	</div>
  </div>
@@ -75,7 +75,7 @@
 <% @total_profit += c[:profitability] %> </td>
 
 <td >
-<%= link_to "Details", ppo_summary_path(for_date: @or_for_date, start_time: c[:start_time], end_time: c[:end_time]), :target => "_blank" %>
+<%= link_to "Details", ppo_details_path(for_date: @or_for_date, start_time: c[:start_time], end_time: c[:end_time]), :target => "_blank" %>
 </td>
   </tr> 
   <% @sno += 1 %> 

@@ -20,8 +20,8 @@
 
  
   <div class="field">
-  	 <%= f.association :product_training_heading, {allow_blank: false, label: "Heading"} %>
   	
+  	 <%= f.input :name, collection: @product_training_headings, value_method: :name, include_blank: false, label: "Heading" %>
   </div>
   <div class="field">
  

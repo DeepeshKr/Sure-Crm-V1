@@ -54,6 +54,7 @@ respond_to :html, :xml, :json
         @product_training_manuals = ProductTrainingManual.where("productid = ?",  @product_master.id)
       @product_training_manual = ProductTrainingManual.new
       @product_training_manual.productid =  @product_master.id
+       @product_training_headings = ProductTrainingHeading.all
       #productmasters = ProductMaster.where('product_sell_type_id = 1').pluck(:id)
      # product_add_on_l = ProductVariantAddOn.where(productid: productmasters).pluck(:productvariantid)
       

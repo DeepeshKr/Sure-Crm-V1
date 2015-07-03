@@ -22,8 +22,9 @@ Rails.application.routes.draw do
   get 'show_ppo' => 'sales_ppo_report#show'
   get 'sales_ppo_report/channel'
   get 'channel_ppo' => 'sales_ppo_report#channel'
-  get 'sales_ppo_report/ppo_summary'
-  get 'ppo_summary' => 'sales_ppo_report#ppo_summary'
+
+  get 'sales_ppo_report/ppo_details'
+  get 'ppo_details' => 'sales_ppo_report#ppo_details'
   get 'sales_ppo_report/orders'
   get 'ppo_orders' => 'sales_ppo_report#orders'
 

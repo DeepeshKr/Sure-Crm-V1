@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150630114145) do
+ActiveRecord::Schema.define(version: 20150703062708) do
 
   create_table "address_types", force: :cascade do |t|
     t.string   "name"
@@ -57,8 +57,8 @@ ActiveRecord::Schema.define(version: 20150630114145) do
 
   create_table "campaign_playlists", force: :cascade do |t|
     t.string   "name"
-    t.integer  "campaignid",       limit: 16, precision: 38
-    t.integer  "productvariantid", limit: 16, precision: 38
+    t.integer  "campaignid",        limit: 16, precision: 38
+    t.integer  "productvariantid",  limit: 16, precision: 38
     t.string   "filename"
     t.text     "description"
     t.decimal  "cost"
@@ -66,18 +66,19 @@ ActiveRecord::Schema.define(version: 20150630114145) do
     t.datetime "updated_at"
     t.string   "channeltapeid"
     t.string   "internaltapeid"
-    t.integer  "start_hr",         limit: 16, precision: 38
-    t.integer  "start_min",        limit: 16, precision: 38
-    t.integer  "start_sec",        limit: 16, precision: 38
-    t.integer  "end_hr",           limit: 16, precision: 38
-    t.integer  "end_min",          limit: 16, precision: 38
-    t.integer  "end_sec",          limit: 16, precision: 38
-    t.integer  "duration_secs",    limit: 16, precision: 38
-    t.integer  "tape_id",          limit: 16, precision: 38
+    t.integer  "start_hr",          limit: 16, precision: 38
+    t.integer  "start_min",         limit: 16, precision: 38
+    t.integer  "start_sec",         limit: 16, precision: 38
+    t.integer  "end_hr",            limit: 16, precision: 38
+    t.integer  "end_min",           limit: 16, precision: 38
+    t.integer  "end_sec",           limit: 16, precision: 38
+    t.integer  "duration_secs",     limit: 16, precision: 38
+    t.integer  "tape_id",           limit: 16, precision: 38
     t.string   "ref_name"
-    t.integer  "list_status_id",   limit: 16, precision: 38
+    t.integer  "list_status_id",    limit: 16, precision: 38
     t.datetime "for_date"
-    t.integer  "total_revenue",    limit: 16, precision: 38
+    t.integer  "total_revenue",     limit: 16, precision: 38
+    t.integer  "playlist_group_id", limit: 16, precision: 38
   end
 
   create_table "campaign_stages", force: :cascade do |t|

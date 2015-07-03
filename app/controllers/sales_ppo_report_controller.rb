@@ -13,7 +13,7 @@ class SalesPpoReportController < ApplicationController
          #media segregation only HBN
           media_segments
 
-          from_date = Date.current - 30.days #30.days
+          from_date = Date.current - 10.days #30.days
           to_date = Date.current
           to_date.downto(from_date).each do |day|
           @datelist <<  day.strftime('%d-%b-%y')
@@ -51,7 +51,7 @@ class SalesPpoReportController < ApplicationController
           #ppo for each hour
          
           totalorders = orderlist.sum(:total)
-          noorders = orderlist.count()
+         noorders = orderlist.sum(:pieces)
           employeeunorderlist << {:total => totalorders,
           :for_date =>  for_date,
           :nos => noorders,
@@ -110,7 +110,12 @@ class SalesPpoReportController < ApplicationController
      #/sales_report/hourly?for_date=05%2F09%2F2015
     @hourlist = "Time UTC is your zone #{Time.zone.now} while actual time is #{Time.now}"  
     @sno = 1
-    if params[:for_date].present? 
+    @searchaction = "hourly"
+   for_date = (330.minutes).from_now.to_date
+    
+    if params.has_key?(:for_date)
+     for_date =  Date.strptime(params[:for_date], "%m/%d/%Y")
+    end
       #@summary ||= []
       @or_for_date = Date.strptime(params[:for_date], "%Y-%m-%d")
       for_date =  Date.strptime(params[:for_date], "%Y-%m-%d")
@@ -172,7 +177,7 @@ class SalesPpoReportController < ApplicationController
           #ppo for each hour
          
           totalorders = orderlist.sum(:total)
-          noorders = orderlist.count()
+          noorders = orderlist.sum(:pieces)
           employeeunorderlist << {:total => totalorders,
           :starttime =>  halfhourago.strftime("%H:%M %p"),
           :endtime => Time.at(date).strftime("%H:%M %p"),
@@ -185,29 +190,55 @@ class SalesPpoReportController < ApplicationController
           :profitability => revenue - (fixed_cost + media_var_cost) }
         end
        @employeeorderlist = employeeunorderlist #.sort_by{|c| c[:total]}.reverse 
-     end
+   
   end
 
   def show
+    #add this link to show
+    #<%= link_to "View PPO", ppo_details_path(campaign_id: c[:campaign_id]), :target => "_blank" %>
     @searchaction = "show"
     for_date = (330.minutes).from_now.to_date
-    
+
     if params.has_key?(:for_date)
      for_date =  Date.strptime(params[:for_date], "%m/%d/%Y")
     end
+     @sno = 1
+
+    @total_nos = 0
+        @total_var_cost = 0
+         @total_fixed_cost = 0
+         @total_sales = 0
+         @total_profit = 0
+          @total_revenue = 0
+      #for_date = for_date - 330.minutes
+        @hourlist ||= []
+        employeeunorderlist ||= []
+
     @orderdate = for_date
     @searchaction = 'show'
       #@for_date = @campaign.startdate
-     @campaign_playlists =  CampaignPlaylist.joins(:campaign).where("campaigns.startdate = ?", for_date).order(:start_hr, :start_min, :start_sec).where(list_status_id: 10000)
+     campaign_playlists =  CampaignPlaylist.joins(:campaign)
+     .where("campaigns.startdate = ?", for_date)
+     .order(:start_hr, :start_min, :start_sec)
+     .where(list_status_id: 10000) #.limit(10)
      
-     hbn_order_masters = OrderMaster.joins(:medium).where('TRUNC(orderdate) = ?',for_date).where('ORDER_STATUS_MASTER_ID > 10002').where(media_id: @hbnlist)
-    
-     #split the fixed cost across the hour
-          revenue = 0
-          media_var_cost = 0
-          product_cost = 0
+     media_cost = Medium.where(media_group_id: 10000).sum(:daily_charges)
+          media_cost = media_cost / (24*60*60) 
 
-          hbn_order_masters.each do |med |
+     campaign_playlists.each do | playlist |
+     orderlist = OrderMaster.where('ORDER_STATUS_MASTER_ID > 10002')
+     .where(campaign_playlist_id: playlist.id)
+
+
+      
+          #add orders of each cable tv operator
+
+          #split the fixed cost across the hour
+           revenue = 0
+            media_var_cost = 0
+             product_cost = 0
+
+          orderlist.each do |med |
             revenue += OrderMaster.find(med.id).productrevenue ||= 0
            # media_var_cost += OrderMaster.find(med.id).mediacost ||= 0
             product_cost += OrderMaster.find(med.id).productcost ||= 0
@@ -223,16 +254,25 @@ class SalesPpoReportController < ApplicationController
                media_var_cost += (med.subtotal * media_variable.first.value.to_f) * correction
               end
           end
+         fixed_cost =  media_cost * playlist.duration_secs.to_i
+          totalorders = orderlist.sum(:total)
+          noorders = orderlist.sum(:pieces)
+          employeeunorderlist << {:show =>  playlist.product_variant.name,
+          :campaign_id => playlist.id,
+          :nos => noorders,
+          :at_time => playlist.starttime,
+          :total => totalorders,
+          :revenue => revenue.to_i,
+          :variable_cost => media_var_cost.to_i,
+          :fixed_cost => fixed_cost.to_i,
+          :profitability => (revenue - (fixed_cost + media_var_cost)).to_i }
+        end
+        @employeeorderlist = employeeunorderlist
 
-      @hbn_ccvalue = hbn_order_masters.where(orderpaymentmode_id: 10000).sum(:total)
-      @hbn_ccorders = hbn_order_masters.where(orderpaymentmode_id: 10000).count()
-      @hbn_codorders = hbn_order_masters.where(orderpaymentmode_id: 10001).count()
-      @hbn_codvalue = hbn_order_masters.where(orderpaymentmode_id: 10001).sum(:total)
-      @hbn_totalorders = hbn_order_masters.sum(:total)
-      @hbn_noorders = hbn_order_masters.count()
+   
   end
 
-  def ppo_summary
+  def ppo_details
    
     #aggregation based on products 
     @sno = 1

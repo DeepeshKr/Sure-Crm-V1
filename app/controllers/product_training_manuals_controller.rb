@@ -1,7 +1,7 @@
 class ProductTrainingManualsController < ApplicationController
    before_action { protect_controllers(8) } 
   before_action :set_product_training_manual, only: [:show, :edit, :update, :destroy]
-
+  before_action :dropdownlist, only: [:create, :edit, :update]
   respond_to :html, :xml, :json
 
   def index
@@ -134,6 +134,9 @@ class ProductTrainingManualsController < ApplicationController
   end
 
   private
+    def dropdownlist
+      @product_training_headings = ProductTrainingHeading.all
+    end
     def set_product_training_manual
       @product_training_manual = ProductTrainingManual.find(params[:id])
     end

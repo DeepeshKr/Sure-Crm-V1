@@ -4,15 +4,15 @@
 	<h4>HBN Shows  
 		<small>
 			<%= @show_date %> 
-			<%= @start_time %> 
-			<%= @end_time %>
+			<%= @start_time.strftime("%H:%M") %> 
+			<%= @end_time.strftime("%H:%M") %>
 		</small>  
 	</h4>
 	<hr>
 		 <%= render('playlists') %>
 	</div>
 	<div class="col-xs-8">
-	<h4>Products Sold over HBN <small><%= @show_date %> <%=@start_time %> <%= @end_time %></small> </h4>
+	<h4>Products Sold over HBN <small><%= @show_date %> <%=@start_time.strftime("%H:%M") %> <%= @end_time.strftime("%H:%M") %></small> </h4>
 	<hr>
 		 <%= render('product_list') %>
 	</div>
@@ -26,8 +26,8 @@
 
 	<div class="col-xs-8">
 	<h4>Order List  <%= @show_date %> 
-			from <%= @start_time %> 
-			to <%= @end_time %></h4>
+			from <%= @start_time.strftime("%H:%M") %> 
+			to <%= @end_time.strftime("%H:%M") %></h4>
 		<%= render('between_time') %>	
 	</div>
 </div>

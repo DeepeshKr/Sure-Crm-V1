@@ -11,20 +11,33 @@
 
 <% if @employeeorderlist.present? %>
 <table class="table table-hover table-bordered">
-  <thead>
+<thead>
+   <tr>
+   <th  rowspan="2">No</th>
+     <th  colspan="2">Date</th>
+    
+      <th colspan="3">Income</th>
+      <th colspan="3">Expense</th>
+     
+     <th rowspan="2">Profitability</th>
+    <th   rowspan="2"></th>
+     </tr>
     <tr>
-     <th class="text-right">No</th>
-     <th class="text-right">Date</th>
-     <th class="text-right">Total Orders</th>
-     <th class="text-right">Total Value</th>
+    
+     <th class="text-right">Start Time</th>
+     <th class="text-right">End Time</th>
+     
+       <th class="text-right">Nos</th>
+     <th class="text-right">Sales</th>
       <th class="text-right">Revenue</th>
-       <th class="text-right">Variable Cost</th>
-     <th class="text-right">Fixed Cost</th>
-     <th class="text-right">Profitability</th>
-    <th class="text-right">PPO</th>
-   
+
+       <th class="text-right">Commision</th>
+     <th class="text-right">Media Cost</th>
+       <th class="text-right">Total Cost</th>
+    
      </tr>
   </thead>
+
 <tbody>
    <% @employeeorderlist.each do |c| %>
    <tr>

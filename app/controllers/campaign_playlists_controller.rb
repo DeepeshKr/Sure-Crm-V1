@@ -375,7 +375,7 @@ end
         :productvariantid, :filename, :description, 
         :duration_secs, 
         :tape_id, :old_campaign_id, :ref_name, 
-        :list_status_id, :for_date, :total_revenue)
+        :list_status_id, :for_date, :total_revenue, :playlist_group_id)
     end
     def set_media_tape
       @media_tapes = MediaTape.all
