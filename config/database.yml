@@ -15,6 +15,9 @@
 # gem 'pg'
 #host: 49.248.13.34
 #host: 3.0.3.5
+#developmentserver: 49.248.13.34
+#productionserver: 3.0.3.5
+
 default: &default
   adapter: oracle_enhanced
   database: TLBRNDDB
@@ -25,6 +28,7 @@ default: &default
   # For details on connection pooling, see rails configuration guide
   # http://guides.rubyonrails.org/configuring.html#database-pooling
   #pool: 5
+
 
 development:
   <<: *default
