@@ -14,20 +14,20 @@
 <thead>
    <tr>
    <th  rowspan="2">No</th>
-     <th  colspan="2">Date</th>
+     <th  rowspan="2">Date</th>
     
-      <th colspan="3">Income</th>
+      <th colspan="4">Income</th>
       <th colspan="3">Expense</th>
      
-     <th rowspan="2">Profitability</th>
-    <th   rowspan="2"></th>
+     <th rowspan="2">30 min</th>
+    <th   rowspan="2">Show wise</th>
      </tr>
     <tr>
     
-     <th class="text-right">Start Time</th>
-     <th class="text-right">End Time</th>
      
-       <th class="text-right">Nos</th>
+     
+       <th class="text-right">Orders</th>
+       <th class="text-right">Pieces</th>
      <th class="text-right">Sales</th>
       <th class="text-right">Revenue</th>
 
@@ -50,6 +50,10 @@
   
 </td>
 <td class="text-right">
+   <%= c[:pieces] %> 
+  
+</td>
+<td class="text-right">
    <%= c[:total] %> 
    
 </td>
@@ -65,14 +69,17 @@
    <%= c[:fixed_cost] %> 
   
 </td>
-<td class="text-right">   <%= c[:profitability] %>
+<td class="text-right">  
+ <%= c[:profitability] %>
 
-<td >
+</td >
 
 <td>
-<%= link_to "View PPO", hourly_ppo_path(for_date: c[:for_date]), :target => "_blank" %>
+<%= link_to "View PPO", hourly_ppo_path(for_date: c[:for_date]), :target => "_blank", class: "btn btn-info btn-xs" %>
 </td>
-
+<td>
+<%= link_to "View PPO", show_ppo_path(for_date: c[:for_date]), :target => "_blank", class: "btn btn-info btn-xs" %>
+</td>
 
   </tr> 
   <% @sno += 1 %> 

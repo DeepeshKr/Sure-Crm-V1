@@ -133,7 +133,7 @@ test:
 production:
   adapter: oracle_enhanced
   database: TLBRNDDB
-  host: 49.248.13.34
+  host: 3.0.3.5
   username: testora
   password: testora
   port: 1521
@@ -141,7 +141,7 @@ production:
 production_testora:
   adapter: oracle_enhanced
   database: TLBRNDDB
-  host: 49.248.13.34
+  host: 3.0.3.5
   username: testora
   password: testora
   port: 1521
@@ -156,7 +156,7 @@ production_web:
 production_ccview:
   adapter: oracle_enhanced
   database: TLBRNDDB
-  host: 49.248.13.34
+  host: 3.0.3.5
   username: CCVIEW
   password: CCVIEW
   port: 1521
@@ -164,7 +164,7 @@ production_ccview:
 production_cccrm:
   adapter: oracle_enhanced
   database: TLBRNDDB
-  host: 49.248.13.34
+  host: 3.0.3.5
   username: cccrm
   password: cccrm
   port: 1521
@@ -172,7 +172,7 @@ production_cccrm:
 production_tuview:
   adapter: oracle_enhanced
   database: TLBRNDDB
-  host: 49.248.13.34
+  host: 3.0.3.5
   username: TUVIEW
   password: TUVIEW
   port: 1521
@@ -180,7 +180,7 @@ production_tuview:
 production_tlbrndu1:
   adapter: oracle_enhanced
   database: TLBRNDDB
-  host: 49.248.13.34
+  host: 3.0.3.5
   username: tlbrndu1
   password: tlbrndu1
   port: 1521

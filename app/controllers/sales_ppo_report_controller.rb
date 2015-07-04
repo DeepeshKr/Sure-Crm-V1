@@ -13,10 +13,10 @@ class SalesPpoReportController < ApplicationController
          #media segregation only HBN
           media_segments
 
-          from_date = Date.current - 10.days #30.days
+          from_date = Date.current - 30.days #30.days
           to_date = Date.current
           to_date.downto(from_date).each do |day|
-          @datelist <<  day.strftime('%d-%b-%y')
+          @datelist <<  day.strftime('%y-%b-%d')
           web_date = day
           web_date = web_date.strftime()
           for_date = day # Date.
@@ -30,31 +30,33 @@ class SalesPpoReportController < ApplicationController
           media_var_cost = 0
           product_cost = 0
 
-          orderlist.each do |med |
-            revenue += OrderMaster.find(med.id).productrevenue ||= 0
-           # media_var_cost += OrderMaster.find(med.id).mediacost ||= 0
-            product_cost += OrderMaster.find(med.id).productcost ||= 0
-            media_variable = Medium.where('id = ? AND value is not null', med.media_id)
-            .where(:media_commision_id => [10020, 10021, 10040, 10041, 10060]) #.pluck(:value)
-              if media_variable.present?
-                #discount the total value by 50% as correction
-                correction = 0.5
-                #PAID_CORRECTION
-                 if media_variable.first.paid_correction.present?
-                   correction = media_variable.first.paid_correction #||= 0.5
-                 end
-               media_var_cost += (med.subtotal * media_variable.first.value.to_f) * correction
-              end
-          end
+          # orderlist.each do |med |
+          #   revenue += OrderMaster.find(med.id).productrevenue ||= 0
+          #  # media_var_cost += OrderMaster.find(med.id).mediacost ||= 0
+          #   product_cost += OrderMaster.find(med.id).productcost ||= 0
+          #   media_variable = Medium.where('id = ? AND value is not null', med.media_id)
+          #   .where(:media_commision_id => [10020, 10021, 10040, 10041, 10060]) #.pluck(:value)
+          #     if media_variable.present?
+          #       #discount the total value by 50% as correction
+          #       correction = 0.5
+          #       #PAID_CORRECTION
+          #        if media_variable.first.paid_correction.present?
+          #          correction = media_variable.first.paid_correction #||= 0.5
+          #        end
+          #      media_var_cost += (med.subtotal * media_variable.first.value.to_f) * correction
+          #     end
+          # end
           fixed_cost = Medium.where(media_group_id: 10000).sum(:daily_charges)
           #fixed_cost = fixed_cost / 48
           #ppo for each hour
          
           totalorders = orderlist.sum(:total)
-         noorders = orderlist.sum(:pieces)
+          nos = orderlist.count()
+         pieces = orderlist.sum(:pieces)
           employeeunorderlist << {:total => totalorders,
-          :for_date =>  for_date,
-          :nos => noorders,
+          :for_date =>  for_date.strftime("%m/%d/%Y"),
+          :pieces => pieces,
+          :nos => nos,
           :revenue => revenue,
           :variable_cost => media_var_cost.to_i,
           :fixed_cost => fixed_cost.to_i,
@@ -115,14 +117,17 @@ class SalesPpoReportController < ApplicationController
     
     if params.has_key?(:for_date)
      for_date =  Date.strptime(params[:for_date], "%m/%d/%Y")
+     @or_for_date = Date.strptime(params[:for_date], "%m/%d/%Y")
+    #for_date =  Date.strptime(params[:for_date], "%Y-%m-%d")
     end
       #@summary ||= []
-      @or_for_date = Date.strptime(params[:for_date], "%Y-%m-%d")
-      for_date =  Date.strptime(params[:for_date], "%Y-%m-%d")
+      
       
         @total_nos = 0
+        @total_pieces = 0
         @total_var_cost = 0
          @total_fixed_cost = 0
+         @total_cost = 0
          @total_sales = 0
          @total_profit = 0
           @total_revenue = 0
@@ -175,15 +180,17 @@ class SalesPpoReportController < ApplicationController
            fixed_cost = Medium.where(media_group_id: 10000).sum(:daily_charges)
           fixed_cost = fixed_cost / 48
           #ppo for each hour
-         
+            nos = orderlist.count()
+         pieces = orderlist.sum(:pieces)
           totalorders = orderlist.sum(:total)
-          noorders = orderlist.sum(:pieces)
+         
           employeeunorderlist << {:total => totalorders,
           :starttime =>  halfhourago.strftime("%H:%M %p"),
           :endtime => Time.at(date).strftime("%H:%M %p"),
           :start_time => halfhourago.strftime("%Y-%m-%d %H:%M"), 
           :end_time => Time.at(date).strftime("%Y-%m-%d %H:%M"),
-          :nos => noorders,
+           :pieces => pieces,
+          :nos => nos,
           :revenue => revenue,
           :variable_cost => media_var_cost.to_i,
           :fixed_cost => fixed_cost.to_i,
@@ -205,8 +212,10 @@ class SalesPpoReportController < ApplicationController
      @sno = 1
 
     @total_nos = 0
+      @total_pieces = 0
         @total_var_cost = 0
          @total_fixed_cost = 0
+         @total_cost = 0
          @total_sales = 0
          @total_profit = 0
           @total_revenue = 0
@@ -259,6 +268,7 @@ class SalesPpoReportController < ApplicationController
           noorders = orderlist.sum(:pieces)
           employeeunorderlist << {:show =>  playlist.product_variant.name,
           :campaign_id => playlist.id,
+           :pieces => pieces,
           :nos => noorders,
           :at_time => playlist.starttime,
           :total => totalorders,
