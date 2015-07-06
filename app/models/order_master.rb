@@ -170,12 +170,13 @@ def productrevenue
   productrevenue = OrderLine.where('orderid = ?', self.id)
 
   if productrevenue.present?
-    total = 0
+    total = self.shipping * 0.98125
     productrevenue.each do |c|
       if c.total > 0
       total += c.productrevenue
       end
     end
+
     return total
     
   else
