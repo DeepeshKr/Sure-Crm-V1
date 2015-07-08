@@ -2,91 +2,125 @@
     <div class="col-xs-6"><h3><%= @search %> <%= @found %>  </h3>    </div>
     <div class="col-xs-6"> <%= render 'search' %></div>
 </div>
-<hr>
+
+<br>
+<div class="row">
+			<div class="col-xs-2">
+				<%= link_to 'Back', product_masters_path, class: "btn btn-info btn-sm" %>
+			</div>
+</div>
 <br>
 
-<h1>
-  <%= @product_master.name %>
-</h1>
-<div class="row">
-	<div class="col-sm-4">
-		<strong>Category:</strong>
-  <%= @product_master.product_category.name if @product_master.product_category %>
+<div class="panel panel-primary">
+ <div class="panel-heading">
+ 	<div class="row">
+			<div class="col-xs-10"> <h4> <%= @product_master.name %> </h4>
+			</div>
+			<div class="col-xs-2">
+			<%= link_to 'Edit', edit_product_master_path(@product_master), class: "btn btn-warning btn-sm" %> 
+			</div>
 	</div>
-	<div class="col-sm-4">
-		<strong>Inventory:</strong>
-  <%= @product_master.product_inventory_code.name if @product_master.product_inventory_code %>
-	</div>
-	<div class="col-sm-4">
-		<strong>Barcode:</strong>
-  <%= @product_master.barcode %>
-	</div>
-</div>
-<div class="row">
-	<div class="col-sm-4">
-		<strong>Extproductcode:</strong>
-  <%= @product_master.extproductcode %>
-	</div>
-	
-	<div class="col-sm-4">
-		<strong>Active Status:</strong>
-  <%= @product_master.product_active_code.name if @product_master.product_active_code %>
-	</div>
-	
-</div>
-<div class="row">
-	<div class="col-sm-3">
-		  <strong>Price:</strong>
-  <%= @product_master.price %>
-	</div>
-	<div class="col-sm-3">
-		 <strong>Taxes:</strong>
-  <%= @product_master.taxes %>
-	</div>
-	<div class="col-sm-3">
-		 <strong>Shipping:</strong>
-  <%= @product_master.shipping %>
-	</div>
-	<div class="col-sm-3">
-		 <strong>Total:</strong>
-  <%= @product_master.total %>
-	</div>
-</div>
-
-<div class="row">
-	<div class="col-sm-10">
-		  <strong>Description:</strong>
-  <%= @product_master.description %>
-	</div>
-</div>
-
-<%= link_to 'Edit', edit_product_master_path(@product_master), class: "btn btn-info btn-sm" %> |
-<%= link_to 'Back', product_masters_path, class: "btn btn-info btn-sm" %>
-<hr />
-<%= render partial: "product_variants/list" %>
-<hr />
-<div class="well">
-<h4>Add New Product Variant for <%= @product_master.name %> </h4>
-<%= render partial: "product_variants/form" %>
-
-</div>
-<br/>
+			
+ </div>
+ <div class="panel-footer">
+ 	 	<div class="row">
+            <div class="col-xs-2">
+                <strong>Price :</strong> <%= @product_master.price %>
+            </div>
+            <div class="col-xs-2">
+                <strong>Shipping :</strong>  <%= @product_master.shipping %>
+            </div>
+            <div class="col-xs-2">
+                <strong>Total :</strong>  <%= @product_master.total %>
+            </div>  
+            <div class="col-xs-2">
+           Status: <strong>  <%= @product_master.product_active_code.name if @product_master.product_active_code %></strong>
+          	</div>   
+          	 <div class="col-xs-4">
+          <strong>Category : </strong>   <%= @product_master.product_category.name if @product_master.product_category %>
+          	</div>   
+        </div>
+       	<div class="row">
+			<div class="col-sm-10">
+			  <strong>Description:</strong>
+	  			<%= @product_master.description %>
+			</div>
+		</div>
+ </div>
+  <div class="panel-body">
+ <div class="row">
 <!-- Product Training from original -->
+<div class="col-xs-8">
+<h4>Product Price Variants of <%= @product_master.name %> </h4>
+</div>
+<div class="col-xs-4">
+<button class="btn btn-info btn-sm" type="button" data-toggle="collapse" data-target="#collapsePriceVariant" aria-expanded="false" aria-controls="collapsePriceVariant">
+ Add New Price Variant
+</button>
+</div>
+</div>
+
+<div class="collapse" id="collapsePriceVariant">
+  <div class="well">
+    <%= render partial: "product_variants/quick_add" %>
+  </div>
+</div>
+
+
+<%= render partial: "product_variants/list" %>
+
+
+<hr>
+
+
+<div class="row">
+<!-- Product Training from original -->
+<div class="col-xs-8">
 <h4>Product Training for <%= @product_master.name %> </h4>
-<hr />
+</div>
+<div class="col-xs-4">
+<button class="btn btn-info btn-sm" type="button" data-toggle="collapse" data-target="#collapseTraining" aria-expanded="false" aria-controls="collapseTraining">
+  Add New Product Training
+</button>
+</div>
+</div>
+
+<div class="collapse" id="collapseTraining">
+  <div class="well">
+    <%= render partial: "product_training_manuals/quick_create" %>
+  </div>
+</div>
+<hr>
 <%= render partial: "product_training_manuals/listing" %>
 <br>
-<div class="well">
-<h4>Add New Product Training for <%= @product_master.name %></h4>
-<%= render partial: "product_training_manuals/quick_create" %>
-<br/>
-</div>
-<!-- Product Add On from original -->
-<br>
- <h4>Product Add On - Which can be ordered with <strong> ONLY WITH <%= @product_master.name %></strong> </h4>
 
-<%= render partial: "product_master_add_ons/list" %>
-<br/>
-<div class="well">
-<%= render partial: "product_master_add_ons/quick_add" %> 
+
+<hr>
+<!-- Product Add On from original -->
+<div class="row">
+<div class="col-xs-8">
+<h4>Product Add On - Which can be ordered with <%= @product_master.name %> </h4>
 </div>
+<div class="col-xs-4">
+<button class="btn btn-info btn-sm" type="button" data-toggle="collapse" data-target="#collapseTraining" aria-expanded="false" aria-controls="collapseTraining">
+  Add New Product Add On
+</button>
+</div>
+</div>
+<br>
+<div class="collapse" id="collapseTraining">
+  <div class="well">
+    <%= render partial: "product_master_add_ons/quick_add" %>
+  </div>
+</div>
+<br>
+<%= render partial: "product_master_add_ons/list" %>
+
+
+<br>
+</div> <!-- Panel Body End -->
+</div> <!-- Panel End -->
+
+
+
+

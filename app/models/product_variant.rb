@@ -16,7 +16,7 @@ class ProductVariant < ActiveRecord::Base
 
   validates_presence_of :name
   validates_presence_of :productmasterid 
-  validates_presence_of :variantbarcode
+  #validates_presence_of :variantbarcode
   validates_presence_of :price
   validates_presence_of :taxes
   #validates_uniqueness_of :variantbarcode, { case_sensitive: false }
@@ -33,7 +33,7 @@ after_save :updator
    end
 
    def productdetails
-     self.name + " -- Basic: Rs." + (self.price.to_s ||= 'No Price') + " -- Total: Rs."  + (self.total.to_s ||= 'No Price') + " " + (self.extproductcode ||= 'No Code')
+     self.name + " -- Basic: Rs." + (self.price.to_s ||= 'No Price') + " -- Total: Rs."  + (self.total.to_s ||= 'No Price') 
    end
 
 private

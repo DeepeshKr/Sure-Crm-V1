@@ -15,8 +15,8 @@ class ProductListsController < ApplicationController
       # @product_masters = ProductMaster.where('productactivecodeid = 10000').where("name like ? OR extproductcode like ? or list_barcode like ?", "#{@searchvalue}%", "#{@searchvalue}%", "#{@searchvalue}%")
       # @inactive_product_masters = ProductMaster.where('productactivecodeid <> 10000').where("name like ? OR extproductcode like ? or list_barcode like ?", "#{@searchvalue}%", "#{@searchvalue}%", "#{@searchvalue}%")
       
-      @product_lists = ProductList.where('active_status_id = ?',  10000).where("name like ? OR extproductcode like ? or list_barcode like ?", "#{@searchvalue}%", "#{@searchvalue}%", "#{@searchvalue}%")
-      @inactive_product_lists = ProductList.where('active_status_id <> ?',  10000).where("name like ? OR extproductcode like ? or list_barcode like ?", "#{@searchvalue}%", "#{@searchvalue}%", "#{@searchvalue}%")
+      @product_lists = ProductList.where('active_status_id = ?',  10000).where("name like ? OR extproductcode like ? or list_barcode like ?", "#{@searchvalue}%", "#{@searchvalue}%", "#{@searchvalue}%").paginate(:page => params[:page])
+      @inactive_product_lists = ProductList.where('active_status_id <> ?',  10000).where("name like ? OR extproductcode like ? or list_barcode like ?", "#{@searchvalue}%", "#{@searchvalue}%", "#{@searchvalue}%").paginate(:page => params[:page])
 
 
       @found = @product_lists.count
@@ -25,17 +25,17 @@ class ProductListsController < ApplicationController
         
        @search = "All Product Sell List"
       @searchvalue = nil
-      @product_lists = ProductList.where('active_status_id = ?',  10000).order('name')
-      @inactive_product_lists = ProductList.where('active_status_id <> ?',  10000).order('name')
+      @product_lists = ProductList.where('active_status_id = ?',  10000).order('name').paginate(:page => params[:page])
+      @inactive_product_lists = ProductList.where('active_status_id <> ?',  10000).order('name').paginate(:page => params[:page])
 
 
       else
-        @search = "Product Sell List (only 10)"
+        @search = "Product Sell List"
         @searchvalue = nil
         #product_masters = ProductMaster.where("productactivecodeid = ?", 10000).pluck("id")
         #product_variants = ProductVariant.where("activeid = ? and product_sell_type_id < ?", 10000, 10002).where(productmasterid: product_masters).pluck("id")
-        @product_lists = ProductList.where('active_status_id = ?',  10000).order('updated_at DESC').limit(10)
-        @inactive_product_lists = ProductList.where('active_status_id <> ?',  10000).order('updated_at DESC').limit(10)
+        @product_lists = ProductList.where('active_status_id = ?',  10000).order('updated_at DESC').paginate(:page => params[:page])
+        @inactive_product_lists = ProductList.where('active_status_id <> ?',  10000).order('updated_at DESC').paginate(:page => params[:page])
 
         @found = nil
       

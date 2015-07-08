@@ -3,8 +3,12 @@
     <div class="col-xs-6"> <%= render 'search' %></div>
 </div>
 <hr>
-<%= will_paginate @product_masters %>
 <br>
+<div class="digg_pagination">
+    <%= will_paginate @product_masters, :container => false %>
+</div>
+<br>
+
 
  <% if @product_masters.present? %>
  <% @product_masters.each do |product_master| %>
@@ -20,7 +24,9 @@
 <% end %>
 <br>
 <br>
-<%= will_paginate @product_masters %>
+<div class="digg_pagination">
+    <%= will_paginate @product_masters, :container => false %>
+</div>
 <br>
 <div class="well well-sm">
 <small>
@@ -150,5 +156,9 @@
 </div>
 
 <br>
-
+<br>
+<div class="digg_pagination">
+    <%= will_paginate @product_masters, :container => false %>
+</div>
+<br>
 <%= link_to 'Add New Product', new_product_master_path, class: "btn btn-primary" %>

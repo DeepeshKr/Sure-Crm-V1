@@ -48,9 +48,13 @@ respond_to :html, :xml, :json
   def show
   #  respond_with(@product_master)
      @product_variants = ProductVariant.where("productmasterid = ?" ,  @product_master.id)
-     @product_variant = ProductVariant.new(productmasterid:  @product_master.id, name: @product_master.name, 
-      price: @product_master.price, taxes: @product_master.taxes || 0, shipping: @product_master.shipping,
-     total: @product_master.total, variantbarcode: @product_master.barcode, description: @product_master.description,
+     @product_variant = ProductVariant.new(productmasterid:  @product_master.id,
+      name: @product_master.name, 
+      price: @product_master.price, 
+      activeid: true,
+      taxes: @product_master.taxes || 0, shipping: @product_master.shipping,
+     total: @product_master.total, variantbarcode: 
+     @product_master.barcode, description: @product_master.description,
      extproductcode: @product_master.extproductcode)
 
      

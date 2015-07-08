@@ -1,14 +1,12 @@
-<h4>Product variants</h4>
-
 <table class="table table-hover" >
   <thead>
     <tr>
-      <th>Name</th>
-      <th>Variant code</th>
+      
+      
       <th>Price</th>
       <th>Taxes</th>
       <th>Total</th>
-      <th>Ext product code</th>
+      
      <th>Sell Type</th>
       <th>Activeid</th>
       <th colspan="2"></th>
@@ -17,13 +15,11 @@
 
   <tbody>
     <% @product_variants.each do |product_variant| %>
-      <tr>
-          <td><%= product_variant.name %></td>
-        <td><%= product_variant.variantbarcode %></td>
+      <tr>    
         <td><%= product_variant.price %></td>
         <td><%= product_variant.taxes %></td>
         <td><%= product_variant.total %></td>
-        <td><%= product_variant.extproductcode %></td>
+       
        <td> <%= product_variant.product_sell_type.name if product_variant.product_sell_type %> </td>
         <td><%= product_variant.product_master.product_active_code.name if product_variant.product_master.product_active_code %></td>
         <td><%= link_to 'Show', product_variant %></td>

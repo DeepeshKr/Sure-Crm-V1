@@ -4,7 +4,9 @@
     <div class="col-xs-6"> <%= render 'search' %></div>
 </div>
 <br>
-<%= will_paginate @employees %>
+<div class="digg_pagination">
+    <%= will_paginate @employees, :container => false %>
+</div>
 <br>
 <table class="table table-hover">
   <thead>
@@ -47,8 +49,10 @@
   </tbody>
 </table>
 <br>
-<%= will_paginate @employees %>
 <br>
+<div class="digg_pagination">
+    <%= will_paginate @employees, :container => false %>
+</div>
 <br>
 
 <%= link_to 'New Employee', new_employee_path, class: "btn btn-primary" %>
