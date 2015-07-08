@@ -20,7 +20,7 @@
       <div class="panel-body">
       	<% if v.product_list.exists? %>
         <div class="alert alert-success">
-            <%= render'product_list', :v => v %>
+            <%= render'product_masters/product_list', :v => v %>
        	</div>
        	<% else %>
         <div class="alert alert-warning">

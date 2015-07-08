@@ -24,7 +24,7 @@
      <% if product_master.variants.exists? %>
      	<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
              <% product_master.variants.each do |v| %>
-              <%= render('product_variant', :v => v) %>
+              <%= render('product_masters/product_variant', :v => v) %>
              <% end %>
         </div>
     <% else %>

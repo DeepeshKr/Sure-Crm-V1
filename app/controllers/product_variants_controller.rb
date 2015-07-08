@@ -105,8 +105,8 @@ class ProductVariantsController < ApplicationController
      if @product_variant.update(product_variant_params)
        total = @product_variant.price + @product_variant.taxes + @product_variant.shipping
         @product_variant.update!(total: total)
-      #respond_with(@product_variant)
-      respond_with(@product_variant.product_master)
+      respond_with(@product_variant)
+      #respond_with(@product_variant.product_master)
     else
       respond_with(@product_variant)
     end

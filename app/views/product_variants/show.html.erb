@@ -2,111 +2,83 @@
     <div class="col-xs-6"><h3><%= @search %> <%= @found %>  </h3>    </div>
     <div class="col-xs-6"> <%= render 'search' %></div>
 </div>
-<hr>
 <br>
 <p id="notice"><%= notice %></p>
-<h2>
-  <%= @product_variant.product_master.name %>
-  <small>Product Master</small>
-</h2>
-<div class="well well-sm">
+
+
+<!-- new form below -->
+<div class="panel panel-primary">
+ <div class="panel-heading">
 <div class="row">
-  <div class="col-sm-3">
-    <strong>Category:</strong>
-  <%= @product_variant.product_master.product_category.name if @product_variant.product_master.product_category %>
-  </div>
-  <div class="col-sm-3">
-    <strong>Inventory:</strong>
-  <%= @product_variant.product_master.product_inventory_code.name if @product_variant.product_master.product_inventory_code %>
-  </div>
-  <div class="col-sm-3">
-    <strong>Barcode:</strong>
-  <%= @product_variant.product_master.barcode %>
-  </div>
-  <div class="col-sm-3">
-    <strong>Active:</strong>
-  <%= @product_variant.product_master.product_active_code.name if @product_variant.product_master.product_active_code %>
+<div class="col-xs-2">
+<h4> <%= @product_variant.product_master.name %> </h4>
+</div>
+      <div class="col-xs-2">
+        <%= link_to 'Back to Product Master', @product_variant.product_master, class: "btn btn-info btn-sm" %>
+      </div>
+</div>
+ </div>
+ <div class="panel-footer">
+   <div class="row">
+   <small>
+            <div class="col-xs-2">
+                <strong>Price :</strong> <%= @product_variant.product_master.price %> 
+            </div>
+            <div class="col-xs-2">
+                <strong>Shipping :</strong> <%= @product_variant.product_master.shipping %>
+            </div>
+            <div class="col-xs-2">
+                <strong>Total :</strong> <%= @product_variant.product_master.total %>
+            </div>  
+            <div class="col-xs-2">
+           Status: <strong> <%= @product_variant.product_master.product_active_code.name if @product_variant.product_master.product_active_code.present?%></strong>
+            </div>   
+             <div class="col-xs-4">
+          <strong>Category : </strong>   <%= @product_variant.product_master.product_category.name if @product_variant.product_master.product_category %>
+            </div>   
+        </div>
+       </small>
+ </div>
+  <div class="panel-body">
+    
+    <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+            <div class="row">
+              <div class="col-xs-3">  <p class="lead"><strong>Sell as:</strong>
+                <%= @product_variant.product_sell_type.name if @product_variant.product_sell_type %> </p></div>
+              <div class="col-xs-2"> <p class="lead"> <strong>Price:</strong>
+                <%= @product_variant.price %> </p></div>
+              <div class="col-xs-3">  <p class="lead"> <strong>Shipping:</strong>
+                <%= @product_variant.shipping %> </p></div>
+              <div class="col-xs-3">  <p class="lead"> <strong>Total:</strong>
+                <%= @product_variant.total %></p></div>
+                <div class="col-xs-1">
+                 <%= link_to 'Edit', edit_product_variant_path(@product_variant), class: "btn btn-info btn-xs" %> 
+           </div>
+        </div>
+   <hr />
+<div class="row">
+<div class="col-xs-8">
+<h4>Product Sell List <small>Only these products can be sold</small></h4>
+</div>
+<div class="col-xs-4">
+    <button class="btn btn-primary btn-sm" type="button" data-toggle="collapse" data-target="#collapseProductList" aria-expanded="false" aria-controls="collapseProductList">
+ Add New Product List
+</button>
+</div>
+</div>
+
+   <div class="collapse" id="collapseProductList">
+  <div class="well">
+    <%= render "product_lists/quickadd" %>
   </div>
 </div>
 
-<div class="row">
-  <div class="col-sm-3">
-    <strong>Extproductcode:</strong>
-  <%= @product_variant.product_master.extproductcode %>
-  </div>
-  <div class="col-sm-3">
-      <strong>Price:</strong>
-  <%= @product_variant.product_master.price %>
+
+<%= render "product_lists/list" %>
+
+
   </div>
  
-  <div class="col-sm-3">
-     <strong>Shipping:</strong>
-  <%= @product_variant.product_master.shipping %>
-  </div>
-  <div class="col-sm-3">
-     <strong>Total:</strong>
-  <%= @product_variant.product_master.total %>
-  </div>
 </div>
 
-<div class="row">
-  <div class="col-sm-10">
-      <strong>Description:</strong>
-  <%= @product_variant.product_master.description %>
-  </div>
-</div>
-</div>
-
-<br>
-<h3>
-  <%= @product_variant.name %> <small>Product Variant</small>
-</h3>
-<div class="well well-sm">
-<div class="row">
-<div class="col-xs-3"> <strong>Master id:</strong>
-  <%= @product_variant.productmasterid %></div>
-<div class="col-xs-3"> <strong>Code:</strong>
-  <%= @product_variant.variantbarcode %> </div>
-<div class="col-xs-3"> <strong>PROD:</strong>
-  <%= @product_variant.extproductcode %> </div>
-<div class="col-xs-3"><strong>Active:</strong>
-  <%= @product_variant.product_active_code.name if @product_variant.product_active_code %> </div>
-
-</div>
-
-
-<div class="row">
-
-<div class="col-xs-3"> <strong>Sell as:</strong>
-  <%= @product_variant.product_sell_type.name if @product_variant.product_sell_type %> </div>
-<div class="col-xs-3"> <strong>Price:</strong>
-  <%= @product_variant.price %> </div>
-<div class="col-xs-3">  <strong>Shipping:</strong>
-  <%= @product_variant.shipping %></div>
-<div class="col-xs-3">  <strong>Total:</strong>
-  <%= @product_variant.total %></div>
-
-
-</div>
-
-<p>
-  <strong>Description:</strong>
-  <%= @product_variant.description %>
-</p>
-
-<br>
-
-<%= link_to 'Edit', edit_product_variant_path(@product_variant), class: "btn btn-info btn-sm" %> |
-<%= link_to 'Back', product_variants_path, class: "btn btn-info btn-sm" %>
-</div>
-<br>
-<hr />
-<h4>Existing Product List <small>Only these products can be sold</small></h4>
-<%= render "product_lists/list" %>
-<hr />
-<div class="well">
-<h4>Add New Product List <small>Only these products can be sold</small></h4>
-<%= render "product_lists/quickadd" %>
-
-</div>
-<br>
+ </div>

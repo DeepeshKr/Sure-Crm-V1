@@ -25,20 +25,20 @@
    <%= f.select :product_spec_list_id,  options_from_collection_for_select(@product_specs, :id, :name, selected: @product_list.product_spec_list_id), {} %>
       
   </div>
-  <div class="field">
+ <div class="field">
    
-    <%= f.text_field :extproductcode, :required => true, :placeholder => "Required code for matching this product to inventory" %>
+    <%= f.text_field :extproductcode, :required => true, :placeholder => "Required code for product like AK1" %>
   </div>
   <div class="field">
     
-    <%= f.text_field :list_barcode, :placeholder => "Optional code for this product" %>
+    <%= f.text_field :list_barcode, :required => true, :placeholder => "Require code for this product looks like 00013" %>
   </div>
   <div class="field">
       <%= f.select :active_status_id,  options_from_collection_for_select(ProductActiveCode.all, :id, :name, selected: @product_list.active_status_id), {} %>
    
   </div>
   <div class="row">
-    <div class="col-xs-2 col-md-offset-5">
+    <div class="col-xs-3 col-md-offset-9">
       <%= f.submit class:"btn btn-primary" %>
     </div>
   </div>

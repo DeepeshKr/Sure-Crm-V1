@@ -56,7 +56,7 @@
   </div>
   <div class="field">
      <%= f.select :activeid,  options_from_collection_for_select(@productactivecode,
-       :id, :name),
+       :id, :name, selected: @product_variant.activeid),
 		         { label: "Select the Product Active" } %>
  
   </div>
