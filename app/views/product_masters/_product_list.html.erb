@@ -1,0 +1,34 @@
+<table class="table table-hover">
+  <thead>
+    <tr>
+    
+    <th>Name</th>
+      
+      <th>Specs</th>
+      <th>PROD</th>
+      
+      <th>BARCODE</th>
+        <th>Active</th>
+      <th colspan="1"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% v.product_list.each do |product_list| %>
+      <tr>
+      
+       <td><%= product_list.name %></td>
+        
+       <td><%= product_list.product_spec_list.name if product_list.product_spec_list %></td>
+        <td><%= product_list.extproductcode %></td>
+       
+        <td><%= product_list.list_barcode %></td>
+        
+        <td>  <%= product_list.product_active_code.name if product_list.product_active_code %> </td>
+        
+        <td><%= link_to 'Edit', edit_product_list_path(product_list), class: "btn btn-info btn-xs" %></td>
+        
+      </tr>
+    <% end %>
+  </tbody>
+</table>

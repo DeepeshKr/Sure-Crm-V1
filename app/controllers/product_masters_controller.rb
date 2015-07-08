@@ -11,21 +11,24 @@ respond_to :html, :xml, :json
       
       @search = "Search for " +  params[:search].upcase
       @searchvalue = params[:search].upcase   
-      @product_masters = ProductMaster.where('productactivecodeid = 10000').where("name like ? OR extproductcode like ? or description like ?", "#{@searchvalue}%", "#{@searchvalue}%", "#{@searchvalue}%")
-      @inactive_product_masters = ProductMaster.where('productactivecodeid <> 10000').where("name like ? OR extproductcode like ? or description like ?", "#{@searchvalue}%", "#{@searchvalue}%", "#{@searchvalue}%")
+      @product_masters = ProductMaster.where('productactivecodeid = 10000')
+      .where("name like ? OR extproductcode like ? or description like ?", "#{@searchvalue}%",
+       "#{@searchvalue}%", "#{@searchvalue}%")
+      .paginate(:page => params[:page], :per_page => 5)
+      @inactive_product_masters = ProductMaster.where('productactivecodeid <> 10000').where("name like ? OR extproductcode like ? or description like ?", "#{@searchvalue}%", "#{@searchvalue}%", "#{@searchvalue}%").paginate(:page => params[:page], :per_page => 5)
       @found = @product_masters.count
      
      elsif params[:showall] == 'true'
         
-       @search = "All Product Sell List"
+       @search = "All Product Masters"
       @searchvalue = nil
-     @product_masters = ProductMaster.all.where('productactivecodeid = 10000')
+     @product_masters = ProductMaster.all.where('productactivecodeid = 10000').paginate(:page => params[:page], :per_page => 5)
       @inactive_product_masters = ProductMaster.where('productactivecodeid <> 10000')
     else
-      @search = "Product Master List"
+      @search = "Product Master"
       @searchvalue = nil
-      @product_masters = ProductMaster.all.where('productactivecodeid = 10000').order('updated_at DESC').limit(10)
-      @inactive_product_masters = ProductMaster.where('productactivecodeid <> 10000').order('updated_at DESC').limit(10)
+      @product_masters = ProductMaster.all.where('productactivecodeid = 10000').order('updated_at DESC').limit(10).paginate(:page => params[:page], :per_page => 5)
+      @inactive_product_masters = ProductMaster.where('productactivecodeid <> 10000').order('updated_at DESC').limit(10).paginate(:page => params[:page], :per_page => 5)
       
       @found = nil
     

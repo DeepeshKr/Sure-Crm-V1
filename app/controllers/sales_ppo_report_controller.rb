@@ -13,7 +13,7 @@ class SalesPpoReportController < ApplicationController
          #media segregation only HBN
           media_segments
 
-          from_date = Date.current - 30.days #30.days
+          from_date = Date.current - 10.days #30.days
           to_date = Date.current
           to_date.downto(from_date).each do |day|
           @datelist <<  day.strftime('%y-%b-%d')
@@ -22,8 +22,8 @@ class SalesPpoReportController < ApplicationController
           for_date = day # Date.
           @or_for_date = for_date
            
-          orderlist = OrderMaster.where('ORDER_STATUS_MASTER_ID > 10002')
-          .where('TRUNC(orderdate) = ?',for_date).where(media_id: @hbnlist)
+           orderlist = OrderMaster.where('ORDER_STATUS_MASTER_ID > 10002')
+           .where('TRUNC(orderdate) = ?',for_date).where(media_id: @hbnlist)
 
           #split the fixed cost across the hour
           revenue = 0
@@ -50,9 +50,9 @@ class SalesPpoReportController < ApplicationController
           #fixed_cost = fixed_cost / 48
           #ppo for each hour
          
-          totalorders = orderlist.sum(:total)
+           totalorders = orderlist.sum(:total)
           nos = orderlist.count()
-         pieces = orderlist.sum(:pieces)
+          pieces = orderlist.sum(:pieces)
           employeeunorderlist << {:total => totalorders,
           :for_date =>  for_date.strftime("%m/%d/%Y"),
           :pieces => pieces,

@@ -27,9 +27,11 @@ class ProjectController < ApplicationController
   end
   
   def about
+     @timenow = (Time.zone.now + 330.minutes).strftime("%d-%b-%Y %H:%M")
   end
 
   def contact
+     @timenow = (Time.zone.now + 330.minutes).strftime("%d-%b-%Y %H:%M")
   end
   
   def dropdown

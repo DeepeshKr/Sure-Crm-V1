@@ -329,15 +329,15 @@ mount Upmin::Engine => '/admin'
 
   #root             'product#home'
   root 'project#home'
-  get 'help'    => 'product#help'
-  get 'about'   => 'product#about'
-  get 'contact' => 'product#contact'
+  get 'oldhelp'    => 'product#help'
+  get 'oldabout'   => 'product#about'
+  get 'oldcontact' => 'product#contact'
  
   get 'dealers' => 'address_dealer#list'
  
-  get 'oldhelp'    => 'project#help'
-  get 'oldabout'   => 'project#about'
-  get 'oldcontact' => 'project#contact'
+  get 'help'    => 'project#help'
+  get 'about'   => 'project#about'
+  get 'contact' => 'project#contact'
   #get 'dropdown' => 'project#dropdown'
   #get "project/update_text", as: "update_text"
   get "productdetails" => 'product_masters#details'

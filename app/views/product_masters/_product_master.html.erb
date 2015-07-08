@@ -1,0 +1,46 @@
+<div class="panel panel-primary">
+ <div class="panel-heading"><h4> <%= product_master.name %> </h4></div>
+ <div class="panel-footer">
+ 	 <div class="row">
+            <div class="col-xs-2">
+                <strong>Price :</strong> <%= product_master.price %> 
+            </div>
+            <div class="col-xs-2">
+                <strong>Shipping :</strong> <%= product_master.shipping %>
+            </div>
+            <div class="col-xs-2">
+                <strong>Total :</strong> <%= product_master.total %>
+            </div>  
+            <div class="col-xs-2">
+           Status: <strong> <%= product_master.product_active_code.name if product_master.product_active_code.present?%></strong>
+          	</div>   
+          	 <div class="col-xs-4">
+          <strong>Category Name : </strong>   <%= product_master.product_category.name if product_master.product_category %>
+          	</div>   
+        </div>
+       
+ </div>
+  <div class="panel-body">
+     <% if product_master.variants.exists? %>
+     	<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+             <% product_master.variants.each do |v| %>
+              <%= render('product_variant', :v => v) %>
+             <% end %>
+        </div>
+    <% else %>
+          <h3>No Product Price Variants Found </h3>
+         <%= link_to 'Add Variant / Training / Basic Upsell', product_master  , class: "btn btn-primary btn-sm" %> 
+    <% end %>
+  
+  </div>
+ <div class="panel-footer">
+ <div class="row">
+            <div class="col-xs-6">
+              <%= link_to 'Add Variant / Training / Basic Upsell', product_master  , class: "btn btn-success btn-sm" %> 
+            </div>
+            <div class="col-xs-6">
+               <%= link_to 'Edit Product', edit_product_master_path(product_master), class: "btn btn-primary btn-sm" %>
+            </div>
+        </div>
+ </div>
+</div>

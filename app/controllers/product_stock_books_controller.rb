@@ -273,7 +273,9 @@ end
       end
 
       #Sold Retail
-      @sold_vpp = VPP.where(prod: prod).where("TRUNC(shdate) = ?", for_date).where("CFO != 'Y'")
+      @sold_vpp = VPP.where(prod: prod).where("TRUNC(shdate) = ?", for_date)
+      .where("CFO != 'Y' OR CFO IS NULL")
+      #.where("CFO != 'Y'")
       if @sold_vpp.present?
           @product_stock_book.update(sold_retail_qty: @sold_vpp.sum(:quantity))
           @product_stock_book.update(sold_retail_rate: 0)
@@ -289,7 +291,8 @@ end
       end
 
       #Sold wholesale
-      @newwlsdet = NEWWLSDET.where(prod: prod).where("TRUNC(shdate) = ? ", for_date).where("CFO != 'Y'")
+      @newwlsdet = NEWWLSDET.where(prod: prod).where("TRUNC(shdate) = ? ", for_date)
+      .where("CFO != 'Y' OR CFO IS NULL")
       if @newwlsdet.present?
         ##wholesale Sales
         @product_stock_book.update(sold_wholesale: @newwlsdet.sum(:quantity))
