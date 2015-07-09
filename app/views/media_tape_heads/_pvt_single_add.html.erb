@@ -1,34 +1,33 @@
-<%= form_tag("/create_playlist", method: "post") do |f| %>
+<%= form_tag("/insert_playlist", method: "post") do |f| %>
 
 <%= hidden_field_tag :for_date, @for_date %>
-
+<%= hidden_field_tag :time_slot, "specific" %></div>
+<br>
 	<div class="well well-sm">
 	
 	
-		<div class="row">
-			<div class="col-xs-1 text-right">
-				<%= radio_button_tag 'time_slot', "specific", @pvtchannelchecked  %>
-			</div>
+	<div class="row">
+	<div class="col-xs-1 text-right">
+		
 			<div class="col-xs-8">
-			 <%=  select_tag "media_tape_type_id",options_from_collection_for_select(@media_cost_master, :id,  :media_tape_type, selected: @campaign.mediumid) , {:class => "form-control",:label => "Select tape", include_blank: 'Select Relevant Cost and Time'}
-     %>
+			 <%=  select_tag "media_tape_type_id",options_from_collection_for_select(@media_cost_master, :id,  :media_tape_type, selected: @campaign.mediumid) , {:class => "form-control",:label => "Select tape", include_blank: 'Select Relevant Cost and Time'} %>
     	 
     <small> Only media which we pay in advance show up here </small>
 			</div>
 
-			<div class="col-xs-1">
-
-			   <%= select_tag :begin_hr, options_for_select(0..23), :class => "form-control"  %>
-
-<small> Start Hr </small>
-			</div>
-			
-			<div class="col-xs-1">
-
-			   <%= select_tag :begin_min, options_for_select(0..59), :class => "form-control"  %>
-			   <small> Start Min </small>
-			</div>
-		</div>
+	<div class="col-xs-1">
+	  <%= select_tag :begin_hr, options_for_select(0..23), :class => "form-control"  %>
+	<small> Start Hr </small>
+	</div>
+	<div class="col-xs-1">
+	  <%= select_tag :begin_min, options_for_select(0..59), :class => "form-control"  %>
+	<small> Start Min </small>
+	</div>
+	<div class="col-xs-1">
+	  <%= select_tag :begin_sec, options_for_select(0..59), :class => "form-control"  %>
+	<small> Start sec </small>
+	</div>
+	</div>
 
 		
 	</div>
@@ -39,11 +38,7 @@
 <br>
 <div class="row">
  <%= hidden_field_tag :campaignid, @campaignid %>
- 
- 
-
-
-	<div class="col-xs-12">
+ <div class="col-xs-12">
 		<%= collection_select(nil, :product_variant_id,  @productvariantlist,  :id, :name, {:prompt   => "Select a Product Variant"}, {:id => 'variants_select', :class => "form-control"}) %>
 
 	</div>

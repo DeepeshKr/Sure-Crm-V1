@@ -77,7 +77,8 @@ end
   def show
       set_media_tape
     # @campaignlist =  Campaign.joins(:medium).where('media.telephone = ?', @order_master.calledno)
-      @orderlines = OrderLine.joins(:order_master).where("order_masters.campaign_playlist_id = ?", params[:id])
+      @orderlines = OrderLine.joins(:order_master)
+      .where("order_masters.campaign_playlist_id = ?", params[:id])
   # Parent.joins(:children).where(children:{favorite:true})
       respond_with(@campaign_playlist, @orderlines)
   end
@@ -263,35 +264,16 @@ end
         if media_tapes.present?
           #add media tapes to campaign playlist
           #time_slot => "auto" / "specific"
-          begin_hr = 0
-          begin_min = 0
-          begin_sec = 0
+            begin_hr = params[:begin_hr]
+            begin_min = params[:begin_min]
+            begin_sec = params[:begin_sec]
 
           cost = 0
           
           first_campaign_playlist_id = 0
           
           media_tapes.each do |m|
-          if params[:time_slot] == "auto"
-              if CampaignPlaylist.where(campaignid: campaignid).present?
-                campaign_playlist = CampaignPlaylist.where(campaignid: campaignid).order("end_hr, end_min, end_sec")
-                begin_hr = campaign_playlist.last.end_hr
-                begin_min = campaign_playlist.last.end_min
-                begin_sec = campaign_playlist.last.end_sec
-              end
-          elsif params[:time_slot] == "specific"
-             begin_hr = params[:time_slot]
-             begin_min = params[:begin_min]
-             begin_sec = 0
-
-             #media tape cost head
-              if params[:media_tape_type_id].present?
-                media_tape_type_id = params[:media_tape_type_id]
-                media_tape_cost = MediaCostMaster.find(media_tape_type_id)
-                cost = media_tape_cost.cost_per_sec
-              end
-          end
-
+          
             list_status_id = 10001
             if m.sort_order == 1
               list_status_id = 10000

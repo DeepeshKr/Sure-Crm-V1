@@ -1,0 +1,49 @@
+<%= form_tag("/create_playlist", method: "post") do |f| %>
+
+<%= hidden_field_tag :for_date, @for_date %>
+<%= hidden_field_tag :time_slot, "specific_hbn" %>
+<%= hidden_field_tag :campaignid, @campaignid %>
+<br>
+
+	
+
+
+<div class="row">
+	<div class="col-xs-1 ">
+	  <%= select_tag :begin_hr, options_for_select(0..23, @begin_hr), :class => "form-control"  %>
+	<small>  Hr </small>
+	</div>
+	<div class="col-xs-1">
+	  <%= select_tag :begin_min, options_for_select(0..59, @begin_min), :class => "form-control"  %>
+	<small>  Min </small>
+	</div>
+
+	 <div class="col-xs-1">
+	  <%= select_tag :begin_sec, options_for_select(0..59, @begin_sec), :class => "form-control"  %>
+	<small>  Sec </small>
+ 	</div>
+ <div class="col-xs-8 col-xs-offset-1">
+		<%= collection_select(nil, :product_variant_id,  @productvariantlist,  :id, :name, {:prompt   => "Select a Product Variant"}, {:id => 'variants_select', :class => "form-control"}) %>	</div>
+</div>
+
+<br/>
+<div class="row">
+	<div class="col-xs-12">
+		<%= collection_select(nil, :media_tape_head_id, @media_tape_head_list, :id, :name, {:prompt   => "Select an Media Tape Head"}, {:id => 'tapes_select', :class => "form-control"}) %>
+
+	</div>
+
+</div>
+<hr>
+<div id='tape_list'>
+
+
+</div>
+
+
+
+<% end %>
+
+
+
+ 

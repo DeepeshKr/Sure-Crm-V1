@@ -1,40 +1,27 @@
 <%= form_tag("/create_playlist", method: "post") do |f| %>
 
 <%= hidden_field_tag :for_date, @for_date %>
-
-	<div class="well well-sm">
-	
-		<div class="row">
-
-			<div class="col-xs-4">
-			 <%= radio_button_tag 'time_slot', "auto", @hbnchecked  %>
-			</div>
-			<div class="col-xs-8">
-			<label>HBN Auto Add</label>	
-			</div>
-		</div>
-	
-
-	
-	</div>
-
-
-
-
-<br>
+<%= hidden_field_tag :time_slot, "auto_hbn" %>
+<%= hidden_field_tag :campaignid, @campaignid %>
+<br>	
+<small>Time Shown below is the last playlist time slot</small>
 <div class="row">
- <%= hidden_field_tag :campaignid, @campaignid %>
- 
- 
-
-
-	<div class="col-xs-12">
-		<%= collection_select(nil, :product_variant_id,  @productvariantlist,  :id, :name, {:prompt   => "Select a Product Variant"}, {:id => 'variants_select', :class => "form-control"}) %>
-
+	<div class="col-xs-1 ">
+	  <%= select_tag :begin_hr, options_for_select(0..23,  selected: @begin_hr), :class => "form-control"  %>
+	<small>  Hr </small>
+	</div>
+	<div class="col-xs-1">
+	  <%= select_tag :begin_min, options_for_select(0..59,  selected: @begin_min), :class => "form-control"  %>
+	<small>  Min </small>
 	</div>
 
+	 <div class="col-xs-1">
+	  <%= select_tag :begin_sec, options_for_select(0..59,  selected: @begin_sec), :class => "form-control"  %>
+	<small>  Sec </small>
+ 	</div>
+ <div class="col-xs-8 col-xs-offset-1">
+		<%= collection_select(nil, :product_variant_id,  @productvariantlist,  :id, :name, {:prompt   => "Select a Product Variant"}, {:id => 'variants_select', :class => "form-control"}) %>	</div>
 </div>
-
 <br/>
 <div class="row">
 	<div class="col-xs-12">
@@ -53,6 +40,22 @@
 
 <% end %>
 
+<br>  
 
-
- 
+   <br>  
+  <div class="well">
+  <div class="row">
+  <div class="col-xs-8">
+  <h4>Reset the entire Playlist above by clicking this button</h4>
+  </div>
+   <%= bootstrap_form_tag url: updatecampaigntimings_path, :method => :POST do |f| %>
+    <%= hidden_field_tag :campaignid, @campaignid %>
+    <div class="col-xs-3">
+      <%= submit_tag "Reset Playlist", name: nil,  class: "btn btn-warning" %>
+    
+    </div>
+    <% end %>
+  </div>
+  </div>
+    <br> 
+      <br> 

@@ -5,17 +5,26 @@ class IndiaCityListsController < ApplicationController
   # GET /india_city_lists.json
   def index
     # product_hash = row.to_hash # exclude the price field
-    oldcitylist = CITYLIST.all
-    oldcitylist.each do |row|
-      product = IndiaCityList.where(name: row["city"])
+    # oldcitylist = CITYLIST.all
+    # oldcitylist.each do |row|
+    #   product = IndiaCityList.where(name: row["city"])
 
-       if product.present?
-         product.first.update_attributes(state: row['state'])
-       else
-        IndiaCityList.create(name: row['city'], state: row['state'])
-      end # end if !product.nil?
-     end # end CSV.foreach
-    @india_city_lists = IndiaCityList.all
+    #    if product.present?
+    #      product.first.update_attributes(state: row['state'])
+    #    else
+    #     IndiaCityList.create(name: row['city'], state: row['state'])
+    #   end # end if !product.nil?
+    #  end # end CSV.foreach
+     if params[:location].present?
+      @searchvalue = params[:location]     
+      @india_city_lists = IndiaCityList.where("name like ? OR state like ?", "#{@searchvalue}%", "#{@searchvalue}%").paginate(:page => params[:page])
+      @search = "Seached for #{@searchvalue}"
+      @found = "Found of over #{@india_pincode_lists.count()} Cities"
+    else
+       @india_city_lists = IndiaCityList.all.paginate(:page => params[:page])
+    end
+
+   
   end
 
   # GET /india_city_lists/1

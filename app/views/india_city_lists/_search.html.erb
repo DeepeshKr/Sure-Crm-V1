@@ -1,0 +1,12 @@
+<div class="row">
+ <%= bootstrap_form_tag url: india_city_lists_path, :method => :GET, :enforce_utf8 => false do |f| %>
+<div class="col-xs-8">
+<%= text_field_tag(:search, nil, :class => "form-control", :required => "true", :placeholder => "Search City", :value => @searchvalue  )   %>
+</div>
+
+<div class="col-xs-4">
+	<%= submit_tag "Search", name: nil, class: "btn btn-primary" %>
+</div>
+<% end %>
+
+</div>

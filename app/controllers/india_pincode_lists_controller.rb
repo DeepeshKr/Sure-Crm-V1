@@ -9,15 +9,23 @@ class IndiaPincodeListsController < ApplicationController
   # GET /india_pincode_lists
   # GET /india_pincode_lists.json
   def index
+    #    <%= @search %> <%= @found %> 
     if params[:pincode].present?
       @searchvalue = params[:pincode]
-      @india_pincode_lists = IndiaPincodeList.where(pincode:  @searchvalue)
+      @india_pincode_lists = IndiaPincodeList.where(pincode:  @searchvalue).paginate(:page => params[:page])
+      @search = "Seached for #{@searchvalue}"
+      @found = "Found of over #{@india_pincode_lists.count()} Cities"
+    elsif params[:location].present?
+      @searchvalue = params[:location]     
+      @india_pincode_lists = IndiaPincodeList.where("taluk like ? OR districtname like ? or regionname like ? or pincode like ?", "#{@searchvalue}%", "#{@searchvalue}%", "#{@searchvalue}%", "#{@searchvalue}%").paginate(:page => params[:page])
+      @search = "Seached for #{@searchvalue}"
+      @found = "Found of over #{@india_pincode_lists.count()} Cities"
+    else
+      nos = IndiaPincodeList.all.count() 
+      @search = ""
+      @found = "Total Listings of over #{nos} Cities"
+      @india_pincode_lists = IndiaPincodeList.all.paginate(:page => params[:page])
     end
-    if params[:location].present?
-      @searchvalue = params[:location]
-      @india_pincode_lists = IndiaPincodeList.where("taluk like ? OR districtname like ? or regionname like ?", "#{@searchvalue}%", "#{@searchvalue}%", "#{@searchvalue}%")
-    end
-      @india_pincode_lists = IndiaPincodeList.all.limit(1000)
   end
 
   def import
