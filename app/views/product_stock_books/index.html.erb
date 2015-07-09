@@ -29,6 +29,7 @@
     <th colspan="6">Sold </th>
     <th rowspan="2" colspan="2">Corrections</th>
     <th rowspan="2" colspan="1">Closing</th>
+     <th rowspan="1" colspan="2">Show</th>
   </tr>
   <tr>
     <th colspan="2">Retail </th>
@@ -103,7 +104,7 @@
         </td>
         <td class="text-right"><%= product_stock_book.corrections_value %></td>
         <td class="text-right"><%= product_stock_book.closing_qty %></td>
-       
+        <td><%= link_to 'Show', product_stock_book, class: "btn btn-info btn-xs", :target => "_blank" %></td>
       </tr>
     <% end %>
   </tbody>

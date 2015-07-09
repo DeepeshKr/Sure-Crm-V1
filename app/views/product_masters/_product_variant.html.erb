@@ -4,6 +4,8 @@
     <div class="col-xs-11">
       <h4 class="panel-title">
         <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#<%= v.id %>" aria-expanded="false" aria-controls=<%= v.id %>>
+
+         <small><%= v.name %></small> 
         <strong>   Price:  <%= v.price %> Shipping: <%= v.shipping %> </strong>
          Sold As: <%= v.product_sell_type.name %> 
               <small>Created: <%= v.created_at.strftime("%d-%b-%Y") %></small>   

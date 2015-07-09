@@ -2,7 +2,7 @@
   <thead>
     <tr>
       
-      
+      <th>Name<th>
       <th>Price</th>
       <th>Taxes</th>
       <th>Total</th>
@@ -16,6 +16,7 @@
   <tbody>
     <% @product_variants.each do |product_variant| %>
       <tr>    
+      <td><%= product_variant.name %> </td>
         <td><%= product_variant.price %></td>
         <td><%= product_variant.taxes %></td>
         <td><%= product_variant.total %></td>

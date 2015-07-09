@@ -237,7 +237,8 @@ end
             description: old_campaign_playlist.description, 
             duration_secs: old_campaign_playlist.duration_secs, 
             tape_id: old_campaign_playlist.tape_id,
-            for_date: Time.now + 1.days)
+            for_date: Time.now + 1.days,
+            playlist_group_id: old_campaign_playlist.playlist_group_id)
         
         end
 
@@ -268,7 +269,7 @@ end
 
           cost = 0
           
-          
+          first_campaign_playlist_id = 0
           
           media_tapes.each do |m|
           if params[:time_slot] == "auto"
@@ -302,7 +303,7 @@ end
               end_min = @end_min
               end_sec = @end_sec
 
-            CampaignPlaylist.create(name: m.name, 
+           new_campaign_playlist = CampaignPlaylist.create(name: m.name, 
               campaignid: campaignid, 
               start_hr: begin_hr, 
               start_min: begin_min, 
@@ -321,6 +322,14 @@ end
               duration_secs: m.duration_secs, 
               tape_id: m.tape_ext_ref_id,
               for_date: for_date)
+
+            if first_campaign_playlist_id == 0
+              first_campaign_playlist_id = new_campaign_playlist.id
+            end
+
+            if first_campaign_playlist_id != 0
+              new_campaign_playlist.update(playlist_group_id: first_campaign_playlist_id)
+            end
 
           end
 

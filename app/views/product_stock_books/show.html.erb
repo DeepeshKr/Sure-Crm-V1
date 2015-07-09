@@ -1,179 +1,233 @@
 <p id="notice"><%= notice %></p>
+<div class="well">
+<div class="row">
+<div class="col-xs-3">
+  <strong>
+    <%= @product_stock_book.stock_date.strftime("%d-%b-%Y") %></strong>
+  </div>
+  <div class="col-xs-3">
+    <strong>
+  <%= @product_stock_book.product_master.name if @product_stock_book.product_master%></strong>
+  </div>
+  <div class="col-xs-3">
+     <strong>PROD:</strong>
+    <%= @product_stock_book.ext_prod_code %>
+  </div>
+   <div class="col-xs-3">
+    <strong>BARCODE:</strong>
+  <%= @product_stock_book.list_barcode %>
+  </div>
+</div>
+</div>
+<br>
+<table class="table table-hover table-bordered">
+  <thead>
+    <tr>
+    <th>
+      
+    </th>
+      <th >
+        Description
+      </th>
+      <th class="text-right">
+        Quantity
+      </th>
+       <th class="text-right">
+        Values
+      </th>
+       <th class="text-right">
+        Rate
+      </th>
+       <th class="text-right">
+       
+      </th>
+    </tr>
+  </thead>
+  <tbody>
+    
+    <tr>
+    <td>Base</td>
+    <td>
+     <strong> Opening qty:</strong>
+      </td>
+       <td class="text-right">
+       <%= @product_stock_book.opening_qty %>
+      </td>
+       <td class="text-right">
+        <%= @product_stock_book.opening_value %>
+      </td>
+       <td class="text-right">
+       <%= @product_stock_book.opening_rate %>
+      </td>
+      <td class="text-right">
+        
+      </td>
+    </tr>
+    <tr>
+    <td>Add (+)</td>
+    <td>
+        <strong>Purchased qty:</strong>
+      </td>
+       <td class="text-right">
+       <%= @product_stock_book.purchased_qty %>
+      </td>
+        <td class="text-right"> 
+        <%= @product_stock_book.purchased_value %>
+      </td>
+       <td class="text-right">
+      <%= @product_stock_book.purchased_rate %>
+      </td>
+      <td class="text-right">
+       
+      </td>
+    </tr>
+     <tr>
+      <td>Add (+)</td>
+    <td>
+       <strong>Returned retail qty:</strong>
+      </td>
+       <td class="text-right">
+        <%= @product_stock_book.returned_retail_qty %>
+      </td>
+        <td class="text-right">
+         <%= @product_stock_book.returned_retail_value %>
+      </td>
+       <td class="text-right">
+        <%= @product_stock_book.returned_retail_rate %>
+      </td>
+      <td class="text-right">
+       
+      </td>
+    </tr>
+    <tr>
+     <td>Add (+)</td>
+    <td>
+       <strong>Returned wholesale qty:</strong>
+      </td>
+       <td class="text-right">
+       <%= @product_stock_book.returned_wholesale_qty %>
+      </td >
+        <td class="text-right">
+        <%= @product_stock_book.returned_wholesale_value %>
+      </td>
+       <td class="text-right">
+       <%= @product_stock_book.returned_wholesale_rate %>
+      </td>
+      <td class="text-right">
+      
+      </td>
+    </tr>
+    <tr>
+     <td>Add (+)</td>
+    <td>
+       <strong>Returned others qty:</strong>
+      </td>
+       <td class="text-right">
+       <%= @product_stock_book.returned_others_qty %>
+      </td>
+        <td class="text-right">
+       <%= @product_stock_book.returned_others_value %>
+      </td>
+       <td class="text-right">
+      <%= @product_stock_book.returned_others_rate %>
+      </td>
+      <td class="text-right">
+        
+      </td>
+    </tr>
+        <tr>
+         <td>Less (-)</td>
+    <td>
+       <strong>Sold retail qty:</strong>
+      </td>
+       <td class="text-right">
+        <%= @product_stock_book.sold_retail_qty %>
+      </td>
+        <td class="text-right">
+       <%= @product_stock_book.sold_retail_value %>
+      </td>
+       <td class="text-right">
+     <%= @product_stock_book.sold_retail_rate %>
+      </td>
+      <td class="text-right">
+       
+      </td>
+    </tr>
+       <tr>
+       <td>Less (-)</td>
+    <td>
+      <strong>Sold wholesale:</strong>
+      </td>
+       <td class="text-right">
+        <%= @product_stock_book.sold_wholesale %>
+      </td>
+        <td class="text-right">
+       <%= @product_stock_book.sold_wholesale_value %>
+      </td>
+       <td class="text-right">
+     <%= @product_stock_book.sold_wholesale_rate %>
+      </td>
+      <td class="text-right">
+        
+      </td>
+    </tr>
+      <tr>
+      <td>Less (-)</td>
+    <td>
+     <strong>Sold branch qty:</strong>
+      </td>
+       <td class="text-right">
+      <%= @product_stock_book.sold_branch_qty %>
+      </td>
+        <td class="text-right">
+       <%= @product_stock_book.sold_branch_value %>
+      </td>
+       <td class="text-right">
+    <%= @product_stock_book.sold_branch_rate %>
+      </td>
+      <td class="text-right">
+        
+      </td>
+    </tr>
+        <tr>
+        <td>Adjust (+/-)</td>
+    <td>
+     <strong>Corrections qty:</strong>
+      </td>
+       <td class="text-right">
+     <%= @product_stock_book.corrections_qty %>
+      </td>
+        <td class="text-right">
+       <%= @product_stock_book.corrections_value %>
+      </td>
+       <td class="text-right">
+    <%= @product_stock_book.corrections_rate %>
+      </td>
+      <td class="text-right">
+        
+      </td>
+    </tr>
+    <tr>
+    <td>Final</td>
+    <td>
+    <strong>Closing qty:</strong>
+      </td>
+       <td class="text-right">
+        <%= @product_stock_book.closing_qty %>
+      </td>
+        <td class="text-right">
+        <%= @product_stock_book.closing_value %>
+      </td>
+       <td class="text-right">
+        <%= @product_stock_book.closing_rate %>
+      </td>
+      <td class="text-right">
+        
+      </td>
+    </tr>
+  </tbody>
+</table>
 
-<p>
-  <strong>Stock date:</strong>
-  <%= @product_stock_book.stock_date %>
-</p>
-
-<p>
-  <strong>Product master:</strong>
-  <%= @product_stock_book.product_master_id %>
-</p>
-
-<p>
-  <strong>Product list:</strong>
-  <%= @product_stock_book.product_list_id %>
-</p>
-
-<p>
-  <strong>Ext prod code:</strong>
-  <%= @product_stock_book.ext_prod_code %>
-</p>
-
-<p>
-  <strong>Name:</strong>
-  <%= @product_stock_book.name %>
-</p>
-
-<p>
-  <strong>Opening qty:</strong>
-  <%= @product_stock_book.opening_qty %>
-</p>
-
-<p>
-  <strong>Opening rate:</strong>
-  <%= @product_stock_book.opening_rate %>
-</p>
-
-<p>
-  <strong>Opening value:</strong>
-  <%= @product_stock_book.opening_value %>
-</p>
-
-<p>
-  <strong>Purchased qty:</strong>
-  <%= @product_stock_book.purchased_qty %>
-</p>
-
-<p>
-  <strong>Purchased rate:</strong>
-  <%= @product_stock_book.purchased_rate %>
-</p>
-
-<p>
-  <strong>Purchased value:</strong>
-  <%= @product_stock_book.purchased_value %>
-</p>
-
-<p>
-  <strong>Returned retail qty:</strong>
-  <%= @product_stock_book.returned_retail_qty %>
-</p>
-
-<p>
-  <strong>Returned retail rate:</strong>
-  <%= @product_stock_book.returned_retail_rate %>
-</p>
-
-<p>
-  <strong>Returned retail value:</strong>
-  <%= @product_stock_book.returned_retail_value %>
-</p>
-
-<p>
-  <strong>Returned wholesale qty:</strong>
-  <%= @product_stock_book.returned_wholesale_qty %>
-</p>
-
-<p>
-  <strong>Returned wholesale rate:</strong>
-  <%= @product_stock_book.returned_wholesale_rate %>
-</p>
-
-<p>
-  <strong>Returned wholesale value:</strong>
-  <%= @product_stock_book.returned_wholesale_value %>
-</p>
-
-<p>
-  <strong>Returned others qty:</strong>
-  <%= @product_stock_book.returned_others_qty %>
-</p>
-
-<p>
-  <strong>Returned others rate:</strong>
-  <%= @product_stock_book.returned_others_rate %>
-</p>
-
-<p>
-  <strong>Returned others value:</strong>
-  <%= @product_stock_book.returned_others_value %>
-</p>
-
-<p>
-  <strong>Sold retail qty:</strong>
-  <%= @product_stock_book.sold_retail_qty %>
-</p>
-
-<p>
-  <strong>Sold retail rate:</strong>
-  <%= @product_stock_book.sold_retail_rate %>
-</p>
-
-<p>
-  <strong>Sold retail value:</strong>
-  <%= @product_stock_book.sold_retail_value %>
-</p>
-
-<p>
-  <strong>Sold wholesale:</strong>
-  <%= @product_stock_book.sold_wholesale %>
-</p>
-
-<p>
-  <strong>Sold wholesale rate:</strong>
-  <%= @product_stock_book.sold_wholesale_rate %>
-</p>
-
-<p>
-  <strong>Sold wholesale value:</strong>
-  <%= @product_stock_book.sold_wholesale_value %>
-</p>
-
-<p>
-  <strong>Sold branch qty:</strong>
-  <%= @product_stock_book.sold_branch_qty %>
-</p>
-
-<p>
-  <strong>Sold branch rate:</strong>
-  <%= @product_stock_book.sold_branch_rate %>
-</p>
-
-<p>
-  <strong>Sold branch value:</strong>
-  <%= @product_stock_book.sold_branch_value %>
-</p>
-
-<p>
-  <strong>Corrections qty:</strong>
-  <%= @product_stock_book.corrections_qty %>
-</p>
-
-<p>
-  <strong>Corrections rate:</strong>
-  <%= @product_stock_book.corrections_rate %>
-</p>
-
-<p>
-  <strong>Corrections value:</strong>
-  <%= @product_stock_book.corrections_value %>
-</p>
-
-<p>
-  <strong>Closing qty:</strong>
-  <%= @product_stock_book.closing_qty %>
-</p>
-
-<p>
-  <strong>Closing rate:</strong>
-  <%= @product_stock_book.closing_rate %>
-</p>
-
-<p>
-  <strong>Closing value:</strong>
-  <%= @product_stock_book.closing_value %>
-</p>
 
 <%= link_to 'Edit', edit_product_stock_book_path(@product_stock_book) %> |
 <%= link_to 'Back', product_stock_books_path %>

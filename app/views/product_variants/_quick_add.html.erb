@@ -25,10 +25,13 @@
    <%= f.hidden_field :productmasterid %>
     <%= f.hidden_field :activeid %>
      <%= f.hidden_field :extproductcode %>
-     <%= f.hidden_field :name %>
+     
       <%= f.hidden_field :variantbarcode %>
   <% end %>
-  
+  <div class="field">   
+    <%= f.text_field :name, label: "Product Name", required: true, help: "Use the Product Name with Free Product to be used for Media like AB KING PRO - (FREE PUB & ALU)" ,:placeholder => "Required, it would look like this AB KING PRO - (FREE PUB & ALU) or Just the Name " %> 
+    
+    </div>
 
   <div class="field">
   	   

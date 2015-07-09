@@ -50,6 +50,7 @@ class ProductStockBooksController < ApplicationController
   # params prod from_date to_date
   #http://localhost:3000/stockbook?utf8=%E2%9C%93&prod=TOTS&from_date=04%2F01%2F2015&to_date=04%2F02%2F2015
   def show
+    
   end
 
   # GET /product_stock_books/new
