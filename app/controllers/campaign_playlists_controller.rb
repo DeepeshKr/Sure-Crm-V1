@@ -278,13 +278,18 @@ end
             list_status_id = 10001
             if m.sort_order == 1
               list_status_id = 10000
+            else
+              campaign_playlists = CampaignPlaylist.where(campaignid: campaignid)
+               .order(:start_hr, :start_min, :start_sec)
+    
+              begin_hr = campaign_playlists.last.end_hr
+              begin_min = campaign_playlists.last.end_min
+              begin_sec = campaign_playlists.last.end_sec
             end
             #ref name is combination of media tape head and media tape name
             ref_name = MediaTapeHead.find(media_tape_head_id).name 
               hour_min_sec(begin_hr, begin_min, begin_sec, m.duration_secs)
-              end_hr = @end_hr
-              end_min = @end_min
-              end_sec = @end_sec
+             
 
            new_campaign_playlist = CampaignPlaylist.create(name: m.name, 
               campaignid: campaignid, 
@@ -293,9 +298,9 @@ end
               start_sec: begin_sec, 
               ref_name: ref_name,
               list_status_id: list_status_id,
-              end_hr: end_hr, 
-              end_min: end_min, 
-              end_sec: end_sec,
+              end_hr: @end_hr, 
+              end_min: @end_min, 
+              end_sec: @end_sec,
               cost: cost, 
               channeltapeid: m.tape_ext_ref_id, 
               internaltapeid: m.unique_tape_name, 

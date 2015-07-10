@@ -22,12 +22,7 @@ class OrderMastersController < ApplicationController
       if params[:completed].present?
         # all completed orders only
          if params[:for_date].present? 
-           if Date.strptime(params[:for_date], "%m/%d/%Y").valid_date?
-              for_date =  Date.strptime(params[:for_date], "%m/%d/%Y")
-            else
-              for_date =  Date.strptime(params[:for_date], "%Y-%m-%d")
-          end  
-          
+          for_date =  Date.strptime(params[:for_date], "%m-%d-%Y")
 
           @order_masters = OrderMaster.where('ORDER_STATUS_MASTER_ID > 10002')
           .where('TRUNC(orderdate) = ?',for_date)
@@ -72,14 +67,8 @@ class OrderMastersController < ApplicationController
     if params[:for_date].present? 
       #@summary ||= []
       # @or_for_date = params[:for_date]
-      if Date.strptime(params[:for_date], "%m/%d/%Y").valid_date?
-        for_date =  Date.strptime(params[:for_date], "%m/%d/%Y")
-      else
-        for_date =  Date.strptime(params[:for_date], "%Y-%m-%d")
-      end        
-
-
-        @or_for_date = for_date.strftime("%m-%d-%Y")
+      for_date =  Date.strptime(params[:for_date], "%m/%d/%Y")
+      @or_for_date = for_date.strftime("%m-%d-%Y")
       order_masters = OrderMaster.where('TRUNC(orderdate) = ?',for_date).where('ORDER_STATUS_MASTER_ID > 10002').select(:employee_id).distinct
       
       @orderdate = "Searched for #{for_date} found #{order_masters.count} agents!"
