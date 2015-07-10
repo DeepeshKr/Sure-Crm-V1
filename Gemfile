@@ -12,7 +12,7 @@ gem 'rails-erd', github: 'ready4god2513/rails-erd', branch: 'rails-4.2-support-f
 gem 'ruby-graphviz'
 
 #gem 'thin'
-gem "rack-timeout"
+#gem "rack-timeout"
 
 #intall luhn for credit card verification => not used for now
 gem 'luhn'
@@ -52,7 +52,11 @@ gem 'kaminari'
 gem 'bootsy'
 
 #date picker
+#gem 'jquery-ui-rails'
+#https://github.com/joliss/jquery-ui-rails
 gem 'bootstrap-datepicker-rails'
+#http://www.eyecon.ro/bootstrap-datepicker/
+
 
 #date picker option 2
 # first dependecies

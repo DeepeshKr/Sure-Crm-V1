@@ -60,14 +60,17 @@ class OrderMastersController < ApplicationController
   end
 
   def daily_report
-    
+    @today_date = Time.zone.now.to_date.strftime("%Y-%m-%d")
      @sno = 1
       #@order_master.orderpaymentmode_id == 10000 #paid over CC
       #@order_master.orderpaymentmode_id == 10001 #paid over COD
     if params[:for_date].present? 
+
+       @today_date
       #@summary ||= []
       # @or_for_date = params[:for_date]
-      for_date =  Date.strptime(params[:for_date], "%m/%d/%Y")
+      for_date =  Date.strptime(params[:for_date], "%Y-%m-%d")
+      @today_date = for_date.strftime("%Y-%m-%d")
       @or_for_date = for_date.strftime("%m-%d-%Y")
       order_masters = OrderMaster.where('TRUNC(orderdate) = ?',for_date).where('ORDER_STATUS_MASTER_ID > 10002').select(:employee_id).distinct
       
@@ -94,7 +97,7 @@ class OrderMastersController < ApplicationController
         @employeeorderlist = employeeunorderlist.sort_by{|c| c[:total]}.reverse 
     
     elsif params[:from_date].present? && params[:to_date].present? 
-      from_date =  Date.strptime(params[:from_date], "%m/%d/%Y")
+       for_date =  Date.strptime(params[:for_date], "%Y-%m-%d")
       to_date =  Date.strptime(params[:to_date], "%m/%d/%Y")
       @or_for_date = for_date.strftime("%m-%d-%Y")
       order_masters = OrderMaster.where('TRUNC(orderdate) >= ? AND TRUNC(orderdate) <= ?',from_date, to_date).where('ORDER_STATUS_MASTER_ID > 10002').select(:employee_id).distinct
