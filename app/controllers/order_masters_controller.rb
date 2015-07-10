@@ -22,7 +22,12 @@ class OrderMastersController < ApplicationController
       if params[:completed].present?
         # all completed orders only
          if params[:for_date].present? 
-          for_date =  Date.strptime(params[:for_date], "%m-%d-%Y")
+           if Date.strptime(params[:for_date], "%m/%d/%Y").valid_date?
+              for_date =  Date.strptime(params[:for_date], "%m/%d/%Y")
+            else
+              for_date =  Date.strptime(params[:for_date], "%Y-%m-%d")
+          end  
+          
 
           @order_masters = OrderMaster.where('ORDER_STATUS_MASTER_ID > 10002')
           .where('TRUNC(orderdate) = ?',for_date)

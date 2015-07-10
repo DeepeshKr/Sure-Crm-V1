@@ -17,6 +17,7 @@
     <tr>
       <th>Product</th>
         <th>Prod</th>
+        <th>BARCODE</th>
        <th>Date</th>
       <th>Opening Stock</th>
       
@@ -30,6 +31,7 @@
         <td><%= product_stock.product_master.name || "None" if product_stock.product_master %>
         <small>(<%= product_stock.product_master.extproductcode || "None" if product_stock.product_master %>)</small></td>
           <td><%= product_stock.ext_prod_code %></td>
+          <td><%= product_stock.barcode %></td>
           <td><%= product_stock.checked_date.strftime("%d-%b-%Y") %></td>
          <td><%= product_stock.current_stock %></td>
         <td><%= link_to 'Edit', edit_product_stock_path(product_stock) %></td>
