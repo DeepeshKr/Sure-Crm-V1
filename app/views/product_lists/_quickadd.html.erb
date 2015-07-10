@@ -5,7 +5,7 @@
    <%= f.hidden_field :product_variant_id %>
 
   
-
+<%= f.hidden_field :product_master_id %>
  
   <div class="field">
    <%= f.select :product_spec_list_id,  options_from_collection_for_select(@product_spec_list, :id, :name, selected: @product_list.product_spec_list_id), {} %>

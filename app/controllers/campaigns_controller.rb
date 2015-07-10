@@ -55,10 +55,10 @@ class CampaignsController < ApplicationController
                 @begin_sec = @campaign_playlists.last.end_sec
         end
          
-         #remove after testing
-         @campaign_playlist = CampaignPlaylist.new(campaignid: params[:id],
-         cost: 0, start_hr: @begin_hr,
-         start_min: @begin_min, start_sec: @begin_sec)
+         # #remove after testing
+         # @campaign_playlist = CampaignPlaylist.new(campaignid: params[:id],
+         # cost: 0, start_hr: @begin_hr,
+         # start_min: @begin_min, start_sec: @begin_sec)
 
      if @campaign.startdate > (330.minutes).from_now.to_date
          @campaign_playlist = CampaignPlaylist.new(campaignid: params[:id],

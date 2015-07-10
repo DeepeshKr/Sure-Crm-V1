@@ -37,8 +37,9 @@ class ProductVariantsController < ApplicationController
 
   def show
     @product_lists = ProductList.where(product_variant_id: @product_variant.id)
-    @product_list = ProductList.new(:product_variant_id => @product_variant.id)
-
+    @product_list = ProductList.new(:product_variant_id => @product_variant.id,
+      product_master_id: @product_variant.productmasterid)
+ 
     @product_spec_list = ProductSpecList.all.order("id")
     respond_with(@product_variant,  @product_list, @product_lists)
   end

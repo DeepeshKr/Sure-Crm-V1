@@ -41,7 +41,13 @@ class ProductListsController < ApplicationController
       
     end
        #respond_with(@product_lists)
-
+      product_lists = ProductList.where('active_status_id = ?',  10000)
+      product_lists.each do | product_list |
+        if ProductVariant.where(id: product_list.product_variant_id).present?
+          product_variant = ProductVariant.find(product_list.product_variant_id)
+          product_list.update(product_master_id: product_variant.productmasterid)
+        end
+      end
   
   end
 
@@ -117,6 +123,6 @@ class ProductListsController < ApplicationController
     def product_list_params
       params.require(:product_list).permit(:name, :product_variant_id,
        :product_spec_list_id, :extproductcode, 
-       :list_barcode, :active_status_id)
+       :list_barcode, :active_status_id, :product_master_id)
     end
 end

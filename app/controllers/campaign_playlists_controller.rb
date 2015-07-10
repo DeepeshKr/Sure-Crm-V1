@@ -106,7 +106,8 @@ end
     #tape_id to find end time duration secs, internaltapeid:, filename, name
     #:end_hr, :end_min, :end_sec, from duration_secs
     @campaign_playlist = CampaignPlaylist.new(campaign_playlist_params)
-    hour_min_sec(campaign_playlist_params[:start_hr], campaign_playlist_params[:start_min], campaign_playlist_params[:start_sec], campaign_playlist_params[:duration_secs])
+    hour_min_sec(campaign_playlist_params[:start_hr], campaign_playlist_params[:start_min],
+     campaign_playlist_params[:start_sec], campaign_playlist_params[:duration_secs])
      @campaign_playlist.end_hr = @end_hr
      @campaign_playlist.end_min = @end_min
      @campaign_playlist.end_sec = @end_sec
@@ -170,7 +171,6 @@ end
        
           list_status_id = 10001
                    
-         
             hour_min_sec(begin_hr, begin_min, begin_sec, media_tapes.duration_secs)
             end_hr = @end_hr
             end_min = @end_min
@@ -196,6 +196,7 @@ end
             tape_id: media_tapes.tape_ext_ref_id,
             for_date: for_date)
 
+           @campaign_playlist.update(playlist_group_id: @campaign_playlist.id)
  #respond_with(@media_cost_master)
       if @campaign_playlist.valid?
           update_timings(campaignid)

@@ -22,6 +22,13 @@
      
   </div>
   <div class="field">
+
+      <%= f.select :product_master_id,  options_from_collection_for_select(@product_masters,
+       :id, :name, selected: @product_list.product_master_id),
+             {} %>
+     
+  </div>
+  <div class="field">
    <%= f.select :product_spec_list_id,  options_from_collection_for_select(@product_specs, :id, :name, selected: @product_list.product_spec_list_id), {} %>
       
   </div>

@@ -162,6 +162,7 @@ class ProductStocksController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def product_stock_params
-      params.require(:product_stock).permit(:product_master_id, :product_list_id, :current_stock, :ext_prod_code, :barcode, :checked_date, :emp_code, :emp_id)
+      params.require(:product_stock).permit(:product_master_id, :product_list_id, 
+        :current_stock, :ext_prod_code, :barcode, :checked_date, :emp_code, :emp_id)
     end
 end
