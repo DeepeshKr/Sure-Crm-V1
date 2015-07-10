@@ -277,14 +277,7 @@ end
           
             list_status_id = 10001
             if m.sort_order == 1
-              list_status_id = 10000
-            else
-              campaign_playlists = CampaignPlaylist.where(campaignid: campaignid)
-               .order(:start_hr, :start_min, :start_sec)
-    
-              begin_hr = campaign_playlists.last.end_hr
-              begin_min = campaign_playlists.last.end_min
-              begin_sec = campaign_playlists.last.end_sec
+              list_status_id = 10000            
             end
             #ref name is combination of media tape head and media tape name
             ref_name = MediaTapeHead.find(media_tape_head_id).name 
@@ -319,6 +312,9 @@ end
               new_campaign_playlist.update(playlist_group_id: first_campaign_playlist_id)
             end
 
+            begin_hr = @end_hr
+            begin_min = @end_min
+            begin_sec = @end_sec
           end
 
           flash[:success] = "Campaign Playlists updated with #{media_tapes.count()} tapes"
