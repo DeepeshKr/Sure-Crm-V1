@@ -6,29 +6,33 @@ class ProductStockBooksController < ApplicationController
   # GET /product_stock_books
   # GET /product_stock_books.json
   def index
-     @prev_datelist = Date.today.in_time_zone,
+     @prev_datelist = Date.today.in_time_zone
+     @or_from_date = Date.today #.in_time_zone - 30.days
+     @or_to_date =  Date.today #.in_time_zone
     #@prev_datelist = "last checked for " + (Date.today - 1.day).strftime('%d-%b-%y')
-    if params[:prod].present? && params[:from_date].present? && params[:to_date].present?
+    if params[:list_barcode].present? && params[:from_date].present? && params[:to_date].present?
       @show_add_update = 1
       #posting params
       @prod = params[:prod]
       @or_from_date = params[:from_date]
       @or_to_date = params[:to_date]
-
-      from_date =  Date.strptime(@or_from_date, "%m/%d/%Y") if @or_from_date.present?
-      to_date =  Date.strptime(@or_to_date, "%m/%d/%Y") if @or_to_date.present? 
+      #Date.strptime(params[:for_date], "%Y-%m-%d")
+      from_date =  Date.strptime(@or_from_date, "%Y-%m-%d") if @or_from_date.present?
+      to_date =  Date.strptime(@or_to_date, "%Y-%m-%d") if @or_to_date.present? 
 
       @datelist ||= []
       (from_date..to_date).each do |day|
         @datelist <<  day.strftime('%d-%b-%y')
       end
 
-       if ProductMaster.where(extproductcode: @prod).present?
-          @product_name = ProductMaster.where(extproductcode: @prod).first.name
+       if ProductList.where(extproductcode: @prod).present?
+          @product_name = ProductList.where(extproductcode: @prod).first.productinfo
         end
         @from_date_text = from_date.strftime('%d-%b-%y')
         @to_date_text = to_date.strftime('%d-%b-%y')
-          @product_stock_books = ProductStockBook.where(ext_prod_code: @prod).where("TRUNC(stock_date) >= ? AND TRUNC(stock_date) <= ?", from_date, to_date).order("stock_date")
+          @product_stock_books = ProductStockBook.where(ext_prod_code: @prod)
+          .where("TRUNC(stock_date) >= ? AND TRUNC(stock_date) <= ?", from_date, to_date)
+          .order("stock_date")
          
           respond_to do |format|
             format.html
@@ -128,7 +132,7 @@ end
       @product_stock_book = ProductStockBook.find(params[:id])
     end
     def dropdowns
-      @productmasterlist = ProductMaster.all.order("name, extproductcode")
+      @productmasterlist = ProductList.all.where(list_barcode: ProductList.all.select(:list_barcode).distinct).order("name, list_barcode")
     end
     def get_variables
       @empcode = current_user.employee_code

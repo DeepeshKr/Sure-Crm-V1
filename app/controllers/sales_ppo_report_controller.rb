@@ -54,7 +54,7 @@ class SalesPpoReportController < ApplicationController
           nos = orderlist.count()
           pieces = orderlist.sum(:pieces)
           employeeunorderlist << {:total => totalorders,
-          :for_date =>  for_date.strftime("%m/%d/%Y"),
+          :for_date =>  for_date.strftime("%Y-%m-%d"),
           :pieces => pieces,
           :nos => nos,
           :revenue => revenue,
@@ -76,7 +76,7 @@ class SalesPpoReportController < ApplicationController
     if params[:for_date].present? 
       #@summary ||= []
       @or_for_date = params[:for_date]
-      for_date =  Date.strptime(params[:for_date], "%m/%d/%Y")
+      for_date =  Date.strptime(params[:for_date], "%Y-%m-%d")
       order_masters = OrderMaster.where('TRUNC(orderdate) = ?',for_date)
       .where('ORDER_STATUS_MASTER_ID > 10002')
       .where(media_id: @hbnlist).select(:employee_id).distinct
@@ -116,8 +116,8 @@ class SalesPpoReportController < ApplicationController
    for_date = (330.minutes).from_now.to_date
     
     if params.has_key?(:for_date)
-     for_date =  Date.strptime(params[:for_date], "%m/%d/%Y")
-     @or_for_date = Date.strptime(params[:for_date], "%m/%d/%Y")
+     for_date =  Date.strptime(params[:for_date], "%Y-%m-%d")
+     @or_for_date = Date.strptime(params[:for_date], "%Y-%m-%d")
     #for_date =  Date.strptime(params[:for_date], "%Y-%m-%d")
     end
       #@summary ||= []
@@ -207,7 +207,7 @@ class SalesPpoReportController < ApplicationController
     for_date = (330.minutes).from_now.to_date
 
     if params.has_key?(:for_date)
-     for_date =  Date.strptime(params[:for_date], "%m/%d/%Y")
+     for_date =  Date.strptime(params[:for_date], "%Y-%m-%d")
     end
      @sno = 1
 

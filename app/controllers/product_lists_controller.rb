@@ -118,6 +118,7 @@ class ProductListsController < ApplicationController
     def dropdowns
       @product_variants = ProductVariant.all.order("name")
       @product_specs = ProductSpecList.all.order("name")
+      @product_masters = ProductMaster.all.order("name")
     end
 
     def product_list_params

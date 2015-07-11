@@ -50,7 +50,7 @@ class SalesReportController < ApplicationController
     if params[:for_date].present? 
       #@summary ||= []
       @or_for_date = params[:for_date]
-      for_date =  Date.strptime(params[:for_date], "%m/%d/%Y")
+      for_date =  Date.strptime(params[:for_date], "%Y-%m-%d")
       order_masters = OrderMaster.where('TRUNC(orderdate) = ?',for_date).where('ORDER_STATUS_MASTER_ID > 10002').where(media_id: @hbnlist).select(:employee_id).distinct
       
       @orderdate = "Searched for #{for_date} found #{order_masters.count} agents!"
@@ -322,7 +322,7 @@ class SalesReportController < ApplicationController
     for_date = (330.minutes).from_now.to_date
     
     if params.has_key?(:for_date)
-     for_date =  Date.strptime(params[:for_date], "%m/%d/%Y")
+     for_date =  Date.strptime(params[:for_date], "%Y-%m-%d")
     end
     @orderdate = for_date
     @searchaction = 'show'
@@ -387,7 +387,7 @@ class SalesReportController < ApplicationController
       if params[:completed].present?
         # all completed orders only
          if params[:for_date].present? 
-          for_date =  Date.strptime(params[:for_date], "%m-%d-%Y")
+          for_date =  Date.strptime(params[:for_date], "%Y-%m-%d")
 
           @order_masters = OrderMaster.where('ORDER_STATUS_MASTER_ID > 10002')
           .where('TRUNC(orderdate) = ?',for_date)

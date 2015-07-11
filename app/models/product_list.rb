@@ -20,7 +20,7 @@ class ProductList < ActiveRecord::Base
 
 
   def productinfo
-     self.name << " (" << self.extproductcode << ")"
+     self.name << " (" << self.list_barcode << ")"
    end
 
    def productlistdetails

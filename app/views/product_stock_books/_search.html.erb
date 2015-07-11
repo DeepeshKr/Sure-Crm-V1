@@ -1,14 +1,14 @@
 <div class="row">
   <%= form_tag("/stockbook", method: "get") do  %>
       <div class="col-xs-6">
-        <%= select_tag(:prod,
-                       options_from_collection_for_select(@productmasterlist, :barcode, :productname, selected: @prod), {:class => "form-control"} )  %>
+        <%= select_tag(:list_barcode,
+                       options_from_collection_for_select(@productmasterlist, :list_barcode, :productinfo, selected: @list_barcode), {:class => "form-control"} )  %>
       </div> 
       <div class="col-xs-4">
         <div class="input-daterange input-group">
-          <%= text_field_tag(:from_date, nil, :data => {:provide => "datepicker"}, :class => "form-control", :required => "true" )   %>
+          <%= text_field_tag(:from_date, @or_from_date, :data => {:provide => "datepicker"}, :id => "datepicker1", :class => "form-control", :required => "true" )   %>
           <span class="input-group-addon">to</span>
-          <%= text_field_tag(:to_date, nil, :data => {:provide => "datepicker"}, :class => "form-control", :required => "true" )  %>
+          <%= text_field_tag(:to_date, @or_to_date, :data => {:provide => "datepicker"}, :id => "datepicker2", :class => "form-control", :required => "true" )  %>
         </div>
       </div>
 
@@ -17,3 +17,30 @@
       </div>
   <% end %>
 </div>
+<script>
+$('#datepicker1').datepicker({format: 'yyyy-mm-dd'});
+$('#datepicker2').datepicker({format: 'yyyy-mm-dd'});
+    var nowTemp = new Date();
+    var now = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate(), 0, 0, 0, 0);
+     
+    var checkin = $('#datepicker1').datepicker({
+      onRender: function(date) {
+        return date.valueOf() < now.valueOf() ? 'disabled' : '';
+      }
+    }).on('changeDate', function(ev) {
+      if (ev.date.valueOf() > checkout.date.valueOf()) {
+        var newDate = new Date(ev.date)
+        newDate.setDate(newDate.getDate() + 1);
+        checkout.setValue(newDate);
+      }
+      checkin.hide();
+      $('#datepicker2')[0].focus();
+    }).data('datepicker');
+    var checkout = $('#datepicker2').datepicker({
+      onRender: function(date) {
+        return date.valueOf() <= checkin.date.valueOf() ? 'disabled' : '';
+      }
+    }).on('changeDate', function(ev) {
+      checkout.hide();
+    }).data('datepicker');
+</script>
