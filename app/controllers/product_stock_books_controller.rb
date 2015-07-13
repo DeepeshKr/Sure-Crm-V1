@@ -10,10 +10,11 @@ class ProductStockBooksController < ApplicationController
      @or_from_date = Date.today #.in_time_zone - 30.days
      @or_to_date =  Date.today #.in_time_zone
     #@prev_datelist = "last checked for " + (Date.today - 1.day).strftime('%d-%b-%y')
-    if params[:list_barcode].present? && params[:from_date].present? && params[:to_date].present?
+    if params[:barcode].present? && params[:from_date].present? && params[:to_date].present?
       @show_add_update = 1
       #posting params
-      @prod = params[:prod]
+      @barcode = params[:barcode]
+      @prod = ProductList.where(list_barcode: params[:barcode]).pluck(:extproductcode)
       @or_from_date = params[:from_date]
       @or_to_date = params[:to_date]
       #Date.strptime(params[:for_date], "%Y-%m-%d")
@@ -70,19 +71,20 @@ class ProductStockBooksController < ApplicationController
   # POST /product_stock_books
   # POST /product_stock_books.json
   def create
-    if params[:prod].present? && params[:from_date].present? && params[:to_date].present?
-      prod = params[:prod]
+    if params[:barcode].present? && params[:from_date].present? && params[:to_date].present?
+      barcode = params[:barcode]
 
-      from_date =  Date.strptime(params[:from_date], "%m/%d/%Y") if params[:from_date].present?
-      to_date =  Date.strptime(params[:to_date], "%m/%d/%Y") if params[:to_date].present? 
+      from_date =  Date.strptime(params[:from_date], "%Y-%m-%d") if params[:from_date].present?
+      to_date =  Date.strptime(params[:to_date], "%Y-%m-%d") if params[:to_date].present? 
 
       #@datelist ||= []
       (from_date..to_date).each do |day|
        # @datelist <<  day.strftime('%d - %m - %y')
-        create_update(day, prod)
+        create_update(day, barcode)
       end
+      #barcode = ProductList.where(extproductcode: prod).first.list_barcode
       #http://localhost:3000/stockbook?from_date=04%2F01%2F2015&prod=TOTS&to_date=04%2F02%2F2015
-      redirect_to stockbook_path(from_date: params[:from_date],prod: prod, to_date: params[:to_date])
+      redirect_to stockbook_path(barcode: barcode,from_date: params[:from_date], to_date: params[:to_date])
       #@product_stock_book = ProductStockBook.new(product_stock_book_params)
 
      #  respond_to do |format|
@@ -132,7 +134,7 @@ end
       @product_stock_book = ProductStockBook.find(params[:id])
     end
     def dropdowns
-      @productmasterlist = ProductList.all.where(list_barcode: ProductList.all.select(:list_barcode).distinct).order("name, list_barcode")
+      @productlist = ProductList.all.where(list_barcode: ProductList.all.select(:list_barcode).distinct).order("name, list_barcode")
     end
     def get_variables
       @empcode = current_user.employee_code
@@ -143,29 +145,34 @@ end
     end
 
     #create row for prod for each date
-    def create_update(for_date, prod)
+    def create_update(for_date, barcode)
       @closing_qty = 0
       @closing_value = 0
 
-       
+      prod = ProductList.where(list_barcode: barcode).pluck(:extproductcode) 
       #check if product listing found for date
         if (ProductStockBook.where("TRUNC(stock_date) = ?", for_date).where(ext_prod_code: prod)).present?
-          @product_stock_book = ProductStockBook.where("TRUNC(stock_date) = ?", for_date).where(ext_prod_code: prod).last
+          @product_stock_book = ProductStockBook.where("TRUNC(stock_date) = ?", for_date)
+          .where(list_barcode: barcode).last
           #this is the first closing quantity step where 
           #as per table the closing 
           #@closing_qty = @product_stock_book.opening_qty
           else
-          @product_stock_book = ProductStockBook.new(stock_date: for_date, :ext_prod_code => prod)
+          @product_stock_book = ProductStockBook.new(stock_date: for_date, 
+             :list_barcode => barcode)
+          #:ext_prod_code => prod.first,
           @product_stock_book.save
 
-            #update or create product info if creating the record for the first time
-            if ProductMaster.where(extproductcode: prod).present?
-              @product_stock_book.update(product_master_id: ProductMaster.where(extproductcode: prod).first.id)
-              @product_stock_book.update(name: ProductMaster.where(extproductcode: prod).first.name)
-            end
+            # #update or create product info if creating the record for the first time
+            # if ProductMaster.where(extproductcode: prod).present?
+            #   #@product_stock_book.update(product_master_id: ProductMaster.where(extproductcode: prod).first.id)
+              
+            # end
 
-            if ProductList.where(extproductcode: prod).present?
-              @product_stock_book.update(product_list_id: ProductList.where(extproductcode: prod).first.id)
+            if ProductList.where(list_barcode: barcode).present?
+              @product_stock_book.update(product_list_id: ProductList.where(list_barcode: barcode).first.id)
+              @product_stock_book.update(name: ProductList.where(list_barcode: barcode).first.name)
+              @product_stock_book.update(product_master_id: ProductList.where(list_barcode: barcode).first.product_master_id)
             end
           
         end

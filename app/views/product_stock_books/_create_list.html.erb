@@ -1,5 +1,6 @@
 <%= form_tag("/updatestockbook", method: "post") do  %>
-  <%= hidden_field_tag 'prod',  @prod %>
+ 
+  <%= hidden_field_tag 'barcode',  @barcode %>
   <%= hidden_field_tag 'from_date',  @or_from_date %>
   <%= hidden_field_tag 'to_date',  @or_to_date %> 
   <div class="well well-sm">

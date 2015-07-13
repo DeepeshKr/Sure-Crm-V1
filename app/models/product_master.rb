@@ -5,15 +5,15 @@ class ProductMaster < ActiveRecord::Base
   belongs_to :product_sell_type , foreign_key: "product_sell_type_id"
   
   has_many :product_master_ann_on, foreign_key: "product_master_id"
-  has_many :product_stock_book, foreign_key: "product_master_id"
-  has_many :product_stock, foreign_key: "product_master_id"
-  has_many :product_stock_adjust, foreign_key: "product_master_id"
+  #has_many :product_stock_book, foreign_key: "product_master_id"
+  #has_many :product_stock, foreign_key: "product_master_id"
+  #has_many :product_stock_adjust, foreign_key: "product_master_id"
 
   has_many :product_variant, foreign_key: "productmasterid" 
   belongs_to :product_training_manual, foreign_key: "productid"
-  
-  validates :barcode, uniqueness: { case_sensitive: false }
-  validates :extproductcode, uniqueness: { case_sensitive: false }
+    validates_presence_of :name
+  #validates :barcode, uniqueness: { case_sensitive: false }
+  #validates :extproductcode, uniqueness: { case_sensitive: false }
   
   validates_associated :product_variant
   

@@ -1,8 +1,8 @@
 <div class="row">
   <%= form_tag("/stockbook", method: "get") do  %>
       <div class="col-xs-6">
-        <%= select_tag(:list_barcode,
-                       options_from_collection_for_select(@productmasterlist, :list_barcode, :productinfo, selected: @list_barcode), {:class => "form-control"} )  %>
+        <%= select_tag(:barcode,
+                       options_from_collection_for_select(@productlist, :list_barcode, :productinfo, selected: @barcode), {:class => "form-control"} )  %>
       </div> 
       <div class="col-xs-4">
         <div class="input-daterange input-group">
