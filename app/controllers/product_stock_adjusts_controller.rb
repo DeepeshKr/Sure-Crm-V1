@@ -1,24 +1,25 @@
 class ProductStockAdjustsController < ApplicationController
    before_action { protect_controllers(8) } 
   before_action :set_product_stock_adjust, only: [:show, :edit, :update, :destroy]
-
+  before_action :dropdown
   # GET /product_stock_adjusts
   # GET /product_stock_adjusts.json
   def index
     if params[:for_date].present?
-      for_date =  Date.strptime(params[:for_date], "%m/%d/%Y")
-      @product_stock_adjusts = ProductStockAdjust.where('TRUNC(created_date) = ?',for_date)
+      @for_date =  Date.strptime(params[:for_date], "%Y-%m-%d")
+      @product_stock_adjusts = ProductStockAdjust.where('TRUNC(created_date) = ?',@for_date)
 
-        @product_stock_adjust = ProductStockAdjust.new(created_date: for_date)
-        @for_date_display = for_date.strftime("%d-%b-%Y")
+        @product_stock_adjust = ProductStockAdjust.new(created_date: @for_date)
+        @for_date_display = @for_date.strftime("%Y-%m-%d")
 
     else
+      @for_date = Time.zone.now.to_date
        @product_stock_adjust = ProductStockAdjust.new
       @for_date_display = "No Date selected showing 100 Recently changed"
       @product_stock_adjusts = ProductStockAdjust.all.limit(100).order("updated_at DESC")
     end
 
-  @productmasterlist = ProductMaster.all.order("name, extproductcode")
+  #@productmasterlist = ProductMaster.all.order("name, extproductcode")
       
     #@product_stock_adjusts = ProductStockAdjust.all
   end
@@ -86,6 +87,11 @@ class ProductStockAdjustsController < ApplicationController
   end
 
   private
+    def dropdown
+      @productlist = ProductList.all.where(list_barcode: ProductList.all.select(:list_barcode).distinct)
+      .order("name, list_barcode")
+    end
+
     # Use callbacks to share common setup or constraints between actions.
     def set_product_stock_adjust
       @product_stock_adjust = ProductStockAdjust.find(params[:id])
@@ -93,6 +99,8 @@ class ProductStockAdjustsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def product_stock_adjust_params
-      params.require(:product_stock_adjust).permit(:product_master_id, :product_list_id, :change_stock, :ext_prod_code, :barcode, :created_date, :emp_code, :emp_id, :name, :description, :total, :rate)
+      params.require(:product_stock_adjust).permit(:product_master_id, :product_list_id, 
+        :change_stock, :ext_prod_code, :barcode, :created_date, :emp_code, :emp_id, 
+        :name, :description, :total, :rate)
     end
 end

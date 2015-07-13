@@ -50,3 +50,14 @@
     </div>
   </div>
 <% end %>
+
+<script type="text/javascript">
+  $(function(){
+    $('#product_list_extproductcode').keyup(function() {
+      $(this).val($(this).val().replace(/ +?/g, ''));
+    });
+    $('#product_list_list_barcode').keyup(function() {
+      $(this).val($(this).val().replace(/ +?/g, ''));
+    });
+  });
+</script>

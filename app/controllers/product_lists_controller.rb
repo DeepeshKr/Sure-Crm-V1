@@ -41,13 +41,16 @@ class ProductListsController < ApplicationController
       
     end
        #respond_with(@product_lists)
-      product_lists = ProductList.where('active_status_id = ?',  10000)
-      product_lists.each do | product_list |
-        if ProductVariant.where(id: product_list.product_variant_id).present?
-          product_variant = ProductVariant.find(product_list.product_variant_id)
-          product_list.update(product_master_id: product_variant.productmasterid)
-        end
-      end
+      # product_lists = ProductList.all.where("product_master_id IS NOT NULL") #where('active_status_id = ?',  10000)
+      # product_lists.each do | product_list |
+      #   if ProductVariant.where(id: product_list.product_variant_id).present?
+
+      #     product_variant = ProductVariant.find(product_list.product_variant_id)
+      #     product_list.update(product_master_id: product_variant.productmasterid)
+      #     barcode = product_list.list_barcode.strip
+      #     product_list.update(list_barcode: barcode)
+      #   end
+      # end
   
   end
 

@@ -4,7 +4,7 @@
 
 <div class="col-xs-8">
 
-<%= text_field_tag(:for_date, nil, :data => {:provide => "datepicker"}, :class => "form-control", :required => "true" )   %>
+<%= text_field_tag(:for_date, @for_date, :data => {:provide => "datepicker"}, :class => "form-control",  :id => "datepicker",  :required => "true" )   %>
 
 </div>
 <div class="col-xs-4">
@@ -12,3 +12,6 @@
 </div>
 <% end %>
 </div>
+<script>
+$('#datepicker').datepicker({format: 'yyyy-mm-dd'});
+</script>

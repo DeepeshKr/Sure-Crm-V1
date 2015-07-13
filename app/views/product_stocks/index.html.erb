@@ -28,8 +28,7 @@
   <tbody>
     <% @product_stocks.each do |product_stock| %>
       <tr>
-        <td><%= product_stock.product_master.name || "None" if product_stock.product_master %>
-        <small>(<%= product_stock.product_master.extproductcode || "None" if product_stock.product_master %>)</small></td>
+        <td><%== product_stock.productinfo %></td>
           <td><%= product_stock.ext_prod_code %></td>
           <td><%= product_stock.barcode %></td>
           <td><%= product_stock.checked_date.strftime("%d-%b-%Y") %></td>

@@ -1,31 +1,43 @@
 class ProductStocksController < ApplicationController
-    before_action { protect_controllers_specific(4) } 
+  before_action { protect_controllers_specific(4) } 
   before_action :set_product_stock, only: [:show, :edit, :update, :destroy]
-
+  before_action :dropdown, only: [:show, :edit, :update, :destroy]
   # GET /product_stocks
   # GET /product_stocks.json
   def index
     if params[:for_date].present?
-      for_date =  Date.strptime(params[:for_date], "%m/%d/%Y")
-      @product_stocks = ProductStock.where('TRUNC(checked_date) = ?',for_date)
+      @for_date =  Date.strptime(params[:for_date], "%Y-%m-%d")
+      @product_stocks = ProductStock.where('TRUNC(checked_date) = ?',@for_date)
 
-       productmastlist = @product_stocks.pluck(:product_master_id)
-        @product_stock = ProductStock.new(checked_date: for_date)
-        @for_date_display = for_date.strftime("%d-%b-%Y")
-        if productmastlist.present?
-             @productmasterlist = ProductMaster.where('id NOT IN (?)', productmastlist).order("name, extproductcode")
+       product_stock_barcode_list = @product_stocks.pluck(:barcode)
+        @product_stock = ProductStock.new(checked_date: @for_date)
+        @for_date_display = @for_date.strftime("%d-%b-%Y")
+        if product_stock_barcode_list.present?
+            @productlist = ProductList.all.where('list_barcode NOT IN (?)', product_stock_barcode_list).where(list_barcode: ProductList.all.select(:list_barcode).distinct).order("name, list_barcode")
+             #@productmasterlist = ProductMaster.where('id NOT IN (?)', productmastlist).order("name, extproductcode")
             @productlistname = "Rest of the Products"
 
         else
-             @productmasterlist = ProductMaster.all.order("name, extproductcode")
+            @productlist = ProductList.all.where(list_barcode: ProductList.all.select(:list_barcode).distinct).order("name, list_barcode")
+             #@productmasterlist = ProductMaster.all.order("name, extproductcode")
              @productlistname = "All Products (none found)"
         end
      
 
     else
+       @for_date = Time.zone.now.to_date
       @for_date_display = "No Date selected showing Recently changed"
       @product_stocks = ProductStock.all.limit(50).order("updated_at DESC")
     end
+
+    # product_stocks_all = ProductStock.all
+    # product_stocks_all.each do |ps|
+    #   #get barcode
+    #   stock_code = ProductList.where(extproductcode: ps.ext_prod_code).where("list_barcode IS NOT NULL")
+    #   if stock_code.present?
+    #     ps.update(barcode: stock_code.first.list_barcode.strip)
+    #   end
+    # end
     # 
     #removed link buttong
     #<%= link_to 'New Product stock', new_product_stock_path %>
@@ -154,7 +166,9 @@ class ProductStocksController < ApplicationController
   end
 
   private
-
+    def dropdown
+      @productlist = ProductList.all.where(list_barcode: ProductList.all.select(:list_barcode).distinct).order("name, list_barcode")
+    end
     # Use callbacks to share common setup or constraints between actions.
     def set_product_stock
       @product_stock = ProductStock.find(params[:id])

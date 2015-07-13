@@ -17,6 +17,7 @@
       <th>Product</th>
       <th>Change</th>
       <th>Prod</th>
+      <th>BARCODE</th>
       <th>Date</th>
       <th>Description</th>
       <th colspan="2"></th>
@@ -27,9 +28,10 @@
     <% @product_stock_adjusts.each do |product_stock_adjust| %>
       <tr>
        <td><%= product_stock_adjust.name %></td>
-        <td><%= product_stock_adjust.product_master.productname %></td>
+        <td><%== product_stock_adjust.productinfo %></td>
         <td><%= product_stock_adjust.change_stock %></td>
         <td><%= product_stock_adjust.ext_prod_code %></td>
+         <td><%= product_stock_adjust.ext_prod_code %></td>
         <td><%= product_stock_adjust.created_date.strftime("%d-%b-%Y") %></td>
         <td><%= product_stock_adjust.description %></td>
         <td><%= link_to 'Edit', edit_product_stock_adjust_path(product_stock_adjust) %></td>

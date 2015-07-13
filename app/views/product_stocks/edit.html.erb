@@ -1,4 +1,4 @@
-<h2>Editing Product Stock</h2>
+<h3>Editing Product Stock</h3>
 
 <% if @product_stock.present? %>
   
@@ -20,8 +20,8 @@
 <label>For Date</label> <br>
 <%= @for_date_display %></div>
   <div class="col-xs-7">
-  <%= f.select(:product_master_id, 
-                options_from_collection_for_select(@productmasterlist, :id, :productname), 
+  <%= f.select(:barcode, 
+                options_from_collection_for_select(@productlist, :list_barcode, :productinfo, selected: @product_stock.barcode), 
                 {:class => "form-control"} )  %>
           
   </div>
