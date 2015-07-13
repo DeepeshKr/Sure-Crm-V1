@@ -1,0 +1,22 @@
+<div class="well well-sm">
+<% if @prod.present? %>
+<div class="row">
+<div class="col-xs-2">
+<h4>PROD's </h4>
+</div>
+<div class="col-xs-10">
+<ul class="list-inline">
+ <% @prod.each do |c| %>
+  <li>
+<%= c  %> &nbsp; 
+  </li>
+  <% end %>
+</ul>
+</div>
+</div>
+<% else %>
+
+<p>No PROD available for this BARCODE</p>
+
+<% end %>
+</div>

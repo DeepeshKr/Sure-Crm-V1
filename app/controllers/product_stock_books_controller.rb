@@ -31,7 +31,7 @@ class ProductStockBooksController < ApplicationController
         end
         @from_date_text = from_date.strftime('%d-%b-%y')
         @to_date_text = to_date.strftime('%d-%b-%y')
-          @product_stock_books = ProductStockBook.where(ext_prod_code: @prod)
+          @product_stock_books = ProductStockBook.where(list_barcode: @barcode)
           .where("TRUNC(stock_date) >= ? AND TRUNC(stock_date) <= ?", from_date, to_date)
           .order("stock_date")
          
@@ -55,7 +55,23 @@ class ProductStockBooksController < ApplicationController
   # params prod from_date to_date
   #http://localhost:3000/stockbook?utf8=%E2%9C%93&prod=TOTS&from_date=04%2F01%2F2015&to_date=04%2F02%2F2015
   def show
-    
+     @prod = ProductList.where(list_barcode: @product_stock_book.list_barcode).pluck(:extproductcode)
+    @old_product_stocks = ProductStockBook.where(:list_barcode => @product_stock_book.list_barcode)
+        .where("TRUNC(stock_date) < ?", @product_stock_book.stock_date)
+      if @old_product_stocks.present?
+
+        @old_product_stock = @old_product_stocks.order("stock_date DESC").first
+        if (@old_product_stock.stock_date.month != 3 && @old_product_stock.stock_date.day != 31)
+         @prev_closing_stock =  @old_product_stock.closing_qty
+        
+         @prev_date = @old_product_stock.stock_date            
+        else
+           @prev_closing_stock = 0
+            @prev_date = "Not Applicable"
+       end
+
+      end
+
   end
 
   # GET /product_stock_books/new
@@ -151,7 +167,8 @@ end
 
       prod = ProductList.where(list_barcode: barcode).pluck(:extproductcode) 
       #check if product listing found for date
-        if (ProductStockBook.where("TRUNC(stock_date) = ?", for_date).where(ext_prod_code: prod)).present?
+        if (ProductStockBook.where("TRUNC(stock_date) = ?", for_date)
+          .where(list_barcode: barcode)).present?
           @product_stock_book = ProductStockBook.where("TRUNC(stock_date) = ?", for_date)
           .where(list_barcode: barcode).last
           #this is the first closing quantity step where 
@@ -170,9 +187,12 @@ end
             # end
 
             if ProductList.where(list_barcode: barcode).present?
-              @product_stock_book.update(product_list_id: ProductList.where(list_barcode: barcode).first.id)
-              @product_stock_book.update(name: ProductList.where(list_barcode: barcode).first.name)
-              @product_stock_book.update(product_master_id: ProductList.where(list_barcode: barcode).first.product_master_id)
+              @product_stock_book.update(product_list_id: ProductList
+                .where(list_barcode: barcode).first.id)
+              @product_stock_book.update(name: ProductList
+                .where(list_barcode: barcode).first.name)
+              @product_stock_book.update(product_master_id: ProductList
+                .where(list_barcode: barcode).first.product_master_id)
             end
           
         end
@@ -184,7 +204,8 @@ end
            #get stock from previous stock date if available
         #using the stock book select the previous date and use the value for opeing stock fo today
         
-        @old_product_stocks = ProductStockBook.where(ext_prod_code: prod).where("TRUNC(stock_date) < ?", for_date)
+        @old_product_stocks = ProductStockBook.where(:list_barcode => barcode)
+        .where("TRUNC(stock_date) < ?", for_date)
       if @old_product_stocks.present?
 
         @old_product_stock = @old_product_stocks.order("stock_date DESC").first
@@ -339,7 +360,8 @@ end
       end
 
       #Stock Corrections
-      @product_stock_adjusts = ProductStockAdjust.where(ext_prod_code: prod).where("TRUNC(created_date) = ? ", for_date)
+      @product_stock_adjusts = ProductStockAdjust.where(ext_prod_code: prod)
+      .where("TRUNC(created_date) = ? ", for_date)
       if @product_stock_adjusts.present?
         #code
         @product_stock_book.update(corrections_qty: @product_stock_adjusts.sum(:change_stock))

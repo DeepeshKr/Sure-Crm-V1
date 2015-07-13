@@ -57,7 +57,7 @@
      <strong> Closing qty:</strong>
       </td>
        <td class="text-right">
-       <%= @prev_closing_stock %>
+       <%= @product_stock_book.opening_qty %>
       </td>
        <td class="text-right">
         <%= @product_stock_book.opening_value %>
@@ -253,4 +253,5 @@
 </table>
 
 
-<%= link_to 'Back', product_stock_books_path, class: "btn btn-primary btn-xs" %>
+<%= link_to 'Edit', edit_product_stock_book_path(@product_stock_book) %> |
+<%= link_to 'Back', product_stock_books_path %>
