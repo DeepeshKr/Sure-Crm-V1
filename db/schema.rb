@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150703062708) do
+ActiveRecord::Schema.define(version: 20150714072320) do
 
   create_table "address_types", force: :cascade do |t|
     t.string   "name"
@@ -324,6 +324,20 @@ ActiveRecord::Schema.define(version: 20150703062708) do
   create_table "employment_types", force: :cascade do |t|
     t.string   "name"
     t.integer  "sortorder",  limit: 16, precision: 38
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "errors", force: :cascade do |t|
+    t.string   "usable_type"
+    t.integer  "usable_id",   limit: 16, precision: 38
+    t.text     "class_name"
+    t.text     "message"
+    t.text     "trace"
+    t.text     "target_url"
+    t.text     "referer_url"
+    t.text     "params"
+    t.text     "user_agent"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

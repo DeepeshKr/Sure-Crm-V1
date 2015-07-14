@@ -13,6 +13,7 @@ gem 'ruby-graphviz'
 
 #gem 'thin'
 #gem "rack-timeout"
+gem 'exception_handler'
 
 #intall luhn for credit card verification => not used for now
 gem 'luhn'

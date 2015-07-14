@@ -112,6 +112,7 @@ GEM
       execjs
     coffee-script-source (1.9.1.1)
     erubis (2.7.0)
+    exception_handler (0.3.45)
     execjs (2.5.2)
     ffi (1.9.8)
     formatador (0.2.5)
@@ -304,6 +305,7 @@ DEPENDENCIES
   coffee-rails (~> 4.0.0)
   datetimepicker-rails!
   devise!
+  exception_handler
   gruff
   guard-minitest (= 2.3.1)
   jbuilder (~> 2.0)
