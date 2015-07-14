@@ -20,16 +20,22 @@
     </div>
     <div id=<%= v.id %> class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
       <div class="panel-body">
+        <div class="well well-sm">
+          <%= render'product_masters/tape_list', :v => v %>
+        </div>
+          <hr>
       	<% if v.product_list.exists? %>
         <div class="alert alert-success">
             <%= render'product_masters/product_list', :v => v %>
        	</div>
        	<% else %>
         <div class="alert alert-warning">
-                 <small>No product listed for sale!</small>
+         <small>No product listed for sale!</small>
    		</div>
    		<% end %>
         <%= link_to 'Add Product Sell List', v  , class: "btn btn-primary btn-xs" %> 
+
+
       </div>
     </div>
 </div>      

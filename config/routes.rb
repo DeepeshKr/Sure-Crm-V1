@@ -53,7 +53,8 @@ Rails.application.routes.draw do
   get 'city_report' => 'sales_report#city'
   get 'sales_report/product'
   get 'product_report' => 'sales_report#product'
- 
+  get 'sales_report/show'
+  get 'show_report' => 'sales_report#show'
   get 'sales_report/order_summary'
   get 'order_summary' => 'sales_report#order_summary'
   get 'sales_report/orders'

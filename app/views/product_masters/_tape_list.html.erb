@@ -1,0 +1,40 @@
+
+<% if v.media_tape.present? %>
+<h4>Media Tapes </h4>
+<table class="table table-hover">
+  <thead>
+    <tr>
+    
+    <th>Name</th>
+      
+      <th>Sec</th>
+      <th>Ref No</th>
+      
+      <th>Released On</th>
+        <th>Ref Id</th>
+     
+    </tr>
+  </thead>
+
+  <tbody>
+    <% v.media_tape.each do |media_tape| %>
+      <tr>
+      
+       <td><%= media_tape.name %></td>
+        
+       <td><%= media_tape.duration_secs %></td>
+        <td><%= media_tape.tape_ext_ref_id %></td>
+       
+        <td><%= media_tape.release_date.strftime("%d-%b-%Y") %></td>
+        
+        <td>  <%= media_tape.unique_tape_name %> </td>
+        
+       
+        
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+<% else %>
+<h4> No Media Tapes found </h4>
+<% end %>

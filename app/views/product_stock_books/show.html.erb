@@ -40,10 +40,10 @@
         Quantity
       </th>
        <th class="text-right">
-        Values
+        Running Total
       </th>
        <th class="text-right">
-        Rate
+        
       </th>
        <th class="text-right">
        
@@ -60,10 +60,10 @@
        <%= @prev_closing_stock %>
       </td>
        <td class="text-right">
-        <%= @product_stock_book.opening_value %>
+        
       </td>
        <td class="text-right">
-       <%= @product_stock_book.opening_rate %>
+       
       </td>
       <td class="text-right">
         
@@ -76,12 +76,13 @@
       </td>
        <td class="text-right">
        <%= @product_stock_book.opening_qty %>
+       <% @running_total = @product_stock_book.opening_qty %>
       </td>
        <td class="text-right">
-        <%= @product_stock_book.opening_value %>
+       <%= @running_total %>
       </td>
        <td class="text-right">
-       <%= @product_stock_book.opening_rate %>
+      
       </td>
       <td class="text-right">
         
@@ -94,12 +95,13 @@
       </td>
        <td class="text-right">
        <%= @product_stock_book.purchased_qty %>
+         <% @running_total += @product_stock_book.purchased_qty %>
       </td>
         <td class="text-right"> 
-        <%= @product_stock_book.purchased_value %>
+       <%= @running_total %>
       </td>
        <td class="text-right">
-      <%= @product_stock_book.purchased_rate %>
+      
       </td>
       <td class="text-right">
        
@@ -112,12 +114,13 @@
       </td>
        <td class="text-right">
         <%= @product_stock_book.returned_retail_qty %>
+        <% @running_total += @product_stock_book.returned_retail_qty %>
       </td>
         <td class="text-right">
-         <%= @product_stock_book.returned_retail_value %>
+         <%= @running_total %>
       </td>
        <td class="text-right">
-        <%= @product_stock_book.returned_retail_rate %>
+       
       </td>
       <td class="text-right">
        
@@ -130,12 +133,13 @@
       </td>
        <td class="text-right">
        <%= @product_stock_book.returned_wholesale_qty %>
+       <% @running_total += @product_stock_book.returned_wholesale_qty %>
       </td >
         <td class="text-right">
-        <%= @product_stock_book.returned_wholesale_value %>
+       <%= @running_total %>
       </td>
        <td class="text-right">
-       <%= @product_stock_book.returned_wholesale_rate %>
+      
       </td>
       <td class="text-right">
       
@@ -148,12 +152,13 @@
       </td>
        <td class="text-right">
        <%= @product_stock_book.returned_others_qty %>
+       <% @running_total += @product_stock_book.returned_others_qty %>
       </td>
         <td class="text-right">
-       <%= @product_stock_book.returned_others_value %>
+      <%= @running_total %>
       </td>
        <td class="text-right">
-      <%= @product_stock_book.returned_others_rate %>
+      
       </td>
       <td class="text-right">
         
@@ -166,12 +171,13 @@
       </td>
        <td class="text-right">
         <%= @product_stock_book.sold_retail_qty %>
+        <% @running_total -= @product_stock_book.sold_retail_qty %>
       </td>
         <td class="text-right">
-       <%= @product_stock_book.sold_retail_value %>
+       <%= @running_total %>
       </td>
        <td class="text-right">
-     <%= @product_stock_book.sold_retail_rate %>
+     
       </td>
       <td class="text-right">
        
@@ -184,12 +190,13 @@
       </td>
        <td class="text-right">
         <%= @product_stock_book.sold_wholesale %>
+        <% @running_total -= @product_stock_book.sold_wholesale %>
       </td>
         <td class="text-right">
-       <%= @product_stock_book.sold_wholesale_value %>
+       <%= @running_total %>
       </td>
        <td class="text-right">
-     <%= @product_stock_book.sold_wholesale_rate %>
+     
       </td>
       <td class="text-right">
         
@@ -202,12 +209,13 @@
       </td>
        <td class="text-right">
       <%= @product_stock_book.sold_branch_qty %>
+      <% @running_total -= @product_stock_book.sold_branch_qty %>
       </td>
         <td class="text-right">
-       <%= @product_stock_book.sold_branch_value %>
+      <%= @running_total %>
       </td>
        <td class="text-right">
-    <%= @product_stock_book.sold_branch_rate %>
+   
       </td>
       <td class="text-right">
         
@@ -220,12 +228,13 @@
       </td>
        <td class="text-right">
      <%= @product_stock_book.corrections_qty %>
+     <% @running_total -= @product_stock_book.corrections_qty %>
       </td>
         <td class="text-right">
-       <%= @product_stock_book.corrections_value %>
+      <%= @running_total %>
       </td>
        <td class="text-right">
-    <%= @product_stock_book.corrections_rate %>
+    
       </td>
       <td class="text-right">
         
@@ -240,10 +249,10 @@
         <%= @product_stock_book.closing_qty %>
       </td>
         <td class="text-right">
-        <%= @product_stock_book.closing_value %>
+        <%= @running_total %>
       </td>
        <td class="text-right">
-        <%= @product_stock_book.closing_rate %>
+        
       </td>
       <td class="text-right">
         
@@ -253,4 +262,3 @@
 </table>
 
 
-<%= link_to 'Back', product_stock_books_path, class: "btn btn-primary btn-xs" %>

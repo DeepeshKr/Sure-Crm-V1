@@ -306,7 +306,8 @@ class SalesReportController < ApplicationController
 
           end
         end
-        @employeeorderlist = employeeunorderlist.sort_by{|c| c[:total]}.reverse 
+
+        @employeeorderlist = employeeunorderlist.sort_by{|c| [c[:total], c[:employee]]}.reverse 
   
 
     end
@@ -319,26 +320,71 @@ class SalesReportController < ApplicationController
   end
 
   def show
+     @searchaction = "show"
     for_date = (330.minutes).from_now.to_date
-    
+
     if params.has_key?(:for_date)
      for_date =  Date.strptime(params[:for_date], "%Y-%m-%d")
     end
+     @sno = 1
+
+    @total_nos = 0
+      @total_pieces = 0
+        @total_var_cost = 0
+         @total_fixed_cost = 0
+         @total_cost = 0
+         @total_sales = 0
+         @total_profit = 0
+          @total_revenue = 0
+      #for_date = for_date - 330.minutes
+        @hourlist ||= []
+        employeeunorderlist ||= []
+
     @orderdate = for_date
     @searchaction = 'show'
       #@for_date = @campaign.startdate
-     @campaign_playlists =  CampaignPlaylist.joins(:campaign).where("campaigns.startdate = ?", for_date).order(:start_hr, :start_min, :start_sec).where(list_status_id: 10000)
+     campaign_playlists =  CampaignPlaylist.joins(:campaign)
+     .where("campaigns.startdate = ?", for_date)
+     .order(:start_hr, :start_min, :start_sec)
+     .where(list_status_id: 10000) #.limit(10)
      
-     media_segments
+     media_cost = Medium.where(media_group_id: 10000).sum(:daily_charges)
+          media_cost = media_cost / (24*60*60) 
 
-      hbn_order_masters = OrderMaster.joins(:medium).where('TRUNC(orderdate) = ?',for_date).where('ORDER_STATUS_MASTER_ID > 10002').where(media_id: @hbnlist)
-    
-      @hbn_ccvalue = hbn_order_masters.where(orderpaymentmode_id: 10000).sum(:total)
-      @hbn_ccorders = hbn_order_masters.where(orderpaymentmode_id: 10000).count()
-      @hbn_codorders = hbn_order_masters.where(orderpaymentmode_id: 10001).count()
-      @hbn_codvalue = hbn_order_masters.where(orderpaymentmode_id: 10001).sum(:total)
-      @hbn_totalorders = hbn_order_masters.sum(:total)
-      @hbn_noorders = hbn_order_masters.count()
+     campaign_playlists.each do | playlist |
+     orderlist = OrderMaster.where('ORDER_STATUS_MASTER_ID > 10002')
+     .where(campaign_playlist_id: playlist.id)
+
+
+      
+          #add orders of each cable tv operator
+
+          #split the fixed cost across the hour
+           revenue = 0
+            media_var_cost = 0
+             product_cost = 0
+
+          orderlist.each do |med |
+            revenue += OrderMaster.find(med.id).productrevenue ||= 0
+           # media_var_cost += OrderMaster.find(med.id).mediacost ||= 0
+            product_cost += OrderMaster.find(med.id).productcost ||= 0
+            media_variable = Medium.where('id = ? AND value is not null', med.media_id)
+            .where(:media_commision_id => [10020, 10021, 10040, 10041, 10060]) #.pluck(:value)
+              
+          end
+        
+          totalorders = orderlist.sum(:total)
+           nos = orderlist.count()
+         pieces = orderlist.sum(:pieces)
+          employeeunorderlist << {:show =>  playlist.product_variant.name,
+          :campaign_id => playlist.id,
+           :pieces => pieces,
+          :nos => nos,
+          :at_time => playlist.starttime,
+          :total => totalorders}
+        end
+        @employeeorderlist = employeeunorderlist
+
 
   
   end
