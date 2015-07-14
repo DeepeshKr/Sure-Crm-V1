@@ -307,7 +307,7 @@ class SalesReportController < ApplicationController
           end
         end
 
-        @employeeorderlist = employeeunorderlist.sort_by{|c| [c[:total], c[:employee]]}.reverse 
+        @employeeorderlist = employeeunorderlist.sort_by{|c| [c[:employee], c[:total]]}.reverse 
   
 
     end
@@ -319,8 +319,10 @@ class SalesReportController < ApplicationController
     
   end
 
-  def show
-     @searchaction = "show"
+   def show
+    #add this link to show
+    #<%= link_to "View PPO", ppo_details_path(campaign_id: c[:campaign_id]), :target => "_blank" %>
+    @searchaction = "show"
     for_date = (330.minutes).from_now.to_date
 
     if params.has_key?(:for_date)
@@ -363,16 +365,24 @@ class SalesReportController < ApplicationController
            revenue = 0
             media_var_cost = 0
              product_cost = 0
-
-          orderlist.each do |med |
-            revenue += OrderMaster.find(med.id).productrevenue ||= 0
-           # media_var_cost += OrderMaster.find(med.id).mediacost ||= 0
-            product_cost += OrderMaster.find(med.id).productcost ||= 0
-            media_variable = Medium.where('id = ? AND value is not null', med.media_id)
-            .where(:media_commision_id => [10020, 10021, 10040, 10041, 10060]) #.pluck(:value)
-              
-          end
-        
+             fixed_cost = 0
+          # orderlist.each do |med |
+          #   #revenue += OrderMaster.find(med.id).productrevenue ||= 0
+          #  # media_var_cost += OrderMaster.find(med.id).mediacost ||= 0
+          #   product_cost += OrderMaster.find(med.id).productcost ||= 0
+          #   media_variable = Medium.where('id = ? AND value is not null', med.media_id)
+          #   .where(:media_commision_id => [10020, 10021, 10040, 10041, 10060]) #.pluck(:value)
+          #     # if media_variable.present?
+          #     #   #discount the total value by 50% as correction
+          #     #   correction = 0.5
+          #     #   #PAID_CORRECTION
+          #     #    if media_variable.first.paid_correction.present?
+          #     #      correction = media_variable.first.paid_correction #||= 0.5
+          #     #    end
+          #     #  media_var_cost += (med.subtotal * media_variable.first.value.to_f) * correction
+          #     # end
+          # end
+         #fixed_cost =  media_cost * playlist.duration_secs.to_i
           totalorders = orderlist.sum(:total)
            nos = orderlist.count()
          pieces = orderlist.sum(:pieces)
@@ -381,12 +391,15 @@ class SalesReportController < ApplicationController
            :pieces => pieces,
           :nos => nos,
           :at_time => playlist.starttime,
-          :total => totalorders}
+          :total => totalorders,
+          :revenue => revenue.to_i,
+          :variable_cost => media_var_cost.to_i,
+          :fixed_cost => fixed_cost.to_i,
+          :profitability => (revenue - (fixed_cost + media_var_cost)).to_i }
         end
         @employeeorderlist = employeeunorderlist
 
-
-  
+   
   end
 
   def order_summary
