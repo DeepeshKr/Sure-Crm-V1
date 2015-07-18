@@ -13,7 +13,7 @@ gem 'ruby-graphviz'
 
 #gem 'thin'
 #gem "rack-timeout"
-gem 'exception_handler'
+#gem 'exception_handler'
 
 #intall luhn for credit card verification => not used for now
 gem 'luhn'
@@ -57,7 +57,7 @@ gem 'bootsy'
 #https://github.com/joliss/jquery-ui-rails
 gem 'bootstrap-datepicker-rails'
 #http://www.eyecon.ro/bootstrap-datepicker/
-
+gem 'simple-form-datepicker'
 
 #date picker option 2
 # first dependecies

@@ -10,15 +10,15 @@ class CampaignsController < ApplicationController
 
   def index
     #@campaigns = Campaign.all
-    for_date = (330.minutes).from_now.to_date
+    @for_date = (330.minutes).from_now.to_date.strftime("%Y-%m-%d")
 
     if params.has_key?(:for_date)
-     for_date =  Date.strptime(params[:for_date], "%m/%d/%Y")
+     @for_date =  Date.strptime(params[:for_date], "%Y-%m-%d")
     end
    
-   @showing_for_date = "Showing campaigns for date #{for_date}"
+   @showing_for_date = "Showing campaigns for date #{@for_date}"
    
-   @campaigns =  Campaign.where('startdate = ?', for_date)
+   @campaigns =  Campaign.where('startdate = ?', @for_date)
 
     case a = params[:stage]
       when "old"

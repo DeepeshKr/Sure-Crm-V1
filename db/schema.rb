@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150714072320) do
+ActiveRecord::Schema.define(version: 20150716082256) do
 
   create_table "address_types", force: :cascade do |t|
     t.string   "name"
@@ -714,6 +714,22 @@ ActiveRecord::Schema.define(version: 20150714072320) do
     t.integer  "product_sell_type_id",   limit: 16, precision: 38
   end
 
+  create_table "product_sample_stocks", force: :cascade do |t|
+    t.integer  "product_master_id", limit: 16, precision: 38
+    t.integer  "product_list_id",   limit: 16, precision: 38
+    t.string   "product_name"
+    t.string   "prod_code"
+    t.string   "barcode"
+    t.decimal  "basic_price"
+    t.decimal  "shipping"
+    t.datetime "air_date"
+    t.integer  "orders",            limit: 16, precision: 38
+    t.integer  "stock",             limit: 16, precision: 38
+    t.text     "description"
+    t.datetime "created_at",                                  null: false
+    t.datetime "updated_at",                                  null: false
+  end
+
   create_table "product_sell_types", force: :cascade do |t|
     t.string   "name"
     t.text     "description"
@@ -802,6 +818,23 @@ ActiveRecord::Schema.define(version: 20150714072320) do
     t.integer  "emp_id",            limit: 16, precision: 38
     t.datetime "created_at",                                  null: false
     t.datetime "updated_at",                                  null: false
+  end
+
+  create_table "product_test_ppos", force: :cascade do |t|
+    t.string   "name"
+    t.string   "prod_code"
+    t.string   "barcode"
+    t.decimal  "basic_price"
+    t.decimal  "shipping"
+    t.string   "channel"
+    t.datetime "aired_date"
+    t.string   "slot"
+    t.integer  "orders",      limit: 16, precision: 38
+    t.decimal  "ppo"
+    t.decimal  "ad_cost"
+    t.text     "description"
+    t.datetime "created_at",                            null: false
+    t.datetime "updated_at",                            null: false
   end
 
   create_table "product_training_headings", force: :cascade do |t|

@@ -34,6 +34,16 @@ class SalesReportController < ApplicationController
         end
         @employeeorderlist = employeeunorderlist #.sort_by{|c| c[:total]}.reverse 
         # flash[:notice] = "remove restrictions of 10"
+        
+        respond_to do |format|
+        csv_file_name = "sale_summary.csv"
+          format.html
+          format.csv do
+            headers['Content-Disposition'] = "attachment; filename=\"#{csv_file_name}\""
+            headers['Content-Type'] ||= 'text/csv'
+          end
+        end
+
   end
    def daily
 
@@ -74,7 +84,15 @@ class SalesReportController < ApplicationController
            :ccorders => ccorders, :ccvalue => ccvalue  }
         end
         @employeeorderlist = employeeunorderlist.sort_by{|c| c[:total]}.reverse 
-  
+
+        respond_to do |format|
+        csv_file_name = "sales_on_#{@or_for_date}.csv"
+          format.html
+          format.csv do
+            headers['Content-Disposition'] = "attachment; filename=\"#{csv_file_name}\""
+            headers['Content-Type'] ||= 'text/csv'
+          end
+        end
 
     end
   end
@@ -117,6 +135,16 @@ class SalesReportController < ApplicationController
            :ccorders => ccorders, :ccvalue => ccvalue  }
         end
        @employeeorderlist = employeeunorderlist #.sort_by{|c| c[:total]}.reverse 
+
+       respond_to do |format|
+        csv_file_name = "sales_hourly_#{@or_for_date}.csv"
+          format.html
+          format.csv do
+            headers['Content-Disposition'] = "attachment; filename=\"#{csv_file_name}\""
+            headers['Content-Type'] ||= 'text/csv'
+          end
+        end
+
      end
       
   end
@@ -212,7 +240,15 @@ class SalesReportController < ApplicationController
            :ccorders => ccorders, :ccvalue => ccvalue  }
         end
         @other_order_list = other_order_list.sort_by{|c| c[:total]}.reverse 
-  
+
+        respond_to do |format|
+        csv_file_name = "channel_sales_#{@or_for_date}.csv"
+          format.html
+          format.csv do
+            headers['Content-Disposition'] = "attachment; filename=\"#{csv_file_name}\""
+            headers['Content-Type'] ||= 'text/csv'
+          end
+        end
 
 
     end
@@ -251,7 +287,14 @@ class SalesReportController < ApplicationController
            :ccorders => ccorders, :ccvalue => ccvalue  }
         end
         @employeeorderlist = employeeunorderlist.sort_by{|c| c[:total]}.reverse 
-  
+        respond_to do |format|
+        csv_file_name = "employee_sales_#{@or_for_date}.csv"
+          format.html
+          format.csv do
+            headers['Content-Disposition'] = "attachment; filename=\"#{csv_file_name}\""
+            headers['Content-Type'] ||= 'text/csv'
+          end
+        end
 
     end
   end
@@ -308,7 +351,14 @@ class SalesReportController < ApplicationController
         end
 
         @employeeorderlist = employeeunorderlist.sort_by{|c| [c[:employee], c[:total]]}.reverse 
-  
+        respond_to do |format|
+        csv_file_name = "city_sales_#{@or_for_date}.csv"
+          format.html
+          format.csv do
+            headers['Content-Disposition'] = "attachment; filename=\"#{csv_file_name}\""
+            headers['Content-Type'] ||= 'text/csv'
+          end
+        end
 
     end
   end

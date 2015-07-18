@@ -62,6 +62,9 @@
   </tbody>
 
   </table>
+
+  <%= link_to 'Download CSV file', city_report_path(for_date: @or_for_date , format: :csv), class: "btn btn-info btn-sm" %>
+
   <% else %>
   <div class="well well-sm">
   <h5>Please select a date to generate the report </h5>

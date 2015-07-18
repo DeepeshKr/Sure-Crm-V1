@@ -30,22 +30,28 @@ class SalesPpoReportController < ApplicationController
           media_var_cost = 0
           product_cost = 0
 
-          orderlist.each do |med |
-            revenue += OrderMaster.find(med.id).productrevenue ||= 0
-           # media_var_cost += OrderMaster.find(med.id).mediacost ||= 0
-            product_cost += OrderMaster.find(med.id).productcost ||= 0
-            media_variable = Medium.where('id = ? AND value is not null', med.media_id)
-            .where(:media_commision_id => [10020, 10021, 10040, 10041, 10060]) #.pluck(:value)
-              if media_variable.present?
-                #discount the total value by 50% as correction
-                correction = 0.5
-                #PAID_CORRECTION
-                 if media_variable.first.paid_correction.present?
-                   correction = media_variable.first.paid_correction #||= 0.5
-                 end
-               media_var_cost += (med.subtotal * media_variable.first.value.to_f) * correction
-              end
-          end
+          # orderlist.each do |med |
+          #   #error loggin
+          #   begin
+                        
+          #   revenue += OrderMaster.find(med.id).productrevenue ||= 0
+          #  # media_var_cost += OrderMaster.find(med.id).mediacost ||= 0
+          #   product_cost += OrderMaster.find(med.id).productcost ||= 0
+          #   media_variable = Medium.where('id = ? AND value is not null', med.media_id)
+          #   .where(:media_commision_id => [10020, 10021, 10040, 10041, 10060]) #.pluck(:value)
+          #     if media_variable.present?
+          #       #discount the total value by 50% as correction
+          #       correction = 0.5
+          #       #PAID_CORRECTION
+          #        if media_variable.first.paid_correction.present?
+          #          correction = media_variable.first.paid_correction #||= 0.5
+          #        end
+          #      media_var_cost += (med.subtotal * media_variable.first.value.to_f) * correction
+          #     end
+          #      rescue => e
+          #      logger.warn "Unable to foo, will ignore: #{e}" 
+          #   end
+          # end
           fixed_cost = Medium.where(media_group_id: 10000).sum(:daily_charges)
           
           #ppo for each hour
@@ -231,8 +237,9 @@ class SalesPpoReportController < ApplicationController
      .order(:start_hr, :start_min, :start_sec)
      .where(list_status_id: 10000) #.limit(10)
      
-     media_cost = Medium.where(media_group_id: 10000).sum(:daily_charges)
-          media_cost = media_cost / (24*60*60) 
+          total_media_cost = Medium.where(media_group_id: 10000).sum(:daily_charges).to_f
+          secs_in_a_day = (24*60*60) 
+          media_cost = total_media_cost / secs_in_a_day
 
      campaign_playlists.each do | playlist |
      orderlist = OrderMaster.where('ORDER_STATUS_MASTER_ID > 10002')
@@ -263,7 +270,8 @@ class SalesPpoReportController < ApplicationController
                media_var_cost += (med.subtotal * media_variable.first.value.to_f) * correction
               end
           end
-         fixed_cost =  media_cost * playlist.duration_secs.to_i
+          total_seconds = totalseconds(playlist.id).to_f
+         fixed_cost =  media_cost * total_seconds
           totalorders = orderlist.sum(:total)
            nos = orderlist.count()
          pieces = orderlist.sum(:pieces)
@@ -428,6 +436,15 @@ class SalesPpoReportController < ApplicationController
 end #end of def  
 
 private
+def totalseconds(playlist_group_id)
+totalsecs = 0
+  all_grp_playlists = CampaignPlaylist.where(playlist_group_id: playlist_group_id)
+
+    all_grp_playlists.each  do | grp|
+      totalsecs += grp.duration_secs.to_i
+    end
+return totalsecs
+end
 
  def between_time
            

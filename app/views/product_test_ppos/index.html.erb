@@ -1,0 +1,58 @@
+<p id="notice"><%= notice %></p>
+
+<h3>Product Test PPO's</h3>
+<div class="digg_pagination">
+    <%= will_paginate @product_test_ppos, :container => false %>
+</div>
+<br>
+<table class="table table-hover table-bordered">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Basic</th>
+      <th>Shipping</th>
+      <th>Channel</th>
+       <th>Slot</th>
+      <th>Aired date</th>
+      <th>Orders</th>
+      <th>PPO</th>
+      <th>Ad cost</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @product_test_ppos.each do |product_test_ppo| %>
+      <tr>
+        <td rowspan="2"><%= product_test_ppo.name %>
+        <br><small><%= product_test_ppo.prod_code %><%= product_test_ppo.barcode %> </small>
+        </td>
+        <td><%= product_test_ppo.basic_price %></td>
+        <td><%= product_test_ppo.shipping %></td>
+        <td><%= product_test_ppo.channel %></td>
+        <td><%= product_test_ppo.aired_date.strftime("%d-%b-%Y") %></td>
+        <td><%= product_test_ppo.slot %></td>
+        <td><%= product_test_ppo.orders %></td>
+        <td><%= product_test_ppo.ppo %></td>
+        <td><%= product_test_ppo.ad_cost %></td>
+        <td rowspan="2"><%= link_to 'More', product_test_ppo %></td>
+        <td rowspan="2"><%= link_to 'Edit', edit_product_test_ppo_path(product_test_ppo) %></td>
+        <td rowspan="2"><%= link_to 'Destroy', product_test_ppo, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+      <tr>
+            <td colspan="8">
+        <%= product_test_ppo.description %>
+      </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+<div class="digg_pagination">
+    <%= will_paginate @product_test_ppos, :container => false %>
+</div>
+<br>
+
+<%= render 'quick_add' %>
+

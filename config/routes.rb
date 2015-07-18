@@ -1,5 +1,10 @@
 Rails.application.routes.draw do
 
+  resources :product_test_ppos
+
+  resources :product_sample_stocks
+  #get 'test_ppo' => 'product_ppo_news#index'
+
   mount Bootsy::Engine => '/bootsy', as: 'bootsy'
   get 'wholesale_distributors/list'
   get 'wholesale_distributors/search'
@@ -194,6 +199,10 @@ Rails.application.routes.draw do
   get 'dailyreport' => 'order_masters#daily_report'
   
   get 'dailyschedule' => 'campaign_playlists#perday' 
+  
+ # put 'groupdestroy' => 'campaign_playlists#groupdestroy' 
+ # put 'campaign_playlists#groupdestroy'
+
   #other activities
   get 'dealersearch' => 'customerorder#dealers'
   get 'newdealer' =>  'customerorder#new_dealer'

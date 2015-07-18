@@ -5,6 +5,7 @@ class ProductList < ActiveRecord::Base
 	belongs_to :product_active_code, foreign_key: "active_status_id"
 	
   has_many :product_master_add_on, foreign_key: "product_list_id"
+  has_many :product_sample_stock, foreign_key: "product_list_id"
   #has_many :product_master_add_on, :class_name => 'PointOfContact',  foreign_key: "replace_by_product_id"
 	#coding not completed for this
 	#has_many :interaction_master, foreign_key: "productvariantid"

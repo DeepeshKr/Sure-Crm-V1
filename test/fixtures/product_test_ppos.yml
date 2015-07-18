@@ -1,0 +1,29 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  name: MyString
+  prod_code: MyString
+  barcode: MyString
+  basic_price: 1.5
+  shipping: 1.5
+  channel: MyString
+  aired_date: 2015-07-16
+  slot: MyString
+  orders: 1
+  ppo: 1.5
+  ad_cost: 1.5
+  description: MyText
+
+two:
+  name: MyString
+  prod_code: MyString
+  barcode: MyString
+  basic_price: 1.5
+  shipping: 1.5
+  channel: MyString
+  aired_date: 2015-07-16
+  slot: MyString
+  orders: 1
+  ppo: 1.5
+  ad_cost: 1.5
+  description: MyText

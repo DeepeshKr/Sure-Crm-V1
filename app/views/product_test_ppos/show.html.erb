@@ -1,0 +1,64 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @product_test_ppo.name %>
+</p>
+
+<p>
+  <strong>Prod code:</strong>
+  <%= @product_test_ppo.prod_code %>
+</p>
+
+<p>
+  <strong>Barcode:</strong>
+  <%= @product_test_ppo.barcode %>
+</p>
+
+<p>
+  <strong>Basic price:</strong>
+  <%= @product_test_ppo.basic_price %>
+</p>
+
+<p>
+  <strong>Shipping:</strong>
+  <%= @product_test_ppo.shipping %>
+</p>
+
+<p>
+  <strong>Channel:</strong>
+  <%= @product_test_ppo.channel %>
+</p>
+
+<p>
+  <strong>Aired date:</strong>
+  <%= @product_test_ppo.aired_date %>
+</p>
+
+<p>
+  <strong>Slot:</strong>
+  <%= @product_test_ppo.slot %>
+</p>
+
+<p>
+  <strong>Orders:</strong>
+  <%= @product_test_ppo.orders %>
+</p>
+
+<p>
+  <strong>Ppo:</strong>
+  <%= @product_test_ppo.ppo %>
+</p>
+
+<p>
+  <strong>Ad cost:</strong>
+  <%= @product_test_ppo.ad_cost %>
+</p>
+
+<p>
+  <strong>Description:</strong>
+  <%= @product_test_ppo.description %>
+</p>
+<%= link_to 'Destroy', product_test_ppos_path, method: :delete, data: { confirm: 'Are you sure?' } %>
+<%= link_to 'Edit', edit_product_test_ppo_path(@product_test_ppo) %> |
+<%= link_to 'Back', product_test_ppos_path %>

@@ -1,0 +1,21 @@
+<%= simple_form_for(@product_sample_stock) do |f| %>
+  <%= f.error_notification %>
+
+  <div class="form-inputs">
+    <%= f.input :product_master_id %>
+    <%= f.input :product_list_id %>
+    <%= f.input :product_name %>
+    <%= f.input :prod_code %>
+    <%= f.input :barcode %>
+    <%= f.input :basic_price %>
+    <%= f.input :shipping %>
+    <%= f.input :air_date %>
+    <%= f.input :orders %>
+    <%= f.input :stock %>
+    <%= f.input :description %>
+  </div>
+
+  <div class="form-actions">
+    <%= f.button :submit %>
+  </div>
+<% end %>

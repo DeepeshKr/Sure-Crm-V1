@@ -1,6 +1,6 @@
 class CampaignPlaylistsController < ApplicationController
  before_action { protect_controllers(8) }  
- before_action :set_campaign_playlist, only: [:show, :duplicate, :edit, :update, :destroy] #before_action :dropdown, only: [:show, :new,  :edit, :update]
+ before_action :set_campaign_playlist, only: [:show, :duplicate, :edit, :update, :groupdestroy, :destroy] #before_action :dropdown, only: [:show, :new,  :edit, :update]
  before_action :proddropdown, only: [:show, :new, :create, :update,  :edit, :update, :showproductvariant]
  before_action :set_media_tape, only: [:show, :new, :create, :update,  :edit, :update]
  before_action :activestatus, only: [:show, :new, :create, :edit, :update]
@@ -11,14 +11,14 @@ class CampaignPlaylistsController < ApplicationController
      
     if(params.has_key?(:campaignid))
       @campaign_playlists = CampaignPlaylist.where("campaignid = ?" , params[:campaignid]).order(:start_hr, :start_min, :start_sec)
-       respond_to do |format|
+        respond_to do |format|
         csv_file_name = @campaign_playlists.first.campaign.name + ".csv"
           format.html
           format.csv do
             headers['Content-Disposition'] = "attachment; filename=\"#{csv_file_name}\""
             headers['Content-Type'] ||= 'text/csv'
           end
-      end
+        end
     end 
     
   end
@@ -343,8 +343,26 @@ end
    end
  end
 
+#  def groupdestroy
+#   if params.has_key?[:id]
+#     all_grp_playlists = CampaignPlaylist.where(playlist_group_id: params[:id])
+
+#     all_grp_playlists.each  do | grp|
+#        grp.destroy
+#     end
+#      respond_with(@campaign_playlist.campaign)
+#   end
+# end
+#  end
   def destroy
-    @campaign_playlist.destroy
+    #removed link
+    #<%= link_to 'Destroy', campaign_playlist, method: :delete, data: { confirm: 'Are you sure?' }, class: "btn btn-info btn-xs" %>
+    #@campaign_playlist.destroy
+    all_grp_playlists = CampaignPlaylist.where(playlist_group_id: params[:id])
+
+    all_grp_playlists.each  do | grp|
+       grp.destroy
+    end
     respond_with(@campaign_playlist.campaign)
   end
 

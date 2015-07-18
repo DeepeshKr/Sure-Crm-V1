@@ -8,6 +8,7 @@ class ProductMaster < ActiveRecord::Base
   #has_many :product_stock_book, foreign_key: "product_master_id"
   #has_many :product_stock, foreign_key: "product_master_id"
   #has_many :product_stock_adjust, foreign_key: "product_master_id"
+  has_many :product_sample_stock, foreign_key: "product_master_id"
 
   has_many :product_variant, foreign_key: "productmasterid" 
   belongs_to :product_training_manual, foreign_key: "productid"
