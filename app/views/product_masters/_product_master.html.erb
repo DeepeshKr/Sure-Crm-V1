@@ -31,7 +31,11 @@
           <h3>No Product Price Variants Found </h3>
          <%= link_to 'Add Variant / Training / Basic Upsell', product_master  , class: "btn btn-primary btn-sm" %> 
     <% end %>
-  
+  <% if product_master.product_sample_stock.exists? %>
+    <p>Product Sample info</p>
+    <% else %>
+    <p>No Product Samples found </p>
+  <% end %>
   </div>
  <div class="panel-footer">
  <div class="row">

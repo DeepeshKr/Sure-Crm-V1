@@ -28,127 +28,19 @@
     <%= will_paginate @product_masters, :container => false %>
 </div>
 <br>
+
+<br>
+<br>
 <div class="well well-sm">
 <small>
-<h3>Inactive Products </h3>
+<h1>Inactive Products </h1>
+<hr>
 <br>
 <% if @inactive_product_masters.present? %>
  <% @inactive_product_masters.each do |product_master| %>
-<div class="row">
-        <div class="col-xs-6">
-          <h4><%= product_master.name %> </h4>
-          <div class="row">
-            <div class="col-xs-4">
-                <strong>Price :</strong> <%= product_master.price %> 
-            </div>
-            <div class="col-xs-4">
-                <strong>Shipping :</strong> <%= product_master.shipping %>
-            </div>
-            <div class="col-xs-4">
-                <strong>Total :</strong> <%= product_master.total %>
-            </div>           
-        </div>
-          <small>
-           This product is:<strong> <%= product_master.product_active_code.name if product_master.product_active_code.present?%></strong>
-          </small>
-
-           <div class="row">
-            <div class="col-xs-6">
-                <strong>External Product Code :</strong> <%= product_master.extproductcode %>
-            </div>
-            <div class="col-xs-6">
-                 <strong>Numeric Code :</strong><%= product_master.barcode %>
-            </div>
-            </div>
-        
-         <div class="row">
-            <div class="col-xs-6">
-               <strong>Category Name : </strong>   <%= product_master.product_category.name if product_master.product_category %>
-            </div>
-            <div class="col-xs-6">
-                  <strong>Inventory Type : </strong>
-            <%= product_master.product_inventory_code.name if product_master.product_inventory_code %>
-            </div>
-            </div>
-
-<br>
-
-
-        <div class="row">
-            <div class="col-xs-6">
-              <%= link_to 'Add Variant / Training / Basic Upsell', product_master  , class: "btn btn-primary btn-sm" %> 
-            </div>
-            <div class="col-xs-6">
-               <%= link_to 'Edit Product', edit_product_master_path(product_master), class: "btn btn-primary btn-sm" %>
-            </div>
-        </div>
-</div>
-<div class="col-xs-6">
-      <% if product_master.variants.exists? %>
-            <table class="table table-hover">
-              <thead>
-                <tr>
-                  <th>Name</th>
-                   <th>Basic</th>
-                  <th>Shipping</th>
-                  <th>Sell As</th>
-                  <th>Started on</th>
-                  <th colspan="1"></th>
-                
-                </tr>
-              </thead>
-
-              <tbody>
-             <% product_master.variants.each do |v| %>
-             <tr>
-             <small>
-            <td> <%= v.name %> </td>
-            <td> <%= v.price %> </td>
-            <td> <%= v.shipping %> </td>
-              <td> <%= v.product_sell_type.name %> </td>
-               <td> <%= v.created_at %> </td>
-              <td>
-                <%= link_to 'Add / View List', v  , class: "btn btn-primary btn-xs" %> 
-                <br>
-                <%= link_to 'Edit Variant', edit_product_variant_path(v), class: "btn btn-primary btn-xs" %>
-              </td>
-              
-               </small>
-              </tr>
-              <tr>
-                 <td colspan="7">
-                 
-                 <% if v.product_list.exists? %>
-                 <div class="alert alert-success">
-                 <strong>Available </strong>
-                  <ul class="list-inline">
-                     <% v.product_list.each do |c| %>
-                        <li><small> <%= c.product_spec_list.name if c.product_spec_list %></small></li>
-                       <% end -%> 
-                  </ul>
-                
-                 <% else %>
-                 <div class="alert alert-warning">
-                 <small>No product listed for sale!</small>
-                 <% end %>
-                 </div>
-                 </td>
-              </tr>
-             <% end %>
-               </tbody>
-            </table>
-
-          <% else %>
-          No Variants found <br>
-          <small>(click on show to add new)</small> 
-          <% end %>
-
-</div>
-
-</div>
-<hr>
-  <% end %>
- 
+ <%= render('product_master', :product_master => product_master) %>
+         <br>
+ <% end %>
 <% else %>
 <h3>No products found </h3>
 <% end %>
@@ -156,9 +48,5 @@
 </div>
 
 <br>
-<br>
-<div class="digg_pagination">
-    <%= will_paginate @product_masters, :container => false %>
-</div>
-<br>
+
 <%= link_to 'Add New Product', new_product_master_path, class: "btn btn-primary" %>
