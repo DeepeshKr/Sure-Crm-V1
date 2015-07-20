@@ -28,6 +28,16 @@ class IndiaPincodeListsController < ApplicationController
     end
   end
 
+  def show_pincode
+    if params.has_key?(:term)
+      @searchvalue = params[:term].upcase   
+      @india_pincode_lists = IndiaPincodeList.where("pincode like ? OR districtname like ?", "#{@searchvalue}%", "#{@searchvalue}%")
+      respond_to do |format|
+        format.json { render json: @india_pincode_lists }
+      end  
+    end
+  end
+
   def import
     #begin
       IndiaPincodeList.import(params[:file])
@@ -99,6 +109,8 @@ class IndiaPincodeListsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def india_pincode_list_params
-      params.require(:india_pincode_list).permit(:officename, :pincode, :deliverystatus, :divisionname, :regionname, :circlename, :taluk, :districtname, :statename)
+      params.require(:india_pincode_list).permit(:officename, :pincode, 
+        :deliverystatus, :divisionname, :regionname, :circlename, :taluk, 
+        :districtname, :statename)
     end
 end
