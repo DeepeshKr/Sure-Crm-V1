@@ -1,5 +1,5 @@
 class SalesPpoReportController < ApplicationController
-  before_action { protect_controllers(2) } 
+  before_action { protect_controllers(4) } 
   before_action :media_segments, only: [:daily, :hourly, :show, :channel]
   def summary
      @sno = 1

@@ -169,6 +169,7 @@ Rails.application.routes.draw do
   get 'address' => 'customerorder#address'
   post 'addaddress' => 'customerorder#add_address'
   post 'updatecustomer' => 'customers#update_customer'
+  get 'show_city' => 'india_city_lists#show_city'
     #step 3
   get 'upsell' => 'customerorder#upsell'
   post 'addupsell' => 'customerorder#add_upsell'

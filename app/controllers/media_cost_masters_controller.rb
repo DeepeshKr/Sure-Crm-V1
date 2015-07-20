@@ -6,11 +6,11 @@ class MediaCostMastersController < ApplicationController
   respond_to :html
 
   def index
-     @media_cost_masters = MediaCostMaster.order('updated_at DESC').limit(10)
+    # @media_cost_masters = MediaCostMaster.order('updated_at DESC').limit(10)
      @summary = 'Recently updated Masters'
      @totalmediacost = 0
-      @showhbn = 1
-      @showpvt = 1
+      #@showhbn = 1
+      #@showpvt = 1
      @media_cost_master = MediaCostMaster.new
     # respond_with(@media_cost_masters)
     if params.has_key?(:media_id)
@@ -25,17 +25,18 @@ class MediaCostMastersController < ApplicationController
         #hide pvt channel form
         @showhbn = 1
         @showpvt = 0
-         @media_cost_masters = MediaCostMaster.where(media_id: 11200)
+        
       else
         #hide hbn form
         @showhbn = 0
         @showpvt = 1
-
+       
       end
       
     end
     
-
+    @hbn_list = MediaCostMaster.where(media_id: 11200).order("str_hr, str_min")
+    @pvt_channel = MediaCostMaster.where('media_id <> 11200').order("media_id, str_hr, str_min")
   end
 
  
@@ -45,6 +46,8 @@ class MediaCostMastersController < ApplicationController
   end
 
   def new
+    @showpvt = 1
+    @showhbn = 1
     @media_cost_master = MediaCostMaster.new
     respond_with(@media_cost_master)
   end

@@ -1,0 +1,48 @@
+<table class="table table-hover">
+  <thead>
+    <tr>
+      <th>Name</th>
+     
+      
+      <th>Media</th>
+     
+      <th>Mins</th>
+    
+      <th>Cost</th>
+      <th colspan="2"></th>
+    </tr>
+  </thead>
+  <% total_cost = 0 %> <% slot_percent = 0.0 %>
+<% if @pvt_channel.present? %>
+
+  <tbody>
+  
+    <% @pvt_channel.each do |media_cost_master| %>
+      <tr>
+        <td><%= media_cost_master.name %></td>
+        
+        <td><%= media_cost_master.medium.name if media_cost_master.medium %></td>
+       
+       
+         <td><%= media_cost_master.duration_secs.to_i / 60 %></td>
+          
+        <td><%= media_cost_master.total_cost %> <% total_cost +=  media_cost_master.total_cost if media_cost_master.total_cost %></td>
+       
+        <td><%= link_to 'Edit', edit_media_cost_master_path(media_cost_master) %></td>
+        <td><%= link_to 'Destroy', media_cost_master, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+  <tfoot>
+    <tr>
+      <th colspan="2">Total</th>
+      
+     
+      <th><%= slot_percent %></th>
+      <th><%= total_cost %></th>
+      <th colspan="3"></th>
+    </tr>
+
+  </tfoot>
+   <% end %>
+</table>

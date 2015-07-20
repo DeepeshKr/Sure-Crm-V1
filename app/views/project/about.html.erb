@@ -1,104 +1,19 @@
+
 <% provide(:title, 'Sign up') %>
 <h1>About => Try New Things here</h1>
 
-<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
-  <div class="panel panel-default">
-    <div class="panel-heading" role="tab" id="headingOne">
-      <h4 class="panel-title">
-        <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion"  href="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
-          Collapsible Group Item #1
-        </a>
-      </h4>
-    </div>
-    <div id="collapseOne" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
-      <div class="panel-body">
-        Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
-      </div>
-    </div>
-  </div>
-  <div class="panel panel-default">
-    <div class="panel-heading" role="tab" id="headingTwo">
-      <h4 class="panel-title">
-        <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-          Collapsible Group Item #2
-        </a>
-      </h4>
-    </div>
-    <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
-      <div class="panel-body">
-        Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
-      </div>
-    </div>
-  </div>
-  <div class="panel panel-default">
-    <div class="panel-heading" role="tab" id="headingThree">
-      <h4 class="panel-title">
-        <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-          Collapsible Group Item #3
-        </a>
-      </h4>
-    </div>
-    <div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
-      <div class="panel-body">
-        Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
-      </div>
-    </div>
-  </div>
-</div>
-<!-- Modal Test Start -->
-<div class="row">
-<!-- Button trigger modal -->
-<button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">
-  Launch demo modal
-</button>
-
-<!-- Modal -->
-<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="myModalLabel">Modal title</h4>
-      </div>
-      <div class="modal-body">
-        ...
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Save changes</button>
-      </div>
-    </div>
-  </div>
-</div>
 
 
-</div>
-<!-- Modal Test End -->
-<div class="row">
-<div class="col-xs-6">
-<div class="ui-widget">
-  <label for="tags">Tags: </label>
-  <input id="tags">
-</div>
-</div>
-<div class="col-xs-6">
- <p>Modified Behavior </p><br>
- <div class="row">
- <div class="col-xs-6">
-    <input id="autocomplete2" type="text" placeholder="U.S. state name"> </div>
-    <div class="col-xs-6"><input id="autocomplete2-value" type="text" name="code"></div>
-   
-    </div>
-</div>
-</div>
  <div class="row">
  <%= bootstrap_form_tag url: product_variants_path, :method => :GET, :enforce_utf8 => false do |f| %>
-<div class="col-xs-8">
-<%= text_field_tag(:search, nil, :class => "form-control", :required => "true", :placeholder => "Search name / Code", :value => @searchvalue  )   %>
+<div class="col-xs-4">
+<%= text_field_tag(:search, nil, :class => "form-control", :required => "true", :placeholder => "Search city", :id => "project" )   %>
 </div>
-
+<div class="col-xs-4">
+<%= text_field_tag(:city, nil, :class => "form-control", :required => "true", :placeholder => "Selected City", :id => "project-id" )   %>
+</div>
 <div class="col-xs-2">
-  <%= submit_tag "Search", name: nil, class: "btn btn-primary", data: { confirm: 'Are you sure? #{@timenow}' } %>
+  <%= submit_tag "Search", name: nil, class: "btn btn-primary" %>
 </div>
 <% end %>
   <div class="col-xs-2">   
@@ -108,113 +23,27 @@
       <% end %>
   </div>
 </div>
- <script>
-    /*
-     * jQuery UI Autocomplete: Using Label-Value Pairs
-     * http://salman-w.blogspot.com/2013/12/jquery-ui-autocomplete-examples.html
-     */
-    var data = [
-      { value: "AL", label: "Alabama" },
-      { value: "AK", label: "Alaska" },
-      { value: "AZ", label: "Arizona" },
-      { value: "AR", label: "Arkansas" },
-      { value: "CA", label: "California" },
-      { value: "CO", label: "Colorado" },
-      { value: "CT", label: "Connecticut" },
-      { value: "DE", label: "Delaware" },
-      { value: "FL", label: "Florida" },
-      { value: "GA", label: "Georgia" },
-      { value: "HI", label: "Hawaii" },
-      { value: "ID", label: "Idaho" },
-      { value: "IL", label: "Illinois" },
-      { value: "IN", label: "Indiana" },
-      { value: "IA", label: "Iowa" },
-      { value: "KS", label: "Kansas" },
-      { value: "KY", label: "Kentucky" },
-      { value: "LA", label: "Louisiana" },
-      { value: "ME", label: "Maine" },
-      { value: "MD", label: "Maryland" },
-      { value: "MA", label: "Massachusetts" },
-      { value: "MI", label: "Michigan" },
-      { value: "MN", label: "Minnesota" },
-      { value: "MS", label: "Mississippi" },
-      { value: "MO", label: "Missouri" },
-      { value: "MT", label: "Montana" },
-      { value: "NE", label: "Nebraska" },
-      { value: "NV", label: "Nevada" },
-      { value: "NH", label: "New Hampshire" },
-      { value: "NJ", label: "New Jersey" },
-      { value: "NM", label: "New Mexico" },
-      { value: "NY", label: "New York" },
-      { value: "NC", label: "North Carolina" },
-      { value: "ND", label: "North Dakota" },
-      { value: "OH", label: "Ohio" },
-      { value: "OK", label: "Oklahoma" },
-      { value: "OR", label: "Oregon" },
-      { value: "PA", label: "Pennsylvania" },
-      { value: "RI", label: "Rhode Island" },
-      { value: "SC", label: "South Carolina" },
-      { value: "SD", label: "South Dakota" },
-      { value: "TN", label: "Tennessee" },
-      { value: "TX", label: "Texas" },
-      { value: "UT", label: "Utah" },
-      { value: "VT", label: "Vermont" },
-      { value: "VA", label: "Virginia" },
-      { value: "WA", label: "Washington" },
-      { value: "WV", label: "West Virginia" },
-      { value: "WI", label: "Wisconsin" },
-      { value: "WY", label: "Wyoming" }
-    ];
-    $(function() {
-      $("#autocomplete1").autocomplete({
-        source: data
-      });
-      $("#autocomplete2").autocomplete({
-        source: data,
-        focus: function(event, ui) {
-          // prevent autocomplete from updating the textbox
-          event.preventDefault();
-          // manually update the textbox
-          $(this).val(ui.item.label);
-        },
-        select: function(event, ui) {
-          // prevent autocomplete from updating the textbox
-          event.preventDefault();
-          // manually update the textbox and hidden field
-          $(this).val(ui.item.label);
-          $("#autocomplete2-value").val(ui.item.value);
-        }
-      });
-    });
-  </script>
-<script>
-  $(function() {
-    var availableTags = [
-      "ActionScript",
-      "AppleScript",
-      "Asp",
-      "BASIC",
-      "C",
-      "C++",
-      "Clojure",
-      "COBOL",
-      "ColdFusion",
-      "Erlang",
-      "Fortran",
-      "Groovy",
-      "Haskell",
-      "Java",
-      "JavaScript",
-      "Lisp",
-      "Perl",
-      "PHP",
-      "Python",
-      "Ruby",
-      "Scala",
-      "Scheme"
-    ];
-    $( "#tags" ).autocomplete({
-      source: availableTags
-    });
+<script type="text/javascript">
+   $(function() {
+    $( "#project" ).autocomplete({
+      minLength: 2,
+      source: "show_city",
+      focus: function( event, ui ) {
+        $( "#project" ).val( ui.item.name );
+        return false;
+      },
+      select: function( event, ui ) {
+        $( "#project" ).val( ui.item.name );
+        $( "#project-id" ).val( ui.item.name );
+       
+        return false;
+      }
+    })
+    .autocomplete( "instance" )._renderItem = function( ul, item ) {
+      return $( "<li>" )
+        .append( "<a>" + item.name + "<br>" + item.state + "</a>" )
+        .appendTo( ul );
+    };
   });
   </script>
+

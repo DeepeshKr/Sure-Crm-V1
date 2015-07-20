@@ -4,6 +4,7 @@ class IndiaCityListsController < ApplicationController
   # GET /india_city_lists
   # GET /india_city_lists.json
   def index
+    @search = "City List India"
     # product_hash = row.to_hash # exclude the price field
     # oldcitylist = CITYLIST.all
     # oldcitylist.each do |row|
@@ -15,18 +16,34 @@ class IndiaCityListsController < ApplicationController
     #     IndiaCityList.create(name: row['city'], state: row['state'])
     #   end # end if !product.nil?
     #  end # end CSV.foreach
-     if params[:location].present?
-      @searchvalue = params[:location]     
+     if params[:search].present?
+      @searchvalue = params[:search].upcase   
       @india_city_lists = IndiaCityList.where("name like ? OR state like ?", "#{@searchvalue}%", "#{@searchvalue}%").paginate(:page => params[:page])
       @search = "Seached for #{@searchvalue}"
-      @found = "Found of over #{@india_pincode_lists.count()} Cities"
+      @found = "Found of over #{@india_city_lists.count()} Cities"
+      respond_to do |format|
+        format.html
+       # format.json { render json: @india_city_lists }
+      end
+      
+      #render json: @india_city_lists
     else
+      @found = "Total Cities " + IndiaCityList.all.count().to_s
        @india_city_lists = IndiaCityList.all.paginate(:page => params[:page])
     end
 
    
   end
 
+  def show_city
+    if params.has_key?(:term)
+      @searchvalue = params[:term].upcase   
+      @india_city_lists = IndiaCityList.where("name like ? OR state like ?", "#{@searchvalue}%", "#{@searchvalue}%").paginate(:page => params[:page])
+      respond_to do |format|
+        format.json { render json: @india_city_lists }
+      end  
+    end
+  end
   # GET /india_city_lists/1
   # GET /india_city_lists/1.json
   def show
@@ -77,7 +94,7 @@ class IndiaCityListsController < ApplicationController
     @india_city_list.destroy
     respond_to do |format|
       format.html { redirect_to india_city_lists_url, notice: 'India city list was successfully destroyed.' }
-      format.json { head :no_content }
+      format.json { head :no_content } 
     end
   end
 
