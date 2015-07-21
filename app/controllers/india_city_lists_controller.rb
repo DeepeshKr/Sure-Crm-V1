@@ -6,16 +6,23 @@ class IndiaCityListsController < ApplicationController
   def index
     @search = "City List India"
     # product_hash = row.to_hash # exclude the price field
-    oldcitylist = CITYLIST.all
-    oldcitylist.each do |row|
-      product = IndiaCityList.where(name: row["city"])
-      state = row['state'].titlecase
-       if product.present?
-         product.first.update_attributes(state: state)
-       else
-        IndiaCityList.create(name: row['city'], state: state)
-      end # end if !product.nil?
-     end # end CSV.foreach
+    # oldcitylist = CITYLIST.all
+    # oldcitylist.each do |row|
+    #   product = IndiaCityList.where(name: row["city"])
+    #   state = row['state'].titlecase
+    #    if product.present?
+    #      product.first.update_attributes(state: state)
+    #    else
+    #     IndiaCityList.create(name: row['city'], state: state)
+    #   end # end if !product.nil?
+    #  end # end CSV.foreach
+
+    # indialist = IndiaCityList.where(state: "Delhi")
+    
+    # indialist.each do |intr|
+    #   intr.update(state: "Delhi NCR")
+    # end
+
      if params[:search].present?
       @searchvalue = params[:search].upcase   
       @india_city_lists = IndiaCityList.where("name like ? OR state like ?", "#{@searchvalue}%", "#{@searchvalue}%").paginate(:page => params[:page])
