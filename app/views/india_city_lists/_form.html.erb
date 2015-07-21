@@ -4,8 +4,8 @@
   <div class="form-inputs">
     <%= f.input :name %>
     
-    <%= f.state if f.state.present? %>
-    <%= f.input(:state, collection:@states, label_method: :name, value_method: :name, include_blank: false, selected: f.state)  %>
+ 
+    <%= f.input(:state, collection:@states, label_method: :name, value_method: :name, include_blank: false, selected: @india_city_list.state)  %>
 
     
   </div>
