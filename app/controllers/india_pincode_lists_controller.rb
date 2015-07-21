@@ -32,9 +32,9 @@ class IndiaPincodeListsController < ApplicationController
     if params.has_key?(:term)
       @searchvalue = params[:term].upcase   
       @india_pincode_lists = IndiaPincodeList.where("pincode like ? OR districtname like ?", "#{@searchvalue}%", "#{@searchvalue}%")
-      respond_to do |format|
-        format.json { render json: @india_pincode_lists }
-      end  
+      #respond_to do |format|
+   render json: @india_pincode_lists
+     # end  
     end
   end
 
