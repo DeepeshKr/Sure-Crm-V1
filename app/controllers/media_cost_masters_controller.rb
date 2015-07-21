@@ -9,7 +9,7 @@ class MediaCostMastersController < ApplicationController
     # @media_cost_masters = MediaCostMaster.order('updated_at DESC').limit(10)
      @summary = 'Recently updated Masters'
      @totalmediacost = 0
-      #@showhbn = 1
+      @showhbn = 1
       #@showpvt = 1
      @media_cost_master = MediaCostMaster.new
     # respond_with(@media_cost_masters)
@@ -110,7 +110,9 @@ class MediaCostMastersController < ApplicationController
       else
           flash[:error] = @media_cost_master.errors.full_messages.join("<br/>")
       end
-       redirect_to media_cost_masters_path(:media_id => @media_id)
+       #redirect_to media_cost_masters_path(:media_id => @media_id)
+
+       redirect_to media_cost_masters_path
   end
    
   def update
