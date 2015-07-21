@@ -3,7 +3,11 @@
 
   <div class="form-inputs">
     <%= f.input :name %>
-    <%= f.input :state %>
+    
+    <%= f.state if f.state.present? %>
+    <%= f.input(:state, collection:@states, label_method: :name, value_method: :name, include_blank: false, selected: f.state)  %>
+
+    
   </div>
 
   <div class="form-actions">

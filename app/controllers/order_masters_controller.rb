@@ -22,7 +22,7 @@ class OrderMastersController < ApplicationController
       if params[:completed].present?
         # all completed orders only
          if params[:for_date].present? 
-          for_date =  Date.strptime(params[:for_date], "%m-%d-%Y")
+          for_date =  Date.strptime(params[:for_date], "%Y-%m-%d")
 
           @order_masters = OrderMaster.where('ORDER_STATUS_MASTER_ID > 10002')
           .where('TRUNC(orderdate) = ?',for_date)
@@ -98,8 +98,8 @@ class OrderMastersController < ApplicationController
     
     elsif params[:from_date].present? && params[:to_date].present? 
        for_date =  Date.strptime(params[:for_date], "%Y-%m-%d")
-      to_date =  Date.strptime(params[:to_date], "%m/%d/%Y")
-      @or_for_date = for_date.strftime("%m-%d-%Y")
+      to_date =  Date.strptime(params[:to_date], "%Y-%m-%d")
+      @or_for_date = for_date.strftime("%Y-%m-%d")
       order_masters = OrderMaster.where('TRUNC(orderdate) >= ? AND TRUNC(orderdate) <= ?',from_date, to_date).where('ORDER_STATUS_MASTER_ID > 10002').select(:employee_id).distinct
       
       @orderdate = "Searched for #{for_date} found #{order_masters.count} agents!"

@@ -1,5 +1,5 @@
 class MediaCostMastersController < ApplicationController
-  before_action { protect_controllers(5) } 
+  before_action { protect_controllers(8) } 
   before_action :set_media_cost_master, only: [:show, :edit, :update, :destroy]
   before_action :dropdown, only: [:index, :new, :destroy]
 
