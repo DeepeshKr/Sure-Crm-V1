@@ -12,10 +12,14 @@ class SalesPpoReportController < ApplicationController
      
          #media segregation only HBN
           media_segments
+          use_date = (330.minutes).from_now.to_date
+          from_date = use_date.to_date - 2.days #30.days
+          up_to_date = use_date.to_date
 
-          from_date = Date.current - 2.days #30.days
-          to_date = Date.current
-          to_date.downto(from_date).each do |day|
+          # from_date = (330.minutes).from_date.to_date
+          # up_to_date = (330.minutes).up_to_date.to_date
+
+          up_to_date.downto(from_date).each do |day|
           @datelist <<  day.strftime('%y-%b-%d')
           web_date = day
           web_date = web_date.strftime()
@@ -63,10 +67,11 @@ class SalesPpoReportController < ApplicationController
           :for_date =>  for_date.strftime("%Y-%m-%d"),
           :pieces => pieces,
           :nos => nos,
-          :revenue => revenue,
+          :revenue => revenue.to_i,
+          :product_cost => product_cost.to_i,
           :variable_cost => media_var_cost.to_i,
           :fixed_cost => fixed_cost.to_i,
-          :profitability => revenue - (fixed_cost + media_var_cost) }
+          :profitability => (revenue - (product_cost + fixed_cost + media_var_cost)).to_i }
         end
         @employeeorderlist = employeeunorderlist #.sort_by{|c| c[:total]}.reverse 
   end
@@ -556,6 +561,7 @@ def hbn_channels_between
     media_segments
     value_now = 0
    correction = 0.5
+   timetaken = 0
     if params.has_key?(:start_time) && params.has_key?(:end_time)
       #  @or_for_date = params[:for_date]
       # for_date =  Date.strptime(params[:for_date], "%Y-%m-%d")
@@ -576,11 +582,9 @@ def hbn_channels_between
         orderlist = OrderMaster.where('ORDER_STATUS_MASTER_ID > 10002')
           .where('orderdate >= ? AND orderdate <= ?', @start_time, @end_time)
           .where(media_id: e)
-        timetaken = orderlist.sum(:codcharges)
-        # ccvalue = orderlist.where(orderpaymentmode_id: 10000).sum(:total)
-        # ccorders = orderlist.where(orderpaymentmode_id: 10000).count()
-        # codorders = orderlist.where(orderpaymentmode_id: 10001).count()
-        # codvalue = orderlist.where(orderpaymentmode_id: 10001).sum(:total)
+
+           orderlist.each {|ol| timetaken += ol.timetaken  }
+       
          media_variable = Medium.where('id = ? AND value is not null', o.media_id)
             .where(:media_commision_id => [10020, 10021, 10040, 10041, 10060]) #.pluck(:value)
               if media_variable.present?
@@ -602,11 +606,54 @@ def hbn_channels_between
         @hbn_order_list = hbn_order_list.sort_by{|c| c[:total]}.reverse 
 
       elsif params.has_key?(:for_date) && params.has_key?(:product_variant)
-        @campaign_playlists =  CampaignPlaylist.joins(:campaign)
-        .where("campaigns.startdate = ?", params[:for_date])
-       .where(productvariantid: params[:product_variant])
-      .order(:start_hr, :start_min, :start_sec).where(list_status_id: 10000)
+        ###########################
+        #for a particular show only
+        #############
+        @hbn_order_masters = OrderLine.joins(:order_master)
+        .where('ordermasters.orderdate >= ?', params[:for_date])
+        .where('ordermasters.ORDER_STATUS_MASTER_ID > 10002')
+        .where("ordermasters.media_id in [@hbnlist]")
+        .where(productvariant_id: params[:product_variant])
+        .select("ordermasters.media_id").distinct
+
+        # hbn_order_masters = OrderMaster.
+        #     .where(id: order_with_product_variants)
+        # .select(:media_id).distinct
+
+         hbn_order_list ||= []
+
+       # @hbn_order_masters.each do |o|
+       #  e = o.media_id
+       
+       #  name = (Medium.find(e).name  || "NA" if Medium.find(e).name.present?)
+       #  orderlist = OrderMaster.where('ORDER_STATUS_MASTER_ID > 10002')
+       #    .where('orderdate >= ?', params[:for_date])
+       #    .where(media_id: e)
+       #  timetaken = orderlist.sum(:codcharges)
+        
+       #   media_variable = Medium.where('id = ? AND value is not null', o.media_id)
+       #      .where(:media_commision_id => [10020, 10021, 10040, 10041, 10060]) #.pluck(:value)
+       #        if media_variable.present?
+       #          #discount the total value by 50% as correction
+       #           #PAID_CORRECTION
+       #           if media_variable.first.paid_correction.present?
+       #             correction = media_variable.first.paid_correction #||= 0.5
+       #           end
+       #           value_now = media_variable.first.value
+                                
+       #        end
+       #  totalorders = orderlist.sum(:total)
+       #  noorders = orderlist.count()
+       #  hbn_order_list << {:total => totalorders,
+       #     :id => e, :channel => name, :for_date =>  @or_for_date,
+       #    :nos => noorders, :correction => correction,
+       #    :commission => value_now }
+       #  end
+        #@hbn_order_list = hbn_order_list.sort_by{|c| c[:total]}.reverse 
+
+       
     end
+
 
 end
 
