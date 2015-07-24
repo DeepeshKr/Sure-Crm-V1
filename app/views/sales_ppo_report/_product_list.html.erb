@@ -1,16 +1,22 @@
  <% if @main_product_list.present? %>
 <table class="table table-hover table-bordered">
   <thead>
-    <tr>
-     <th>No</th>
-     <th>Product</th>
-     <th>CC Orders</th>
-       <th>CC Value</th>
-      <th>COD Orders</th>
-       <th>COD Value</th>
-       <th>Total Orders</th>
-     <th>Total Value</th>
+  <tr>
+     <th rowspan="2">No</th>
+     <th rowspan="2">Product</th>
+     
+       <th colspan="4">Sales Info</th>
+     
+    <th colspan="2">Derived </th>
     
+     </tr>
+    <tr>
+     <th> Pieces</th>
+          <th> Shipping</th>
+     <th> Subtotal</th>
+      <th>Total </th>
+      <th>Revenue</th>
+    <th>Cost</th>
      </tr>
   </thead>
 <tbody>
@@ -19,28 +25,35 @@
    <td><%= @sno %></td>
 
 <td>
- <%= link_to c[:product], orderlist_path(product_list_id: c[:id], for_date: c[:for_date]), :target => "_blank" %>
+ <%= c[:product] %> <br>
+ <small>
+  Cost Per: <%= c[:cost_of_product] %>
+  Revenue Per:
+<%= c[:revenue_of_product] %>
+ </small>
+<small>From ROPMASTER_NEW <%= link_to "More Details", productcost_path(search: c[:prod]), :target => "_blank" %> </small>
+</td>
 
-</td>
-<td class="text-right">
-   <%= c[:ccorders] %> 
-</td>
-<td class="text-right">
-   <%= c[:ccvalue] %> 
-</td>
-<td class="text-right">
-   <%= c[:codorders] %> 
-</td>
-<td class="text-right">
-   <%= c[:codvalue] %> 
-</td>
 
 <td class="text-right">
    <%= c[:nos] %> 
 </td>
 <td class="text-right">
+   <%= c[:shipping] %> 
+</td>
+<td class="text-right">
+   <%= c[:subtotal] %> 
+</td>
+<td class="text-right">
    <%= c[:total] %> 
 </td>
+<td class="text-right">
+   <%= c[:product_revenue] %> 
+</td>
+<td class="text-right">
+   <%= c[:product_cost] %> 
+</td>
+
 
   </tr> 
   <% @sno += 1 %> 
@@ -49,7 +62,32 @@
  
 
   </tbody>
+<tfoot>
+<tr>
+  <td colspan="2">Total</td>
 
+<td class="text-right">
+   <%= @main_total_orders_nos %> 
+</td>
+<td class="text-right">
+   <%=  @main_total_orders_shipping %> 
+</td>
+<td class="text-right">
+   <%= @main_total_orders_subtotal %> 
+</td>
+<td class="text-right">
+   <%= @main_total_orders_total %> 
+</td>
+<td class="text-right">
+   <%= @main_total_orders_revenue %> 
+</td>
+<td class="text-right">
+   <%= @main_total_Orders_product_cost %> 
+</td>
+
+
+  </tr> 
+</tfoot>
   </table>
   <% else %>
   <div class="well well-sm">
@@ -61,17 +99,23 @@
 
 <% if @basic_product_list_orderlist.present? %>
 <table class="table table-hover table-bordered">
-  <thead>
-    <tr>
-     <th>No</th>
-     <th>Product</th>
-     <th>CC Orders</th>
-       <th>CC Value</th>
-      <th>COD Orders</th>
-       <th>COD Value</th>
-       <th>Total Orders</th>
-     <th>Total Value</th>
+   <thead>
+  <tr>
+     <th rowspan="2">No</th>
+     <th rowspan="2">Product</th>
+     
+       <th colspan="4">Sales Info</th>
+     
+    <th colspan="2">Derived </th>
     
+     </tr>
+    <tr>
+     <th> Pieces</th>
+          <th> Shipping</th>
+     <th> Subtotal</th>
+      <th>Total </th>
+      <th>Revenue</th>
+    <th>Cost</th>
      </tr>
   </thead>
 <tbody>
@@ -80,28 +124,35 @@
    <td><%= @sno %></td>
 
 <td>
- <%= link_to c[:product], orderlist_path(product_list_id: c[:id], for_date: c[:for_date]), :target => "_blank" %>
+ <%= c[:product] %> <br>
+ <small>
+  Cost Per: <%= c[:cost_of_product] %>
+  Revenue Per:
+<%= c[:revenue_of_product] %>
+ </small>
+<small>From ROPMASTER_NEW <%= link_to "More Details", productcost_path(search: c[:prod]), :target => "_blank" %></small>
+</td>
 
-</td>
-<td class="text-right">
-   <%= c[:ccorders] %> 
-</td>
-<td class="text-right">
-   <%= c[:ccvalue] %> 
-</td>
-<td class="text-right">
-   <%= c[:codorders] %> 
-</td>
-<td class="text-right">
-   <%= c[:codvalue] %> 
-</td>
 
 <td class="text-right">
    <%= c[:nos] %> 
 </td>
 <td class="text-right">
+   <%= c[:shipping] %> 
+</td>
+<td class="text-right">
+   <%= c[:subtotal] %> 
+</td>
+<td class="text-right">
    <%= c[:total] %> 
 </td>
+<td class="text-right">
+   <%= c[:product_revenue] %> 
+</td>
+<td class="text-right">
+   <%= c[:product_cost] %> 
+</td>
+
 
   </tr> 
   <% @sno += 1 %> 
@@ -110,7 +161,34 @@
  
 
   </tbody>
+<tfoot>
+<tr>
+  <td colspan="2">Total</td>
 
+
+
+<td class="text-right">
+   <%= @basic_total_orders_nos %> 
+</td>
+<td class="text-right">
+   <%=  @basic_total_orders_shipping %> 
+</td>
+<td class="text-right">
+   <%= @basic_total_orders_subtotal %> 
+</td>
+<td class="text-right">
+   <%= @basic_total_orders_total %> 
+</td>
+<td class="text-right">
+   <%= @basic_total_orders_revenue %> 
+</td>
+<td class="text-right">
+   <%= @basic_total_Orders_product_cost %> 
+</td>
+
+
+  </tr> 
+</tfoot>
   </table>
   <% else %>
   <div class="well well-sm">
@@ -122,47 +200,60 @@
 
 <% if @common_product_list_orderlist.present? %>
 <table class="table table-hover table-bordered">
-  <thead>
-    <tr>
-     <th>No</th>
-     <th>Product</th>
-     <th>CC Orders</th>
-       <th>CC Value</th>
-      <th>COD Orders</th>
-       <th>COD Value</th>
-       <th>Total Orders</th>
-     <th>Total Value</th>
+   <thead>
+  <tr>
+     <th rowspan="2">No</th>
+     <th rowspan="2">Product</th>
+     
+       <th colspan="4">Sales Info</th>
+     
+    <th colspan="2">Derived </th>
     
+     </tr>
+    <tr>
+     <th> Pieces</th>
+          <th> Shipping</th>
+     <th> Subtotal</th>
+      <th>Total </th>
+    <th>Revenue</th>
+    <th>Cost</th>
      </tr>
   </thead>
 <tbody>
    <% @common_product_list_orderlist.each do |c| %>
-   <tr>
+    <tr>
    <td><%= @sno %></td>
 
 <td>
- <%= link_to c[:product], orderlist_path(product_list_id: c[:id], for_date: c[:for_date]), :target => "_blank" %>
+ <%= c[:product] %> <br>
+ <small>
+  Cost Per: <%= c[:cost_of_product] %>
+  Revenue Per:
+<%= c[:revenue_of_product] %>
+ </small>
+<small>From ROPMASTER_NEW <%= link_to "More Details", productcost_path(search: c[:prod]), :target => "_blank" %></small>
+</td>
 
-</td>
-<td class="text-right">
-   <%= c[:ccorders] %> 
-</td>
-<td class="text-right">
-   <%= c[:ccvalue] %> 
-</td>
-<td class="text-right">
-   <%= c[:codorders] %> 
-</td>
-<td class="text-right">
-   <%= c[:codvalue] %> 
-</td>
 
 <td class="text-right">
    <%= c[:nos] %> 
 </td>
 <td class="text-right">
+   <%= c[:shipping] %> 
+</td>
+<td class="text-right">
+   <%= c[:subtotal] %> 
+</td>
+<td class="text-right">
    <%= c[:total] %> 
 </td>
+<td class="text-right">
+   <%= c[:product_revenue] %> 
+</td>
+<td class="text-right">
+   <%= c[:product_cost] %> 
+</td>
+
 
   </tr> 
   <% @sno += 1 %> 
@@ -171,7 +262,34 @@
  
 
   </tbody>
+<tfoot>
+<tr>
+  <td colspan="2">Total</td>
 
+
+
+<td class="text-right">
+   <%= @common_total_orders_nos %> 
+</td>
+<td class="text-right">
+   <%=  @common_total_orders_shipping %> 
+</td>
+<td class="text-right">
+   <%= @common_total_orders_subtotal %> 
+</td>
+<td class="text-right">
+   <%= @common_total_orders_total %> 
+</td>
+<td class="text-right">
+   <%= @common_total_orders_revenue %> 
+</td>
+<td class="text-right">
+   <%= @common_total_Orders_product_cost %> 
+</td>
+
+
+  </tr> 
+</tfoot>
   </table>
   <% else %>
   <div class="well well-sm">

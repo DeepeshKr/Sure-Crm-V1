@@ -1,5 +1,5 @@
-<h3>List of Products (PRODMASTER)</h3>
-
+<h3>Search Products (PRODMASTER)</h3>
+<% if @prodmasters.present? %>
 <table class="table table-hover">
   <thead>
     <tr>
@@ -42,4 +42,6 @@
     <% end %>
   </tbody>
 </table>
-
+<% else %>
+<h3>Nothing found </h3>
+<% end %>

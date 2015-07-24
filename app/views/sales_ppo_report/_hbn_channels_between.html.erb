@@ -7,7 +7,8 @@
     
        <th>Nos</th>
      <th>Value</th>
-    
+      <th>Corr</th>
+     <th>Comm</th>
      </tr>
   </thead>
 <tbody>
@@ -27,6 +28,12 @@
 <td class="text-right">
    <%= c[:total] %> 
 </td>
+<td class="text-right">
+   <%= c[:correction] %> 
+</td>
+<td class="text-right">
+   <%= c[:commission] %> 
+</td>
 
   </tr> 
 
@@ -37,6 +44,7 @@
   </tbody>
 
   </table>
+  <small>Corr => Correction | Comm => Commission</small>
   <% else %>
   <div class="well well-sm">
   <h5>Please select a date to generate the report or No sales in HBN </h5>

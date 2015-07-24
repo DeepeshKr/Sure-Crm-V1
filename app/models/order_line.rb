@@ -186,32 +186,39 @@ end
 
 end
 
+def productcost
+   if self.product_list.present? #&& self.pieces.present?
+    pcode = self.product_list.extproductcode
+    ropmaster =  ROPMASTER_NEW.where("prod = ?", pcode).first
+      if ropmaster.present?
+          return ropmaster.totalcost #* self.pieces || 0
+     else
+        return 0
+     end
+  else
+    return 0
+  end
+end
+
 def productrevenue
-  pcode = self.product_variant.product_master.extproductcode
- ropmaster = ROPMASTER_NEW.where("prod = ?", pcode).first
- if ropmaster.present?
-    if subtotal > 0
-      return ropmaster.totalrevenue * self.pieces || 0
+  if self.product_list.present? #&& self.pieces.present?
+    pcode = self.product_list.extproductcode
+    ropmaster = ROPMASTER_NEW.where("prod = ?", pcode).first
+    if ropmaster.present?
+        if self.subtotal > 0
+          return ropmaster.totalrevenue #* self.pieces || 0
+        else
+          return 0
+        end
     else
       return 0
     end
-    
- else
-    return 0
- end
-  
-end
+  else
+      return 0
+    end
+end 
 
-def productcost
-  pcode = self.product_variant.product_master.extproductcode
-  ropmaster =  ROPMASTER_NEW.where("prod = ?", pcode).first
-  if ropmaster.present?
-      return ropmaster.totalcost * self.pieces || 0
- else
-    return 0
- end
-  
-end
+
 
 private
   #campaign_playlist_id in orderline

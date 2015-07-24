@@ -1,0 +1,66 @@
+<h4>Product Costs </h4>
+<% if @ropmasters.present? %>
+<p class="lead">Cost: <%= @ropmasters.first.totalcost  %>
+<small>(
+vc1: <%= @ropmasters.first.vc1 %> 
+pc1: <%= @ropmasters.first.pc1  %>
+tc1: <%= @ropmasters.first.tc1  %>
+pack1: <%= @ropmasters.first.pack1  %>
+copret: <%= @ropmasters.first.copret  %>
+royalty: <%= @ropmasters.first.royalty  %>)
+</small> 
+<br>
+Revenue: <%= @ropmasters.first.totalrevenue  %>
+
+<small>(
+bp1: <%= @ropmasters.first.bp1 %> 
+sh1: <%= @ropmasters.first.sh1  %>)  </small>  </p>
+
+
+<table class="table table-hover">
+  <thead>
+    <tr>
+       <th>prod</th>
+           <th>PC1 <br>     PC2 <br> PC3 </th>
+       <th>BP1 <br>      BP2  <br>      BP3 </th>
+       <th>SH1 <br>     SH2  <br>      SH3 </th>
+       <th>VC1  <br>      VC2  <br>      VC3   </th>
+       <th>TC1  <br>    TC2  <br>      TC3   </th>
+       <th>PACK1   <br>     PACK2 <br>      PACK3   </th>
+       <th>WBP <br> WVC <br> PCB1 </th>
+       <th>BPB1 <br> SHB1 <br> VCB1 </th>
+       <th>TCB1 <br> PCP1 <br> BPP1 </th>
+       <th>SHP1 <br>VCP1 <br> TCP1 </th>
+       <th>PCM1 <br>BPM1 <br> SHM1 </th>
+       <th>VCM1 <br>TCM1 <br> DNBASIC </th>
+       <th>WPC <br>ROYALTY <br> COPRET </th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @ropmasters.each do |d| %>
+      <tr>
+        <td><%= d.prod %></td>
+           <td><%= d.pc1 %> <br>       <%= d.pc2 %><br>       <%= d.pc3 %></td>
+       <td><%= d.bp1 %> <br>      <%= d.bp2 %> <br>      <%= d.bp3 %></td>
+       <td><%= d.sh1 %> <br>      <%= d.sh2 %> <br>       <%= d.sh3 %></td>
+       
+       <td><%= d.vc1 %>  <br>      <%= d.vc2 %> <br>       <%= d.vc3 %>  </td>
+        <td><%= d.tc1 %>  <br>      <%= d.tc2 %> <br>       <%= d.tc3 %>  </td>
+
+           <td><%= d.pack1 %>  <br>      <%= d.pack2 %> <br>       <%= d.pack3 %>  </td>
+        <td><%= d.wbp %> <br> <%= d.wvc %> <br> <%= d.pcb1 %></td>
+       <td><%= d.bpb1 %> <br> <%= d.shb1 %> <br> <%= d.vcb1 %></td>
+       <td><%= d.tcb1 %><br><%= d.pcp1 %><br><%= d.bpp1 %></td>
+       <td><%= d.shp1 %><br><%= d.vcp1 %><br><%= d.tcp1 %></td>
+       <td><%= d.pcm1 %><br><%= d.bpm1 %><br><%= d.shm1 %></td>
+       <td><%= d.vcm1 %><br><%= d.tcm1 %><br><%= d.dnbasic %></td>
+      <td><%= d.wpc %><br><%= d.royalty %><br><%= d.copret %></td>
+
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+<% else %>
+<h3> No products found </h3>
+<% end %>

@@ -4,15 +4,17 @@
 	<h4>HBN Shows  
 		<small>
 			<%= @show_date %> 
-			<%= @start_time.strftime("%H:%M") %> 
-			<%= @end_time.strftime("%H:%M") %>
+			<%= @start_time.strftime("%H:%M") if  @start_time.present? %> 
+			<%= @end_time.strftime("%H:%M") if  @end_time.present? %>
 		</small>  
 	</h4>
 	<hr>
 		 <%= render('playlists') %>
 	</div>
 	<div class="col-xs-8">
-	<h4>Products Sold over HBN <small><%= @show_date %> <%=@start_time.strftime("%H:%M") %> <%= @end_time.strftime("%H:%M") %></small> </h4>
+	<h4>Products Sold over HBN <small><%= @show_date %> 
+	<%=@start_time.strftime("%H:%M") if  @start_time.present? %> 
+	<%= @end_time.strftime("%H:%M") if  @end_time.present? %></small> </h4>
 	<hr>
 		 <%= render('product_list') %>
 	</div>
@@ -22,12 +24,88 @@
 	<h4>Channel </h4>
 <%= render('hbn_channels_between') %>
 	</h4>
+	<h4>List Break up 
+			</h4>
+		<%= render('between_time') %>	
 	</div>
 
 	<div class="col-xs-8">
-	<h4>Order List  <%= @show_date %> 
-			from <%= @start_time.strftime("%H:%M") %> 
-			to <%= @end_time.strftime("%H:%M") %></h4>
-		<%= render('between_time') %>	
+
+	<div class="well well-sm">
+	<h3>Original</h3>
+	<hr>
+	<div class="row">
+	<div class="col-xs-12">
+	<table class="table table-hover table-bordered">
+		<thead>
+			<tr>
+			<th>Order Nos</th>
+			<th>Sales</th>
+			<th>Revenue</th>
+			<th>Product Cost</th>
+			<th>Commission</th>
+			<th>Media Cost</th>
+			<th>Profitability</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+			<td class="text-right"><%= @total_orders_nos %></td>
+			<td class="text-right"><%= @total_orders_sales %></td>
+			<td class="text-right"><%= @total_orders_revenue %></td>
+			<td class="text-right"><%= @total_Orders_product_cost %></td>
+			<td class="text-right"><%= @order_media_var_cost_full %></td>
+			<td class="text-right"><%= @actual_media_cost %></td>
+			<td class="text-right">Profitability</td>
+			</tr>
+		
+		</tbody>
+	</table>
+	</div>
+	</div>
+	</div>
+
+	<div class="well well-sm">
+	<h3>Corrected by 50%</h3>
+	<hr>
+	<div class="row">
+	<div class="col-xs-12">
+	<table class="table table-hover table-bordered">
+		<thead>
+			<tr>
+			<th>Order Nos</th>
+			<th>Sales</th>
+			<th>Revenue</th>
+			<th>Product Cost</th>
+			<th>Commission</th>
+			<th>Media Cost</th>
+			<th>Profitability</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+			<td class="text-right"><%= (@total_orders_nos * 0.5).to_i %></td>
+			<td class="text-right"><%= @total_orders_sales * 0.5 %></td>
+			<td class="text-right"><%= @total_orders_revenue * 0.5 %></td>
+			<td class="text-right"><%= @total_Orders_product_cost * 0.5 %></td>
+			<td class="text-right"><%= @order_media_var_cost %></td>
+			<td class="text-right"><%= @actual_media_cost %></td>
+			<td class="text-right">Profitability</td>
+			</tr>
+			<tr>
+			<td class="text-right">Per Order</td>
+			<td class="text-right" ><%= (@total_orders_sales * 0.5) / (@total_orders_nos * 0.5).to_i %></td>
+			<td class="text-right"><%= (@total_orders_revenue * 0.5) / (@total_orders_nos * 0.5).to_i %></td>
+			<td class="text-right"><%= (@total_Orders_product_cost * 0.5) / (@total_orders_nos * 0.5).to_i %></td>
+			<td class="text-right"><%= (@order_media_var_cost).to_i / (@total_orders_nos * 0.5).to_i %></td>
+			<td class="text-right"><%= (@actual_media_cost).to_i / (@total_orders_nos * 0.5).to_i %></td>
+			<td class="text-right">Profitability</td>
+			</tr>
+		</tbody>
+	</table>
+	</div>
+	</div>
+	</div>
+	
 	</div>
 </div>

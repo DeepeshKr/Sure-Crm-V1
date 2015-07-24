@@ -7,11 +7,20 @@ class  ROPMASTER_NEW < ActiveRecord::Base
   self.table_name = 'ROPMASTER_NEW' 
 
   def totalcost
+    if self.present?
   	(self.vc1 ||=0) + (self.pc1 ||= 0) + (self.tc1 ||= 0) + (self.pack1 ||= 0) + (self.copret ||= 0) +  (self.royalty ||= 0) 
+     else
+
+    end
   end
 
   def totalrevenue
-	(self.bp1 ||= 0) +  (self.sh1 ||= 0) 
+    if self.present?
+      (self.bp1 ||= 0) +  (self.sh1 ||= 0) 
+    else
+
+    end
+	
   end
 
 end

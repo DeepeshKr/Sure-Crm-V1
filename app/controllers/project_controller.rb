@@ -27,6 +27,29 @@ class ProjectController < ApplicationController
   end
   
   def about
+    # stuff = ['chod', :mint, "wall", :ball]
+    # @list = "NA"
+    # stuff.find_all do |word|
+    #    if word[0..1] == "wa"
+    #      @list += word[0..1]
+    #   end
+    # end
+
+    n = "10 10 10"
+    @test = n
+      @values = n.split #.('')
+      @n1 = @values[0].to_i
+      @n2 = @values[1].to_i
+      @n3 = @values[2].to_i
+
+      if (@n1 == @n2) && (@n2 == @n3)
+          @list = "An Equvilateral Triangle"
+      elsif (@n1 == @n2) || (@n2 == @n3) || (@n1 == @n3)
+          @list = "An Isoceles Triangle"
+      else
+          @list = "Scalene Triangle"    
+      end
+
       @states = State.all.order("name")
      @timenow = (Time.zone.now + 330.minutes).strftime("%d-%b-%Y %H:%M")
   end

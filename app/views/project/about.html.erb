@@ -1,9 +1,11 @@
 
 <% provide(:title, 'Sign up') %>
 <h1>About => Try New Things here</h1>
-
-
-
+Teste for: <%= @test %> <%= @values %>
+<p class="lead">
+n1<% @n1 %> n2<% @n2 %> n3<% @n3 %>
+<%= @list %>
+</p>
  <div class="row">
  <%= bootstrap_form_tag url: show_city_path, :method => :GET, :enforce_utf8 => false do |f| %>
 <div class="col-xs-3">

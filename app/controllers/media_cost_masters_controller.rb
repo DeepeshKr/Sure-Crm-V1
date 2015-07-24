@@ -98,15 +98,20 @@ class MediaCostMastersController < ApplicationController
        str_min = media_cost_master_params[:str_min].to_i 
        end_hr = media_cost_master_params[:end_hr].to_i 
        end_min = media_cost_master_params[:end_min].to_i 
+       if end_hr == 0 && end_min == 0
+          end_hr = 24
+       end
        duration_secs = (end_hr*60*60 + end_min*60) - (str_hr*60*60 + str_min*60) 
         @media_cost_master.update(duration_secs: duration_secs)
         @media_cost_master.update(name: "Cost for time between #{str_hr}:#{str_min} and #{end_hr}: #{end_min} ")
+    
      end
 
       #respond_with(@media_cost_master)
       if @media_cost_master.valid?
           flash[:success] = "Media Cost successfully added " 
            @media_cost_master.save
+            @media_cost_master.update(total_cost: hbn_total_cost.to_f * media_cost_master_params[:slot_percent].to_f)
       else
           flash[:error] = @media_cost_master.errors.full_messages.join("<br/>")
       end
@@ -128,6 +133,9 @@ class MediaCostMastersController < ApplicationController
        str_min = media_cost_master_params[:str_min].to_i 
        end_hr = media_cost_master_params[:end_hr].to_i 
        end_min = media_cost_master_params[:end_min].to_i 
+       if end_hr == 0 && end_min == 0
+          end_hr = 24
+       end
        duration_secs = (end_hr*60*60 + end_min*60) - (str_hr*60*60 + str_min*60) 
         @media_cost_master.update(duration_secs: duration_secs)
         @media_cost_master.update(name: "Cost for time between #{str_hr}:#{str_min} and #{end_hr}: #{end_min} ")

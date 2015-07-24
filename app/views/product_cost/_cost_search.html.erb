@@ -1,0 +1,12 @@
+<div class="row">
+ <%= form_tag({controller: "product_cost", action: "details"}, method: "get") do  %>
+<div class="col-xs-8">
+<%= text_field_tag(:search, nil, :class => "form-control", :required => "true", :placeholder => "Search Product Name", :value => @searchvalue  )   %>
+</div>
+
+<div class="col-xs-4">
+	<%= submit_tag "Search", name: nil, class: "btn btn-primary" %>
+</div>
+<% end %>
+
+</div>

@@ -1,5 +1,6 @@
-<h4>Products with Product Id <%= @prod %></h4>
-
+<h4>Is there a PROD <%= @prod %> in PRODMASTER</h4>
+<% if @prodmasters.present? %>
+<p class="lead">Yes there is </p>
 <table class="table table-hover">
   <thead>
     <tr>
@@ -41,3 +42,6 @@
     <% end %>
   </tbody>
 </table>
+<% else %>
+<p class="lead">No such PROD <%= @prod %> found </p>
+<% end %>

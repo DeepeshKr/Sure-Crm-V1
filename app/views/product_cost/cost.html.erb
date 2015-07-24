@@ -1,5 +1,5 @@
 <h3>List of Products</h3>
-
+<% if @ropmasters.present? %>
 <table class="table table-hover">
   <thead>
     <tr>
@@ -78,4 +78,6 @@
     <% end %>
   </tbody>
 </table>
-
+<% else %>
+<h3>Nothing found </h3>
+<% end %>
