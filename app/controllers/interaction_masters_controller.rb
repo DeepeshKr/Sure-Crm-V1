@@ -55,6 +55,8 @@ class InteractionMastersController < ApplicationController
   end
 
   def show
+    @quick_close_text = "Closed Problem"
+    @close_id = 10003
     @empcode = current_user.employee_code
       #@empid = current_user.id
       @empid = Employee.where(employeecode: @empcode).first.id
@@ -62,6 +64,8 @@ class InteractionMastersController < ApplicationController
     @em_interaction_transcript = InteractionTranscript.new(:interactionid => params[:id], :interactionuserid => 10001, employee_id: @empid, ip: request.remote_ip)
     @cm_interaction_transcript = InteractionTranscript.new(:interactionid => params[:id], :interactionuserid => 10000, employee_id: @empid, ip: request.remote_ip)
      @interaction_transcripts = InteractionTranscript.where("interactionid = ?", params[:id]).order(:created_at)
+   
+     flash[:notice] = "This has been updated" 
     respond_with(@interaction_master, @interaction_transcripts, @em_interaction_transcript, @cm_interaction_transcript)
   end
 
