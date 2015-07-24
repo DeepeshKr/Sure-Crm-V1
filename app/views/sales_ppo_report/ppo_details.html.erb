@@ -45,19 +45,20 @@
 			<th>Product Cost</th>
 			<th>Commission</th>
 			<th>Media Cost</th>
+			<th>Refunds</th>
 			<th>Profitability</th>
 			</tr>
 		</thead>
 		<tbody>
 			<tr>
-			<td class="text-right"><%= @total_orders_nos %></td>
-			<td class="text-right"><%= @total_orders_sales %></td>
-			<td class="text-right"><%= @total_orders_revenue %></td>
-			<td class="text-right"><%= @total_Orders_product_cost %></td>
-			<td class="text-right"><%= @order_media_var_cost_full %></td>
-			<td class="text-right"><%= @actual_media_cost %></td>
-			<td class="text-right"><%= (@total_orders_revenue) - ((@total_Orders_product_cost + @total_Orders_product_cost * 0.1) + 
-			@order_media_var_cost + @actual_media_cost) %></td>
+			<td class="text-right"><%= @total_orders_nos.to_i %></td>
+			<td class="text-right"><%= @total_orders_sales.to_i %></td>
+			<td class="text-right"><%= @total_orders_revenue.to_i %></td>
+			<td class="text-right"><%= @total_Orders_product_cost.to_i  %></td>
+			<td class="text-right"><%= @order_media_var_cost_full.to_i %></td>
+			<td class="text-right"><%= @actual_media_cost.to_i %></td>
+			<td class="text-right"><%= @total_orders_refund.to_i %></td>
+			<td class="text-right"><%= @total_order_profitability.to_i %></td>
 			</tr>
 		
 		</tbody>
@@ -67,7 +68,7 @@
 	</div>
 
 	<div class="well well-sm">
-	<h3>Corrected by 60%</h3>
+	<h3>Corrected by 60% Sold and Delivered</h3>
 	<hr>
 	<div class="row">
 	<div class="col-xs-12">
@@ -80,19 +81,20 @@
 			<th>Product Cost*</th>
 			<th>Commission</th>
 			<th>Media Cost</th>
+			<th>Refunds</th>
 			<th>Profitability</th>
 			</tr>
 		</thead>
 		<tbody>
 			<tr>
-			<td class="text-right"><%= (@total_orders_nos * 0.6).to_i %></td>
-			<td class="text-right"><%= @total_orders_sales * 0.6 %></td>
-			<td class="text-right"><%= @total_orders_revenue * 0.6 %></td>
-			<td class="text-right"><%= @total_Orders_product_cost * 0.6 %></td>
-			<td class="text-right"><%= @order_media_var_cost %></td>
-			<td class="text-right"><%= @actual_media_cost %></td>
-			<td class="text-right"><%= (@total_orders_revenue * 0.6) - (((@total_Orders_product_cost * 0.6) + @total_Orders_product_cost * 0.1) + 
-			@order_media_var_cost + @actual_media_cost) %></td>
+			<td class="text-right"><%= (@total_orders_nos_60).to_i %></td>
+			<td class="text-right"><%= @total_orders_sales_60.to_i %></td>
+			<td class="text-right"><%= @total_orders_revenue_60.to_i %></td>
+			<td class="text-right"><%= (@total_Orders_product_cost_60 + @total_Orders_product_cost_breakage_60).to_i %></td>
+			<td class="text-right"><%= @order_media_var_cost_60.to_i %></td>
+			<td class="text-right"><%= @actual_media_cost.to_i %></td>
+			<td class="text-right"><%= @total_orders_refund_60.to_i %></td>
+			<td class="text-right"><%= @total_order_profitability_60.to_i %></td>
 			</tr>
 			
 		</tbody>
@@ -102,7 +104,7 @@
 	</div>
 	</div>
 	<div class="well well-sm">
-	<h3>Corrected by 50%</h3>
+	<h3>Corrected by 50% Sold and Delivered</h3>
 	<hr>
 	<div class="row">
 	<div class="col-xs-12">
@@ -115,19 +117,20 @@
 			<th>Product Cost*</th>
 			<th>Commission</th>
 			<th>Media Cost</th>
+			<th>Refunds</th>
 			<th>Profitability</th>
 			</tr>
 		</thead>
 		<tbody>
 			<tr>
-			<td class="text-right"><%= (@total_orders_nos * 0.5).to_i %></td>
-			<td class="text-right"><%= @total_orders_sales * 0.5 %></td>
-			<td class="text-right"><%= @total_orders_revenue * 0.5 %></td>
-			<td class="text-right"><%= @total_Orders_product_cost * 0.5 %></td>
-			<td class="text-right"><%= @order_media_var_cost %></td>
-			<td class="text-right"><%= @actual_media_cost %></td>
-			<td class="text-right"><%= (@total_orders_revenue * 0.5) - (((@total_Orders_product_cost * 0.5) + @total_Orders_product_cost * 0.1) + 
-			@order_media_var_cost + @actual_media_cost) %></td>
+			<td class="text-right"><%= (@total_orders_nos_50).to_i %></td>
+			<td class="text-right"><%= @total_orders_sales_50.to_i %></td>
+			<td class="text-right"><%= @total_orders_revenue_50.to_i %></td>
+			<td class="text-right"><%= (@total_Orders_product_cost_50  + @total_Orders_product_cost_breakage_50).to_i %></td>
+			<td class="text-right"><%= @order_media_var_cost_50.to_i %></td>
+			<td class="text-right"><%= @actual_media_cost.to_i %></td>
+			<td class="text-right"><%= @total_orders_refund_50.to_i %></td>
+			<td class="text-right"><%= @total_order_profitability_50.to_i %></td>
 			</tr>
 			
 		</tbody>
@@ -136,8 +139,44 @@
 	</div>
 	</div>
 	</div>
+		<div class="well well-sm">
+	<h3>Corrected by 40% Sold and Delivered</h3>
+	<hr>
+	<div class="row">
+	<div class="col-xs-12">
+	<table class="table table-hover table-bordered">
+		<thead>
+			<tr>
+			<th>Order Nos</th>
+			<th>Sales</th>
+			<th>Revenue</th>
+			<th>Product Cost*</th>
+			<th>Commission</th>
+			<th>Media Cost</th>
+			<th>Refunds</th>
+			<th>Profitability</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+			<td class="text-right"><%= (@total_orders_nos_40).to_i %></td>
+			<td class="text-right"><%= @total_orders_sales_40.to_i %></td>
+			<td class="text-right"><%= @total_orders_revenue_40.to_i %></td>
+			<td class="text-right"><%= (@total_Orders_product_cost_40 + @total_Orders_product_cost_breakage_40).to_i %></td>
+			<td class="text-right"><%= @order_media_var_cost_40.to_i %></td>
+			<td class="text-right"><%= @actual_media_cost.to_i %></td>
+			<td class="text-right"><%= @total_orders_refund_40.to_i %></td>
+			<td class="text-right"><%= @total_order_profitability_40.to_i %></td>
+			</tr>
+			
+		</tbody>
+	</table>
+	<small>Product Cost is added 10% more to take care of Damages, Packaging etc</small>
+	</div>
+	</div>
+	</div>
+	<div class="well well-sm">
+		<p>All Description about this Report</p>
+	</div>
 	</div>
 </div>
-<p>
-<%= @hbn_order_masters %>
-</p>

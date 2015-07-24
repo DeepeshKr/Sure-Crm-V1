@@ -750,6 +750,9 @@ def shows_between
     @total_orders_nos = 0
     @total_orders_revenue = 0
     @total_Orders_product_cost = 0
+    @actual_media_cost = 0
+    @order_media_var_cost = 0
+    @total_order_profitability = 0
 
     @main_total_orders_subtotal = 0
         @main_total_orders_shipping = 0
@@ -813,7 +816,7 @@ def shows_between
 
         order_master_list = OrderMaster.where(id: order_masters)
           #split the fixed cost across the hour 
-          @order_media_var_cost = 0
+         
           @order_media_var_cost_full = 0
           order_master_list.each do |med |
            
@@ -1028,12 +1031,50 @@ def shows_between
         @basic_total_Orders_product_cost += cost_of_product  * noorders
 
         @total_orders_sales += totalorders
+        @total_orders_refund = @total_orders_sales * 0.02
         @total_orders_nos += noorders
         @total_orders_revenue += revenue_of_product * noorders
         @total_Orders_product_cost += cost_of_product  * noorders
         end
 
         @basic_product_list_orderlist = basic_product_list_orderlist.sort_by{|c| c[:total]}.reverse  
+        
+        @total_order_profitability = @total_orders_revenue + (@total_Orders_product_cost + @actual_media_cost + @order_media_var_cost)
+        #60%
+        total_Orders_product_cost_60 = 0
+        @total_orders_sales_60 = (@total_orders_sales * 0.6) || 0
+        @total_orders_nos_60 = (@total_orders_nos * 0.6) || 0
+        @total_orders_refund_60 = (@total_orders_refund * 0.6) || 0
+        @total_orders_revenue_60 = (@total_orders_revenue  * 0.6) || 0
+        @total_Orders_product_cost_60 = (@total_Orders_product_cost * 0.6) || 0
+        @total_Orders_product_cost_breakage_60 = (@total_Orders_product_cost_60 * 0.10) || 0
+        @actual_media_cost_60 = @actual_media_cost
+        @order_media_var_cost_60 = (@order_media_var_cost * 0.6) || 0
+        @total_order_profitability_60 = (@total_orders_revenue_60 - (@total_Orders_product_cost_60 + @total_orders_refund_60 + @actual_media_cost_60 +   @total_Orders_product_cost_breakage_60 + @order_media_var_cost_60)) || 0
+
+        @total_Orders_product_cost__breakage_50 = 0
+        @total_orders_sales_50 = (@total_orders_sales * 0.5) || 0
+        @total_orders_nos_50 = (@total_orders_nos * 0.5) || 0
+          @total_orders_refund_50 = (@total_orders_refund * 0.5) || 0
+        @total_orders_revenue_50 = (@total_orders_revenue  * 0.5) || 0
+        @total_Orders_product_cost_50 = (@total_Orders_product_cost * 0.5) || 0
+        @total_Orders_product_cost_breakage_50 = (@total_Orders_product_cost_50 * 0.10) || 0
+        @actual_media_cost_50 = @actual_media_cost
+        @order_media_var_cost_50 = (@order_media_var_cost * 0.5) || 0
+        @total_order_profitability_50 = (@total_orders_revenue_50 - (@total_Orders_product_cost_50 +  @total_Orders_product_cost_breakage_50 + @total_orders_refund_50 + @actual_media_cost_50 +  @order_media_var_cost_50)) || 0
+         #@total_order_profitability_50 = (@total_orders_revenue_50 - (@total_Orders_product_cost_50 + @actual_media_cost_50 + @total_Orders_product_cost_breakage_50 + @order_media_var_cost_50)) || 0
+        @total_Orders_product_cost__breakage_40 = 0
+        @total_orders_sales_40 = (@total_orders_sales * 0.4) || 0
+        @total_orders_nos_40 = (@total_orders_nos * 0.4) || 0
+        @total_orders_refund_40 = (@total_orders_refund * 0.4) || 0
+        @total_orders_revenue_40 = (@total_orders_revenue  * 0.4) || 0
+        @total_Orders_product_cost_40 = (@total_Orders_product_cost * 0.4) || 0
+        @total_Orders_product_cost_breakage_40 = (@total_Orders_product_cost_40 * 0.10) || 0
+        @actual_media_cost_40 = @actual_media_cost
+        @order_media_var_cost_40 = (@order_media_var_cost * 0.4) || 0
+        @total_order_profitability_40 = (@total_orders_revenue_40 - (@total_Orders_product_cost_40 +  @total_Orders_product_cost_breakage_40 + @total_orders_refund_40 + @actual_media_cost_40 +  @order_media_var_cost_40)) || 0
+   
+
      end
  end
 
