@@ -257,7 +257,7 @@ Rails.application.routes.draw do
   get 'newinteraction' => 'interaction_masters#new_ticket'
   post 'newticket' => 'interaction_masters#new_interaction'
   post 'disposecall' => 'interaction_masters#dispose_call'
-  post 'newcomments' => 'interaction_transcripts#quick_create'
+  post 'newcomments' => 'interaction_transcripts#quick_create' 
 
   get 'corporateorder/list'
   get 'corporateorder/new'

@@ -27,18 +27,7 @@ class InteractionTranscriptsController < ApplicationController
       @empid = Employee.where(employeecode: @empcode).first.id
 
     @interaction_transcript = InteractionTranscript.create(interaction_transcript_params) 
-        # description: params[:description], 
-        # employee_id: ,
-        # callednumber: params[:callednumber],
-        #  )
-  
-
-    #description = interaction_transcript_params[:description]
-    #description += "-- update by user: " << current_user.name << " from ip:" << request.remote_ip 
-    #@interaction_transcript = InteractionTranscript.new(interaction_transcript_params)
-    #@interaction_transcript.save
-    #@interaction_transcript.update(employee_id: @empid, ip: request.remote_ip)
-
+     
     interaction_status_id = params[:interaction_status_id]
     interaction_master = InteractionMaster.find(@interaction_transcript.interactionid)
     interaction_master.update(interaction_status_id: interaction_status_id)
@@ -68,6 +57,8 @@ class InteractionTranscriptsController < ApplicationController
     end
 
     def interaction_transcript_params
-      params.require(:interaction_transcript).permit(:interactionid, :interactionuserid, :description, :interaction_status_id, :employee_id, :ip)
+      params.require(:interaction_transcript).permit(:interactionid, 
+        :interactionuserid, :description, :interaction_status_id,
+         :employee_id, :ip)
     end
 end
