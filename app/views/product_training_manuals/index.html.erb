@@ -7,7 +7,7 @@
 <%= form_tag("/producttraining", method: "get") do  %>
       <div class="row">
         <div class="col-xs-10">
-        <%= select_tag(:productid, 
+        <%= select_tag(:id, 
                 options_from_collection_for_select(ProductMaster.all, :id, :productname, selected: @productid), 
                 {:class => "form-control"} )  %>
           

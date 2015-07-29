@@ -5,10 +5,10 @@ class ProductTrainingManualsController < ApplicationController
   respond_to :html, :xml, :json
 
   def index
-    if params[:productid].present?
-       @product_training_manuals = ProductTrainingManual.where("productid = ?", params[:productid])
-       @productid = params[:productid]
-       @trainingfor = ProductMaster.find(params[:productid]).productname + " Training"
+    if params[:id].present?
+       @product_training_manuals = ProductTrainingManual.where("productid = ?", params[:id])
+       @productid = params[:id]
+       @trainingfor = ProductMaster.find(params[:id]).productname + " Training"
     
         @product_training_manual = ProductTrainingManual.new(productid: @productid)
     
@@ -37,8 +37,10 @@ class ProductTrainingManualsController < ApplicationController
        @traininglist = ProductTrainingManual.where('productid = ?', @productid)
                 
        if @traininglist.empty?
-         @training = "No script for " + params[:id] + "product id " + @productid.to_s
+        if params.has_key?(:id)
+         @training = "No script for " + params[:id] 
          @heading = "Searched for " << @productid.to_s 
+       end
        end         
         
         @training =  "updated at " + DateTime.now.to_s 

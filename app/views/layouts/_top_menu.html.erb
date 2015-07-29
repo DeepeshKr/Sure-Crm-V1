@@ -13,9 +13,7 @@
             <ul class="dropdown-menu">
               <li><%= link_to "New Employees", "/employees/new" %></li>
               <li><%= link_to "Employee List", "/employees" %></li>
-              <li class="divider"></li>
-              <li><%= link_to "List of Orders", "/orderlist" %></li>
-               <li><%= link_to "Daily Report", "/dailyreport" %></li>
+        
               
             </ul>
          </li>
@@ -25,9 +23,9 @@
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
               Reports <b class="caret"></b> </a>
             <ul class="dropdown-menu">
-             <li><%= link_to "Sales Summary Report", "/sales_report" %></li>
+             <li><%= link_to "Sales Summary Report", "/sales_report" , data: { confirm: 'This Report Will take some time to show!' } %></li>
               <% if (current_user.employee_role.sortorder < 3) %> 
-               <li><%= link_to "PPO Report", "/ppo_report" %></li>
+               <li><%= link_to "PPO Report", "/ppo_report" , data: { confirm: 'This Report Will take some time to show!'} %></li>
                <li><%= link_to "PPO Report (Test Products)", "/product_test_ppos" %></li>
             <% end %>
               
@@ -88,7 +86,7 @@
             	Products <b class="caret"></b> </a>
             <ul class="dropdown-menu">
               <li><%= link_to "Master", "/product_masters" %></li>
-               <li><%= link_to "Training", "/producttraininglist" %></li>
+               <!-- <li><%= link_to "Training", "/producttraininglist" %></li> -->
               <li><%= link_to "Variant", "/product_variants" %></li>
                 <li><%= link_to "Product Lists", "/product_lists" %></li>
                  <li><%= link_to "Basic Upsell Lists", "/product_master_add_ons" %></li>

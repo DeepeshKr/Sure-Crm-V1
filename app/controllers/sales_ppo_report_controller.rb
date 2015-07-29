@@ -1,78 +1,108 @@
 class SalesPpoReportController < ApplicationController
   before_action { protect_controllers(4) } 
   before_action :media_segments, only: [:daily, :hourly, :show, :channel]
+  before_action :constants
   def summary
      @sno = 1
      @searchaction = "summary"
         @datelist ||= []
         employeeunorderlist ||= []
-
-      #  @or_for_date = Date.strptime(params[:for_date], "%d-%m-%Y")
-      #for_date =  Date.strptime(params[:for_date], "%d-%m-%Y")
-     
-         #media segregation only HBN
+        
+         if params.has_key?(:for_date)
+          for_date =  Date.strptime(params[:for_date], "%Y-%m-%d")
+          @or_for_date = Date.strptime(params[:for_date], "%Y-%m-%d")
+          #for_date =  Date.strptime(params[:for_date], "%Y-%m-%d")
+          from_date = for_date.to_date - 0.days #30.days
+          up_to_date = for_date.to_date 
+        else
+           use_date = (330.minutes).from_now.to_date
+          from_date = use_date.to_date - 1.days #30.days
+          up_to_date = use_date.to_date - 1.days
+        end
+      
           media_segments
-          use_date = (330.minutes).from_now.to_date
-          from_date = use_date.to_date - 2.days #30.days
-          up_to_date = use_date.to_date
+         
 
           # from_date = (330.minutes).from_date.to_date
           # up_to_date = (330.minutes).up_to_date.to_date
-
+        
           up_to_date.downto(from_date).each do |day|
+           # day = day - 330.minutes
           @datelist <<  day.strftime('%y-%b-%d')
-          web_date = day
-          web_date = web_date.strftime()
+          # web_date = day
+          # web_date = web_date.strftime()
           for_date = day # Date.
           @or_for_date = for_date
+
+           from_date = for_date.beginning_of_day - 330.minutes
+           to_date = for_date.end_of_day - 330.minutes
            
            orderlist = OrderMaster.where('ORDER_STATUS_MASTER_ID > 10002')
-           .where('TRUNC(orderdate) = ?',for_date).where(media_id: @hbnlist)
+           .where('orderdate >= ? AND orderdate <= ?', from_date, to_date)
+           .where(media_id: @hbnlist)
 
           # #split the fixed cost across the hour
           revenue = 0
           media_var_cost = 0
           product_cost = 0
 
+          @list_of_orders ||= []
+            
+         
           orderlist.each do |med |
+
+            @list_of_orders << {order_no:  med.id,
+             time_of_order: med.orderdate.strftime('%Y-%b-%d %H:%M:%S')}
             #error loggin
-            begin
+            
+           #  begin
                         
-            revenue += OrderMaster.find(med.id).productrevenue ||= 0
-           # media_var_cost += OrderMaster.find(med.id).mediacost ||= 0
-            product_cost += OrderMaster.find(med.id).productcost ||= 0
-            media_variable = Medium.where('id = ? AND value is not null', med.media_id)
-            .where(:media_commision_id => [10020, 10021, 10040, 10041, 10060]) #.pluck(:value)
-              if media_variable.present?
-                #discount the total value by 50% as correction
-                correction = 0.5
-                #PAID_CORRECTION
-                 if media_variable.first.paid_correction.present?
-                   correction = media_variable.first.paid_correction #||= 0.5
-                 end
-               media_var_cost += (med.subtotal * media_variable.first.value.to_f) * correction
-              end
-               rescue => e
-               logger.warn "Unable to foo, will ignore: #{e}" 
-            end
-          end
+           #  revenue += OrderMaster.find(med.id).productrevenue  ||= 0
+           # # media_var_cost += OrderMaster.find(med.id).mediacost ||= 0
+           #  product_cost += OrderMaster.find(med.id).productcost ||= 0
+           #  media_variable = Medium.where('id = ? AND value is not null', med.media_id)
+           #  .where(:media_commision_id => [10020, 10021, 10040, 10041, 10060]) #.pluck(:value)
+           #    if media_variable.present?
+           #      #discount the total value by 50% as media_correction
+           #      media_correction = 0.5
+           #      #PAID_CORRECTION
+           #       if media_variable.first.paid_correction.present?
+           #         media_correction = media_variable.first.paid_correction #||= 0.5
+           #       end
+           #     media_var_cost += (med.subtotal * media_variable.first.value.to_f) * media_correction
+           #    end
+           #     rescue => e
+           #     logger.warn "Unable to foo, will ignore: #{e}" 
+           #  end
+
+          end #end order list
+
+           #  revenue = revenue * @correction
+           #  product_cost = (product_cost * @correction) + (product_cost * 0.10)
+
           fixed_cost = Medium.where(media_group_id: 10000).sum(:daily_charges)
           
           #ppo for each hour
-         
-           totalorders = orderlist.sum(:total)
-          nos = orderlist.count()
-          pieces = orderlist.sum(:pieces)
-          employeeunorderlist << {:total => totalorders,
+          total_shipping = (orderlist.sum(:shipping) * @shipping_tax_less) * @correction
+          total_sub_total = (orderlist.sum(:subtotal) * @subtotal_vat_less) * @correction
+          totalorders = total_shipping + total_sub_total
+          nos = orderlist.count() 
+          pieces = orderlist.sum(:pieces) * @correction
+          refund = totalorders * 0.02
+
+          employeeunorderlist << {:total => totalorders.to_i,
           :for_date =>  for_date.strftime("%Y-%m-%d"),
-          :pieces => pieces,
-          :nos => nos,
+          :pieces => pieces.to_i * @correction,
+          :refund => refund.to_i,
+          :nos => nos.to_i * @correction,
+          :total_nos => nos.to_i,
           :revenue => revenue.to_i,
           :product_cost => product_cost.to_i,
           :variable_cost => media_var_cost.to_i,
           :fixed_cost => fixed_cost.to_i,
-          :profitability => (revenue - (product_cost + fixed_cost + media_var_cost)).to_i }
+          :profitability => (revenue - (product_cost + fixed_cost + media_var_cost + refund)).to_i }
         end
+         @list_of_orders =  @list_of_orders.sort_by{ |c| c[:time_of_order]}
         @employeeorderlist = employeeunorderlist #.sort_by{|c| c[:total]}.reverse 
   end
 
@@ -142,6 +172,7 @@ class SalesPpoReportController < ApplicationController
          @total_sales = 0
          @total_profit = 0
           @total_revenue = 0
+           @total_refund = 0
           @total_product_cost = 0
       #for_date = for_date - 330.minutes
         @hourlist ||= []
@@ -151,7 +182,8 @@ class SalesPpoReportController < ApplicationController
         to_date = for_date.end_of_day - 300.minutes
         #media segregation only HBN
         
-
+        nos = 0
+        total_order_value = 0
         #start loop
         
         (from_date.to_datetime.to_i .. to_date.to_datetime.to_i).step(30.minutes) do |date|
@@ -165,24 +197,33 @@ class SalesPpoReportController < ApplicationController
 
           #split the fixed cost across the hour
            revenue = 0
+           fixed_cost = 0
             media_var_cost = 0
              product_cost = 0
-
+             media_cost_master = 0
+               @list_of_orders ||= []
+          
           orderlist.each do |med |
-            revenue += OrderMaster.find(med.id).productrevenue ||= 0
+
+           @list_of_orders << {order_no:  med.id,
+             time_of_order: med.orderdate.strftime('%Y-%b-%d %H:%M:%S')}
+            #error loggin
+            
+
+           # revenue += OrderMaster.find(med.id).productrevenue ||= 0
            # media_var_cost += OrderMaster.find(med.id).mediacost ||= 0
-            product_cost += OrderMaster.find(med.id).productcost ||= 0
-            media_variable = Medium.where('id = ? AND value is not null', med.media_id)
-            .where(:media_commision_id => [10020, 10021, 10040, 10041, 10060]) #.pluck(:value)
-              if media_variable.present?
-                #discount the total value by 50% as correction
-                correction = 0.5
-                #PAID_CORRECTION
-                 if media_variable.first.paid_correction.present?
-                   correction = media_variable.first.paid_correction #||= 0.5
-                 end
-               media_var_cost += (med.subtotal * media_variable.first.value.to_f) * correction
-              end
+            # product_cost += OrderMaster.find(med.id).productcost ||= 0
+            # media_variable = Medium.where('id = ? AND value is not null', med.media_id)
+            # .where(:media_commision_id => [10020, 10021, 10040, 10041, 10060]) #.pluck(:value)
+            #   if media_variable.present?
+            #     #discount the total value by 50% as correction
+            #     media_correction = 0.5
+            #     #PAID_CORRECTION
+            #      if media_variable.first.paid_correction.present?
+            #        media_correction = media_variable.first.paid_correction #||= 0.5
+            #      end
+            #    media_var_cost += ((med.subtotal * 0.888889) * media_variable.first.value.to_f) * media_correction
+            #   end
           end
          
          
@@ -198,27 +239,49 @@ class SalesPpoReportController < ApplicationController
           end_hr = Time.at(date).strftime("%H")
           end_min = Time.at(date).strftime("%M")
           media_cost_master = MediaCostMaster.where(media_id: 11200).where("str_hr = ? AND str_min = ? AND end_hr = ? AND end_min = ?", start_hr, start_min, end_hr, end_min)
-          fixed_cost = media_cost_master.first.total_cost
+          media_fixed_cost = media_cost_master.first.total_cost.to_i
+          revenue = revenue * @correction
+          product_cost = (product_cost * @correction) + (product_cost * 0.10)
           #ppo for each hour
+           #@total_orders_sales += ((shipping * @shipping_tax_less) + subtotal * @subtotal_vat_less) 
+
+          total_shipping = (orderlist.sum(:shipping) * @shipping_tax_less) 
+          total_sub_total = (orderlist.sum(:subtotal) * @subtotal_vat_less) 
+          totalorders = total_shipping + total_sub_total
           nos = orderlist.count()
           pieces = orderlist.sum(:pieces)
-          totalorders = orderlist.sum(:total)
+          refund = totalorders * 0.02
          
-          employeeunorderlist << {:total => totalorders,
+         nos = nos #* @correction
+         pieces =  pieces #* @correction
+         totalorders = totalorders #* @correction
+          employeeunorderlist << {:total => totalorders.to_i * @correction,
+            :total_orders => totalorders.to_i,
           :starttime =>  halfhourago.strftime("%H:%M %p"),
           :endtime => Time.at(date).strftime("%H:%M %p"),
           :start_time => halfhourago.strftime("%Y-%m-%d %H:%M"), 
           :end_time => Time.at(date).strftime("%Y-%m-%d %H:%M"),
-          :pieces => pieces,
-          :nos => nos,
+          :pieces => pieces.to_i * @correction,
+          :total_pieces => pieces.to_i,
+           :refund => refund.to_i,
+          :nos => nos.to_i * @correction,
+          :total_nos => nos.to_i,
           :revenue => revenue.to_i,
           :product_cost => product_cost.to_i,
           :variable_cost => media_var_cost.to_i,
-          :fixed_cost => fixed_cost.to_i,
-          :profitability => (revenue - (fixed_cost + media_var_cost + product_cost)).to_i }
+          :fixed_cost => media_fixed_cost.to_i,
+          :profitability => (revenue.to_i - (product_cost.to_i + media_fixed_cost.to_i + refund.to_i + media_var_cost.to_i)).to_i }
         end
        @employeeorderlist = employeeunorderlist #.sort_by{|c| c[:total]}.reverse 
-   
+       respond_to do |format|
+        csv_file_name = "half_hourly_summary_#{@or_for_date}.csv"
+          format.html
+          format.csv do
+            headers['Content-Disposition'] = "attachment; filename=\"#{csv_file_name}\""
+            headers['Content-Type'] ||= 'text/csv'
+          end
+        end
+    @list_of_orders =  @list_of_orders.sort_by{ |c| c[:time_of_order]}
   end
 
   def show
@@ -241,6 +304,7 @@ class SalesPpoReportController < ApplicationController
         @total_profit = 0
         @total_revenue = 0
         @total_product_cost = 0
+        @total_refund = 0
       #for_date = for_date - 330.minutes
         @hourlist ||= []
         employeeunorderlist ||= []
@@ -261,7 +325,8 @@ class SalesPpoReportController < ApplicationController
      orderlist = OrderMaster.where('ORDER_STATUS_MASTER_ID > 10002')
      .where(campaign_playlist_id: playlist.id)
 
-
+ #@total_orders_sales += ((shipping * @shipping_tax_less) + subtotal * @subtotal_vat_less) 
+       
       
           #add orders of each cable tv operator
 
@@ -278,25 +343,36 @@ class SalesPpoReportController < ApplicationController
             .where(:media_commision_id => [10020, 10021, 10040, 10041, 10060]) #.pluck(:value)
               if media_variable.present?
                 #discount the total value by 50% as correction
-                correction = 0.5
+                media_correction = 0.5
                 #PAID_CORRECTION
                  if media_variable.first.paid_correction.present?
                    correction = media_variable.first.paid_correction #||= 0.5
                  end
-               media_var_cost += (med.subtotal * media_variable.first.value.to_f) * correction
+               media_var_cost += (med.subtotal * media_variable.first.value.to_f) * media_correction
               end
           end
+
+          revenue = revenue * @correction
+          product_cost = (product_cost * @correction) + (product_cost * 0.10)
+          #ppo for each hour
+          total_shipping = (orderlist.sum(:shipping) *@shipping_tax_less) * @correction
+          total_sub_total = (orderlist.sum(:subtotal) * @subtotal_vat_less) * @correction
+          totalorders = total_shipping + total_sub_total
+          nos = orderlist.count() * @correction
+          pieces = orderlist.sum(:pieces) * @correction
+          refund = totalorders * 0.02
+         
+
           total_seconds = totalseconds(playlist.id).to_f
          fixed_cost =  media_cost * total_seconds
-          totalorders = orderlist.sum(:total)
-           nos = orderlist.count()
-         pieces = orderlist.sum(:pieces)
+        
           employeeunorderlist << {:show =>  playlist.product_variant.name,
           :campaign_id => playlist.id,
            :pieces => pieces,
           :nos => nos,
           :at_time => playlist.starttime,
-          :total => totalorders,
+          :total => totalorders.to_i,
+          :refund => refund.to_i,
           :revenue => revenue.to_i,
           :product_cost => product_cost.to_i,
           :variable_cost => media_var_cost.to_i,
@@ -308,6 +384,20 @@ class SalesPpoReportController < ApplicationController
 
    
   end
+
+  def show_ppo_details
+   
+    #aggregation based on products 
+    @sno = 1
+    @time_sno = 1
+    showproducts
+    shows_between
+    
+    between_time #show between timings
+
+    hbn_channels_between #channel between timings
+  end #end of def  
+  
 
   def ppo_details
    
@@ -518,12 +608,12 @@ end
             .where(:media_commision_id => [10020, 10021, 10040, 10041, 10060]) #.pluck(:value)
               if media_variable.present?
                 #discount the total value by 50% as correction
-                correction = 0.5
+                media_correction = 0.5
                 #PAID_CORRECTION
                  if media_variable.first.paid_correction.present?
                    correction = media_variable.first.paid_correction #||= 0.5
                  end
-               media_var_cost += (med.subtotal * media_variable.first.value.to_f) * correction
+               media_var_cost += (med.subtotal * media_variable.first.value.to_f) * media_correction
               end
           end
          
@@ -560,7 +650,7 @@ def hbn_channels_between
    #media segregation only HBN
     media_segments
     value_now = 0
-   correction = 0.5
+   media_correction = 0.5
    timetaken = 0
     if params.has_key?(:start_time) && params.has_key?(:end_time)
       #  @or_for_date = params[:for_date]
@@ -591,7 +681,7 @@ def hbn_channels_between
                 #discount the total value by 50% as correction
                  #PAID_CORRECTION
                  if media_variable.first.paid_correction.present?
-                   correction = media_variable.first.paid_correction #||= 0.5
+                   media_correction = media_variable.first.paid_correction #||= 0.5
                  end
                  value_now = media_variable.first.value
                                 
@@ -600,7 +690,7 @@ def hbn_channels_between
         noorders = orderlist.count()
         hbn_order_list << {:total => totalorders,
            :id => e, :channel => name, :for_date =>  @or_for_date,
-          :nos => noorders, :correction => correction,
+          :nos => noorders, :correction => media_correction,
           :commission => value_now }
         end
         @hbn_order_list = hbn_order_list.sort_by{|c| c[:total]}.reverse 
@@ -676,46 +766,46 @@ def shows_between
 
         
         if @start_time.hour < 4
-        #show previous day shows as well
-        previous_start_hr = 20
-        case @start_time.hour # a_variable is the variable we want to compare
-          when 3   #compare to 1
-            previous_start_hr = 23
-          when 2    #compare to 2
-           previous_start_hr = 22
-          when 1
-           previous_start_hr = 21
-          end
-        
-        
-        previous_startsecs = (previous_start_hr * 60 * 60) 
-        previous_endsecs = (23 * 60 * 60) + (59 * 60)
-        previous_day = for_date - 1.day
+          #show previous day shows as well
+          previous_start_hr = 20
+          case @start_time.hour # a_variable is the variable we want to compare
+            when 3   #compare to 1
+              previous_start_hr = 23
+            when 2    #compare to 2
+             previous_start_hr = 22
+            when 1
+             previous_start_hr = 21
+            end
+          
+          
+          previous_startsecs = (previous_start_hr * 60 * 60) 
+          previous_endsecs = (23 * 60 * 60) + (59 * 60)
+          previous_day = for_date - 1.day
 
-        @earlier_day = previous_day.strftime("%d-%b-%Y")
+          @earlier_day = previous_day.strftime("%d-%b-%Y")
 
-        @old_campaign_playlists =  CampaignPlaylist.where("(start_hr * 60 * 60) + (start_min * 60) >= ? and (start_hr * 60 *60 )  + (start_min *60) <= ?", previous_startsecs, previous_endsecs)
-       .joins(:campaign).where("campaigns.startdate = ?", previous_day)
-       .where('campaigns.mediumid IN (?)', @hbnlist)
-      .order(:start_hr, :start_min, :start_sec).where(list_status_id: 10000)
-        
+          @old_campaign_playlists =  CampaignPlaylist.where("(start_hr * 60 * 60) + (start_min * 60) >= ? and (start_hr * 60 *60 )  + (start_min *60) <= ?", previous_startsecs, previous_endsecs)
+         .joins(:campaign).where("campaigns.startdate = ?", previous_day)
+         .where('campaigns.mediumid IN (?)', @hbnlist)
+        .order(:start_hr, :start_min, :start_sec).where(list_status_id: 10000)
+          
         else
-        @start_time = Time.strptime(params[:start_time], "%Y-%m-%d %H:%M") 
-        @end_time = Time.strptime(params[:end_time], "%Y-%m-%d %H:%M") 
+          @start_time = Time.strptime(params[:start_time], "%Y-%m-%d %H:%M") 
+          @end_time = Time.strptime(params[:end_time], "%Y-%m-%d %H:%M") 
 
-        @start_time = @start_time - 4.hours
-        @end_time = @end_time 
+          @start_time = @start_time - 4.hours
+          @end_time = @end_time 
         end
      
 
-      @Show_start_time = @start_time.strftime("%H:%M")
-      @Show_end_time = @end_time.strftime("%H:%M")
+      @Show_start_time = @start_time.strftime("%H:%M") || 0
+      @Show_end_time = @end_time.strftime("%H:%M") || 0
 
       # @campaign_playlists =  CampaignPlaylist.where(list_status_id: 10000).limit(10)
-      startsecs = ((@start_time.hour) || 0 * 60 * 60) + ((@start_time.min) || 0 * 60)
-      endsecs = (@end_time.hour * 60 * 60) + (@end_time.min * 60) 
+      @startsecs = ((@start_time.hour) * 60 * 60) + ((@start_time.min) * 60)
+      @endsecs = (@end_time.hour * 60 * 60) + (@end_time.min * 60) 
 
-       @campaign_playlists =  CampaignPlaylist.where("(start_hr * 60 * 60) + (start_min * 60) >= ? and (start_hr * 60 *60 )  + (start_min *60) <= ?", startsecs, endsecs)
+       @campaign_playlists =  CampaignPlaylist.where("(start_hr * 60 * 60) + (start_min * 60) >= ? and (start_hr * 60 *60 )  + (start_min *60) <= ?", @startsecs, @endsecs)
        .joins(:campaign).where("campaigns.startdate = ?", for_date)
        .where('campaigns.mediumid IN (?)', @hbnlist)
       .order(:start_hr, :start_min, :start_sec).where(list_status_id: 10000)
@@ -813,27 +903,31 @@ def shows_between
         order_masters_cod = OrderMaster.where(orderpaymentmode_id: 10001).where('orderdate >= ? AND orderdate <= ?', start_time, end_time).where('ORDER_STATUS_MASTER_ID > 10002').where(media_id: @hbnlist).select(:id).distinct
        order_masters_cc = OrderMaster.where(orderpaymentmode_id: 10000).where('orderdate >= ? AND orderdate <= ?', start_time, end_time).where('ORDER_STATUS_MASTER_ID > 10002').where(media_id: @hbnlist).select(:id).distinct
        
+       noorders = order_masters.count()
 
         order_master_list = OrderMaster.where(id: order_masters)
           #split the fixed cost across the hour 
-         
+          @list_of_orders ||= []
           @order_media_var_cost_full = 0
           order_master_list.each do |med |
-           
+          @list_of_orders << {order_no:  med.id,
+             time_of_order: med.orderdate.strftime('%Y-%b-%d %H:%M:%S')}
+
             media_variable = Medium.where('id = ? AND value is not null', med.media_id)
             .where(:media_commision_id => [10020, 10021, 10040, 10041, 10060]) #.pluck(:value)
               if media_variable.present?
                 #discount the total value by 50% as correction
-                correction = 0.5
+                media_correction = 0.5
                 #PAID_CORRECTION
                  if media_variable.first.paid_correction.present?
-                   correction = media_variable.first.paid_correction #||= 0.5
+                   media_correction = media_variable.first.paid_correction #||= 0.5
                  end
                @order_media_var_cost_full += (med.subtotal * media_variable.first.value.to_f)   
-               @order_media_var_cost += (med.subtotal * media_variable.first.value.to_f) * correction
+               @order_media_var_cost += (med.subtotal * media_variable.first.value.to_f) * media_correction
               end
           end
 
+           @list_of_orders =  @list_of_orders.sort_by{ |c| c[:order_no]}
        end
 
             
@@ -903,8 +997,8 @@ def shows_between
         @main_total_Orders_product_cost += cost_of_product  * noorders
 
 
-        @total_orders_sales += totalorders
-        @total_orders_nos += noorders
+        @total_orders_sales += (@main_total_orders_subtotal * @subtotal_vat_less) + (@main_total_orders_shipping * @shipping_tax_less)
+        @total_orders_nos += noorders * @correction
         @total_orders_revenue += revenue_of_product * noorders
         @total_Orders_product_cost += cost_of_product  * noorders
         end
@@ -960,15 +1054,15 @@ def shows_between
           :nos => noorders, :codorders => codorders, :codvalue => codvalue,
            :ccorders => ccorders, :ccvalue => ccvalue  }
         
-        @common_total_orders_subtotal += subtotal
-        @common_total_orders_shipping += shipping
+        @common_total_orders_subtotal += subtotal 
+        @common_total_orders_shipping += shipping 
         @common_total_orders_total += totalorders
         @common_total_orders_nos += noorders
         @common_total_orders_revenue += revenue_of_product * noorders
         @common_total_Orders_product_cost += cost_of_product  * noorders
 
-        @total_orders_sales += totalorders
-        @total_orders_nos += noorders
+        @total_orders_sales += (@common_total_orders_subtotal * @subtotal_vat_less) + (@common_total_orders_shipping * @shipping_tax_less)
+        @total_orders_nos += noorders * @correction
         @total_orders_revenue += revenue_of_product * noorders
         @total_Orders_product_cost += cost_of_product  * noorders
         end
@@ -1013,71 +1107,81 @@ def shows_between
 
         orderlist.each {|ol| product_cost += ol.productcost  }
 
-        noorders = orderlist.count()
+        noofpieces = orderlist.sum(:pieces)
+         
         basic_product_list_orderlist << {:total => totalorders,
               :subtotal => subtotal, :shipping => shipping,
               :prod => prod,
-           :cost_of_product => cost_of_product, :revenue_of_product => revenue_of_product,
+           :cost_of_product => cost_of_product, 
+           :revenue_of_product => revenue_of_product,
            :id => e, :product => name, :for_date =>  @or_for_date,
-            :product_cost => cost_of_product  * noorders, :product_revenue => revenue_of_product * noorders,
+            :product_cost => cost_of_product  * noofpieces, 
+            :product_revenue => revenue_of_product * noofpieces,
           :nos => noorders, :codorders => codorders, :codvalue => codvalue,
            :ccorders => ccorders, :ccvalue => ccvalue  }
         
-        @basic_total_orders_subtotal += subtotal
-        @basic_total_orders_shipping += shipping
+        @basic_total_orders_subtotal += subtotal * @subtotal_vat_less
+        @basic_total_orders_shipping += shipping * @shipping_tax_less
         @basic_total_orders_total += totalorders
-        @basic_total_orders_nos += noorders
-        @basic_total_orders_revenue += revenue_of_product * noorders
-        @basic_total_Orders_product_cost += cost_of_product  * noorders
+        @basic_total_orders_nos = noorders
+        @basic_total_orders_revenue += revenue_of_product * noofpieces
+        @basic_total_Orders_product_cost += cost_of_product  * noofpieces
 
-        @total_orders_sales += totalorders
-        @total_orders_refund = @total_orders_sales * 0.02
-        @total_orders_nos += noorders
-        @total_orders_revenue += revenue_of_product * noorders
-        @total_Orders_product_cost += cost_of_product  * noorders
+        @total_orders_sales += shipping + subtotal 
+       
+        @total_orders_nos += noorders || 0
+        @total_orders_revenue += (revenue_of_product * noofpieces) || 0
+        @total_Orders_product_cost += (cost_of_product  * noofpieces) || 0
         end
+        @total_Orders_product_cost += (@total_Orders_product_cost * 0.10) || 0
+        @total_orders_refund = (@total_orders_sales * 0.02) || 0 || 0 if @total_orders_sales.presence
 
         @basic_product_list_orderlist = basic_product_list_orderlist.sort_by{|c| c[:total]}.reverse  
-        
-        @total_order_profitability = @total_orders_revenue + (@total_Orders_product_cost + @actual_media_cost + @order_media_var_cost)
+        #@total_orders_revenue +
+        @total_order_profitability = (@total_orders_revenue.to_i - (@total_Orders_product_cost.to_i + @actual_media_cost.to_i + @total_orders_refund.to_i + @order_media_var_cost.to_i)).to_i
         #60%
-        total_Orders_product_cost_60 = 0
+        @total_orders_product_cost_60 = 0
         @total_orders_sales_60 = (@total_orders_sales * 0.6) || 0
         @total_orders_nos_60 = (@total_orders_nos * 0.6) || 0
-        @total_orders_refund_60 = (@total_orders_refund * 0.6) || 0
+        @total_orders_refund_60 = (@total_orders_refund * 0.6) || 0 if @total_orders_refund.presence
         @total_orders_revenue_60 = (@total_orders_revenue  * 0.6) || 0
-        @total_Orders_product_cost_60 = (@total_Orders_product_cost * 0.6) || 0
-        @total_Orders_product_cost_breakage_60 = (@total_Orders_product_cost_60 * 0.10) || 0
+        @total_Orders_product_cost_60 = (@total_Orders_product_cost * 0.6) || 0 + ((@total_Orders_product_cost_60 * 0.10) || 0)
+         
         @actual_media_cost_60 = @actual_media_cost
         @order_media_var_cost_60 = (@order_media_var_cost * 0.6) || 0
-        @total_order_profitability_60 = (@total_orders_revenue_60 - (@total_Orders_product_cost_60 + @total_orders_refund_60 + @actual_media_cost_60 +   @total_Orders_product_cost_breakage_60 + @order_media_var_cost_60)) || 0
+        #
+        @total_order_profitability_60 = (@total_orders_revenue_60 - (@total_Orders_product_cost_60  + @actual_media_cost_60 + @total_orders_refund_60 +  @order_media_var_cost_60)) || 0
 
         @total_Orders_product_cost__breakage_50 = 0
         @total_orders_sales_50 = (@total_orders_sales * 0.5) || 0
         @total_orders_nos_50 = (@total_orders_nos * 0.5) || 0
-          @total_orders_refund_50 = (@total_orders_refund * 0.5) || 0
+        @total_orders_refund_50 = (@total_orders_refund * 0.5) || 0 if @total_orders_refund.presence
         @total_orders_revenue_50 = (@total_orders_revenue  * 0.5) || 0
         @total_Orders_product_cost_50 = (@total_Orders_product_cost * 0.5) || 0
         @total_Orders_product_cost_breakage_50 = (@total_Orders_product_cost_50 * 0.10) || 0
         @actual_media_cost_50 = @actual_media_cost
         @order_media_var_cost_50 = (@order_media_var_cost * 0.5) || 0
-        @total_order_profitability_50 = (@total_orders_revenue_50 - (@total_Orders_product_cost_50 +  @total_Orders_product_cost_breakage_50 + @total_orders_refund_50 + @actual_media_cost_50 +  @order_media_var_cost_50)) || 0
+        @total_order_profitability_50 = (@total_orders_revenue_50 - (@total_Orders_product_cost_50 +  @total_Orders_product_cost_breakage_50  + @actual_media_cost_50 +  @order_media_var_cost_50)) || 0
          #@total_order_profitability_50 = (@total_orders_revenue_50 - (@total_Orders_product_cost_50 + @actual_media_cost_50 + @total_Orders_product_cost_breakage_50 + @order_media_var_cost_50)) || 0
         @total_Orders_product_cost__breakage_40 = 0
         @total_orders_sales_40 = (@total_orders_sales * 0.4) || 0
         @total_orders_nos_40 = (@total_orders_nos * 0.4) || 0
-        @total_orders_refund_40 = (@total_orders_refund * 0.4) || 0
+        @total_orders_refund_40 = (@total_orders_refund * 0.4) || 0 if @total_orders_refund.presence
         @total_orders_revenue_40 = (@total_orders_revenue  * 0.4) || 0
         @total_Orders_product_cost_40 = (@total_Orders_product_cost * 0.4) || 0
         @total_Orders_product_cost_breakage_40 = (@total_Orders_product_cost_40 * 0.10) || 0
         @actual_media_cost_40 = @actual_media_cost
         @order_media_var_cost_40 = (@order_media_var_cost * 0.4) || 0
-        @total_order_profitability_40 = (@total_orders_revenue_40 - (@total_Orders_product_cost_40 +  @total_Orders_product_cost_breakage_40 + @total_orders_refund_40 + @actual_media_cost_40 +  @order_media_var_cost_40)) || 0
+        @total_order_profitability_40 = (@total_orders_revenue_40 - (@total_Orders_product_cost_40 +  @total_Orders_product_cost_breakage_40 + @actual_media_cost_40 +  @order_media_var_cost_40)) || 0
    
 
      end
  end
-
+ def constants
+   @correction = 0.5
+   @shipping_tax_less = 0.98125
+   @subtotal_vat_less = 0.888889
+ end
 
  def media_segments
   @hbnlist = Medium.where(media_group_id: 10000).pluck(:id)

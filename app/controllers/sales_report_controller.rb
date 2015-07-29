@@ -19,8 +19,13 @@ class SalesReportController < ApplicationController
           for_date = day # Date.
           @or_for_date = for_date
            
+          from_date = for_date.beginning_of_day - 330.minutes
+          to_date = for_date.end_of_day - 330.minutes
+           
           orderlist = OrderMaster.where('ORDER_STATUS_MASTER_ID > 10002')
-          .where('TRUNC(orderdate) = ?',for_date)
+          .where('orderdate >= ? AND orderdate <= ?', from_date, to_date)
+           #.where(media_id: @hbnlist)
+
           ccvalue = orderlist.where(orderpaymentmode_id: 10000).sum(:total)
           ccorders = orderlist.where(orderpaymentmode_id: 10000).count()
           codorders = orderlist.where(orderpaymentmode_id: 10001).count()
@@ -61,7 +66,13 @@ class SalesReportController < ApplicationController
       #@summary ||= []
       @or_for_date = params[:for_date]
       for_date =  Date.strptime(params[:for_date], "%Y-%m-%d")
-      order_masters = OrderMaster.where('TRUNC(orderdate) = ?',for_date).where('ORDER_STATUS_MASTER_ID > 10002').where(media_id: @hbnlist).select(:employee_id).distinct
+
+      from_date = for_date.beginning_of_day - 330.minutes
+      to_date = for_date.end_of_day - 330.minutes
+
+      order_masters = OrderMaster.where('ORDER_STATUS_MASTER_ID > 10002') 
+      .where('orderdate >= ? AND orderdate <= ?', from_date, to_date)
+      .where(media_id: @hbnlist).select(:employee_id).distinct
       
       @orderdate = "Searched for #{for_date} found #{order_masters.count} agents!"
       employeeunorderlist ||= []
@@ -163,13 +174,25 @@ class SalesReportController < ApplicationController
       #media segregation
       media_segments
 
-      hbn_order_masters = OrderMaster.where('TRUNC(orderdate) = ?',for_date).where('ORDER_STATUS_MASTER_ID > 10002').where(media_id: @hbnlist).select(:media_id).distinct
-      paid_order_masters = OrderMaster.where('TRUNC(orderdate) = ?',for_date).where('ORDER_STATUS_MASTER_ID > 10002').where(media_id: @paid).select(:media_id).distinct
-      other_order_masters = OrderMaster.where('TRUNC(orderdate) = ?',for_date).where('ORDER_STATUS_MASTER_ID > 10002').where(media_id: @others).select(:media_id).distinct
+      from_date = for_date.beginning_of_day - 330.minutes
+      to_date = for_date.end_of_day - 330.minutes
 
-      total_hbn_order_masters = OrderMaster.where('TRUNC(orderdate) = ?',for_date).where('ORDER_STATUS_MASTER_ID > 10002').where(media_id: @hbnlist)
-      total_paid_order_masters = OrderMaster.where('TRUNC(orderdate) = ?',for_date).where('ORDER_STATUS_MASTER_ID > 10002').where(media_id: @paid)
-      total_other_order_masters = OrderMaster.where('TRUNC(orderdate) = ?',for_date).where('ORDER_STATUS_MASTER_ID > 10002').where(media_id: @others)
+      hbn_order_masters = OrderMaster.where('orderdate >= ? AND orderdate <= ?', from_date, to_date)
+      .where('ORDER_STATUS_MASTER_ID > 10002')
+      .where(media_id: @hbnlist).select(:media_id).distinct
+      paid_order_masters = OrderMaster.where('orderdate >= ? AND orderdate <= ?', from_date, to_date)
+      .where('ORDER_STATUS_MASTER_ID > 10002')
+      .where(media_id: @paid).select(:media_id).distinct
+      other_order_masters = OrderMaster.where('orderdate >= ? AND orderdate <= ?', from_date, to_date)
+      .where('ORDER_STATUS_MASTER_ID > 10002').where(media_id: @others)
+      .select(:media_id).distinct
+
+      total_hbn_order_masters = OrderMaster.where('orderdate >= ? AND orderdate <= ?', from_date, to_date)
+      .where('ORDER_STATUS_MASTER_ID > 10002').where(media_id: @hbnlist)
+      total_paid_order_masters = OrderMaster.where('orderdate >= ? AND orderdate <= ?', from_date, to_date)
+      .where('ORDER_STATUS_MASTER_ID > 10002').where(media_id: @paid)
+      total_other_order_masters = OrderMaster.where('orderdate >= ? AND orderdate <= ?', from_date, to_date)
+      .where('ORDER_STATUS_MASTER_ID > 10002').where(media_id: @others)
       
 
       @orderdate = "Orders for #{for_date}: HBN Channel #{total_hbn_order_masters.count} for Rs. #{total_hbn_order_masters.sum(:total)}, Paid channels #{total_paid_order_masters.count} for Rs. #{total_paid_order_masters.sum(:total)} and Free Channel #{total_other_order_masters.count} for Rs. #{total_other_order_masters.sum(:total)}!"
@@ -205,7 +228,8 @@ class SalesReportController < ApplicationController
        
         name = (Medium.find(e).name  || "NA" if Medium.find(e).name.present?)
         orderlist = OrderMaster.where('ORDER_STATUS_MASTER_ID > 10002')
-        .where('TRUNC(orderdate) = ?',for_date).where(media_id: e)
+        .where('orderdate >= ? AND orderdate <= ?', from_date, to_date)
+        .where(media_id: e)
         timetaken = orderlist.sum(:codcharges)
         ccvalue = orderlist.where(orderpaymentmode_id: 10000).sum(:total)
         ccorders = orderlist.where(orderpaymentmode_id: 10000).count()
@@ -226,7 +250,9 @@ class SalesReportController < ApplicationController
         e = o.media_id
        
         name = (Medium.find(e).name  || "NA" if Medium.find(e).name.present?)
-        orderlist = OrderMaster.where('ORDER_STATUS_MASTER_ID > 10002').where('TRUNC(orderdate) = ?',for_date).where(media_id: e)
+        orderlist = OrderMaster.where('ORDER_STATUS_MASTER_ID > 10002')
+        .where('orderdate >= ? AND orderdate <= ?', from_date, to_date)
+        .where(media_id: e)
         timetaken = orderlist.sum(:codcharges)
         ccvalue = orderlist.where(orderpaymentmode_id: 10000).sum(:total)
         ccorders = orderlist.where(orderpaymentmode_id: 10000).count()
@@ -263,7 +289,13 @@ class SalesReportController < ApplicationController
       #@summary ||= []
       @or_for_date = params[:for_date]
       for_date =  Date.strptime(params[:for_date], "%Y-%m-%d")
-      order_masters = OrderMaster.where('TRUNC(orderdate) = ?',for_date).where('ORDER_STATUS_MASTER_ID > 10002').select(:employee_id).distinct
+
+      from_date = for_date.beginning_of_day - 330.minutes
+      to_date = for_date.end_of_day - 330.minutes
+          
+
+      order_masters = OrderMaster.where('orderdate >= ? AND orderdate <= ?', from_date, to_date)
+      .where('ORDER_STATUS_MASTER_ID > 10002').select(:employee_id).distinct
       
       @orderdate = "Searched for #{for_date} found #{order_masters.count} agents!"
       employeeunorderlist ||= []
@@ -273,7 +305,7 @@ class SalesReportController < ApplicationController
        
         name = (Employee.find(e).first_name  || "NA" if Employee.find(e).first_name.present?)
         orderlist = OrderMaster.where('ORDER_STATUS_MASTER_ID > 10002')
-        .where('TRUNC(orderdate) = ?',for_date).where(employee_id: e)
+        .where('orderdate >= ? AND orderdate <= ?', from_date, to_date).where(employee_id: e)
         timetaken = orderlist.sum(:codcharges)
         ccvalue = orderlist.where(orderpaymentmode_id: 10000).sum(:total)
         ccorders = orderlist.where(orderpaymentmode_id: 10000).count()
@@ -307,16 +339,20 @@ class SalesReportController < ApplicationController
       #@summary ||= []
       @or_for_date = params[:for_date]
       for_date =  Date.strptime(params[:for_date], "%Y-%m-%d")
+
+      from_date = for_date.beginning_of_day - 330.minutes
+      to_date = for_date.end_of_day - 330.minutes
+          
        
       if params.has_key?(:media_id)
-         order_masters = OrderMaster.where('TRUNC(orderdate) = ?',for_date)
+         order_masters = OrderMaster.where('orderdate >= ? AND orderdate <= ?', from_date, to_date)
          .where(media_id: params[:media_id])
       .where('ORDER_STATUS_MASTER_ID > 10002').where('customer_address_id IS NOT NULL')
       .joins(:customer_address).select("customer_addresses.city").distinct
 
         from_channel = Medium.find(params[:media_id]).name
       else
-         order_masters = OrderMaster.where('TRUNC(orderdate) = ?',for_date)
+         order_masters = OrderMaster.where('orderdate >= ? AND orderdate <= ?', from_date, to_date)
       .where('ORDER_STATUS_MASTER_ID > 10002').where('customer_address_id IS NOT NULL')
       .joins(:customer_address).select("customer_addresses.city").distinct
        end
@@ -330,7 +366,8 @@ class SalesReportController < ApplicationController
             #city = CustomerAddress.find(e).city  #  || "NA" if Employee.find(e).first_name.present?)
             
             orderlist = OrderMaster.where('ORDER_STATUS_MASTER_ID > 10002')
-            .where('TRUNC(orderdate) = ?',for_date).joins(:customer_address)
+            .where('orderdate >= ? AND orderdate <= ?', from_date, to_date)
+            .joins(:customer_address)
             .where("customer_addresses.city = ?", city)
              if params.has_key?(:media_id)
               orderlist = orderlist.where(media_id: params[:media_id])
@@ -469,8 +506,13 @@ class SalesReportController < ApplicationController
      for_date =  Date.strptime(params[:for_date], "%Y-%m-%d")
     end
 
+    from_date = for_date.beginning_of_day - 330.minutes
+    to_date = for_date.end_of_day - 330.minutes
+          
+
     @orderlistabout = "for date #{for_date}"
-    @order_masters =  OrderMaster.where('TRUNC(orderdate) = ?',for_date).where('ORDER_STATUS_MASTER_ID > 10002')
+    @order_masters =  OrderMaster.where('orderdate >= ? AND orderdate <= ?', from_date, to_date)
+    .where('ORDER_STATUS_MASTER_ID > 10002')
     
     if params.has_key?(:playlist_id)
      campaign_id =  params[:playlist_id]
@@ -499,14 +541,15 @@ class SalesReportController < ApplicationController
           for_date =  Date.strptime(params[:for_date], "%Y-%m-%d")
 
           @order_masters = OrderMaster.where('ORDER_STATUS_MASTER_ID > 10002')
-          .where('TRUNC(orderdate) = ?',for_date)
+          .where('orderdate >= ? AND orderdate <= ?', from_date, to_date)
           .where(employee_id: @employee_id).order("id")
           @orderdesc = "#{@order_masters.count()} orders of #{employee} for #{for_date}"
 
          end
       else
          @orderdesc = "Recent 1000 all orders of #{employee} "
-          @order_masters = OrderMaster.where(employee_id: @employee_id).order("id DESC").limit(1000)
+          @order_masters = OrderMaster.where(employee_id: @employee_id)
+          .order("id DESC").limit(1000)
       end
 
     end

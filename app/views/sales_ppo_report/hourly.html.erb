@@ -17,9 +17,10 @@
    <th  rowspan="2">No</th>
      <th  colspan="2">Time</th>
     
-      <th colspan="4">Income</th>
+      <th colspan="3">Income</th>
+<th class="text-right" rowspan="2">Revenue</th>
       <th colspan="4">Expense</th>
-     
+      
      <th rowspan="2">Profitability</th>
     <th   rowspan="2"></th>
      </tr>
@@ -31,13 +32,12 @@
     <th class="text-right">Orders</th>
     <th class="text-right">Pieces</th>
     <th class="text-right">Sales</th>
-    <th class="text-right">Revenue</th>
+   
 
-    <th class="text-right">Product Cost</th>
-    <th class="text-right">Commision</th>
+    <th class="text-right">Produst Cost</th>
+    <th class="text-right">Comm</th>
     <th class="text-right">Media Cost</th>
-    <th class="text-right">Total Cost</th>
-    
+    <th class="text-right">Refund</th>
      </tr>
   </thead>
 <tbody>
@@ -50,14 +50,17 @@
 <td class="text-right">
    <%= c[:nos] %> 
    <% @total_nos += c[:nos] %>
+  
 </td>
 <td class="text-right">
    <%= c[:pieces] %> 
    <% @total_pieces += c[:pieces] %>
+   
 </td>
 <td class="text-right">
    <%= c[:total] %> 
    <% @total_sales += c[:total] %>
+
 </td>
 <td class="text-right">
    <%= c[:revenue] %> 
@@ -75,9 +78,10 @@
    <%= c[:fixed_cost] %> 
    <% @total_fixed_cost += c[:fixed_cost] %>
 </td>
+
 <td class="text-right">
-<%= c[:variable_cost] + c[:fixed_cost] %> 
-<% @total_cost += c[:variable_cost] + c[:fixed_cost] %>
+   <%= c[:refund] %> 
+   <% @total_refund += c[:refund] %>
 </td>
 <td class="text-right">   <%= c[:profitability] %>
 <% @total_profit += c[:profitability] %> </td>
@@ -103,7 +107,7 @@
        <th class="text-right"><%= @total_product_cost %></th>
        <th class="text-right"><%= @total_var_cost %></th>
      <th class="text-right"><%= @total_fixed_cost %></th>
-     <th class="text-right"><%= @total_cost %></th>
+     <th class="text-right"><%= @total_refund %></th>
      <th class="text-right"><%= @total_profit %></th>
     <th></th>
      </tr>
@@ -115,6 +119,26 @@
   </div>
   <% end %>
  <br>
+ <%= link_to 'Download CSV file', hourly_ppo_path(for_date: @or_for_date , format: :csv), class: "btn btn-info btn-sm" %>
+<hr>
+<% @hidelist = true %>
+<% if @hidelist == false %>
+<div style="visibility:hidden">
+<% @order_sno = 1 %>
+<table class="table table-bordered">
+  <tr>
+    <td>Order No</td> <td>Date Time</td>
 
-
-<%= @hourlist %>
+  </tr>
+ <% @list_of_orders.each do |c| %>
+<tr>  
+<td> <%= @order_sno %></td>
+<td> <%= c[:order_no] %></td>
+<td> <%= c[:time_of_order] %></td>
+</tr>
+<% @order_sno += 1 %></td>
+</tr>
+ <% end -%>
+</table>
+</div>
+<% end %>

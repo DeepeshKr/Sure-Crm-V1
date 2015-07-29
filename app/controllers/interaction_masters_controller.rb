@@ -6,7 +6,20 @@ class InteractionMastersController < ApplicationController
   respond_to :html
 
   def index
-   
+    # remove the interactions before a certain date to ensure
+    # the system is cleaned up
+   # upto_date = Date.strptime("07/15/2015", "%m/%d/%Y")
+   # use_date = (330.minutes).from_now.to_date
+   # @lists = InteractionMaster.where("createdon < ?", upto_date)
+   # .where("closedon IS NULL")
+   # .where( interaction_status_id: 10000)
+
+   # @lists.each do | list |
+   #   list.update(closedon: use_date, employee_id:10100, 
+   #    employee_code:"em001",
+   #    interaction_status_id: 10003)
+   # end
+
    
    dropdowns
     if params.has_key?(:category) and params.has_key?(:status)

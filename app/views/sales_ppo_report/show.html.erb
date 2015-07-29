@@ -19,7 +19,8 @@
    <th  rowspan="2">Show</th>
      <th rowspan="2">Start Time</th>
     
-      <th colspan="4">Income</th>
+      <th colspan="3">Income</th>
+       <th rowspan="2" class="text-right">Revenue</th>
       <th colspan="4">Expense</th>
      
      <th rowspan="2">Profitability</th>
@@ -30,12 +31,12 @@
       <th class="text-right">Orders</th>
        <th class="text-right">Pieces</th>
      <th class="text-right">Sales</th>
-      <th class="text-right">Revenue</th>
+     
 
       <th class="text-right">Product Cost</th>
        <th class="text-right">Commision</th>
      <th class="text-right">Media Cost</th>
-       <th class="text-right">Total Cost</th>
+       <th class="text-right">Refund</th>
     
      </tr>
   </thead>
@@ -77,13 +78,13 @@
    <% @total_fixed_cost += c[:fixed_cost] %>
 </td>
 <td class="text-right">
-<%= c[:variable_cost] + c[:fixed_cost] %> 
-<% @total_cost += c[:variable_cost] + c[:fixed_cost] %>
+<%= c[:refund] %> 
+<% @total_refund += c[:refund] %>
 </td>
 <td class="text-right">   <%= c[:profitability] %>
 <% @total_profit += c[:profitability] %> </td>
 <td >
-<%= link_to "Details", ppo_details_path(for_date: @or_for_date, product_variant: c[:product_variant_id]), :target => "_blank" %>
+
 </td>
   </tr> 
   <% @sno += 1 %> 
@@ -112,4 +113,25 @@
   </div>
   <% end %>
  <br>
+<% @hidelist = true %>
+<% if @hidelist == false %>
+<div style="visibility:hidden">
+<% @order_sno = 1 %>
+<table class="table table-bordered">
+  <tr>
+    <td>Order No</td> <td>Date Time</td>
 
+  </tr>
+ <% @list_of_orders.each do |c| %>
+<tr>  
+<td> <%= @order_sno %></td>
+<td> <%= c[:order_no] %></td>
+<td> <%= c[:time_of_order] %></td>
+</tr>
+<% @order_sno += 1 %></td>
+</tr>
+ <% end -%>
+</table>
+</div>
+<%= link_to "Details", ppo_details_path(for_date: @or_for_date, product_variant: c[:product_variant_id]), :target => "_blank" %>
+<% end %>

@@ -9,6 +9,7 @@
 		</small>  
 	</h4>
 	<hr>
+	
 		 <%= render('playlists') %>
 	</div>
 	<div class="col-xs-8">
@@ -39,7 +40,7 @@
 	<table class="table table-hover table-bordered">
 		<thead>
 			<tr>
-			<th>Order Nos</th>
+			<th>Orders</th>
 			<th>Sales</th>
 			<th>Revenue</th>
 			<th>Product Cost</th>
@@ -75,7 +76,7 @@
 	<table class="table table-hover table-bordered">
 		<thead>
 			<tr>
-			<th>Order Nos</th>
+			<th>Orders</th>
 			<th>Sales</th>
 			<th>Revenue</th>
 			<th>Product Cost*</th>
@@ -90,7 +91,7 @@
 			<td class="text-right"><%= (@total_orders_nos_60).to_i %></td>
 			<td class="text-right"><%= @total_orders_sales_60.to_i %></td>
 			<td class="text-right"><%= @total_orders_revenue_60.to_i %></td>
-			<td class="text-right"><%= (@total_Orders_product_cost_60 + @total_Orders_product_cost_breakage_60).to_i %></td>
+			<td class="text-right"><%= (@total_Orders_product_cost_60).to_i %></td>
 			<td class="text-right"><%= @order_media_var_cost_60.to_i %></td>
 			<td class="text-right"><%= @actual_media_cost.to_i %></td>
 			<td class="text-right"><%= @total_orders_refund_60.to_i %></td>
@@ -99,7 +100,7 @@
 			
 		</tbody>
 	</table>
-	<small>Product Cost is added 10% more to take care of Damages, Packaging etc</small>
+	
 	</div>
 	</div>
 	</div>
@@ -111,7 +112,7 @@
 	<table class="table table-hover table-bordered">
 		<thead>
 			<tr>
-			<th>Order Nos</th>
+			<th>Orders</th>
 			<th>Sales</th>
 			<th>Revenue</th>
 			<th>Product Cost*</th>
@@ -135,7 +136,7 @@
 			
 		</tbody>
 	</table>
-	<small>Product Cost is added 10% more to take care of Damages, Packaging etc</small>
+	
 	</div>
 	</div>
 	</div>
@@ -147,7 +148,7 @@
 	<table class="table table-hover table-bordered">
 		<thead>
 			<tr>
-			<th>Order Nos</th>
+			<th>Orders</th>
 			<th>Sales</th>
 			<th>Revenue</th>
 			<th>Product Cost*</th>
@@ -171,12 +172,39 @@
 			
 		</tbody>
 	</table>
-	<small>Product Cost is added 10% more to take care of Damages, Packaging etc</small>
+	
 	</div>
 	</div>
 	</div>
 	<div class="well well-sm">
 		<p>All Description about this Report</p>
+		<ul>
+		<li>Product Cost is added 10% more to take care of Damages, Packaging etc</li>
+		<li>Product Revenue includes shipping</li>
+		<li>Shipping Revenues are take after reducing tax for 15% (considering MH) or 0.98125 of orginal</li>
+		<li>Refund is 2% of total</li>
+		<li>VAT is deducted from products (0.888889) of original value</li>
+		<li>To calculate commission sub-total less VAT is used. No shipping charges are included</li>
+		</ul>
 	</div>
+	<% @hidelist = true %>
+<% if @hidelist == false %>
+	<div style="visibility:hidden">
+	<% if @list_of_orders.present? %>
+	<table class="table table-bordered">
+  <tr>
+    <td>Order No</td> <td>Date Time</td>
+
+  </tr>
+ <% @list_of_orders.each do |c| %>
+<tr>  
+<td> <%= c[:order_no] %></td>
+<td> <%= c[:time_of_order] %></td>
+</tr>
+ <% end -%>
+</table>
+<% end %>
+</div>
+<% end  %>
 	</div>
 </div>

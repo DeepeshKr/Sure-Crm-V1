@@ -1,9 +1,11 @@
 class MediaController < ApplicationController
-  before_action :set_medium, :dropdowns, only: [:show, :edit, :update, :destroy]
+  before_action :set_medium, :dropdowns, only: [ :show, :edit, :update, :destroy]
 
   respond_to :html
 
   def index
+    dropdowns
+     @statelists = State.all
     @showall = true
      @media = Medium.all.order("updated_at DESC").limit(50)
       @inactivemedia = Medium.where(active:0).order("updated_at DESC").limit(50)
@@ -11,6 +13,11 @@ class MediaController < ApplicationController
        @media = Medium.where(telephone: params[:telephone])
        @telephone = params[:telephone]
         @inactivemedia = Medium.where(active:0).where(telephone: params[:telephone])
+    end
+     if params.has_key?(:state)
+       @media = Medium.where(state: params[:state])
+       @state = params[:state]
+        @inactivemedia = Medium.where(active:0).where(state: params[:state])
     end
     if params[:dnis].present?
        @media = Medium.where(dnis: params[:dnis]).order("updated_at DESC")

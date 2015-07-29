@@ -17,7 +17,7 @@
      <th  rowspan="2">Date</th>
     
       <th colspan="4">Income</th>
-      <th colspan="4">Expense</th>
+      <th colspan="5">Expense</th>
     
      <th rowspan="2">Half Hourly</th>
     <th rowspan="2">Show wise</th>
@@ -34,6 +34,7 @@
       <th class="text-right">Product Cost</th>
        <th class="text-right">Commision</th>
      <th class="text-right">Media Cost</th>
+      <th class="text-right">Refund</th>
      <th class="text-right">Profitability</th>
      </tr>
   </thead>
@@ -47,7 +48,6 @@
 
 <td class="text-right">
    <%= c[:nos] %> 
-  
 </td>
 <td class="text-right">
    <%= c[:pieces] %> 
@@ -71,6 +71,10 @@
 </td>
 <td class="text-right">
    <%= c[:fixed_cost] %> 
+  
+</td>
+<td class="text-right">
+   <%= c[:refund] %> 
   
 </td>
 <td class="text-right">  
@@ -97,4 +101,25 @@
   </div>
   <% end %>
  <br>
+<hr>
+<!-- style="visibility:hidden" -->
+<% @hidelist = true %>
+<% if @hidelist == false %>
+<div style="visibility:hidden">
+<% @order_sno = 1 %>
+<table class="table table-bordered">
+  <tr>
+    <td>Order No</td> <td>Date Time</td>
 
+  </tr>
+ <% @list_of_orders.each do |c| %>
+<tr>  
+<td> <%= @order_sno %></td>
+<td> <%= c[:order_no] %></td>
+<td> <%= c[:time_of_order] %></td>
+</tr>
+<% @order_sno += 1 %>
+ <% end -%>
+</table>
+</div>
+<% end %>

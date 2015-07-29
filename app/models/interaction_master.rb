@@ -10,7 +10,7 @@ class InteractionMaster < ActiveRecord::Base
    
   has_many :interaction_transcript, foreign_key: "interactionid"
 
-  #validates :customer_id,  :presence => { :message => "No customer selected!" } 
+  validates :customer_id,  :presence => { :message => "No customer selected!" } , :allow_blank => true
   validates :interaction_category_id,  :presence => { :message => "No problem category selected!" }
   validates :interaction_priority_id,  :presence => { :message => "No problem priority selected!" }
   validates :interaction_status_id,  :presence => { :message => "No problem status selected!" }
