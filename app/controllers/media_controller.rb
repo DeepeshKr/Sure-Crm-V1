@@ -120,6 +120,7 @@ class MediaController < ApplicationController
       @statelist = State.all
       @media_commission = MediaCommision.all
       @media_group = MediaGroup.all
+    @employees = Employee.all.order("first_name").joins(:employee_role) #.sort("employee_roles.sortorder desc")
     end
     def set_medium
       @medium = Medium.find(params[:id])
@@ -129,6 +130,6 @@ class MediaController < ApplicationController
       params.require(:medium).permit(:name, :telephone, :alttelephone, :state,
        :active, :corporateid, :description, :ref_name, :media_commision_id, 
         :value, :media_group_id, :dnis, :channel, :slot, :daily_charges,
-         :paid_correction)
+         :paid_correction, :employee_id)
     end
 end

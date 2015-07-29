@@ -18,6 +18,7 @@ class Employee < ActiveRecord::Base
   belongs_to :employee_role, foreign_key: "employee_role_id"
 
   has_many :user, foreign_key: "employee_code"
+  has_many :medium, foreign_key: "employee_id"
   
   has_many :subordinates, class_name: "Employee",
                           foreign_key: "reporting_to_id"

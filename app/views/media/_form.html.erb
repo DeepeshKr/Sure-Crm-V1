@@ -78,8 +78,12 @@
           <%= f.number_field :corporateid, label: "Corporate Id", placeholder: "Ignore if you dont know" %>
     </div>
   </div>
- 
- 
+<div class="field">
+ <%= f.select(:employee_id, 
+    options_from_collection_for_select(@employees, :id, :name, selected: @medium.employee_id), 
+        {:prompt => '-Select Managed by-'} , 
+    {label: " Managed By"})  %>
+ </div>
   <div class="field">
    
     <%= f.text_area :description, label: "Description" %>
