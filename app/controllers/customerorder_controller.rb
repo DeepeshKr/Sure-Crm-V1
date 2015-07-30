@@ -43,7 +43,9 @@ def update_product_list
     #@productlist = ProductList.where('active_status_id = ?',  10000).where(product_variant_id: product_variants).joins(:product_variant).order("product_variants.name")
     
     #product_list = ProductList.where(active_status_id: 10000).where("productlist.name like ? ", "#{@searchvalue}%").joins(:product_variant).order("product_variants.name")
-    product_list = ProductList.where(active_status_id: 10000).where("name like ? ", "#{@searchvalue}%")
+     product_list = ProductList.where(active_status_id: 10000).joins(:product_variant)
+    .where("product_variants.product_sell_type_id = ?", 10000)
+    .where("name like ? ", "#{@searchvalue}%").order("id DESC")
     
       found  = product_list.count
       @newproductlist = product_list.map{|s| [s.name, s.id]}
