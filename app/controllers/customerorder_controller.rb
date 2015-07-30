@@ -41,11 +41,12 @@ def update_product_list
     #product_masters = ProductMaster.where("productactivecodeid = ?", 10000).where("name like ? OR extproductcode like ? or description like ?", "#{@searchvalue}%", "#{@searchvalue}%", "#{@searchvalue}%").pluck("id")
     #product_variants = ProductVariant.where("activeid = ? and product_sell_type_id = ?", 10000, 10000).where(productmasterid: product_masters).where("name like ? OR extproductcode like ? or description like ?", "#{@searchvalue}%", "#{@searchvalue}%", "#{@searchvalue}%").pluck("id")
     #@productlist = ProductList.where('active_status_id = ?',  10000).where(product_variant_id: product_variants).joins(:product_variant).order("product_variants.name")
-    
+     product_variants = ProductVariant.where("activeid = ? and product_sell_type_id = ?", 10000, 10000).pluck("id")
     #product_list = ProductList.where(active_status_id: 10000).where("productlist.name like ? ", "#{@searchvalue}%").joins(:product_variant).order("product_variants.name")
-     product_list = ProductList.where(active_status_id: 10000).joins(:product_variant)
-    .where("product_variants.product_sell_type_id = ?", 10000)
-    .where("name like ? ", "#{@searchvalue}%").order("id DESC")
+    product_list = ProductList.where(active_status_id: 10000)
+    .where(:product_variant_id => product_variants)
+    .where("name like ? ", "#{@searchvalue}%")
+    .order("name")
     
       found  = product_list.count
       @newproductlist = product_list.map{|s| [s.name, s.id]}

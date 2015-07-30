@@ -64,41 +64,30 @@ class ProductTrainingManualsController < ApplicationController
   end
 
   def training_text
-    if !params.blank?
+   if !params.blank?
     @searchvalue = params[:searchvalue]
      @searchvalue =  @searchvalue.upcase
       
       @training =  "updated at " + DateTime.now.to_s 
-      @heading = "No Script for " << @searchvalue
-    productlists = ProductList.where(active_status_id: 10000).where("name like ? ", "#{@searchvalue}%").pluck(:product_variant_id).first
+     # @heading = "No Script for " << @searchvalue
+      product_variants = ProductVariant.where("activeid = ? and product_sell_type_id = ?", 10000, 10000).pluck("id")
+      
+     productlists = ProductList.where(active_status_id: 10000)
+    .where(:product_variant_id => product_variants)
+    .where("name like ? ", "#{@searchvalue}%").order("name")
        if productlists.present?
-          #exiting
 
-         #productvariantid = ProductList.where('id = ?', params[:id]).pluck(:product_variant_id).first
-          
-         @productid = ProductVariant.where('id = ?', productlists).pluck(:productmasterid).first
+          @traininglist = ProductTrainingManual.where('productid = ?', productlists.first.product_master_id)
+       
 
-         @traininglist = ProductTrainingManual.where('productid = ?', @productid)
-                  
-          
-         if @traininglist.empty?
-           @training = "No script for " + product_list_id.to_s + "product id " + @productid.to_s
-           @heading = "Searched for " << @searchvalue
-         end         
-          
-          product_listed = ProductList.where(active_status_id: 10000).where("name like ? ", "#{@searchvalue}%")
+          @heading = productlists.first.productinfo
+          @basic =  productlists.first.price
+          @cod =  productlists.first.codcharges.to_i.to_s
+          @mahcod =  productlists.first.maharastracodextra.to_i.to_s
+          @cc =  productlists.first.creditcardcharges.to_i.to_s
+          @mahcc =  productlists.first.maharastraccextra.to_i.to_s
 
-          @heading = product_listed.first.productinfo
-          
-          @basic =  product_listed.first.price
-           #@shipping =  productlist.shipping.to_i.to_s
-           
-          @cod =  product_listed.first.codcharges.to_i.to_s
-          @mahcod =  product_listed.first.maharastracodextra.to_i.to_s
-           #@servicetx =  productlist.servicetax.to_i.to_s
-
-          @cc =  product_listed.first.creditcardcharges.to_i.to_s
-          @mahcc =  product_listed.first.maharastraccextra.to_i.to_s
+         
        end
      end
   end
