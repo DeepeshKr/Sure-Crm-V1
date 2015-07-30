@@ -10,7 +10,11 @@
   </div>
 </div>
 
-
+<br>
+<div class="digg_pagination">
+    <%= will_paginate @media, :container => false %>
+</div>
+<br>
 <table class="table table-hover">
   <thead>
     <tr>
@@ -21,6 +25,7 @@
       <th>State</th>
       <th>Active</th>
       <th>Group</th>
+       <th>BDM</th>
        <% if (current_user.employee_role.sortorder < 6) %> 
       <th>Commission Type</th>
        <th>Percent </th>
@@ -31,6 +36,7 @@
        <% if (current_user.employee_role.sortorder < 6) %> 
        <th>Ads</th>
       <% end %>
+     
       <th colspan=""></th>
     </tr>
   </thead>
@@ -45,6 +51,7 @@
         <td><%= medium.state %></td>
         <td><%= medium.active %></td>
         <td><%= medium.media_group.name if medium.media_group %></td>
+        <td><%= medium.employee.firstname || "NO BDM" if medium.employee %></td>
          <% if (current_user.employee_role.sortorder < 6) %> 
         <td><%= medium.media_commision.name if medium.media_commision %></td>
          <td><%= medium.value %></td>
@@ -60,7 +67,11 @@
     <% end %>
   </tbody>
 </table>
-
+<br>
+<div class="digg_pagination">
+    <%= will_paginate @media, :container => false %>
+</div>
+<br>
 <br>
 <div class="row">
   <div class="col-xs-6">
@@ -84,6 +95,7 @@
       <th>State</th>
       <th>Active</th>
       <th>Group</th>
+       <th>BDM</th>
        <% if (current_user.employee_role.sortorder < 6) %> 
       <th>Commission Type</th>
        <th>Percent </th>
@@ -108,6 +120,7 @@
         <td><%= medium.state %></td>
         <td><%= medium.active %></td>
         <td><%= medium.media_group.name if medium.media_group %></td>
+        <td><%= medium.employee.firstname || "NO BDM" if medium.employee %></td>
          <% if (current_user.employee_role.sortorder < 6) %> 
         <td><%= medium.media_commision.name if medium.media_commision %></td>
          <td><%= medium.value %></td>

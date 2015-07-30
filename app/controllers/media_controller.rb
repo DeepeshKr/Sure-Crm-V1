@@ -7,17 +7,17 @@ class MediaController < ApplicationController
     dropdowns
      @statelists = State.all
     @showall = true
-     @media = Medium.all.order("updated_at DESC").limit(50)
-      @inactivemedia = Medium.where(active:0).order("updated_at DESC").limit(50)
+     @media = Medium.all.order("updated_at DESC").limit(50).paginate(:page => params[:page])
+      @inactivemedia = Medium.where(active:0).order("updated_at DESC").limit(50).paginate(:page => params[:page])
     if params[:telephone].present?
-       @media = Medium.where(telephone: params[:telephone])
+       @media = Medium.where(telephone: params[:telephone]).paginate(:page => params[:page])
        @telephone = params[:telephone]
-        @inactivemedia = Medium.where(active:0).where(telephone: params[:telephone])
+        @inactivemedia = Medium.where(active:0).where(telephone: params[:telephone]).paginate(:page => params[:page])
     end
      if params.has_key?(:state)
-       @media = Medium.where(state: params[:state])
+       @media = Medium.where(state: params[:state]).paginate(:page => params[:page])
        @state = params[:state]
-        @inactivemedia = Medium.where(active:0).where(state: params[:state])
+        @inactivemedia = Medium.where(active:0).where(state: params[:state]).paginate(:page => params[:page])
     end
     if params[:dnis].present?
        @media = Medium.where(dnis: params[:dnis]).order("updated_at DESC")
@@ -27,15 +27,15 @@ class MediaController < ApplicationController
     if params[:name].present?
       @search = params[:name]
       @search = @search.upcase
-      @media = Medium.where("name like ? or ref_name like ?", "#{@search}%", "#{@search}%").order("updated_at DESC")
-      @inactivemedia = Medium.where(active:0).where("name like ? or ref_name like ?", "#{@search}%", "#{@search}%").order("updated_at DESC")
+      @media = Medium.where("name like ? or ref_name like ?", "#{@search}%", "#{@search}%").order("updated_at DESC").paginate(:page => params[:page])
+      @inactivemedia = Medium.where(active:0).where("name like ? or ref_name like ?", "#{@search}%", "#{@search}%").order("updated_at DESC").paginate(:page => params[:page])
        @dnis = params[:dnis]
     end
       if params[:showall].present?
         if params[:showall] = "true"
           @showall = "true"
-           @media = Medium.all.order("name, updated_at DESC")
-           @inactivemedia = Medium.where(active:0).order("name, updated_at DESC")
+           @media = Medium.all.order("name, updated_at DESC").paginate(:page => params[:page])
+           @inactivemedia = Medium.where(active:0).order("name, updated_at DESC").paginate(:page => params[:page])
         respond_to do |format|
           format.html
           format.csv do
