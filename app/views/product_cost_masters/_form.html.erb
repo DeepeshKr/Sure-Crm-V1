@@ -1,0 +1,15 @@
+<%= simple_form_for(@product_cost_master) do |f| %>
+  <%= f.error_notification %>
+
+  <div class="form-inputs">
+    <%= f.input :product_id %>
+    <%= f.input :prod %>
+    <%= f.input :barcode %>
+    <%= f.input :cost %>
+    <%= f.input :revenue %>
+  </div>
+
+  <div class="form-actions">
+    <%= f.button :submit %>
+  </div>
+<% end %>

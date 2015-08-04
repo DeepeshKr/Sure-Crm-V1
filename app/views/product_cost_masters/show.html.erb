@@ -1,0 +1,29 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Product:</strong>
+  <%= @product_cost_master.product_id %>
+</p>
+
+<p>
+  <strong>Prod:</strong>
+  <%= @product_cost_master.prod %>
+</p>
+
+<p>
+  <strong>Barcode:</strong>
+  <%= @product_cost_master.barcode %>
+</p>
+
+<p>
+  <strong>Cost:</strong>
+  <%= @product_cost_master.cost %>
+</p>
+
+<p>
+  <strong>Revenue:</strong>
+  <%= @product_cost_master.revenue %>
+</p>
+
+<%= link_to 'Edit', edit_product_cost_master_path(@product_cost_master) %> |
+<%= link_to 'Back', product_cost_masters_path %>

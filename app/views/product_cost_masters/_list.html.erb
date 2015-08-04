@@ -1,0 +1,30 @@
+
+
+<% if @product_cost_masters.present? %>
+<h3>Product Costs</h3>
+<table class="table table-hover">
+  <thead>
+    <tr>
+    
+      <th>Prod</th>
+     
+      <th>Cost</th>
+     
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @product_cost_masters.each do |product_cost_master| %>
+      <tr>
+       
+        <td><%= product_cost_master.prod %></td>
+        <td><%= product_cost_master.cost %></td>
+      
+        
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+<% else %>
+<h3>No Product Costs found used for creating PPO </h3>
+<% end %>

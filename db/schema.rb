@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150729083740) do
+ActiveRecord::Schema.define(version: 20150803082129) do
 
   create_table "address_types", force: :cascade do |t|
     t.string   "name"
@@ -654,6 +654,16 @@ ActiveRecord::Schema.define(version: 20150729083740) do
     t.string   "description"
     t.datetime "created_at"
     t.datetime "updated_at"
+  end
+
+  create_table "product_cost_masters", force: :cascade do |t|
+    t.integer  "product_id", limit: 16, precision: 38
+    t.string   "prod"
+    t.string   "barcode"
+    t.decimal  "cost",                  precision: 10, scale: 2
+    t.decimal  "revenue",               precision: 10, scale: 2
+    t.datetime "created_at",                                     null: false
+    t.datetime "updated_at",                                     null: false
   end
 
   create_table "product_inventory_codes", force: :cascade do |t|

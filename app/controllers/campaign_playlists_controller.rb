@@ -61,7 +61,7 @@ def showproductvariant
   respond_with(@campaign_playlist)
 
 end
-
+ 
 def updateproductvariant
    @campaign_playlist = CampaignPlaylist.find(params[:id])
 if campaign_playlist_params[:productvariantid].present?
@@ -170,6 +170,10 @@ end
            #media tape cost head
        
           list_status_id = 10001
+          cost = 0
+          if params[:media_cost].present?
+              cost = params[:media_cost]
+          end
                    
             hour_min_sec(begin_hr, begin_min, begin_sec, media_tapes.duration_secs)
             end_hr = @end_hr
@@ -186,7 +190,7 @@ end
             end_hr: end_hr, 
             end_min: end_min, 
             end_sec: end_sec,
-            cost: 0, 
+            cost: cost, 
             channeltapeid: media_tapes.tape_ext_ref_id, 
             internaltapeid: media_tapes.unique_tape_name, 
             productvariantid: media_tapes.product_variant_id, 
@@ -277,7 +281,12 @@ end
           
             list_status_id = 10001
             if m.sort_order == 1
-              list_status_id = 10000            
+              list_status_id = 10000
+               if params[:media_cost].present?
+                  cost = params[:media_cost]
+                end
+              else
+            cost = 0      
             end
             #ref name is combination of media tape head and media tape name
             ref_name = MediaTapeHead.find(media_tape_head_id).name 

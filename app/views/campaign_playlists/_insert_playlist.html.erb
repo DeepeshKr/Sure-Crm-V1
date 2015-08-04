@@ -1,7 +1,7 @@
 <div class="alert alert-warning" role="alert">Modifcations here would Reset the Entire List</div>
 <% if @campaign_playlist.present? %>
  <%= bootstrap_form_for @campaign_playlist, url: insert_playlist_path, :method => :POST do |f| %>
-
+ 
   
  <%= hidden_field_tag :for_date, @for_date %>
  <%= f.hidden_field :campaignid %>

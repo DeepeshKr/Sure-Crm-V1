@@ -23,9 +23,10 @@
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
               Reports <b class="caret"></b> </a>
             <ul class="dropdown-menu">
-             <li><%= link_to "Sales Summary Report", "/sales_report" , data: { confirm: 'This Report Will take some time to show!' } %></li>
-              <% if (current_user.employee_role.sortorder < 3) %> 
-               <li><%= link_to "PPO Report", "/ppo_report" , data: { confirm: 'This Report Will take some time to show!'} %></li>
+             <li><%= link_to "Sales Summary Report", "/sales_reports" , data: { confirm: 'All the reports are listed here' } %></li>
+             <li><%= link_to "Sales Summary Report", "/sales_report" , data: { confirm: 'This Report Will take some time to show, please have patience!' } %></li>
+              <% if (current_user.employee_role.sortorder < 5) %> 
+               <li><%= link_to "PPO Report", "/ppo_report" , data: { confirm: 'This Report Will take some time to show, please dont refresh!'} %></li>
                <li><%= link_to "PPO Report (Test Products)", "/product_test_ppos" %></li>
             <% end %>
               

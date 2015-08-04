@@ -1,20 +1,20 @@
-<h4>Product Costs </h4>
-<% if @ropmasters.present? %>
-<p class="lead">Cost: <%= @ropmasters.first.totalcost  %>
+<h4>Product Costs (HBN)</h4>
+<% if @ropmasterhbn.present? %>
+<p class="lead">Cost: <%= @ropmasterhbn.first.totalcost  %>
 <small>(
-vc1: <%= @ropmasters.first.vc1 %> 
-pc1: <%= @ropmasters.first.pc1  %>
-tc1: <%= @ropmasters.first.tc1  %>
-pack1: <%= @ropmasters.first.pack1  %>
-copret: <%= @ropmasters.first.copret  %>
-royalty: <%= @ropmasters.first.royalty  %>)
+vc1: <%= @ropmasterhbn.first.vc1 %> 
+pc1: <%= @ropmasterhbn.first.pc1  %>
+tc1: <%= @ropmasterhbn.first.tc1  %>
+pack1: <%= @ropmasterhbn.first.pack1  %>
+copret: <%= @ropmasterhbn.first.copret  %>
+royalty: <%= @ropmasterhbn.first.royalty  %>)
 </small> 
 <br>
-Revenue: <%= @ropmasters.first.totalrevenue  %>
+Revenue: <%= @ropmasterhbn.first.totalrevenue  %>
 
 <small>(
-bp1: <%= @ropmasters.first.bp1 %> 
-sh1: <%= @ropmasters.first.sh1  %>)  </small>  </p>
+bp1: <%= @ropmasterhbn.first.bp1 %> 
+sh1: <%= @ropmasterhbn.first.sh1  %>)  </small>  </p>
 
 
 <table class="table table-hover">
@@ -38,7 +38,7 @@ sh1: <%= @ropmasters.first.sh1  %>)  </small>  </p>
   </thead>
 
   <tbody>
-    <% @ropmasters.each do |d| %>
+    <% @ropmasterhbn.each do |d| %>
       <tr>
         <td><%= d.prod %></td>
            <td><%= d.pc1 %> <br>       <%= d.pc2 %><br>       <%= d.pc3 %></td>
@@ -62,5 +62,5 @@ sh1: <%= @ropmasters.first.sh1  %>)  </small>  </p>
   </tbody>
 </table>
 <% else %>
-<h3> No products found in ROPMASTER_NEW</h3>
+<h3> No products found in ROPMASTER_HBN</h3>
 <% end %>

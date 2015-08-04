@@ -5,6 +5,12 @@ class ProductCostController < ApplicationController
     # @con_action = list
      if params.has_key?(:search)
       @prod = params[:search].upcase
+
+      @product_cost_masters = ProductCostMaster.where(prod: @prod)
+
+      @ropupsprod = ROPUPSPROD.where("prod = ?", @prod)
+      @ropmasterhbn = ROPMASTER_HBN.where("prod = ?", @prod)
+
       @prodmasters = PRODMASTER.where("prod = ?", @prod)
       @ropmasters = ROPMASTER_NEW.where("prod = ?", @prod)
       @searchvalue = @prod 
@@ -29,8 +35,14 @@ class ProductCostController < ApplicationController
      
     if params.has_key?(:search)
       @prod = params[:search] #.upcase
+        @product_cost_masters = ProductCostMaster.where(prod: @prod)
+
+      @ropupsprod = ROPUPSPROD.where("prod = ?", @prod)
+      @ropmasterhbn = ROPMASTER_HBN.where("prod = ?", @prod)
+
       @prodmasters = PRODMASTER.where("prod = ?", @prod)
       @ropmasters = ROPMASTER_NEW.where("prod = ?", @prod)
+   
       @searchvalue = @prod 
 
     else

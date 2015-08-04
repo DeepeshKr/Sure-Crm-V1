@@ -39,7 +39,7 @@ class CampaignsController < ApplicationController
   def show
     recent_campaigns
     proddropdown
-   
+    
     
     @for_date = @campaign.startdate
       @campaign_playlists = CampaignPlaylist.where("campaignid = ?", params[:id]).order(:start_hr, :start_min, :start_sec)
@@ -133,11 +133,15 @@ class CampaignsController < ApplicationController
      @productvariantlist = ProductVariant.where('product_variants.activeid = ? and product_variants.product_sell_type_id < ?', 10000, 10002).joins(:product_master)
      .where("product_masters.productactivecodeid = ?", 10000).order("product_variants.name")
 
-     @media_cost_master = MediaCostMaster.all
+     @media_cost_master = MediaCostMaster.all.order(:total_cost)
+     @hbn_media_cost_master = MediaCostMaster.where(media_id: 11200).order(:total_cost)
+     
     end
      def proddropdown
       #product_sell_type_id
      @productvariant = ProductVariant.where('activeid = ? and product_sell_type_id <= ?', 10000, 10001).order('name')
+    
+     #@media_cost_masters
     end 
      def activestatus
      @active_status = CampaignPlayListStatus.all.order('id')

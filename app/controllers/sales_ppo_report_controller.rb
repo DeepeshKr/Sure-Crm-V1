@@ -16,8 +16,8 @@ class SalesPpoReportController < ApplicationController
           up_to_date = for_date.to_date 
         else
            use_date = (330.minutes).from_now.to_date
-          from_date = use_date.to_date - 1.days #30.days
-          up_to_date = use_date.to_date - 1.days
+          from_date = use_date.to_date - 5.days #30.days
+          up_to_date = use_date.to_date #- 5.days
         end
       
           media_segments
@@ -55,30 +55,30 @@ class SalesPpoReportController < ApplicationController
              time_of_order: med.orderdate.strftime('%Y-%b-%d %H:%M:%S')}
             #error loggin
             
-           #  begin
+             begin
                         
-           #  revenue += OrderMaster.find(med.id).productrevenue  ||= 0
-           # # media_var_cost += OrderMaster.find(med.id).mediacost ||= 0
-           #  product_cost += OrderMaster.find(med.id).productcost ||= 0
-           #  media_variable = Medium.where('id = ? AND value is not null', med.media_id)
-           #  .where(:media_commision_id => [10020, 10021, 10040, 10041, 10060]) #.pluck(:value)
-           #    if media_variable.present?
-           #      #discount the total value by 50% as media_correction
-           #      media_correction = 0.5
-           #      #PAID_CORRECTION
-           #       if media_variable.first.paid_correction.present?
-           #         media_correction = media_variable.first.paid_correction #||= 0.5
-           #       end
-           #     media_var_cost += (med.subtotal * media_variable.first.value.to_f) * media_correction
-           #    end
-           #     rescue => e
-           #     logger.warn "Unable to foo, will ignore: #{e}" 
-           #  end
+            revenue += OrderMaster.find(med.id).productrevenue  ||= 0
+           # media_var_cost += OrderMaster.find(med.id).mediacost ||= 0
+            product_cost += OrderMaster.find(med.id).productcost ||= 0
+            media_variable = Medium.where('id = ? AND value is not null', med.media_id)
+            .where(:media_commision_id => [10020, 10021, 10040, 10041, 10060]) #.pluck(:value)
+              if media_variable.present?
+                #discount the total value by 50% as media_correction
+                media_correction = 0.5
+                #PAID_CORRECTION
+                 if media_variable.first.paid_correction.present?
+                   media_correction = media_variable.first.paid_correction #||= 0.5
+                 end
+               media_var_cost += (med.subtotal * media_variable.first.value.to_f) * media_correction
+              end
+               rescue => e
+               logger.warn "Unable to foo, will ignore: #{e}" 
+            end
 
           end #end order list
 
-           #  revenue = revenue * @correction
-           #  product_cost = (product_cost * @correction) + (product_cost * 0.10)
+            revenue = revenue * @correction
+             product_cost = (product_cost * @correction) + (product_cost * 0.10)
 
           fixed_cost = Medium.where(media_group_id: 10000).sum(:daily_charges)
           
@@ -376,7 +376,7 @@ class SalesPpoReportController < ApplicationController
           :revenue => revenue.to_i,
           :product_cost => product_cost.to_i,
           :variable_cost => media_var_cost.to_i,
-          :fixed_cost => fixed_cost.to_i,
+          :fixed_cost => playlist.cost.to_i,
           :profitability => (revenue - (fixed_cost + media_var_cost + product_cost)).to_i ,
           :product_variant_id => playlist.productvariantid}
         end

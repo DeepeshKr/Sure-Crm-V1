@@ -1,5 +1,7 @@
 Rails.application.routes.draw do
 
+  resources :product_cost_masters
+
   resources :product_test_ppos
 
   resources :product_sample_stocks
@@ -44,6 +46,8 @@ Rails.application.routes.draw do
  
   devise_for :logins
 #sales report 
+  get 'sales_reports' => 'sales_report#index' 
+  get 'sales_report/index'
   get 'sales_report' => 'sales_report#summary' 
   get 'sales_report/summary'
   get 'sales_report/hourly'

@@ -189,9 +189,9 @@ end
 def productcost
    if self.product_list.present? #&& self.pieces.present?
     pcode = self.product_list.extproductcode
-    ropmaster =  ROPMASTER_NEW.where("prod = ?", pcode).first
-      if ropmaster.present?
-          return ropmaster.totalcost #* self.pieces || 0
+    cost_master =  ProductCostMaster.where("prod = ?", pcode).first
+      if cost_master.present?
+          return cost_master.cost * self.pieces || 0
      else
         return 0
      end
@@ -200,23 +200,40 @@ def productcost
   end
 end
 
+# def productcost
+#    if self.product_list.present? #&& self.pieces.present?
+#     pcode = self.product_list.extproductcode
+#     ropmaster =  ROPMASTER_NEW.where("prod = ?", pcode).first
+#       if ropmaster.present?
+#           return ropmaster.totalcost #* self.pieces || 0
+#      else
+#         return 0
+#      end
+#   else
+#     return 0
+#   end
+# end
+
 def productrevenue
-  if self.product_list.present? #&& self.pieces.present?
-    pcode = self.product_list.extproductcode
-    ropmaster = ROPMASTER_NEW.where("prod = ?", pcode).first
-    if ropmaster.present?
-        if self.subtotal > 0
-          return ropmaster.totalrevenue #* self.pieces || 0
-        else
-          return 0
-        end
-    else
-      return 0
-    end
-  else
-      return 0
-    end
+    return ((self.total * self.pieces) * 0.888889)|| 0
 end 
+# def productrevenue
+#   if self.product_list.present? #&& self.pieces.present?
+#     pcode = self.product_list.extproductcode
+#     ropmaster = ROPMASTER_NEW.where("prod = ?", pcode).first
+#     if ropmaster.present?
+#         if self.subtotal > 0
+#           return ropmaster.totalrevenue #* self.pieces || 0
+#         else
+#           return 0
+#         end
+#     else
+#       return 0
+#     end
+#   else
+#       return 0
+#     end
+# end 
 
 
 

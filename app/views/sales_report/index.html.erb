@@ -1,0 +1,322 @@
+<div class="jumbotron">
+ <div class="container">
+  <h1>Sales Reports</h1>
+  <p>List of all sales reports with detailed description can be found here.</p>
+ </div>
+</div>
+ <div class="container">
+	<div class="row">
+	<div class="col-xs-4">
+			<div class="panel panel-primary">
+			<div class="panel-heading">
+			 <h3 class="panel-title">BDM Channel Sales</h3>
+			</div>
+			  <div class="panel-body">
+			   Get Sales report for each BDM Listed below for Channel Sales managed by them
+			  </div>
+			  <div class="panel-footer">
+			  
+					 <%= bootstrap_form_tag url: url_for(:controller => 'sales_report', :action => 'summary'), :method => :GET, :enforce_utf8 => false do |f| %>
+					 <div class="row">
+					<div class="col-xs-8">
+					 <%= text_field_tag(:for_date, nil, :data => {:provide => "datepicker"}, :id => "datepicker1", :class => "form-control", :required => "true" )   %>
+					          
+					</div>
+					
+					<div class="col-xs-4">
+						<%= submit_tag "Report", name: nil, class: "btn btn-success ", data: { confirm: 'Are you sure?'}  %>
+					</div>
+					</div>
+
+					<% end %>
+
+					</div>
+								  
+								  </div>
+	</div>
+	<div class="col-xs-4">
+			<div class="panel panel-primary">
+			<div class="panel-heading"><h3 class="panel-title">HBN Showwise Report</h3></div>
+			  <div class="panel-body">
+			    See how each show is performing and sales against each show, warning sometimes some show may get no results at all.
+			  </div>
+			  <div class="panel-footer">
+			    <%= bootstrap_form_tag url: url_for(:controller => 'sales_report', :action => 'summary'), :method => :GET, :enforce_utf8 => false do |f| %>
+					 <div class="row">
+					<div class="col-xs-8">
+					 <%= text_field_tag(:for_date, nil, :data => {:provide => "datepicker"}, :id => "datepicker1", :class => "form-control", :required => "true" )   %>
+					          
+					</div>
+					
+					<div class="col-xs-4">
+						<%= submit_tag "Report", name: nil, class: "btn btn-success ", data: { confirm: 'Are you sure?'}  %>
+					</div>
+					</div>
+
+					<% end %>
+			  </div>
+			</div>
+	</div>
+	<div class="col-xs-4">
+			<div class="panel panel-primary">
+			<div class="panel-heading"><h3 class="panel-title">HBN half hour</h3></div>
+			  <div class="panel-body">
+			    See how each half hour is performing and sales against each 30 minute interval, get to see the days performance across time zones.
+			  </div>
+			  <div class="panel-footer">
+			  	 <%= bootstrap_form_tag url: url_for(:controller => 'sales_report', :action => 'summary'), :method => :GET, :enforce_utf8 => false do |f| %>
+					 <div class="row">
+					<div class="col-xs-8">
+					 <%= text_field_tag(:for_date, nil, :data => {:provide => "datepicker"}, :id => "datepicker1", :class => "form-control", :required => "true" )   %>
+					          
+					</div>
+					
+					<div class="col-xs-4">
+						<%= submit_tag "Report", name: nil, class: "btn btn-success ", data: { confirm: 'Are you sure?'}  %>
+					</div>
+					</div>
+
+					<% end %>
+			  </div>
+			</div>
+	</div>
+
+	</div>
+
+	<div class="row">
+	<div class="col-xs-4">
+			<div class="panel panel-primary">
+			<div class="panel-heading">
+			 <h3 class="panel-title">Agent Order Report</h3>
+			</div>
+			  <div class="panel-body">
+			   Sales by individual agents for each day
+			  </div>
+			  <div class="panel-footer">
+			  
+					 <%= bootstrap_form_tag url: url_for(:controller => 'sales_report', :action => 'summary'), :method => :GET, :enforce_utf8 => false do |f| %>
+					 <div class="row">
+					<div class="col-xs-8">
+					 <%= text_field_tag(:for_date, nil, :data => {:provide => "datepicker"}, :id => "datepicker23", :class => "form-control", :required => "true" )   %>
+					          
+					</div>
+					
+					<div class="col-xs-4">
+						<%= submit_tag "Report", name: nil, class: "btn btn-success ", data: { confirm: 'Are you sure?'}  %>
+					</div>
+					</div>
+
+					<% end %>
+
+					</div>
+								  
+								  </div>
+	</div>
+	<div class="col-xs-4">
+			<div class="panel panel-primary">
+			<div class="panel-heading"><h3 class="panel-title">Agentwise upsale (common) Report</h3></div>
+			  <div class="panel-body">
+			    All the upsell products sold by an agents on a selected day
+			  </div>
+			  <div class="panel-footer">
+			  	<%= bootstrap_form_tag url: url_for(:controller => 'sales_report', :action => 'summary'), :method => :GET, :enforce_utf8 => false do |f| %>
+					 <div class="row">
+					<div class="col-xs-8">
+					 <%= text_field_tag(:for_date, nil, :data => {:provide => "datepicker"}, :id => "datepicker5", :class => "form-control", :required => "true" )   %>
+					          
+					</div>
+					
+					<div class="col-xs-4">
+						<%= submit_tag "Report", name: nil, class: "btn btn-success ", data: { confirm: 'Are you sure?'}  %>
+			  </div>
+			</div>
+			<% end %>
+		</div>
+		</div>
+	</div>
+	<div class="col-xs-4">
+			<div class="panel panel-primary">
+			<div class="panel-heading"><h3 class="panel-title">Agentwise upsale (basic) Report</h3></div>
+			  <div class="panel-body">
+			    All the upsell products sold by an agents on a selected day
+			  </div>
+			  <div class="panel-footer">
+			  	<%= bootstrap_form_tag url: url_for(:controller => 'sales_report', :action => 'summary'), :method => :GET, :enforce_utf8 => false do |f| %>
+					 <div class="row">
+					<div class="col-xs-8">
+					 <%= text_field_tag(:for_date, nil, :data => {:provide => "datepicker"}, :id => "datepicker6", :class => "form-control", :required => "true" )   %>
+					          
+					</div>
+					
+					<div class="col-xs-4">
+						<%= submit_tag "Report", name: nil, class: "btn btn-success ", data: { confirm: 'Are you sure?'}  %>
+			  </div>
+			</div>
+			<% end %>
+		</div>
+		</div>
+	</div>
+ </div>
+
+<div class="row">
+	<div class="col-xs-4">
+			<div class="panel panel-primary">
+			<div class="panel-heading">
+			 <h3 class="panel-title">HBN report</h3>
+			</div>
+			  <div class="panel-body">
+			   Sales  Channelwise, citywise, prdt wise, valuewise
+			  </div>
+			  <div class="panel-footer">
+			  
+					 <%= bootstrap_form_tag url: url_for(:controller => 'sales_report', :action => 'summary'), :method => :GET, :enforce_utf8 => false do |f| %>
+					 <div class="row">
+					<div class="col-xs-8">
+					 <%= text_field_tag(:for_date, nil, :data => {:provide => "datepicker"}, :id => "datepicker7", :class => "form-control", :required => "true" )   %>
+					          
+					</div>
+					
+					<div class="col-xs-4">
+						<%= submit_tag "Report", name: nil, class: "btn btn-success ", data: { confirm: 'Are you sure?'}  %>
+					</div>
+					</div>
+
+					<% end %>
+
+					</div>
+								  
+								  </div>
+	</div>
+	<div class="col-xs-4">
+			<div class="panel panel-primary">
+			<div class="panel-heading"><h3 class="panel-title">Pvt Channel Report</h3></div>
+			  <div class="panel-body">
+			    All sales from private channel
+			  </div>
+			  <div class="panel-footer">
+			  	<%= bootstrap_form_tag url: url_for(:controller => 'sales_report', :action => 'summary'), :method => :GET, :enforce_utf8 => false do |f| %>
+					 <div class="row">
+					<div class="col-xs-8">
+					 <%= text_field_tag(:for_date, nil, :data => {:provide => "datepicker"}, :id => "datepicker8", :class => "form-control", :required => "true" )   %>
+					          
+					</div>
+					
+					<div class="col-xs-4">
+						<%= submit_tag "Report", name: nil, class: "btn btn-success ", data: { confirm: 'Are you sure?'}  %>
+			  </div>
+			</div>
+			<% end %>
+		</div>
+		</div>
+	</div>
+	<div class="col-xs-4">
+			<div class="panel panel-primary">
+			<div class="panel-heading"><h3 class="panel-title">Non Sale Report</h3></div>
+			  <div class="panel-body">
+			   Channel wise, product wise report
+			  </div>
+			  <div class="panel-footer">
+			  	<%= bootstrap_form_tag url: url_for(:controller => 'sales_report', :action => 'summary'), :method => :GET, :enforce_utf8 => false do |f| %>
+					 <div class="row">
+					<div class="col-xs-8">
+					 <%= text_field_tag(:for_date, nil, :data => {:provide => "datepicker"}, :id => "datepicker9", :class => "form-control", :required => "true" )   %>
+					          
+					</div>
+					
+					<div class="col-xs-4">
+						<%= submit_tag "Search", name: nil, class: "btn btn-success ", data: { confirm: 'Are you sure?'}  %>
+			  </div>
+			</div>
+			<% end %>
+		</div>
+		</div>
+	</div>
+ </div>
+ <div class="row">
+	<div class="col-xs-4">
+			<div class="panel panel-primary">
+			<div class="panel-heading">
+			 <h3 class="panel-title">Gender report*</h3>
+			</div>
+			  <div class="panel-body">
+			  HBN and Pvt channel caller gender report (How many males/females place orders?)
+			  </div>
+			  <div class="panel-footer">
+			  
+					 <%= bootstrap_form_tag url: url_for(:controller => 'sales_report', :action => 'summary'), :method => :GET, :enforce_utf8 => false do |f| %>
+					 <div class="row">
+					<div class="col-xs-8">
+					 <%= text_field_tag(:for_date, nil, :data => {:provide => "datepicker"}, :id => "datepicker10", :class => "form-control", :required => "true" )   %>
+					          
+					</div>
+					
+					<div class="col-xs-4">
+						<%= submit_tag "Report", name: nil, class: "btn btn-success ", data: { confirm: 'Are you sure?'}  %>
+					</div>
+					</div>
+
+					<% end %>
+
+					</div>
+								  
+								  </div>
+	</div>
+	<div class="col-xs-4">
+			<div class="panel panel-primary">
+			<div class="panel-heading"><h3 class="panel-title">Pvt Channel Slot Report*</h3></div>
+			  <div class="panel-body">
+			    All sales from private channel, slotwise report
+			  </div>
+			  <div class="panel-footer">
+			  	<%= bootstrap_form_tag url: url_for(:controller => 'sales_report', :action => 'summary'), :method => :GET, :enforce_utf8 => false do |f| %>
+					 <div class="row">
+					<div class="col-xs-8">
+					 <%= text_field_tag(:for_date, nil, :data => {:provide => "datepicker"}, :id => "datepicker11", :class => "form-control", :required => "true" )   %>
+					          
+					</div>
+					
+					<div class="col-xs-4">
+						<%= submit_tag "Report", name: nil, class: "btn btn-success ", data: { confirm: 'Are you sure?'}  %>
+			  </div>
+			</div>
+			<% end %>
+		</div>
+		</div>
+	</div>
+	<div class="col-xs-4" style="visibility:hidden">
+			<div class="panel panel-primary">
+			<div class="panel-heading"><h3 class="panel-title">Non Sale Report</h3></div>
+			  <div class="panel-body">
+			   Channel wise, product wise report
+			  </div>
+			  <div class="panel-footer">
+			  	<%= bootstrap_form_tag url: url_for(:controller => 'sales_report', :action => 'summary'), :method => :GET, :enforce_utf8 => false do |f| %>
+					 <div class="row">
+					<div class="col-xs-8">
+					 <%= text_field_tag(:for_date, nil, :data => {:provide => "datepicker"}, :id => "datepicker12", :class => "form-control", :required => "true" )   %>
+					          
+					</div>
+					
+					<div class="col-xs-4">
+						<%= submit_tag "Search", name: nil, class: "btn btn-success ", data: { confirm: 'Are you sure?'}  %>
+			  </div>
+			</div>
+			<% end %>
+		</div>
+		</div>
+	</div>
+ </div>
+ <script>
+$('#datepicker1').datepicker({format: 'yyyy-mm-dd'});
+$('#datepicker22').datepicker({format: 'yyyy-mm-dd'});
+$('#datepicker23').datepicker({format: 'yyyy-mm-dd'});
+$('#datepicker24').datepicker({format: 'yyyy-mm-dd'});
+$('#datepicker5').datepicker({format: 'yyyy-mm-dd'});
+$('#datepicker6').datepicker({format: 'yyyy-mm-dd'});
+$('#datepicker7').datepicker({format: 'yyyy-mm-dd'});
+$('#datepicker8').datepicker({format: 'yyyy-mm-dd'});
+$('#datepicker9').datepicker({format: 'yyyy-mm-dd'});
+$('#datepicker10').datepicker({format: 'yyyy-mm-dd'});
+$('#datepicker11').datepicker({format: 'yyyy-mm-dd'});
+$('#datepicker12').datepicker({format: 'yyyy-mm-dd'});
+</script>
