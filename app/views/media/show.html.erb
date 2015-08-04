@@ -56,7 +56,7 @@
 
 <p>
   <strong>BDM:</strong>
-  <%= @medium.employee.firstname || "NO BDM" if medium.employee  %>
+  <%= @medium.employee.firstname ||= "NO BDM" if @medium.employee.present?  %>
 </p>
 <%= link_to 'Edit', edit_medium_path(@medium) %> |
 <%= link_to 'Back', media_path %>

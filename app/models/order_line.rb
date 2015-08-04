@@ -215,7 +215,10 @@ end
 # end
 
 def productrevenue
-    return ((self.total * self.pieces) * 0.888889)|| 0
+  totalrevenue = 0
+    totalrevenue += ((self.subtotal * self.pieces) * 0.888889)|| 0
+    totalrevenue += ((self.shipping * self.pieces) *0.98125)|| 0
+     return totalrevenue
 end 
 # def productrevenue
 #   if self.product_list.present? #&& self.pieces.present?

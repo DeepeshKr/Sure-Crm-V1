@@ -167,26 +167,10 @@ def productcost
  
 end
 def productrevenue
-  productrevenue = OrderLine.where('orderid = ?', self.id)
-
-  if productrevenue.present?
-    total = self.shipping * 0.98125
-    productrevenue.each do |c|
-      if c.total > 0
-      total += c.productrevenue
-      end
-    end
-
-    return total
-    
-  else
-    return 0
-  end
- 
-  #productcost.sum { |p| p.productrevenue }
-  #
-
-  #return OrderLine.where('orderid = ?', self.id).sum(:productrevenue)
+   totalrevenue = 0
+    totalrevenue += ((self.subtotal * self.pieces) * 0.888889)|| 0
+    totalrevenue += ((self.shipping * self.pieces) *0.98125)|| 0
+     return totalrevenue
 end
 private
   def on_create
