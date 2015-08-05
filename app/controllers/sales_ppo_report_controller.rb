@@ -21,10 +21,6 @@ class SalesPpoReportController < ApplicationController
         end
       
           media_segments
-         
-
-          # from_date = (330.minutes).from_date.to_date
-          # up_to_date = (330.minutes).up_to_date.to_date
         
           up_to_date.downto(from_date).each do |day|
            # day = day - 330.minutes
@@ -83,10 +79,10 @@ class SalesPpoReportController < ApplicationController
           fixed_cost = Medium.where(media_group_id: 10000).sum(:daily_charges)
           
           #ppo for each hour
-          total_shipping = (orderlist.sum(:shipping) * @shipping_tax_less) * @correction
-          total_sub_total = (orderlist.sum(:subtotal) * @subtotal_vat_less) * @correction
+          total_shipping = (orderlist.sum(:shipping)) * @correction
+          total_sub_total = (orderlist.sum(:subtotal)) * @correction
           totalorders = total_shipping + total_sub_total
-          nos = orderlist.count() 
+          nos = (orderlist.count()) * @correction
           pieces = orderlist.sum(:pieces) * @correction
           refund = totalorders * 0.02
 
@@ -210,20 +206,21 @@ class SalesPpoReportController < ApplicationController
             #error loggin
             
 
-           # revenue += OrderMaster.find(med.id).productrevenue ||= 0
-           # media_var_cost += OrderMaster.find(med.id).mediacost ||= 0
-            # product_cost += OrderMaster.find(med.id).productcost ||= 0
-            # media_variable = Medium.where('id = ? AND value is not null', med.media_id)
-            # .where(:media_commision_id => [10020, 10021, 10040, 10041, 10060]) #.pluck(:value)
-            #   if media_variable.present?
-            #     #discount the total value by 50% as correction
-            #     media_correction = 0.5
-            #     #PAID_CORRECTION
-            #      if media_variable.first.paid_correction.present?
-            #        media_correction = media_variable.first.paid_correction #||= 0.5
-            #      end
-            #    media_var_cost += ((med.subtotal * 0.888889) * media_variable.first.value.to_f) * media_correction
-            #   end
+           revenue += OrderMaster.find(med.id).productrevenue ||= 0
+           
+            product_cost += OrderMaster.find(med.id).productcost ||= 0
+            # media varaible cost is already calculate from order master
+            media_variable = Medium.where('id = ? AND value is not null', med.media_id)
+            .where(:media_commision_id => [10020, 10021, 10040, 10041, 10060]) #.pluck(:value)
+              if media_variable.present?
+                #discount the total value by 50% as correction
+                media_correction = 0.5
+                #PAID_CORRECTION
+                 if media_variable.first.paid_correction.present?
+                   media_correction = media_variable.first.paid_correction #||= 0.5
+                 end
+               media_var_cost += ((med.subtotal * 0.888889) * media_variable.first.value.to_f) * media_correction
+              end
           end
          
          
@@ -245,17 +242,18 @@ class SalesPpoReportController < ApplicationController
           #ppo for each hour
            #@total_orders_sales += ((shipping * @shipping_tax_less) + subtotal * @subtotal_vat_less) 
 
-          total_shipping = (orderlist.sum(:shipping) * @shipping_tax_less) 
-          total_sub_total = (orderlist.sum(:subtotal) * @subtotal_vat_less) 
+          total_shipping = (orderlist.sum(:shipping) ) 
+          total_sub_total = (orderlist.sum(:subtotal) ) 
           totalorders = total_shipping + total_sub_total
           nos = orderlist.count()
           pieces = orderlist.sum(:pieces)
+                  
+          nos = nos * @correction
+          pieces =  pieces * @correction
+          totalorders = totalorders * @correction
+
           refund = totalorders * 0.02
-         
-         nos = nos #* @correction
-         pieces =  pieces #* @correction
-         totalorders = totalorders #* @correction
-          employeeunorderlist << {:total => totalorders.to_i * @correction,
+          employeeunorderlist << {:total => totalorders.to_i,
             :total_orders => totalorders.to_i,
           :starttime =>  halfhourago.strftime("%H:%M %p"),
           :endtime => Time.at(date).strftime("%H:%M %p"),
@@ -272,13 +270,13 @@ class SalesPpoReportController < ApplicationController
           :fixed_cost => media_fixed_cost.to_i,
           :profitability => (revenue.to_i - (product_cost.to_i + media_fixed_cost.to_i + refund.to_i + media_var_cost.to_i)).to_i }
         end
-       @employeeorderlist = employeeunorderlist #.sort_by{|c| c[:total]}.reverse 
-       respond_to do |format|
-        csv_file_name = "half_hourly_summary_#{@or_for_date}.csv"
-          format.html
-          format.csv do
-            headers['Content-Disposition'] = "attachment; filename=\"#{csv_file_name}\""
-            headers['Content-Type'] ||= 'text/csv'
+        @employeeorderlist = employeeunorderlist #.sort_by{|c| c[:total]}.reverse 
+          respond_to do |format|
+            csv_file_name = "half_hourly_summary_#{@or_for_date}.csv"
+              format.html
+              format.csv do
+                headers['Content-Disposition'] = "attachment; filename=\"#{csv_file_name}\""
+                headers['Content-Type'] ||= 'text/csv'
           end
         end
     @list_of_orders =  @list_of_orders.sort_by{ |c| c[:time_of_order]}
@@ -346,18 +344,20 @@ class SalesPpoReportController < ApplicationController
                 media_correction = 0.5
                 #PAID_CORRECTION
                  if media_variable.first.paid_correction.present?
-                   correction = media_variable.first.paid_correction #||= 0.5
+                   media_correction = media_variable.first.paid_correction #||= 0.5
                  end
-               media_var_cost += (med.subtotal * media_variable.first.value.to_f) * media_correction
+               media_var_cost += ((med.subtotal * 0.888889) * media_variable.first.value.to_f) * media_correction
               end
+
           end
 
           revenue = revenue * @correction
           product_cost = (product_cost * @correction) + (product_cost * 0.10)
           #ppo for each hour
-          total_shipping = (orderlist.sum(:shipping) *@shipping_tax_less) * @correction
-          total_sub_total = (orderlist.sum(:subtotal) * @subtotal_vat_less) * @correction
+          total_shipping = orderlist.sum(:shipping)
+          total_sub_total = orderlist.sum(:subtotal) 
           totalorders = total_shipping + total_sub_total
+          totalorders = totalorders * @correction
           nos = orderlist.count() * @correction
           pieces = orderlist.sum(:pieces) * @correction
           refund = totalorders * 0.02

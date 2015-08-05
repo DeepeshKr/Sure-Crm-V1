@@ -135,19 +135,38 @@ def mediacost
      media_variable = Medium.where('id = ? AND value is not null', self.media_id)
       .where(:media_commision_id => [10020, 10021, 10040, 10041, 10060]) #.pluck(:value)
       if media_variable.present?
-      #discount the total value by 50% as correction
-      correction = 0.5
-      #PAID_CORRECTION
-       if media_variable.first.paid_correction.present?
-          correction = media_variable.first.paid_correction #||= 0.5
-       end
-        return (med.subtotal * media_variable.first.value.to_f) * correction
-    end
+        #discount the total value by 50% as correction
+        correction = 0.5
+        #PAID_CORRECTION
+         if media_variable.first.paid_correction.present?
+            correction = media_variable.first.paid_correction #||= 0.5
+         end
+         #value is the amout to be paid to distributr
+          return (((self.subtotal) * 0.888889) * media_variable.first.value.to_f) * correction
+      end
   else
     return 0
   end 
 end
 
+def mediacomission
+    if self.media_id.present?
+     media_variable = Medium.where('id = ? AND value is not null', self.media_id)
+      .where(:media_commision_id => [10020, 10021, 10040, 10041, 10060]) #.pluck(:value)
+      if media_variable.present?
+        #discount the total value by 50% as correction
+        correction = 0.5
+        #PAID_CORRECTION
+         if media_variable.first.paid_correction.present?
+            correction = media_variable.first.paid_correction #||= 0.5
+         end
+         #value is the amout to be paid to distributr
+          return (((self.subtotal) * 0.888889) * media_variable.first.value.to_f) * correction
+      end
+  else
+    return 0
+  end 
+end
 
 def productcost
  productcost = OrderLine.where('orderid = ?', self.id)
@@ -168,8 +187,8 @@ def productcost
 end
 def productrevenue
    totalrevenue = 0
-    totalrevenue += ((self.subtotal * self.pieces) * 0.888889)|| 0
-    totalrevenue += ((self.shipping * self.pieces) *0.98125)|| 0
+    totalrevenue += ((self.subtotal) * 0.888889)|| 0
+    totalrevenue += ((self.shipping) * 0.98125)|| 0
      return totalrevenue
 end
 private
