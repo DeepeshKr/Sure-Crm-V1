@@ -364,7 +364,7 @@ class SalesPpoReportController < ApplicationController
          
 
           total_seconds = totalseconds(playlist.id).to_f
-         fixed_cost =  media_cost * total_seconds
+         fixed_cost =  playlist.cost.to_i
         
           employeeunorderlist << {:show =>  playlist.product_variant.name,
           :campaign_id => playlist.id,
@@ -376,7 +376,7 @@ class SalesPpoReportController < ApplicationController
           :revenue => revenue.to_i,
           :product_cost => product_cost.to_i,
           :variable_cost => media_var_cost.to_i,
-          :fixed_cost => playlist.cost.to_i,
+          :fixed_cost => fixed_cost,
           :profitability => (revenue - (fixed_cost + media_var_cost + product_cost)).to_i ,
           :product_variant_id => playlist.productvariantid}
         end
