@@ -187,6 +187,7 @@ end
 end
 
 def productcost
+
    if self.product_list.present? #&& self.pieces.present?
     pcode = self.product_list.extproductcode
     cost_master =  ProductCostMaster.where("prod = ?", pcode).first
@@ -198,6 +199,7 @@ def productcost
   else
     return 0
   end
+ 
 end
 
 # def productcost

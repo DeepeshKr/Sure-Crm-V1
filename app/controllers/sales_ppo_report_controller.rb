@@ -16,7 +16,7 @@ class SalesPpoReportController < ApplicationController
           up_to_date = for_date.to_date 
         else
            use_date = (330.minutes).from_now.to_date
-          from_date = use_date.to_date - 5.days #30.days
+          from_date = use_date.to_date - 2.days #30.days
           up_to_date = use_date.to_date #- 5.days
         end
       
@@ -56,6 +56,7 @@ class SalesPpoReportController < ApplicationController
             revenue += OrderMaster.find(med.id).productrevenue  ||= 0
            # media_var_cost += OrderMaster.find(med.id).mediacost ||= 0
             product_cost += OrderMaster.find(med.id).productcost ||= 0
+          
             media_variable = Medium.where('id = ? AND value is not null', med.media_id)
             .where(:media_commision_id => [10020, 10021, 10040, 10041, 10060]) #.pluck(:value)
               if media_variable.present?
@@ -65,7 +66,7 @@ class SalesPpoReportController < ApplicationController
                  if media_variable.first.paid_correction.present?
                    media_correction = media_variable.first.paid_correction #||= 0.5
                  end
-               media_var_cost += (med.subtotal * media_variable.first.value.to_f) * media_correction
+               media_var_cost += ((med.subtotal * 0.888889) * media_variable.first.value.to_f) * media_correction
               end
                rescue => e
                logger.warn "Unable to foo, will ignore: #{e}" 
@@ -73,18 +74,20 @@ class SalesPpoReportController < ApplicationController
 
           end #end order list
 
-            revenue = revenue * @correction
-             product_cost = (product_cost * @correction) + (product_cost * 0.10)
+          revenue = revenue * @correction
+          product_cost = (product_cost * @correction) + (product_cost * 0.10)
 
           fixed_cost = Medium.where(media_group_id: 10000).sum(:daily_charges)
           
           #ppo for each hour
-          total_shipping = (orderlist.sum(:shipping)) * @correction
-          total_sub_total = (orderlist.sum(:subtotal)) * @correction
-          totalorders = total_shipping + total_sub_total
+          total_shipping = (orderlist.sum(:shipping)) 
+          total_sub_total = (orderlist.sum(:subtotal)) 
+          totalorders = (total_shipping + total_sub_total)
+          refund = totalorders * 0.02
+          totalorders = totalorders * @correction
           nos = (orderlist.count()) * @correction
           pieces = orderlist.sum(:pieces) * @correction
-          refund = totalorders * 0.02
+         
 
           employeeunorderlist << {:total => totalorders.to_i,
           :for_date =>  for_date.strftime("%Y-%m-%d"),
@@ -100,48 +103,6 @@ class SalesPpoReportController < ApplicationController
         end
          @list_of_orders =  @list_of_orders.sort_by{ |c| c[:time_of_order]}
         @employeeorderlist = employeeunorderlist #.sort_by{|c| c[:total]}.reverse 
-  end
-
-  def daily
-      @datelist ||= []
-       from_date = Date.current - 30.days
-      (from_date..to_date).each do |day|
-        @datelist <<  day.strftime('%d-%b-%y')
-      end
-
-    @sno = 1
-    if params[:for_date].present? 
-      #@summary ||= []
-      @or_for_date = params[:for_date]
-      for_date =  Date.strptime(params[:for_date], "%Y-%m-%d")
-      order_masters = OrderMaster.where('TRUNC(orderdate) = ?',for_date)
-      .where('ORDER_STATUS_MASTER_ID > 10002')
-      .where(media_id: @hbnlist).select(:employee_id).distinct
-      
-      @orderdate = "Searched for #{for_date} found #{order_masters.count} agents!"
-      employeeunorderlist ||= []
-      num = 1
-      order_masters.each do |o|
-        e = o.employee_id
-       
-        name = (Employee.find(e).first_name  || "NA" if Employee.find(e).first_name.present?)
-        orderlist = OrderMaster.where('ORDER_STATUS_MASTER_ID > 10002').where('TRUNC(orderdate) = ?',for_date).where(media_id: @hbnlist).where(employee_id: e)
-        timetaken = orderlist.sum(:codcharges)
-        ccvalue = orderlist.where(orderpaymentmode_id: 10000).sum(:total)
-        ccorders = orderlist.where(orderpaymentmode_id: 10000).count()
-        codorders = orderlist.where(orderpaymentmode_id: 10001).count()
-        codvalue = orderlist.where(orderpaymentmode_id: 10001).sum(:total)
-        totalorders = orderlist.sum(:total)
-        noorders = orderlist.count()
-        employeeunorderlist << {:total => totalorders,
-           :id => e, :employee => name, :for_date =>  @or_for_date,
-          :nos => noorders, :codorders => codorders, :codvalue => codvalue,
-           :ccorders => ccorders, :ccvalue => ccvalue  }
-        end
-        @employeeorderlist = employeeunorderlist.sort_by{|c| c[:total]}.reverse 
-  
-
-    end
   end
 
   def hourly
@@ -206,9 +167,10 @@ class SalesPpoReportController < ApplicationController
             #error loggin
             
 
-           revenue += OrderMaster.find(med.id).productrevenue ||= 0
+           revenue += med.productrevenue 
            
-            product_cost += OrderMaster.find(med.id).productcost ||= 0
+            product_cost += med.productcost ||= 0
+          
             # media varaible cost is already calculate from order master
             media_variable = Medium.where('id = ? AND value is not null', med.media_id)
             .where(:media_commision_id => [10020, 10021, 10040, 10041, 10060]) #.pluck(:value)
@@ -250,19 +212,19 @@ class SalesPpoReportController < ApplicationController
                   
           nos = nos * @correction
           pieces =  pieces * @correction
-          totalorders = totalorders * @correction
-
           refund = totalorders * 0.02
+          totalorders = totalorders * @correction
+          
           employeeunorderlist << {:total => totalorders.to_i,
             :total_orders => totalorders.to_i,
           :starttime =>  halfhourago.strftime("%H:%M %p"),
           :endtime => Time.at(date).strftime("%H:%M %p"),
           :start_time => halfhourago.strftime("%Y-%m-%d %H:%M"), 
           :end_time => Time.at(date).strftime("%Y-%m-%d %H:%M"),
-          :pieces => pieces.to_i * @correction,
+          :pieces => pieces.to_i,
           :total_pieces => pieces.to_i,
            :refund => refund.to_i,
-          :nos => nos.to_i * @correction,
+          :nos => nos.to_i,
           :total_nos => nos.to_i,
           :revenue => revenue.to_i,
           :product_cost => product_cost.to_i,
@@ -337,6 +299,7 @@ class SalesPpoReportController < ApplicationController
             revenue += OrderMaster.find(med.id).productrevenue ||= 0
              # media_var_cost += OrderMaster.find(med.id).mediacost ||= 0
             product_cost += OrderMaster.find(med.id).productcost ||= 0
+            product_cost += OrderMaster.find(med.id).productcost  * 0.10
             media_variable = Medium.where('id = ? AND value is not null', med.media_id)
             .where(:media_commision_id => [10020, 10021, 10040, 10041, 10060]) #.pluck(:value)
               if media_variable.present?
@@ -352,31 +315,33 @@ class SalesPpoReportController < ApplicationController
           end
 
           revenue = revenue * @correction
-          product_cost = (product_cost * @correction) + (product_cost * 0.10)
+          product_cost = (product_cost * @correction) 
+          product_cost += (product_cost * 0.10)
           #ppo for each hour
           total_shipping = orderlist.sum(:shipping)
           total_sub_total = orderlist.sum(:subtotal) 
           totalorders = total_shipping + total_sub_total
+           refund = totalorders * 0.02
           totalorders = totalorders * @correction
           nos = orderlist.count() * @correction
           pieces = orderlist.sum(:pieces) * @correction
-          refund = totalorders * 0.02
+         
          
 
           total_seconds = totalseconds(playlist.id).to_f
-         fixed_cost =  playlist.cost.to_i
+         fixed_cost =  media_cost * total_seconds
         
           employeeunorderlist << {:show =>  playlist.product_variant.name,
           :campaign_id => playlist.id,
-           :pieces => pieces,
-          :nos => nos,
+           :pieces => pieces.to_i,
+          :nos => nos.to_i,
           :at_time => playlist.starttime,
           :total => totalorders.to_i,
           :refund => refund.to_i,
           :revenue => revenue.to_i,
           :product_cost => product_cost.to_i,
           :variable_cost => media_var_cost.to_i,
-          :fixed_cost => fixed_cost,
+          :fixed_cost => fixed_cost.to_i,
           :profitability => (revenue - (fixed_cost + media_var_cost + product_cost)).to_i ,
           :product_variant_id => playlist.productvariantid}
         end
@@ -412,139 +377,6 @@ class SalesPpoReportController < ApplicationController
     hbn_channels_between #channel between timings
   end #end of def  
     
-
-  def channel
-     #/sales_report/channel?for_date=05%2F09%2F2015
-     @sno = 1
-      #@order_master.orderpaymentmode_id == 10000 #paid over CC
-      #@order_master.orderpaymentmode_id == 10001 #paid over COD
-    if params[:for_date].present? 
-      #@summary ||= []
-      @or_for_date = params[:for_date]
-      for_date =  Date.strptime(params[:for_date], "%Y-%m-%d")
-     
-
-      hbn_order_masters = OrderMaster.where('TRUNC(orderdate) = ?',for_date).where('ORDER_STATUS_MASTER_ID > 10002').where(media_id: @hbnlist).select(:media_id).distinct
-      paid_order_masters = OrderMaster.where('TRUNC(orderdate) = ?',for_date).where('ORDER_STATUS_MASTER_ID > 10002').where(media_id: @paid).select(:media_id).distinct
-      other_order_masters = OrderMaster.where('TRUNC(orderdate) = ?',for_date).where('ORDER_STATUS_MASTER_ID > 10002').where(media_id: @others).select(:media_id).distinct
-
-      total_hbn_order_masters = OrderMaster.where('TRUNC(orderdate) = ?',for_date).where('ORDER_STATUS_MASTER_ID > 10002').where(media_id: @hbnlist)
-      total_paid_order_masters = OrderMaster.where('TRUNC(orderdate) = ?',for_date).where('ORDER_STATUS_MASTER_ID > 10002').where(media_id: @paid)
-      total_other_order_masters = OrderMaster.where('TRUNC(orderdate) = ?',for_date).where('ORDER_STATUS_MASTER_ID > 10002').where(media_id: @others)
-      
-
-      @orderdate = "Orders for #{for_date}: HBN Channel #{total_hbn_order_masters.count} for Rs. #{total_hbn_order_masters.sum(:total)}, Paid channels #{total_paid_order_masters.count} for Rs. #{total_paid_order_masters.sum(:total)} and Free Channel #{total_other_order_masters.count} for Rs. #{total_other_order_masters.sum(:total)}!"
-      
-      hbn_order_list ||= []
-      num = 1
-      hbn_order_masters.each do |o|
-        e = o.media_id
-       
-        name = (Medium.find(e).name  || "NA" if Medium.find(e).name.present?)
-        orderlist = OrderMaster.where('ORDER_STATUS_MASTER_ID > 10002').where('TRUNC(orderdate) = ?',for_date).where(media_id: e)
-        timetaken = orderlist.sum(:codcharges)
-        ccvalue = orderlist.where(orderpaymentmode_id: 10000).sum(:total)
-        ccorders = orderlist.where(orderpaymentmode_id: 10000).count()
-        codorders = orderlist.where(orderpaymentmode_id: 10001).count()
-        codvalue = orderlist.where(orderpaymentmode_id: 10001).sum(:total)
-        totalorders = orderlist.sum(:total)
-        noorders = orderlist.count()
-        hbn_order_list << {:total => totalorders,
-           :id => e, :channel => name, :for_date =>  @or_for_date,
-          :nos => noorders, :codorders => codorders, :codvalue => codvalue,
-           :ccorders => ccorders, :ccvalue => ccvalue,
-            :product_variant_id => o.productvariant_id}
-        end
-        @hbn_order_list = hbn_order_list.sort_by{|c| c[:total]}.reverse 
-
-        paid_order_list ||= []
-        
-        paid_order_masters.each do |o|
-        e = o.media_id
-       
-        name = (Medium.find(e).name  || "NA" if Medium.find(e).name.present?)
-        orderlist = OrderMaster.where('ORDER_STATUS_MASTER_ID > 10002').where('TRUNC(orderdate) = ?',for_date).where(media_id: e)
-        timetaken = orderlist.sum(:codcharges)
-        ccvalue = orderlist.where(orderpaymentmode_id: 10000).sum(:total)
-        ccorders = orderlist.where(orderpaymentmode_id: 10000).count()
-        codorders = orderlist.where(orderpaymentmode_id: 10001).count()
-        codvalue = orderlist.where(orderpaymentmode_id: 10001).sum(:total)
-        totalorders = orderlist.sum(:total)
-        noorders = orderlist.count()
-        paid_order_list << {:total => totalorders,
-           :id => e, :channel => name, :for_date =>  @or_for_date,
-          :nos => noorders, :codorders => codorders, :codvalue => codvalue,
-           :ccorders => ccorders, :ccvalue => ccvalue,
-            :product_variant_id => o.productvariant_id}
-        end
-        @paid_order_list = paid_order_list.sort_by{|c| c[:total]}.reverse 
-      
-        other_order_list ||= []
-       
-        other_order_masters.each do |o|
-        e = o.media_id
-       
-        name = (Medium.find(e).name  || "NA" if Medium.find(e).name.present?)
-        orderlist = OrderMaster.where('ORDER_STATUS_MASTER_ID > 10002').where('TRUNC(orderdate) = ?',for_date).where(media_id: e)
-        timetaken = orderlist.sum(:codcharges)
-        ccvalue = orderlist.where(orderpaymentmode_id: 10000).sum(:total)
-        ccorders = orderlist.where(orderpaymentmode_id: 10000).count()
-        codorders = orderlist.where(orderpaymentmode_id: 10001).count()
-        codvalue = orderlist.where(orderpaymentmode_id: 10001).sum(:total)
-        totalorders = orderlist.sum(:total)
-        noorders = orderlist.count()
-        other_order_list << {:total => totalorders,
-           :id => e, :channel => name, :for_date =>  @or_for_date,
-          :nos => noorders, :codorders => codorders, :codvalue => codvalue,
-           :ccorders => ccorders, :ccvalue => ccvalue,
-            :product_variant_id => o.productvariant_id}
-        end
-        @other_order_list = other_order_list.sort_by{|c| c[:total]}.reverse 
-  end
-
-
-   
-
-  def orderlisting
-    @t = (330.minutes).from_now
-    @sno = 1
-    for_date = (330.minutes).from_now.to_date
-    
-    if params.has_key?(:for_date)
-     for_date =  Date.strptime(params[:for_date], "%Y-%m-%d")
-    end
-
-    @orderlistabout = "for date #{for_date}"
-    @order_masters =  OrderMaster.where('TRUNC(orderdate) = ?',for_date).where('ORDER_STATUS_MASTER_ID > 10002')
-    
-    if params.has_key?(:playlist_id)
-      campaign_id =  params[:playlist_id]
-      @order_masters = @order_masters.where('campaign_playlist_id = ?', campaign_id).order("orderdate")
-      @orderlistabout = "for selected playlist #{for_date}"
-    end
-     
-    if params.has_key?(:media)
-      if params[:media] == 'hbn'
-          hbnlist = Medium.where(media_group_id: 10000)
-          @order_masters = @order_masters.where(media_id: @hbnlist).order("orderdate")
-          @orderlistabout = "for selected playlist HBN"
-          if params.has_key?(:missed)
-            @order_masters = @order_masters.where('campaign_playlist_id IS NULL').order("orderdate")
-            @orderlistabout = "for selected playlist HBN Missed orders"
-          end
-      end
-    end
-    if params.has_key?(:start_time) && params.has_key?(:end_time)
-      @start_time = Time.strptime(params[:start_time], "%Y-%m-%d %H:%M") 
-      @end_time = Time.strptime(params[:end_time], "%Y-%m-%d %H:%M") 
-     
-      @order_masters = OrderMaster.where('ORDER_STATUS_MASTER_ID > 10002').where('orderdate >= ? AND orderdate <= ?', @start_time, @end_time)
-      @orderlistabout = "for selected playlist #{for_date} between #{start_time} and #{end_time} "
-    end
-    
-  end
-  
-end #end of def  
 
 private
 def totalseconds(playlist_group_id)
@@ -604,6 +436,7 @@ end
             revenue += OrderMaster.find(med.id).productrevenue ||= 0
            # media_var_cost += OrderMaster.find(med.id).mediacost ||= 0
             product_cost += OrderMaster.find(med.id).productcost ||= 0
+            product_cost += OrderMaster.find(med.id).productcost * 0.10
             media_variable = Medium.where('id = ? AND value is not null', med.media_id)
             .where(:media_commision_id => [10020, 10021, 10040, 10041, 10060]) #.pluck(:value)
               if media_variable.present?
@@ -874,16 +707,11 @@ def shows_between
       #media segregation only HBN
       media_segments
 
-      order_masters = OrderMaster.where('TRUNC(orderdate) = ?',for_date).where('ORDER_STATUS_MASTER_ID > 10002').select(:id).where(media_id: @hbnlist).distinct
-      order_masters_cod = OrderMaster.where(orderpaymentmode_id: 10001).where('TRUNC(orderdate) = ?',for_date).where('ORDER_STATUS_MASTER_ID > 10002').where(media_id: @hbnlist).select(:id).distinct
-      order_masters_cc = OrderMaster.where(orderpaymentmode_id: 10000).where('TRUNC(orderdate) = ?',for_date).where('ORDER_STATUS_MASTER_ID > 10002').where(media_id: @hbnlist).select(:id).distinct
+      #order_masters = OrderMaster.where('TRUNC(orderdate) = ?',for_date).where('ORDER_STATUS_MASTER_ID > 10002').select(:id).where(media_id: @hbnlist).distinct
+      # order_masters_cod = OrderMaster.where(orderpaymentmode_id: 10001).where('TRUNC(orderdate) = ?',for_date).where('ORDER_STATUS_MASTER_ID > 10002').where(media_id: @hbnlist).select(:id).distinct
+      # order_masters_cc = OrderMaster.where(orderpaymentmode_id: 10000).where('TRUNC(orderdate) = ?',for_date).where('ORDER_STATUS_MASTER_ID > 10002').where(media_id: @hbnlist).select(:id).distinct
       
-     
-
-
-
-
-       if params.has_key?(:start_time) && params.has_key?(:end_time)
+     if params.has_key?(:start_time) && params.has_key?(:end_time)
         start_time = Time.strptime(params[:start_time], "%Y-%m-%d %H:%M") 
         end_time = Time.strptime(params[:end_time], "%Y-%m-%d %H:%M") 
 
@@ -899,19 +727,19 @@ def shows_between
 
         @actual_media_cost = media_cost_master.first.total_cost
 
-        order_masters = OrderMaster.where('orderdate >= ? AND orderdate <= ?', start_time, end_time).where('ORDER_STATUS_MASTER_ID > 10002').where(media_id: @hbnlist).select(:id).distinct
-        order_masters_cod = OrderMaster.where(orderpaymentmode_id: 10001).where('orderdate >= ? AND orderdate <= ?', start_time, end_time).where('ORDER_STATUS_MASTER_ID > 10002').where(media_id: @hbnlist).select(:id).distinct
-       order_masters_cc = OrderMaster.where(orderpaymentmode_id: 10000).where('orderdate >= ? AND orderdate <= ?', start_time, end_time).where('ORDER_STATUS_MASTER_ID > 10002').where(media_id: @hbnlist).select(:id).distinct
+        order_masters = OrderMaster.where('orderdate >= ? AND orderdate <= ?', start_time, end_time).where('ORDER_STATUS_MASTER_ID > 10002').where(media_id: @hbnlist).pluck(:id)
+       #  order_masters_cod = OrderMaster.where(orderpaymentmode_id: 10001).where('orderdate >= ? AND orderdate <= ?', start_time, end_time).where('ORDER_STATUS_MASTER_ID > 10002').where(media_id: @hbnlist).select(:id).distinct
+       # order_masters_cc = OrderMaster.where(orderpaymentmode_id: 10000).where('orderdate >= ? AND orderdate <= ?', start_time, end_time).where('ORDER_STATUS_MASTER_ID > 10002').where(media_id: @hbnlist).select(:id).distinct
        
        noorders = order_masters.count()
 
         order_master_list = OrderMaster.where(id: order_masters)
           #split the fixed cost across the hour 
           @list_of_orders ||= []
-          @order_media_var_cost_full = 0
+          #@order_media_var_cost_full = 0
           order_master_list.each do |med |
           @list_of_orders << {order_no:  med.id,
-             time_of_order: med.orderdate.strftime('%Y-%b-%d %H:%M:%S')}
+             time_of_order: (med.orderdate + 330.minutes).strftime('%Y-%b-%d %H:%M:%S')}
 
             media_variable = Medium.where('id = ? AND value is not null', med.media_id)
             .where(:media_commision_id => [10020, 10021, 10040, 10041, 10060]) #.pluck(:value)
@@ -922,14 +750,23 @@ def shows_between
                  if media_variable.first.paid_correction.present?
                    media_correction = media_variable.first.paid_correction #||= 0.5
                  end
-               @order_media_var_cost_full += (med.subtotal * media_variable.first.value.to_f)   
-               @order_media_var_cost += (med.subtotal * media_variable.first.value.to_f) * media_correction
+               # @order_media_var_cost_full += (med.subtotal * media_variable.first.value.to_f)   
+               @order_media_var_cost += ((med.subtotal * 0.888889) * media_variable.first.value.to_f) * media_correction
               end
+
+              @total_orders_sales += med.total
+              @total_orders_nos += 1
+              @total_orders_revenue += (med.subtotal * 0.888889) + (med.shipping * 0.98125)
+              @total_Orders_product_cost += med.productcost 
+              @total_Orders_product_cost += med.productcost * 0.10
           end
 
-           @list_of_orders =  @list_of_orders.sort_by{ |c| c[:order_no]}
+           @list_of_orders =  @list_of_orders.sort_by{ |c| c[:time_of_order]}
        end
-
+        
+       
+       
+        @total_order_profitability = 0
             
       if params.has_key?(:product_variant)
         regular_product_variant_list = ProductVariant.where(id: params[:product_variant])
@@ -943,133 +780,66 @@ def shows_between
 
       end
 
+      #select the product list based on the product selling category regular basic common upsell
       reg_order_lines = OrderLine.where(orderid: order_masters).where(productvariant_id: regular_product_variant_list).select(:product_list_id).distinct
-      common_order_lines = OrderLine.where(orderid: order_masters).where(productvariant_id: common_sell_product_variant_list).select(:product_list_id).distinct
       basic_order_lines = OrderLine.where(orderid: order_masters).where(productvariant_id: basic_sell_product_variant_list).select(:product_list_id).distinct
-      
+      common_order_lines = OrderLine.where(orderid: order_masters).where(productvariant_id: common_sell_product_variant_list).select(:product_list_id).distinct
+   
       #@orderdate = "Searched for #{for_date} found #{order_masters.count} agents!"
         main_product_list_orderlist ||= []
         num = 1
+        
+        cost_of_product = 0
+        revenue_of_product = 0
+        prod = ""
+        
         reg_order_lines.each do |o|
         e = o.product_list_id
        
         name = (ProductList.find(e).productlistdetails  || "NA" if ProductList.find(e).productlistdetails.present?)
         orderlist = OrderLine.where(orderid: order_masters).where(product_list_id: e)
-        timetaken = orderlist.sum(:codcharges)
-
-        revenue_of_product = 0
-        cost_of_product = 0
-
-        prod = ProductList.find(e).extproductcode
-        if prod.present?
-            ropmaster  = ROPMASTER_NEW.where("prod = ?", prod).first
-            if ropmaster.present?
-              revenue_of_product = ropmaster.totalrevenue
-              cost_of_product =ropmaster.totalcost
+       
+        orderlist.each do | ol |
+          prod = ProductList.find(e).extproductcode
+            if prod.present?
+              cost_master =  ProductCostMaster.where("prod = ?", prod).first
+              if cost_master.present?
+                cost_of_product += cost_master.cost * ol.pieces || 0
+              end  
             end
         end
 
-        ccvalue = OrderLine.where(orderid: order_masters_cc).where(product_list_id: e).sum(:total)
-        ccorders = OrderLine.where(orderid: order_masters_cc).where(product_list_id: e).count()
-        codorders = OrderLine.where(orderid: order_masters_cod).where(product_list_id: e).count()
-        codvalue = OrderLine.where(orderid: order_masters_cod).where(product_list_id: e).sum(:total)
-       
-         #orderlist.each {|ol| product_cost += o.productcost  }
-         #orderlist.each {|ol| product_revenue += o.productrevenue  }
-          subtotal = orderlist.sum(:subtotal)
-           shipping = orderlist.sum(:shipping)
+        subtotal = orderlist.sum(:subtotal)
+        shipping = orderlist.sum(:shipping)
         totalorders = orderlist.sum(:total)
+        revenue_of_product = (subtotal * 0.888889) + (shipping * 0.98125)
         noorders = orderlist.count()
-        main_product_list_orderlist << {:total => totalorders, :nos => noorders,
-          :cost_of_product => cost_of_product, :revenue_of_product => revenue_of_product,
-           :id => e, :product => name, :for_date =>  @or_for_date,
-             :prod => prod,
-           :subtotal => subtotal, :shipping => shipping,
-          :product_cost => cost_of_product  * noorders, :product_revenue => revenue_of_product * noorders,
-           :codorders => codorders, :codvalue => codvalue,
-           :ccorders => ccorders, :ccvalue => ccvalue  }
+
+        main_product_list_orderlist << {:total => totalorders, 
+          :nos => noorders,
+          :cost_of_product => cost_of_product, 
+          :revenue_of_product => revenue_of_product,
+          :id => e, :product => name, 
+          :for_date =>  @or_for_date,
+          :prod => prod,
+          :subtotal => subtotal.to_i, :shipping => shipping.to_i,
+          :product_cost => cost_of_product.to_i,
+          :product_revenue => revenue_of_product.to_i }
 
         @main_total_orders_subtotal += subtotal
         @main_total_orders_shipping += shipping
         @main_total_orders_total += totalorders
         @main_total_orders_nos += noorders
-        @main_total_orders_revenue += revenue_of_product * noorders
-        @main_total_Orders_product_cost += cost_of_product  * noorders
+        @main_total_orders_revenue += (revenue_of_product)
+        @main_total_Orders_product_cost += cost_of_product
 
-
-        @total_orders_sales += (@main_total_orders_subtotal * @subtotal_vat_less) + (@main_total_orders_shipping * @shipping_tax_less)
-        @total_orders_nos += noorders * @correction
-        @total_orders_revenue += revenue_of_product * noorders
-        @total_Orders_product_cost += cost_of_product  * noorders
         end
-
-       
-
-        product_revenue = 0
-        product_cost = 0
-        
         @main_product_list = main_product_list_orderlist.sort_by{|c| c[:total]}.reverse 
 
-        common_product_list_orderlist ||= []
-        common_order_lines.each do |o|
-        e = o.product_list_id
-        
-        name = (ProductList.find(e).productlistdetails  || "NA" if ProductList.find(e).productlistdetails.present?)
-        orderlist = OrderLine.where(orderid: order_masters).where(product_list_id: e)
-        timetaken = orderlist.sum(:codcharges)
-        #product_revenue = orderlist.sum(:productrevenue)
-        #product_cost = orderlist.sum(:productcost)
-        revenue_of_product = 0
-        cost_of_product = 0
+        ##
+        #BASIC PRODUCT LIST
+        ##
 
-        prod = ProductList.find(e).extproductcode
-        if prod.present?
-            ropmaster  = ROPMASTER_NEW.where("prod = ?", prod).first
-            if ropmaster.present?
-              revenue_of_product = ropmaster.totalrevenue
-              cost_of_product =ropmaster.totalcost
-            end
-        end
-       
-
-        ccvalue = OrderLine.where(orderid: order_masters_cc).where(product_list_id: e).sum(:total)
-        ccorders = OrderLine.where(orderid: order_masters_cc).where(product_list_id: e).count()
-        codorders = OrderLine.where(orderid: order_masters_cod).where(product_list_id: e).count()
-        codvalue = OrderLine.where(orderid: order_masters_cod).where(product_list_id: e).sum(:total)
-       
-         orderlist.each {|ol| product_cost += ol.productcost  }
-         orderlist.each {|ol| product_revenue += ol.productrevenue  }
-
-          subtotal = orderlist.sum(:subtotal)
-           shipping = orderlist.sum(:shipping)
-        totalorders = orderlist.sum(:total)
-        noorders = orderlist.count()
-        common_product_list_orderlist << {:total => totalorders,
-           :cost_of_product => cost_of_product, :revenue_of_product => revenue_of_product,
-               :subtotal => subtotal, :shipping => shipping,
-                 :prod => prod,
-           :id => e, :product => name, :for_date =>  @or_for_date,
-           :product_cost => cost_of_product  * noorders,
-            :product_revenue => revenue_of_product * noorders,
-          :nos => noorders, :codorders => codorders, :codvalue => codvalue,
-           :ccorders => ccorders, :ccvalue => ccvalue  }
-        
-        @common_total_orders_subtotal += subtotal 
-        @common_total_orders_shipping += shipping 
-        @common_total_orders_total += totalorders
-        @common_total_orders_nos += noorders
-        @common_total_orders_revenue += revenue_of_product * noorders
-        @common_total_Orders_product_cost += cost_of_product  * noorders
-
-        @total_orders_sales += (@common_total_orders_subtotal * @subtotal_vat_less) + (@common_total_orders_shipping * @shipping_tax_less)
-        @total_orders_nos += noorders * @correction
-        @total_orders_revenue += revenue_of_product * noorders
-        @total_Orders_product_cost += cost_of_product  * noorders
-        end
-
-
-        @common_product_list_orderlist = common_product_list_orderlist.sort_by{|c| c[:total]}.reverse 
-        
         product_revenue = 0
         product_cost = 0
 
@@ -1077,63 +847,103 @@ def shows_between
         basic_order_lines.each do |o|
         e = o.product_list_id
         
-        revenue_of_product = 0
-        cost_of_product = 0
-        prod = (ProductList.find(e).extproductcode)
-        if prod.present?
-            ropmaster  = ROPMASTER_NEW.where("prod = ?", prod).first
-            if ropmaster.present?
-              revenue_of_product = ropmaster.totalrevenue
-              cost_of_product =ropmaster.totalcost
-            end
-        end
-
         name = (ProductList.find(e).productlistdetails  || "NA" if ProductList.find(e).productlistdetails.present?)
         orderlist = OrderLine.where(orderid: order_masters).where(product_list_id: e)
-        timetaken = orderlist.sum(:codcharges)
-        ccvalue = OrderLine.where(orderid: order_masters_cc).where(product_list_id: e).sum(:total)
-        ccorders = OrderLine.where(orderid: order_masters_cc).where(product_list_id: e).count()
-        codorders = OrderLine.where(orderid: order_masters_cod).where(product_list_id: e).count()
-        codvalue = OrderLine.where(orderid: order_masters_cod).where(product_list_id: e).sum(:total)
+       
+        cost_of_product = 0
+        prod = ""
         
-         #orderlist.each {|ol| product_cost += ol.productcost  }
-         #orderlist.each {|ol| product_revenue += ol.productrevenue  }
 
+        orderlist.each do | ol |
+          prod = ProductList.find(e).extproductcode
+            if prod.present?
+              cost_master =  ProductCostMaster.where("prod = ?", prod).first
+              if cost_master.present?
+                cost_of_product += cost_master.cost * ol.pieces || 0
+              end  
+            end
+        end
+        
           subtotal = orderlist.sum(:subtotal)
            shipping = orderlist.sum(:shipping)
         totalorders = orderlist.sum(:total)
-
-
-
-        orderlist.each {|ol| product_cost += ol.productcost  }
-
+        revenue_of_product = (subtotal * 0.888889) + (shipping * 0.98125)
         noofpieces = orderlist.sum(:pieces)
          
         basic_product_list_orderlist << {:total => totalorders,
               :subtotal => subtotal, :shipping => shipping,
               :prod => prod,
-           :cost_of_product => cost_of_product, 
-           :revenue_of_product => revenue_of_product,
+           :cost_of_product => cost_of_product.to_i, 
+           :revenue_of_product => revenue_of_product.to_i,
            :id => e, :product => name, :for_date =>  @or_for_date,
-            :product_cost => cost_of_product  * noofpieces, 
-            :product_revenue => revenue_of_product * noofpieces,
-          :nos => noorders, :codorders => codorders, :codvalue => codvalue,
-           :ccorders => ccorders, :ccvalue => ccvalue  }
+            :product_cost => cost_of_product.to_i, 
+            :product_revenue => revenue_of_product.to_i,
+          :nos => noorders}
         
-        @basic_total_orders_subtotal += subtotal * @subtotal_vat_less
-        @basic_total_orders_shipping += shipping * @shipping_tax_less
+        @basic_total_orders_subtotal += subtotal 
+        @basic_total_orders_shipping += shipping 
         @basic_total_orders_total += totalorders
         @basic_total_orders_nos = noorders
-        @basic_total_orders_revenue += revenue_of_product * noofpieces
-        @basic_total_Orders_product_cost += cost_of_product  * noofpieces
+        @basic_total_orders_revenue += revenue_of_product 
+        @basic_total_Orders_product_cost += cost_of_product  
 
-        @total_orders_sales += shipping + subtotal 
-       
-        @total_orders_nos += noorders || 0
-        @total_orders_revenue += (revenue_of_product * noofpieces) || 0
-        @total_Orders_product_cost += (cost_of_product  * noofpieces) || 0
         end
-        @total_Orders_product_cost += (@total_Orders_product_cost * 0.10) || 0
+
+        @basic_product_list_orderlist = basic_product_list_orderlist.sort_by{|c| c[:total]}.reverse 
+        ##
+        #COMMON PRODUCT LIST
+        ##
+
+        common_product_list_orderlist ||= []
+        common_order_lines.each do |o|
+        e = o.product_list_id
+        
+        name = (ProductList.find(e).productlistdetails  || "NA" if ProductList.find(e).productlistdetails.present?)
+        orderlist = OrderLine.where(orderid: order_masters).where(product_list_id: e)
+       
+        cost_of_product = 0
+        prod = ""
+        
+
+        orderlist.each do | ol |
+          prod = ProductList.find(e).extproductcode
+            if prod.present?
+              cost_master =  ProductCostMaster.where("prod = ?", prod).first
+              if cost_master.present?
+                cost_of_product += cost_master.cost * ol.pieces || 0
+              end  
+            end
+        end
+
+        subtotal = orderlist.sum(:subtotal)
+        shipping = orderlist.sum(:shipping)
+        totalorders = orderlist.sum(:total)
+        revenue_of_product = (subtotal * 0.888889) + (shipping * 0.98125)
+        noorders = orderlist.count()
+        common_product_list_orderlist << {:total => totalorders,
+           :cost_of_product => cost_of_product, 
+           :revenue_of_product => revenue_of_product.to_i,
+               :subtotal => subtotal, :shipping => shipping.to_i,
+                 :prod => prod,
+           :id => e, :product => name, :for_date =>  @or_for_date,
+           :product_cost => cost_of_product,
+            :product_revenue => revenue_of_product ,
+          :nos => noorders  }
+        
+        @common_total_orders_subtotal += subtotal 
+        @common_total_orders_shipping += shipping 
+        @common_total_orders_total += totalorders
+        @common_total_orders_nos += noorders
+        @common_total_orders_revenue += revenue_of_product 
+        @common_total_Orders_product_cost += cost_of_product
+
+        end
+
+        @common_product_list_orderlist = common_product_list_orderlist.sort_by{|c| c[:total]}.reverse 
+        
+        
+
+        
         @total_orders_refund = (@total_orders_sales * 0.02) || 0 || 0 if @total_orders_sales.presence
 
         @basic_product_list_orderlist = basic_product_list_orderlist.sort_by{|c| c[:total]}.reverse  
@@ -1152,7 +962,7 @@ def shows_between
         #
         @total_order_profitability_60 = (@total_orders_revenue_60 - (@total_Orders_product_cost_60  + @actual_media_cost_60 + @total_orders_refund_60 +  @order_media_var_cost_60)) || 0
 
-        @total_Orders_product_cost__breakage_50 = 0
+        @total_Orders_product_cost_breakage_50 = 0
         @total_orders_sales_50 = (@total_orders_sales * 0.5) || 0
         @total_orders_nos_50 = (@total_orders_nos * 0.5) || 0
         @total_orders_refund_50 = (@total_orders_refund * 0.5) || 0 if @total_orders_refund.presence
@@ -1163,7 +973,7 @@ def shows_between
         @order_media_var_cost_50 = (@order_media_var_cost * 0.5) || 0
         @total_order_profitability_50 = (@total_orders_revenue_50 - (@total_Orders_product_cost_50 +  @total_Orders_product_cost_breakage_50  + @actual_media_cost_50 +  @order_media_var_cost_50)) || 0
          #@total_order_profitability_50 = (@total_orders_revenue_50 - (@total_Orders_product_cost_50 + @actual_media_cost_50 + @total_Orders_product_cost_breakage_50 + @order_media_var_cost_50)) || 0
-        @total_Orders_product_cost__breakage_40 = 0
+        @total_Orders_product_cost_breakage_40 = 0
         @total_orders_sales_40 = (@total_orders_sales * 0.4) || 0
         @total_orders_nos_40 = (@total_orders_nos * 0.4) || 0
         @total_orders_refund_40 = (@total_orders_refund * 0.4) || 0 if @total_orders_refund.presence
@@ -1178,7 +988,7 @@ def shows_between
      end
  end
  def constants
-   @correction = 0.5
+   @correction = 1
    @shipping_tax_less = 0.98125
    @subtotal_vat_less = 0.888889
  end

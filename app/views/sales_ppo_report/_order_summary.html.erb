@@ -1,0 +1,83 @@
+
+	
+	<hr>
+	<div class="row">
+	<div class="col-xs-12">
+	<table class="table table-hover table-bordered">
+		<thead>
+			<tr>
+			<th>Orders</th>
+			<th>Sales</th>
+			<th>Revenue</th>
+			<th>Product Cost</th>
+			<th>Commission</th>
+			<th>Media Cost</th>
+			<th>Refunds</th>
+			<th>Profitability</th>
+			</tr>
+		</thead>
+		<tbody>
+		<tr> <td colspan="8">Original Sales</td> </tr>
+			<tr>
+			<td class="text-right"><%= @total_orders_nos.to_i %></td>
+			<td class="text-right"><%= @total_orders_sales.to_i %></td>
+			<td class="text-right"><%= @total_orders_revenue.to_i %></td>
+			<td class="text-right"><%= @total_Orders_product_cost.to_i  %></td>
+			<td class="text-right"><%= @order_media_var_cost.to_i %></td>
+			<td class="text-right"><%= @actual_media_cost.to_i %></td>
+			<td class="text-right"><%= @total_orders_refund.to_i %></td>
+			<td class="text-right"><%= @total_order_profitability.to_i %></td>
+			</tr>
+		
+		<tr> <td colspan="8">60% of Sales Delivered</td> </tr>
+			<tr>
+			<td class="text-right"><%= (@total_orders_nos_60).to_i %></td>
+			<td class="text-right"><%= @total_orders_sales_60.to_i %></td>
+			<td class="text-right"><%= @total_orders_revenue_60.to_i %></td>
+			<td class="text-right"><%= (@total_Orders_product_cost_60).to_i %></td>
+			<td class="text-right"><%= @order_media_var_cost_60.to_i %></td>
+			<td class="text-right"><%= @actual_media_cost.to_i %></td>
+			<td class="text-right"><%= @total_orders_refund_60.to_i %></td>
+			<td class="text-right"><%= @total_order_profitability_60.to_i %></td>
+			</tr>
+			<tr> <td colspan="8">50% of Sales Delivered</td> </tr>
+			<tr>
+			<td class="text-right"><%= (@total_orders_nos_50).to_i %></td>
+			<td class="text-right"><%= @total_orders_sales_50.to_i %></td>
+			<td class="text-right"><%= @total_orders_revenue_50.to_i %></td>
+			<td class="text-right"><%= (@total_Orders_product_cost_50  + @total_Orders_product_cost_breakage_50).to_i %></td>
+			<td class="text-right"><%= @order_media_var_cost_50.to_i %></td>
+			<td class="text-right"><%= @actual_media_cost.to_i %></td>
+			<td class="text-right"><%= @total_orders_refund_50.to_i %></td>
+			<td class="text-right"><%= @total_order_profitability_50.to_i %></td>
+			</tr>
+
+			<tr> <td colspan="8">40% of Sales Delivered</td> </tr>
+			<tr>
+			<td class="text-right"><%= (@total_orders_nos_40).to_i %></td>
+			<td class="text-right"><%= @total_orders_sales_40.to_i %></td>
+			<td class="text-right"><%= @total_orders_revenue_40.to_i %></td>
+			<td class="text-right"><%= (@total_Orders_product_cost_40 + @total_Orders_product_cost_breakage_40).to_i %></td>
+			<td class="text-right"><%= @order_media_var_cost_40.to_i %></td>
+			<td class="text-right"><%= @actual_media_cost.to_i %></td>
+			<td class="text-right"><%= @total_orders_refund_40.to_i %></td>
+			<td class="text-right"><%= @total_order_profitability_40.to_i %></td>
+			</tr>
+		</tbody>
+	</table>
+	</div>
+	</div>
+
+
+	
+	<div class="well well-sm">
+		<p>All Description about this Report</p>
+		<ul>
+		<li>Product Cost is added 10% more to take care of Damages, Packaging etc</li>
+		<li>Product Revenue includes shipping</li>
+		<li>Shipping Revenues are take after reducing tax for 15% (considering MH) or 0.98125 of orginal</li>
+		<li>Refund is 2% of total</li>
+		<li>VAT is deducted from products (0.888889) of original value</li>
+		<li>To calculate commission sub-total less VAT is used. No shipping charges are included</li>
+		</ul>
+	</div>

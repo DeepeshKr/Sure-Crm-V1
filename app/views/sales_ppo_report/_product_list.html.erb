@@ -26,12 +26,8 @@
 
 <td>
  <%= c[:product] %> <br>
- <small>
-  Cost Per: <%= c[:cost_of_product] %>
-  Revenue Per:
-<%= c[:revenue_of_product] %>
- </small>
-<small>From ROPMASTER_NEW <%= link_to "More Details", productcost_path(search: c[:prod]), :target => "_blank" %> </small>
+ 
+<small><%= link_to "Cost Details", productcost_path(search: c[:prod]), :target => "_blank", class: "btn btn-primary btn-xs" %> </small>
 </td>
 
 
@@ -70,19 +66,19 @@
    <%= @main_total_orders_nos %> 
 </td>
 <td class="text-right">
-   <%=  @main_total_orders_shipping %> 
+   <%=  @main_total_orders_shipping.to_i %> 
 </td>
 <td class="text-right">
-   <%= @main_total_orders_subtotal %> 
+   <%= @main_total_orders_subtotal.to_i %> 
 </td>
 <td class="text-right">
-   <%= @main_total_orders_total %> 
+   <%= @main_total_orders_total.to_i %> 
 </td>
 <td class="text-right">
-   <%= @main_total_orders_revenue %> 
+   <%= @main_total_orders_revenue.to_i %> 
 </td>
 <td class="text-right">
-   <%= @main_total_Orders_product_cost %> 
+   <%= @main_total_Orders_product_cost.to_i %> 
 </td>
 
 
@@ -125,12 +121,7 @@
 
 <td>
  <%= c[:product] %> <br>
- <small>
-  Cost Per: <%= c[:cost_of_product] %>
-  Revenue Per:
-<%= c[:revenue_of_product] %>
- </small>
-<small>From ROPMASTER_NEW <%= link_to "More Details", productcost_path(search: c[:prod]), :target => "_blank" %></small>
+ <small><%= link_to "Cost Details", productcost_path(search: c[:prod]), :target => "_blank", class: "btn btn-primary btn-xs" %> </small>
 </td>
 
 
@@ -171,19 +162,19 @@
    <%= @basic_total_orders_nos %> 
 </td>
 <td class="text-right">
-   <%=  @basic_total_orders_shipping %> 
+   <%=  @basic_total_orders_shipping.to_i %> 
 </td>
 <td class="text-right">
-   <%= @basic_total_orders_subtotal %> 
+   <%= @basic_total_orders_subtotal.to_i %> 
 </td>
 <td class="text-right">
-   <%= @basic_total_orders_total %> 
+   <%= @basic_total_orders_total.to_i %> 
 </td>
 <td class="text-right">
-   <%= @basic_total_orders_revenue %> 
+   <%= @basic_total_orders_revenue.to_i %> 
 </td>
 <td class="text-right">
-   <%= @basic_total_Orders_product_cost %> 
+   <%= @basic_total_Orders_product_cost.to_i %> 
 </td>
 
 
@@ -226,12 +217,7 @@
 
 <td>
  <%= c[:product] %> <br>
- <small>
-  Cost Per: <%= c[:cost_of_product] %>
-  Revenue Per:
-<%= c[:revenue_of_product] %>
- </small>
-<small>From ROPMASTER_NEW <%= link_to "More Details", productcost_path(search: c[:prod]), :target => "_blank" %></small>
+ <small><%= link_to "Cost Details", productcost_path(search: c[:prod]), :target => "_blank", class: "btn btn-primary btn-xs" %> </small>
 </td>
 
 
@@ -272,19 +258,19 @@
    <%= @common_total_orders_nos %> 
 </td>
 <td class="text-right">
-   <%=  @common_total_orders_shipping %> 
+   <%=  @common_total_orders_shipping.to_i %> 
 </td>
 <td class="text-right">
-   <%= @common_total_orders_subtotal %> 
+   <%= @common_total_orders_subtotal.to_i %> 
 </td>
 <td class="text-right">
-   <%= @common_total_orders_total %> 
+   <%= @common_total_orders_total.to_i %> 
 </td>
 <td class="text-right">
-   <%= @common_total_orders_revenue %> 
+   <%= @common_total_orders_revenue.to_i %> 
 </td>
 <td class="text-right">
-   <%= @common_total_Orders_product_cost %> 
+   <%= @common_total_Orders_product_cost.to_i %> 
 </td>
 
 
