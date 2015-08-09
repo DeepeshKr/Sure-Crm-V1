@@ -18,7 +18,7 @@ class ProductCostMastersControllerTest < ActionController::TestCase
 
   test "should create product_cost_master" do
     assert_difference('ProductCostMaster.count') do
-      post :create, product_cost_master: { barcode: @product_cost_master.barcode, cost: @product_cost_master.cost, prod: @product_cost_master.prod, product_id: @product_cost_master.product_id, revenue: @product_cost_master.revenue }
+      post :create, product_cost_master: { barcode: @product_cost_master.barcode, basic_cost: @product_cost_master.basic_cost, call_centre_commission: @product_cost_master.call_centre_commission, cost_of_return: @product_cost_master.cost_of_return, dealer_network_basic: @product_cost_master.dealer_network_basic, postage: @product_cost_master.postage, prod: @product_cost_master.prod, product_cost: @product_cost_master.product_cost, product_id: @product_cost_master.product_id, product_list_id: @product_cost_master.product_list_id, royalty: @product_cost_master.royalty, shipping_handling: @product_cost_master.shipping_handling, tel_cost: @product_cost_master.tel_cost, transf_order_basic: @product_cost_master.transf_order_basic, wholesale_variable_cost: @product_cost_master.wholesale_variable_cost }
     end
 
     assert_redirected_to product_cost_master_path(assigns(:product_cost_master))
@@ -35,7 +35,7 @@ class ProductCostMastersControllerTest < ActionController::TestCase
   end
 
   test "should update product_cost_master" do
-    patch :update, id: @product_cost_master, product_cost_master: { barcode: @product_cost_master.barcode, cost: @product_cost_master.cost, prod: @product_cost_master.prod, product_id: @product_cost_master.product_id, revenue: @product_cost_master.revenue }
+    patch :update, id: @product_cost_master, product_cost_master: { barcode: @product_cost_master.barcode, basic_cost: @product_cost_master.basic_cost, call_centre_commission: @product_cost_master.call_centre_commission, cost_of_return: @product_cost_master.cost_of_return, dealer_network_basic: @product_cost_master.dealer_network_basic, postage: @product_cost_master.postage, prod: @product_cost_master.prod, product_cost: @product_cost_master.product_cost, product_id: @product_cost_master.product_id, product_list_id: @product_cost_master.product_list_id, royalty: @product_cost_master.royalty, shipping_handling: @product_cost_master.shipping_handling, tel_cost: @product_cost_master.tel_cost, transf_order_basic: @product_cost_master.transf_order_basic, wholesale_variable_cost: @product_cost_master.wholesale_variable_cost }
     assert_redirected_to product_cost_master_path(assigns(:product_cost_master))
   end
 

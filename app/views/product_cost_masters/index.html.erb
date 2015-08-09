@@ -1,15 +1,30 @@
 <p id="notice"><%= notice %></p>
 
-<h1>Listing Product Cost Masters</h1>
-
+<h3>Product Cost Masters</h3>
+<br>
+<div class="digg_pagination">
+    
+    <%= will_paginate @product_cost_masters, :container => false %>
+  </div>
+  <br>
 <table class="table table-hover">
   <thead>
     <tr>
       <th>Product</th>
+      <th>Product list</th>
       <th>Prod</th>
       <th>Barcode</th>
-      <th>Cost</th>
-      <th>Revenue</th>
+      <th>Product cost</th>
+      <th>Basic cost</th>
+      <th>Shipping handling</th>
+      <th>Postage</th>
+      <th>Tel cost</th>
+      <th>Transf order basic</th>
+      <th>Dealer network basic</th>
+      <th>Wholesale variable cost</th>
+      <th>Royalty</th>
+      <th>Cost of return</th>
+      <th>Call centre commission</th>
       <th colspan="3"></th>
     </tr>
   </thead>
@@ -18,10 +33,20 @@
     <% @product_cost_masters.each do |product_cost_master| %>
       <tr>
         <td><%= product_cost_master.product_id %></td>
+        <td><%= product_cost_master.product_list_id %></td>
         <td><%= product_cost_master.prod %></td>
         <td><%= product_cost_master.barcode %></td>
-        <td><%= product_cost_master.cost %></td>
-        <td><%= product_cost_master.revenue %></td>
+        <td><%= product_cost_master.product_cost %></td>
+        <td><%= product_cost_master.basic_cost %></td>
+        <td><%= product_cost_master.shipping_handling %></td>
+        <td><%= product_cost_master.postage %></td>
+        <td><%= product_cost_master.tel_cost %></td>
+        <td><%= product_cost_master.transf_order_basic %></td>
+        <td><%= product_cost_master.dealer_network_basic %></td>
+        <td><%= product_cost_master.wholesale_variable_cost %></td>
+        <td><%= product_cost_master.royalty %></td>
+        <td><%= product_cost_master.cost_of_return %></td>
+        <td><%= product_cost_master.call_centre_commission %></td>
         <td><%= link_to 'Show', product_cost_master %></td>
         <td><%= link_to 'Edit', edit_product_cost_master_path(product_cost_master) %></td>
         <td><%= link_to 'Destroy', product_cost_master, method: :delete, data: { confirm: 'Are you sure?' } %></td>
@@ -29,7 +54,11 @@
     <% end %>
   </tbody>
 </table>
-
+<div class="digg_pagination">
+    
+    <%= will_paginate @product_cost_masters, :container => false %>
+  </div>
+  <br>
 <br>
 
-<%= link_to 'New Product cost master', new_product_cost_master_path, class: "btn btn-primary" %>
+<!--<%= link_to 'New Product cost master', new_product_cost_master_path %>-->

@@ -1,15 +1,79 @@
 <%= simple_form_for(@product_cost_master) do |f| %>
   <%= f.error_notification %>
 
-  <div class="form-inputs">
-    <%= f.input :product_id %>
-    <%= f.input :prod %>
+<div class="row">
+  <div class="col-xs-3">
+    <%= @product_cost_master.product_master.name if @product_cost_master.product_master %>
+  </div>
+  <div class="col-xs-3"> 
+    <%= @product_cost_master.product_list.name if @product_cost_master.product_list  %>
+  </div>
+  <div class="col-xs-3"> 
+    <%= f.input :prod, readonly:true, required:true %>
+  </div>
+  <div class="col-xs-3">
     <%= f.input :barcode %>
-    <%= f.input :cost %>
-    <%= f.input :revenue %>
   </div>
+</div>
 
-  <div class="form-actions">
-    <%= f.button :submit %>
+<div class="row">
+  <div class="col-xs-6">
+      <div class="panel panel-primary">
+      <!-- Default panel contents -->
+      <div class="panel-heading">
+      <h3 class="panel-title">Product Revenue</h3>
+      </div>
+      
+        <!-- Table -->
+        <table class="table table-hover">
+        <tr>
+          <td><%= f.input :basic_cost %></td>
+          <td><%= f.input :shipping_handling %></td>
+        </tr>
+        </table>
+        
+      </div>
   </div>
+  <div class="col-xs-3">
+  <%= f.input :product_cost %>
+  </div>
+ 
+  <div class="col-xs-3">
+   <%= f.input :postage %>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-xs-3">
+    <%= f.input :tel_cost %>
+  </div>
+  <div class="col-xs-3">
+    <%= f.input :transf_order_basic %>
+  </div>
+  <div class="col-xs-3">
+    <%= f.input :dealer_network_basic %>
+  </div>
+  <div class="col-xs-3">
+    <%= f.input :wholesale_variable_cost %>
+  </div>
+</div>
+<div class="row">
+  <div class="col-xs-3">    
+    <%= f.input :royalty %>
+  </div>
+  <div class="col-xs-3">    
+    <%= f.input :cost_of_return %>
+  </div>
+  <div class="col-xs-3">    
+    <%= f.input :call_centre_commission %>
+  </div>
+</div>   
+   
+<div class="row">
+  <div class="col-xs-3 col-xs-offset-8">
+    <%= f.button :submit, class:"btn btn-primary" %>
+  </div>
+  
+</div>    
+
 <% end %>

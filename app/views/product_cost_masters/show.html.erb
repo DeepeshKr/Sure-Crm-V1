@@ -6,6 +6,11 @@
 </p>
 
 <p>
+  <strong>Product list:</strong>
+  <%= @product_cost_master.product_list_id %>
+</p>
+
+<p>
   <strong>Prod:</strong>
   <%= @product_cost_master.prod %>
 </p>
@@ -16,13 +21,58 @@
 </p>
 
 <p>
-  <strong>Cost:</strong>
-  <%= @product_cost_master.cost %>
+  <strong>Product cost:</strong>
+  <%= @product_cost_master.product_cost %>
 </p>
 
 <p>
-  <strong>Revenue:</strong>
-  <%= @product_cost_master.revenue %>
+  <strong>Basic cost:</strong>
+  <%= @product_cost_master.basic_cost %>
+</p>
+
+<p>
+  <strong>Shipping handling:</strong>
+  <%= @product_cost_master.shipping_handling %>
+</p>
+
+<p>
+  <strong>Postage:</strong>
+  <%= @product_cost_master.postage %>
+</p>
+
+<p>
+  <strong>Tel cost:</strong>
+  <%= @product_cost_master.tel_cost %>
+</p>
+
+<p>
+  <strong>Transf order basic:</strong>
+  <%= @product_cost_master.transf_order_basic %>
+</p>
+
+<p>
+  <strong>Dealer network basic:</strong>
+  <%= @product_cost_master.dealer_network_basic %>
+</p>
+
+<p>
+  <strong>Wholesale variable cost:</strong>
+  <%= @product_cost_master.wholesale_variable_cost %>
+</p>
+
+<p>
+  <strong>Royalty:</strong>
+  <%= @product_cost_master.royalty %>
+</p>
+
+<p>
+  <strong>Cost of return:</strong>
+  <%= @product_cost_master.cost_of_return %>
+</p>
+
+<p>
+  <strong>Call centre commission:</strong>
+  <%= @product_cost_master.call_centre_commission %>
 </p>
 
 <%= link_to 'Edit', edit_product_cost_master_path(@product_cost_master) %> |

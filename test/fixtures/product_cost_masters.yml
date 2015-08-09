@@ -2,14 +2,34 @@
 
 one:
   product_id: 1
+  product_list_id: 1
   prod: MyString
   barcode: MyString
-  cost: 9.99
-  revenue: 9.99
+  product_cost: 1
+  basic_cost: 1
+  shipping_handling: 1
+  postage: 1
+  tel_cost: 1
+  transf_order_basic: 1
+  dealer_network_basic: 1
+  wholesale_variable_cost: 1
+  royalty: 1
+  cost_of_return: 1
+  call_centre_commission: 1
 
 two:
   product_id: 1
+  product_list_id: 1
   prod: MyString
   barcode: MyString
-  cost: 9.99
-  revenue: 9.99
+  product_cost: 1
+  basic_cost: 1
+  shipping_handling: 1
+  postage: 1
+  tel_cost: 1
+  transf_order_basic: 1
+  dealer_network_basic: 1
+  wholesale_variable_cost: 1
+  royalty: 1
+  cost_of_return: 1
+  call_centre_commission: 1

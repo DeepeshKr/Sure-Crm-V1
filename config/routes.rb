@@ -41,6 +41,7 @@ Rails.application.routes.draw do
   get 'packing_cost/search'
   get 'packing_cost/details'
   get 'listofproducts' => 'product_masters#listofproducts'
+  get 'productwithcosts' => 'product_lists#product_costs'
 
 
  

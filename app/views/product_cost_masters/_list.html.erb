@@ -1,14 +1,22 @@
-
-
 <% if @product_cost_masters.present? %>
-<h3>Product Costs</h3>
+<h3>Listing Product Cost Masters</h3>
 <table class="table table-hover">
   <thead>
     <tr>
-    
+      
       <th>Prod</th>
-     
-      <th>Cost</th>
+      <th>Barcode</th>
+      <th>Product cost</th>
+      <th>Basic cost</th>
+      <th>Shipping handling</th>
+      <th>Postage</th>
+      <th>Tel cost</th>
+      <th>Transfer order basic</th>
+      <th>Dealer network basic</th>
+      <th>Wholesale variable cost</th>
+      <th>Royalty</th>
+      <th>Cost of return</th>
+      <th>Call centre commission</th>
      
     </tr>
   </thead>
@@ -16,15 +24,25 @@
   <tbody>
     <% @product_cost_masters.each do |product_cost_master| %>
       <tr>
-       
         <td><%= product_cost_master.prod %></td>
-        <td><%= product_cost_master.cost %></td>
-      
-        
+        <td><%= product_cost_master.barcode %></td>
+        <td><%= product_cost_master.product_cost %></td>
+        <td><%= product_cost_master.basic_cost %></td>
+        <td><%= product_cost_master.shipping_handling %></td>
+        <td><%= product_cost_master.postage %></td>
+        <td><%= product_cost_master.tel_cost %></td>
+        <td><%= product_cost_master.transf_order_basic %></td>
+        <td><%= product_cost_master.dealer_network_basic %></td>
+        <td><%= product_cost_master.wholesale_variable_cost %></td>
+        <td><%= product_cost_master.royalty %></td>
+        <td><%= product_cost_master.cost_of_return %></td>
+        <td><%= product_cost_master.call_centre_commission %></td>
+       
       </tr>
     <% end %>
   </tbody>
 </table>
 <% else %>
-<h3>No Product Costs found used for creating PPO </h3>
+<h3>No Details found in Product Master </h3>  
+
 <% end %>

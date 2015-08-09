@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150807092921) do
+ActiveRecord::Schema.define(version: 20150809061501) do
 
   create_table "address_types", force: :cascade do |t|
     t.string   "name"
@@ -658,23 +658,24 @@ ActiveRecord::Schema.define(version: 20150807092921) do
 
   create_table "product_cost_masters", force: :cascade do |t|
     t.integer  "product_id",              limit: 16, precision: 38
+    t.integer  "product_list_id",         limit: 16, precision: 38
     t.string   "prod"
     t.string   "barcode"
-    t.decimal  "cost",                               precision: 10, scale: 2
-    t.decimal  "revenue",                            precision: 10, scale: 2
-    t.datetime "created_at",                                                  null: false
-    t.datetime "updated_at",                                                  null: false
-    t.decimal  "product_cost",                       precision: 6,  scale: 2
-    t.decimal  "basic",                              precision: 6,  scale: 2
-    t.decimal  "postage",                            precision: 6,  scale: 2
-    t.decimal  "tel_cost",                           precision: 6,  scale: 2
-    t.decimal  "tran_order_basic",                   precision: 6,  scale: 2
-    t.decimal  "dealer_basic",                       precision: 6,  scale: 2
-    t.decimal  "wholesale_variable_cost",            precision: 6,  scale: 2
-    t.decimal  "royalty",                            precision: 6,  scale: 2
-    t.decimal  "return_cost",                        precision: 6,  scale: 2
-    t.decimal  "call_center_comm",                   precision: 6,  scale: 2
-    t.decimal  "shipping_handling",                  precision: 6,  scale: 2
+    t.integer  "product_cost",            limit: 16, precision: 38
+    t.integer  "basic_cost",              limit: 16, precision: 38
+    t.integer  "shipping_handling",       limit: 16, precision: 38
+    t.integer  "postage",                 limit: 16, precision: 38
+    t.integer  "tel_cost",                limit: 16, precision: 38
+    t.integer  "transf_order_basic",      limit: 16, precision: 38
+    t.integer  "dealer_network_basic",    limit: 16, precision: 38
+    t.integer  "wholesale_variable_cost", limit: 16, precision: 38
+    t.integer  "royalty",                 limit: 16, precision: 38
+    t.integer  "cost_of_return",          limit: 16, precision: 38
+    t.integer  "call_centre_commission",  limit: 16, precision: 38
+    t.datetime "created_at",                                        null: false
+    t.datetime "updated_at",                                        null: false
+    t.integer  "cost",                    limit: 16, precision: 38
+    t.integer  "revenue",                 limit: 16, precision: 38
   end
 
   create_table "product_inventory_codes", force: :cascade do |t|

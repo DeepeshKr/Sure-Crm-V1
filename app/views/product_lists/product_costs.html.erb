@@ -1,0 +1,149 @@
+<p id="notice"><%= notice %></p>
+
+<div class="row">
+    <div class="col-xs-6"><h3><%= @search %> <%= @found %>  </h3>    
+    <small>These are list of products for sale.</small>
+    </div>
+    <div class="col-xs-6"> 
+    <div class="row">
+         <%= form_tag("/productwithcosts", method: "get") do  %>
+        <div class="col-xs-8">
+        <%= text_field_tag(:search, nil, :class => "form-control", :required => "true", :placeholder => "Search Product Name", :value => @searchvalue  )   %>
+        </div>
+
+        <div class="col-xs-2">
+          <%= submit_tag "Search", name: nil, class: "btn btn-primary" %>
+        </div>
+        <% end %>
+    </div>
+</div>
+</div>
+<hr>
+<div class="row">
+<div class="col-xs-4">
+<h4>No Product Costs Available for below</h4>
+</div>
+<div class="col-xs-8 pull-right">
+  <div class="digg_pagination">
+    <%= will_paginate @inactive_product_lists, :container => false %>
+  </div>
+</div>
+</div>
+
+
+<br>
+
+
+<% if @inactive_product_lists.present? %>
+  <table class="table table-hover">
+  <thead>
+    <tr>
+     <th>Sell Type</th>
+    <th>Name</th>
+      <th>Specs</th>
+      <th>PROD</th>
+        <th>Active</th>
+        <th>Cost</th>
+        <th>Revenue</th>
+      <th colspan="1"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @inactive_product_lists.each do |product_list| %>
+      <tr>
+    <td><%= product_list.product_variant.product_sell_type.name if product_list.product_variant %></td>
+    <td><%= product_list.name %></td>
+        
+    <td><%= product_list.product_spec_list.name if product_list.product_spec_list %></td>
+    <td><%= product_list.extproductcode %></td>
+    <td>  <%= product_list.product_active_code.name if product_list.product_active_code %> </td>
+    <td colspan="2">  
+    <% if product_list.product_cost_master %>
+    <table class="table">
+    <% product_list.product_cost_master.each do | pc| %>
+      <tr>
+        <td>
+          <%= pc.cost %>
+        </td>
+        <td>
+          <%= pc.revenue %>
+        </td>
+      </tr>
+      <% end %>
+    </table>
+    <% end %>
+    </td> 
+        <td><%= link_to 'Add Costs', new_product_cost_master_path(:prod => product_list.extproductcode, :product_list_id => product_list.id), class: "btn btn-info btn-xs" %></td>
+        
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+<% else %>
+<h3>No Products without costs available, cool! </h3>
+<% end %>
+<br>
+
+<br>
+
+<br>
+
+<table class="table table-hover">
+  <thead>
+    <tr>
+     <th>Sell Type</th>
+    <th>Name</th>
+      <th>Specs</th>
+      <th>PROD</th>
+        <th>Active</th>
+        <th>Cost</th>
+        <th>Revenue</th>
+      <th colspan="1"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @product_lists.each do |product_list| %>
+      <tr>
+    <td><%= product_list.product_variant.product_sell_type.name if product_list.product_variant %></td>
+    <td><%= product_list.name %></td>
+        
+    <td><%= product_list.product_spec_list.name if product_list.product_spec_list %></td>
+    <td><%= product_list.extproductcode %></td>
+    <td>  <%= product_list.product_active_code.name if product_list.product_active_code %> </td>
+    <td colspan="3">  
+    <% if product_list.product_cost_master %>
+    <table class="table">
+    <% product_list.product_cost_master.each do | pc| %>
+      <tr>
+        <td>
+          <%= pc.cost %>
+        </td>
+        <td>
+          <%= pc.revenue %>
+        </td>
+        <td><%= link_to 'Edit', edit_product_cost_master_path(pc), class: "btn btn-info btn-xs" %></td>
+      </tr>
+      <% end %>
+    </table>
+    <% end %>
+    </td> 
+        
+        
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<div class="digg_pagination">
+    
+    <%= will_paginate @product_lists, :container => false %>
+  </div>
+  <br>
+
+
+<br>
+

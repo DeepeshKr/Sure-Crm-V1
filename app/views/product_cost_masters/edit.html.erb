@@ -1,6 +1,4 @@
-<h1>Editing Product Cost Master</h1>
+<h3>Edit Product Cost Master</h3>
 
 <%= render 'form' %>
-
-<%= link_to 'Show', @product_cost_master %> |
-<%= link_to 'Back', product_cost_masters_path %>
+<%= link_to 'Destroy (if duplicate)', @product_cost_master, method: :delete, data: { confirm: 'Are you sure?' }, class:"btn btn-danger btn-sm" %> 

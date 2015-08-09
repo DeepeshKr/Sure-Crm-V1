@@ -25,7 +25,9 @@ class ProductListsController < ApplicationController
         
        @search = "All Product Sell List"
       @searchvalue = nil
+
       @product_lists = ProductList.where('active_status_id = ?',  10000).order('name').paginate(:page => params[:page])
+      
       @inactive_product_lists = ProductList.where('active_status_id <> ?',  10000).order('name').paginate(:page => params[:page])
 
 
@@ -40,18 +42,45 @@ class ProductListsController < ApplicationController
         @found = nil
       
     end
-       #respond_with(@product_lists)
-      # product_lists = ProductList.all.where("product_master_id IS NOT NULL") #where('active_status_id = ?',  10000)
-      # product_lists.each do | product_list |
-      #   if ProductVariant.where(id: product_list.product_variant_id).present?
+  end
 
-      #     product_variant = ProductVariant.find(product_list.product_variant_id)
-      #     product_list.update(product_master_id: product_variant.productmasterid)
-      #     barcode = product_list.list_barcode.strip
-      #     product_list.update(list_barcode: barcode)
-      #   end
-      # end
-  
+  def product_costs
+    @showall = true
+      @product_cost_masters = ProductCostMaster.where("product_list_id IS NOT NULL").pluck(:product_list_id)
+    if params.has_key?(:search)
+      
+    
+
+      @search = "Search for " +  params[:search].upcase
+      @searchvalue = params[:search].upcase   
+      
+      # @product_masters = ProductMaster.where('productactivecodeid = 10000').where("name like ? OR extproductcode like ? or list_barcode like ?", "#{@searchvalue}%", "#{@searchvalue}%", "#{@searchvalue}%")
+      # @inactive_product_masters = ProductMaster.where('productactivecodeid <> 10000').where("name like ? OR extproductcode like ? or list_barcode like ?", "#{@searchvalue}%", "#{@searchvalue}%", "#{@searchvalue}%")
+      
+      @product_lists = ProductList.where(id: @product_cost_masters).where('active_status_id = ?',  10000)
+      .where("name like ? OR extproductcode like ? or list_barcode like ?", "#{@searchvalue}%", 
+        "#{@searchvalue}%", "#{@searchvalue}%")
+      .paginate(:page => params[:page])
+      @inactive_product_lists = ProductList.where('id NOT IN (?)', @product_cost_masters).where('active_status_id = ?',  10000)
+      .where("name like ? OR extproductcode like ? or list_barcode like ?", 
+        "#{@searchvalue}%", "#{@searchvalue}%", "#{@searchvalue}%")
+      .paginate(:page => params[:page])
+
+
+      @found = @product_lists.count
+      
+      else
+        @search = "Product Sell List"
+        @searchvalue = nil
+
+        @product_lists = ProductList.where(id: @product_cost_masters).where('active_status_id = ?',  10000).order('updated_at DESC').paginate(:page => params[:page])
+
+        @inactive_product_lists = ProductList.where('id NOT IN (?)', @product_cost_masters).where('active_status_id = ?',  10000).order('updated_at DESC').paginate(:page => params[:page])
+
+        @found = nil
+      
+    end
+     
   end
 
   # def retail
