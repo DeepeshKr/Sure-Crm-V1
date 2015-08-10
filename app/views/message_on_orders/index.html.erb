@@ -33,7 +33,8 @@
       <th>Response</th>
       <th>Mobile no</th>
       <th>Alt mobile no</th>
-     
+      <th>Time</th>
+      <th>  </th>
     </tr>
   </thead>
 
@@ -47,6 +48,7 @@
         <td><%= message_on_order.response %></td>
         <td><%= message_on_order.mobile_no %></td>
         <td><%= message_on_order.alt_mobile_no %></td>
+        <td><%= (message_on_order.updated_at + 330.minutes).strftime("%d-%b-%y %H:%M") %></td>
       </tr>
     <% end %>
   </tbody>

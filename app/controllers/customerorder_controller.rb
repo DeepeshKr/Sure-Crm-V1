@@ -487,6 +487,9 @@ end
         notices = []
         notice = ""
         order_number = []
+        msg = nil
+      
+        
         #@review_message = "There are #{@order_lines_regular.count} products, this order would be split into #{@order_lines_regular.count} orders."
           # use this to duplicate_order
           # move the relevant order line to new order
@@ -517,8 +520,9 @@ end
             end #check if upsell if found
  
             orderprocessed = update_customer_order_list(new_order)
-            #new_order.update(external_order_no: orderprocessed.to_s, order_status_master_id: 10003) 
-           order_number << orderprocessed
+
+           order_number << order.external_order_no + " for Rs " + order.total.to_i.to_s
+            
           end #loop through the order lines Regular 
 
           #save orderline
@@ -528,26 +532,46 @@ end
             end
 
            orderprocessed = update_customer_order_list(@order_master.id)
-            order_number << orderprocessed
+           
           notice += "This order has been be split in #{@order_lines_regular.count} orders"
-       
+        
+          order_number << @order_master.external_order_no + " for Rs " + @order_master.total.to_i.to_s
+            payment_mode_id = @order_master.orderpaymentmode_id
+            payment_mode_id = payment_mode_id.to_i
+            case payment_mode_id
+            when 10000 #paid over CC
+              msg = " Thanks for payment "
+            when 10001
+              msg = " Please pay cash on delivery "
+            end
          flash[:notice] = notice
         else #IF ONLY one regular product found
 
           # after this is done complete the ordering
           orderprocessed = update_customer_order_list(@order_master.id)
-           order_number << orderprocessed
+           
+           order_number << ord.external_order_no + " for Rs " + ord.total.to_i.to_s
+            payment_mode_id = ord.orderpaymentmode_id
+            payment_mode_id = payment_mode_id.to_i
+            case payment_mode_id
+            when 10000 #paid over CC
+              msg = " Thanks for payment "
+            when 10001
+              msg = " Please pay cash on delivery "
+            end
 
        end
-       #params.require(:message_on_order).permit(:customer_id, :message_type_id, 
-        #:message_status_id, :message, :response, :mobile_no, :alt_mobile_no)
-          message = "Thank's for your order #{order_number}, Telebrands"
+    
+          message = "Thanks for Order, #{order_number.join(",")}, products will reach you in 7-10 days. #{msg} Telebrands"
+
           message = message[0..159]
           @sms_message = MessageOnOrder.create(customer_id: @order_master.customer_id, 
             message_status_id: 10000, message_type_id: 10000,
-            mobile_no: @customer.mobile, alt_mobile_no: @customer.alt_mobile,
+            mobile_no: @order_master.customer.mobile, 
+            alt_mobile_no: @order_master.customer.alt_mobile,
             message: message)
-           redirect_to summary_path(:order_id => @order_master.id) 
+
+    redirect_to summary_path(:order_id => @order_master.id) 
 
   end
   def summary
@@ -556,6 +580,7 @@ end
     #   customer
     #   @cust_details_id = @order_master.external_order_no
        @ordernos = []
+        order_number = []
     # #mix the orders to add all the related orders
        @order_master_lists = OrderMaster.where('id = ? OR original_order_id = ?', order_id, order_id)
    
@@ -566,7 +591,8 @@ end
        else
           @order_master_lists.each do |ord|
             @ordernos << ord.external_order_no << " "
-          end
+            order_number << ord.external_order_no
+       end
          
           @order_message = "Awesome, #{@order_master_lists.count}  order successfully processed"
           @order_processed_next_steps = "Please close this window and wait for next call"
