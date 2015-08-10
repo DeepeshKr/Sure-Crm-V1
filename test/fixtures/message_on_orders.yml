@@ -1,0 +1,19 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  customer_id: 1
+  message_type_id: 1
+  message_status_id: 1
+  message: MyString
+  response: MyString
+  mobile_no: MyString
+  alt_mobile_no: MyString
+
+two:
+  customer_id: 1
+  message_type_id: 1
+  message_status_id: 1
+  message: MyString
+  response: MyString
+  mobile_no: MyString
+  alt_mobile_no: MyString

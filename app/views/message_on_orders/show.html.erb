@@ -1,0 +1,39 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Customer:</strong>
+  <%= @message_on_order.customer_id %>
+</p>
+
+<p>
+  <strong>Message type:</strong>
+  <%= @message_on_order.message_type_id %>
+</p>
+
+<p>
+  <strong>Message status:</strong>
+  <%= @message_on_order.message_status_id %>
+</p>
+
+<p>
+  <strong>Message:</strong>
+  <%= @message_on_order.message %>
+</p>
+
+<p>
+  <strong>Response:</strong>
+  <%= @message_on_order.response %>
+</p>
+
+<p>
+  <strong>Mobile no:</strong>
+  <%= @message_on_order.mobile_no %>
+</p>
+
+<p>
+  <strong>Alt mobile no:</strong>
+  <%= @message_on_order.alt_mobile_no %>
+</p>
+
+<%= link_to 'Edit', edit_message_on_order_path(@message_on_order) %> |
+<%= link_to 'Back', message_on_orders_path %>

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150809061501) do
+ActiveRecord::Schema.define(version: 20150809180316) do
 
   create_table "address_types", force: :cascade do |t|
     t.string   "name"
@@ -518,6 +518,34 @@ ActiveRecord::Schema.define(version: 20150809061501) do
     t.datetime "release_date"
     t.integer  "media_tape_head_id", limit: 16, precision: 38
     t.integer  "sort_order",         limit: 16, precision: 38
+  end
+
+  create_table "message_on_orders", force: :cascade do |t|
+    t.integer  "customer_id",       limit: 16, precision: 38
+    t.integer  "message_type_id",   limit: 16, precision: 38
+    t.integer  "message_status_id", limit: 16, precision: 38
+    t.string   "message"
+    t.string   "response"
+    t.string   "mobile_no"
+    t.string   "alt_mobile_no"
+    t.datetime "created_at",                                  null: false
+    t.datetime "updated_at",                                  null: false
+  end
+
+  create_table "message_statuses", force: :cascade do |t|
+    t.string   "name"
+    t.string   "description"
+    t.integer  "sort_order",  limit: 16, precision: 38
+    t.datetime "created_at",                            null: false
+    t.datetime "updated_at",                            null: false
+  end
+
+  create_table "message_types", force: :cascade do |t|
+    t.string   "name"
+    t.string   "description"
+    t.integer  "sort_order",  limit: 16, precision: 38
+    t.datetime "created_at",                            null: false
+    t.datetime "updated_at",                            null: false
   end
 
   create_table "order_fors", force: :cascade do |t|

@@ -44,59 +44,7 @@ class ProductListsController < ApplicationController
     end
   end
 
-  def product_costs
-    @showall = true
-      @product_cost_masters = ProductCostMaster.where("product_list_id IS NOT NULL").pluck(:product_list_id)
-    if params.has_key?(:search)
-      
-    
 
-      @search = "Search for " +  params[:search].upcase
-      @searchvalue = params[:search].upcase   
-      
-      # @product_masters = ProductMaster.where('productactivecodeid = 10000').where("name like ? OR extproductcode like ? or list_barcode like ?", "#{@searchvalue}%", "#{@searchvalue}%", "#{@searchvalue}%")
-      # @inactive_product_masters = ProductMaster.where('productactivecodeid <> 10000').where("name like ? OR extproductcode like ? or list_barcode like ?", "#{@searchvalue}%", "#{@searchvalue}%", "#{@searchvalue}%")
-      
-      @product_lists = ProductList.where(id: @product_cost_masters).where('active_status_id = ?',  10000)
-      .where("name like ? OR extproductcode like ? or list_barcode like ?", "#{@searchvalue}%", 
-        "#{@searchvalue}%", "#{@searchvalue}%")
-      .paginate(:page => params[:page])
-      @inactive_product_lists = ProductList.where('id NOT IN (?)', @product_cost_masters).where('active_status_id = ?',  10000)
-      .where("name like ? OR extproductcode like ? or list_barcode like ?", 
-        "#{@searchvalue}%", "#{@searchvalue}%", "#{@searchvalue}%")
-      .paginate(:page => params[:page])
-
-
-      @found = @product_lists.count
-      
-      else
-        @search = "Product Sell List"
-        @searchvalue = nil
-
-        @product_lists = ProductList.where(id: @product_cost_masters).where('active_status_id = ?',  10000).order('updated_at DESC').paginate(:page => params[:page])
-
-        @inactive_product_lists = ProductList.where('id NOT IN (?)', @product_cost_masters).where('active_status_id = ?',  10000).order('updated_at DESC').paginate(:page => params[:page])
-
-        @found = nil
-      
-    end
-     
-  end
-
-  # def retail
-  #    product_masters = ProductMaster.where("productactivecodeid = ?", 10000).pluck("id")
-  #     product_variants = ProductVariant.where("activeid = ? and product_sell_type_id = ?", 10000, 10000).where(productmasterid: product_masters).pluck("id")
-  #     @product_lists = ProductList.where('active_status_id = ?',  10000).where(product_variant_id: product_variants)
-  #   @product_lists = ProductList.all
-  #   respond_with(@product_lists)
-  # end
-
-  # def wholesale
-  #    product_masters = ProductMaster.where("productactivecodeid = ?", 10000).pluck("id")
-  #     product_variants = ProductVariant.where("activeid = ? and product_sell_type_id = ?", 10000, 10000).where(productmasterid: product_masters).pluck("id")
-  #     @product_lists = ProductList.where('active_status_id = ?',  10000).where(product_variant_id: product_variants)
-  #     respond_with(@product_lists)
-  # end
 
   def show
     respond_with(@product_list)

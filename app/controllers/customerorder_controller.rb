@@ -24,7 +24,7 @@ def newcall
         specific_addon_product_lists  
       
     end
-     
+      
     @newproductlist = ProductList.take(0)
     
 
@@ -486,6 +486,7 @@ end
        if @order_lines_regular.count > 1
         notices = []
         notice = ""
+        order_number = []
         #@review_message = "There are #{@order_lines_regular.count} products, this order would be split into #{@order_lines_regular.count} orders."
           # use this to duplicate_order
           # move the relevant order line to new order
@@ -517,7 +518,7 @@ end
  
             orderprocessed = update_customer_order_list(new_order)
             #new_order.update(external_order_no: orderprocessed.to_s, order_status_master_id: 10003) 
-           
+           order_number << orderprocessed
           end #loop through the order lines Regular 
 
           #save orderline
@@ -527,7 +528,7 @@ end
             end
 
            orderprocessed = update_customer_order_list(@order_master.id)
-
+            order_number << orderprocessed
           notice += "This order has been be split in #{@order_lines_regular.count} orders"
        
          flash[:notice] = notice
@@ -535,11 +536,18 @@ end
 
           # after this is done complete the ordering
           orderprocessed = update_customer_order_list(@order_master.id)
-
+           order_number << orderprocessed
 
        end
-  
-     redirect_to summary_path(:order_id => @order_master.id) 
+       #params.require(:message_on_order).permit(:customer_id, :message_type_id, 
+        #:message_status_id, :message, :response, :mobile_no, :alt_mobile_no)
+          message = "Thank's for your order #{order_number}, Telebrands"
+          message = message[0..159]
+          @sms_message = MessageOnOrder.create(customer_id: @order_master.customer_id, 
+            message_status_id: 10000, message_type_id: 10000,
+            mobile_no: @customer.mobile, alt_mobile_no: @customer.alt_mobile,
+            message: message)
+           redirect_to summary_path(:order_id => @order_master.id) 
 
   end
   def summary

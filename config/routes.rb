@@ -1,5 +1,11 @@
 Rails.application.routes.draw do
 
+  resources :message_types
+
+  resources :message_statuses
+
+  resources :message_on_orders
+
   resources :product_cost_masters
 
   resources :product_test_ppos
@@ -41,7 +47,7 @@ Rails.application.routes.draw do
   get 'packing_cost/search'
   get 'packing_cost/details'
   get 'listofproducts' => 'product_masters#listofproducts'
-  get 'productwithcosts' => 'product_lists#product_costs'
+  get 'productwithcosts' => 'product_cost_masters#product_costs'
 
 
  

@@ -1,0 +1,19 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @message_status.name %>
+</p>
+
+<p>
+  <strong>Description:</strong>
+  <%= @message_status.description %>
+</p>
+
+<p>
+  <strong>Sort order:</strong>
+  <%= @message_status.sort_order %>
+</p>
+
+<%= link_to 'Edit', edit_message_status_path(@message_status) %> |
+<%= link_to 'Back', message_statuses_path %>

@@ -1,6 +1,6 @@
 class ProductCostMastersController < ApplicationController
   before_action :set_product_cost_master, only: [:show, :edit, :update, :destroy]
-
+  before_action { protect_controllers(5) } 
   # GET /product_cost_masters
   # GET /product_cost_masters.json
   def index
@@ -8,6 +8,44 @@ class ProductCostMastersController < ApplicationController
     #update_all
   end
 
+  def product_costs
+    @showall = true
+      @product_cost_masters = ProductCostMaster.where("product_list_id IS NOT NULL").pluck(:product_list_id)
+    if params.has_key?(:search)
+      
+    
+
+      @search = "Search for " +  params[:search].upcase
+      @searchvalue = params[:search].upcase   
+      
+      # @product_masters = ProductMaster.where('productactivecodeid = 10000').where("name like ? OR extproductcode like ? or list_barcode like ?", "#{@searchvalue}%", "#{@searchvalue}%", "#{@searchvalue}%")
+      # @inactive_product_masters = ProductMaster.where('productactivecodeid <> 10000').where("name like ? OR extproductcode like ? or list_barcode like ?", "#{@searchvalue}%", "#{@searchvalue}%", "#{@searchvalue}%")
+      
+      @product_lists = ProductList.where(id: @product_cost_masters).where('active_status_id = ?',  10000)
+      .where("name like ? OR extproductcode like ? or list_barcode like ?", "#{@searchvalue}%", 
+        "#{@searchvalue}%", "#{@searchvalue}%")
+      .paginate(:page => params[:page])
+      @inactive_product_lists = ProductList.where('id NOT IN (?)', @product_cost_masters).where('active_status_id = ?',  10000)
+      .where("name like ? OR extproductcode like ? or list_barcode like ?", 
+        "#{@searchvalue}%", "#{@searchvalue}%", "#{@searchvalue}%")
+      .paginate(:page => params[:page])
+
+
+      @found = @product_lists.count
+      
+      else
+        @search = "Product Sell List"
+        @searchvalue = nil
+
+        @product_lists = ProductList.where(id: @product_cost_masters).where('active_status_id = ?',  10000).order('updated_at DESC').paginate(:page => params[:page])
+        @nos_with_price = @product_lists.count()
+        @inactive_product_lists = ProductList.where('id NOT IN (?)', @product_cost_masters).where('active_status_id = ?',  10000).order('updated_at DESC').paginate(:page => params[:page])
+        @nos_with_out_price = @inactive_product_lists.count()
+        @found = nil
+      
+    end
+     
+  end
   # GET /product_cost_masters/1
   # GET /product_cost_masters/1.json
   def show

@@ -1,0 +1,17 @@
+<%= simple_form_for(@message_on_order) do |f| %>
+  <%= f.error_notification %>
+
+  <div class="form-inputs">
+    <%= f.input :customer_id %>
+    <%= f.input :message_type_id %>
+    <%= f.input :message_status_id %>
+    <%= f.input :message %>
+    <%= f.input :response %>
+    <%= f.input :mobile_no %>
+    <%= f.input :alt_mobile_no %>
+  </div>
+
+  <div class="form-actions">
+    <%= f.button :submit %>
+  </div>
+<% end %>

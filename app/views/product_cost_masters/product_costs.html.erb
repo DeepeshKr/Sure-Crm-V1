@@ -21,7 +21,7 @@
 <hr>
 <div class="row">
 <div class="col-xs-4">
-<h4>No Product Costs Available for below</h4>
+<h4>No Product Costs Available for <%= @nos_with_out_price %> Products</h4>
 </div>
 <div class="col-xs-8 pull-right">
   <div class="digg_pagination">
@@ -86,7 +86,16 @@
 <br>
 
 <br>
-
+<div class="row">
+<div class="col-xs-4">
+<h4>Product Costs Available for <%= @nos_with_price %> Products</h4>
+</div>
+<div class="col-xs-8 pull-right">
+  <div class="digg_pagination">
+    <%= will_paginate @product_lists, :container => false %>
+  </div>
+</div>
+</div>
 <br>
 
 <table class="table table-hover">
@@ -136,13 +145,7 @@
   </tbody>
 </table>
 
-<br>
 
-<div class="digg_pagination">
-    
-    <%= will_paginate @product_lists, :container => false %>
-  </div>
-  <br>
 
 
 <br>

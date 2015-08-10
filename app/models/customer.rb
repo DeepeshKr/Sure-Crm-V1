@@ -8,6 +8,8 @@ class Customer < ActiveRecord::Base
   has_many :order_line, through: :order_master
   
   has_many :customer_credit_card, foreign_key: "customer_id"
+  has_many :message_on_order, foreign_key: "customer_id"
+
   accepts_nested_attributes_for :customer_address
   accepts_nested_attributes_for :interaction_master
   accepts_nested_attributes_for :order_master
@@ -57,7 +59,7 @@ def gender
 end
 
 def fullname
-  return self.salute + " " + self.first_name + " " + self.last_name
+  return self.salute + " " + (self.first_name || nil) + " " + (self.last_name || nil)
 end
 
 def name

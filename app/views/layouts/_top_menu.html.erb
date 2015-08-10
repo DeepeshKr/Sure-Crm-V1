@@ -64,7 +64,8 @@
               <li><%= link_to "Existing Dealers Old", "/dealers" %></li>
               <li><%= link_to "Existing Dealers New", "/dealers" %></li>
               <li><%= link_to "List of Dealer Enquiries", "/dealer_enquiry?category=10020&status=10000" %></li>    
-                
+                <li class="divider"></li>
+                 <li><%= link_to "SMS on Order", "/message_on_orders" %></li>
               <li class="divider"></li>
             
              <li><%= link_to "Customer Orders (Search)", "/custordersearch"  %></li>
@@ -148,7 +149,7 @@
               <li><%= link_to "Media", "/media" %></li>
                <li><%= link_to "Channel Tape Ids", "/tapeids/list"  %></li>
               <% if (current_user.employee_role.sortorder < 6) %> 
-               <li class="divider">Set up</li>
+               <li class="divider"></li>
 
                <li><%= link_to "Media Group", "/media_groups" %></li>
                 <li><%= link_to "Commision Type", "/media_commisions" %></li>
@@ -181,6 +182,9 @@
 	             <li class="divider"></li>
               	 	<li><%= link_to "Address Type", "/address_types" %></li>
               	 	<li><%= link_to "Address Validity", "/address_valids" %></li>
+                   <li class="divider"></li>
+                  <li><%= link_to "Message Type", "/message_types" %></li>
+                  <li><%= link_to "Message Status", "/message_statuses" %></li>
               	
               	 <li class="divider"></li>
               	 	<li><%= link_to "Interaction Categories", "/interaction_categories" %></li>

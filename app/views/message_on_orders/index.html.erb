@@ -1,0 +1,60 @@
+<p id="notice"><%= notice %></p>
+<div class="row">
+<div class="col-xs-4">
+<h3><%= @message_details %></h3>
+    <div class="btn-group" role="group" aria-label="...">
+    <%= link_to 'In Queue', message_on_orders_path(status: 10000), type:"button", class: @btn1 %>
+    <%= link_to 'Not Delivered', message_on_orders_path(status: 10003), type:"button", class: @btn2 %>
+    <%= link_to 'Delivered', message_on_orders_path(status: 10004), type:"button", class: @btn3 %>
+ <!--  <button type="button" >Queued</button>
+  <button type="button" class="btn btn-default"></button>
+  <button type="button" class="btn btn-default"></button> -->
+</div>
+</div>
+<div class="col-xs-8">
+<br>
+<div class="digg_pagination">
+    
+    <%= will_paginate @message_on_orders, :container => false %>
+  </div>
+ 
+  <br>
+</div>
+</div>
+
+<hr>
+<table class="table table-hover">
+  <thead>
+    <tr>
+      <th>Customer</th>
+      <th>Message type</th>
+      <th>Message status</th>
+      <th>Message</th>
+      <th>Response</th>
+      <th>Mobile no</th>
+      <th>Alt mobile no</th>
+     
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @message_on_orders.each do |message_on_order| %>
+      <tr>
+        <td><%= message_on_order.customer.fullname if message_on_order.customer %></td>
+        <td><%= message_on_order.message_type.name if message_on_order.message_type %></td>
+        <td><%= message_on_order.message_status.name if message_on_order.message_status %></td>
+        <td><%= message_on_order.message %></td>
+        <td><%= message_on_order.response %></td>
+        <td><%= message_on_order.mobile_no %></td>
+        <td><%= message_on_order.alt_mobile_no %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+<hr>
+<br>
+<div class="digg_pagination">
+    
+    <%= will_paginate @message_on_orders, :container => false %>
+  </div>
+  <br>
