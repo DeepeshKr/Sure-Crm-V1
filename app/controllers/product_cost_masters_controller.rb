@@ -64,7 +64,11 @@ class ProductCostMastersController < ApplicationController
       product_id = product_list.product_master_id
     end
     @product_cost_master = ProductCostMaster.new(prod: prod, 
-      product_list_id: product_list_id, product_id: product_id)
+      product_list_id: product_list_id, product_id: product_id, :product_cost => 0, 
+      :basic_cost => 0, :shipping_handling => 0, :postage => 0, 
+      :tel_cost => 0, :transf_order_basic => 0, :dealer_network_basic => 0,
+       :wholesale_variable_cost => 0, :royalty => 0, :cost_of_return => 0,
+        :call_centre_commission => 0)
   end
 
   # GET /product_cost_masters/1/edit
@@ -76,42 +80,54 @@ class ProductCostMastersController < ApplicationController
   def create
 
     @product_cost_master = ProductCostMaster.new(product_cost_master_params)
-
-    respond_to do |format|
-      if @product_cost_master.save
-        format.html { redirect_to @product_cost_master, notice: 'Product cost master was successfully created.' }
-        format.json { render :show, status: :created, location: @product_cost_master }
-      else
-        format.html { render :new }
-        format.json { render json: @product_cost_master.errors, status: :unprocessable_entity }
-      end
-    end
+    if  @product_cost_master.save
+    flash[:success] = 'You have added prices successfully!'
+   else
+     flash[:error] = 'You have not added any prices and cannot be processed!'
+   end
     redirect_to productwithcosts_path
+    # respond_to do |format|
+    #   if @product_cost_master.save
+    #     redirect_to productwithcosts_path
+    #     #format.html { redirect_to @product_cost_master, notice: 'Product cost master was successfully created.' }
+    #     #format.json { render :show, status: :created, location: @product_cost_master }
+    #   else
+    #     format.html { render :new }
+    #     format.json { render json: @product_cost_master.errors, status: :unprocessable_entity }
+    #   end
+    # end
+    
   end
 
   # PATCH/PUT /product_cost_masters/1
   # PATCH/PUT /product_cost_masters/1.json
   def update
-    respond_to do |format|
-      if @product_cost_master.update(product_cost_master_params)
-        format.html { redirect_to @product_cost_master, notice: 'Product cost master was successfully updated.' }
-        format.json { render :show, status: :ok, location: @product_cost_master }
-      else
-        format.html { render :edit }
-        format.json { render json: @product_cost_master.errors, status: :unprocessable_entity }
-      end
-    end
-    redirect_to productwithcosts_path
+    
+       @product_cost_master.update(product_cost_master_params)
+        flash[:success] = 'You have updated prices successfully!'
+        redirect_to productwithcosts_path
+    # respond_to do |format|
+    #   if @product_cost_master.update(product_cost_master_params)
+    #     redirect_to productwithcosts_path
+    #    # format.html { redirect_to @product_cost_master, notice: 'Product cost master was successfully updated.' }
+    #     #format.json { render :show, status: :ok, location: @product_cost_master }
+    #   else
+    #     format.html { render :edit }
+    #     format.json { render json: @product_cost_master.errors, status: :unprocessable_entity }
+    #   end
+    # end
+    
   end
 
   # DELETE /product_cost_masters/1
   # DELETE /product_cost_masters/1.json
   def destroy
     @product_cost_master.destroy
-    respond_to do |format|
-      format.html { redirect_to product_cost_masters_url, notice: 'Product cost master was successfully destroyed.' }
-      format.json { head :no_content }
-    end
+    # respond_to do |format|
+    #   format.html { redirect_to product_cost_masters_url, notice: 'Product cost master was successfully destroyed.' }
+    #   format.json { head :no_content }
+    # end
+     flash[:success] = 'You have removed prices successfully!'
     redirect_to productwithcosts_path
   end
 
