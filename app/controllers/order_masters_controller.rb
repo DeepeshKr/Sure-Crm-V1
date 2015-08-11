@@ -193,18 +193,18 @@ class OrderMastersController < ApplicationController
     if params[:mobile].present?
         @mobile = params[:mobile]
         customer_addresses = CustomerAddress.where('telephone1 = ? OR telephone2 = ?', @mobile, @mobile).pluck("id")
-        @order_masters = OrderMaster.where(customer_address_id: customer_addresses)  
+        @order_masters = OrderMaster.where(customer_address_id: customer_addresses).paginate(:page => params[:page])  
     elsif params[:emailid].present?
         @emailid = params[:emailid]
         customers = Customer.where('emailid = ? OR alt_emailid = ?', @emailid, @emailid).pluck("id")
-        @order_masters = OrderMaster.where(customer_id: customers)  
+        @order_masters = OrderMaster.where(customer_id: customers).paginate(:page => params[:page])  
     elsif params[:order_id].present?
         @order_id = params[:order_id]
-        @order_masters = OrderMaster.where(id: @order_id) 
+        @order_masters = OrderMaster.where(id: @order_id).paginate(:page => params[:page]) 
 
      elsif params[:calledno].present?
         @calledno = params[:calledno]
-        @order_masters = OrderMaster.where(calledno: @calledno)  
+        @order_masters = OrderMaster.where(calledno: @calledno).paginate(:page => params[:page])  
  
     end
   end

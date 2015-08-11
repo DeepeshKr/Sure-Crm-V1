@@ -49,6 +49,9 @@
         <td><%= message_on_order.mobile_no %></td>
         <td><%= message_on_order.alt_mobile_no %></td>
         <td><%= (message_on_order.updated_at + 330.minutes).strftime("%d-%b-%y %H:%M") %></td>
+        <td>
+          <%= link_to 'Destroy', message_on_order, method: :delete, data: { confirm: 'Are you sure?' }, class:"btn btn-danger btn-xs" %>
+        </td>
       </tr>
     <% end %>
   </tbody>
