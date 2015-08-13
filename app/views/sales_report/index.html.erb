@@ -4,7 +4,11 @@
   <p>List of all sales reports with detailed description can be found here.</p>
  </div>
 </div>
-<%= render ('date_range_search') %>
+<div style:"visibility:hidden">
+<%= render partial: 'date_range_search', :locals => {:searchaction => "index"}  %>
+<%= render partial: 'hbn_media_list', :locals => {:searchaction => "index"}  %>
+<%= render partial: 'media_list', :locals => {:searchaction => "index"}  %>
+</div>
  <div class="container">
 	<div class="row">
 	<div class="col-xs-4">
@@ -65,10 +69,10 @@
 			    See how each half hour is performing and sales against each 30 minute interval, get to see the days performance across time zones.
 			  </div>
 			  <div class="panel-footer">
-			  	 <%= bootstrap_form_tag url: url_for(:controller => 'sales_report', :action => 'summary'), :method => :GET, :enforce_utf8 => false do |f| %>
+			  	 <%= bootstrap_form_tag url: url_for(:controller => 'sales_report', :action => 'hourly'), :method => :GET, :enforce_utf8 => false do |f| %>
 					 <div class="row">
 					<div class="col-xs-8">
-					 <%= text_field_tag(:for_date, nil, :data => {:provide => "datepicker"}, :id => "datepicker1", :class => "form-control", :required => "true" )   %>
+					 <%= text_field_tag(:for_date, @today_date, :data => {:provide => "datepicker"}, :id => "datepicker1", :class => "form-control", :required => "true" )   %>
 					          
 					</div>
 					

@@ -1,0 +1,84 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @promotion.name %>
+</p>
+
+<p>
+  <strong>Description:</strong>
+  <%= @promotion.description %>
+</p>
+
+<p>
+  <strong>Start hr:</strong>
+  <%= @promotion.start_hr %>
+</p>
+
+<p>
+  <strong>Start min:</strong>
+  <%= @promotion.start_min %>
+</p>
+
+<p>
+  <strong>End hr:</strong>
+  <%= @promotion.end_hr %>
+</p>
+
+<p>
+  <strong>End min:</strong>
+  <%= @promotion.end_min %>
+</p>
+
+<p>
+  <strong>Start date:</strong>
+  <%= @promotion.start_date %>
+</p>
+
+<p>
+  <strong>End date:</strong>
+  <%= @promotion.end_date %>
+</p>
+
+<p>
+  <strong>Media:</strong>
+  <%= @promotion.media_id %>
+</p>
+
+<p>
+  <strong>Min sale value:</strong>
+  <%= @promotion.min_sale_value %>
+</p>
+
+<p>
+  <strong>Discount percent:</strong>
+  <%= @promotion.discount_percent %>
+</p>
+
+<p>
+  <strong>Discount value:</strong>
+  <%= @promotion.discount_value %>
+</p>
+
+<p>
+  <strong>Free product list:</strong>
+  <%= @promotion.free_product_list_id %>
+</p>
+
+<p>
+  <strong>Active:</strong>
+  <%= @promotion.active %>
+</p>
+
+<p>
+  <strong>Unique code:</strong>
+  <%= @promotion.unique_code %>
+</p>
+
+<p>
+  <strong>Promo cost:</strong>
+  <%= @promotion.promo_cost %>
+</p>
+
+<%= link_to 'Edit', edit_promotion_path(@promotion) %> |
+<%= link_to 'Back', promotions_path %>

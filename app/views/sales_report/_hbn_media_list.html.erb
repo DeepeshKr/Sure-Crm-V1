@@ -1,0 +1,18 @@
+
+ <%= form_tag  url_for(:controller => 'sales_report', :action => searchaction), method: "get" do  %>
+
+
+<div class="row">
+  	<div class="col-xs-2">
+    <strong> Select Media To add</strong>
+    </div>
+   	<div class="col-xs-8">
+   
+    <%= select_tag :mediumid, options_from_collection_for_select(@hbnmedialist, :id, :mediainfo), :class => "form-control" %>
+    
+  	</div>
+  	<div class="col-xs-2">
+         <%= submit_tag("Add Media", :class => "btn btn-success btn-sm") %> 
+	</div>
+</div>
+<% end %>

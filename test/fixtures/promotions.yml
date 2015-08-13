@@ -1,0 +1,37 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  name: MyString
+  description: MyText
+  start_hr: 1
+  start_min: 1
+  end_hr: 1
+  end_min: 1
+  start_date: 2015-08-12
+  end_date: 2015-08-12
+  media_id: 1
+  min_sale_value: 1
+  discount_percent: 9.99
+  discount_value: 1
+  free_product_list_id: 1
+  active: 1
+  unique_code: MyString
+  promo_cost: 9.99
+
+two:
+  name: MyString
+  description: MyText
+  start_hr: 1
+  start_min: 1
+  end_hr: 1
+  end_min: 1
+  start_date: 2015-08-12
+  end_date: 2015-08-12
+  media_id: 1
+  min_sale_value: 1
+  discount_percent: 9.99
+  discount_value: 1
+  free_product_list_id: 1
+  active: 1
+  unique_code: MyString
+  promo_cost: 9.99

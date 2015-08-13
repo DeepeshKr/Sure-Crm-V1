@@ -1,5 +1,7 @@
 Rails.application.routes.draw do
 
+  resources :promotions
+
   resources :message_types
 
   resources :message_statuses
@@ -186,6 +188,11 @@ Rails.application.routes.draw do
   get 'upsell' => 'customerorder#upsell'
   post 'addupsell' => 'customerorder#add_upsell'
   get 'deleteupsell' => 'order_lines#deleteupsell'
+
+  #step 3 added for appending the offer details
+  get 'offers' => 'customerorder#show_offers'
+  post 'addoffer' => 'customerorder#add_offer'
+
   #step 3
   get 'payment' => 'customerorder#payment'
   post 'addpayment' => 'customerorder#add_payment'

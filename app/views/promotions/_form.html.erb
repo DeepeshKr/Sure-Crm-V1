@@ -1,0 +1,26 @@
+<%= simple_form_for(@promotion) do |f| %>
+  <%= f.error_notification %>
+
+  <div class="form-inputs">
+    <%= f.input :name %>
+    <%= f.input :description %>
+    <%= f.input :start_hr %>
+    <%= f.input :start_min %>
+    <%= f.input :end_hr %>
+    <%= f.input :end_min %>
+    <%= f.input :start_date %>
+    <%= f.input :end_date %>
+    <%= f.input :media_id %>
+    <%= f.input :min_sale_value %>
+    <%= f.input :discount_percent %>
+    <%= f.input :discount_value %>
+    <%= f.input :free_product_list_id %>
+    <%= f.input :active %>
+    <%= f.input :unique_code %>
+    <%= f.input :promo_cost %>
+  </div>
+
+  <div class="form-actions">
+    <%= f.button :submit %>
+  </div>
+<% end %>

@@ -1,9 +1,10 @@
 class SalesReportController < ApplicationController
   before_action { protect_controllers(7) } 
    respond_to :html
+   before_action :drop_downs, only: [:index, :update, :destroy, :deleteupsell]
   # before_filter :authenticate_user!
   def index
-    
+     @today_date = Date.current - 330.minutes
   end
   def summary
         @sno = 1
@@ -13,8 +14,15 @@ class SalesReportController < ApplicationController
          #media segregation only HBN
           media_segments
 
-          from_date = Date.current - 30.days #30.days
+          from_date = Date.current - 7.days #30.days
+          if params.has_key?(:from_date)
+             from_date =  Date.strptime(params[:from_date], "%Y-%m-%d")
+          end
           to_date = Date.current
+          if params.has_key?(:to_date)
+             to_date =  Date.strptime(params[:to_date], "%Y-%m-%d")
+          end
+
           to_date.downto(from_date).each do |day|
           @datelist <<  day.strftime('%d-%b-%y')
           web_date = day
@@ -40,7 +48,7 @@ class SalesReportController < ApplicationController
           :nos => noorders, :codorders => codorders, :codvalue => codvalue,
            :ccorders => ccorders, :ccvalue => ccvalue  }
         end
-        @employeeorderlist = employeeunorderlist #.sort_by{|c| c[:total]}.reverse 
+        @employeeorderlist = employeeunorderlist.sort_by{|c| c[:for_date]}
         # flash[:notice] = "remove restrictions of 10"
         
         respond_to do |format|
@@ -54,21 +62,15 @@ class SalesReportController < ApplicationController
 
   end
    def daily
-
-       @datelist ||= []
-       from_date = Date.current - 30.days
-      (from_date..to_date).each do |day|
-        @datelist <<  day.strftime('%d-%b-%y')
-      end
-
       #media segregation only HBN
       media_segments
-
       @sno = 1
+
     if params[:for_date].present? 
       #@summary ||= []
       @or_for_date = params[:for_date]
       for_date =  Date.strptime(params[:for_date], "%Y-%m-%d")
+
 
       from_date = for_date.beginning_of_day - 330.minutes
       to_date = for_date.end_of_day - 330.minutes
@@ -747,11 +749,21 @@ class SalesReportController < ApplicationController
      end
  end
 
+def drop_downs
+ @medialist = Medium.where('media_group_id IS NULL or media_group_id <> 10000 or id = 11200').order('name')
+  @hbnmedialist = Medium.where('media_group_id = 10000 AND id <> 11200').order('name')
+end
 
  def media_segments
   @hbnlist = Medium.where(media_group_id: 10000).pluck(:id)
   @paid = Medium.where(media_commision_id: 10000).where("media_group_id IS NULL OR media_group_id <> 10000").select("id")
   @others = Medium.where('media_commision_id IS NULL').where("media_group_id IS NULL OR media_group_id <> 10000").select("id")
-
+  
+ 
  end
 end
+    #<%= render 'my_partial', :locals => {:greeting => 'Hello world', :x => 36} %>
+    #<h1> <%= locals[:greeting] %> , my x value is <%= locals[:x] %> </h1>
+    # add partial: to view info like
+    #<%= render partial: 'my_partial', :locals => {:greeting => 'Hello world', :x => 36} %>
+    #<h1> <%= greeting %> , my x value is <%= x %> </h1>

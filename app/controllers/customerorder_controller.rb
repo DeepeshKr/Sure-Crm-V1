@@ -265,6 +265,14 @@ def add_products
 
   end
 
+  def show_offers
+
+  end
+
+  def add_offer
+
+  end
+
   def payment
     
     if @order_master.customer_address_id.blank?
