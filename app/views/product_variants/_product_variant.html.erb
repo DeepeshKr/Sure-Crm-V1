@@ -1,0 +1,47 @@
+
+<div class="panel panel-info">
+    <div class="panel-heading" role="tab" id="headingOne">
+    <div class="col-xs-11">
+      <h4 class="panel-title">
+        <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#<%= v.id %>" aria-expanded="false" aria-controls=<%= v.id %>>
+
+         <strong> <%= v.name %></strong>
+         Price:  <%= v.price %> Shipping: <%= v.shipping %> 
+         Sold As: <%= v.product_sell_type.name %> 
+              <small>Created: <%= v.created_at.strftime("%d-%b-%Y") %></small>   
+
+        </a>
+ <br>
+      <small>Linked to Product Master: <%= v.product_master.productname if v.product_master%></small>
+      </h4>
+
+      </div>
+      <div class="col-cs-1">
+      	<%= link_to 'Edit', edit_product_variant_path(v), class: "btn btn-warning btn-xs" %>
+      </div>
+      
+    </div>
+    <div id=<%= v.id %> class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+      <div class="panel-body">
+        <div class="well well-sm">
+          <%= render'product_masters/tape_list', :v => v %>
+        </div>
+          <hr>
+      	<% if v.product_list.exists? %>
+        <div class="alert alert-success">
+            <%= render'product_masters/product_list', :v => v %>
+       	</div>
+       	<% else %>
+        <div class="alert alert-warning">
+         <small>No product listed for sale!</small>
+   		</div>
+   		<% end %>
+        <%= link_to 'Add Product Sell List', v  , class: "btn btn-primary btn-xs" %> 
+
+        <br>
+        <hr>
+      <%= render partial: 'change_product_master', locals:{id: v.id, productmasterid: v.productmasterid} %>
+      <br>
+       </div>
+    </div>
+</div>      

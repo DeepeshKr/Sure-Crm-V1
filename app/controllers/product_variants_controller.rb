@@ -5,27 +5,27 @@ class ProductVariantsController < ApplicationController
   respond_to :html, :xml, :json
 
   def index
-
+     @product_masters_active = ProductMaster.all.where('productactivecodeid = 10000')
       @showall = true
     if params.has_key?(:search)
       
       @search = "Search for " +  params[:search].upcase
       @searchvalue = params[:search].upcase   
-       @product_variants = ProductVariant.where('activeid = 10000').where("name like ? OR extproductcode like ? or description like ? or variantbarcode like ?", "#{@searchvalue}%", "#{@searchvalue}%", "#{@searchvalue}%", "#{@searchvalue}%")
-      @inactive_product_variants = ProductVariant.where('activeid <> 10000').where("name like ? OR extproductcode like ? or description like ? or variantbarcode like ?", "#{@searchvalue}%", "#{@searchvalue}%", "#{@searchvalue}%", "#{@searchvalue}%")
+       @product_variants = ProductVariant.where('activeid = 10000').where("name like ? OR extproductcode like ? or description like ? or variantbarcode like ?", "#{@searchvalue}%", "#{@searchvalue}%", "#{@searchvalue}%", "#{@searchvalue}%").paginate(:page => params[:page], :per_page => 10)
+      @inactive_product_variants = ProductVariant.where('activeid <> 10000').where("name like ? OR extproductcode like ? or description like ? or variantbarcode like ?", "#{@searchvalue}%", "#{@searchvalue}%", "#{@searchvalue}%", "#{@searchvalue}%").paginate(:page => params[:page], :per_page => 5)
       @found = @product_variants.count
      
      elsif params[:showall] == 'true'
         
        @search = "All Product Variant List"
       @searchvalue = nil
-     @product_variants = ProductVariant.all.where('activeid = 10000')
-      @inactive_product_variants = ProductVariant.where('activeid <> 10000')
+     @product_variants = ProductVariant.all.where('activeid = 10000').paginate(:page => params[:page], :per_page => 10)
+      @inactive_product_variants = ProductVariant.where('activeid <> 10000').paginate(:page => params[:page], :per_page => 10)
     else
       @search = "Product Variant List"
       @searchvalue = nil
-       @product_variants = ProductVariant.all.where('activeid = 10000').order('updated_at DESC').limit(10)
-      @inactive_product_variants = ProductVariant.where('activeid <> 10000').order('updated_at DESC').limit(10)
+       @product_variants = ProductVariant.all.where('activeid = 10000').order('updated_at DESC').paginate(:page => params[:page], :per_page => 10)
+      @inactive_product_variants = ProductVariant.where('activeid <> 10000').order('updated_at DESC').paginate(:page => params[:page], :per_page => 10)
       
       @found = nil
     
@@ -54,6 +54,17 @@ class ProductVariantsController < ApplicationController
   end
 
   def edit
+
+  end
+
+  def update_variant_master_id
+   if params.has_key?(:productmasterid) && params.has_key?(:id)
+    product_variant = ProductVariant.find(params[:id])
+
+    product_variant.update(productmasterid: params[:productmasterid])
+
+    redirect_to product_variants_path
+   end
   end
 
   def details
@@ -124,6 +135,7 @@ class ProductVariantsController < ApplicationController
       @product_variant = ProductVariant.find(params[:id])
        @productactivecode = ProductActiveCode.all.order("id")
      @productselltype = ProductSellType.all.order("id")
+     
     
     end
 

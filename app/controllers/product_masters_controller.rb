@@ -7,7 +7,7 @@ respond_to :html, :xml, :json
 
   def index
      @showall = true
-    if params.has_key?(:search)
+    if params.has_key?(:search) 
       
       @search = "Search for " +  params[:search].upcase
       @searchvalue = params[:search].upcase   

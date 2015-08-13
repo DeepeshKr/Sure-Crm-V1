@@ -1,0 +1,14 @@
+
+ <div class="row">
+  <%= form_tag  url: updatevariantmaster_path, method: "post" do  %>
+   <%= hidden_field_tag :id, id %>
+ <div class="col-xs-9">
+ <%= select_tag :productmasterid, options_from_collection_for_select(@product_masters_active, :id, :productname, selected: productmasterid), {prompt: "Please select the Product Master", label: "Product Master", :class => "form-control"} %>
+   
+ </div>
+  <div class="col-xs-3">
+   <%= submit_tag "Change Product Master", name: nil, class: "btn btn-primary" %>
+  </div>
+  <% end %>
+  </div>
+
