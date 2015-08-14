@@ -1,5 +1,19 @@
 <% if @product_cost_masters.present? %>
 <h3>Listing Product Cost Masters</h3>
+<div class="well well-sm">
+<small>Revenue: <%= (@product_cost_masters.first.basic_cost || 0) + 
+(@product_cost_masters.first.shipping_handling || 0) %>
+basic_cost + shipping_handling 
+</small>
+<br>
+<small>
+  Cost:<%= (@product_cost_masters.first.product_cost || 0) + 
+           (@product_cost_masters.first.tel_cost || 0) + 
+        (@product_cost_masters.first.cost_of_return || 0) +
+        (@product_cost_masters.first.call_centre_commission || 0) %>
+product_cost + tel_cost + cost_of_return + call_centre_commission
+</small>
+</div>
 <table class="table table-hover">
   <thead>
     <tr>
@@ -17,7 +31,7 @@
       <th>Royalty</th>
       <th>Cost of return</th>
       <th>Call centre commission</th>
-     
+      
     </tr>
   </thead>
 
