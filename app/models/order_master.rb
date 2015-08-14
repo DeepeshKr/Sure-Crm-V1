@@ -191,6 +191,14 @@ def productrevenue
     totalrevenue += ((self.shipping) * 0.98125)|| 0
      return totalrevenue
 end
+
+def grand_total
+
+return self.subtotal + self.shipping + self.codcharges 
++ self.servicetax + self.maharastracodextra - self.creditcardcharges - self.maharastraccextra
+
+end
+
 private
   def on_create
   #self.update_column(pieces: 0,subtotal: 0, taxes: 0, codcharges: 0, shipping:0, total: 0)

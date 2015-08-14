@@ -52,29 +52,30 @@
   <!-- Tab panes -->
 <div class="tab-content">
   <div role="tabpanel" class="tab-pane fade in active" id="home">
-    
-      <% if @hbnchecked == TRUE %>
-  <%= render partial: "media_tape_heads/hbn_auto_add" %>
-     <% else %>
-     <h3>You can't add HBN channels Listing when you have selected private channel </h3>
-     <% end %>
+    <% if @hbnchecked == TRUE %>
+      <%= render partial: "media_tape_heads/hbn_auto_add" %>
+    <% else %>
+      <h3>You can't add HBN channels Listing when you have selected private channel </h3>
+    <% end %>
 
   </div>
   
   <div role="tabpanel" class="tab-pane fade" id="profile">
     <% if @hbnchecked == TRUE %>
-  <%= render partial: "campaign_playlists/insert_playlist" %>
-<% else %>
-<h3>You can't add HBN channels Listing when you have selected private channel </h3>
-<% end %>
-   
+      <%= render partial: "campaign_playlists/insert_playlist" %>
+    <% else %>
+      <h3>You can't add HBN channels Listing when you have selected private channel </h3>
+    <% end %>
   </div>
-    <div role="tabpanel" class="tab-pane fade" id="pvt">
-    <% if @pvtchannelchecked == TRUE %>
-      <%= render partial: "media_tape_heads/pvt_single_add" %>
-  <% else %>
-     <h3>You can't add private channel Listing when you have selected HBN channels </h3>
-     <% end %>
+
+  <div role="tabpanel" class="tab-pane fade" id="pvt">
+      <% if @pvtchannelchecked == TRUE %>
+      <div class="well well-sm">
+        <%= render partial: "media_tape_heads/pvt_single_add" %>
+        </div>
+        <% else %>
+        <h3>You can't add private channel Listing when you have selected HBN channels </h3>
+      <% end %>
   </div>
   
 </div> <!-- Tab panes end-->

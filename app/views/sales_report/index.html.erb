@@ -5,7 +5,7 @@
  </div>
 </div>
 <div style:"visibility:hidden">
-<%= render partial: 'date_range_search', :locals => {:searchaction => "index"}  %>
+
 <%= render partial: 'hbn_media_list', :locals => {:searchaction => "index"}  %>
 <%= render partial: 'media_list', :locals => {:searchaction => "index"}  %>
 </div>
@@ -20,11 +20,11 @@
 			   Get Sales report for each BDM Listed below for Channel Sales managed by them
 			  </div>
 			  <div class="panel-footer">
-			  
+			   
 					 <%= bootstrap_form_tag url: url_for(:controller => 'sales_report', :action => 'summary'), :method => :GET, :enforce_utf8 => false do |f| %>
 					 <div class="row">
 					<div class="col-xs-8">
-					 <%= text_field_tag(:for_date, nil, :data => {:provide => "datepicker"}, :id => "datepicker1", :class => "form-control", :required => "true" )   %>
+					 <%= text_field_tag(:from_date, @from_date, :data => {:provide => "datepicker"}, :id => "datepicker1", :class => "form-control", :required => "true" )   %>
 					          
 					</div>
 					
@@ -46,10 +46,10 @@
 			    See how each show is performing and sales against each show, warning sometimes some show may get no results at all.
 			  </div>
 			  <div class="panel-footer">
-			    <%= bootstrap_form_tag url: url_for(:controller => 'sales_report', :action => 'summary'), :method => :GET, :enforce_utf8 => false do |f| %>
+			    <%= bootstrap_form_tag url: url_for(:controller => 'sales_report', :action => 'show'), :method => :GET, :enforce_utf8 => false do |f| %>
 					 <div class="row">
 					<div class="col-xs-8">
-					 <%= text_field_tag(:for_date, nil, :data => {:provide => "datepicker"}, :id => "datepicker1", :class => "form-control", :required => "true" )   %>
+					 <%= text_field_tag(:from_date, @from_date, :data => {:provide => "datepicker"}, :id => "datepicker2", :class => "form-control", :required => "true" )   %>
 					          
 					</div>
 					
@@ -72,7 +72,7 @@
 			  	 <%= bootstrap_form_tag url: url_for(:controller => 'sales_report', :action => 'hourly'), :method => :GET, :enforce_utf8 => false do |f| %>
 					 <div class="row">
 					<div class="col-xs-8">
-					 <%= text_field_tag(:for_date, @today_date, :data => {:provide => "datepicker"}, :id => "datepicker1", :class => "form-control", :required => "true" )   %>
+					 <%= text_field_tag(:from_date, @from_date, :data => {:provide => "datepicker"}, :id => "datepicker3", :class => "form-control", :required => "true" )   %>
 					          
 					</div>
 					
@@ -102,7 +102,7 @@
 					 <%= bootstrap_form_tag url: url_for(:controller => 'sales_report', :action => 'summary'), :method => :GET, :enforce_utf8 => false do |f| %>
 					 <div class="row">
 					<div class="col-xs-8">
-					 <%= text_field_tag(:for_date, nil, :data => {:provide => "datepicker"}, :id => "datepicker23", :class => "form-control", :required => "true" )   %>
+					 <%= text_field_tag(:from_date, @from_date, :data => {:provide => "datepicker"}, :id => "datepicker4", :class => "form-control", :required => "true" )   %>
 					          
 					</div>
 					
@@ -127,7 +127,7 @@
 			  	<%= bootstrap_form_tag url: url_for(:controller => 'sales_report', :action => 'summary'), :method => :GET, :enforce_utf8 => false do |f| %>
 					 <div class="row">
 					<div class="col-xs-8">
-					 <%= text_field_tag(:for_date, nil, :data => {:provide => "datepicker"}, :id => "datepicker5", :class => "form-control", :required => "true" )   %>
+					 <%= text_field_tag(:from_date, @from_date, :data => {:provide => "datepicker"}, :id => "datepicker5", :class => "form-control", :required => "true" )   %>
 					          
 					</div>
 					
@@ -149,7 +149,7 @@
 			  	<%= bootstrap_form_tag url: url_for(:controller => 'sales_report', :action => 'summary'), :method => :GET, :enforce_utf8 => false do |f| %>
 					 <div class="row">
 					<div class="col-xs-8">
-					 <%= text_field_tag(:for_date, nil, :data => {:provide => "datepicker"}, :id => "datepicker6", :class => "form-control", :required => "true" )   %>
+					 <%= text_field_tag(:from_date, @from_date, :data => {:provide => "datepicker"}, :id => "datepicker6", :class => "form-control", :required => "true" )   %>
 					          
 					</div>
 					
@@ -177,7 +177,7 @@
 					 <%= bootstrap_form_tag url: url_for(:controller => 'sales_report', :action => 'summary'), :method => :GET, :enforce_utf8 => false do |f| %>
 					 <div class="row">
 					<div class="col-xs-8">
-					 <%= text_field_tag(:for_date, nil, :data => {:provide => "datepicker"}, :id => "datepicker7", :class => "form-control", :required => "true" )   %>
+					 <%= text_field_tag(:from_date, @from_date, :data => {:provide => "datepicker"}, :id => "datepicker7", :class => "form-control", :required => "true" )   %>
 					          
 					</div>
 					
@@ -202,7 +202,7 @@
 			  	<%= bootstrap_form_tag url: url_for(:controller => 'sales_report', :action => 'summary'), :method => :GET, :enforce_utf8 => false do |f| %>
 					 <div class="row">
 					<div class="col-xs-8">
-					 <%= text_field_tag(:for_date, nil, :data => {:provide => "datepicker"}, :id => "datepicker8", :class => "form-control", :required => "true" )   %>
+					 <%= text_field_tag(:from_date, @from_date, :data => {:provide => "datepicker"}, :id => "datepicker8", :class => "form-control", :required => "true" )   %>
 					          
 					</div>
 					
@@ -224,7 +224,7 @@
 			  	<%= bootstrap_form_tag url: url_for(:controller => 'sales_report', :action => 'summary'), :method => :GET, :enforce_utf8 => false do |f| %>
 					 <div class="row">
 					<div class="col-xs-8">
-					 <%= text_field_tag(:for_date, nil, :data => {:provide => "datepicker"}, :id => "datepicker9", :class => "form-control", :required => "true" )   %>
+					 <%= text_field_tag(:from_date, @from_date, :data => {:provide => "datepicker"}, :id => "datepicker9", :class => "form-control", :required => "true" )   %>
 					          
 					</div>
 					
@@ -251,7 +251,7 @@
 					 <%= bootstrap_form_tag url: url_for(:controller => 'sales_report', :action => 'summary'), :method => :GET, :enforce_utf8 => false do |f| %>
 					 <div class="row">
 					<div class="col-xs-8">
-					 <%= text_field_tag(:for_date, nil, :data => {:provide => "datepicker"}, :id => "datepicker10", :class => "form-control", :required => "true" )   %>
+					 <%= text_field_tag(:from_date, @from_date, :data => {:provide => "datepicker"}, :id => "datepicker10", :class => "form-control", :required => "true" )   %>
 					          
 					</div>
 					
@@ -276,7 +276,7 @@
 			  	<%= bootstrap_form_tag url: url_for(:controller => 'sales_report', :action => 'summary'), :method => :GET, :enforce_utf8 => false do |f| %>
 					 <div class="row">
 					<div class="col-xs-8">
-					 <%= text_field_tag(:for_date, nil, :data => {:provide => "datepicker"}, :id => "datepicker11", :class => "form-control", :required => "true" )   %>
+					 <%= text_field_tag(:from_date, @from_date, :data => {:provide => "datepicker"}, :id => "datepicker11", :class => "form-control", :required => "true" )   %>
 					          
 					</div>
 					
@@ -298,7 +298,7 @@
 			  	<%= bootstrap_form_tag url: url_for(:controller => 'sales_report', :action => 'summary'), :method => :GET, :enforce_utf8 => false do |f| %>
 					 <div class="row">
 					<div class="col-xs-8">
-					 <%= text_field_tag(:for_date, nil, :data => {:provide => "datepicker"}, :id => "datepicker12", :class => "form-control", :required => "true" )   %>
+					 <%= text_field_tag(:from_date, @from_date, :data => {:provide => "datepicker"}, :id => "datepicker12", :class => "form-control", :required => "true" )   %>
 					          
 					</div>
 					
@@ -313,9 +313,9 @@
  </div>
  <script>
 $('#datepicker1').datepicker({format: 'yyyy-mm-dd'});
-$('#datepicker22').datepicker({format: 'yyyy-mm-dd'});
-$('#datepicker23').datepicker({format: 'yyyy-mm-dd'});
-$('#datepicker24').datepicker({format: 'yyyy-mm-dd'});
+$('#datepicker2').datepicker({format: 'yyyy-mm-dd'});
+$('#datepicker3').datepicker({format: 'yyyy-mm-dd'});
+$('#datepicker4').datepicker({format: 'yyyy-mm-dd'});
 $('#datepicker5').datepicker({format: 'yyyy-mm-dd'});
 $('#datepicker6').datepicker({format: 'yyyy-mm-dd'});
 $('#datepicker7').datepicker({format: 'yyyy-mm-dd'});

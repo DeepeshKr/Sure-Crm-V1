@@ -4,7 +4,7 @@ class SalesReportController < ApplicationController
    before_action :drop_downs, only: [:index, :update, :destroy, :deleteupsell]
   # before_filter :authenticate_user!
   def index
-     @today_date = Date.current - 330.minutes
+     @from_date = (Date.current + 330.minutes).strftime("%Y-%m-%d") #.strftime("%Y-%m-%d")
   end
   def summary
         @sno = 1
@@ -14,27 +14,27 @@ class SalesReportController < ApplicationController
          #media segregation only HBN
           media_segments
 
-          from_date = Date.current - 7.days #30.days
+          @from_date = Date.current - 7.days #30.days
           if params.has_key?(:from_date)
-             from_date =  Date.strptime(params[:from_date], "%Y-%m-%d")
+             @from_date =  Date.strptime(params[:from_date], "%Y-%m-%d")
           end
-          to_date = Date.current
+          @to_date = Date.current
           if params.has_key?(:to_date)
-             to_date =  Date.strptime(params[:to_date], "%Y-%m-%d")
+             @to_date =  Date.strptime(params[:to_date], "%Y-%m-%d")
           end
 
-          to_date.downto(from_date).each do |day|
+          @to_date.downto(@from_date).each do |day|
           @datelist <<  day.strftime('%d-%b-%y')
           web_date = day
           web_date = web_date.strftime()
           for_date = day # Date.
-          @or_for_date = for_date
+          @or_for_date = @from_date
            
-          from_date = for_date.beginning_of_day - 330.minutes
-          to_date = for_date.end_of_day - 330.minutes
+          @from_date = for_date.beginning_of_day + 330.minutes
+          @to_date = for_date.end_of_day + 330.minutes
            
           orderlist = OrderMaster.where('ORDER_STATUS_MASTER_ID > 10002')
-          .where('orderdate >= ? AND orderdate <= ?', from_date, to_date)
+          .where('orderdate >= ? AND orderdate <= ?', @from_date, @to_date)
            #.where(media_id: @hbnlist)
 
           ccvalue = orderlist.where(orderpaymentmode_id: 10000).sum(:total)
@@ -66,20 +66,24 @@ class SalesReportController < ApplicationController
       media_segments
       @sno = 1
 
-    if params[:for_date].present? 
+    if params[:from_date].present? 
       #@summary ||= []
-      @or_for_date = params[:for_date]
-      for_date =  Date.strptime(params[:for_date], "%Y-%m-%d")
+     @from_date = Date.current - 7.days #30.days
+          if params.has_key?(:from_date)
+             @from_date =  Date.strptime(params[:from_date], "%Y-%m-%d")
+          end
+    @to_date = Date.current
+    if params.has_key?(:to_date)
+     @to_date =  Date.strptime(params[:to_date], "%Y-%m-%d")
+    end
 
-
-      from_date = for_date.beginning_of_day - 330.minutes
-      to_date = for_date.end_of_day - 330.minutes
+    @to_date.downto(@from_date).each do |day|
 
       order_masters = OrderMaster.where('ORDER_STATUS_MASTER_ID > 10002') 
-      .where('orderdate >= ? AND orderdate <= ?', from_date, to_date)
+      .where('orderdate >= ? AND orderdate <= ?', @from_date, @to_date)
       .where(media_id: @hbnlist).select(:employee_id).distinct
       
-      @orderdate = "Searched for #{for_date} found #{order_masters.count} agents!"
+      @orderdate = "Searched for #{@from_date} found #{order_masters.count} agents!"
       employeeunorderlist ||= []
       num = 1
       order_masters.each do |o|
@@ -95,44 +99,46 @@ class SalesReportController < ApplicationController
         totalorders = orderlist.sum(:total)
         noorders = orderlist.count()
         employeeunorderlist << {:total => totalorders,
-           :id => e, :employee => name, :for_date =>  @or_for_date,
+           :id => e, :employee => name, :for_date =>  @from_date,
           :nos => noorders, :codorders => codorders, :codvalue => codvalue,
            :ccorders => ccorders, :ccvalue => ccvalue  }
         end
         @employeeorderlist = employeeunorderlist.sort_by{|c| c[:total]}.reverse 
 
         respond_to do |format|
-        csv_file_name = "sales_on_#{@or_for_date}.csv"
+        csv_file_name = "sales_on_#{@from_date}.csv"
           format.html
           format.csv do
             headers['Content-Disposition'] = "attachment; filename=\"#{csv_file_name}\""
             headers['Content-Type'] ||= 'text/csv'
           end
-        end
-
-    end
+        end #end csv
+    end #end do
+  end #end if
+    
   end
   def hourly
     #/sales_report/hourly?for_date=05%2F09%2F2015
     @hourlist = "Time UTC is your zone #{Time.zone.now} while actual time is #{Time.now}"  
     @sno = 1
-    if params[:for_date].present? 
+    if params[:from_date].present? 
       #@summary ||= []
-      @or_for_date = Date.strptime(params[:for_date], "%Y-%m-%d")
-      for_date =  Date.strptime(params[:for_date], "%Y-%m-%d")
+      @or_for_date = Date.strptime(params[:from_date], "%Y-%m-%d")
+      @from_date =  Date.strptime(params[:from_date], "%Y-%m-%d")
     
       #for_date = for_date - 330.minutes
         @hourlist ||= []
         employeeunorderlist ||= []
     
-        from_date = for_date.beginning_of_day - 300.minutes
-        to_date = for_date.end_of_day - 300.minutes
+        @from_date = @from_date.beginning_of_day - 300.minutes
+        @to_date = @from_date + 1.days
+        @to_date = @to_date.end_of_day - 300.minutes
         #media segregation only HBN
         media_segments
 
         #start loop
         
-        (from_date.to_datetime.to_i .. to_date.to_datetime.to_i).step(30.minutes) do |date|
+        (@from_date.to_datetime.to_i .. @to_date.to_datetime.to_i).step(30.minutes) do |date|
          
          halfhourago = Time.at(date - 30.minutes) 
 
@@ -153,7 +159,7 @@ class SalesReportController < ApplicationController
        @employeeorderlist = employeeunorderlist #.sort_by{|c| c[:total]}.reverse 
 
        respond_to do |format|
-        csv_file_name = "sales_hourly_#{@or_for_date}.csv"
+        csv_file_name = "sales_hourly_#{@from_date}.csv"
           format.html
           format.csv do
             headers['Content-Disposition'] = "attachment; filename=\"#{csv_file_name}\""
@@ -423,13 +429,9 @@ class SalesReportController < ApplicationController
      @sno = 1
 
     @total_nos = 0
-      @total_pieces = 0
-        @total_var_cost = 0
-         @total_fixed_cost = 0
-         @total_cost = 0
-         @total_sales = 0
-         @total_profit = 0
-          @total_revenue = 0
+    @total_pieces = 0
+    @total_sales = 0
+        
       #for_date = for_date - 330.minutes
         @hourlist ||= []
         employeeunorderlist ||= []
@@ -440,42 +442,13 @@ class SalesReportController < ApplicationController
      campaign_playlists =  CampaignPlaylist.joins(:campaign)
      .where("campaigns.startdate = ?", for_date)
      .order(:start_hr, :start_min, :start_sec)
-     .where(list_status_id: 10000) #.limit(10)
-     
-     media_cost = Medium.where(media_group_id: 10000).sum(:daily_charges)
-          media_cost = media_cost / (24*60*60) 
+     .where(list_status_id: 10000) #.limit(10) 
 
      campaign_playlists.each do | playlist |
      orderlist = OrderMaster.where('ORDER_STATUS_MASTER_ID > 10002')
      .where(campaign_playlist_id: playlist.id)
 
-
-      
-          #add orders of each cable tv operator
-
-          #split the fixed cost across the hour
-           revenue = 0
-            media_var_cost = 0
-             product_cost = 0
-             fixed_cost = 0
-          # orderlist.each do |med |
-          #   #revenue += OrderMaster.find(med.id).productrevenue ||= 0
-          #  # media_var_cost += OrderMaster.find(med.id).mediacost ||= 0
-          #   product_cost += OrderMaster.find(med.id).productcost ||= 0
-          #   media_variable = Medium.where('id = ? AND value is not null', med.media_id)
-          #   .where(:media_commision_id => [10020, 10021, 10040, 10041, 10060]) #.pluck(:value)
-          #     # if media_variable.present?
-          #     #   #discount the total value by 50% as correction
-          #     #   correction = 0.5
-          #     #   #PAID_CORRECTION
-          #     #    if media_variable.first.paid_correction.present?
-          #     #      correction = media_variable.first.paid_correction #||= 0.5
-          #     #    end
-          #     #  media_var_cost += (med.subtotal * media_variable.first.value.to_f) * correction
-          #     # end
-          # end
-         #fixed_cost =  media_cost * playlist.duration_secs.to_i
-          totalorders = orderlist.sum(:total)
+      totalorders = orderlist.sum(:total)
            nos = orderlist.count()
          pieces = orderlist.sum(:pieces)
           employeeunorderlist << {:show =>  playlist.product_variant.name,
@@ -483,11 +456,7 @@ class SalesReportController < ApplicationController
            :pieces => pieces,
           :nos => nos,
           :at_time => playlist.starttime,
-          :total => totalorders,
-          :revenue => revenue.to_i,
-          :variable_cost => media_var_cost.to_i,
-          :fixed_cost => fixed_cost.to_i,
-          :profitability => (revenue - (fixed_cost + media_var_cost)).to_i }
+          :total => totalorders}
         end
         @employeeorderlist = employeeunorderlist
 
@@ -750,8 +719,15 @@ class SalesReportController < ApplicationController
  end
 
 def drop_downs
- @medialist = Medium.where('media_group_id IS NULL or media_group_id <> 10000 or id = 11200').order('name')
-  @hbnmedialist = Medium.where('media_group_id = 10000 AND id <> 11200').order('name')
+@medialist = Medium.where('media_group_id IS NULL or media_group_id <> 10000 or id = 11200').order('name')
+@hbnmedialist = Medium.where('media_group_id = 10000 AND id <> 11200').order('name')
+#employees with id in media
+media_bdm = Medium.all.select(:employee_id).distinct
+@all_bdm = Employee.all.where(id: media_bdm)
+
+@sales_staff = Employee.all.where("employee_role_id > 7")
+
+
 end
 
  def media_segments
@@ -767,3 +743,22 @@ end
     # add partial: to view info like
     #<%= render partial: 'my_partial', :locals => {:greeting => 'Hello world', :x => 36} %>
     #<h1> <%= greeting %> , my x value is <%= x %> </h1>
+#     <td>
+# <%= link_to "View", city_report_path(for_date: c[:for_date]), :target => "_blank" %>
+# </td>
+# <td>
+# <%= link_to "View", employee_report_path(for_date: c[:for_date]), :target => "_blank" %>
+# </td>
+# <td>
+# <%= link_to "View", hourly_report_path(for_date: c[:for_date]), :target => "_blank" %>
+# </td>
+
+# <td>
+# <%= link_to "View", channel_report_path(for_date: c[:for_date]), :target => "_blank" %>
+# </td>
+# <td>
+# <%= link_to "View", product_report_path(for_date: c[:for_date]), :target => "_blank" %>
+# </td>
+# <td>
+# <%= link_to "View", show_report_path(for_date: c[:for_date]), :target => "_blank" %>
+# </td>

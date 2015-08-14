@@ -133,7 +133,7 @@ class CampaignsController < ApplicationController
      @productvariantlist = ProductVariant.where('product_variants.activeid = ? and product_variants.product_sell_type_id < ?', 10000, 10002).joins(:product_master)
      .where("product_masters.productactivecodeid = ?", 10000).order("product_variants.name")
 
-     @media_cost_master = MediaCostMaster.all.order(:total_cost)
+     @media_cost_master = MediaCostMaster.where("media_id <> 11200").order(:total_cost)
      @hbn_media_cost_master = MediaCostMaster.where(media_id: 11200).order(:total_cost)
      
     end
