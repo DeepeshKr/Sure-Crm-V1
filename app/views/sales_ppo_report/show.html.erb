@@ -29,7 +29,7 @@
     <tr>
     
       <th class="text-right">Orders</th>
-       <th class="text-right">Pieces</th>
+       <th class="text-right">Pieces*</th>
      <th class="text-right">Sales</th>
      
 
@@ -47,7 +47,13 @@
    <td><%= @sno %></td>
 
  <td><%= c[:show] %>
- <%= c[:more] %></td>
+ <%= c[:more] %><br>
+<% if c[:product_cost_master] == 0 %>
+<span style="color:red">No Product Cost Found</span>
+<% else %>
+<span style="color:green"> Cost Rs: <%= c[:product_cost_master] %></span>
+<% end %>
+ </td>
 <td><%= c[:at_time] %></td>
 <td class="text-right">
    <%= c[:nos] %> 
@@ -135,3 +141,8 @@
 </div>
 <%= link_to "Details", ppo_details_path(for_date: @or_for_date, product_variant: c[:product_variant_id]), :target => "_blank" %>
 <% end %>
+<div class="well well-sm">
+<ul class="list-inline">
+  <li>* The pieces are including upsell</li>
+</ul>
+</div>

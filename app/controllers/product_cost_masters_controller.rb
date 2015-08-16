@@ -6,6 +6,7 @@ class ProductCostMastersController < ApplicationController
   def index
     @product_cost_masters = ProductCostMaster.all.paginate(:page => params[:page])
     #update_all
+    #reset_prices
   end
 
   def product_costs
@@ -140,6 +141,16 @@ class ProductCostMastersController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def product_cost_master_params
       params.require(:product_cost_master).permit(:product_id, :product_list_id, :prod, :barcode, :product_cost, :basic_cost, :shipping_handling, :postage, :tel_cost, :transf_order_basic, :dealer_network_basic, :wholesale_variable_cost, :royalty, :cost_of_return, :call_centre_commission)
+    end
+    def reset_prices
+      product_cost_masters = ProductCostMaster.all
+
+      product_cost_masters.each do |pc|
+        pc.revenue = (pc.basic_cost || 0) + (pc.shipping_handling || 0) 
+
+        pc.cost = (pc.product_cost || 0) + (pc.tel_cost || 0) + 
+           (pc.cost_of_return || 0) + (pc.call_centre_commission || 0)
+      end
     end
  def update_all
       #update the entire list

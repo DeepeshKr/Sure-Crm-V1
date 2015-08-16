@@ -18,9 +18,9 @@ def updateprice
 	#:royalty, :cost_of_return, :call_centre_commission
 	m_revenue = (self.basic_cost || 0) + (self.shipping_handling || 0) 
 
-	m_cost = (self.product_cost || 0) + (self.product_cost || 0) +
-				(self.tel_cost || 0) + (self.cost_of_return || 0) +
-				(self.call_centre_commission || 0)
+	m_cost = (self.product_cost || 0) + (self.tel_cost || 0) + 
+	         (self.cost_of_return || 0) + (self.call_centre_commission || 0)
+
 	self.update_columns(cost: m_cost, revenue: m_revenue)	
 end	
 end

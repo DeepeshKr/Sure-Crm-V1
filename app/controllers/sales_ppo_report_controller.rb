@@ -296,6 +296,7 @@ class SalesPpoReportController < ApplicationController
              product_cost = 0
 
           orderlist.each do |med |
+
             revenue += OrderMaster.find(med.id).productrevenue ||= 0
              # media_var_cost += OrderMaster.find(med.id).mediacost ||= 0
             product_cost += OrderMaster.find(med.id).productcost ||= 0
@@ -326,13 +327,18 @@ class SalesPpoReportController < ApplicationController
           nos = orderlist.count() * @correction
           pieces = orderlist.sum(:pieces) * @correction
          
-         
+
+         product_cost_master = 0
+         if ProductCostMaster.where(prod: playlist.product_variant.extproductcode).present?
+          product_cost_master = ProductCostMaster.where(prod: playlist.product_variant.extproductcode).first.cost
+         end
 
           total_seconds = totalseconds(playlist.id).to_f
          fixed_cost =  media_cost * total_seconds
         
           employeeunorderlist << {:show =>  playlist.product_variant.name,
           :campaign_id => playlist.id,
+          :product_cost_master => product_cost_master,
            :pieces => pieces.to_i,
           :nos => nos.to_i,
           :at_time => playlist.starttime,

@@ -1,52 +1,75 @@
 <p id="notice"><%= notice %></p>
-
+<div class="row">
+<div class="col-xs-4">
 <h3>Product Cost Masters</h3>
+</div>
+<div class="col-xs-8">
 <br>
 <div class="digg_pagination">
     
     <%= will_paginate @product_cost_masters, :container => false %>
   </div>
   <br>
-<table class="table table-hover">
+</div>
+</div>
+
+
+<table class="table table-hover table-bordered">
   <thead>
+  <tr>
+     
+      <th rowspan="2">Product</th>
+      <th rowspan="2">Prod </th>
+    
+      <th colspan="2">Revenue</th>
+    
+      <th colspan="6">Cost</th>
+     <th colspan="3">Others</th>
+      <th colspan="3" rowspan="2"></th>
+    </tr>
     <tr>
-      <th>Product</th>
-      <th>Product list</th>
-      <th>Prod</th>
-      <th>Barcode</th>
-      <th>Product cost</th>
+      
+     
       <th>Basic cost</th>
       <th>Shipping handling</th>
+
+       <th>Product cost</th>
       <th>Postage</th>
       <th>Tel cost</th>
-      <th>Transf order basic</th>
-      <th>Dealer network basic</th>
-      <th>Wholesale variable cost</th>
+      
       <th>Royalty</th>
       <th>Cost of return</th>
       <th>Call centre commission</th>
-      <th colspan="3"></th>
+
+      <th>Transf order basic</th>
+      <th>Dealer network basic</th>
+      <th>Wholesale variable cost</th>
+      
     </tr>
   </thead>
 
   <tbody>
     <% @product_cost_masters.each do |product_cost_master| %>
       <tr>
-        <td><%= product_cost_master.product_id %></td>
-        <td><%= product_cost_master.product_list_id %></td>
+       
+        <td><%= product_cost_master.product_list.name if product_cost_master.product_list %></td>
         <td><%= product_cost_master.prod %></td>
-        <td><%= product_cost_master.barcode %></td>
-        <td><%= product_cost_master.product_cost %></td>
+       
+       
         <td><%= product_cost_master.basic_cost %></td>
         <td><%= product_cost_master.shipping_handling %></td>
+         <td><%= product_cost_master.product_cost %></td>
         <td><%= product_cost_master.postage %></td>
         <td><%= product_cost_master.tel_cost %></td>
-        <td><%= product_cost_master.transf_order_basic %></td>
-        <td><%= product_cost_master.dealer_network_basic %></td>
-        <td><%= product_cost_master.wholesale_variable_cost %></td>
+       
         <td><%= product_cost_master.royalty %></td>
         <td><%= product_cost_master.cost_of_return %></td>
         <td><%= product_cost_master.call_centre_commission %></td>
+
+         <td><%= product_cost_master.transf_order_basic %></td>
+        <td><%= product_cost_master.dealer_network_basic %></td>
+        <td><%= product_cost_master.wholesale_variable_cost %></td>
+
         <td><%= link_to 'Show', product_cost_master %></td>
         <td><%= link_to 'Edit', edit_product_cost_master_path(product_cost_master) %></td>
         <td><%= link_to 'Destroy', product_cost_master, method: :delete, data: { confirm: 'Are you sure?' } %></td>
