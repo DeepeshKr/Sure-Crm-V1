@@ -98,19 +98,45 @@
   </tbody>
 <tfoot>
     <tr>
-     <th colspan="3" >Total</th>
-    
-      <th class="text-right"><%= @total_nos %></th>
-       <th class="text-right"><%= @total_pieces %></th>
-     <th class="text-right"><%= @total_sales %></th>
-     <th class="text-right"><%= @total_revenue %></th>
-     <th class="text-right"><%= @total_product_cost %></th>
-       <th class="text-right"><%= @total_var_cost %></th>
-     <th class="text-right"><%= @total_fixed_cost %></th>
-       <th class="text-right"><%= @total_cost %></th>
-     <th class="text-right"><%= @total_profit %></th>
+    <th colspan="3" >Total</th>
+    <th class="text-right"><%= @total_nos.to_i %></th>
+    <th class="text-right"><%= @total_pieces.to_i %></th>
+    <th class="text-right"><%= @total_sales.to_i %></th>
+    <th class="text-right"><%= @total_revenue.to_i %></th>
+    <th class="text-right"><%= @total_product_cost.to_i %></th>
+    <th class="text-right"><%= @total_var_cost.to_i %></th>
+    <th class="text-right"><%= @total_fixed_cost.to_i %></th>
+    <th class="text-right"><%= @total_refund.to_i %></th>
+    <th class="text-right"><%= @total_profit.to_i %></th>
     <th></th>
      </tr>
+
+     <tr>
+      <td colspan="3" >Grand Total (for the day)</td>
+      <td class="text-right"><%= @total_orders_nos.to_i %></td>
+      <td class="text-right"><%= @total_orders_pieces.to_i %></td>
+      <td class="text-right"><%= @total_orders_sales.to_i %></td>
+      <td class="text-right"><%= @total_orders_revenue.to_i %></td>
+      <td class="text-right"><%= @total_orders_product_cost.to_i  %></td>
+      <td class="text-right"><%= @total_orders_media_var_cost.to_i %></td>
+      <td class="text-right"><%= @total_orders_media_fixed_cost.to_i %></td>
+      <td class="text-right"><%= @total_orders_refund.to_i %></td>
+      <td class="text-right"><%= @total_order_profitability.to_i %></td>
+      <td></td>
+      </tr>
+      <tr>
+      <td colspan="3" >Balance</td>
+      <td class="text-right"><%= @total_nos.to_i - @total_orders_nos.to_i %></td>
+      <td class="text-right"><%= @total_pieces.to_i - @total_orders_pieces.to_i %></td>
+      <td class="text-right"><%= @total_sales.to_i - @total_orders_sales.to_i %></td>
+      <td class="text-right"><%= @total_revenue.to_i - @total_orders_revenue.to_i %></td>
+      <td class="text-right"><%= @total_product_cost.to_i - @total_orders_product_cost.to_i  %></td>
+      <td class="text-right"><%= @total_var_cost.to_i - @total_orders_media_var_cost.to_i %></td>
+      <td class="text-right"><%= @total_fixed_cost.to_i - @total_orders_media_fixed_cost.to_i %></td>
+      <td class="text-right"><%= @total_refund.to_i - @total_orders_refund.to_i %></td>
+      <td class="text-right"><%= @total_profit.to_i - @total_order_profitability.to_i %></td>
+      <td></td>
+      </tr>
   </tfoot>
   </table>
   <% else %>
@@ -141,6 +167,34 @@
 </div>
 <%= link_to "Details", ppo_details_path(for_date: @or_for_date, product_variant: c[:product_variant_id]), :target => "_blank" %>
 <% end %>
+
+<table class="table table-hover table-bordered">
+    <thead>
+      <tr>
+      <th>Orders</th>
+      <th>Sales</th>
+      <th>Revenue</th>
+      <th>Product Cost</th>
+      <th>Commission</th>
+      <th>Media Cost</th>
+      <th>Refunds</th>
+      <th>Profitability</th>
+      </tr>
+    </thead>
+    <tbody>
+    <tr>
+      <td class="text-right"><%= @total_orders_nos.to_i %></td>
+      <td class="text-right"><%= @total_orders_sales.to_i %></td>
+      <td class="text-right"><%= @total_orders_revenue.to_i %></td>
+      <td class="text-right"><%= @total_orders_product_cost.to_i  %></td>
+      <td class="text-right"><%= @total_orders_media_var_cost.to_i %></td>
+      <td class="text-right"><%= @total_orders_media_fixed_cost.to_i %></td>
+      <td class="text-right"><%= @total_orders_refund.to_i %></td>
+      <td class="text-right"><%= @total_order_profitability.to_i %></td>
+      </tr>
+
+      </tbody>
+</table>
 <div class="well well-sm">
 <ul class="list-inline">
   <li>* The pieces are including upsell</li>
