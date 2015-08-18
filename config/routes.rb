@@ -1,5 +1,9 @@
 Rails.application.routes.draw do
 
+  resources :page_names
+
+  resources :page_trails
+
   resources :promotions
 
   resources :message_types

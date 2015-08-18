@@ -22,6 +22,7 @@ class Employee < ActiveRecord::Base
   
   has_many :subordinates, class_name: "Employee",
                           foreign_key: "reporting_to_id"
+  has_many :page_trail, foreign_key: "employee_id"
  
   belongs_to :manager, class_name: "Employee",
                           foreign_key: "reporting_to_id"

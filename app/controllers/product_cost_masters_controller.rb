@@ -4,6 +4,7 @@ class ProductCostMastersController < ApplicationController
   # GET /product_cost_masters
   # GET /product_cost_masters.json
   def index
+   
     @product_cost_masters = ProductCostMaster.all.paginate(:page => params[:page])
     #update_all
     #reset_prices
@@ -146,10 +147,11 @@ class ProductCostMastersController < ApplicationController
       product_cost_masters = ProductCostMaster.all
 
       product_cost_masters.each do |pc|
-        pc.revenue = (pc.basic_cost || 0) + (pc.shipping_handling || 0) 
+        revenue = (pc.basic_cost || 0) + (pc.shipping_handling || 0) 
 
-        pc.cost = (pc.product_cost || 0) + (pc.tel_cost || 0) + 
+        cost = (pc.product_cost || 0) + (pc.tel_cost || 0) + 
            (pc.cost_of_return || 0) + (pc.call_centre_commission || 0)
+          pc.update(cost:cost, revenue:revenue)
       end
     end
  def update_all

@@ -1,13 +1,13 @@
 <% if @product_cost_masters.present? %>
 <h3>Listing Product Cost Masters</h3>
 <div class="well well-sm">
-<small>Revenue: <%= (@product_cost_masters.first.basic_cost || 0) + 
+Revenue: <%= @product_cost_masters.first.revenue %>  <small><%= (@product_cost_masters.first.basic_cost || 0) + 
 (@product_cost_masters.first.shipping_handling || 0) %>
 basic_cost + shipping_handling 
 </small>
 <br>
-<small>
-  Cost:<%= (@product_cost_masters.first.product_cost || 0) + 
+
+  Cost: <%= @product_cost_masters.first.cost %>  <small> <%= (@product_cost_masters.first.product_cost || 0) + 
            (@product_cost_masters.first.tel_cost || 0) + 
         (@product_cost_masters.first.cost_of_return || 0) +
         (@product_cost_masters.first.call_centre_commission || 0) %>
@@ -26,19 +26,14 @@ product_cost + tel_cost + cost_of_return + call_centre_commission
      <th colspan="3">Others</th>
   </tr>
     <tr>
-      
-     
-     
       <th>Basic cost</th>
       <th>Shipping handling</th>
-
       <th>Product cost</th>
       <th>Postage</th>
       <th>Tel cost</th>
       <th>Royalty</th>
       <th>Cost of return</th>
       <th>Call centre commission</th>
-
       <th>Transfer order basic</th>
       <th>Dealer network basic</th>
       <th>Wholesale variable cost</th>
@@ -52,18 +47,15 @@ product_cost + tel_cost + cost_of_return + call_centre_commission
         <td><%= product_cost_master.barcode %></td>
         <td><%= product_cost_master.basic_cost %></td>
         <td><%= product_cost_master.shipping_handling %></td>
-         <td><%= product_cost_master.product_cost %></td>
+        <td><%= product_cost_master.product_cost %></td>
         <td><%= product_cost_master.postage %></td>
         <td><%= product_cost_master.tel_cost %></td>
-       
         <td><%= product_cost_master.royalty %></td>
         <td><%= product_cost_master.cost_of_return %></td>
         <td><%= product_cost_master.call_centre_commission %></td>
-
-         <td><%= product_cost_master.transf_order_basic %></td>
+        <td><%= product_cost_master.transf_order_basic %></td>
         <td><%= product_cost_master.dealer_network_basic %></td>
         <td><%= product_cost_master.wholesale_variable_cost %></td>
-       
       </tr>
     <% end %>
   </tbody>

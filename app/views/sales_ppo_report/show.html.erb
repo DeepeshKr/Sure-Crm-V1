@@ -126,15 +126,15 @@
       </tr>
       <tr>
       <td colspan="3" >Balance</td>
-      <td class="text-right"><%= @total_nos.to_i - @total_orders_nos.to_i %></td>
-      <td class="text-right"><%= @total_pieces.to_i - @total_orders_pieces.to_i %></td>
-      <td class="text-right"><%= @total_sales.to_i - @total_orders_sales.to_i %></td>
-      <td class="text-right"><%= @total_revenue.to_i - @total_orders_revenue.to_i %></td>
-      <td class="text-right"><%= @total_product_cost.to_i - @total_orders_product_cost.to_i  %></td>
-      <td class="text-right"><%= @total_var_cost.to_i - @total_orders_media_var_cost.to_i %></td>
-      <td class="text-right"><%= @total_fixed_cost.to_i - @total_orders_media_fixed_cost.to_i %></td>
-      <td class="text-right"><%= @total_refund.to_i - @total_orders_refund.to_i %></td>
-      <td class="text-right"><%= @total_profit.to_i - @total_order_profitability.to_i %></td>
+      <td class="text-right"><%= @total_orders_nos.to_i - @total_nos.to_i  %></td>
+      <td class="text-right"><%= @total_orders_pieces.to_i - @total_pieces.to_i %></td>
+      <td class="text-right"><%= @total_orders_sales.to_i  - @total_sales.to_i  %></td>
+      <td class="text-right"><%= @total_orders_revenue.to_i - @total_revenue.to_i %></td>
+      <td class="text-right"><%= @total_orders_product_cost.to_i - @total_product_cost.to_i %></td>
+      <td class="text-right"><%= @total_orders_media_var_cost.to_i - @total_var_cost.to_i  %></td>
+      <td class="text-right"><%= @total_orders_media_fixed_cost.to_i - @total_fixed_cost.to_i %></td>
+      <td class="text-right"><%= @total_orders_refund.to_i - @total_refund.to_i %></td>
+      <td class="text-right"><%= @total_order_profitability.to_i - @total_profit.to_i %></td>
       <td></td>
       </tr>
   </tfoot>
@@ -148,6 +148,9 @@
 <% @hidelist = true %>
 <% if @hidelist == false %>
 <div style="visibility:hidden">
+
+<%= link_to "Details", ppo_details_path(start_time: @from_date, end_time: @to_date, product_variant: c[:product_variant_id]), :target => "_blank" %>
+
 <% @order_sno = 1 %>
 <table class="table table-bordered">
   <tr>
@@ -168,33 +171,7 @@
 <%= link_to "Details", ppo_details_path(for_date: @or_for_date, product_variant: c[:product_variant_id]), :target => "_blank" %>
 <% end %>
 
-<table class="table table-hover table-bordered">
-    <thead>
-      <tr>
-      <th>Orders</th>
-      <th>Sales</th>
-      <th>Revenue</th>
-      <th>Product Cost</th>
-      <th>Commission</th>
-      <th>Media Cost</th>
-      <th>Refunds</th>
-      <th>Profitability</th>
-      </tr>
-    </thead>
-    <tbody>
-    <tr>
-      <td class="text-right"><%= @total_orders_nos.to_i %></td>
-      <td class="text-right"><%= @total_orders_sales.to_i %></td>
-      <td class="text-right"><%= @total_orders_revenue.to_i %></td>
-      <td class="text-right"><%= @total_orders_product_cost.to_i  %></td>
-      <td class="text-right"><%= @total_orders_media_var_cost.to_i %></td>
-      <td class="text-right"><%= @total_orders_media_fixed_cost.to_i %></td>
-      <td class="text-right"><%= @total_orders_refund.to_i %></td>
-      <td class="text-right"><%= @total_order_profitability.to_i %></td>
-      </tr>
 
-      </tbody>
-</table>
 <div class="well well-sm">
 <ul class="list-inline">
   <li>* The pieces are including upsell</li>

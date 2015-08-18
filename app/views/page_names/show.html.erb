@@ -1,0 +1,19 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @page_name.name %>
+</p>
+
+<p>
+  <strong>Sort order:</strong>
+  <%= @page_name.sort_order %>
+</p>
+
+<p>
+  <strong>Description:</strong>
+  <%= @page_name.description %>
+</p>
+
+<%= link_to 'Edit', edit_page_name_path(@page_name) %> |
+<%= link_to 'Back', page_names_path %>

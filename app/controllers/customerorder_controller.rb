@@ -18,13 +18,15 @@ def newcall
     new_call
     #if order is not null then create orderline with order id
     @order_line = OrderLine.new()
-  
+
+   
     if @order_id.present?
         @order_line.orderid = @order_id  
         specific_addon_product_lists  
-      
+      #update_page_trail(page_name)
+      update_page_trail("neworder / add products")
     end
-      
+     
     @newproductlist = ProductList.take(0)
     
 
@@ -55,6 +57,8 @@ end
 
 def products
     new_call
+
+    
     #if order is not null then create orderline with order id
     @order_line = OrderLine.new()
   
@@ -63,6 +67,8 @@ def products
         specific_addon_product_lists  
        
     end
+    #update_page_trail(page_name)
+    update_page_trail("neworder / add products (old page)")
 
   respond_with(@order_master, @order_lines, @order_line)
 end
@@ -72,7 +78,8 @@ def offline
     employee = Employee.where(employeecode: current_user.employee_code)
     @user_file_name =  employee.last.mobile || "Not Set" << ".cli"
 
-
+     #update_page_trail(page_name)
+    update_page_trail("offline order")
 end
 
 def uploadcall
@@ -101,7 +108,7 @@ def uploadcall
 end
 
 def add_products
-   
+   #post
     
      new_call
     orderid = 0
@@ -131,7 +138,7 @@ def add_products
     end
 
   def add_basic_upsell
-        
+        #post
      if params[:product_list_id].present?
       product_list_id = params[:product_list_id]
       order_id = params[:order_id]
@@ -204,7 +211,9 @@ def add_products
       flash[:success] = "#{success}"
 
       #respond_with(@order_master, @order_lines, @customer_address, @customer)
-
+      
+      #update_page_trail(page_name)
+      update_page_trail("address")
   end
 
   def add_address
@@ -249,7 +258,8 @@ def add_products
     #@generalproductaddonlists = ProductList.where('active_status_id = ?',  10000).where(product_variant_id: product_variants).joins(:product_variant).order("product_variants.name") 
 
     @generalproductaddonlists = ProductList.where('product_lists.active_status_id = ?',  10000).joins(:product_variant).where("product_variants.activeid = ? and product_variants.product_sell_type_id = ?", 10000, 10001).order("product_variants.name")  
-    
+     #update_page_trail(page_name)
+      update_page_trail("upsell")
   end
 
   def add_upsell
@@ -266,7 +276,8 @@ def add_products
   end
 
   def show_offers
-
+    #update_page_trail(page_name)
+      update_page_trail("offers")
   end
 
   def add_offer
@@ -324,7 +335,8 @@ def add_products
   end
 
 
-    
+    #update_page_trail(page_name)
+      update_page_trail("payment")
     #respond_with(@order_master, @order_lines,  @customer_credit_card_o, @customer_credit_card)
   end
 
@@ -390,6 +402,8 @@ end
             flash[:success] = " Media #{medianame} with state #{@order_master.customer_address.state.upcase} added " 
             return redirect_to review_path(:order_id => @order_master.id)
           else
+            #update_page_trail(page_name)
+            update_page_trail("channel")
             @medialist =  Medium.where(active:1).where('dnis = ?', @order_master.calledno).order("updated_at DESC")
           end 
         end
@@ -461,13 +475,15 @@ end
        end
         
       
-      
+      #update_page_trail(page_name)
+      update_page_trail("review")
     #respond_with(@order_master, @order_lines, @customer, @customer_address)
   end
   
   def process_order
         #this is post 
-
+         order_number = []
+        msg = nil
       #check for address
       if @order_master.customer_address_id.nil?
         flash[:error] = "Customer Address is missing " 
@@ -490,13 +506,10 @@ end
         flash[:error] = 'You have not added any regular products, this order cannot be processed!'
          redirect_to orderreview_path(:order_id => @order_master.id) 
        end
-
+       
        if @order_lines_regular.count > 1
         notices = []
         notice = ""
-        order_number = []
-        msg = nil
-      
         
         #@review_message = "There are #{@order_lines_regular.count} products, this order would be split into #{@order_lines_regular.count} orders."
           # use this to duplicate_order
@@ -510,41 +523,38 @@ end
             #switch the order line to new order master
             #first the regular product
             order.update(orderid: new_order)
-            if @order_lines_basic.count > 0
-              #find any related upsell product
-             
+            if @order_lines_basic.count > 0           
               list_of_upsells = ProductMasterAddOn.where(product_master_id: order.product_master_id)
               .pluck(:product_list_id)
-           
               sold_upsells = @order_lines_basic.where(product_list_id: list_of_upsells)
                 if sold_upsells.count > 0
-
                   sold_upsell = sold_upsells.first
                    #notice +=  "Found a matching product from list of upsell #{sold_upsell.description}"
                   sold_upsell.update(orderid: new_order)
                 end #checked if basic upsell is found to be matching
-           
-            #notice +=  "New order created #{new_order} and processed Order No is #{orderprocessed}"
             end #check if upsell if found
  
             orderprocessed = update_customer_order_list(new_order)
+              order_split = OrderMaster.find(new_order)
 
-           order_number << order.external_order_no + " for Rs " + order.total.to_i.to_s
+           order_number << order_split.external_order_no + " for Rs " + order_split.grand_total.to_i.to_s
+              
             
-          end #loop through the order lines Regular 
-
+      end #loop through the order lines Regular 
           #save orderline
             orderline_last = OrderLine.where(orderid: @order_master.id)
             orderline_last.each do |ordl|
               ordl.save
             end
 
-           orderprocessed = update_customer_order_list(@order_master.id)
-           
+          orderprocessed = update_customer_order_list(@order_master.id)
+          
+           order_final = OrderMaster.find(@order_master.id)
+
           notice += "This order has been be split in #{@order_lines_regular.count} orders"
         
-          order_number << @order_master.external_order_no + " for Rs " + @order_master.total.to_i.to_s
-            payment_mode_id = @order_master.orderpaymentmode_id
+          order_number << order_final.external_order_no + " for Rs " + order_final.grand_total.to_i.to_s
+            payment_mode_id = order_final.orderpaymentmode_id
             payment_mode_id = payment_mode_id.to_i
             case payment_mode_id
             when 10000 #paid over CC
@@ -552,14 +562,15 @@ end
             when 10001
               msg = " Please pay cash on delivery "
             end
+
          flash[:notice] = notice
         else #IF ONLY one regular product found
 
           # after this is done complete the ordering
           orderprocessed = update_customer_order_list(@order_master.id)
-           
-           order_number << ord.external_order_no + " for Rs " + ord.total.to_i.to_s
-            payment_mode_id = ord.orderpaymentmode_id
+           order_master = OrderMaster.find(@order_master.id)
+          order_number << order_master.external_order_no  + " for Rs " + order_master.grand_total.to_i.to_s
+            payment_mode_id = order_master.orderpaymentmode_id
             payment_mode_id = payment_mode_id.to_i
             case payment_mode_id
             when 10000 #paid over CC
@@ -579,7 +590,10 @@ end
             alt_mobile_no: @order_master.customer.alt_mobile,
             message: message)
 
-    redirect_to summary_path(:order_id => @order_master.id) 
+          flash[:success] = "SMS: #{message}"
+
+    redirect_to summary_path(:order_id => @order_master.id)
+     
 
   end
   def summary
@@ -587,8 +601,9 @@ end
       order_id = params[:order_id]
     #   customer
     #   @cust_details_id = @order_master.external_order_no
-       @ordernos = []
-        order_number = []
+      @ordernos = []
+      order_number = []
+       msg = nil
     # #mix the orders to add all the related orders
        @order_master_lists = OrderMaster.where('id = ? OR original_order_id = ?', order_id, order_id)
    
@@ -599,16 +614,50 @@ end
        else
           @order_master_lists.each do |ord|
             @ordernos << ord.external_order_no << " "
-            order_number << ord.external_order_no
-       end
+
+            # order_number << ord.external_order_no + " for Rs " + ord.total.to_i.to_s
+            # payment_mode_id = ord.orderpaymentmode_id
+            # payment_mode_id = payment_mode_id.to_i
+            # case payment_mode_id
+            # when 10000 #paid over CC
+            #   msg = " Thanks for payment "
+            # when 10001
+            #   msg = " Please pay cash on delivery "
+            # end
+
+        end
+         
+          orderprocessed = update_customer_order_list(@order_master.id)
+           
+           # order_number << @order_master.external_order_no + " for Rs " + @order_master.grand_total.to_i.to_s
+           #  payment_mode_id = @order_master.orderpaymentmode_id
+           #  payment_mode_id = payment_mode_id.to_i
+           #  case payment_mode_id
+           #  when 10000 #paid over CC
+           #    msg = " Thanks for payment "
+           #  when 10001
+           #    msg = " Please pay cash on delivery "
+           #  end
          
           @order_message = "Awesome, #{@order_master_lists.count}  order successfully processed"
           @order_processed_next_steps = "Please close this window and wait for next call"
-          flash[:success] = "Awesome,this order is successfully processed"
+          
+          # message = "Thanks for Order, #{order_number.join(",")}, products will reach you in 7-10 days. #{msg} Telebrands"
+          # message = message[0..159]
+          # flash[:success] = "SMS: #{message}"
+          # message = "Thanks for Order, #{order_number.join(",")}, products will reach you in 7-10 days. #{msg} Telebrands"
+          # message = message[0..159]
+          # @sms_message = MessageOnOrder.create(customer_id: @order_master.customer_id, 
+          #   message_status_id: 10000, message_type_id: 10000,
+          #   mobile_no: @order_master.customer.mobile, 
+          #   alt_mobile_no: @order_master.customer.alt_mobile,
+          #   message: message)
 
        end
 
      end
+     #update_page_trail(page_name)
+      update_page_trail("summary")
   end
 
   #other menus
@@ -618,6 +667,8 @@ end
     @interactioncategorylist =  InteractionCategory.where("sortorder >= 10")
     @interactionprioritylist =  InteractionPriority.all
     respond_with(@interaction_master, @customer)
+    #update_page_trail(page_name)
+      update_page_trail("new dealer")
   end
 
   def created_new_dealer
@@ -644,12 +695,22 @@ end
         end
 
       end
-          #respond_with(@cities, @address_dealer)
-    end
+      #update_page_trail(page_name)
+      update_page_trail("existing dealers")
+      #respond_with(@cities, @address_dealer)
+  end
 
 
 
   private
+  def update_page_trail(page_name)
+    url = request.original_url
+    @empcode = current_user.employee_code
+    employee_id = Employee.where(employeecode: @empcode).first.id
+    #.permit(:name, :order_id, :page_id, :url, :employee_id, :duration_secs)
+    PageTrail.create(name: page_name, order_id: @order_id, url: url, employee_id: employee_id)
+
+  end
     def allowprocessing
          
       if !params[:order_id].present?
@@ -659,6 +720,9 @@ end
           return @allow_processing =  1 
       end
       if @order_master.customer_address_id.blank?
+       return @allow_processing = 1
+      end
+      if @order_master.external_order_no.blank?
        return @allow_processing = 1
       end
        if @order_master.customer_id.blank?
@@ -924,8 +988,8 @@ end
       if pro_order_master.orderpaymentmode_id == 10000
         customer_credit_card = CustomerCreditCard.where(customer_id: pro_order_master.customer_id).last
         creditcardno =  customer_credit_card.card_no.truncate(20)
-        expmonth = customer_credit_card.expiry_mon.truncate(20).rjust(2, '0')
-        expyear = customer_credit_card.expiry_yr_string.truncate(20).rjust(4, '0')
+        expmonth = customer_credit_card.expiry_mon.truncate(2).rjust(2, '0')
+        expyear = customer_credit_card.expiry_yr_string.truncate(4).rjust(4, '0')[-2..-1]
         cardtype = CreditCard.find_type(creditcardno).truncate(20)
         creditcardcharges = "Y"
       end
@@ -1123,8 +1187,6 @@ end
           pro_order_master.update(external_order_no: order_num.to_s, order_status_master_id: 10003) 
 
           return order_num.to_s #customer_order_list.ordernum
-       
-
       end
 
 

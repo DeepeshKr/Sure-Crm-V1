@@ -155,7 +155,7 @@ class MediaCostMastersController < ApplicationController
     redirect_to media_cost_masters_path(:media_id => @media_cost_master.media_id)
     #respond_with(@media_cost_master)
   end 
-
+ 
   private
     def set_media_cost_master
       @media_cost_master = MediaCostMaster.find(params[:id])

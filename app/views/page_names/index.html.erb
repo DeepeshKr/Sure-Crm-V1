@@ -1,0 +1,31 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Listing Page Names</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Sort order</th>
+      <th>Description</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @page_names.each do |page_name| %>
+      <tr>
+        <td><%= page_name.name %></td>
+        <td><%= page_name.sort_order %></td>
+        <td><%= page_name.description %></td>
+        <td><%= link_to 'Show', page_name %></td>
+        <td><%= link_to 'Edit', edit_page_name_path(page_name) %></td>
+        <td><%= link_to 'Destroy', page_name, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Page name', new_page_name_path %>

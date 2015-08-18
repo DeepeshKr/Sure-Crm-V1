@@ -1,0 +1,16 @@
+<%= simple_form_for(@page_trail) do |f| %>
+  <%= f.error_notification %>
+
+  <div class="form-inputs">
+    <%= f.input :name %>
+    <%= f.input :order_id %>
+    <%= f.input :page_id %>
+    <%= f.input :url %>
+    <%= f.input :employee_id %>
+    <%= f.input :duration_secs %>
+  </div>
+
+  <div class="form-actions">
+    <%= f.button :submit %>
+  </div>
+<% end %>

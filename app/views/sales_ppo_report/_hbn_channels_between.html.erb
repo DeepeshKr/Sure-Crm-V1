@@ -8,7 +8,7 @@
        <th>Nos</th>
      <th>Value</th>
       <th>Corr</th>
-     <th>Comm</th>
+     
      </tr> 
   </thead>
 <tbody>
@@ -31,9 +31,7 @@
 <td class="text-right">
    <%= c[:correction] %> 
 </td>
-<td class="text-right">
-   <%= c[:commission] %> 
-</td>
+
 
   </tr> 
 
@@ -50,3 +48,13 @@
   <h5>Please select a date to generate the report or No sales in HBN </h5>
   </div>
   <% end %>
+
+<hr>
+ <% if @hbn_product_orders.present? > %>
+  <ol>
+ <% @hbn_product_orders.each do |c| %>
+<li> <%= c %></li>
+
+ <% end -%>
+</ol>
+<% end %>

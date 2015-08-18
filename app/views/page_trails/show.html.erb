@@ -1,0 +1,34 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @page_trail.name %>
+</p>
+
+<p>
+  <strong>Order:</strong>
+  <%= @page_trail.order_id %>
+</p>
+
+<p>
+  <strong>Page:</strong>
+  <%= @page_trail.page_id %>
+</p>
+
+<p>
+  <strong>Url:</strong>
+  <%= @page_trail.url %>
+</p>
+
+<p>
+  <strong>Employee:</strong>
+  <%= @page_trail.employee_id %>
+</p>
+
+<p>
+  <strong>Duration secs:</strong>
+  <%= @page_trail.duration_secs %>
+</p>
+
+<%= link_to 'Edit', edit_page_trail_path(@page_trail) %> |
+<%= link_to 'Back', page_trails_path %>
