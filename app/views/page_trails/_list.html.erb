@@ -1,20 +1,8 @@
-<p id="notice"><%= notice %></p>
-<div class="row">
-<div class="col-xs-4">
-<h3>Recent Page Visits</h3>
-</div>
-<div class="col-xs-8">
-<%= render 'search' %>
-</div>
-</div>
-
-
 <table class="table table-hover">
   <thead>
     <tr>
       <th>Page Name</th>
       <th>Order</th>
-     
       <th>Url</th>
       <th>Employee</th>
       <th>Est Secs</th>
@@ -27,7 +15,6 @@
       <tr>
         <td><%= page_trail.name %></td>
         <td><%= page_trail.order_id %></td>
-       
         <td><%= page_trail.url %></td>
         <td><%= page_trail.employee.name if page_trail.employee %></td>
         <td><%= page_trail.duration_secs %></td>
@@ -36,6 +23,3 @@
     <% end %>
   </tbody>
 </table>
-
-<br>
-

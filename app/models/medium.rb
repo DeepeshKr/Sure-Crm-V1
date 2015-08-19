@@ -5,6 +5,7 @@ class Medium < ActiveRecord::Base
    has_many :order_master,  foreign_key: "media_id"
    has_many :media_tape, foreign_key: "media_id"
    has_many :media_cost_master, foreign_key: "media_id"
+   has_many :promotion, foreign_key: "media_id"
 
    belongs_to :media_commision,  foreign_key: "media_commision_id"
    belongs_to :media_group,  foreign_key: "media_group_id"

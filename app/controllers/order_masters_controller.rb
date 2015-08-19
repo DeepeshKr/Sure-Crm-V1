@@ -252,6 +252,6 @@ class OrderMastersController < ApplicationController
         :subtotal, :taxes, :shipping, :codcharges, :total, :order_status_master_id, 
         :orderpaymentmode_id, :campaign_playlist_id, :notes, :order_source_id,
         :media_id, :corporate_id, :order_for_id, :userip, :sessionid, :calledno,
-        :original_order_id)
+        :original_order_id, :promotion_id)
     end
 end
