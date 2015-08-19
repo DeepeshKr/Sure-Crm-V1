@@ -725,7 +725,7 @@ def drop_downs
 media_bdm = Medium.all.select(:employee_id).distinct
 @all_bdm = Employee.all.where(id: media_bdm)
 
-@sales_staff = Employee.all.where("employee_role_id > 7")
+@sales_staff = Employee.all.joins(:employee_role).where("employee_roles.sortorder > 7")
 
 
 end
