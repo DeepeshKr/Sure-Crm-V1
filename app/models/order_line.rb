@@ -18,7 +18,7 @@ class OrderLine < ActiveRecord::Base
 
   after_create :updateorder # :creator
 
-  after_save :updateorder # :updator
+  #after_save :updateorder # :updator
 
   after_update :updateorder
 
