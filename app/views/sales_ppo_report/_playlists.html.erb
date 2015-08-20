@@ -10,15 +10,20 @@
   </thead>
 
   <tbody>
+
   <% if @old_campaign_playlists.present? then %>
     <% @old_campaign_playlists.each do |campaign_playlist| %>
         <tr >
-         <td><%= @earlier_day %></td>
+         <td>
+         <small>
+         Previous Day: 
+         <%= @earlier_day %></small>
+         </td>
          
-          <td><%= campaign_playlist.product_variant.name if campaign_playlist.product_variant  %>
+          <td> <small><%= campaign_playlist.product_variant.name if campaign_playlist.product_variant  %></small>
 
           </td>
-          <td><%= campaign_playlist.starttime %></td>
+          <td> <small><%= campaign_playlist.starttime %></small></td>
            </tr>
        
       <% end %>

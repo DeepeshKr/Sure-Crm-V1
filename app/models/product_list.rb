@@ -22,35 +22,34 @@ class ProductList < ActiveRecord::Base
 
 
   def productinfo
-     self.name << " (" << self.list_barcode << ")"
+     self.name << " (" << self.extproductcode << ")"
    end
 
    def productlistdetails
     if self.product_variant_id.present?
-
-   if ProductVariant.where(id: self.product_variant_id).present?
-         product_variant = ProductVariant.find(self.product_variant_id)
-     self.name << " Price:" << product_variant.price.to_s << " Shipping:" << product_variant.shipping.to_s << " (" << self.extproductcode << ")"
+      if ProductVariant.where(id: self.product_variant_id).present?
+           product_variant = ProductVariant.find(self.product_variant_id)
+       self.name << " Price:" << product_variant.price.to_s << " Shipping:" << product_variant.shipping.to_s << " (" << self.extproductcode << ")"
+      end
     end
   end
-  end
 
-   def price
-     if self.product_variant_id.present?
-    if ProductVariant.where(id: self.product_variant_id).present?
-      product_variant = ProductVariant.find(self.product_variant_id)
-    return "Basic Price : " << (product_variant.price || 0).to_s << "  Shipping : " << (product_variant.shipping || 0).to_s
+  def price
+    if self.product_variant_id.present?
+      if ProductVariant.where(id: self.product_variant_id).present?
+        product_variant = ProductVariant.find(self.product_variant_id)
+      return "Basic Price : " << (product_variant.price || 0).to_s << "  Shipping : " << (product_variant.shipping || 0).to_s
+      end
     end
-  end
   end
 
   def shipping
-     if self.product_variant_id.present?
+    if self.product_variant_id.present?
       if ProductVariant.find(self.product_variant_id).present?
-      product_variant = ProductVariant.find(self.product_variant_id)
-    return  "Shipping : " << (product_variant.shipping || 0).to_i.to_s
-  end
-end
+        product_variant = ProductVariant.find(self.product_variant_id)
+        return  "Shipping : " << (product_variant.shipping || 0).to_i.to_s
+      end
+    end
   end
   
   def codcharges

@@ -1,4 +1,5 @@
 class PageTrailsController < ApplicationController
+  before_action { protect_controllers(7) } 
   before_action :set_page_trail, only: [:show, :edit, :update, :destroy]
 
   # GET /page_trails
@@ -7,18 +8,18 @@ class PageTrailsController < ApplicationController
     dropdowns
     if params.has_key?(:order_id) 
       
-      @search = "Search for Order No: " +  params[:search].upcase
-      @searchvalue = params[:search].upcase   
+      @search = "Search for Order No: " +  params[:order_id]
+      @order_id = params[:order_id].upcase   
       @page_trails = PageTrail.where(order_id: params[:order_id]).paginate(:page => params[:page], :per_page => 50)
 
-      @found = @product_masters.count
+      @found = @page_trails.count
     elsif params.has_key?(:employee_id) 
       
-      @search = "Search for Order No: " +  params[:search].upcase
-      @searchvalue = params[:search].upcase   
+      @search = "Search for Employee Id: " + params[:employee_id]
+      @employee_id = params[:employee_id]
       @page_trails = PageTrail.where(employee_id: params[:employee_id]).paginate(:page => params[:page], :per_page => 50)
 
-      @found = @product_masters.count
+      @found = @page_trails.count
      else
       @page_trails = PageTrail.all.order("created_at DESC").paginate(:page => params[:page], :per_page => 50) 
      end
@@ -83,6 +84,7 @@ class PageTrailsController < ApplicationController
   private
   def dropdowns
     @sales_staff = Employee.all.joins(:employee_role).where("employee_roles.sortorder > 7")
+    .order("first_name")
   end
     # Use callbacks to share common setup or constraints between actions.
     def set_page_trail

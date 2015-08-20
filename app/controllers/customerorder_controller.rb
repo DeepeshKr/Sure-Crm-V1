@@ -606,7 +606,18 @@ end
        msg = nil
     # #mix the orders to add all the related orders
        @order_master_lists = OrderMaster.where('id = ? OR original_order_id = ?', order_id, order_id)
-   
+      @show_details = 1
+     time_as_now = Time.zone.now - 1.hour
+      if @order_master_lists.where("updated_at > time_as_now")
+         @show_details = 0
+      end
+      @empcode = current_user.employee_code
+      cur_employee_id = Employee.where(employeecode: @empcode).first.id
+      if @order_master_lists.where("employee_id <> ?", cur_employee_id)
+         update_page_trail("unauthorised view of order attempted by user #{@empcode}")
+          @show_details = 0
+      end
+
        if @order_master_lists.first.external_order_no.blank?
           @order_message = "The orders are not processed"
           @order_processed_next_steps = "Please go back and process the order"
@@ -777,6 +788,18 @@ end
             if campaign_playlist.count > 0
               @order_master.update(campaign_playlist_id: campaign_playlist.first.id)
               updates = "Updated at #{t} order for #{channel} with show #{campaign_playlist.name} at Hour:#{nowhour}  Minutes:#{nowminute}"
+            else
+              #update for earlier date playlists
+              #this is designed for the playlist to go back as as required to assign this order for 
+              # a particular date
+              older_campaign_playlist = CampaignPlaylist.where("TRUNC(for_date) <  ?", todaydate)
+              .where(list_status_id: 10000).where(productvariantid: product_variant_id)
+              .where("start_hr <= ? and start_min <= ?", nowhour, nowminute)
+              .order("start_hr, start_min DESC")
+              if older_campaign_playlist.count > 0
+                @order_master.update(campaign_playlist_id: older_campaign_playlist.first.id)
+                updates = "Updated at #{t} order for #{channel} with show #{older_campaign_playlist.name} at Hour:#{nowhour}  Minutes:#{nowminute}"  
+              end
             end
           end
           @order_master.update(notes: updates)
@@ -1217,6 +1240,13 @@ end
      order_master =  OrderMaster.find(orderid)
      statusno = order_master.order_status_master_id
       ondate = order_master.updated_at.to_s
+
+      update_page_trail("checked processed order")
+      @empcode = current_user.employee_code
+      employee_id = Employee.where(employeecode: @empcode).first.id
+      if order_master.employee_id != employee_id
+         update_page_trail("unauthorised view of order attempted by user #{@empcode}")
+      end
       if order_master.order_status_master_id >= 10003
          flash[:error] = "This order no #{orderid} is already processed at #{ondate}" 
         redirect_to summary_path(:order_id => @order_master.id)

@@ -211,8 +211,7 @@ end
 
 def grand_total
 
-return self.subtotal + self.shipping + self.codcharges 
-+ self.servicetax + self.maharastracodextra - self.creditcardcharges - self.maharastraccextra
+return self.subtotal + self.shipping + self.codcharges + self.servicetax + self.maharastracodextra + self.creditcardcharges + self.maharastraccextra
 
 end
 

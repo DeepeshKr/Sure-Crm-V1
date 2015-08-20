@@ -8,8 +8,6 @@ class MediaCostMaster < ActiveRecord::Base
 belongs_to :medium, foreign_key: "media_id"
 
 def cost_segment
-        return self.total_cost.to_s + " (" + (self.slot_percent * 100).to_s + ")" 
-        + "-  (" + (self.str_hr).to_s + ":"  + (self.str_min).to_s   
-        + "-  (" + (self.end_hr).to_s + ":"  + (self.end_min).to_s + ")" 
+    return self.total_cost.to_s + " - " + (self.slot_percent * 100).to_s + "%" + " - (" + (self.str_hr).to_s + ":"  + (self.str_min).to_s  + "-" + (self.end_hr).to_s + ":"  + (self.end_min).to_s + ")" 
     end
 end

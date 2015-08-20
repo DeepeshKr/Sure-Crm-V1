@@ -94,6 +94,9 @@ class SalesPpoReportController < ApplicationController
     
     if params.has_key?(:for_date)
      for_date =  Date.strptime(params[:for_date], "%Y-%m-%d")
+
+      @or_for_date = for_date.strftime("%Y-%m-%d")
+
     end
         @total_nos = 0
         @total_pieces = 0
@@ -209,6 +212,7 @@ class SalesPpoReportController < ApplicationController
      for_date =  Date.strptime(params[:for_date], "%Y-%m-%d")
      @from_date = for_date.beginning_of_day - 330.minutes
      @to_date = for_date.end_of_day - 330.minutes
+     @or_for_date = for_date.strftime("%Y-%m-%d")
     end
     @sno = 1
    
@@ -237,8 +241,7 @@ class SalesPpoReportController < ApplicationController
     all_orderlist.each do |med |
       @total_orders_product_cost += med.productcost ||= 0
       @total_orders_revenue += med.productrevenue  ||= 0
-      @total_orders_media_var_cost += med.media_commission ||= 0
-      @total_orders_nos += 1
+      
     end
 
        ## Add all the totals here ###
@@ -246,6 +249,7 @@ class SalesPpoReportController < ApplicationController
           @total_order_sub_total = (all_orderlist.sum(:subtotal)) 
           @total_orders_sales = (@total_order_shipping + @total_order_sub_total)
           @total_orders_pieces = (all_orderlist.sum(:pieces)) 
+          @total_orders_nos = (all_orderlist.count(:pieces)) 
 
            ## Apply all the corrections here ###
           @total_orders_nos = @total_orders_nos* @correction
@@ -292,9 +296,7 @@ class SalesPpoReportController < ApplicationController
           fixed_cost = playlist.cost
 
           orderlist.each do |med |
-            product_cost += med.productcost ||= 0
-            revenue += med.productrevenue  ||= 0
-            media_var_cost += med.media_commission ||= 0
+            product_cost = med.productcost ||= 0
           end
 
           total_shipping = orderlist.sum(:shipping)
@@ -303,6 +305,7 @@ class SalesPpoReportController < ApplicationController
           nos = orderlist.count()
           pieces = orderlist.sum(:pieces)
           revenue = revenue * @correction
+          product_cost = product_cost * nos
           product_cost = (product_cost * @correction) 
           product_cost += (product_cost * 0.10)
           totalorders = totalorders * @correction
@@ -477,42 +480,7 @@ def hbn_channels_between
       @start_time = Time.strptime(params[:start_time], "%Y-%m-%d %H:%M") 
         @end_time = Time.strptime(params[:end_time], "%Y-%m-%d %H:%M") 
 
-        if params.has_key?(:product_variant)
-        ###########################
-        #for a particular show only
-        #############
-        @hbn_product_orders = OrderLine.joins(:order_master)
-        .where('ordermasters.orderdate >= ?', params[:start_time])
-        .where('ordermasters.ORDER_STATUS_MASTER_ID > 10002')
-        .where("ordermasters.media_id in (@hbnlist)")
-        .where(productvariant_id: params[:product_variant])
-        .select("orderid").distinct
-
-        hbn_order_masters = OrderMaster.where(orderid: @hbn_order_masters)
-        .select(:media_id).distinct #.limit(10)
-        hbn_order_list ||= []
-
-       hbn_order_masters.each do |o| #hbn order loop begin
-            e = o.media_id
-           
-            name = (Medium.find(e).name  || "NA" if Medium.find(e).name.present?)
-            orderlist = OrderMaster.where('ORDER_STATUS_MASTER_ID > 10002')
-            .where('orderdate >= ? AND orderdate <= ?', @start_time, @end_time)
-            .where(media_id: e)
-
-            orderlist.each {|ol| timetaken += ol.timetaken  }
-            orderlist.each {|ol| media_var_cost += ol.media_commission  }
-           
-             
-            totalorders = orderlist.sum(:total)
-            noorders = orderlist.count()
-            hbn_order_list << {:total => totalorders,
-            :id => e, :channel => name, :for_date =>  @or_for_date,
-            :nos => noorders, :correction => media_correction,
-            :commission => media_var_cost }
-
-          end
-        else
+        
         
         hbn_order_masters = OrderMaster.where('ORDER_STATUS_MASTER_ID > 10002')
         .where('orderdate >= ? AND orderdate <= ?', @start_time, @end_time)
@@ -540,7 +508,7 @@ def hbn_channels_between
             :commission => media_var_cost.to_i }
        
         end #hbn order loop end
-      end
+      
         @hbn_order_list = hbn_order_list.sort_by{|c| c[:total]}.reverse 
 
        
@@ -566,8 +534,8 @@ def shows_between
        @start_time = Time.strptime(params[:start_time], "%Y-%m-%d %H:%M") 
         @end_time = Time.strptime(params[:end_time], "%Y-%m-%d %H:%M") 
 
-        
-        if @start_time.hour < 4
+        @startsecs = ((@start_time.hour) * 60 * 60) + ((@start_time.min) * 60)
+        if @start_time.hour <= 4
           #show previous day shows as well
           previous_start_hr = 20
           case @start_time.hour # a_variable is the variable we want to compare
@@ -590,13 +558,17 @@ def shows_between
          .joins(:campaign).where("campaigns.startdate = ?", previous_day)
          .where('campaigns.mediumid IN (?)', @hbnlist)
         .order(:start_hr, :start_min, :start_sec).where(list_status_id: 10000)
-          
+         
+          @startsecs = 0
         else
+
           @start_time = Time.strptime(params[:start_time], "%Y-%m-%d %H:%M") 
           @end_time = Time.strptime(params[:end_time], "%Y-%m-%d %H:%M") 
 
           @start_time = @start_time - 4.hours
           @end_time = @end_time 
+
+
         end
      
 
@@ -604,7 +576,7 @@ def shows_between
       @Show_end_time = @end_time.strftime("%H:%M") || 0
 
       # @campaign_playlists =  CampaignPlaylist.where(list_status_id: 10000).limit(10)
-      @startsecs = ((@start_time.hour) * 60 * 60) + ((@start_time.min) * 60)
+     
       @endsecs = (@end_time.hour * 60 * 60) + (@end_time.min * 60) 
 
        @campaign_playlists =  CampaignPlaylist.where("(start_hr * 60 * 60) + (start_min * 60) >= ? and (start_hr * 60 *60 )  + (start_min *60) <= ?", @startsecs, @endsecs)
@@ -612,14 +584,7 @@ def shows_between
        .where('campaigns.mediumid IN (?)', @hbnlist)
       .order(:start_hr, :start_min, :start_sec).where(list_status_id: 10000)
      
-      elsif params.has_key?(:product_variant)
-
-        @campaign_playlists =  CampaignPlaylist.joins(:campaign)
-        .where("campaigns.startdate >= ?", for_date)
-       .where(productvariantid: params[:product_variant])
-      .order(:start_hr, :start_min, :start_sec).where(list_status_id: 10000)
       
-
     end
    
  end

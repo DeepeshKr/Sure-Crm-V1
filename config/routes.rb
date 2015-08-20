@@ -45,7 +45,7 @@ Rails.application.routes.draw do
   get 'sales_ppo_report/ppo_details'
   get 'ppo_details' => 'sales_ppo_report#ppo_details'
   get 'sales_ppo_report/orders'
-  get 'ppo_orders' => 'sales_ppo_report#orders'
+  get 'ppo_products' => 'sales_ppo_report#ppo_products'
 
   resources :tax_rates
 

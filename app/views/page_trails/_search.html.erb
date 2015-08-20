@@ -1,7 +1,7 @@
 <div class="row">
  <%= bootstrap_form_tag url: page_trails_path, :method => :GET, :enforce_utf8 => false do |f| %>
 <div class="col-xs-3">
-<%= text_field_tag(:order_id, nil, :class => "form-control", :required => "true", :placeholder => "Search order No", :value => @searchvalue  )   %>
+<%= text_field_tag(:order_id, @order_id, :class => "form-control", :required => "true", :placeholder => "Search order No", :value => @searchvalue  )   %>
 </div>
 
 <div class="col-xs-2">
@@ -13,7 +13,7 @@
   <%= form_tag  url_for(:controller => 'page_trails', :action => "index"), method: "get" do  %>
    	<div class="col-xs-5">
    
-    <%= select_tag :employee_id, options_from_collection_for_select(@sales_staff, :id, :name), :class => "form-control" %>
+    <%= select_tag :employee_id, options_from_collection_for_select(@sales_staff, :id, :name, selected: @employee_id), :class => "form-control" %>
     
   	</div>
   	<div class="col-xs-2">

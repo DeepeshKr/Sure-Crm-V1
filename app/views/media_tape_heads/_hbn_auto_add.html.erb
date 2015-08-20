@@ -24,11 +24,11 @@
 </div>
 <br/>
 <div class="row">
-	<div class="col-xs-10">
+	<div class="col-xs-8">
 		<%= collection_select(nil, :media_tape_head_id, @media_tape_head_list, :id, :name, {:prompt   => "Select a Media Tape Head"}, {:id => 'tapes_select', :class => "form-control"}) %>
 
 	</div>
-  <div class="col-xs-2">
+  <div class="col-xs-4">
     <%= collection_select(nil, :media_cost, @hbn_media_cost_master, :total_cost, :cost_segment, { :prompt => '-- Select Media Cost --'}, {:class => "form-control", :required => true }) %>
   </div>
 </div>

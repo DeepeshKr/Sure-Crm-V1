@@ -47,7 +47,7 @@
    <td><%= @sno %></td>
 
  <td><%= c[:show] %>
- <%= c[:more] %><br>
+ <%= c[:more] %> Id: <%= c[:campaign_id] %><br>
 <% if c[:product_cost_master] == 0 %>
 <span style="color:red">No Product Cost Found</span>
 <% else %>
@@ -111,32 +111,7 @@
     <th></th>
      </tr>
 
-     <tr>
-      <td colspan="3" >Grand Total (for the day)</td>
-      <td class="text-right"><%= @total_orders_nos.to_i %></td>
-      <td class="text-right"><%= @total_orders_pieces.to_i %></td>
-      <td class="text-right"><%= @total_orders_sales.to_i %></td>
-      <td class="text-right"><%= @total_orders_revenue.to_i %></td>
-      <td class="text-right"><%= @total_orders_product_cost.to_i  %></td>
-      <td class="text-right"><%= @total_orders_media_var_cost.to_i %></td>
-      <td class="text-right"><%= @total_orders_media_fixed_cost.to_i %></td>
-      <td class="text-right"><%= @total_orders_refund.to_i %></td>
-      <td class="text-right"><%= @total_order_profitability.to_i %></td>
-      <td></td>
-      </tr>
-      <tr>
-      <td colspan="3" >Balance</td>
-      <td class="text-right"><%= @total_orders_nos.to_i - @total_nos.to_i  %></td>
-      <td class="text-right"><%= @total_orders_pieces.to_i - @total_pieces.to_i %></td>
-      <td class="text-right"><%= @total_orders_sales.to_i  - @total_sales.to_i  %></td>
-      <td class="text-right"><%= @total_orders_revenue.to_i - @total_revenue.to_i %></td>
-      <td class="text-right"><%= @total_orders_product_cost.to_i - @total_product_cost.to_i %></td>
-      <td class="text-right"><%= @total_orders_media_var_cost.to_i - @total_var_cost.to_i  %></td>
-      <td class="text-right"><%= @total_orders_media_fixed_cost.to_i - @total_fixed_cost.to_i %></td>
-      <td class="text-right"><%= @total_orders_refund.to_i - @total_refund.to_i %></td>
-      <td class="text-right"><%= @total_order_profitability.to_i - @total_profit.to_i %></td>
-      <td></td>
-      </tr>
+     
   </tfoot>
   </table>
   <% else %>

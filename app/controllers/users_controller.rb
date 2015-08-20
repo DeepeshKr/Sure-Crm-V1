@@ -5,7 +5,12 @@ class UsersController < ApplicationController
   respond_to :html
   #before_filter :authenticate_user!
   def show
-    
+    @empcode = current_user.employee_code
+    employee_id = Employee.where(employeecode: @empcode).first.id
+    chkuser = User.where(employee_code: @empcode)
+    @userpas = chkuser.first
+    @userstatus = "This employee #{chkuser.first.name} has already got a Login Id: #{chkuser.first.employee_code} and password, you may change the password here"
+   
     @user = User.find(params[:id])
     @userroles = EmployeeRole.where('sortorder >= ?', current_user.employee_role.sortorder)
      #debugger
