@@ -216,52 +216,53 @@ class SalesPpoReportController < ApplicationController
     end
     @sno = 1
    
-        @total_orders_nos = 0
-        @total_orders_pieces = 0
-        @total_orders_sales = 0
-        @total_orders_revenue = 0
-        @total_orders_media_var_cost = 0
-        @total_orders_media_fixed_cost = 0
-        @total_orders_refund = 0         
-        @total_orders_product_cost = 0
-        @total_order_profitability = 0
+    #     @total_orders_nos = 0
+    #     @total_orders_pieces = 0
+    #     @total_orders_sales = 0
+    #     @total_orders_revenue = 0
+    #     @total_orders_media_var_cost = 0
+    #     @total_orders_media_fixed_cost = 0
+    #     @total_orders_refund = 0         
+    #     @total_orders_product_cost = 0
+    #     @total_order_profitability = 0
        
-      #for_date = for_date - 330.minutes
-        @hourlist ||= []
-        employeeunorderlist ||= []
+    #   #for_date = for_date - 330.minutes
+    # 
 
-    @searchaction = 'show'
+    # @searchaction = 'show'
 
-    @total_orders_media_fixed_cost = Medium.where(media_group_id: 10000).sum(:daily_charges)
+    # @total_orders_media_fixed_cost = Medium.where(media_group_id: 10000).sum(:daily_charges)
 
-    all_orderlist = OrderMaster.where('ORDER_STATUS_MASTER_ID > 10002')
-           .where('orderdate >= ? AND orderdate <= ?', for_date, to_date)
-           .where(media_id: @hbnlist) #.limit(10)
+    # all_orderlist = OrderMaster.where('ORDER_STATUS_MASTER_ID > 10002')
+    #        .where('orderdate >= ? AND orderdate <= ?', for_date, to_date)
+    #        .where(media_id: @hbnlist) #.limit(10)
 
-    all_orderlist.each do |med |
-      @total_orders_product_cost += med.productcost ||= 0
-      @total_orders_revenue += med.productrevenue  ||= 0
+    # all_orderlist.each do |med |
+    #   @total_orders_product_cost += med.productcost ||= 0
+    #   @total_orders_revenue += med.productrevenue  ||= 0
       
-    end
+    # end
 
-       ## Add all the totals here ###
-          @total_order_shipping = (all_orderlist.sum(:shipping)) 
-          @total_order_sub_total = (all_orderlist.sum(:subtotal)) 
-          @total_orders_sales = (@total_order_shipping + @total_order_sub_total)
-          @total_orders_pieces = (all_orderlist.sum(:pieces)) 
-          @total_orders_nos = (all_orderlist.count(:pieces)) 
+    #    ## Add all the totals here ###
+    #       @total_order_shipping = (all_orderlist.sum(:shipping)) 
+    #       @total_order_sub_total = (all_orderlist.sum(:subtotal)) 
+    #       @total_orders_sales = (@total_order_shipping + @total_order_sub_total)
+    #       @total_orders_pieces = (all_orderlist.sum(:pieces)) 
+    #       @total_orders_nos = (all_orderlist.count(:pieces)) 
 
-           ## Apply all the corrections here ###
-          @total_orders_nos = @total_orders_nos* @correction
-          @total_orders_pieces = @total_orders_pieces * @correction
-          @total_orders_revenue = @total_orders_revenue * @correction
-          @total_orders_product_cost = @total_orders_product_cost * @correction
-          @total_orders_product_cost += @total_orders_product_cost * 0.10
-          @total_orders_sales = @total_orders_sales * @correction
-          @total_orders_refund = @total_orders_sales * 0.02
+    #        ## Apply all the corrections here ###
+    #       @total_orders_nos = @total_orders_nos* @correction
+    #       @total_orders_pieces = @total_orders_pieces * @correction
+    #       @total_orders_revenue = @total_orders_revenue * @correction
+    #       @total_orders_product_cost = @total_orders_product_cost * @correction
+    #       @total_orders_product_cost += @total_orders_product_cost * 0.10
+    #       @total_orders_sales = @total_orders_sales * @correction
+    #       @total_orders_refund = @total_orders_sales * 0.02
           
-          @total_order_profitability = (@total_orders_revenue - (@total_orders_product_cost + @total_orders_media_fixed_cost + @total_orders_media_var_cost + @total_orders_refund)).to_i 
+    #       @total_order_profitability = (@total_orders_revenue - (@total_orders_product_cost + @total_orders_media_fixed_cost + @total_orders_media_var_cost + @total_orders_refund)).to_i 
 
+        @hourlist ||= []
+         employeeunorderlist ||= []
 
       @total_nos = 0
       @total_pieces = 0
@@ -294,25 +295,32 @@ class SalesPpoReportController < ApplicationController
           media_var_cost = 0
           product_cost = 0
           fixed_cost = playlist.cost
-
+          nos = 0
+          pieces = 0
           orderlist.each do |med |
-            product_cost = med.productcost ||= 0
+            product_cost += med.productcost 
+            revenue += med.productrevenue 
+            media_var_cost += med.media_commission
+            nos += 1
+            pieces += med.pieces
           end
 
           total_shipping = orderlist.sum(:shipping)
           total_sub_total = orderlist.sum(:subtotal) 
           totalorders = total_shipping + total_sub_total
-          nos = orderlist.count()
-          pieces = orderlist.sum(:pieces)
+          #nos = orderlist.count()
+          #pieces = orderlist.sum(:pieces)
+
+          nos =  nos * @correction
+          pieces = pieces * @correction
           revenue = revenue * @correction
-          product_cost = product_cost * nos
+          # #product_cost = product_cost * nos
           product_cost = (product_cost * @correction) 
           product_cost += (product_cost * 0.10)
           totalorders = totalorders * @correction
           refund = totalorders * 0.02
         
-          nos +=  nos * @correction
-          pieces += pieces * @correction
+         
           profitability = (revenue - (product_cost + fixed_cost + media_var_cost + refund)).to_i 
 
           ### check if product cost is found in product master
@@ -341,31 +349,156 @@ class SalesPpoReportController < ApplicationController
 
    
   end
+  def ppo_products
+    if params.has_key?(:campaign_id)
+      @total_nos = 0
+      @total_pieces = 0
+      @total_subtotal = 0
+      @total_shipping = 0
+      @total_sales = 0
+      @total_revenue = 0
+      @total_product_cost = 0
+      @total_var_cost = 0
+      @total_fixed_cost = 0
+      @total_cost = 0
+      @total_refund = 0
+      @total_profit = 0
+      @cost_per_order = 0
+      @profit_per_order = 0
+      @total_promo_cost = 0
 
-  def show_ppo_details
+      @campaign_playlist =  CampaignPlaylist.find(params[:campaign_id])
+      @order_masters = OrderMaster.where(campaign_playlist_id: params[:campaign_id]).order("created_at")
+
+      #  t = (330.minutes).from_now #Time.zone.now + 330.minutes
+      #     @nowhour = t.strftime('%H').to_i
+      #     @nowminute = t.strftime('%M').to_i
+      # @nowsecs = (@nowhour * 60 * 60) + (@nowminute * 60)
+      # #@startsecs = ((@start_time.hour) * 60 * 60) + ((@start_time.min) * 60)
+
+      # @all_campaign_playlists = CampaignPlaylist.where(list_status_id: 10000)
+      # .where(productvariantid: @campaign_playlist.productvariantid)
+      #       .where("TRUNC(for_date) =  ?", @campaign_playlist.for_date)
+      #       .where("(start_hr * 60 * 60) + (start_min * 60) <= ?", @nowsecs)
+      #       .order("start_hr DESC, start_min DESC")
+
+        @order_masters.each do |order |
+            @total_nos += 1
+            @total_pieces += order.pieces
+            @total_subtotal += order.subtotal
+            @total_shipping += order.shipping
+            @total_sales += order.total
+            @total_revenue += order.productrevenue
+            @total_product_cost += order.productcost
+            @total_var_cost += order.media_commission
+            if order.promotion.present?
+              @total_promo_cost += order.promotion.promo_cost
+            end
+            @total_fixed_cost += order.campaign_playlist.cost
+            @total_refund += @total_sales * 0.02
+            @total_profit += (@total_revenue - (@total_product_cost + @total_fixed_cost + @total_var_cost +  @total_refund + @total_promo_cost)).to_i 
+
+        end
+        @total_cost_per_order = (@total_product_cost + @total_fixed_cost + @total_var_cost +  @total_refund + @total_promo_cost).to_i
+        @cost_per_order = @total_cost_per_order / @total_pieces
+        @profit_per_order = @total_profit / @total_pieces
+
+         @total_nos_60 = @total_nos * 0.6
+         @total_pieces_60 = @total_pieces * 0.6
+         @total_subtotal_60 = @total_subtotal * 0.6
+         @total_shipping_60 = @total_shipping * 0.6
+         @total_sales_60 = @total_sales * 0.6
+         @total_revenue_60 = @total_revenue * 0.6
+         @total_product_cost_60 = @total_product_cost * 0.6
+         @total_promo_cost_60 = @total_promo_cost * 0.6
+         @total_var_cost_60 = @total_var_cost * 0.6
+         @total_fixed_cost_60 = @total_fixed_cost 
+         @total_refund_60 = @total_refund * 0.6
+         @total_profit_60 = @total_profit * 0.6
+         @total_cost_per_order_60 =  @total_cost_per_order * 0.6
+         @cost_per_order_60 = @total_cost_per_order_60 / @total_pieces_60
+         @profit_per_order_60 = @total_profit_60 / @total_pieces_60
+
+
+         @total_nos_50 = @total_nos * 0.5
+         @total_pieces_50 = @total_pieces * 0.5
+         @total_subtotal_50 = @total_subtotal * 0.5
+         @total_shipping_50 = @total_shipping * 0.5
+         @total_sales_50 = @total_sales * 0.5
+         @total_revenue_50 = @total_revenue * 0.5
+         @total_product_cost_50 = @total_product_cost * 0.5
+         @total_promo_cost_50 = @total_promo_cost * 0.5
+         @total_var_cost_50 = @total_var_cost * 0.5
+         @total_fixed_cost_50 = @total_fixed_cost 
+         @total_refund_50 = @total_refund * 0.5
+         @total_profit_50 = @total_profit * 0.5
+
+         @total_cost_per_order_50 =  @total_cost_per_order * 0.5
+         @cost_per_order_50 = @total_cost_per_order_50 / @total_pieces_50
+         @profit_per_order_50 = @total_profit_50 / @total_pieces_50
+
+
+         @total_nos_40 = @total_nos * 0.4
+         @total_pieces_40 = @total_pieces * 0.4
+         @total_subtotal_40 = @total_subtotal * 0.4
+         @total_shipping_40 = @total_shipping * 0.4
+         @total_sales_40 = @total_sales * 0.4
+         @total_revenue_40 = @total_revenue * 0.4
+         @total_product_cost_40 = @total_product_cost * 0.4
+         @total_promo_cost_40 = @total_promo_cost * 0.4
+         @total_var_cost_40 = @total_var_cost * 0.4
+         @total_fixed_cost_40 = @total_fixed_cost 
+         @total_refund_40 = @total_refund * 0.4
+         @total_profit_40 = @total_profit * 0.4
+
+         @total_cost_per_order_40 =  @total_cost_per_order * 0.4
+         @cost_per_order_40 = @total_cost_per_order_40 / @total_pieces_40
+         @profit_per_order_40 = @total_profit_40 / @total_pieces_40
+
+
+      ordernos = @order_masters.pluck(:id)
+      main_product_type_id = 10000
+      basic_product_type_id = 10040
+      common_product_type_id = 10001
+      @regular_basic,   @regular_shipping,  @regular_total,   @regular_cost,  @regular_revenue = 0,0,0,0,0
+      @order_lines_regular = OrderLine.where(orderid: ordernos).joins(:product_variant).where("product_variants.product_sell_type_id = ?", main_product_type_id).order("order_lines.created_at")
+          
+          @order_lines_regular.each do |order |
+            @regular_basic += order.subtotal
+            @regular_shipping += order.shipping
+            @regular_total += order.total
+            @regular_cost += order.productcost
+            @regular_revenue += order.productrevenue
+
+          end
+
+      @basic_basic,   @basic_shipping,  @basic_total,   @basic_cost,  @basic_revenue = 0,0,0,0,0
+      @order_lines_basic = OrderLine.where(orderid: ordernos).joins(:product_variant).where("product_variants.product_sell_type_id = ?", basic_product_type_id).order("order_lines.created_at")
+        
+         @order_lines_basic.each do |order |
+            @basic_basic += order.subtotal
+            @basic_shipping += order.shipping
+            @basic_total += order.total
+            @basic_cost += order.productcost
+            @basic_revenue += order.productrevenue
+
+          end
+
+      @common_basic,   @common_shipping,  @common_total,   @common_cost,  @common_revenue = 0,0,0,0,0
+      @order_lines_common = OrderLine.where(orderid: ordernos).joins(:product_variant).where("product_variants.product_sell_type_id = ?", common_product_type_id).order("order_lines.created_at")
+          @order_lines_common.each do |order |
+            @common_basic += order.subtotal
+            @common_shipping += order.shipping
+            @common_total += order.total
+            @common_cost += order.productcost
+            @common_revenue += order.productrevenue
+
+          end
+
+    end
+  end
+
    
-    #aggregation based on products 
-    @sno = 1
-    
-    showproducts
-    shows_for_variant_for_day #show all the shows for the day for the products
-
-    orders_from_channels #orders from channels (media name)
-  end #end of def  
-  
-
-  def ppo_details
-   
-    #aggregation based on products 
-    @sno = 1
-    @time_sno = 1
-    showproducts
-    shows_between
-    
-    between_time #show between timings
-
-    hbn_channels_between #channel between timings
-  end #end of def  
     
 
 private
@@ -899,7 +1032,7 @@ def shows_between
 
  end
  def constants
-   @correction = 1
+   @correction = 0.5
    @shipping_tax_less = 0.98125
    @subtotal_vat_less = 0.888889
  end

@@ -1,0 +1,57 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Listing Promotions</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Description</th>
+      <th>Start hr</th>
+      <th>Start min</th>
+      <th>End hr</th>
+      <th>End min</th>
+      <th>Start date</th>
+      <th>End date</th>
+      <th>Media</th>
+      <th>Min sale value</th>
+      <th>Discount percent</th>
+      <th>Discount value</th>
+      <th>Free product list</th>
+      <th>Active</th>
+      <th>Unique code</th>
+      <th>Promo cost</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @promotions.each do |promotion| %>
+      <tr>
+        <td><%= promotion.name %></td>
+        <td><%= promotion.description %></td>
+        <td><%= promotion.start_hr %></td>
+        <td><%= promotion.start_min %></td>
+        <td><%= promotion.end_hr %></td>
+        <td><%= promotion.end_min %></td>
+        <td><%= promotion.start_date %></td>
+        <td><%= promotion.end_date %></td>
+        <td><%= promotion.media_id %></td>
+        <td><%= promotion.min_sale_value %></td>
+        <td><%= promotion.discount_percent %></td>
+        <td><%= promotion.discount_value %></td>
+        <td><%= promotion.free_product_list_id %></td>
+        <td><%= promotion.active %></td>
+        <td><%= promotion.unique_code %></td>
+        <td><%= promotion.promo_cost %></td>
+        <td><%= link_to 'Show', promotion %></td>
+        <td><%= link_to 'Edit', edit_promotion_path(promotion) %></td>
+        <td><%= link_to 'Destroy', promotion, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Promotion', new_promotion_path %>

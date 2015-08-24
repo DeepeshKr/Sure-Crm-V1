@@ -24,3 +24,64 @@
       <td class="text-right"><%= @total_order_profitability.to_i - @total_profit.to_i %></td>
       <td></td>
       </tr>
+
+
+      <% @total_pieces += order_master.pieces %> 
+          <% @total_subtotal += order_master.subtotal %> 
+          <% @total_shipping += order_master.shipping %>
+          <% @total_sales += order_master.total %>
+          <% @total_product_cost += order_master.productcost %>
+          <% @total_var_cost += order_master.media_commission %>
+          <% @total_fixed_cost += order_master.campaign_playlist.cost %>
+          <% @total_revenue += order_master.productrevenue %>
+
+
+        ===============
+        <div class="row">
+  <div class="col-xs-6 text-right">
+  <p class="lead">Gross Revenue </p>
+  <small>Sales Total</small>
+  </div>
+  <div class="col-xs-6 text-right">
+  <p class="lead">
+  <%= @total_sales.to_i  %>
+  </p>
+  </div>
+</div>
+<hr>
+<div class="row">
+  <div class="col-xs-6 text-right">
+  <p class="lead">Net Revenue</p>
+  <small>Revenue</small>
+  </div>
+  <div class="col-xs-6 text-right">
+  <p class="lead">
+ <%= @total_revenue.to_i  %>
+ </p>
+  </div>
+</div>
+
+<hr>
+<div class="row">
+  <div class="col-xs-6 text-right">
+  <p class="lead">Promotional Cost </p>
+  <small>Distributor Commission</small>
+  </div>
+  <div class="col-xs-6 text-right">
+  <p class="lead">
+ <%= @total_var_cost.to_i  %>
+ </p>
+  </div>
+</div>
+<hr>
+<div class="row">
+  <div class="col-xs-6 text-right">
+  <p class="lead">Media Cost </p>
+  <small>Fixed Media Cost</small>
+  </div>
+  <div class="col-xs-6 text-right">
+  <p class="lead">
+ <%= @total_fixed_cost.to_i  %>
+ </p>
+  </div>
+</div>

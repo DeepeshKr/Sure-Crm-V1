@@ -90,7 +90,7 @@
 <td class="text-right">   <%= c[:profitability] %>
 <% @total_profit += c[:profitability] %> </td>
 <td >
-
+<%= link_to "Details", ppo_products_path(campaign_id: c[:campaign_id]), :target => "_blank" %>
 </td>
   </tr> 
   <% @sno += 1 %> 

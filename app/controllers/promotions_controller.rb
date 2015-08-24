@@ -4,7 +4,18 @@ class PromotionsController < ApplicationController
   # GET /promotions
   # GET /promotions.json
   def index
+     @for_date = (330.minutes).from_now.to_date.strftime("%Y-%m-%d")
+
+     todaydate = (330.minutes).from_now.to_date
+    if params.has_key?(:for_date)
+     @for_date =  Date.strptime(params[:for_date], "%Y-%m-%d")
+     todaydate
+    end
+    #:start_date, :end_date
     @promotions = Promotion.all
+    @live_promotions = Promotion.where('TRUNC(start_date) <= ? and TRUNC(end_date) >= ?', todaydate, todaydate)
+    @live_not_active_promotions = Promotion.all
+    @upcoming_promotions = Promotion.all
   end
 
   # GET /promotions/1
@@ -14,11 +25,13 @@ class PromotionsController < ApplicationController
 
   # GET /promotions/new
   def new
+    drop_downs
     @promotion = Promotion.new
   end
 
   # GET /promotions/1/edit
   def edit
+    drop_downs
   end 
 
   # POST /promotions
@@ -62,6 +75,10 @@ class PromotionsController < ApplicationController
   end
 
   private
+  def drop_downs
+     @product_lists = ProductList.joins(:product_variant)
+     .where("product_variants.product_sell_type_id = ?", 10060)
+  end
     # Use callbacks to share common setup or constraints between actions.
     def set_promotion
       @promotion = Promotion.find(params[:id])

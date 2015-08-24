@@ -42,6 +42,9 @@ after_destroy :updateOrder
     return (ended_on - started_at).to_i 
   end
 
+  def promo_cost
+   #self.promotion
+  end
 
   def codcharges
   productcost = OrderLine.where('orderid = ?', self.id)
@@ -152,19 +155,19 @@ def mediacost
 end
 
 def media_commission
-            media_variable = Medium.where('id = ? AND value is not null', self.media_id)
-            .where(:media_commision_id => [10020, 10021, 10040, 10041, 10060]) #.pluck(:value)
-              if media_variable.present?
-                #discount the total value by 50% as media_correction
-                media_correction = 0.5
-                #PAID_CORRECTION
-                 if media_variable.first.paid_correction.present?
-                   media_correction = media_variable.first.paid_correction #||= 0.5
-                 end
-                return ((self.subtotal * 0.888889) * media_variable.first.value.to_f) * media_correction
-              else
-                return 0
-              end
+   media_variable = Medium.where('id = ? AND value is not null', self.media_id)
+    .where(:media_commision_id => [10020, 10021, 10040, 10041, 10060]) #.pluck(:value)
+     if media_variable.present?
+         #discount the total value by 50% as media_correction
+       media_correction = 0.5
+       #PAID_CORRECTION
+        if media_variable.first.paid_correction.present?
+         media_correction = media_variable.first.paid_correction #||= 0.5
+        end
+        return ((self.subtotal * 0.888889) * media_variable.first.value.to_f) * media_correction
+      else
+        return 0
+      end
 end
 def mediacomission
     if self.media_id.present?

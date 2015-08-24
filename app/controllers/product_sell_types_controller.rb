@@ -10,8 +10,8 @@ class ProductSellTypesController < ApplicationController
   end
 
   def show
-    @product_masters = ProductMaster.where("product_sell_type_id = ?", @product_sell_type.id )
-    respond_with(@product_sell_type, @product_masters)
+    @product_variants = ProductVariant.where("product_sell_type_id = ?", @product_sell_type.id )
+    respond_with(@product_sell_type, @product_variants)
   end
 
   def new

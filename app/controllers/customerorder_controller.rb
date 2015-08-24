@@ -760,7 +760,7 @@ end
           nowhour = t.strftime('%H').to_i
           nowminute = t.strftime('%M').to_i
           todaydate = (330.minutes).from_now.to_date
-          
+          @nowsecs = (@nowhour * 60 * 60) + (@nowminute * 60)
           # check if media is part of HBN group
           # check if media is part of HBN group, if yes, update the HBN group 
           # campaign playlist id both ways
@@ -782,8 +782,8 @@ end
           if campaignlist.present?
             campaign_playlist = CampaignPlaylist.where({campaignid: campaignlist})
             .where(list_status_id: 10000).where(productvariantid: product_variant_id)
-            .where("start_hr <= ? and start_min <= ?", nowhour, nowminute)
-            .order("start_hr, start_min DESC")
+            .where("(start_hr * 60 * 60) + (start_min * 60) <= ?", @nowsecs)
+            .order("start_hr DESC, start_min DESC")
              updates = "Updated at #{t} order for #{channel} without any relevant show name at Hour:#{nowhour}  Minutes:#{nowminute}"
             if campaign_playlist.count > 0
               @order_master.update(campaign_playlist_id: campaign_playlist.first.id)
@@ -794,13 +794,12 @@ end
               # a particular date
               older_campaign_playlist = CampaignPlaylist.where("TRUNC(for_date) <  ?", todaydate)
               .where(list_status_id: 10000).where(productvariantid: product_variant_id)
-              .where("start_hr <= ? and start_min <= ?", nowhour, nowminute)
-              .order("start_hr, start_min DESC")
+              .order("start_hr DESC, start_min DESC")
               if older_campaign_playlist.count > 0
                 @order_master.update(campaign_playlist_id: older_campaign_playlist.first.id)
                 updates = "Updated at #{t} order for #{channel} with show #{older_campaign_playlist.name} at Hour:#{nowhour}  Minutes:#{nowminute}"  
               end
-            end
+            end 
           end
           @order_master.update(notes: updates)
     end
@@ -1241,7 +1240,7 @@ end
      statusno = order_master.order_status_master_id
       ondate = order_master.updated_at.to_s
 
-      update_page_trail("checked processed order")
+      update_page_trail("The user has searched for a processed order")
       @empcode = current_user.employee_code
       employee_id = Employee.where(employeecode: @empcode).first.id
       if order_master.employee_id != employee_id

@@ -1,0 +1,48 @@
+<%= bootstrap_form_for(@promotion) do |f| %>
+
+<% if @promotion.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@promotion.errors.count, "error") %> prohibited this promotion from being saved:</h2>
+
+      <ul>
+      <% @promotion.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+ <div class="field">
+   <%= f.text_field :name, label: "Name of the promotion ", required: true,  :placeholder => "Simple and unique name" %>
+  </div>
+  <div class="field">
+   <%= f.text_area :description, label: "Detailed description of the promotion ", required: true,  :placeholder => "This description helps agents communicate the details of offer to customer, so please be as descriptive as possible!" %>
+  </div>
+  <div class="field">
+   
+        <%= f.select :free_product_list_id,  options_from_collection_for_select(@product_lists, :id, :productinfo, selected: @promotion.free_product_list_id),
+		         {:prompt => 'No FREE Product in Offer', label: "Select the Product if the promo has FREE Product associated" } %>
+  </div>
+  <div class="row">
+  <div class="col-xs-3">
+ <%= f.text_field :start_date, label: "Start Date", :id => "datepicker1", :class => "form-control", :required => "true"   %>
+
+  </div>
+  <div class="col-xs-3"> 
+  	<%= f.text_field :end_date, label: "End Date", :id => "datepicker2", :class => "form-control", :required => "true"   %>
+   </div>
+  <div class="col-xs-3"><%= f.check_box :active, label: "Activate Promotion" %>  </div>
+  <div class="col-xs-3">  <%= f.text_field :promo_cost, label: "Cost of Promotion", required: true,  :placeholder => "Total Cost" %> </div>
+
+  </div>
+  
+  <div class="col-xs-4 col-xs-offset-8">
+      <%= submit_tag "Create New Promotion", name: nil,  class: "btn btn-primary" %>
+    
+  </div>
+<% end %>
+
+<script>
+$('#datepicker1').datepicker({format: 'yyyy-mm-dd'});
+$('#datepicker2').datepicker({format: 'yyyy-mm-dd'});
+</script>

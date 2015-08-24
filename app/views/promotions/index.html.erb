@@ -1,26 +1,17 @@
 <p id="notice"><%= notice %></p>
 
-<h1>Listing Promotions</h1>
+<h3>Listing Promotions</h3>
 
-<table>
+<table class="table table-hover table-stripped" >
   <thead>
     <tr>
       <th>Name</th>
       <th>Description</th>
-      <th>Start hr</th>
-      <th>Start min</th>
-      <th>End hr</th>
-      <th>End min</th>
       <th>Start date</th>
       <th>End date</th>
-      <th>Media</th>
-      <th>Min sale value</th>
-      <th>Discount percent</th>
-      <th>Discount value</th>
       <th>Free product list</th>
       <th>Active</th>
-      <th>Unique code</th>
-      <th>Promo cost</th>
+      <th>Cost</th>
       <th colspan="3"></th>
     </tr>
   </thead>
@@ -30,19 +21,10 @@
       <tr>
         <td><%= promotion.name %></td>
         <td><%= promotion.description %></td>
-        <td><%= promotion.start_hr %></td>
-        <td><%= promotion.start_min %></td>
-        <td><%= promotion.end_hr %></td>
-        <td><%= promotion.end_min %></td>
-        <td><%= promotion.start_date %></td>
-        <td><%= promotion.end_date %></td>
-        <td><%= promotion.media_id %></td>
-        <td><%= promotion.min_sale_value %></td>
-        <td><%= promotion.discount_percent %></td>
-        <td><%= promotion.discount_value %></td>
-        <td><%= promotion.free_product_list_id %></td>
+        <td><%= promotion.start_date.strftime('%d-%b-%Y') %></td>
+        <td><%= promotion.end_date.strftime('%d-%b-%Y') %></td>
+        <td><%= promotion.product_list.productinfo if promotion.product_list %></td>
         <td><%= promotion.active %></td>
-        <td><%= promotion.unique_code %></td>
         <td><%= promotion.promo_cost %></td>
         <td><%= link_to 'Show', promotion %></td>
         <td><%= link_to 'Edit', edit_promotion_path(promotion) %></td>
@@ -54,4 +36,4 @@
 
 <br>
 
-<%= link_to 'New Promotion', new_promotion_path %>
+<%= link_to 'New Promotion', new_promotion_path, class: "btn btn-primary" %>
