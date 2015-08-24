@@ -257,7 +257,10 @@ def add_products
     #product_variants = ProductVariant.where("activeid = ? and product_sell_type_id = ?", 10000, 10001).where(productmasterid: product_masters).pluck("id")
     #@generalproductaddonlists = ProductList.where('active_status_id = ?',  10000).where(product_variant_id: product_variants).joins(:product_variant).order("product_variants.name") 
 
-    @generalproductaddonlists = ProductList.where('product_lists.active_status_id = ?',  10000).joins(:product_variant).where("product_variants.activeid = ? and product_variants.product_sell_type_id = ?", 10000, 10001).order("product_variants.name")  
+    @generalproductaddonlists = ProductList.where('product_lists.active_status_id = ?',  10000).joins(:product_variant).where("product_variants.activeid = ? and product_variants.product_sell_type_id = ?", 10000, 10001).order("product_variants.name")
+
+    #.paginate(:page => params[:page], :per_page => 1) 
+    # <%= will_paginate @generalproductaddonlists, :container => true %>
      #update_page_trail(page_name)
       update_page_trail("upsell")
   end
@@ -760,7 +763,7 @@ end
           nowhour = t.strftime('%H').to_i
           nowminute = t.strftime('%M').to_i
           todaydate = (330.minutes).from_now.to_date
-          @nowsecs = (@nowhour * 60 * 60) + (@nowminute * 60)
+          @nowsecs = (nowhour * 60 * 60) + (nowminute * 60)
           # check if media is part of HBN group
           # check if media is part of HBN group, if yes, update the HBN group 
           # campaign playlist id both ways

@@ -1,6 +1,17 @@
 <% if @generalproductaddonlists.present? %>
 <div class="well well-lg">
+<div class="row">
+
+<div class="col-xs-6">
 <p class="lead">Would you like to add these products to the order</p>
+</div>
+<div class="col-xs-6">
+  <div class="digg_pagination">
+      
+  </div>
+</div>
+
+</div>
 <table class="table table-hover">
    <tbody>
     <% @generalproductaddonlists.each do |productaddonlist| %>

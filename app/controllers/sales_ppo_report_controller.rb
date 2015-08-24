@@ -394,13 +394,15 @@ class SalesPpoReportController < ApplicationController
             if order.promotion.present?
               @total_promo_cost += order.promotion.promo_cost
             end
-            @total_fixed_cost += order.campaign_playlist.cost
             @total_refund += @total_sales * 0.02
-            @total_profit += (@total_revenue - (@total_product_cost + @total_fixed_cost + @total_var_cost +  @total_refund + @total_promo_cost)).to_i 
+            @total_profit += (@total_revenue - (@total_product_cost + @total_var_cost +  @total_refund + @total_promo_cost)).to_i 
 
         end
-        @total_cost_per_order = (@total_product_cost + @total_fixed_cost + @total_var_cost +  @total_refund + @total_promo_cost).to_i
-        @cost_per_order = @total_cost_per_order / @total_pieces
+        @total_fixed_cost = @campaign_playlist.cost
+
+        @total_profit = @total_profit - @total_fixed_cost
+        @total_cost_per_order = (@total_product_cost + @total_var_cost +  @total_refund + @total_promo_cost).to_i
+        @cost_per_order = (@total_cost_per_order + @total_fixed_cost) / @total_pieces
         @profit_per_order = @total_profit / @total_pieces
 
          @total_nos_60 = @total_nos * 0.6
@@ -414,9 +416,9 @@ class SalesPpoReportController < ApplicationController
          @total_var_cost_60 = @total_var_cost * 0.6
          @total_fixed_cost_60 = @total_fixed_cost 
          @total_refund_60 = @total_refund * 0.6
-         @total_profit_60 = @total_profit * 0.6
+         @total_profit_60 = (@total_profit * 0.6) - @total_fixed_cost_60
          @total_cost_per_order_60 =  @total_cost_per_order * 0.6
-         @cost_per_order_60 = @total_cost_per_order_60 / @total_pieces_60
+         @cost_per_order_60 = (@total_cost_per_order_60 + @total_fixed_cost_60) / @total_pieces_60
          @profit_per_order_60 = @total_profit_60 / @total_pieces_60
 
 
@@ -429,12 +431,12 @@ class SalesPpoReportController < ApplicationController
          @total_product_cost_50 = @total_product_cost * 0.5
          @total_promo_cost_50 = @total_promo_cost * 0.5
          @total_var_cost_50 = @total_var_cost * 0.5
-         @total_fixed_cost_50 = @total_fixed_cost 
+         @total_fixed_cost_50 = @total_fixed_cost
          @total_refund_50 = @total_refund * 0.5
-         @total_profit_50 = @total_profit * 0.5
+         @total_profit_50 = (@total_profit * 0.5) - @total_fixed_cost_50
 
          @total_cost_per_order_50 =  @total_cost_per_order * 0.5
-         @cost_per_order_50 = @total_cost_per_order_50 / @total_pieces_50
+         @cost_per_order_50 = (@total_cost_per_order_50 + @total_fixed_cost_50)  / @total_pieces_50
          @profit_per_order_50 = @total_profit_50 / @total_pieces_50
 
 
@@ -447,12 +449,12 @@ class SalesPpoReportController < ApplicationController
          @total_product_cost_40 = @total_product_cost * 0.4
          @total_promo_cost_40 = @total_promo_cost * 0.4
          @total_var_cost_40 = @total_var_cost * 0.4
-         @total_fixed_cost_40 = @total_fixed_cost 
+         @total_fixed_cost_40 = @total_fixed_cost
          @total_refund_40 = @total_refund * 0.4
-         @total_profit_40 = @total_profit * 0.4
+         @total_profit_40 = (@total_profit * 0.4) - @total_fixed_cost_40
 
          @total_cost_per_order_40 =  @total_cost_per_order * 0.4
-         @cost_per_order_40 = @total_cost_per_order_40 / @total_pieces_40
+         @cost_per_order_40 = (@total_cost_per_order_40 + @total_fixed_cost_40)  / @total_pieces_40
          @profit_per_order_40 = @total_profit_40 / @total_pieces_40
 
 
