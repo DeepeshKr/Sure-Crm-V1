@@ -1,0 +1,57 @@
+
+<div class="row">
+	<div class="col-xs-4">
+	<h4>HBN Shows  
+		<small>
+			<%= @show_date %> 
+			<%= @start_time.strftime("%H:%M") if  @start_time.present? %> 
+			<%= @end_time.strftime("%H:%M") if  @end_time.present? %>
+		</small>  
+	</h4>
+	<hr>
+	
+		 <%= render('playlists') %>
+	</div>
+	<div class="col-xs-8">
+	<h4>Products Sold over HBN <small><%= @show_date %> 
+	<%=@start_time.strftime("%H:%M") if  @start_time.present? %> 
+	<%= @end_time.strftime("%H:%M") if  @end_time.present? %></small> </h4>
+	<hr>
+		 <%= render('product_list') %>
+	</div>
+</div>
+<div class="row">
+	<div class="col-xs-4">
+	<h4>Channel </h4>
+<%= render('hbn_channels_between') %>
+	</h4>
+	<h4>List Break up 
+			</h4>
+		<%= render('between_time') %>	
+	</div>
+
+	<div class="col-xs-8">
+
+	<%= render('order_summary') %>
+	<% @hidelist = true %>
+	<!-- style="visibility:hidden" -->
+<% if @hidelist == true %>
+	<div >
+	<% if @list_of_orders.present? %>
+	<table class="table table-bordered">
+  <tr>
+    <td>Order No</td> <td>Date Time</td>
+
+  </tr>
+ <% @list_of_orders.each do |c| %>
+<tr>  
+<td> <%= c[:order_no] %></td>
+<td> <%= c[:time_of_order] %></td>
+</tr>
+ <% end -%>
+</table>
+<% end %>
+</div>
+<% end  %>
+	</div>
+</div>

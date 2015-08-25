@@ -28,9 +28,11 @@ class InteractionTranscriptsController < ApplicationController
 
     @interaction_transcript = InteractionTranscript.create(interaction_transcript_params) 
      
-    interaction_status_id = params[:interaction_status_id]
+   # interaction_status_id = 
     interaction_master = InteractionMaster.find(@interaction_transcript.interactionid)
-    interaction_master.update(interaction_status_id: interaction_status_id)
+    interaction_master.update(interaction_status_id: params[:interaction_status_id], closedon:
+      params[:closedon])
+
 
     respond_with(@interaction_transcript.interaction_master)
   end
@@ -58,7 +60,6 @@ class InteractionTranscriptsController < ApplicationController
 
     def interaction_transcript_params
       params.require(:interaction_transcript).permit(:interactionid, 
-        :interactionuserid, :description, :interaction_status_id,
-         :employee_id, :ip)
+        :interactionuserid, :description, :employee_id, :ip)
     end
 end

@@ -500,7 +500,12 @@ class SalesPpoReportController < ApplicationController
     end
   end
 
-   
+def ppo_details
+  between_time
+  hbn_channels_between
+  shows_between
+  showproducts
+end
     
 
 private
@@ -750,13 +755,10 @@ def shows_between
           @start_time, @end_time).where('ORDER_STATUS_MASTER_ID > 10002')
         .where(media_id: @hbnlist).pluck(:id)
           
-      if params.has_key?(:product_variant)
-
-        regular_product_variant_list = ProductVariant.where(id: params[:product_variant])   
-      else
+     
         total_order_summary(order_masters, @start_time, @end_time )
         regular_product_variant_list = ProductVariant.where(product_sell_type_id: 10000)
-       end
+       
         common_sell_product_variant_list = ProductVariant.where(product_sell_type_id: 10001)
         basic_sell_product_variant_list =  ProductVariant.where(product_sell_type_id: 10040)
      

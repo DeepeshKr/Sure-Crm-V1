@@ -10,6 +10,7 @@
   <thead>
   
     <tr>
+    <th>SNo</th>
     <th>Id </th>
       <th>Product </th>
       <th>Time</th>
@@ -27,10 +28,12 @@
    <th colspan="9">Main Products </th>
       
    </tr>
+   <% @sno = 1 %>
     <% if @order_lines_regular.present? %>
 <!-- Regular Products -->
      <% @order_lines_regular.each do |order_line| %>
       <tr>
+       <td><%= @sno %></td>
        <td><%= order_line.order_master.external_order_no %></td>
         <td><%= order_line.description %></td>
        <td><small>
@@ -50,6 +53,7 @@
       <%= order_line.productrevenue.to_i %> 
         </td>
       </tr>
+      <% @sno += 1 %>
     <% end %>
      <tr>
     <th colspan="3">Total</th>
@@ -59,15 +63,18 @@
     <th class="text-right"><%= @regular_cost.to_i %></th>
     <th class="text-right"><%= @regular_revenue.to_i %></th>
     </tr>
+     
     <% end %>
     <tr>
    <th colspan="9">Basic Upsell Products </th>
       
    </tr>
     <% if @order_lines_basic.present? %>
+     <% @sno = 1 %>
     <!-- Basic Upsell Products -->
      <% @order_lines_basic.each do |order_line| %>
        <tr>
+        <td><%= @sno %></td>
         <td><%= order_line.order_master.external_order_no %></td>
         <td><%= order_line.description %></td>
        <td><small>
@@ -79,6 +86,7 @@
        <td class="text-right"><%= order_line.productcost %></td>
         <td class="text-right"><%= order_line.productrevenue.to_i %>  </td>
       </tr>
+       <% @sno += 1 %>
     <% end %>
      <tr>
     <th colspan="3">Total</th>
@@ -93,10 +101,13 @@
    <th colspan="9">Common Upsell Products </th>
       
    </tr>
+    <% @sno = 1 %>
     <% if @order_lines_common.present? %>
+    
     <!-- Common Upsell Products -->
      <% @order_lines_common.each do |order_line| %>
        <tr>
+        <td><%= @sno %></td>
         <td><%= order_line.order_master.external_order_no %></td>
         <td><%= order_line.description %></td>
        <td><small>
@@ -119,6 +130,7 @@
         
         
       </tr>
+       <% @sno += 1 %>
     <% end %>
      <tr>
     <th colspan="3">Total</th>
