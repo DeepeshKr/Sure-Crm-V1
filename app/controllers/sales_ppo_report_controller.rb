@@ -501,6 +501,7 @@ class SalesPpoReportController < ApplicationController
   end
 
 def ppo_details
+  @sno = 1
   between_time
   hbn_channels_between
   shows_between
