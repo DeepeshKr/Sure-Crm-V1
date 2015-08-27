@@ -53,6 +53,7 @@
 <% else %>
 <span style="color:green"> Cost Rs: <%= c[:product_cost_master] %></span>
 <% end %>
+<small><%= link_to "Cost Details", productcost_path(search: c[:prod]), :target => "_blank", class: "btn btn-primary btn-xs" %> </small>
  </td>
 <td><%= c[:at_time] %></td>
 <td class="text-right">

@@ -333,6 +333,7 @@ class SalesPpoReportController < ApplicationController
           :campaign_id => playlist.id,
           :product_cost_master => product_cost_master,
           :pieces => pieces.to_i,
+          :prod => playlist.product_variant.extproductcode,
           :nos => nos.to_i,
           :at_time => playlist.starttime,
           :start_time => @from_date, end_time: @to_date,
