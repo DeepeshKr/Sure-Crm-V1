@@ -383,6 +383,7 @@ class SalesPpoReportController < ApplicationController
       #       .where("(start_hr * 60 * 60) + (start_min * 60) <= ?", @nowsecs)
       #       .order("start_hr DESC, start_min DESC")
 
+     
         @order_masters.each do |order |
             @total_nos += 1
             @total_pieces += order.pieces
@@ -390,6 +391,7 @@ class SalesPpoReportController < ApplicationController
             @total_shipping += order.shipping
             @total_sales += order.total
             @total_revenue += order.productrevenue
+
             @total_product_cost += order.productcost
             @total_var_cost += order.media_commission
             if order.promotion.present?
@@ -400,9 +402,9 @@ class SalesPpoReportController < ApplicationController
 
         end
         @total_fixed_cost = @campaign_playlist.cost
-
+        @total_product_dam_cost  = @total_product_cost * 0.10
         @total_profit = @total_profit - @total_fixed_cost
-        @total_cost_per_order = (@total_product_cost + @total_var_cost +  @total_refund + @total_promo_cost).to_i
+        @total_cost_per_order = (@total_product_cost + @total_product_dam_cost + @total_var_cost +  @total_refund + @total_promo_cost).to_i
         @cost_per_order = (@total_cost_per_order + @total_fixed_cost) / @total_pieces
         @profit_per_order = @total_profit / @total_pieces
 
@@ -413,6 +415,7 @@ class SalesPpoReportController < ApplicationController
          @total_sales_60 = @total_sales * 0.6
          @total_revenue_60 = @total_revenue * 0.6
          @total_product_cost_60 = @total_product_cost * 0.6
+         @total_product_dam_cost_60 = @total_product_dam_cost * 0.6
          @total_promo_cost_60 = @total_promo_cost * 0.6
          @total_var_cost_60 = @total_var_cost * 0.6
          @total_fixed_cost_60 = @total_fixed_cost 
@@ -430,6 +433,7 @@ class SalesPpoReportController < ApplicationController
          @total_sales_50 = @total_sales * 0.5
          @total_revenue_50 = @total_revenue * 0.5
          @total_product_cost_50 = @total_product_cost * 0.5
+         @total_product_dam_cost_50 = @total_product_dam_cost * 0.5
          @total_promo_cost_50 = @total_promo_cost * 0.5
          @total_var_cost_50 = @total_var_cost * 0.5
          @total_fixed_cost_50 = @total_fixed_cost
@@ -448,6 +452,7 @@ class SalesPpoReportController < ApplicationController
          @total_sales_40 = @total_sales * 0.4
          @total_revenue_40 = @total_revenue * 0.4
          @total_product_cost_40 = @total_product_cost * 0.4
+         @total_product_dam_cost_40 = @total_product_dam_cost * 0.4
          @total_promo_cost_40 = @total_promo_cost * 0.4
          @total_var_cost_40 = @total_var_cost * 0.4
          @total_fixed_cost_40 = @total_fixed_cost
