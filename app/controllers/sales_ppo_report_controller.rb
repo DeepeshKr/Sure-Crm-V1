@@ -404,7 +404,7 @@ class SalesPpoReportController < ApplicationController
         @total_fixed_cost = @campaign_playlist.cost
         @total_product_dam_cost  = @total_product_cost * 0.10
         @total_profit = @total_profit - @total_fixed_cost
-        @total_cost_per_order = (@total_product_cost + @total_product_dam_cost + @total_var_cost +  @total_refund + @total_promo_cost).to_i
+        @total_cost_per_order = (@total_product_cost  + @total_var_cost +  @total_refund + @total_promo_cost).to_i
         @cost_per_order = (@total_cost_per_order + @total_fixed_cost) / @total_pieces
         @profit_per_order = @total_profit / @total_pieces
 
