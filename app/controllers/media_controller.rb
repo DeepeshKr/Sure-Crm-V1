@@ -17,7 +17,7 @@ class MediaController < ApplicationController
      if params.has_key?(:state)
        @media = Medium.where(state: params[:state]).paginate(:page => params[:page])
        @state = params[:state]
-        @inactivemedia = Medium.where(active:0).where(state: params[:state]).paginate(:page => params[:page])
+       @inactivemedia = Medium.where(active:0).where(state: params[:state]).paginate(:page => params[:page])
     end
     if params[:dnis].present?
        @media = Medium.where(dnis: params[:dnis]).order("updated_at DESC")
@@ -31,6 +31,13 @@ class MediaController < ApplicationController
       @inactivemedia = Medium.where(active:0).where("name like ? or ref_name like ?", "#{@search}%", "#{@search}%").order("updated_at DESC").paginate(:page => params[:page])
        @dnis = params[:dnis]
     end
+    #@commission
+     if params.has_key?(:commission)
+       @media = Medium.where(media_commision_id: params[:commission]).paginate(:page => params[:page])
+       @commission = params[:commission]
+       @inactivemedia = Medium.where(active:0).where(media_commision_id: params[:commission]).paginate(:page => params[:page])
+    end
+    
       if params[:showall].present?
         if params[:showall] = "true"
           @showall = "true"

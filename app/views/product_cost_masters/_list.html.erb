@@ -10,8 +10,10 @@ basic_cost + shipping_handling
   Cost: <%= @product_cost_masters.first.cost %>  <small> <%= (@product_cost_masters.first.product_cost || 0) + 
            (@product_cost_masters.first.tel_cost || 0) + 
         (@product_cost_masters.first.cost_of_return || 0) +
+        (@product_cost_masters.first.shipping_handling || 0) +
+        (@product_cost_masters.first.royalty || 0) +
         (@product_cost_masters.first.call_centre_commission || 0) %>
-product_cost + tel_cost + cost_of_return + call_centre_commission
+product_cost + tel_cost + royalty + Shipping handling + cost_of_return + call_centre_commission
 </small>
 </div>
 <table class="table table-hover table-bordered">
@@ -24,6 +26,7 @@ product_cost + tel_cost + cost_of_return + call_centre_commission
      
       <th colspan="6">cost</th>
      <th colspan="3">Others</th>
+     <th> </th>
   </tr>
     <tr>
       <th>Basic cost</th>
@@ -37,6 +40,7 @@ product_cost + tel_cost + cost_of_return + call_centre_commission
       <th>Transfer order basic</th>
       <th>Dealer network basic</th>
       <th>Wholesale variable cost</th>
+      <th> </th>
     </tr>
   </thead>
 
@@ -56,10 +60,13 @@ product_cost + tel_cost + cost_of_return + call_centre_commission
         <td><%= product_cost_master.transf_order_basic %></td>
         <td><%= product_cost_master.dealer_network_basic %></td>
         <td><%= product_cost_master.wholesale_variable_cost %></td>
+        <td><%= link_to 'Edit This', edit_product_cost_master_path(product_cost_master),
+        class:"btn btn-primary btn-xs" %></td>
       </tr>
     <% end %>
   </tbody>
 </table>
+
 <% else %>
 <h3>No Details found in Product Master </h3>  
 

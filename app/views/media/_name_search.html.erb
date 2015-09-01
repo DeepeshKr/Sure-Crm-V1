@@ -1,0 +1,14 @@
+<div class="well well-sm">
+    <div class="row">
+      <%= bootstrap_form_tag url: media_path, :method => :GET, :enforce_utf8 => false do |f| %>
+      
+      <div class="col-xs-10">
+            <%= text_field_tag(:name, @dnis,
+            {:class => "form-control", :value => @search,  :placeholder => "Search by Name"})  %>
+        </div>
+        <div class="col-xs-2">
+            <%= submit_tag "Ok", name: nil,  class: "btn btn-primary" %>
+        </div>
+      <% end %>
+      </div>
+    </div>

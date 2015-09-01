@@ -4,11 +4,11 @@
   <div class="well well-sm">
   <div class="row">
     <%= bootstrap_form_tag url: media_path, :method => :GET, :enforce_utf8 => false do |f| %>
-      <div class="col-xs-10">
+      <div class="col-xs-9">
           <%= text_field_tag(:telephone, @telephone,
-          {:class => "form-control", :placeholder => "Search Telephone"})  %>
+          {:class => "form-control", :placeholder => "Telephone"})  %>
       </div>
-      <div class="col-xs-2">
+      <div class="col-xs-3">
           <%= submit_tag "Ok", name: nil,  class: "btn btn-primary" %>
       </div>
     <% end %>
@@ -19,16 +19,12 @@
   <div class="well well-sm">
   <div class="row">
     <%= bootstrap_form_tag url: media_path, :method => :GET, :enforce_utf8 => false do |f| %>
-      <div class="col-xs-10">
+      <div class="col-xs-9">
       <%= select_tag(:state, 
                 options_from_collection_for_select(State.all, :name, :name, selected: @state), 
                 {:class => "form-control"} )  %>
-        
-         
-
-        
       </div>
-      <div class="col-xs-2">
+      <div class="col-xs-3">
           <%= submit_tag "Ok", name: nil,  class: "btn btn-primary" %>
       </div>
     <% end %>
@@ -40,11 +36,11 @@
     <div class="row">
       <%= bootstrap_form_tag url: media_path, :method => :GET, :enforce_utf8 => false do |f| %>
       
-      <div class="col-xs-8">
+      <div class="col-xs-7">
             <%= text_field_tag(:dnis, @dnis,
-            {:class => "form-control", :placeholder => "Search DNI"})  %>
+            {:class => "form-control", :placeholder => "DNIS"})  %>
         </div>
-        <div class="col-xs-4">
+        <div class="col-xs-5">
             <%= submit_tag "Ok", name: nil,  class: "btn btn-primary btn-sm" %>
         </div>
       <% end %>
@@ -52,20 +48,20 @@
     </div>
   </div>
  <div class="col-xs-3">
-  <div class="well well-sm">
-    <div class="row">
-      <%= bootstrap_form_tag url: media_path, :method => :GET, :enforce_utf8 => false do |f| %>
-      
-      <div class="col-xs-10">
-            <%= text_field_tag(:name, @dnis,
-            {:class => "form-control", :value => @search,  :placeholder => "Search by Name"})  %>
-        </div>
-        <div class="col-xs-2">
-            <%= submit_tag "Ok", name: nil,  class: "btn btn-primary" %>
-        </div>
-      <% end %>
+   <div class="well well-sm">
+  <div class="row">
+    <%= bootstrap_form_tag url: media_path, :method => :GET, :enforce_utf8 => false do |f| %>
+      <div class="col-xs-9">
+      <%= select_tag(:commission, 
+                options_from_collection_for_select(MediaCommision.all, :id, :name, selected: @commission), 
+                {:class => "form-control"} )  %>
       </div>
-    </div>
+      <div class="col-xs-3">
+          <%= submit_tag "Ok", name: nil,  class: "btn btn-primary" %>
+      </div>
+    <% end %>
+  </div>
+  </div>
   </div> 
   <div class="col-xs-1">
   <div class="well well-sm">

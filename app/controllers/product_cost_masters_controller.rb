@@ -12,6 +12,7 @@ class ProductCostMastersController < ApplicationController
 
   def product_costs
     @showall = true
+    #reset_prices
       @product_cost_masters = ProductCostMaster.where("product_list_id IS NOT NULL").pluck(:product_list_id)
     if params.has_key?(:search)
       
@@ -141,7 +142,13 @@ class ProductCostMastersController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def product_cost_master_params
-      params.require(:product_cost_master).permit(:product_id, :product_list_id, :prod, :barcode, :product_cost, :basic_cost, :shipping_handling, :postage, :tel_cost, :transf_order_basic, :dealer_network_basic, :wholesale_variable_cost, :royalty, :cost_of_return, :call_centre_commission)
+      params.require(:product_cost_master).permit(:product_id, :product_list_id, 
+        :prod, :barcode, :product_cost, :basic_cost, 
+        :shipping_handling, :postage, 
+        :tel_cost, :transf_order_basic, 
+        :dealer_network_basic, 
+        :wholesale_variable_cost, 
+        :royalty, :cost_of_return, :call_centre_commission)
     end
     def reset_prices
       product_cost_masters = ProductCostMaster.all
@@ -149,9 +156,9 @@ class ProductCostMastersController < ApplicationController
       product_cost_masters.each do |pc|
         revenue = (pc.basic_cost || 0) + (pc.shipping_handling || 0) 
 
-        cost = (pc.product_cost || 0) + (pc.tel_cost || 0) + 
-           (pc.cost_of_return || 0) + (pc.call_centre_commission || 0)
-          pc.update(cost:cost, revenue:revenue)
+        cost = (pc.product_cost || 0) + (pc.tel_cost || 0) + (pc.postage || 0) + (pc.royalty || 0) + (pc.cost_of_return || 0) + (pc.call_centre_commission || 0)        
+
+        pc.update(cost:cost, revenue:revenue)
       end
     end
  def update_all
