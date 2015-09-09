@@ -1,0 +1,2 @@
+<%= render partial: 'hbn_media_list', :locals => {:searchaction => "index"}  %>
+<%= render partial: 'media_list', :locals => {:searchaction => "index"}  %>

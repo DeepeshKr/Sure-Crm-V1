@@ -4,11 +4,6 @@
   <p>List of all sales reports with detailed description can be found here.</p>
  </div>
 </div>
-<div style:"visibility:hidden">
-
-<%= render partial: 'hbn_media_list', :locals => {:searchaction => "index"}  %>
-<%= render partial: 'media_list', :locals => {:searchaction => "index"}  %>
-</div>
  <div class="container">
 	<div class="row">
 	<div class="col-xs-4">
@@ -288,17 +283,17 @@
 		</div>
 		</div>
 	</div>
-	<div class="col-xs-4" style="visibility:hidden">
+	<div class="col-xs-4">
 			<div class="panel panel-primary">
-			<div class="panel-heading"><h3 class="panel-title">Non Sale Report</h3></div>
+			<div class="panel-heading"><h3 class="panel-title">City Report</h3></div>
 			  <div class="panel-body">
-			   Channel wise, product wise report
+			   City wise (Warning Slow Report)
 			  </div>
 			  <div class="panel-footer">
-			  	<%= bootstrap_form_tag url: url_for(:controller => 'sales_report', :action => 'summary'), :method => :GET, :enforce_utf8 => false do |f| %>
+			  	<%= bootstrap_form_tag url: url_for(:controller => 'sales_report', :action => 'city'), :method => :GET, :enforce_utf8 => false do |f| %>
 					 <div class="row">
 					<div class="col-xs-8">
-					 <%= text_field_tag(:from_date, @from_date, :data => {:provide => "datepicker"}, :id => "datepicker12", :class => "form-control", :required => "true" )   %>
+					 <%= text_field_tag(:from_date, @from_date, :data => {:provide => "datepicker"}, :id => "datepicker13", :class => "form-control", :required => "true" )   %>
 					          
 					</div>
 					
@@ -324,4 +319,5 @@ $('#datepicker9').datepicker({format: 'yyyy-mm-dd'});
 $('#datepicker10').datepicker({format: 'yyyy-mm-dd'});
 $('#datepicker11').datepicker({format: 'yyyy-mm-dd'});
 $('#datepicker12').datepicker({format: 'yyyy-mm-dd'});
+$('#datepicker13').datepicker({format: 'yyyy-mm-dd'});
 </script>

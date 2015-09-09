@@ -126,6 +126,7 @@ class SalesReportController < ApplicationController
       @or_for_date = Date.strptime(params[:from_date], "%Y-%m-%d")
       @from_date =  Date.strptime(params[:from_date], "%Y-%m-%d")
     
+
       #for_date = for_date - 330.minutes
         @hourlist ||= []
         employeeunorderlist ||= []
@@ -346,14 +347,17 @@ class SalesReportController < ApplicationController
       @sno = 1
       #@order_master.orderpaymentmode_id == 10000 #paid over CC
       #@order_master.orderpaymentmode_id == 10001 #paid over COD
-    if params[:for_date].present?  
+    if params[:from_date].present?  
       #@summary ||= []
-      @or_for_date = params[:for_date]
-      for_date =  Date.strptime(params[:for_date], "%Y-%m-%d")
+      @or_for_date = params[:from_date]
+      for_date =  Date.strptime(params[:from_date], "%Y-%m-%d")
 
       from_date = for_date.beginning_of_day - 330.minutes
       to_date = for_date.end_of_day - 330.minutes
-          
+      if params.has_key?(:to_date)
+         @to_date =  Date.strptime(params[:to_date], "%Y-%m-%d")
+         to_date = @to_date.end_of_day - 330.minutes
+      end
        
       if params.has_key?(:media_id)
          order_masters = OrderMaster.where('orderdate >= ? AND orderdate <= ?', from_date, to_date)
