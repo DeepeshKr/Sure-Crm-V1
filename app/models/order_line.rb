@@ -67,7 +67,10 @@ def creditcardcharges
         charges = 0
      end
   end
-
+ 
+ if self.product_variant.product_sell_type_id != 10000
+    charges = 0
+ end
 
   return ((self.subtotal || 0)  * (charges || 0)).round(2)
 
