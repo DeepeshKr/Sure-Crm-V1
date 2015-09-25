@@ -1,0 +1,76 @@
+<h3>show_for_date: <%= @show_for_date %></h3>
+
+<% if @ordered_product_list.present? %>
+<table class="table table-hover table-bordered">
+  <thead>
+    <tr>
+    <th>No</th>
+    <th>Product</th>
+    <th>City / State</th>
+    <th>Order No</th>
+    <th>Channel</th>
+    <th>Time Taken</th>
+    <th>Date Time</th>
+    <th>Pieces</th>
+    <th>Sub Total</th>
+    <th>Shipping</th>
+    <th>Total</th>
+    <th>Promo Cost</th>
+    <th>Commission</th>
+    <th>Media Cost</th>
+    <th>Revenue</th>
+   
+      
+     
+    </tr>
+  </thead>
+
+  <tbody>
+  <% @sno = 1 %>
+    <% @ordered_product_list.each do |order_line| %>
+      <tr>
+      <td><%= @sno %></td>
+       <td><%= order_line.description rescue nil %>
+       <td><%= order_line.order_master.customer_address.city  rescue nil %>
+        <%= order_line.order_master.customer_address.state  rescue nil %></td>
+      <td><%= order_line.order_master.external_order_no %> </td>
+      <td><%= order_line.order_master.medium.name || 0 if order_line.order_master.medium.present? %> </td>
+       <td><small><%= (order_line.order_master.timetaken) %> Secs</small> </td>
+        <td><%= (order_line.order_master.orderdate + 330.minutes).strftime('%d-%b-%Y') %>
+    <small><%= (order_line.order_master.orderdate + 330.minutes).strftime('%H:%M %P') %></small> </td>
+          <td class="text-right"><%= order_line.order_master.pieces %></td>
+        <td class="text-right"><%= order_line.order_master.subtotal.to_i  %></td>
+         <td class="text-right"><%= order_line.order_master.shipping.to_i   %> </td>
+         <td class="text-right"><%= order_line.order_master.total.to_i  %></td>
+         <td class="text-right"><%= order_line.order_master.promotion.promo_cost || 0 if order_line.order_master.promotion.present? %></td>
+         <td class="text-right"><%= order_line.order_master.productcost.to_i  %>  </td>
+          <td class="text-right"><%= order_line.order_master.media_commission.to_i  %> </td>
+        <td class="text-right"><%= order_line.order_master.campaign_playlist.cost.to_i  || 0 if order_line.order_master.campaign_playlist.present? %></td>
+        <td class="text-right"><%= order_line.order_master.productrevenue.to_i %>   </td>
+     </tr>
+       <% @sno += 1 %>
+    <% end %>
+  </tbody>
+  <tfoot>
+   
+    <tr>
+    <th colspan="6"></th>
+    <th class="text-right"><%= @product_list_total_pieces %></th>
+    <th class="text-right"><%= @product_list_total_subtotal.to_i  %></th>
+    <th class="text-right"><%= @product_list_total_shipping.to_i  %></th>
+    <th class="text-right"><%= @product_list_total_sales.to_i  %></th>
+    <th class="text-right"><%= @product_list_total_promo_cost.to_i  %>  </th>
+    <th class="text-right"><%= @product_list_total_product_cost.to_i  %></th>
+    <th class="text-right"><%= @product_list_total_var_cost.to_i   %></th>
+    <th class="text-right"><%= @product_list_total_fixed_cost.to_i   %></th>
+    <th class="text-right"><%= @product_list_total_revenue.to_i  %></th>
+   
+ 
+    </tr>
+  
+
+  </tfoot>
+</table>
+
+<% end %>
+

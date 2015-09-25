@@ -19,7 +19,7 @@ class ProductList < ActiveRecord::Base
 
   	validates_uniqueness_of :name, :scope => [:product_variant_id, :product_spec_list_id], :message => "Not Saved, a variant has been saved earlier with the same spec! "
 
-
+ 
 
   def productinfo
      self.name << " (" << self.extproductcode << ")"

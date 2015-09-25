@@ -59,21 +59,20 @@ end
 
 def creditcardcharges
   if (self.orderid).present? 
-  creditcardid = 10000
-  charges = Orderpaymentmode.find(creditcardid).charges
-  if self.order_master.orderpaymentmode_id.present?
-     #check if paid using cash on delivery is selected
-     if self.order_master.orderpaymentmode_id == 10001
+      creditcardid = 10000
+      charges = Orderpaymentmode.find(creditcardid).charges
+      if self.order_master.orderpaymentmode_id.present?
+         #check if paid using cash on delivery is selected
+         if self.order_master.orderpaymentmode_id == 10001
+            charges = 0
+         end
+      end
+     
+     if self.product_variant.product_sell_type_id != 10000
         charges = 0
      end
-  end
- 
- if self.product_variant.product_sell_type_id != 10000
-    charges = 0
- end
 
-  return ((self.subtotal || 0)  * (charges || 0)).round(2)
-
+      return ((self.subtotal || 0)  * (charges || 0)).round(2) 
   end
 end
 

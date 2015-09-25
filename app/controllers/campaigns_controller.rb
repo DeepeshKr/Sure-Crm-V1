@@ -60,11 +60,11 @@ class CampaignsController < ApplicationController
          # cost: 0, start_hr: @begin_hr,
          # start_min: @begin_min, start_sec: @begin_sec)
 
-     if @campaign.startdate > (330.minutes).from_now.to_date
+     #if @campaign.startdate > (330.minutes).from_now.to_date
          @campaign_playlist = CampaignPlaylist.new(campaignid: params[:id],
          cost: 0, start_hr: @begin_hr,
          start_min: @begin_min, start_sec: @begin_sec )
-     end
+     #end
      
      @campaignid = params[:id]
      #check if media belongs to HBN Group

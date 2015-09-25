@@ -321,7 +321,7 @@ class SalesPpoReportController < ApplicationController
           refund = totalorders * 0.02
         
          
-          profitability = (revenue - (product_cost + fixed_cost + media_var_cost + refund)).to_i 
+          profitability = ((revenue - (product_cost + fixed_cost + media_var_cost + refund))/2).to_i 
 
           ### check if product cost is found in product master
           product_cost_master = 0
@@ -371,6 +371,17 @@ class SalesPpoReportController < ApplicationController
       @campaign_playlist =  CampaignPlaylist.find(params[:campaign_id])
       @order_masters = OrderMaster.where(campaign_playlist_id: params[:campaign_id]).order("created_at")
 
+      start_hr = @campaign_playlist.start_hr
+      start_min = @campaign_playlist.start_min
+      # @show_for_date = (@campaign_playlist.for_date + 330.minutes).beginning_of_day
+
+      #show_for_date = for_date
+      # .where("order_lines.orderdate.hour >= ? and orderlines.orderdate.min >= ?", start_hr, start_min)
+      #  @ordered_product_list = OrderLine.where(productvariant_id: @campaign_playlist.productvariantid)
+      #  .where("TRUNC(order_lines.orderdate) >= ?", @show_for_date )
+      # .where("order_lines.orderdate <= ?", @campaign_playlist.for_date + 3.days)
+      #  .joins(:order_master).where("order_masters.ORDER_STATUS_MASTER_ID > 10002")
+      #  .order("order_lines.created_at")
       #  t = (330.minutes).from_now #Time.zone.now + 330.minutes
       #     @nowhour = t.strftime('%H').to_i
       #     @nowminute = t.strftime('%M').to_i
@@ -392,15 +403,18 @@ class SalesPpoReportController < ApplicationController
             @total_sales += order.total
             @total_revenue += order.productrevenue
 
-            @total_product_cost += order.productcost
+            @total_product_cost += order.productcost 
             @total_var_cost += order.media_commission
             if order.promotion.present?
               @total_promo_cost += order.promotion.promo_cost
             end
-            @total_refund += @total_sales * 0.02
-            @total_profit += (@total_revenue - (@total_product_cost + @total_var_cost +  @total_refund + @total_promo_cost)).to_i 
+           
+            
 
         end
+        @total_refund = @total_sales * 0.02
+        @total_profit = (@total_revenue - (@total_product_cost + @total_var_cost +  @total_refund + @total_promo_cost)).to_i 
+
         @total_fixed_cost = @campaign_playlist.cost
         @total_product_dam_cost  = @total_product_cost * 0.10
         @total_profit = @total_profit - @total_fixed_cost
@@ -504,6 +518,10 @@ class SalesPpoReportController < ApplicationController
           end
 
     end
+    #populate sales information
+
+
+    #end of class
   end
 
 def ppo_details
@@ -735,6 +753,7 @@ def shows_between
     end
    
  end
+
 
  def showproducts
    #@summary ||= []

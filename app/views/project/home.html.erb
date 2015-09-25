@@ -52,4 +52,130 @@
 <!-- <%= image_tag("/project/home/exciting.png", :alt => "Image missing") %> -->
 </div>
 
- 
+ <div class="row" style="visibility:hidden">
+      <h1>Table Fixed Header</h1>
+    </div>
+    <div class="row fixed-table">
+      <div class="table-content">
+        <table class="table table-striped table-fixed-header" id="mytable">
+          <thead class="header">
+            <tr>
+              <th>Email Address</th>
+              <th>First Name</th>
+              <th>Last Name</th>
+              <th>Administrator</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>admin@fakeadress.com</td>
+              <td>firstname</td>
+              <td>LastName</td>
+              <td>Data Column 4</td>
+            </tr>
+            <tr>
+              <td>admin@fakeadress.com</td>
+              <td>firstname</td>
+              <td>LastName</td>
+              <td>Data Column 4</td>
+            </tr>
+            <tr>
+              <td>admin@fakeadress.com</td>
+              <td>firstname</td>
+              <td>LastName</td>
+              <td>Data Column 4</td>
+            </tr>
+            <tr>
+              <td>admin@fakeadress.com</td>
+              <td>firstname</td>
+              <td>LastName</td>
+              <td>Data Column 4</td>
+            </tr>
+            <tr>
+              <td>admin@fakeadress.com</td>
+              <td>firstname</td>
+              <td>LastName</td>
+              <td>Data Column 4</td>
+            </tr>
+            <tr>
+              <td>admin@fakeadress.com</td>
+              <td>firstname</td>
+              <td>LastName</td>
+              <td>Data Column 4</td>
+            </tr>
+            <tr>
+              <td>admin@fakeadress.com</td>
+              <td>firstname</td>
+              <td>LastName</td>
+              <td>Data Column 4</td>
+            </tr>
+            <tr>
+              <td>admin@fakeadress.com</td>
+              <td>firstname</td>
+              <td>LastName</td>
+              <td>Data Column 4</td>
+            </tr>
+            <tr>
+              <td>admin@fakeadress.com</td>
+              <td>firstname</td>
+              <td>LastName</td>
+              <td>Data Column 4</td>
+            </tr>
+            <tr>
+              <td>admin@fakeadress.com</td>
+              <td>firstname</td>
+              <td>LastName</td>
+              <td>Data Column 4</td>
+            </tr>
+            <tr>
+              <td>admin@fakeadress.com</td>
+              <td>firstname</td>
+              <td>LastName</td>
+              <td>Data Column 4</td>
+            </tr>
+            <tr>
+              <td>admin@fakeadress.com</td>
+              <td>firstname</td>
+              <td>LastName</td>
+              <td>Data Column 4</td>
+            </tr>
+            <tr>
+              <td>admin@fakeadress.com</td>
+              <td>firstname</td>
+              <td>LastName</td>
+              <td>Data Column 4</td>
+            </tr>
+            <tr>
+              <td>admin@fakeadress.com</td>
+              <td>firstname</td>
+              <td>LastName</td>
+              <td>Data Column 4</td>
+            </tr>
+            <tr>
+              <td>admin@fakeadress.com</td>
+              <td>firstname</td>
+              <td>LastName</td>
+              <td>Data Column 4</td>
+            </tr>
+            <tr>
+              <td>admin@fakeadress.com</td>
+              <td>firstname</td>
+              <td>LastName</td>
+              <td>Data Column 4</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+        <script language="javascript" type="text/javascript" >
+    $(document).ready(function(){
+      // add 30 more rows to the table
+      var row = $('table#mytable > tbody > tr:first');
+      for (i=0; i<30; i++) {
+        $('table#mytable > tbody').append(row.clone());
+      }
+
+      // make the header fixed on scroll
+      $('.table-fixed-header').fixedHeader();
+    });
+  </script>

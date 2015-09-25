@@ -352,6 +352,16 @@ end
    end
  end
 
+def update_ppo_on_addition
+  if params.has_key?(:campaignid)
+      campaignid = params[:campaignid]
+      @campaign = Campaign.find(campaignid)
+
+
+      respond_with(@campaign)
+  end
+end
+
 #  def groupdestroy
 #   if params.has_key?[:id]
 #     all_grp_playlists = CampaignPlaylist.where(playlist_group_id: params[:id])
@@ -442,32 +452,123 @@ end
     end
 
     def showcampaign_page(campaign_id)
-      recent_campaigns
-    proddropdown
-      @campaign_playlists = CampaignPlaylist.where("campaignid = ?", campaign_id).order(:start_hr, :start_min, :start_sec)
-       @campaign_id = params[:id]
-     if @campaign.enddate >= DateTime.now
-              start_hour = 0
-              start_minute = 0
-              start_second = 0
-      if @campaign_playlists.present?
-              start_hour = @campaign_playlists.last.end_hr
-              start_minute = @campaign_playlists.last.end_min
-              start_second = @campaign_playlists.last.end_sec
-      end
-       media_tapes_s = MediaTape.where("product_variant_id is null")
-        
-      @campaign_playlist = CampaignPlaylist.new(campaignid: params[:id],
-       cost: 0, start_hr: start_hour,
-       start_min: start_minute, start_sec: start_second,
-       name: media_tapes_s.first.name,
-       internaltapeid: media_tapes_s.first.unique_tape_name,
-       filename: media_tapes_s.first.name,
-       duration_secs: media_tapes_s.first.duration_secs)
-     end
-     
-     @campaignid = params[:id]
+        recent_campaigns
+        proddropdown
+          @campaign_playlists = CampaignPlaylist.where("campaignid = ?", campaign_id).order(:start_hr, :start_min, :start_sec)
+           @campaign_id = params[:id]
+         if @campaign.enddate >= DateTime.now
+                  start_hour = 0
+                  start_minute = 0
+                  start_second = 0
+          if @campaign_playlists.present?
+                  start_hour = @campaign_playlists.last.end_hr
+                  start_minute = @campaign_playlists.last.end_min
+                  start_second = @campaign_playlists.last.end_sec
+          end
+           media_tapes_s = MediaTape.where("product_variant_id is null")
+            
+          @campaign_playlist = CampaignPlaylist.new(campaignid: params[:id],
+           cost: 0, start_hr: start_hour,
+           start_min: start_minute, start_sec: start_second,
+           name: media_tapes_s.first.name,
+           internaltapeid: media_tapes_s.first.unique_tape_name,
+           filename: media_tapes_s.first.name,
+           duration_secs: media_tapes_s.first.duration_secs)
+         end
+         
+         @campaignid = params[:id]
 
-    respond_with(@campaign, @campaign_playlists,  @campaign_playlist)
+        respond_with(@campaign, @campaign_playlists,  @campaign_playlist)
+    end
+
+    def add_product_to_campaign(campaignid)
+      #get the campaign Id
+       master_campaign_playlist = CampaignPlaylist.where(campaignid: campaignid)
+              .where(list_status_id: 10000)
+
+      campaignid = 
+      
+      master_campaign_playlist.each do | m |
+        #get each product variant id
+        list_product_variant_id = m.productvariantid
+        #current date time START_HR START_MIN START_SEC
+        list_start_hr = m.start_hr
+        list_start_mn = m.start_hr
+        list_start_sc = m.start_hr
+        list_start_date = TRUNC(m.for_date)
+        #next date time START_HR START_MIN START_SEC
+        next_product_listing = CampaignPlaylist.where(campaignid: campaignid)
+              .where(list_status_id: 10000).where("TRUNC(for_date) >=  ?", list_date)
+              .where("TRUNC(for_date) <  ?", list_date+3)
+              .where("start_hr > ? and start_min > ? and start_sec > ?",list_start_hr, list_start_mn, list_start_sc)
+        #if no campaign date found close the sales for next 48 hours
+          list_end_hr = 0
+          list_end_mn = 0
+          list_end_sc = 0
+          list_end_date = (TRUNC(m.for_date))+3
+        if next_product_listing != null
+
+          list_end_hr = next_product_listing.first.start_hr
+          list_end_mn = next_product_listing.first.start_hr
+          list_end_sc = next_product_listing.first.start_hr
+          list_end_date = TRUNC(next_product_listing.first.for_date)
+        end
+        #get the sold product between this and next campaign date
+
+       end
+
+      updates = "Trying to update order master with show for media #{mediumid}"
+        product_variant_id = OrderLine.where(orderid: @order_master.id)
+        .order("id").pluck(:productvariant_id).first
+        
+         # product_variant_id = productvariants
+          t = (330.minutes).from_now #Time.zone.now + 330.minutes
+          nowhour = t.strftime('%H').to_i
+          nowminute = t.strftime('%M').to_i
+          todaydate = (330.minutes).from_now.to_date
+          @nowsecs = (nowhour * 60 * 60) + (nowminute * 60)
+          # check if media is part of HBN group
+          # check if media is part of HBN group, if yes, update the HBN group 
+          # campaign playlist id both ways
+          # on order and agains the campaign playlis
+          if Medium.where(id: mediumid).present?
+             channelname = Medium.find(mediumid).name
+          end
+          
+          if Medium.find(mediumid).media_group_id == 10000
+            #HBN Master Media Id 11200
+            #select the campaign from HBN Master Campaign List
+            channel = "HBN Shows on #{channelname}"
+            campaignlist =  Campaign.where(mediumid: 11200)
+            .where('TRUNC(startdate) =  ?', todaydate)
+          else 
+            channel = "#{channelname} Private Channel Shows"        
+            campaignlist =  Campaign.where(mediumid: mediumid)
+            .where('TRUNC(startdate) =  ?', todaydate)
+          end 
+          updates = "Updated at #{t} order for #{channel} without any specific show at Hour:#{nowhour}  Minutes:#{nowminute}"
+          if campaignlist.present?
+            campaign_playlist = CampaignPlaylist.where({campaignid: campaignlist})
+            .where(list_status_id: 10000).where(productvariantid: product_variant_id)
+            .where("(start_hr * 60 * 60) + (start_min * 60) <= ?", @nowsecs)
+            .order("start_hr DESC, start_min DESC")
+             updates = "Updated at #{t} order for #{channel} without any relevant show name at Hour:#{nowhour}  Minutes:#{nowminute}"
+            if campaign_playlist.count > 0
+              @order_master.update(campaign_playlist_id: campaign_playlist.first.id)
+              updates = "Updated at #{t} order for #{channel} with show #{campaign_playlist.name} at Hour:#{nowhour}  Minutes:#{nowminute}"
+            else
+              #update for earlier date playlists
+              #this is designed for the playlist to go back as as required to assign this order for 
+              # a particular date
+              older_campaign_playlist = CampaignPlaylist.where("TRUNC(for_date) <  ?", todaydate)
+              .where(list_status_id: 10000).where(productvariantid: product_variant_id)
+              .order("start_hr DESC, start_min DESC")
+              if older_campaign_playlist.count > 0
+                @order_master.update(campaign_playlist_id: older_campaign_playlist.first.id)
+                updates = "Updated at #{t} order for #{channel} with show #{older_campaign_playlist.name} at Hour:#{nowhour}  Minutes:#{nowminute}"  
+              end
+            end 
+          end
+          @order_master.update(notes: updates)
     end
 end

@@ -68,4 +68,19 @@
 <% else %>
 <div class="alert alert-danger" role="alert">This campaign is over you cant add any playlist</div>
 
+<br>  
+  <div class="well" style="visibility:hidden">
+  <div class="row">
+  <div class="col-xs-8">
+  <h4>Recalculate the PPO if you alter the Playlist</h4>
+  </div>
+   <%= bootstrap_form_tag url: update_ppo_on_addition_path, :method => :POST do |f| %>
+    <%= hidden_field_tag :campaignid, @campaignid %>
+    <div class="col-xs-3">
+      <%= submit_tag "Recalucate PPO", name: nil,  class: "btn btn-danger", method: :delete, data: { confirm: 'This is to be used when you have changed PPO after it was played, and this may take some time, Are you sure?' } %>
+    
+    </div>
+    <% end %>
+  </div>
+  </div>
 <% end %>

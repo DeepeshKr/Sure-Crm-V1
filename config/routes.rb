@@ -7,7 +7,7 @@ Rails.application.routes.draw do
   resources :promotions
 
   resources :message_types
-
+ 
   resources :message_statuses
 
   resources :message_on_orders
@@ -18,7 +18,7 @@ Rails.application.routes.draw do
 
   resources :product_sample_stocks
   #get 'test_ppo' => 'product_ppo_news#index'
-
+ 
   mount Bootsy::Engine => '/bootsy', as: 'bootsy'
   get 'wholesale_distributors/list'
   get 'wholesale_distributors/search'
@@ -255,6 +255,7 @@ Rails.application.routes.draw do
   post 'create_playlist' => 'campaign_playlists#create_playlist_with_media_tape_head'
   #post 'update__playlist' => 'campaign_playlists#create_playlist_with_media_tape_head'
   post 'updatecampaigntimings' => 'campaign_playlists#updatecampaigntimings'
+  post 'update_ppo_on_addition' => 'campaign_playlists#update_ppo_on_addition'
 
   #post 'neworder' => 'create_order#index'
 
