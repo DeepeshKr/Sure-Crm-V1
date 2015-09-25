@@ -1,0 +1,17 @@
+<%= simple_form_for(@help_file) do |f| %>
+  <%= f.error_notification %>
+
+  <div class="form-inputs">
+    <%= f.input :name %>
+    <%= f.input :link %>
+    <%= f.input :description %>
+    <%= f.input :code_used %>
+    <%= f.input :database_used %>
+    <%= f.input :tags %>
+    <%= f.input :employee_id %>
+  </div>
+
+  <div class="form-actions">
+    <%= f.button :submit %>
+  </div>
+<% end %>

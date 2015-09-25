@@ -1,5 +1,7 @@
 Rails.application.routes.draw do
 
+  resources :help_files
+
   resources :page_names
 
   resources :page_trails

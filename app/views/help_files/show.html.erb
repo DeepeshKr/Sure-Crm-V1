@@ -1,0 +1,39 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @help_file.name %>
+</p>
+
+<p>
+  <strong>Link:</strong>
+  <%= @help_file.link %>
+</p>
+
+<p>
+  <strong>Description:</strong>
+  <%= @help_file.description %>
+</p>
+
+<p>
+  <strong>Code used:</strong>
+  <%= @help_file.code_used %>
+</p>
+
+<p>
+  <strong>Database used:</strong>
+  <%= @help_file.database_used %>
+</p>
+
+<p>
+  <strong>Tags:</strong>
+  <%= @help_file.tags %>
+</p>
+
+<p>
+  <strong>Employee:</strong>
+  <%= @help_file.employee_id %>
+</p>
+
+<%= link_to 'Edit', edit_help_file_path(@help_file) %> |
+<%= link_to 'Back', help_files_path %>

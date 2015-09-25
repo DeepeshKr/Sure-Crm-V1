@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150819041845) do
+ActiveRecord::Schema.define(version: 20150925151458) do
 
   create_table "address_types", force: :cascade do |t|
     t.string   "name"
@@ -340,6 +340,18 @@ ActiveRecord::Schema.define(version: 20150819041845) do
     t.text     "user_agent"
     t.datetime "created_at"
     t.datetime "updated_at"
+  end
+
+  create_table "help_files", force: :cascade do |t|
+    t.string   "name"
+    t.string   "link"
+    t.text     "description"
+    t.text     "code_used"
+    t.text     "database_used"
+    t.string   "tags"
+    t.integer  "employee_id",   limit: 16, precision: 38
+    t.datetime "created_at",                              null: false
+    t.datetime "updated_at",                              null: false
   end
 
   create_table "india_city_lists", force: :cascade do |t|

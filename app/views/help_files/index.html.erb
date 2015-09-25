@@ -1,0 +1,39 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Listing Help Files</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Link</th>
+      <th>Description</th>
+      <th>Code used</th>
+      <th>Database used</th>
+      <th>Tags</th>
+      <th>Employee</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @help_files.each do |help_file| %>
+      <tr>
+        <td><%= help_file.name %></td>
+        <td><%= help_file.link %></td>
+        <td><%= help_file.description %></td>
+        <td><%= help_file.code_used %></td>
+        <td><%= help_file.database_used %></td>
+        <td><%= help_file.tags %></td>
+        <td><%= help_file.employee_id %></td>
+        <td><%= link_to 'Show', help_file %></td>
+        <td><%= link_to 'Edit', edit_help_file_path(help_file) %></td>
+        <td><%= link_to 'Destroy', help_file, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Help file', new_help_file_path %>
