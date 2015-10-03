@@ -318,7 +318,14 @@ class SalesReportController < ApplicationController
 
       @from_date = for_date.beginning_of_day - 330.minutes
       @to_date = for_date.end_of_day - 330.minutes
-          
+      #@to_date = @from_date + 1.day
+      
+      if params.has_key?(:to_date)
+        @to_date =  Date.strptime(params[:to_date], "%Y-%m-%d")
+      end
+      
+      @to_date = @to_date.end_of_day - 330.minutes    
+
 
       order_masters = OrderMaster.where('orderdate >= ? AND orderdate <= ?', @from_date, @to_date)
       .where('ORDER_STATUS_MASTER_ID > 10002').select(:employee_id).distinct
@@ -331,7 +338,7 @@ class SalesReportController < ApplicationController
        
         name = (Employee.find(e).first_name  || "NA" if Employee.find(e).first_name.present?)
         orderlist = OrderMaster.where('ORDER_STATUS_MASTER_ID > 10002')
-        .where('orderdate >= ? AND orderdate <= ?', from_date, to_date).where(employee_id: e)
+        .where('orderdate >= ? AND orderdate <= ?', @from_date, @to_date).where(employee_id: e)
         timetaken = orderlist.sum(:codcharges)
         ccvalue = orderlist.where(orderpaymentmode_id: 10000).sum(:total)
         ccorders = orderlist.where(orderpaymentmode_id: 10000).count()
