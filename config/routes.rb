@@ -241,7 +241,7 @@ Rails.application.routes.draw do
   post 'inlinetraining' => 'product_training_manuals#inlinecreate'
   # get 'dealersearch' => 'address_dealer#list'
   # get 'newdealer' =>  'address_dealer#new_dealer'
-
+ 
   post 'newdealerenquiry' =>  'address_dealer#dealer_enquiry'
   post 'updatestockbook' => 'product_stock_books#create'
   #this is a duplication of interaction below

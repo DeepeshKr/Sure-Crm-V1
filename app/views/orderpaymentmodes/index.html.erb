@@ -1,4 +1,4 @@
-<h1>Listing order payment modes</h1>
+<h3>Listing order payment modes</h3>
 
 <table class="table table-hover">
   <thead>
@@ -14,7 +14,7 @@
     <% @orderpaymentmodes.each do |orderpaymentmode| %>
       <tr>
         <td><%= orderpaymentmode.name %></td>
-          <td><%= orderpaymentmode.charges %></td>
+        <td><%= orderpaymentmode.charges %></td>
         <td><%= orderpaymentmode.description %></td>
         <td><%= link_to 'Show', orderpaymentmode %></td>
         <td><%= link_to 'Edit', edit_orderpaymentmode_path(orderpaymentmode) %></td>

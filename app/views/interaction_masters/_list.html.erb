@@ -1,4 +1,11 @@
+
+
 <% if @interaction_masters.present? %>
+
+
+<div class="digg_pagination">
+    <%= will_paginate @interaction_masters, :container => false %>
+</div>
 
 <table class="table table-hover">
   
@@ -54,4 +61,10 @@
     <% end %>
   </tbody>
 </table>
+
+
+<div class="digg_pagination">
+    <%= will_paginate @interaction_masters, :container => false %>
+</div>
+
 <% end %>
