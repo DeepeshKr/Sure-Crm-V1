@@ -5,13 +5,20 @@
     <%= f.input :name %>
     <%= f.input :link %>
     <%= f.input :description %>
+     <% if (current_user.employee_role.sortorder < 3) %> 
     <%= f.input :code_used %>
     <%= f.input :database_used %>
+    <% end %>
     <%= f.input :tags %>
-    <%= f.input :employee_id %>
+
+  </div>
+<div class="row">
+  <div class="col-xs-4 col-xs-offset-8">
+      <div class="form-actions">
+    <%= f.button :submit, class:"btn btn-primary" %>
+  </div>
   </div>
 
-  <div class="form-actions">
-    <%= f.button :submit %>
-  </div>
+</div>
+
 <% end %>

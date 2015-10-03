@@ -73,7 +73,7 @@ class PromotionsController < ApplicationController
       format.json { head :no_content }
     end
   end
-
+ 
   private
   def drop_downs
      @product_lists = ProductList.joins(:product_variant)

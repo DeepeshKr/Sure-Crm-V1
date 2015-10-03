@@ -94,7 +94,7 @@
 			  </div>
 			  <div class="panel-footer">
 			  
-					 <%= bootstrap_form_tag url: url_for(:controller => 'sales_report', :action => 'summary'), :method => :GET, :enforce_utf8 => false do |f| %>
+					 <%= bootstrap_form_tag url: url_for(:controller => 'sales_report', :action => 'employee'), :method => :GET, :enforce_utf8 => false do |f| %>
 					 <div class="row">
 					<div class="col-xs-8">
 					 <%= text_field_tag(:from_date, @from_date, :data => {:provide => "datepicker"}, :id => "datepicker4", :class => "form-control", :required => "true" )   %>
@@ -119,7 +119,7 @@
 			    All the upsell products sold by an agents on a selected day
 			  </div>
 			  <div class="panel-footer">
-			  	<%= bootstrap_form_tag url: url_for(:controller => 'sales_report', :action => 'summary'), :method => :GET, :enforce_utf8 => false do |f| %>
+			  	<%= bootstrap_form_tag url: url_for(:controller => 'sales_report', :action => 'employee'), :method => :GET, :enforce_utf8 => false do |f| %>
 					 <div class="row">
 					<div class="col-xs-8">
 					 <%= text_field_tag(:from_date, @from_date, :data => {:provide => "datepicker"}, :id => "datepicker5", :class => "form-control", :required => "true" )   %>
@@ -141,7 +141,7 @@
 			    All the upsell products sold by an agents on a selected day
 			  </div>
 			  <div class="panel-footer">
-			  	<%= bootstrap_form_tag url: url_for(:controller => 'sales_report', :action => 'summary'), :method => :GET, :enforce_utf8 => false do |f| %>
+			  	<%= bootstrap_form_tag url: url_for(:controller => 'sales_report', :action => 'employee'), :method => :GET, :enforce_utf8 => false do |f| %>
 					 <div class="row">
 					<div class="col-xs-8">
 					 <%= text_field_tag(:from_date, @from_date, :data => {:provide => "datepicker"}, :id => "datepicker6", :class => "form-control", :required => "true" )   %>
@@ -194,7 +194,7 @@
 			    All sales from private channel
 			  </div>
 			  <div class="panel-footer">
-			  	<%= bootstrap_form_tag url: url_for(:controller => 'sales_report', :action => 'summary'), :method => :GET, :enforce_utf8 => false do |f| %>
+			  	<%= bootstrap_form_tag url: url_for(:controller => 'sales_report', :action => 'channel'), :method => :GET, :enforce_utf8 => false do |f| %>
 					 <div class="row">
 					<div class="col-xs-8">
 					 <%= text_field_tag(:from_date, @from_date, :data => {:provide => "datepicker"}, :id => "datepicker8", :class => "form-control", :required => "true" )   %>

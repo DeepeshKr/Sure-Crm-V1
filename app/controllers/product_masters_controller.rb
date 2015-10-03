@@ -17,7 +17,7 @@ respond_to :html, :xml, :json
       .paginate(:page => params[:page], :per_page => 5)
       @inactive_product_masters = ProductMaster.where('productactivecodeid <> 10000').where("name like ? OR extproductcode like ? or description like ?", "#{@searchvalue}%", "#{@searchvalue}%", "#{@searchvalue}%").paginate(:page => params[:page], :per_page => 5)
       @found = @product_masters.count
-     
+      
      elsif params[:showall] == 'true'
         
        @search = "All Product Masters"

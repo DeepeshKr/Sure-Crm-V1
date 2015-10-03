@@ -1,6 +1,8 @@
 Rails.application.routes.draw do
 
   resources :help_files
+  get 'help' => 'help_files#index'
+  get 'search' => 'help_files#index'
 
   resources :page_names
 
@@ -373,7 +375,7 @@ mount Upmin::Engine => '/admin'
  
   get 'dealers' => 'address_dealer#list'
  
-  get 'help'    => 'project#help'
+ # get 'help'    => 'project#help'
   get 'about'   => 'project#about'
   get 'contact' => 'project#contact'
   #get 'dropdown' => 'project#dropdown'

@@ -6,7 +6,7 @@
 <div class="row">
   	<div class="col-xs-8">
    
-    <%= select_tag :mediumid, options_from_collection_for_select(@hbnmedialist, :id, :mediainfo), {prompt: "Please select the HBN Media", label: "HBN Media", :class => "form-control"} %>
+    <%= select_tag :media_id, options_from_collection_for_select(@hbnmedialist, :id, :mediainfo, selected: @media_id), {prompt: "Please select the HBN Media", label: "HBN Media", :class => "form-control"} %>
     
   	</div>
   	<div class="col-xs-4">
