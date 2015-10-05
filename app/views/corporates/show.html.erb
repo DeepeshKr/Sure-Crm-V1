@@ -1,4 +1,4 @@
-<p id="notice"><%= notice %></p>
+<div class="well well-sm">
 <div class="row">
     <div class="col-xs-6">
         <h3> <%= @corporate.name %> </h3>
@@ -11,7 +11,7 @@
     </div>
 </div>
 
-<div class="well well-sm"><%= @corporate.description %></div>
+<%= @corporate.description %>
 
 <div class="row">
     <div class="col-xs-12">
@@ -43,7 +43,7 @@
     </div>
     <div class="col-xs-6">
         <p> <strong>Mobile:</strong> <%= @corporate.mobile2 %></p>
-        <p> <strong>Emaild:</strong> <%= @corporate.emaild2 %></p>
+        <p> <strong>Emaild:</strong> <%= @corporate.emailid2 %></p>
     </div>
 </div>
 
@@ -54,7 +54,7 @@
     </div>
     <div class="col-xs-6">
         <p> <strong>Mobile:</strong> <%= @corporate.mobile3 %></p>
-        <p> <strong>Emaild:</strong> <%= @corporate.emaild3 %></p>
+        <p> <strong>Emaild:</strong> <%= @corporate.emailid3 %></p>
     </div>
 </div>
 
@@ -63,17 +63,17 @@
 
 
 
-<%= link_to 'Edit', edit_corporate_path(@corporate), class="btn btn-primary btn-sm" %> |
-<%= link_to 'Back', corporates_path, class="btn btn-primary btn-sm" %>
+<%= link_to 'Edit', edit_corporate_path(@corporate), class:"btn btn-primary btn-sm" %> |
+<%= link_to 'Back', corporates_path, class:"btn btn-primary btn-sm" %>
+</div>
+<hr>
+<h4>Serviced Pincodes</h4> 
 
 <hr>
-<h4>Current Orders</h4> 
+
+<h4>Product Stock</h4> 
 
 <hr>
-
-<h4>Recent Past Orders</h4> 
-
-<hr>
-<h4>Recent Payments</h4> 
+<h4>Recent Stock Ledger (Recent Stock Movements)</h4> 
 
 <hr>

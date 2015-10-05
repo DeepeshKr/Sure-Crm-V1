@@ -7,7 +7,16 @@ class MediaTapesController < ApplicationController
 
   def index
     @media_tapes = MediaTape.all
+  
+
+    @media_tapes.each do |add|
+      media_tape1 = MediaTape.find(add.id)
+      #media_tape1.update(description: add.name)
+
+    end
+
     respond_with(@media_tapes)
+
   end
 
   def show
@@ -151,7 +160,7 @@ class MediaTapesController < ApplicationController
 
     def media_tape_params
       params.require(:media_tape).permit(:name,:release_date, :duration_secs, 
-        :tape_ext_ref_id, :unique_tape_name, 
+        :frames, :tape_ext_ref_id, :unique_tape_name, 
         :media_id, :product_variant_id, :description, :file_parts, 
         :file_extenstion, :media_tape_head_id, :sort_order)
 

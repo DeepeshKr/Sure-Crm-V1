@@ -4,6 +4,7 @@ class InteractionMaster < ActiveRecord::Base
   belongs_to :interaction_status, foreign_key: "interaction_status_id"
   belongs_to :product_variant, foreign_key: "product_variant_id"
   belongs_to :campaign_playlist, foreign_key: "campaign_playlist_id"
+  belongs_to :order_master, foreign_key: "orderid"
   
   belongs_to :customer, foreign_key: "customer_id" 
   belongs_to :employee, foreign_key: "employee_id" #, polymorphic: true

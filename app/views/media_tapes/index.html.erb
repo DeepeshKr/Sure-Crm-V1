@@ -6,9 +6,11 @@
   <thead>
     <tr>
     <th>Tape Head</th>
-      <th>Tape Name</th>
-       <th>Release Date</th>
+      <th>Tape Name <br>
+      Full Path</th>
+      <th>Release Date</th>
       <th>Duration secs</th>
+      <th>Frames secs</th>
       <th>Tape ext ref</th>
       <th>Unique tape name</th>
       <th>Media</th>
@@ -22,16 +24,19 @@
     <% @media_tapes.each do |media_tape| %>
       <tr>
        <td><%= media_tape.media_tape_head.name if media_tape.media_tape_head %></td>
-        <td><%= media_tape.name %></td>
+        <td><strong>File Name:</strong> <%= media_tape.name %> <br>
+        <strong>Full Path:</strong> <%= media_tape.description %>
+        </td>
         <td><%= media_tape.release_date.strftime("%d/%m/%Y") %></td>
         <td><%= media_tape.duration_secs %></td>
+        <td><%= media_tape.frames %></td>
         <td><%= media_tape.tape_ext_ref_id %></td>
         <td><%= media_tape.unique_tape_name %></td>
         <td><%= media_tape.medium.name || "No Media Selected"  if media_tape.medium.present? %></td>
         <td><%= media_tape.product_variant.productinfo || "No Product Selected" if media_tape.product_variant.present? %></td>
        
         <td><%= link_to 'Show', media_tape %></td>
-       
+        <td><%= link_to 'Edit', edit_media_tape_path(media_tape), class:"btn btn-primary btn-xs" %></td>
         <td><%= link_to 'Destroy', media_tape, method: :delete, data: { confirm: 'Are you sure?' } %></td>
       </tr>
     <% end %>

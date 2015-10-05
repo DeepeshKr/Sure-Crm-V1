@@ -7,8 +7,9 @@
       <th>Tape Name</th>
        <th>Release Date</th>
       <th>Duration secs</th>
+      <th>Frames</th>
       <th>Tape ext ref</th>
-      <th>Unique tape name</th>
+      <th>Unique tape name</th> 
       <th>Media</th>
       <th>Product variant</th>
      
@@ -21,9 +22,11 @@
     <% @media_tapes.each do |media_tape| %>
       <tr>
         <td><%= media_tape.sort_order %></td>
-        <td><%= media_tape.name %></td>
+        <td><strong>File Name: </strong><%= media_tape.name %> <br> 
+        <strong>File Name:</strong> <%= media_tape.description %></td>
         <td><%= media_tape.release_date.strftime("%d/%m/%Y") %></td>
         <td><%= media_tape.duration_secs %></td>
+        <td><%= media_tape.frames %></td>
         <td><%= media_tape.tape_ext_ref_id %></td>
         <td><%= media_tape.unique_tape_name %></td>
         <td><%= media_tape.medium.name || "No Media Selected"  if media_tape.medium.present? %></td>

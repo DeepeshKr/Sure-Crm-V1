@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150925151458) do
+ActiveRecord::Schema.define(version: 20151005105732) do
 
   create_table "address_types", force: :cascade do |t|
     t.string   "name"
@@ -163,6 +163,7 @@ ActiveRecord::Schema.define(version: 20150925151458) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "corporate_type_id", limit: 16, precision: 38
+    t.integer  "active",            limit: 16, precision: 38
   end
 
   create_table "customer_addresses", force: :cascade do |t|
@@ -530,6 +531,7 @@ ActiveRecord::Schema.define(version: 20150925151458) do
     t.datetime "release_date"
     t.integer  "media_tape_head_id", limit: 16, precision: 38
     t.integer  "sort_order",         limit: 16, precision: 38
+    t.integer  "frames",             limit: 16, precision: 38
   end
 
   create_table "message_on_orders", force: :cascade do |t|
@@ -795,6 +797,7 @@ ActiveRecord::Schema.define(version: 20150925151458) do
     t.datetime "updated_at"
     t.decimal  "shipping"
     t.integer  "product_sell_type_id",   limit: 16, precision: 38
+    t.decimal  "weight_kg",                         precision: 8,  scale: 4
   end
 
   create_table "product_sample_stocks", force: :cascade do |t|

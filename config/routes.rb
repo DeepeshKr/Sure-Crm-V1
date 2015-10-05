@@ -13,7 +13,7 @@ Rails.application.routes.draw do
   resources :message_types
  
   resources :message_statuses
-
+ 
   resources :message_on_orders
 
   resources :product_cost_masters

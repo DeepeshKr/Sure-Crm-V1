@@ -10,6 +10,7 @@ class OrderMaster < ActiveRecord::Base
   belongs_to :medium, foreign_key: "media_id"
   belongs_to :promotion, foreign_key: "promotion_id"
 
+  has_many :interaction_master, foreign_key: "orderid"
   has_many :page_trail, foreign_key: "order_id" 
   has_many :order_line, foreign_key: "orderid", :dependent => :destroy
    

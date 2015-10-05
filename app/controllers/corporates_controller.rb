@@ -4,8 +4,18 @@ class CorporatesController < ApplicationController
   respond_to :html
 
   def index
-    @corporates = Corporate.all
-    respond_with(@corporates)
+  
+      if params.has_key?(:search) 
+         @search = "Search for " +  params[:search].upcase
+          @searchvalue = params[:search].upcase   
+         @corporates = Corporate.where("name like ? OR city like ? or state like ?", "#{@searchvalue}%",
+       "#{@searchvalue}%", "#{@searchvalue}%").paginate(:page => params[:page])
+      respond_with(@corporates)
+      else
+         @corporates = Corporate.all.paginate(:page => params[:page])
+      respond_with(@corporates)
+      end
+     
   end
 
   def show
@@ -73,5 +83,22 @@ class CorporatesController < ApplicationController
         :mobile2, :emailid2, :salute3, :first_name3, 
         :last_name3, :designation3, :mobile3, 
         :emailid3, :description)
+    end
+    def add_all
+
+      # @address_dealer = ADDRESS_DEALER.all
+
+       # @address_dealer.each do |dealer|
+       #  @corporate = Corporate.new(name: dealer.franchisee,
+       #    :address1 => dealer.add1, 
+       #    :address2 => dealer.add2, 
+       #    :address3 => dealer.add3,  
+       #   :state => dealer.state,
+       #   :country => "India", 
+       #   :telephone1 => dealer.phone, 
+       #   :telephone2 => dealer.mobile, 
+       #   :fax => dealer.fax)
+       #   @corporate.save
+       # end
     end
 end
