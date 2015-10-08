@@ -177,6 +177,6 @@ respond_to :html, :xml, :json
         :productinventorycodeid, 
       :barcode, :price, :taxes,  :shipping, :extproductcode, :description, 
       :productactivecodeid, 
-      :product_sell_type_id)
+      :product_sell_type_id, :weight_kg)
     end
 end
