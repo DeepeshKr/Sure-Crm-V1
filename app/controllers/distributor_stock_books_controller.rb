@@ -69,6 +69,9 @@ class DistributorStockBooksController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def distributor_stock_book_params
-      params.require(:distributor_stock_book).permit(:corporate_id, :product_master_id, :product_variant_id, :product_list_id, :prod, :opening_qty, :opening_value, :10,2, :sold_qty, :sold_value, :10,2, :return_qty, :return_value, :10,2, :closing_qty, :closing_value, :10,2, :book_date, :list_barcode)
+      params.require(:distributor_stock_book).permit(:corporate_id, :product_master_id, :product_variant_id, 
+        :product_list_id, :prod, :opening_qty, :opening_value, 
+        :sold_qty, :sold_value,  :return_qty, :return_value, :closing_qty, :closing_value,
+         :book_date, :list_barcode)
     end
 end
