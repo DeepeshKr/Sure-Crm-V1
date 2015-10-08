@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151005105732) do
+ActiveRecord::Schema.define(version: 20151008053037) do
 
   create_table "address_types", force: :cascade do |t|
     t.string   "name"
@@ -119,6 +119,14 @@ ActiveRecord::Schema.define(version: 20151005105732) do
     t.datetime "updated_at"
   end
 
+  create_table "corporate_active_masters", force: :cascade do |t|
+    t.string   "name"
+    t.integer  "sort_order",  limit: 16, precision: 38
+    t.text     "description"
+    t.datetime "created_at",                            null: false
+    t.datetime "updated_at",                            null: false
+  end
+
   create_table "corporate_types", force: :cascade do |t|
     t.string   "name"
     t.text     "description"
@@ -164,6 +172,13 @@ ActiveRecord::Schema.define(version: 20151005105732) do
     t.datetime "updated_at"
     t.integer  "corporate_type_id", limit: 16, precision: 38
     t.integer  "active",            limit: 16, precision: 38
+    t.string   "tally_id"
+    t.string   "c_form"
+    t.string   "cst_no"
+    t.string   "gst_no"
+    t.string   "vat_no"
+    t.string   "tin_no"
+    t.decimal  "rupee_balance",                precision: 14, scale: 2
   end
 
   create_table "customer_addresses", force: :cascade do |t|
@@ -295,6 +310,64 @@ ActiveRecord::Schema.define(version: 20151005105732) do
 
   add_index "devises", ["email"], name: "index_devises_on_email", unique: true
   add_index "devises", ["reset_password_token"], name: "i_devises_reset_password_token", unique: true
+
+  create_table "distributor_pincode_lists", force: :cascade do |t|
+    t.string   "city"
+    t.string   "state"
+    t.string   "locality"
+    t.integer  "sort_order", limit: 16, precision: 38
+    t.string   "pincode"
+    t.datetime "created_at",                           null: false
+    t.datetime "updated_at",                           null: false
+  end
+
+  create_table "distributor_stock_books", force: :cascade do |t|
+    t.integer  "corporate_id",       limit: 16, precision: 38
+    t.integer  "product_master_id",  limit: 16, precision: 38
+    t.integer  "product_variant_id", limit: 16, precision: 38
+    t.integer  "product_list_id",    limit: 16, precision: 38
+    t.string   "prod"
+    t.integer  "opening_qty",        limit: 16, precision: 38
+    t.decimal  "opening_value",                 precision: 10, scale: 2
+    t.integer  "sold_qty",           limit: 16, precision: 38
+    t.decimal  "sold_value",                    precision: 10, scale: 2
+    t.integer  "return_qty",         limit: 16, precision: 38
+    t.decimal  "return_value",                  precision: 10, scale: 2
+    t.integer  "closing_qty",        limit: 16, precision: 38
+    t.decimal  "closing_value",                 precision: 10, scale: 2
+    t.datetime "book_date"
+    t.string   "list_barcode"
+    t.datetime "created_at",                                             null: false
+    t.datetime "updated_at",                                             null: false
+  end
+
+  create_table "distributor_stock_ledgers", force: :cascade do |t|
+    t.integer  "corporate_id",       limit: 16, precision: 38
+    t.integer  "product_master_id",  limit: 16, precision: 38
+    t.integer  "product_variant_id", limit: 16, precision: 38
+    t.integer  "product_list_id",    limit: 16, precision: 38
+    t.string   "prod"
+    t.string   "name"
+    t.text     "description"
+    t.decimal  "stock_change"
+    t.datetime "ledger_date"
+    t.datetime "created_at",                                   null: false
+    t.datetime "updated_at",                                   null: false
+  end
+
+  create_table "distributor_stock_summaries", force: :cascade do |t|
+    t.integer  "corporate_id",       limit: 16, precision: 38
+    t.integer  "product_master_id",  limit: 16, precision: 38
+    t.integer  "product_variant_id", limit: 16, precision: 38
+    t.integer  "product_list_id",    limit: 16, precision: 38
+    t.string   "prod"
+    t.integer  "stock_qty",          limit: 16, precision: 38
+    t.integer  "stock_value",        limit: 16, precision: 38
+    t.integer  "stock_returned",     limit: 16, precision: 38
+    t.datetime "summary_date"
+    t.datetime "created_at",                                   null: false
+    t.datetime "updated_at",                                   null: false
+  end
 
   create_table "employee_roles", force: :cascade do |t|
     t.string   "name"
@@ -632,6 +705,8 @@ ActiveRecord::Schema.define(version: 20151005105732) do
     t.string   "mobile"
     t.integer  "original_order_id",      limit: 16, precision: 38
     t.integer  "promotion_id",           limit: 16, precision: 38
+    t.string   "city"
+    t.string   "pincode"
   end
 
   create_table "order_payments", force: :cascade do |t|

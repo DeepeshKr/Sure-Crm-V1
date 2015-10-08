@@ -1,8 +1,12 @@
 
  <%= form_tag  url_for(:controller => 'sales_report', :action => searchaction), method: "get" do  %>
 
-<%= hidden_field_tag :from_date, @from_date %>
- <%= hidden_field_tag :to_date, @to_date %>
+<% if @from_date.present? %>
+	<%= hidden_field_tag :from_date, @from_date %>
+<% end %>
+<% if @to_date.present? %>
+	<%= hidden_field_tag :to_date, @to_date %>
+<% end %>
 <div class="row">
    	<div class="col-xs-8">
    

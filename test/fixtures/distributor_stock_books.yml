@@ -1,0 +1,43 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  corporate_id: 1
+  product_master_id: 1
+  product_variant_id: 1
+  product_list_id: 1
+  prod: MyString
+  opening_qty: 1
+  opening_value: 9.99
+  10,2: MyString
+  sold_qty: 1
+  sold_value: 9.99
+  10,2: MyString
+  return_qty: 1
+  return_value: 9.99
+  10,2: MyString
+  closing_qty: 1
+  closing_value: 9.99
+  10,2: MyString
+  book_date: 2015-10-07
+  list_barcode: MyString
+
+two:
+  corporate_id: 1
+  product_master_id: 1
+  product_variant_id: 1
+  product_list_id: 1
+  prod: MyString
+  opening_qty: 1
+  opening_value: 9.99
+  10,2: MyString
+  sold_qty: 1
+  sold_value: 9.99
+  10,2: MyString
+  return_qty: 1
+  return_value: 9.99
+  10,2: MyString
+  closing_qty: 1
+  closing_value: 9.99
+  10,2: MyString
+  book_date: 2015-10-07
+  list_barcode: MyString

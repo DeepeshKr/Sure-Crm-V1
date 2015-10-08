@@ -1,0 +1,49 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Corporate:</strong>
+  <%= @distributor_stock_summary.corporate_id %>
+</p>
+
+<p>
+  <strong>Product master:</strong>
+  <%= @distributor_stock_summary.product_master_id %>
+</p>
+
+<p>
+  <strong>Product variant:</strong>
+  <%= @distributor_stock_summary.product_variant_id %>
+</p>
+
+<p>
+  <strong>Product list:</strong>
+  <%= @distributor_stock_summary.product_list_id %>
+</p>
+
+<p>
+  <strong>Prod:</strong>
+  <%= @distributor_stock_summary.prod %>
+</p>
+
+<p>
+  <strong>Stock balance:</strong>
+  <%= @distributor_stock_summary.stock_balance %>
+</p>
+
+<p>
+  <strong>Rupee balance:</strong>
+  <%= @distributor_stock_summary.rupee_balance %>
+</p>
+
+<p>
+  <strong>Stock returned:</strong>
+  <%= @distributor_stock_summary.stock_returned %>
+</p>
+
+<p>
+  <strong>Summary date:</strong>
+  <%= @distributor_stock_summary.summary_date %>
+</p>
+
+<%= link_to 'Edit', edit_distributor_stock_summary_path(@distributor_stock_summary) %> |
+<%= link_to 'Back', distributor_stock_summaries_path %>

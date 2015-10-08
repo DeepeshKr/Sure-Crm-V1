@@ -1,0 +1,1 @@
+json.extract! @distributor_stock_ledger, :id, :corporate_id, :product_master_id, :product_variant_id, :product_list_id, :prod, :name, :description, :stock_change, :ledger_date, :created_at, :updated_at

@@ -1,0 +1,19 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @corporate_active_master.name %>
+</p>
+
+<p>
+  <strong>Sort order:</strong>
+  <%= @corporate_active_master.sort_order %>
+</p>
+
+<p>
+  <strong>Description:</strong>
+  <%= @corporate_active_master.description %>
+</p>
+
+<%= link_to 'Edit', edit_corporate_active_master_path(@corporate_active_master) %> |
+<%= link_to 'Back', corporate_active_masters_path %>

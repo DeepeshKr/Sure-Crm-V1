@@ -1,0 +1,13 @@
+<%= simple_form_for(@distributor_pincode_list) do |f| %>
+  <%= f.error_notification %>
+
+  <div class="form-inputs">
+    <%= f.input :name %>
+    <%= f.input :sort_order %>
+    <%= f.input :pincode %>
+  </div>
+
+  <div class="form-actions">
+    <%= f.button :submit %>
+  </div>
+<% end %>

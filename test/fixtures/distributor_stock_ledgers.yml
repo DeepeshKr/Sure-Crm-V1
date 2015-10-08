@@ -1,0 +1,23 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  corporate_id: 1
+  product_master_id: 1
+  product_variant_id: 1
+  product_list_id: 1
+  prod: MyString
+  name: MyString
+  description: MyText
+  stock_change: 1.5
+  ledger_date: 2015-10-07
+
+two:
+  corporate_id: 1
+  product_master_id: 1
+  product_variant_id: 1
+  product_list_id: 1
+  prod: MyString
+  name: MyString
+  description: MyText
+  stock_change: 1.5
+  ledger_date: 2015-10-07

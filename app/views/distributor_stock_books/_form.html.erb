@@ -1,0 +1,29 @@
+<%= simple_form_for(@distributor_stock_book) do |f| %>
+  <%= f.error_notification %>
+
+  <div class="form-inputs">
+    <%= f.input :corporate_id %>
+    <%= f.input :product_master_id %>
+    <%= f.input :product_variant_id %>
+    <%= f.input :product_list_id %>
+    <%= f.input :prod %>
+    <%= f.input :opening_qty %>
+    <%= f.input :opening_value %>
+    <%= f.input :10,2 %>
+    <%= f.input :sold_qty %>
+    <%= f.input :sold_value %>
+    <%= f.input :10,2 %>
+    <%= f.input :return_qty %>
+    <%= f.input :return_value %>
+    <%= f.input :10,2 %>
+    <%= f.input :closing_qty %>
+    <%= f.input :closing_value %>
+    <%= f.input :10,2 %>
+    <%= f.input :book_date %>
+    <%= f.input :list_barcode %>
+  </div>
+
+  <div class="form-actions">
+    <%= f.button :submit %>
+  </div>
+<% end %>

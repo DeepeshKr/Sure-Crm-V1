@@ -1,0 +1,49 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Corporate:</strong>
+  <%= @distributor_stock_ledger.corporate_id %>
+</p>
+
+<p>
+  <strong>Product master:</strong>
+  <%= @distributor_stock_ledger.product_master_id %>
+</p>
+
+<p>
+  <strong>Product variant:</strong>
+  <%= @distributor_stock_ledger.product_variant_id %>
+</p>
+
+<p>
+  <strong>Product list:</strong>
+  <%= @distributor_stock_ledger.product_list_id %>
+</p>
+
+<p>
+  <strong>Prod:</strong>
+  <%= @distributor_stock_ledger.prod %>
+</p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @distributor_stock_ledger.name %>
+</p>
+
+<p>
+  <strong>Description:</strong>
+  <%= @distributor_stock_ledger.description %>
+</p>
+
+<p>
+  <strong>Stock change:</strong>
+  <%= @distributor_stock_ledger.stock_change %>
+</p>
+
+<p>
+  <strong>Ledger date:</strong>
+  <%= @distributor_stock_ledger.ledger_date %>
+</p>
+
+<%= link_to 'Edit', edit_distributor_stock_ledger_path(@distributor_stock_ledger) %> |
+<%= link_to 'Back', distributor_stock_ledgers_path %>

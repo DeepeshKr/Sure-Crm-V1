@@ -1,5 +1,15 @@
 Rails.application.routes.draw do
 
+  resources :distributor_stock_summaries
+
+  resources :distributor_pincode_lists
+
+  resources :distributor_stock_ledgers
+
+  resources :distributor_stock_books
+
+  resources :corporate_active_masters
+
   resources :help_files
   get 'help' => 'help_files#index'
   get 'search' => 'help_files#index'

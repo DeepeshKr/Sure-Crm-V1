@@ -1,0 +1,31 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Listing Corporate Active Masters</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Sort order</th>
+      <th>Description</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @corporate_active_masters.each do |corporate_active_master| %>
+      <tr>
+        <td><%= corporate_active_master.name %></td>
+        <td><%= corporate_active_master.sort_order %></td>
+        <td><%= corporate_active_master.description %></td>
+        <td><%= link_to 'Show', corporate_active_master %></td>
+        <td><%= link_to 'Edit', edit_corporate_active_master_path(corporate_active_master) %></td>
+        <td><%= link_to 'Destroy', corporate_active_master, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Corporate active master', new_corporate_active_master_path %>

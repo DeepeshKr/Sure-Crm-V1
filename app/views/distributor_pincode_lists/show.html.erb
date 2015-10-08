@@ -1,0 +1,19 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @distributor_pincode_list.name %>
+</p>
+
+<p>
+  <strong>Sort order:</strong>
+  <%= @distributor_pincode_list.sort_order %>
+</p>
+
+<p>
+  <strong>Pincode:</strong>
+  <%= @distributor_pincode_list.pincode %>
+</p>
+
+<%= link_to 'Edit', edit_distributor_pincode_list_path(@distributor_pincode_list) %> |
+<%= link_to 'Back', distributor_pincode_lists_path %>

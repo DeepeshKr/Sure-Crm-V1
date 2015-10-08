@@ -1,0 +1,43 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Listing Distributor Stock Summaries</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Corporate</th>
+      <th>Product master</th>
+      <th>Product variant</th>
+      <th>Product list</th>
+      <th>Prod</th>
+      <th>Stock balance</th>
+      <th>Rupee balance</th>
+      <th>Stock returned</th>
+      <th>Summary date</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @distributor_stock_summaries.each do |distributor_stock_summary| %>
+      <tr>
+        <td><%= distributor_stock_summary.corporate_id %></td>
+        <td><%= distributor_stock_summary.product_master_id %></td>
+        <td><%= distributor_stock_summary.product_variant_id %></td>
+        <td><%= distributor_stock_summary.product_list_id %></td>
+        <td><%= distributor_stock_summary.prod %></td>
+        <td><%= distributor_stock_summary.stock_balance %></td>
+        <td><%= distributor_stock_summary.rupee_balance %></td>
+        <td><%= distributor_stock_summary.stock_returned %></td>
+        <td><%= distributor_stock_summary.summary_date %></td>
+        <td><%= link_to 'Show', distributor_stock_summary %></td>
+        <td><%= link_to 'Edit', edit_distributor_stock_summary_path(distributor_stock_summary) %></td>
+        <td><%= link_to 'Destroy', distributor_stock_summary, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Distributor stock summary', new_distributor_stock_summary_path %>

@@ -1,0 +1,31 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Listing Distributor Pincode Lists</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Sort order</th>
+      <th>Pincode</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @distributor_pincode_lists.each do |distributor_pincode_list| %>
+      <tr>
+        <td><%= distributor_pincode_list.name %></td>
+        <td><%= distributor_pincode_list.sort_order %></td>
+        <td><%= distributor_pincode_list.pincode %></td>
+        <td><%= link_to 'Show', distributor_pincode_list %></td>
+        <td><%= link_to 'Edit', edit_distributor_pincode_list_path(distributor_pincode_list) %></td>
+        <td><%= link_to 'Destroy', distributor_pincode_list, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Distributor pincode list', new_distributor_pincode_list_path %>
