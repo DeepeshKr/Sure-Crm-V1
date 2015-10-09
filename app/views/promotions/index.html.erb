@@ -1,39 +1,28 @@
-<p id="notice"><%= notice %></p>
-
-<h3>Listing Promotions</h3>
-
-<table class="table table-hover table-stripped" >
-  <thead>
-    <tr>
-      <th>Name</th>
-      <th>Description</th>
-      <th>Start date</th>
-      <th>End date</th>
-      <th>Free product list</th>
-      <th>Active</th>
-      <th>Cost</th>
-      <th colspan="3"></th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <% @promotions.each do |promotion| %>
-      <tr>
-        <td><%= promotion.name %></td>
-        <td><%= promotion.description %></td>
-        <td><%= promotion.start_date.strftime('%d-%b-%Y') %></td>
-        <td><%= promotion.end_date.strftime('%d-%b-%Y') %></td>
-        <td><%= promotion.product_list.productinfo if promotion.product_list %></td>
-        <td><%= promotion.active %></td>
-        <td><%= promotion.promo_cost %></td>
-        <td><%= link_to 'Show', promotion %></td>
-        <td><%= link_to 'Edit', edit_promotion_path(promotion) %></td>
-        <td><%= link_to 'Destroy', promotion, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
+<div class="row">
+<div class="col-xs-6">
+<h3>Promotions</h3>
+</div>
+<div class="col-xs-6">
+<%= render partial: 'search', :locals => {:searchaction => "index"} %>
+</div>
+</div>
 
 <br>
+<div class="digg_pagination">
+    <%= will_paginate @product_variants, :container => false %>
+</div>
+<br>
 
+<%= render partial: 'list', :locals => {:listing => @live_promotions,:name => "Live"} %>
+<br>
+ <%= render partial: 'list', :locals => {:listing => @live_not_active_promotions, :name => "Live but Not Active"} %>
+<br>
+ <%= render partial: 'list', :locals => {:listing => @promotions,:name => "All"} %>
+
+
+
+ <br>
+ <%= render partial: 'list', :locals => {:listing => @upcoming_promotions, :name => "Upcoming"} %>
+
+<br>
 <%= link_to 'New Promotion', new_promotion_path, class: "btn btn-primary" %>

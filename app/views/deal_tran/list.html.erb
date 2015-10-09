@@ -1,0 +1,147 @@
+<h1>DealTran#list</h1>
+<p>Find me in app/views/deal_tran/list.html.erb</p>
+
+<table>
+	<thead>
+		<tr>
+			 <th>	FNAME	 </th>
+ <th>	LNAME	 </th>
+ <th>	ADD1	 </th>
+ <th>	ADD2	 </th>
+ <th>	ADD3	 </th>
+ <th>	CITY	 </th>
+ <th>	PIN	 </th>
+ <th>	STATE	 </th>
+ <th>	TEL1	 </th>
+ <th>	TEL2	 </th>
+ <th>	FAX	 </th>
+ <th>	EMAIL	 </th>
+ <th>	DEPT	 </th>
+ <th>	PROD	 </th>
+ <th>	QTY	 </th>
+ <th>	ORDERDATE	 </th>
+ <th>	TRANDATE	 </th>
+ <th>	ORDERSOURCE	 </th>
+ <th>	DEO	 </th>
+ <th>	VPP	 </th>
+ <th>	OPERATOR	 </th>
+ <th>	TITLE	 </th>
+ <th>	DISTNAME	 </th>
+ <th>	BASICPRICE	 </th>
+ <th>	STATUS	 </th>
+ <th>	STATUSDATE	 </th>
+ <th>	DISTCODE	 </th>
+ <th>	ORDERNO	 </th>
+ <th>	DEBITNOTE	 </th>
+ <th>	NORMAL	 </th>
+ <th>	TRANSFER	 </th>
+ <th>	DEBITNOTEDATE	 </th>
+ <th>	TAXPER	 </th>
+ <th>	TAXAMT	 </th>
+ <th>	POSTAGE	 </th>
+ <th>	INVOICEAMOUNT	 </th>
+ <th>	DIST	 </th>
+ <th>	DESPATCH	 </th>
+ <th>	MODBY	 </th>
+ <th>	MODDT	 </th>
+ <th>	TRANTYPE	 </th>
+ <th>	CHANNEL	 </th>
+ <th>	DELVDATE	 </th>
+ <th>	ENTRYDATE	 </th>
+ <th>	CUSTREF	 </th>
+ <th>	ORDERTYPE	 </th>
+ <th>	MANIFEST	 </th>
+ <th>	TEMPSTATUS	 </th>
+ <th>	TEMPSTATUSDATE	 </th>
+ <th>	LOYDATE	 </th>
+ <th>	LANDMARK	 </th>
+ <th>	TEMPTRANDATE	 </th>
+ <th>	INVDATE	 </th>
+ <th>	ACTDATE	 </th>
+ <th>	ACTION	 </th>
+ <th>	LESSPROD	 </th>
+ <th>	REMARKS	 </th>
+ <th>	BARCODE	 </th>
+ <th>	BARCODE2	 </th>
+ <th>	BARCODE3	 </th>
+ <th>	CODAMT	 </th>
+ <th>	WEIGHT	 </th>
+ <th>	DT_HOUR	 </th>
+ <th>	DT_MIN	 </th>
+ <th>	CONVCHARGES	 </th>
+
+		</tr>
+	</thead>
+	<tbody>
+	<% @vpp.each do |v| %>
+		<tr>
+			 <td>	<%= v.fname %>	 </td>
+ <td>	<%= v.lname %>	 </td>
+ <td>	<%= v.add1 %>	 </td>
+ <td>	<%= v.add2 %>	 </td>
+ <td>	<%= v.add3 %>	 </td>
+ <td>	<%= v.city %>	 </td>
+ <td>	<%= v.pin %>	 </td>
+ <td>	<%= v.state %>	 </td>
+ <td>	<%= v.tel1 %>	 </td>
+ <td>	<%= v.tel2 %>	 </td>
+ <td>	<%= v.fax %>	 </td>
+ <td>	<%= v.email %>	 </td>
+ <td>	<%= v.dept %>	 </td>
+ <td>	<%= v.prod %>	 </td>
+ <td>	<%= v.qty %>	 </td>
+ <td>	<%= v.orderdate %>	 </td>
+ <td>	<%= v.trandate %>	 </td>
+ <td>	<%= v.ordersource %>	 </td>
+ <td>	<%= v.deo %>	 </td>
+ <td>	<%= v.vpp %>	 </td>
+ <td>	<%= v.operator %>	 </td>
+ <td>	<%= v.title %>	 </td>
+ <td>	<%= v.distname %>	 </td>
+ <td>	<%= v.basicprice %>	 </td>
+ <td>	<%= v.status %>	 </td>
+ <td>	<%= v.statusdate %>	 </td>
+ <td>	<%= v.distcode %>	 </td>
+ <td>	<%= v.orderno %>	 </td>
+ <td>	<%= v.debitnote %>	 </td>
+ <td>	<%= v.normal %>	 </td>
+ <td>	<%= v.transfer %>	 </td>
+ <td>	<%= v.debitnotedate %>	 </td>
+ <td>	<%= v.taxper %>	 </td>
+ <td>	<%= v.taxamt %>	 </td>
+ <td>	<%= v.postage %>	 </td>
+ <td>	<%= v.invoiceamount %>	 </td>
+ <td>	<%= v.dist %>	 </td>
+ <td>	<%= v.despatch %>	 </td>
+ <td>	<%= v.modby %>	 </td>
+ <td>	<%= v.moddt %>	 </td>
+ <td>	<%= v.trantype %>	 </td>
+ <td>	<%= v.channel %>	 </td>
+ <td>	<%= v.delvdate %>	 </td>
+ <td>	<%= v.entrydate %>	 </td>
+ <td>	<%= v.custref %>	 </td>
+ <td>	<%= v.ordertype %>	 </td>
+ <td>	<%= v.manifest %>	 </td>
+ <td>	<%= v.tempstatus %>	 </td>
+ <td>	<%= v.tempstatusdate %>	 </td>
+ <td>	<%= v.loydate %>	 </td>
+ <td>	<%= v.landmark %>	 </td>
+ <td>	<%= v.temptrandate %>	 </td>
+ <td>	<%= v.invdate %>	 </td>
+ <td>	<%= v.actdate %>	 </td>
+ <td>	<%= v.action %>	 </td>
+ <td>	<%= v.lessprod %>	 </td>
+ <td>	<%= v.remarks %>	 </td>
+ <td>	<%= v.barcode %>	 </td>
+ <td>	<%= v.barcode2 %>	 </td>
+ <td>	<%= v.barcode3 %>	 </td>
+ <td>	<%= v.codamt %>	 </td>
+ <td>	<%= v.weight %>	 </td>
+ <td>	<%= v.dt_hour %>	 </td>
+ <td>	<%= v.dt_min %>	 </td>
+ <td>	<%= v.convcharges %>	 </td>
+ 
+		</tr>
+	<% end %>
+	</tbody>
+</table>

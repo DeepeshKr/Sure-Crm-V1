@@ -80,7 +80,7 @@
 <br>
  <div class="panel panel-primary">
   <div class="panel-heading">
-    <h3 class="panel-title">Order in Dispatch / Paid / Returned</h3>
+    <h3 class="panel-title">Order in Dispatch / Paid / Returned (VPP)</h3>
   </div>
   <% if @vpp.present? %>
  <%= render 'vpp' %>
@@ -93,4 +93,18 @@
 </div>
 
 <br>
+<br>
+ <div class="panel panel-primary">
+  <div class="panel-heading">
+    <h3 class="panel-title">Order in Transfer Order (DEALTRAN)</h3>
+  </div>
+  <% if @dealtran.present? %>
+ <%= render 'deal_tran/list' %>
+
+<% else %>
+<div class="well well-sm">
+<h4><%= @dealtransearch %></h4>
+</div>
+<% end %>
+</div>
 

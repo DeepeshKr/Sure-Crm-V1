@@ -1,0 +1,39 @@
+
+<h3><%= name %> Promotions</h3>
+
+<% if listing.present? %>
+<table class="table table-hover table-stripped" >
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Description</th>
+      <th>Start date</th>
+      <th>End date</th>
+      <th>Free product list</th>
+      <th>Active</th>
+      <th>Cost</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% listing.each do |promotion| %>
+      <tr>
+        <td><%= promotion.name %></td>
+        <td><%= promotion.description %></td>
+        <td><%= promotion.start_date.strftime('%d-%b-%Y') %></td>
+        <td><%= promotion.end_date.strftime('%d-%b-%Y') %></td>
+        <td><%= promotion.product_list.productinfo if promotion.product_list %></td>
+        <td><%= promotion.active %></td>
+        <td><%= promotion.promo_cost %></td>
+        <td><%= link_to 'Show', promotion %></td>
+        <td><%= link_to 'Edit', edit_promotion_path(promotion) %></td>
+        <td><%= link_to 'Destroy', promotion, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table><% else %>
+<div class="well well-sm">
+<h4>There are no <%= name %> promotions</h4>
+</div>
+<% end %>

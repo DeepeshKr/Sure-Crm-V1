@@ -1,5 +1,11 @@
 Rails.application.routes.draw do
 
+  get 'deal_tran/list'
+
+  get 'deal_tran/search'
+
+  get 'deal_tran/details'
+
   resources :distributor_stock_summaries
 
   resources :distributor_pincode_lists

@@ -163,6 +163,8 @@ class OrderMastersController < ApplicationController
   def search
     @ordersearchresults = "Please search for Order, Results across Ordering, Processing and Dispatch"
     @vppsearch = "Please search for Order, Results across Ordering, Processing and Dispatch"
+    @dealtransearch = "Please search for Orders in Transfer Orders"
+
     if params[:ordernum].present?
       @ordernum = params[:ordernum]
       @custdetails = CUSTDETAILS.where("ORDERNUM = ?", @ordernum)
@@ -178,9 +180,14 @@ class OrderMastersController < ApplicationController
           #end 
         end
         #custref related to 
-        if VPP.where(custref: @ordernum).present?
+       # if VPP.where(custref: @ordernum).present?
           @vpp = VPP.where(custref: @ordernum)
-        end 
+       # end 
+
+        # if DEALTRAN.where(custref: @ordernum).present?
+          @dealtran = DEALTRAN.where(custref: @ordernum)
+        #end 
+
       end
     end
   end
