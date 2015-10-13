@@ -24,8 +24,8 @@
       <td><%= order_master.medium.name if order_master.medium %> <br>
       <%= order_master.campaign_playlist.product_variant.name || "No Show" if order_master.campaign_playlist.present? %>
        </td>
-        <td><%= (order_master.orderdate).strftime('%d-%b-%Y') %>
-    <small><%= Time.at(order_master.orderdate).strftime('%H:%M %P') %></small>
+        <td><%= (order_master.orderdate + 330.minutes).strftime('%d-%b-%Y') %>
+    <small><%= Time.at(order_master.orderdate + 330.minutes).strftime('%H:%M %P') %></small>
 <br>
 <%= order_master.employee.name if order_master.employee %> 
         <small><strong><%= order_master.employeecode %> </strong></small>

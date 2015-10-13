@@ -306,6 +306,35 @@
 		</div>
 	</div>
  </div>
+   <div class="panel panel-primary">
+			<div class="panel-heading"><h3 class="panel-title">Product Sold Report</h3></div>
+			  <div class="panel-body">
+<div class="row">
+ <div class="col-xs-3">
+
+	 <h3>Search Product</h3>
+	 </div>
+  <%= form_tag  url_for(:controller => 'sales_report', :action => "product_sold"), method: "get" do  %>
+     <div class="col-xs-6">
+	 	 <%= select_tag :product_master_id,  options_from_collection_for_select(@product_master,
+       :id, :productname, selected: @product_master_id ),
+             {:class => "form-control", label: "Select the Product if required " } %>
+	 </div>
+      <div class="col-xs-3">
+       
+          <%= text_field_tag(:from_date, @from_date, :data => {:provide => "datepicker"}, :id => "datepicker", :class => "form-control", :required => "true" )   %>
+          
+        </div>
+          <div class="col-xs-2">
+        <%= submit_tag "Show Report", name: nil, class: "btn btn-primary" %>
+      </div>
+  
+
+    
+  <% end %>
+</div>
+</div>
+</div>
  <script>
 $('#datepicker1').datepicker({format: 'yyyy-mm-dd'});
 $('#datepicker2').datepicker({format: 'yyyy-mm-dd'});
