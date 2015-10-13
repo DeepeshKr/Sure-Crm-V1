@@ -17,8 +17,27 @@ class CorporatesController < ApplicationController
       end
      
   end
-
+ 
   def show
+    #show pincode
+    @distributor_pincode_lists = DistributorPincodeList.where(corporate_id: @corporate.id)
+    
+    #add pincode
+    @distributor_pincode_list = DistributorPincodeList.new(corporate_id: @corporate.id)
+    
+    #show distributor stock summary
+    @distributor_stock_summaries = DistributorStockSummary.all.where(corporate_id: @corporate.id)
+
+    #show stock ledger
+     @distributor_stock_ledgers = DistributorStockLedger.all.where(corporate_id: @corporate.id)
+
+     #add stock ledger
+     @product_master = ProductMaster.where(productactivecodeid: 10000).order('name')
+     @distributor_stock_ledger_type = DistributorStockLedgerType.order('sort_order')
+    @distributor_stock_ledger = DistributorStockLedger.new(corporate_id: @corporate.id)
+    
+
+
     respond_with(@corporate)
   end
 
@@ -82,7 +101,10 @@ class CorporatesController < ApplicationController
         :first_name2, :last_name2, :designation2, 
         :mobile2, :emailid2, :salute3, :first_name3, 
         :last_name3, :designation3, :mobile3, 
-        :emailid3, :description)
+        :emailid3, :description, :corporate_type_id,
+        :active, :tally_id,  :c_form, 
+        :cst_no, :gst_no, :vat_no, :tin_no, :rupee_balance, 
+        :web_id, :ref_no)
     end
     def add_all
 

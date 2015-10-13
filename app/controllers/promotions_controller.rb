@@ -15,7 +15,7 @@ class PromotionsController < ApplicationController
     @promotions = Promotion.all.order("start_date DESC, end_date DESC").paginate(:page => params[:page])
     @live_promotions = Promotion.where("TRUNC(start_date) <= ? and TRUNC(end_date) >= ? AND ACTIVE = ?", todaydate, todaydate, 1).order("start_date DESC, end_date DESC")
     @live_not_active_promotions = Promotion.where("TRUNC(start_date) <= ? and TRUNC(end_date) >= ? AND ACTIVE = ?", todaydate, todaydate, 0).order("start_date DESC, end_date DESC")
-    @upcoming_promotions = Promotion.where("TRUNC(start_date) > ?", todaydate).paginate(:page => params[:page]).order("start_date DESC, end_date DESC")
+    @upcoming_promotions = Promotion.where("TRUNC(start_date) > ?", todaydate).order("start_date DESC, end_date DESC")
   end
 
   # GET /promotions/1

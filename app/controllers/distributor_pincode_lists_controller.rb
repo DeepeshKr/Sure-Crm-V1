@@ -4,7 +4,13 @@ class DistributorPincodeListsController < ApplicationController
   # GET /distributor_pincode_lists
   # GET /distributor_pincode_lists.json
   def index
-    @distributor_pincode_lists = DistributorPincodeList.all
+    if params.has_key? :corporate_id
+      @distributor_pincode_lists = DistributorPincodeList.where(corporate_id: params[:corporate_id]).sort("pincode, name").paginate(:page => params[:page])
+    else
+      @distributor_pincode_lists = DistributorPincodeList.all.order("pincode, name").paginate(:page => params[:page]) 
+      #.sort("pincode, name")
+    end
+    
   end
 
   # GET /distributor_pincode_lists/1
@@ -69,6 +75,7 @@ class DistributorPincodeListsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def distributor_pincode_list_params
-      params.require(:distributor_pincode_list).permit(:name, :sort_order, :pincode)
+      params.require(:distributor_pincode_list).permit(:name, :corporate_id,
+       :sort_order, :pincode)
     end
 end

@@ -1,11 +1,20 @@
-<p id="notice"><%= notice %></p>
 
-<h1>Listing Distributor Pincode Lists</h1>
+<h3>Listing Distributor Pincode Lists</h3>
 
-<table>
+<% if @distributor_pincode_lists.present? %>
+<br>
+<div class="digg_pagination">
+    <%= will_paginate @distributor_pincode_lists, :container => false %>
+</div>
+<br>
+
+
+<table class="table table-hover">
   <thead>
     <tr>
-      <th>Name</th>
+      <th>State</th>
+      <th>City</th>
+      <th>Locality</th>
       <th>Sort order</th>
       <th>Pincode</th>
       <th colspan="3"></th>
@@ -15,7 +24,9 @@
   <tbody>
     <% @distributor_pincode_lists.each do |distributor_pincode_list| %>
       <tr>
-        <td><%= distributor_pincode_list.name %></td>
+        <td><%= distributor_pincode_list.state %></td>
+        <td><%= distributor_pincode_list.city %></td>
+        <td><%= distributor_pincode_list.locality %></td>
         <td><%= distributor_pincode_list.sort_order %></td>
         <td><%= distributor_pincode_list.pincode %></td>
         <td><%= link_to 'Show', distributor_pincode_list %></td>
@@ -27,5 +38,5 @@
 </table>
 
 <br>
-
-<%= link_to 'New Distributor pincode list', new_distributor_pincode_list_path %>
+<% end %>
+<%= link_to 'New Distributor pincode list', new_distributor_pincode_list_path, class:"btn btn-primary" %>

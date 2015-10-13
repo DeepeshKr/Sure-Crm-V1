@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151008053037) do
+ActiveRecord::Schema.define(version: 20151011175930) do
 
   create_table "address_types", force: :cascade do |t|
     t.string   "name"
@@ -179,6 +179,8 @@ ActiveRecord::Schema.define(version: 20151008053037) do
     t.string   "vat_no"
     t.string   "tin_no"
     t.decimal  "rupee_balance",                precision: 14, scale: 2
+    t.integer  "web_id",            limit: 16, precision: 38
+    t.integer  "ref_no",            limit: 16, precision: 38
   end
 
   create_table "customer_addresses", force: :cascade do |t|
@@ -315,10 +317,11 @@ ActiveRecord::Schema.define(version: 20151008053037) do
     t.string   "city"
     t.string   "state"
     t.string   "locality"
-    t.integer  "sort_order", limit: 16, precision: 38
+    t.integer  "sort_order",   limit: 16, precision: 38
     t.string   "pincode"
-    t.datetime "created_at",                           null: false
-    t.datetime "updated_at",                           null: false
+    t.datetime "created_at",                             null: false
+    t.datetime "updated_at",                             null: false
+    t.integer  "corporate_id", limit: 16, precision: 38
   end
 
   create_table "distributor_stock_books", force: :cascade do |t|
@@ -341,6 +344,14 @@ ActiveRecord::Schema.define(version: 20151008053037) do
     t.datetime "updated_at",                                             null: false
   end
 
+  create_table "distributor_stock_ledger_types", force: :cascade do |t|
+    t.string   "name"
+    t.integer  "sort_order",  limit: 16, precision: 38
+    t.text     "description"
+    t.datetime "created_at",                            null: false
+    t.datetime "updated_at",                            null: false
+  end
+
   create_table "distributor_stock_ledgers", force: :cascade do |t|
     t.integer  "corporate_id",       limit: 16, precision: 38
     t.integer  "product_master_id",  limit: 16, precision: 38
@@ -353,6 +364,7 @@ ActiveRecord::Schema.define(version: 20151008053037) do
     t.datetime "ledger_date"
     t.datetime "created_at",                                   null: false
     t.datetime "updated_at",                                   null: false
+    t.integer  "type_id",            limit: 16, precision: 38
   end
 
   create_table "distributor_stock_summaries", force: :cascade do |t|

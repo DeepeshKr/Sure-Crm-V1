@@ -1,5 +1,7 @@
 Rails.application.routes.draw do
 
+  resources :distributor_stock_ledger_types
+
   get 'deal_tran/list'
 
   get 'deal_tran/search'
@@ -74,6 +76,7 @@ Rails.application.routes.draw do
   get 'packing_cost/details'
   get 'listofproducts' => 'product_masters#listofproducts'
   get 'productwithcosts' => 'product_cost_masters#product_costs'
+  get 'showprod' => 'product_masters#showprod'
 
 
  
@@ -97,6 +100,8 @@ Rails.application.routes.draw do
   get 'product_report' => 'sales_report#product'
   get 'sales_report/show'
   get 'show_report' => 'sales_report#show'
+  get 'sales_report/product_sold'
+  get 'products_sold' => 'sales_report#product_sold'
   get 'sales_report/order_summary'
   get 'order_summary' => 'sales_report#order_summary'
   get 'sales_report/orders'

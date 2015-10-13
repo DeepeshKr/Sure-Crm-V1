@@ -14,6 +14,8 @@ class DistributorStockLedgersController < ApplicationController
 
   # GET /distributor_stock_ledgers/new
   def new
+    @product_master = ProductMaster.where(productactivecodeid: 10000).limit(10).order('name')
+     @distributor_stock_ledger_type = DistributorStockLedgerType.order('sort_order')
     @distributor_stock_ledger = DistributorStockLedger.new
   end
 

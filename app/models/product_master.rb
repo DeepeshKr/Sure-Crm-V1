@@ -5,6 +5,8 @@ class ProductMaster < ActiveRecord::Base
   belongs_to :product_sell_type , foreign_key: "product_sell_type_id"
   
   has_many :product_master_ann_on, foreign_key: "product_master_id"
+  has_many :distributor_stock_ledger, foreign_key: "product_master_id"
+  
   #has_many :product_stock_book, foreign_key: "product_master_id"
   #has_many :product_stock, foreign_key: "product_master_id"
   #has_many :product_stock_adjust, foreign_key: "product_master_id"

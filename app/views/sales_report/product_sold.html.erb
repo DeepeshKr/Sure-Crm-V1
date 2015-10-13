@@ -1,0 +1,35 @@
+  
+<div class="row">
+ <div class="col-xs-3">
+
+	 <h3>Product <%= @product_master_id %> </h3>
+	 </div>
+  <%= form_tag  url_for(:controller => 'sales_report', :action => "product_sold"), method: "get" do  %>
+     <div class="col-xs-4">
+	 	 <%= select_tag :product_master_id,  options_from_collection_for_select(@product_master,
+       :id, :productname, selected: @product_master_id ),
+             {:class => "form-control", label: "Select the Product if required " } %>
+	 </div>
+      <div class="col-xs-3">
+       
+          <%= text_field_tag(:from_date, @from_date, :data => {:provide => "datepicker"}, :id => "datepicker", :class => "form-control", :required => "true" )   %>
+          
+        </div>
+          <div class="col-xs-2">
+        <%= submit_tag "Show Report", name: nil, class: "btn btn-primary" %>
+      </div>
+  
+
+    
+  <% end %>
+</div>
+
+<hr>
+
+<h3>Report</h3>
+
+ <%= render('product_list') %>
+
+<script>
+$('#datepicker').datepicker({format: 'yyyy-mm-dd'});
+</script>

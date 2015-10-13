@@ -1,79 +1,30 @@
-<div class="well well-sm">
-<div class="row">
-    <div class="col-xs-6">
-        <h3> <%= @corporate.name %> </h3>
-        <p>  <%= @corporate.website %></p>
-    </div>
-    <div class="col-xs-6">
-        <p> <strong>Telephone:</strong> <%= @corporate.telephone1 %></p>
-        <p> <strong>Telephone:</strong> <%= @corporate.telephone2 %> </p>
-        <p> <strong>Fax:</strong> <%= @corporate.fax %></p>
-    </div>
-</div>
-
-<%= @corporate.description %>
-
-<div class="row">
-    <div class="col-xs-12">
-    <p>    <strong>Address:</strong>  </p>
-
-    <p> <%= @corporate.address1 %>   <%= @corporate.address2 %>   <%= @corporate.address3 %>
-    <%= @corporate.landmark %>    <%= @corporate.district %>  <%= @corporate.city %> <%= @corporate.pincode %> <%= @corporate.state %>   <%= @corporate.country %>
-</p>
-    </div>
-</div>
-<h3>Contacts</h3>
-<div class="row">
-    <div class="col-xs-6">
-        <p> <%= @corporate.salute1 %><%= @corporate.first_name1 %>  <%= @corporate.last_name1 %>
-        </p>
-        <p>  <%= @corporate.designation1 %></p>
-    </div>
-    <div class="col-xs-6">
-        <p> <strong>Mobile:</strong> <%= @corporate.mobile1 %></p>
-        <p> <strong>Emaild:</strong> <%= @corporate.emaild1 %></p>
-    </div>
-</div>
-
-<div class="row">
-    <div class="col-xs-6">
-        <p> <%= @corporate.salute2 %><%= @corporate.first_name2 %>  <%= @corporate.last_name2 %>
-        </p>
-        <p>  <%= @corporate.designation2 %></p>
-    </div>
-    <div class="col-xs-6">
-        <p> <strong>Mobile:</strong> <%= @corporate.mobile2 %></p>
-        <p> <strong>Emaild:</strong> <%= @corporate.emailid2 %></p>
-    </div>
-</div>
-
-<div class="row">
-    <div class="col-xs-6">
-        <p> <%= @corporate.salute3 %><%= @corporate.first_name3 %>  <%= @corporate.last_name3 %></p>
-        <p>  <%= @corporate.designation3 %></p>
-    </div>
-    <div class="col-xs-6">
-        <p> <strong>Mobile:</strong> <%= @corporate.mobile3 %></p>
-        <p> <strong>Emaild:</strong> <%= @corporate.emailid3 %></p>
-    </div>
-</div>
-
-
-
-
-
-
-<%= link_to 'Edit', edit_corporate_path(@corporate), class:"btn btn-primary btn-sm" %> |
-<%= link_to 'Back', corporates_path, class:"btn btn-primary btn-sm" %>
-</div>
+<%= render partial: 'show_details' %>
 <hr>
-<h4>Serviced Pincodes</h4> 
+<h3>Serviced Pincodes</h3> 
+
+
+<button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#servicedPincode" aria-expanded="false" aria-controls="servicedPincode">
+  Add New Pincode
+</button>
+<div class="collapse" id="servicedPincode">
+  <div class="well">
+    <%= render partial: 'distributor_pincode_lists/form' %>
+  </div>
+</div>
 
 <hr>
 
-<h4>Product Stock</h4> 
+<h3>Product Stock Summary (where available or Returns more than ZERO</h3> 
 
 <hr>
-<h4>Recent Stock Ledger (Recent Stock Movements)</h4> 
+<h3>Recent Stock Ledger (Recent Stock Movements)</h3> 
 
 <hr>
+<button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#distributorLedger" aria-expanded="false" aria-controls="distributorLedger">
+  New Stock Ledger
+</button>
+<div class="collapse" id="distributorLedger">
+  <div class="well">
+    <%= render partial: 'distributor_stock_ledgers/form' %>
+  </div>
+</div>

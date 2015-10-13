@@ -1,13 +1,60 @@
 <%= simple_form_for(@distributor_pincode_list) do |f| %>
   <%= f.error_notification %>
+  <%= f.hidden_field :corporate_id %>
 
-  <div class="form-inputs">
-    <%= f.input :name %>
-    <%= f.input :sort_order %>
-    <%= f.input :pincode %>
-  </div>
+<div class="form-inputs">
+	<div class="row">
+		  <div class="col-xs-6">
+		  	 <%= f.input :pincode, label: "Pincode", placeholder: "Search by entering pincodes", required: true %>
+		  </div>
+		  <div class="col-xs-6">
+		  <%= f.input :sort_order, label: "Priority", placeholder: "Set Priority", required: true  %>
+		  </div>
+	</div>
+	<div class="row">
+		  <div class="col-xs-4">
+		  	<%= f.input :city, label: "City", required: true %>	
+		  </div>
+		  <div class="col-xs-4">
+		  	<%= f.input :state, label: "State", required: true %>
+		  </div>
+		  <div class="col-xs-4">
+		  	<%= f.input :locality, label: "Locality" %>
+		  </div>
+	</div>  
+</div>
 
-  <div class="form-actions">
-    <%= f.button :submit %>
-  </div>
+<div class="row">
+	<div class="col-xs-3 col-xs-offset-3">
+    	<%= f.button :submit, class:"btn btn-primary" %>
+  	</div>
+</div>
+  
 <% end %>
+
+<script type="text/javascript">
+   $(function() {
+    var city = $("#project-id" ).val();
+    $( "#distributor_pincode_list_pincode" ).autocomplete({
+      minLength: 3,
+      source: "/show_pincode",
+      focus: function( event, ui ) {
+        $( "#distributor_pincode_list_pincode" ).val( ui.item.pincode );
+        return false;
+      }
+      ,
+      select: function( event, ui ) {
+        $( "#distributor_pincode_list_pincode" ).val( ui.item.pincode);
+        $( "#distributor_pincode_list_city" ).val( ui.item.regionname);
+         $( "#distributor_pincode_list_locality" ).val( ui.item.officename);
+        $( "#distributor_pincode_list_state" ).val( ui.item.statename );
+        return false;
+      }
+    })
+      .autocomplete( "instance" )._renderItem = function( ul, item ) {
+      return $( "<li>" )
+         .append(  item.pincode + " " + item.officename  + " " + item.circlename + " <br>" + " " + item.taluk  )
+        .appendTo( ul );
+    };
+  });
+  </script>

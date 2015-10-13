@@ -1,0 +1,19 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @distributor_stock_ledger_type.name %>
+</p>
+
+<p>
+  <strong>Sort order:</strong>
+  <%= @distributor_stock_ledger_type.sort_order %>
+</p>
+
+<p>
+  <strong>Description:</strong>
+  <%= @distributor_stock_ledger_type.description %>
+</p>
+
+<%= link_to 'Edit', edit_distributor_stock_ledger_type_path(@distributor_stock_ledger_type) %> |
+<%= link_to 'Back', distributor_stock_ledger_types_path %>

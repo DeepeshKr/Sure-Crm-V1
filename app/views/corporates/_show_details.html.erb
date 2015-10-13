@@ -1,0 +1,89 @@
+<div class="well well-sm">
+<div class="row">
+    <div class="col-xs-6">
+        <h3> <%= @corporate.name %> </h3>
+        <p> <%= @corporate.rupee_balance %>  <%= @corporate.corporate_type.name if @corporate.corporate_type %></p>
+        <p class="lead">Status: <%= @corporate.corporate_active_master.name if @corporate.corporate_active_master %></p>
+    </div>
+    <div class="col-xs-6">
+     <p>  <%= @corporate.website %></p>
+        <p> <strong>Telephone:</strong> <%= @corporate.telephone1 %></p>
+        <p> <strong>Telephone:</strong> <%= @corporate.telephone2 %> </p>
+        <p> <strong>Fax:</strong> <%= @corporate.fax %></p>
+    </div>
+</div>
+
+<%= @corporate.description %>
+
+<div class="row">
+    <div class="col-xs-12">
+    <p>    <strong>Address:</strong>  </p>
+
+    <p> <%= @corporate.address1 %>   <%= @corporate.address2 %>   <%= @corporate.address3 %>
+    <%= @corporate.landmark %>    <%= @corporate.district %>  <%= @corporate.city %> <%= @corporate.pincode %> <%= @corporate.state %>   <%= @corporate.country %>
+</p>
+    </div>
+</div>
+
+<hr>
+
+<div class="well well-sm">
+    <div class="row">
+        <div class="col-xs-3"> CST: <%= @corporate.cst_no %> </div>
+        <div class="col-xs-3"> GST: <%= @corporate.gst_no %> </div>
+        <div class="col-xs-3"> VAT: <%= @corporate.vat_no %> </div>
+        <div class="col-xs-3"> TIN: <%= @corporate.tin_no %> </div>
+    </div>
+    <hr>
+    <div class="row">
+        <div class="col-xs-3"> Tally Id: <%= @corporate.tally_id %> </div>
+        <div class="col-xs-3"> C-Form: <%= @corporate.c_form %> </div>
+        <div class="col-xs-3"> Web Id: <%= @corporate.web_id %> </div>
+        <div class="col-xs-3"> Ref No: <%= @corporate.ref_no %> </div>
+    </div>
+</div>
+<hr>
+<h3>Contacts</h3>
+<div class="row">
+    <div class="col-xs-6">
+        <p> <%= @corporate.salute1 %><%= @corporate.first_name1 %>  <%= @corporate.last_name1 %>
+        </p>
+        <p>  <%= @corporate.designation1 %></p>
+    </div>
+    <div class="col-xs-6">
+        <p> <strong>Mobile:</strong> <%= @corporate.mobile1 %></p>
+        <p> <strong>Emaild:</strong> <%= @corporate.emaild1 %></p>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-xs-6">
+        <p> <%= @corporate.salute2 %><%= @corporate.first_name2 %>  <%= @corporate.last_name2 %>
+        </p>
+        <p>  <%= @corporate.designation2 %></p>
+    </div>
+    <div class="col-xs-6">
+        <p> <strong>Mobile:</strong> <%= @corporate.mobile2 %></p>
+        <p> <strong>Emaild:</strong> <%= @corporate.emailid2 %></p>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-xs-6">
+        <p> <%= @corporate.salute3 %><%= @corporate.first_name3 %>  <%= @corporate.last_name3 %></p>
+        <p>  <%= @corporate.designation3 %></p>
+    </div>
+    <div class="col-xs-6">
+        <p> <strong>Mobile:</strong> <%= @corporate.mobile3 %></p>
+        <p> <strong>Emaild:</strong> <%= @corporate.emailid3 %></p>
+    </div>
+</div>
+
+
+
+
+
+
+<%= link_to 'Edit', edit_corporate_path(@corporate), class:"btn btn-primary btn-sm" %> |
+<%= link_to 'Back', corporates_path, class:"btn btn-primary btn-sm" %>
+</div>

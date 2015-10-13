@@ -1,19 +1,65 @@
-<%= simple_form_for(@distributor_stock_ledger) do |f| %>
-  <%= f.error_notification %>
+<div class="row">
+<div class="col-xs-12">
 
-  <div class="form-inputs">
-    <%= f.input :corporate_id %>
-    <%= f.input :product_master_id %>
-    <%= f.input :product_variant_id %>
-    <%= f.input :product_list_id %>
-    <%= f.input :prod %>
-    <%= f.input :name %>
-    <%= f.input :description %>
-    <%= f.input :stock_change %>
-    <%= f.input :ledger_date %>
-  </div>
+<%= bootstrap_form_for(@distributor_stock_ledger) do |f| %>
+    <% if @distributor_stock_ledger.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@distributor_stock_ledger.errors.count, "error") %> prohibited this from being saved:</h2>
 
-  <div class="form-actions">
-    <%= f.button :submit %>
+      <ul>
+      <% @distributor_stock_ledger.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+<%= f.hidden_field :corporate_id %>
+<%= f.hidden_field :product_variant_id %>
+<%= f.hidden_field :product_list_id %>
+<%= f.hidden_field :prod %>
+
+  
+<div class="row">
+ <div class="col-xs-8">
+
+  <%= f.select :product_master_id,  options_from_collection_for_select(@product_master,
+       :id, :productname, selected: @distributor_stock_ledger.product_master_id ),
+             {:prompt => 'No Stock Change', label: "Select the Product if required " } %>
+ </div>
+  <div class="col-xs-4">
+  <%= f.select :type_id,  options_from_collection_for_select(@distributor_stock_ledger_type,
+       :id, :name, selected: @distributor_stock_ledger.type_id ),
+             {label: "Select the Type of Activity", :required => "true" } %>
+
+ </div>
+ </div>
+<div class="row">
+ <div class="col-xs-7">
+ <%= f.text_field :name, label: "Name of Entry", :required => "true" %> 
+ </div>
+ <div class="col-xs-3">
+  <%= f.text_field :ledger_date,  :data => {:provide => "datepicker"}, :id => "datepicker", :class => "form-control", label: "Date of Entry",  :required => "true"   %>
   </div>
+  <div class="col-xs-2">
+    <%= f.number_field :stock_change,  min: -100, max: 100, step: 1, label: "Change Stock", :class => "form-control", :required => "true", :placeholder => "Select No"  %>
+  </div>
+ </div>
+
+ <div class="form-inputs">
+    <%= f.text_area :description, label: "Description of entry", :required => "true" %>
+   </div>
+   
+  <div class="row">
+  
+  </div>
+   
+
+   <div class="col-xs-3">
+        <%= submit_tag "Save Details", name: nil, class: "btn btn-primary" %>
+      </div>
 <% end %>
+</div>
+</div>
+<script>
+$('#datepicker').datepicker({format: 'yyyy-mm-dd'});
+</script>
