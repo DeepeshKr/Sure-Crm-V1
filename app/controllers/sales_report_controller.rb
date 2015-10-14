@@ -382,31 +382,62 @@ class SalesReportController < ApplicationController
       end
        
       if params.has_key?(:media_id)
-         order_masters = OrderMaster.where('orderdate >= ? AND orderdate <= ?', from_date, to_date)
-         .where(media_id: params[:media_id])
-      .where('ORDER_STATUS_MASTER_ID > 10002').where('customer_address_id IS NOT NULL')
-      .joins(:customer_address).select("customer_addresses.city").distinct
+      #    order_masters = OrderMaster.where('orderdate >= ? AND orderdate <= ?', from_date, to_date)
+      #    .where(media_id: params[:media_id])
+      # .where('ORDER_STATUS_MASTER_ID > 10002').where('city IS NOT NULL').uniq.pluck(:city)
 
+      order_cities = OrderMaster.where('orderdate >= ? AND orderdate <= ?', from_date, to_date)
+      .where('ORDER_STATUS_MASTER_ID > 10002').where('city IS NOT NULL').where(media_id: params[:media_id])
+      .uniq.pluck(:city)
+
+      # order_id_1 = OrderMaster.where('orderdate >= ? AND orderdate <= ?', from_date, to_date)
+      # .where('ORDER_STATUS_MASTER_ID > 10002').where('city IS NOT NULL')
+      # .where(media_id: params[:media_id])
+      # .limit(1000).uniq.pluck(:id)
+      #  order_id_2 = OrderMaster.where('orderdate >= ? AND orderdate <= ?', from_date, to_date)
+      # .where('ORDER_STATUS_MASTER_ID > 10002').where('city IS NOT NULL')
+      # .where(media_id: params[:media_id])
+      # .offset(1000).limit(1000).uniq.pluck(:id)
+      #  order_id_3 = OrderMaster.where('orderdate >= ? AND orderdate <= ?', from_date, to_date)
+      # .where('ORDER_STATUS_MASTER_ID > 10002').where('city IS NOT NULL').where(media_id: params[:media_id])
+      # .offset(2000).limit(1000).uniq.pluck(:id)
+  
+      
         @media_id = params[:media_id]
         from_channel = Medium.find(params[:media_id]).name
       else
-         order_masters = OrderMaster.where('orderdate >= ? AND orderdate <= ?', from_date, to_date)
-      .where('ORDER_STATUS_MASTER_ID > 10002').where('customer_address_id IS NOT NULL')
-      .joins(:customer_address).select("customer_addresses.city").distinct
+      #    order_masters = OrderMaster.where('orderdate >= ? AND orderdate <= ?', from_date, to_date)
+      # .where('ORDER_STATUS_MASTER_ID > 10002').where('city IS NOT NULL')
+
+      order_cities = OrderMaster.where('orderdate >= ? AND orderdate <= ?', from_date, to_date)
+      .where('ORDER_STATUS_MASTER_ID > 10002').where('city IS NOT NULL').uniq.pluck(:city)
+      # order_id_1 = OrderMaster.where('orderdate >= ? AND orderdate <= ?', from_date, to_date)
+      # .where('ORDER_STATUS_MASTER_ID > 10002').where('city IS NOT NULL').limit(1000).uniq.pluck(:id)
+      #  order_id_2 = OrderMaster.where('orderdate >= ? AND orderdate <= ?', from_date, to_date)
+      # .where('ORDER_STATUS_MASTER_ID > 10002').where('city IS NOT NULL').offset(1000).limit(1000).uniq.pluck(:id)
+      #  order_id_3 = OrderMaster.where('orderdate >= ? AND orderdate <= ?', from_date, to_date)
+      # .where('ORDER_STATUS_MASTER_ID > 10002').where('city IS NOT NULL').offset(2000).limit(1000).uniq.pluck(:id)
+      
+
        end
 
-      @orderdate = "Searched for #{for_date} #{from_channel} found #{order_masters.count} cities!"
+      @orderdate = "Searched for #{for_date} #{from_channel} found #{order_cities.count} cities!"
       employeeunorderlist ||= []
       num = 1
-      order_masters.each do |o|
-        city = o.city
-          if city.present?
+      order_cities.each do |o|
+      city = o #.city
+      if city.present?
             #city = CustomerAddress.find(e).city  #  || "NA" if Employee.find(e).first_name.present?)
             
-            orderlist = OrderMaster.where('ORDER_STATUS_MASTER_ID > 10002')
-            .where('orderdate >= ? AND orderdate <= ?', from_date, to_date)
-            .joins(:customer_address)
-            .where("customer_addresses.city = ?", city)
+           orderlist = OrderMaster.where('orderdate >= ? AND orderdate <= ?', from_date, to_date)
+          .where('ORDER_STATUS_MASTER_ID > 10002').where('city IS NOT NULL').where("city = ?", city)
+          # order_id_1 = order_id_1.flatten
+          # order_id_2 = order_id_2.flatten
+          # order_id_3 = order_id_3.flatten
+
+          # orderlist = OrderMaster.where(id: order_id_1).where(id: order_id_2)
+          # .where(id: order_id_3).where("city = ?", city)
+
              if params.has_key?(:media_id)
               orderlist = orderlist.where(media_id: params[:media_id])
              end
@@ -439,13 +470,13 @@ class SalesReportController < ApplicationController
   end
 
   def product_sold
-     @product_master = ProductMaster.order('name').limit(10)
+     @product_master = ProductMaster.where(productactivecodeid: 10000).order('name') #.limit(10)
   if params[:from_date].present?  
       #@summary ||= []
       @or_for_date = params[:from_date]
       @from_date =  Date.strptime(params[:from_date], "%Y-%m-%d")
       #@from_date = for_date.beginning_of_day - 330.minutes
-
+      product_name = " "
       from_date = @from_date.beginning_of_day - 330.minutes
       to_date = @from_date.end_of_day - 330.minutes
       if params.has_key?(:to_date)
@@ -460,10 +491,18 @@ class SalesReportController < ApplicationController
         .where(product_master_id: @product_master_id).joins(:order_master)
         .where('ORDER_MASTERS.ORDER_STATUS_MASTER_ID > 10002')
         .uniq.pluck(:orderid)
+        product_name = ProductMaster.find(@product_master_id).name
       end
 
      @order_masters = OrderMaster.where(id: sold_product_list).order("orderdate")
-
+     respond_to do |format|
+        csv_file_name = "#{product_name}_sold_#{@or_for_date}.csv"
+          format.html
+          format.csv do
+            headers['Content-Disposition'] = "attachment; filename=\"#{csv_file_name}\""
+            headers['Content-Type'] ||= 'text/csv'
+          end
+        end
       #@order_masters = OrderMaster.where(id: sold_product_list)
    end
  end

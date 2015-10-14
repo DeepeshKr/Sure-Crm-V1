@@ -23,6 +23,22 @@ class CampaignPlaylistsController < ApplicationController
     
   end
 
+    def newreport
+     
+    if(params.has_key?(:campaignid))
+      @campaign_playlists = CampaignPlaylist.where("campaignid = ?" , params[:campaignid]).order(:start_hr, :start_min, :start_sec)
+        respond_to do |format|
+        csv_file_name = @campaign_playlists.first.campaign.name + ".csv"
+          format.html
+          format.csv do
+            headers['Content-Disposition'] = "attachment; filename=\"#{csv_file_name}\""
+            headers['Content-Type'] ||= 'text/csv'
+          end
+        end
+    end 
+    
+  end
+
   def perday
     medialist = Medium.where("media_group_id not in 10000")
       campaigns = Campaign.where(mediumid: medialist)
@@ -423,6 +439,25 @@ end
         @end_hr      =  totalseconds % 24
     end
 
+    def hour_min_sec_ff(s_hr, s_min, s_sec, s_ff, duration_seconds, duration_ff)
+
+        total_ff = (s_ff + duration_ff) % 24 
+        if (s_ff + duration_ff) / 24 != 23
+          @end_ff = (s_ff + duration_ff) / 24 
+        else
+          total_ff += 1
+          @end_ff = 0
+        end
+        
+        first = (s_hr.to_i * 60 * 60) + (s_min.to_i * 60) + s_sec.to_i + total_ff.to_i
+        
+        totalseconds = duration_seconds.to_i + first
+        @end_sec    =  totalseconds % 60
+        totalseconds = (totalseconds - @end_sec) / 60
+        @end_min    =  totalseconds % 60
+        totalseconds = (totalseconds - @end_min) / 60
+        @end_hr      =  totalseconds % 24
+    end
     # def recent_campaigns
     #   @recentplaylist = Campaigns.where("mediumid = ?", @campaign_playlist.campaigns.mediumid).order('id DESC').limit(10)
     # end

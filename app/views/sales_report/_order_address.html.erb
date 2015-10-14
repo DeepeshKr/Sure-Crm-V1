@@ -1,0 +1,87 @@
+<% if @order_masters.present? %>
+<table class="table table-hover table-bordered">
+  <thead>
+  <tr>
+    <th>No</th>
+    <th>Orderdate</th>
+    <th>Customer / Mobile <br> City / State</th>
+    <th colspan="8">Products</th>
+  </tr>
+  </thead>
+
+  <tbody>
+  <% @sno = 1 %> <% totalnos = 0 %> <% totalvalue = 0 %>
+    <% @order_masters.each do |order_master| %>
+      <tr>
+      <td><%= @sno %></td>
+     
+        <td><%= (order_master.orderdate + 330.minutes).strftime('%d-%b-%Y') %>
+    <small><%= Time.at(order_master.orderdate + 330.minutes).strftime('%H:%M %P') %></small>
+
+       
+        </td>
+        <td>
+        <%= order_master.customer.first_name if order_master.customer %> <%= order_master.customer.last_name if order_master.customer %> <br>
+          <%= order_master.mobile %> <br>
+        <%= order_master.customer_address.address1  if order_master.customer_address %>
+        <%= order_master.customer_address.address2  if order_master.customer_address %>
+        <%= order_master.customer_address.address3  if order_master.customer_address %>
+        <%= order_master.customer_address.landmark  if order_master.customer_address %>
+        <%= order_master.customer_address.city  if order_master.customer_address %>
+        <%= order_master.customer_address.pincode  if order_master.customer_address %>
+        <%= order_master.customer_address.state  if order_master.customer_address %></td>
+        <td  colspan="8">
+          <table class="table table-hover table-bordered">
+          <tr>
+          <td><strong>
+          <%= link_to order_master.external_order_no, custordersearch_path(ordernum: order_master.external_order_no), :target => "_blank" %></strong> 
+          </td>
+          <td><small>Ref No: <%= order_master.id %></small> 
+          </td>
+          </tr>
+            <% order_master.order_line.each do |line| %>
+
+            <tr>
+             <td colspan="2"> <%= line.product_variant.name  rescue nil %></td>
+            </tr>
+            <% end %>
+            <tr>
+              <td>Pieces: <%= order_master.pieces %></td>
+         <td>Total: <%= order_master.total %></td>
+            </tr>
+            <tr>
+              <td colspan="2"><%= order_master.order_status_master.name %></td>
+            </tr>
+            <tr >
+              <td colspan="2"><%= order_master.orderpaymentmode.name if order_master.orderpaymentmode %></td>
+            </tr>
+          </table>
+
+        </td>
+ 
+       
+      </tr>
+       <% @sno += 1 %>
+       <% totalnos += order_master.pieces %> 
+       <% totalvalue += order_master.total %>
+    <% end %>
+  </tbody>
+  <tfoot>
+   
+    <tr>
+    <th colspan="7">Total</th>  
+      <th colspan="2">Pieces: <%= totalnos %> </th>   
+       <th colspan="2"> Value: <%= totalvalue %></th>
+      
+
+    </tr>
+  
+
+  </tfoot>
+</table>
+<% else %>
+<div class="well well-sm">
+<h4>@ordersearch</h4>
+
+</div>
+<% end %>
