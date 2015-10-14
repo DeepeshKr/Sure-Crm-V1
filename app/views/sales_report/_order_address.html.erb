@@ -16,7 +16,7 @@
       <td><%= @sno %></td>
      
         <td><%= (order_master.orderdate + 330.minutes).strftime('%d-%b-%Y') %>
-    <small><%= Time.at(order_master.orderdate + 330.minutes).strftime('%H:%M %P') %></small>
+    <small><%= Time.at(order_master.orderdate.strftime('%H:%M %P') %></small>
 
        
         </td>

@@ -494,7 +494,7 @@ class SalesReportController < ApplicationController
         product_name = ProductMaster.find(@product_master_id).name
       end
 
-     @order_masters = OrderMaster.where(id: sold_product_list).order("orderdate")
+     @order_masters = OrderMaster.where(id: sold_product_list) #.order("orderdate")
      respond_to do |format|
         csv_file_name = "#{product_name}_sold_#{@or_for_date}.csv"
           format.html
