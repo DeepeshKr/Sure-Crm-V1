@@ -14,23 +14,22 @@
     <% @order_masters.each do |order_master| %>
       <tr>
       <td><%= @sno %></td>
-     
-        <td><%= (order_master.orderdate + 330.minutes).strftime('%d-%b-%Y') %>
-    <small><%= Time.at(order_master.orderdate.strftime('%H:%M %P') %></small>
+     <td><%= (order_master.orderdate + 330.minutes).strftime('%d-%b-%Y') %>
+    </td>
+    <td>
+      <%= order_master.customer.first_name if order_master.customer %> 
+      <%= order_master.customer.last_name if order_master.customer %> <br>
+      <%= order_master.mobile %> <br>
+      <%= order_master.customer_address.address1  if order_master.customer_address %><br>
+      <%= order_master.customer_address.address2  if order_master.customer_address %><br>
+      <%= order_master.customer_address.address3  if order_master.customer_address %><br>
+      <%= order_master.customer_address.landmark  if order_master.customer_address %><br>
+      <%= order_master.customer_address.city  if order_master.customer_address %>
+      <%= order_master.customer_address.pincode  if order_master.customer_address %><br>
+      <%= order_master.customer_address.state  if order_master.customer_address %>
 
-       
-        </td>
-        <td>
-        <%= order_master.customer.first_name if order_master.customer %> <%= order_master.customer.last_name if order_master.customer %> <br>
-          <%= order_master.mobile %> <br>
-        <%= order_master.customer_address.address1  if order_master.customer_address %>
-        <%= order_master.customer_address.address2  if order_master.customer_address %>
-        <%= order_master.customer_address.address3  if order_master.customer_address %>
-        <%= order_master.customer_address.landmark  if order_master.customer_address %>
-        <%= order_master.customer_address.city  if order_master.customer_address %>
-        <%= order_master.customer_address.pincode  if order_master.customer_address %>
-        <%= order_master.customer_address.state  if order_master.customer_address %></td>
-        <td  colspan="8">
+    </td>
+    <td  colspan="8">
           <table class="table table-hover table-bordered">
           <tr>
           <td><strong>
@@ -50,10 +49,13 @@
          <td>Total: <%= order_master.total %></td>
             </tr>
             <tr>
-              <td colspan="2"><%= order_master.order_status_master.name %></td>
+              <td colspan="2">
+              <%= order_master.order_status_master.name %>
+              </td>
             </tr>
-            <tr >
-              <td colspan="2"><%= order_master.orderpaymentmode.name if order_master.orderpaymentmode %></td>
+            <tr>
+              <td colspan="2">
+              <%= order_master.orderpaymentmode.name if order_master.orderpaymentmode %></td>
             </tr>
           </table>
 
@@ -62,8 +64,7 @@
        
       </tr>
        <% @sno += 1 %>
-       <% totalnos += order_master.pieces %> 
-       <% totalvalue += order_master.total %>
+     
     <% end %>
   </tbody>
   

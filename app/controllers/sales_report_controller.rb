@@ -496,14 +496,15 @@ class SalesReportController < ApplicationController
       end
 
      @order_masters = OrderMaster.where(id: sold_product_list) #.order("orderdate")
-     respond_to do |format|
-        csv_file_name = "#{product_name}_sold_#{@or_for_date}.csv"
-          format.html
-          format.csv do
-            headers['Content-Disposition'] = "attachment; filename=\"#{csv_file_name}\""
-            headers['Content-Type'] ||= 'text/csv'
-          end
-        end
+     # respond_to do |format|
+     #    csv_file_name = "#{product_name}_sold_#{@or_for_date}.csv"
+     #      format.html
+     #      format.csv do
+     #        headers['Content-Disposition'] = "attachment; filename=\"#{csv_file_name}\""
+     #        headers['Content-Type'] ||= 'text/csv'
+     #      end
+     #    end
+
       #@order_masters = OrderMaster.where(id: sold_product_list)
    end
  end
@@ -713,12 +714,21 @@ class SalesReportController < ApplicationController
 
  def showproducts
    #@summary ||= []
-   if params[:for_date].present? 
-     
-   
-      @or_for_date = params[:for_date]
-       for_date =  Date.strptime(params[:for_date], "%Y-%m-%d")
+   if params[:from_date].present?  
+      #@summary ||= []
+      @or_for_date = params[:from_date]
+      @from_date =  Date.strptime(params[:from_date], "%Y-%m-%d")
+      #@from_date = for_date.beginning_of_day - 330.minutes
+      product_name = " "
+      from_date = @from_date.beginning_of_day - 330.minutes
+      to_date = @from_date.end_of_day - 330.minutes
+      if params.has_key?(:to_date)
+         @to_date =  Date.strptime(params[:to_date], "%Y-%m-%d")
+         to_date = @to_date.end_of_day - 330.minutes
+      end   
        @orderdate = params[:for_date]
+         for_date =  Date.strptime(params[:from_date], "%Y-%m-%d")
+       
 
        @show_date = for_date
 
