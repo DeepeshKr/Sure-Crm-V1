@@ -66,22 +66,11 @@
        <% totalvalue += order_master.total %>
     <% end %>
   </tbody>
-  <tfoot>
-   
-    <tr>
-    <th colspan="7">Total</th>  
-      <th colspan="2">Pieces: <%= totalnos %> </th>   
-       <th colspan="2"> Value: <%= totalvalue %></th>
-      
-
-    </tr>
   
-
-  </tfoot>
 </table>
 <% else %>
 <div class="well well-sm">
-<h4>@ordersearch</h4>
+<h4> <%= @ordersearch %></h4>
 
 </div>
 <% end %>

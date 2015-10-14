@@ -470,6 +470,7 @@ class SalesReportController < ApplicationController
   end
 
   def product_sold
+    @ordersearch = "No Products sold for the period / day"
      @product_master = ProductMaster.where(productactivecodeid: 10000).order('name') #.limit(10)
   if params[:from_date].present?  
       #@summary ||= []
