@@ -485,25 +485,42 @@ class SalesReportController < ApplicationController
          to_date = @to_date.end_of_day - 330.minutes
       end   
       sold_product_list ||= []
-
+  
       if params.has_key?(:product_master_id)
         @product_master_id = params[:product_master_id]
         sold_product_list = OrderLine.where('order_lines.orderdate >= ? and order_lines.orderdate <= ?', from_date, to_date)
         .where(product_master_id: @product_master_id).joins(:order_master)
-        .where('ORDER_MASTERS.ORDER_STATUS_MASTER_ID > 10002')
-        .uniq.pluck(:orderid)
+        .where('ORDER_MASTERS.ORDER_STATUS_MASTER_ID > 10002') #.limit(10)
+        #.uniq.pluck(:orderid)
         product_name = ProductMaster.find(@product_master_id).name
-      end
+        
+         @order_lines_csv ||= []
+              sold_product_list.each do |o|
+                @order_lines_csv << {:order_no => o.order_master.external_order_no,
+              :ref_no => o.orderid, :order_date =>  (o.order_master.orderdate + 330.minutes).strftime('%d-%b-%Y'),
+              :customer => o.order_master.customer.first_name + " " + o.order_master.customer.last_name, 
+              :phone => o.order_master.mobile + " / " + o.order_master.customer_address.telephone1,
+              :address1 => o.order_master.customer_address.address1.strip,
+              :address2 => o.order_master.customer_address.address2.strip, 
+              :address3 => o.order_master.customer_address.address3.strip, 
+              :landmark => o.order_master.customer_address.landmark.strip,
+              :city => o.order_master.customer_address.city + " " + o.order_master.customer_address.pincode,
+              :state => o.order_master.customer_address.state, 
+              :product => o.product_variant.name,
+              :total => o.subtotal}
+            end
 
-     @order_masters = OrderMaster.where(id: sold_product_list) #.order("orderdate")
-     # respond_to do |format|
-     #    csv_file_name = "#{product_name}_sold_#{@or_for_date}.csv"
-     #      format.html
-     #      format.csv do
-     #        headers['Content-Disposition'] = "attachment; filename=\"#{csv_file_name}\""
-     #        headers['Content-Type'] ||= 'text/csv'
-     #      end
-     #    end
+       @order_lines = sold_product_list #.order("orderdate")
+        respond_to do |format|
+          csv_file_name = "#{product_name}_sold_#{@from_date}.csv"
+            format.html
+            format.csv do           
+              headers['Content-Disposition'] = "attachment; filename=\"#{csv_file_name}\""
+              headers['Content-Type'] ||= 'text/csv'
+            end
+        end
+
+      end
 
       #@order_masters = OrderMaster.where(id: sold_product_list)
    end

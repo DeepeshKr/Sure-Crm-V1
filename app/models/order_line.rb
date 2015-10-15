@@ -79,7 +79,7 @@ def creditcardcharges
       return ((self.subtotal || 0)  * (charges || 0)).round(2)
 
     end
-    return ((self.subtotal || 0)
+    return (self.subtotal || 0)
   end
 end
 
