@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151011175930) do
+ActiveRecord::Schema.define(version: 20151015124337) do
 
   create_table "address_types", force: :cascade do |t|
     t.string   "name"
@@ -885,6 +885,11 @@ ActiveRecord::Schema.define(version: 20151011175930) do
     t.decimal  "shipping"
     t.integer  "product_sell_type_id",   limit: 16, precision: 38
     t.decimal  "weight_kg",                         precision: 8,  scale: 4
+    t.integer  "sel_cod",                limit: 16, precision: 38
+    t.integer  "sel_s_tax",              limit: 16, precision: 38
+    t.integer  "sel_m_cod",              limit: 16, precision: 38
+    t.integer  "sel_m_cc",               limit: 16, precision: 38
+    t.integer  "sel_cc",                 limit: 16, precision: 38
   end
 
   create_table "product_sample_stocks", force: :cascade do |t|

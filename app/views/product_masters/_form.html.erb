@@ -57,6 +57,31 @@
   
     <%= f.text_field :weight_kg, label: "Weight in Kgs" %>
   </div>
+
+  <div class="row">
+  <div class="col-xs-2">
+    <%= f.select :sel_cod,  options_for_select([['Required', 1], ['Not Required', 0]], selected: @product_master.sel_cod),
+             { label: "COD Charges" } %>
+  </div>
+  <div class="col-xs-2">
+       <%= f.select :sel_s_tax,  options_for_select([['Required', 1], ['Not Required', 0]], selected: @product_master.sel_s_tax),
+             { label: "Service Tax" } %>
+  </div>
+  <div class="col-xs-2">
+      <%= f.select :sel_m_cod,  options_for_select([['Required', 1], ['Not Required', 0]], selected: @product_master.sel_m_cod),
+             { label: "Mah COD" } %>
+  </div>
+  <div class="col-xs-2">
+      <%= f.select :sel_m_cc,  options_for_select([['Required', 1], ['Not Required', 0]], selected: @product_master.sel_m_cc),
+             { label: "Mah CC" } %>
+  </div>
+  <div class="col-xs-2">
+      <%= f.select :sel_cc,  options_for_select([['Required', 1], ['Not Required', 0]], selected: @product_master.sel_cc),
+             { label: "CC Charges" } %>
+  </div>
+
+  </div>
+  
   <div class="field">
     
     <%= f.text_field :extproductcode, label: "Product Ref Code", placeholder: "Prod / Gprod etc external ref code",  help: "this code looks like EV1, AK1 and unique" %>

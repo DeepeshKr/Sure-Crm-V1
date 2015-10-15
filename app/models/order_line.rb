@@ -18,7 +18,7 @@ class OrderLine < ActiveRecord::Base
 
   after_create :updateorder # :creator
 
-  #after_save :updateorder # :updator
+  after_save :updateorder # :updator
 
   after_update :updateorder
 
@@ -27,181 +27,193 @@ class OrderLine < ActiveRecord::Base
 def codcharges
 codcharges = 0
   if (self.orderid).present? 
-    
-    cashondeliveryid = 10001
-    cashondeliverycharge = Orderpaymentmode.find(cashondeliveryid).charges
+     codcharges = (self.total || 0 )
+     if self.product_masters.sel_cod.blank? || self.product_masters.sel_cod == 1
 
-    # maharastracodextraid = 10020
-    # maharastracodcharge = Orderpaymentmode.find(maharastracodextraid).charges
-    # maharastracodextra = self.total * maharastracodcharge
-    # #add all charges
-    codcharges = ((self.total || 0 )) * (cashondeliverycharge || 0) 
-    
-    #check if address is selected
-    if self.order_master.customer_address_id.present?
-     #check if state is maharastra
-      if self.order_master.customer_address.state.upcase == 'MAHARASHTRA'
-         codcharges = ((self.total || 0 )) * (cashondeliverycharge || 0) 
-      else
+        cashondeliveryid = 10001
+        cashondeliverycharge = Orderpaymentmode.find(cashondeliveryid).charges
+
+        # maharastracodextraid = 10020
+        # maharastracodcharge = Orderpaymentmode.find(maharastracodextraid).charges
+        # maharastracodextra = self.total * maharastracodcharge
+        # #add all charges
         codcharges = ((self.total || 0 )) * (cashondeliverycharge || 0) 
-      end
-    end
-     #check if paid using credit card is selected
-  if self.order_master.orderpaymentmode_id.present?
-     if self.order_master.orderpaymentmode_id == 10000
-      return  0
-     end
-  end
-  
+        
+        #check if address is selected
+        if self.order_master.customer_address_id.present?
+         #check if state is maharastra
+          if self.order_master.customer_address.state.upcase == 'MAHARASHTRA'
+             codcharges = ((self.total || 0 )) * (cashondeliverycharge || 0) 
+          else
+            codcharges = ((self.total || 0 )) * (cashondeliverycharge || 0) 
+          end
+        end
+           #check if paid using credit card is selected
+        if self.order_master.orderpaymentmode_id.present?
+           if self.order_master.orderpaymentmode_id != 10001
+            return  0
+           end
+        end
+    end 
   end
     return codcharges.round(2)
 end
 
 def creditcardcharges
   if (self.orderid).present? 
+    if self.product_masters.sel_cc.blank? || self.product_masters.sel_cc == 1
+
       creditcardid = 10000
       charges = Orderpaymentmode.find(creditcardid).charges
       if self.order_master.orderpaymentmode_id.present?
-         #check if paid using cash on delivery is selected
-         if self.order_master.orderpaymentmode_id == 10001
+         #check if paid using cash on delivery is selected or atom not selected
+         if self.order_master.orderpaymentmode_id == 10001 
             charges = 0
          end
       end
-     
-     if self.product_variant.product_sell_type_id != 10000
-        charges = 0
-     end
 
-      return ((self.subtotal || 0)  * (charges || 0)).round(2) 
+      if self.product_variant.product_sell_type_id != 10000 #or self.product_variant.product_sell_type_id != 10060
+            charges = 0
+      end
+
+      return ((self.subtotal || 0)  * (charges || 0)).round(2)
+
+    end
+    return ((self.subtotal || 0)
   end
 end
 
 #service it levied on COD charges only at 12.36%
 def servicetax
   if (self.orderid).present? 
-    servicetaxid = 10040
-    servicetaxrate = Orderpaymentmode.find(servicetaxid).charges 
-   
-     maharastracodextraid = 10020
-     maharastracodextrarate = Orderpaymentmode.find(maharastracodextraid).charges
+    servicetax = 0
+    if self.product_masters.sel_s_tax.blank? || self.product_masters.sel_s_tax == 1
 
-     maharastracodextracharge = self.total * maharastracodextrarate
-
-    cashondeliveryid = 10001
-    cashondeliveryrate = Orderpaymentmode.find(cashondeliveryid).charges
-    cashondeliverycharge = self.total * cashondeliveryrate
-
+      servicetaxid = 10040
+      servicetaxrate = Orderpaymentmode.find(servicetaxid).charges 
      
-    
-    #add all charges
-    servicetax = ((maharastracodextracharge || 0) + (cashondeliverycharge || 0)) * (servicetaxrate || 0)
+       maharastracodextraid = 10020
+       maharastracodextrarate = Orderpaymentmode.find(maharastracodextraid).charges
 
-    #check if address is selected
-    if self.order_master.customer_address_id.present?
-       #check if state is maharastra
-       if self.order_master.customer_address.state.upcase == 'MAHARASHTRA'
+       maharastracodextracharge = self.total * maharastracodextrarate
+
+      cashondeliveryid = 10001
+      cashondeliveryrate = Orderpaymentmode.find(cashondeliveryid).charges
+      cashondeliverycharge = self.total * cashondeliveryrate
+
        
-        servicetax = ((maharastracodextracharge || 0) + (cashondeliverycharge || 0)) * (servicetaxrate || 0)
-       else
-        servicetax =  (cashondeliverycharge || 0) * (servicetaxrate || 0)
+      
+      #add all charges
+      servicetax = ((maharastracodextracharge || 0) + (cashondeliverycharge || 0)) * (servicetaxrate || 0)
+
+      #check if address is selected
+      if self.order_master.customer_address_id.present?
+         #check if state is maharastra
+         if self.order_master.customer_address.state.upcase == 'MAHARASHTRA'
+         
+          servicetax = ((maharastracodextracharge || 0) + (cashondeliverycharge || 0)) * (servicetaxrate || 0)
+         else
+          servicetax =  (cashondeliverycharge || 0) * (servicetaxrate || 0)
 
 
-       end
+         end
+      end
+
+      #check if paid using credit card is selected
+      if self.order_master.orderpaymentmode_id.present?
+         if self.order_master.orderpaymentmode_id == 10000
+          return  0
+         end
+      end
+
     end
 
   end
- 
-  #check if paid using credit card is selected
-  if self.order_master.orderpaymentmode_id.present?
-     if self.order_master.orderpaymentmode_id == 10000
-      return  0
-     end
-  end
 
  return servicetax.round(2)
-
 end
 
 def maharastracodextra
   if (self.orderid).present? 
-    surchargeid = 10020
-    maharastracodcharge = Orderpaymentmode.find(surchargeid).charges
+    if self.product_masters.sel_m_cod.blank? || self.product_masters.sel_m_cod == 1
 
-    cashondeliveryid = 10001
-    cashondeliverycharge = Orderpaymentmode.find(cashondeliveryid).charges
-     codcharges = ((self.total || 0 )) * (cashondeliverycharge || 0) 
+        surchargeid = 10020
+        maharastracodcharge = Orderpaymentmode.find(surchargeid).charges
 
-    maharastracodextra = (self.total + codcharges) * maharastracodcharge
-      #check if address is selected
-    if self.order_master.customer_address.present?
-     #check if state is maharastra
-     if self.order_master.customer_address.state.upcase == 'MAHARASHTRA'
+        cashondeliveryid = 10001
+        cashondeliverycharge = Orderpaymentmode.find(cashondeliveryid).charges
+         codcharges = ((self.total || 0 )) * (cashondeliverycharge || 0) 
+
         maharastracodextra = (self.total + codcharges) * maharastracodcharge
-     else
-        maharastracodextra = 0
-     end
-    end
-  end
- #check if paid using credit card is selected
-  if self.order_master.orderpaymentmode_id.present?
-     if self.order_master.orderpaymentmode_id == 10000
-      return  0
-     end
-  end
-return maharastracodextra.round(2)
+          #check if address is selected
+        if self.order_master.customer_address.present?
+         #check if state is maharastra
+           if self.order_master.customer_address.state.upcase == 'MAHARASHTRA'
+              maharastracodextra = (self.total + codcharges) * maharastracodcharge
+           else
+              maharastracodextra = 0
+           end
+        end
+    
+       #check if paid using credit card is selected
+        if self.order_master.orderpaymentmode_id.present?
+           if self.order_master.orderpaymentmode_id == 10000
+            return  0
+           end
+        end
 
+    end
+  return maharastracodextra.round(2)
+  end
 end
 
 def maharastraccextra
   maharastraccextra = 0
   if (self.orderid).present? 
   
-  creditcardid = 10000
-  creditcardcharges = Orderpaymentmode.find(creditcardid).charges
-  creditcardtotal = (self.subtotal || 0)  * (creditcardcharges || 0)
+    if self.product_masters.sel_m_cc.blank? || self.product_masters.sel_m_cc == 1
+      
+      creditcardid = 10000
+      creditcardcharges = Orderpaymentmode.find(creditcardid).charges
+      creditcardtotal = (self.subtotal || 0)  * (creditcardcharges || 0)
 
-   surchargeid = 10020
-  surcharge = Orderpaymentmode.find(surchargeid).charges
-  
+       surchargeid = 10020
+      surcharge = Orderpaymentmode.find(surchargeid).charges
+      
 
-  maharastraccextra =  (self.subtotal + creditcardtotal + self.shipping) * surcharge
+      maharastraccextra =  (self.subtotal + creditcardtotal + self.shipping) * surcharge
 
-    #check if address is selected
-    if self.order_master.customer_address.present?
-       #check if state is maharastra
-      if self.order_master.customer_address.state.upcase == 'MAHARASHTRA'
-           maharastraccextra =  (self.subtotal + creditcardtotal + self.shipping) * surcharge
-       else
-          maharastraccextra = 0
+      #check if address is selected
+      if self.order_master.customer_address.present?
+         #check if state is maharastra
+        if self.order_master.customer_address.state.upcase == 'MAHARASHTRA'
+             maharastraccextra =  (self.subtotal + creditcardtotal + self.shipping) * surcharge
+         else
+            maharastraccextra = 0
+        end
       end
-    end
-    
- #check if paid using cash on delivery is selected
-  if self.order_master.orderpaymentmode_id.present?
-     if self.order_master.orderpaymentmode_id == 10001
-      return  0
-     end
-  end
+      
+      #check if paid using cash on delivery is selected
+      if self.order_master.orderpaymentmode_id.present?
+         if self.order_master.orderpaymentmode_id == 10001
+          return  0
+         end
+      end
 
-end
+    end
+  end
   return maharastraccextra.round(2)
 
 end
 
-def productcost
-
-   if self.product_list.present? #&& self.pieces.present?
-    pcode = self.product_list.extproductcode
-    cost_master =  ProductCostMaster.where("prod = ?", pcode).first
-      if cost_master.present?
-          return cost_master.cost * self.pieces || 0
-     else
-        return 0
-     end
+def productcost 
+  pcode = self.product_list.extproductcode
+  cost_master =  ProductCostMaster.where("prod = ?", pcode).first
+  if cost_master.present?
+    return cost_master.cost * self.pieces || 0
   else
     return 0
-  end
- 
+  end 
 end
 
 # def productcost
@@ -248,7 +260,7 @@ private
   #campaign_playlist_id in orderline
   #add to campaign
   def creator
-  	productlist = ProductList.find(self.product_list_id)
+    productlist = ProductList.find(self.product_list_id)
 
     self.update_columns(subtotal: productv.price * self.pieces, 
     taxes: productv.taxes * self.pieces,
@@ -262,30 +274,30 @@ private
     #updateOrder
   end
 
-def updator
-  	productlist = ProductList.find(self.product_list_id)
+  def updator
+      productlist = ProductList.find(self.product_list_id)
 
-    self.update_columns(subtotal: productv.price * self.pieces, 
-    taxes: productv.taxes * self.pieces,
-    codcharges: 0 * self.pieces,
-    shipping: productv.shipping * self.pieces,
-    total: productv.total * self.pieces,
-    description: productv.name) # This will skip validation gracefully.
+      self.update_columns(subtotal: productv.price * self.pieces, 
+      taxes: productv.taxes * self.pieces,
+      codcharges: 0 * self.pieces,
+      shipping: productv.shipping * self.pieces,
+      total: productv.total * self.pieces,
+      description: productv.name) # This will skip validation gracefully.
 
-    self.update(description: productlist.productlistdetails)
-end
+      self.update(description: productlist.productlistdetails)
+  end
 
-def updateorder
-    if (self.orderid).present? 
-      order_master = OrderMaster.find(self.orderid)
-    
-      order_master.update_columns(pieces: OrderLine.where('orderid = ?', self.orderid).sum(:pieces),
-       subtotal: OrderLine.where('orderid = ?', self.orderid).sum(:subtotal),
-       shipping: OrderLine.where('orderid = ?', self.orderid).sum(:shipping), 
-      	taxes:  OrderLine.where('orderid = ?', self.orderid).sum(:taxes), 
-      	codcharges: OrderLine.where('orderid = ?', self.orderid).sum(:codcharges), 
-      	total: OrderLine.where('orderid = ?', self.orderid).sum(:total))
-    end
-end
+  def updateorder
+      if (self.orderid).present? 
+        order_master = OrderMaster.find(self.orderid)
+      
+        order_master.update_columns(pieces: OrderLine.where('orderid = ?', self.orderid).sum(:pieces),
+         subtotal: OrderLine.where('orderid = ?', self.orderid).sum(:subtotal),
+         shipping: OrderLine.where('orderid = ?', self.orderid).sum(:shipping), 
+          taxes:  OrderLine.where('orderid = ?', self.orderid).sum(:taxes), 
+          codcharges: OrderLine.where('orderid = ?', self.orderid).sum(:codcharges), 
+          total: OrderLine.where('orderid = ?', self.orderid).sum(:total))
+      end
+  end
 
 end

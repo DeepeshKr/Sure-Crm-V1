@@ -7,6 +7,14 @@ respond_to :html, :xml, :json
 
   def index
      @showall = true
+
+     # product_masters_all = ProductMaster.all
+
+     # product_masters_all.each do |xx|
+     #  xx.update(:sel_cod  => 1, :sel_s_tax  => 1, :sel_m_cod  => 1,
+     #  :sel_m_cc  => 1, :sel_cc => 1)
+     # end
+
     if params.has_key?(:search) 
       
       @search = "Search for " +  params[:search].upcase
@@ -174,9 +182,12 @@ respond_to :html, :xml, :json
 
     def product_master_params
       params.require(:product_master).permit(:name, :productcategoryid, 
-        :productinventorycodeid, 
-      :barcode, :price, :taxes,  :shipping, :extproductcode, :description, 
+      :productinventorycodeid, 
+      :barcode, :price, :taxes,  :shipping, :extproductcode, 
+      :description, 
       :productactivecodeid, 
-      :product_sell_type_id, :weight_kg)
+      :product_sell_type_id, :weight_kg, 
+      :sel_cod, :sel_s_tax, :sel_m_cod,
+      :sel_m_cc, :sel_cc)
     end
 end
