@@ -1,4 +1,5 @@
 class MediaController < ApplicationController
+   before_action { protect_controllers(10) } 
   before_action :set_medium, :dropdowns, only: [ :show, :edit, :update, :destroy]
 
   respond_to :html
