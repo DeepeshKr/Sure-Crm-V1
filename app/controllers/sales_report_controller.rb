@@ -490,7 +490,7 @@ class SalesReportController < ApplicationController
         @product_master_id = params[:product_master_id]
         sold_product_list = OrderLine.where('order_lines.orderdate >= ? and order_lines.orderdate <= ?', from_date, to_date)
         .where(product_master_id: @product_master_id).joins(:order_master)
-        .where('ORDER_MASTERS.ORDER_STATUS_MASTER_ID > 10002').limit(10)
+        .where('ORDER_MASTERS.ORDER_STATUS_MASTER_ID > 10002')#.limit(10)
         #.uniq.pluck(:orderid)
         product_name = ProductMaster.find(@product_master_id).name
         
