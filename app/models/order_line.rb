@@ -7,7 +7,7 @@ class OrderLine < ActiveRecord::Base
   belongs_to :order_status_master #, polymorphic: true
 
   belongs_to :product_list, foreign_key: "product_list_id"
-
+  belongs_to :product_master, foreign_key: "product_master_id"
 
   validates :pieces ,  :presence => { :message => "Please select no of pieces!" }
   validates :orderid,  :presence => { :message => "Please add an order first!" } 
@@ -24,11 +24,54 @@ class OrderLine < ActiveRecord::Base
 
   after_destroy :updateorder  
 
+# def self.to_csv(options = {})
+#   CSV.generate(options) do |csv|
+#     csv.add_row column_names
+#     all.each do |foo|
+#       values = foo.attributes.values
+#       csv.add_row values
+#     end
+#   end
+# end
+# def self.to_csv_with_bar(options = {})
+#   CSV.generate(options) do |csv|
+#     csv.add_row column_names + self.bar.column_names
+
+#     all.each do |foo|
+
+#       values = foo.attributes.values
+
+#       if foo.bar
+#         values += foo.bar.attributes.values
+#       end
+
+#       csv.add_row values
+#     end
+#   end
+# end
+# def self.to_csv(foo_attributes = column_names, bar_attributes = bar.column_names, options = {})
+
+#   CSV.generate(options) do |csv|
+#     csv.add_row foo_attributes + bar_attributes
+
+#     all.each do |foo|
+
+#       values = foo.attributes.slice(*foo_attributes).values
+
+#       if foo.contact_details
+#         values += foo.contact_details.attributes.slice(*bar_attributes).values
+#       end
+
+#       csv.add_row values
+#     end
+#   end
+# end
+
 def codcharges
 codcharges = 0
   if (self.orderid).present? 
      codcharges = (self.total || 0 )
-     if self.product_masters.sel_cod.blank? || self.product_masters.sel_cod == 1
+     if self.product_master.sel_cod.blank? || self.product_master.sel_cod == 1
 
         cashondeliveryid = 10001
         cashondeliverycharge = Orderpaymentmode.find(cashondeliveryid).charges
@@ -61,7 +104,7 @@ end
 
 def creditcardcharges
   if (self.orderid).present? 
-    if self.product_masters.sel_cc.blank? || self.product_masters.sel_cc == 1
+    if self.product_master.sel_cc.blank? || self.product_master.sel_cc == 1
 
       creditcardid = 10000
       charges = Orderpaymentmode.find(creditcardid).charges
@@ -87,7 +130,7 @@ end
 def servicetax
   if (self.orderid).present? 
     servicetax = 0
-    if self.product_masters.sel_s_tax.blank? || self.product_masters.sel_s_tax == 1
+    if self.product_master.sel_s_tax.blank? || self.product_master.sel_s_tax == 1
 
       servicetaxid = 10040
       servicetaxrate = Orderpaymentmode.find(servicetaxid).charges 
@@ -135,7 +178,7 @@ end
 
 def maharastracodextra
   if (self.orderid).present? 
-    if self.product_masters.sel_m_cod.blank? || self.product_masters.sel_m_cod == 1
+    if self.product_master.sel_m_cod.blank? || self.product_master.sel_m_cod == 1
 
         surchargeid = 10020
         maharastracodcharge = Orderpaymentmode.find(surchargeid).charges
@@ -171,7 +214,7 @@ def maharastraccextra
   maharastraccextra = 0
   if (self.orderid).present? 
   
-    if self.product_masters.sel_m_cc.blank? || self.product_masters.sel_m_cc == 1
+    if self.product_master.sel_m_cc.blank? || self.product_master.sel_m_cc == 1
       
       creditcardid = 10000
       creditcardcharges = Orderpaymentmode.find(creditcardid).charges

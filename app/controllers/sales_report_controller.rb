@@ -490,7 +490,7 @@ class SalesReportController < ApplicationController
         @product_master_id = params[:product_master_id]
         sold_product_list = OrderLine.where('order_lines.orderdate >= ? and order_lines.orderdate <= ?', from_date, to_date)
         .where(product_master_id: @product_master_id).joins(:order_master)
-        .where('ORDER_MASTERS.ORDER_STATUS_MASTER_ID > 10002') #.limit(10)
+        .where('ORDER_MASTERS.ORDER_STATUS_MASTER_ID > 10002').limit(10)
         #.uniq.pluck(:orderid)
         product_name = ProductMaster.find(@product_master_id).name
         
@@ -500,10 +500,7 @@ class SalesReportController < ApplicationController
               :ref_no => o.orderid, :order_date =>  (o.order_master.orderdate + 330.minutes).strftime('%d-%b-%Y'),
               :customer => o.order_master.customer.first_name + " " + o.order_master.customer.last_name, 
               :phone => o.order_master.mobile + " / " + o.order_master.customer_address.telephone1,
-              :address1 => o.order_master.customer_address.address1.strip,
-              :address2 => o.order_master.customer_address.address2.strip, 
-              :address3 => o.order_master.customer_address.address3.strip, 
-              :landmark => o.order_master.customer_address.landmark.strip,
+              :address => o.order_master.customer_address.address1.gsub(/,/, '').strip + " " + o.order_master.customer_address.address2.gsub(/,/, '').strip + " " + o.order_master.customer_address.address3.gsub(/,/, '').strip + " " +  o.order_master.customer_address.landmark.gsub(/,/, '').strip,
               :city => o.order_master.customer_address.city + " " + o.order_master.customer_address.pincode,
               :state => o.order_master.customer_address.state, 
               :product => o.product_variant.name,

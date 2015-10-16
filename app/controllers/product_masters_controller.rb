@@ -21,9 +21,11 @@ respond_to :html, :xml, :json
       @searchvalue = params[:search].upcase   
       @product_masters = ProductMaster.where('productactivecodeid = 10000')
       .where("name like ? OR extproductcode like ? or description like ?", "#{@searchvalue}%",
-       "#{@searchvalue}%", "#{@searchvalue}%")
+       "#{@searchvalue}%", "#{@searchvalue}%").order("updated_at DESC")
       .paginate(:page => params[:page], :per_page => 5)
-      @inactive_product_masters = ProductMaster.where('productactivecodeid <> 10000').where("name like ? OR extproductcode like ? or description like ?", "#{@searchvalue}%", "#{@searchvalue}%", "#{@searchvalue}%").paginate(:page => params[:page], :per_page => 5)
+      @inactive_product_masters = ProductMaster.where('productactivecodeid <> 10000')
+      .where("name like ? OR extproductcode like ? or description like ?", "#{@searchvalue}%", "#{@searchvalue}%", "#{@searchvalue}%")
+      .paginate(:page => params[:page], :per_page => 5).order("updated_at DESC")
       @found = @product_masters.count
       
      elsif params[:showall] == 'true'

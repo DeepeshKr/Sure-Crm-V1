@@ -67,7 +67,7 @@ class ProductList < ActiveRecord::Base
       # surcharge = 1 + Orderpaymentmode.find(surchargeid).charges
       # total = price * surcharge
       total = price
-      if self.product_masters.sel_cod.blank? || self.product_masters.sel_cod == 1
+      if self.product_master.sel_cod.blank? || self.product_master.sel_cod == 1
         cashondeliveryid = 10001
         charges = 1 + Orderpaymentmode.find(cashondeliveryid).charges
         total = total * charges
@@ -86,7 +86,7 @@ class ProductList < ActiveRecord::Base
       price = (product_variant.price  || 0) + (product_variant.shipping || 0)
       total = price
      
-      if self.product_masters.sel_m_cod.blank? || self.product_masters.sel_m_cod == 1
+      if self.product_master.sel_m_cod.blank? || self.product_master.sel_m_cod == 1
            
       surchargeid = 10020
       surcharge = 1 + Orderpaymentmode.find(surchargeid).charges
@@ -108,7 +108,7 @@ class ProductList < ActiveRecord::Base
 
   def servicetax
     total = (product_variant.price  || 0) + (product_variant.shipping || 0)
-    if self.product_masters.sel_s_tax.blank? || self.product_masters.sel_s_tax == 1
+    if self.product_master.sel_s_tax.blank? || self.product_master.sel_s_tax == 1
       cashondeliveryid = 10001
       codcharges = 1 + Orderpaymentmode.find(cashondeliveryid).charges
 
@@ -124,7 +124,7 @@ class ProductList < ActiveRecord::Base
 
   def creditcardcharges
     total = (product_variant.price  || 0) + (product_variant.shipping || 0)
-      if self.product_masters.sel_cc.blank? || self.product_masters.sel_cc == 1
+      if self.product_master.sel_cc.blank? || self.product_master.sel_cc == 1
         creditcardid = 10000
         charges = 1 +  Orderpaymentmode.find(creditcardid).charges
         total = ((product_variant.price  || 0) * charges ) + (product_variant.shipping || 0)
@@ -135,7 +135,7 @@ class ProductList < ActiveRecord::Base
 
   def maharastraccextra
     total = (product_variant.price  || 0) + (product_variant.shipping || 0)
-    if self.product_masters.sel_m_cc.blank? || self.product_masters.sel_m_cc == 1
+    if self.product_master.sel_m_cc.blank? || self.product_master.sel_m_cc == 1
     
       creditcardid = 10000
       charges = 1 +  Orderpaymentmode.find(creditcardid).charges
