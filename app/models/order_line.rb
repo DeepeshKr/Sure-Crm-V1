@@ -178,6 +178,7 @@ end
 
 def maharastracodextra
   if (self.orderid).present? 
+     maharastracodextra = 0
     if self.product_master.sel_m_cod.blank? || self.product_master.sel_m_cod == 1
 
         surchargeid = 10020
