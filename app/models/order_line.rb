@@ -70,7 +70,7 @@ class OrderLine < ActiveRecord::Base
 def codcharges
 codcharges = 0
   if (self.orderid).present? 
-     codcharges = (self.total || 0 )
+     codcharges = 0
      if self.product_master.sel_cod.blank? || self.product_master.sel_cod == 1
 
         cashondeliveryid = 10001
@@ -103,6 +103,7 @@ codcharges = 0
 end
 
 def creditcardcharges
+  creditcardcharges = 0
   if (self.orderid).present? 
     if self.product_master.sel_cc.blank? || self.product_master.sel_cc == 1
 
@@ -122,7 +123,7 @@ def creditcardcharges
       return ((self.subtotal || 0)  * (charges || 0)).round(2)
 
     end
-    return (self.subtotal || 0)
+    return creditcardcharges
   end
 end
 
