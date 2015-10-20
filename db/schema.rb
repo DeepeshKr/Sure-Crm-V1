@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151015124337) do
+ActiveRecord::Schema.define(version: 20151016164100) do
 
   create_table "address_types", force: :cascade do |t|
     t.string   "name"
@@ -362,9 +362,10 @@ ActiveRecord::Schema.define(version: 20151015124337) do
     t.text     "description"
     t.decimal  "stock_change"
     t.datetime "ledger_date"
-    t.datetime "created_at",                                   null: false
-    t.datetime "updated_at",                                   null: false
+    t.datetime "created_at",                                             null: false
+    t.datetime "updated_at",                                             null: false
     t.integer  "type_id",            limit: 16, precision: 38
+    t.decimal  "stock_value",                   precision: 10, scale: 2
   end
 
   create_table "distributor_stock_summaries", force: :cascade do |t|

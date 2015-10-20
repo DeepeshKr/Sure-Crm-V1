@@ -2,8 +2,11 @@
 <hr>
 <h3>Serviced Pincodes</h3> 
 
+<%= render partial: 'distributor_pincode_lists/quick_list' %>
 
-<button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#servicedPincode" aria-expanded="false" aria-controls="servicedPincode">
+<br>
+
+<button class="btn btn-success btn-sm" type="button" data-toggle="collapse" data-target="#servicedPincode" aria-expanded="false" aria-controls="servicedPincode">
   Add New Pincode
 </button>
 <div class="collapse" id="servicedPincode">
@@ -17,10 +20,15 @@
 <h3>Product Stock Summary (where available or Returns more than ZERO</h3> 
 
 <hr>
+<%= render partial: 'distributor_stock_summaries/quick_list' %>
+<br>
 <h3>Recent Stock Ledger (Recent Stock Movements)</h3> 
 
 <hr>
-<button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#distributorLedger" aria-expanded="false" aria-controls="distributorLedger">
+<%= render partial: 'distributor_stock_ledgers/quick_list' %>
+<br>
+
+<button class="btn btn-success btn-sm" type="button" data-toggle="collapse" data-target="#distributorLedger" aria-expanded="false" aria-controls="distributorLedger">
   New Stock Ledger
 </button>
 <div class="collapse" id="distributorLedger">

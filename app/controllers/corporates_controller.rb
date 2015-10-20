@@ -20,7 +20,8 @@ class CorporatesController < ApplicationController
  
   def show
     #show pincode
-    @distributor_pincode_lists = DistributorPincodeList.where(corporate_id: @corporate.id)
+    @distributor_pincode_lists = DistributorPincodeList.where(corporate_id: @corporate.id).paginate(:page => params[:page]) 
+      #.sort("pincode, name")
     
     #add pincode
     @distributor_pincode_list = DistributorPincodeList.new(corporate_id: @corporate.id)
@@ -32,8 +33,9 @@ class CorporatesController < ApplicationController
      @distributor_stock_ledgers = DistributorStockLedger.all.where(corporate_id: @corporate.id)
 
      #add stock ledger
-     @product_master = ProductMaster.where(productactivecodeid: 10000).order('name')
-     @distributor_stock_ledger_type = DistributorStockLedgerType.order('sort_order')
+    @product_list = ProductList.joins(:product_variant).where("product_variants.activeid = 10000").order('product_lists.name') #.limit(10)
+    @product_master = ProductMaster.where(productactivecodeid: 10000).order('name') #.limit(10)
+    @distributor_stock_ledger_type = DistributorStockLedgerType.order('sort_order')
     @distributor_stock_ledger = DistributorStockLedger.new(corporate_id: @corporate.id)
     
 

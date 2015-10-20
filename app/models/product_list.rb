@@ -7,7 +7,11 @@ class ProductList < ActiveRecord::Base
   
   has_many :product_master_add_on, foreign_key: "product_list_id"
   has_many :product_sample_stock, foreign_key: "product_list_id"
-  has_many :product_cost_master, foreign_key: "product_list_id" 
+  has_many :product_cost_master, foreign_key: "product_list_id"
+
+  has_many :distributor_stock_ledger, foreign_key: "product_variant_id"
+  has_many :distributor_stock_summary, foreign_key: "product_variant_id"
+
   belongs_to :promotion, foreign_key: "free_product_list_id"
 
   #has_many :product_master_add_on, :class_name => 'PointOfContact',  foreign_key: "replace_by_product_id"
@@ -22,7 +26,14 @@ class ProductList < ActiveRecord::Base
 
     validates_uniqueness_of :name, :scope => [:product_variant_id, :product_spec_list_id], :message => "Not Saved, a variant has been saved earlier with the same spec! "
 
-
+  def productname
+    if self.product_variant_id.present?
+      if ProductVariant.where(id: self.product_variant_id).present?
+        product_variant = ProductVariant.find(self.product_variant_id)
+        self.extproductcode + " - " + self.name << " Price:" << product_variant.price.to_s << " Shipping:" << product_variant.shipping.to_s << " (" << self.extproductcode << ")"
+      end
+    end
+  end
 
   def productinfo
      self.name << " (" << self.extproductcode << ")"
@@ -30,12 +41,11 @@ class ProductList < ActiveRecord::Base
 
    def productlistdetails
     if self.product_variant_id.present?
-
-   if ProductVariant.where(id: self.product_variant_id).present?
-      product_variant = ProductVariant.find(self.product_variant_id)
-      self.name << " Price:" << product_variant.price.to_s << " Shipping:" << product_variant.shipping.to_s << " (" << self.extproductcode << ")"
+      if ProductVariant.where(id: self.product_variant_id).present?
+        product_variant = ProductVariant.find(self.product_variant_id)
+        self.name << " Price:" << product_variant.price.to_s << " Shipping:" << product_variant.shipping.to_s << " (" << self.extproductcode << ")"
+      end
     end
-  end
   end
 
    def price

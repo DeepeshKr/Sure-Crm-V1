@@ -34,7 +34,7 @@ class DistributorPincodeListsController < ApplicationController
 
     respond_to do |format|
       if @distributor_pincode_list.save
-        format.html { redirect_to @distributor_pincode_list, notice: 'Distributor pincode list was successfully created.' }
+        format.html { redirect_to corporate_path @distributor_pincode_list.corporate_id, notice: 'Distributor pincode list was successfully created.' }
         format.json { render :show, status: :created, location: @distributor_pincode_list }
       else
         format.html { render :new }
@@ -48,7 +48,7 @@ class DistributorPincodeListsController < ApplicationController
   def update
     respond_to do |format|
       if @distributor_pincode_list.update(distributor_pincode_list_params)
-        format.html { redirect_to @distributor_pincode_list, notice: 'Distributor pincode list was successfully updated.' }
+        format.html { redirect_to corporate_path @distributor_pincode_list.corporate_id, notice: 'Distributor pincode list was successfully updated.' }
         format.json { render :show, status: :ok, location: @distributor_pincode_list }
       else
         format.html { render :edit }
@@ -62,7 +62,7 @@ class DistributorPincodeListsController < ApplicationController
   def destroy
     @distributor_pincode_list.destroy
     respond_to do |format|
-      format.html { redirect_to distributor_pincode_lists_url, notice: 'Distributor pincode list was successfully destroyed.' }
+      format.html { redirect_to corporate_path @distributor_pincode_list.corporate_id, notice: 'Distributor pincode list was successfully destroyed.' }
       format.json { head :no_content }
     end
   end
@@ -75,7 +75,7 @@ class DistributorPincodeListsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def distributor_pincode_list_params
-      params.require(:distributor_pincode_list).permit(:name, :corporate_id,
-       :sort_order, :pincode)
+      params.require(:distributor_pincode_list).permit(:corporate_id,
+       :sort_order, :city, :state, :locality, :pincode)
     end
 end

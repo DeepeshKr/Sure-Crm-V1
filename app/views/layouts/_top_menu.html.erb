@@ -5,14 +5,15 @@
        <!--   <li>          <p style="margin-top:12px;">   <%= link_to "Customer",  new_customer_path, class: "btn btn-info btn-sm" %>  </p>         </li> -->
          <% if logged_in? %>
          <li>          <p style="margin-top:12px;">         <%= link_to "Customer",  neworder_path, class: "btn btn-success btn-sm" %>         </p>         </li>
-       <% if (current_user.employee_role.sortorder < 8) %> 
+      
+         <% if (current_user.employee_role.sortorder < 8) %> 
          
           <li class="dropdown">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-            Employees <b class="caret"></b> </a>
+            Distributors <b class="caret"></b> </a>
             <ul class="dropdown-menu">
-              <li><%= link_to "New Employees", "/employees/new" %></li>
-              <li><%= link_to "Employee List", "/employees" %></li>
+              <li><%= link_to "New Distributor", "/corporates/new" %></li>
+              <li><%= link_to "Distributor List", "/corporates" %></li>
         
               
             </ul>
@@ -72,14 +73,21 @@
             <li><%= link_to "Customer Orders (Details Search)", "/detailedordersearch"  %></li>
            
             <li class="divider"></li>
-               <li><%= link_to "All Interactions", "/interaction" %></li> 
-              <li><%= link_to "PINCODE List", "/india_pincode_lists" %></li>    
-              <li><%= link_to "City List ", "/india_city_lists" %></li>    
-              <li class="divider"></li>
+            <li><%= link_to "All Interactions", "/interaction" %></li> 
+            <li><%= link_to "PINCODE List", "/india_pincode_lists" %></li>    
+            <li><%= link_to "City List ", "/india_city_lists" %></li>    
+            <li class="divider"></li>
              
-              <li><%= link_to "Salutes", "/salutes" %></li>
+            <li><%= link_to "Salutes", "/salutes" %></li>
               <li><%= link_to "States", "/states" %></li>
-              <li><%= link_to "Interaction Categories", "/interaction_categories" %></li>           
+              <li><%= link_to "Interaction Categories", "/interaction_categories" %></li> 
+            <li class="divider"></li>
+            <% if (current_user.employee_role.sortorder < 8) %> 
+         
+                <li><%= link_to "New Employees", "/employees/new" %></li>
+                <li><%= link_to "Employee List", "/employees" %></li>
+            
+            <% end %>         
             </ul>
          </li>
          <% end %>

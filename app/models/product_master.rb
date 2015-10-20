@@ -6,6 +6,7 @@ class ProductMaster < ActiveRecord::Base
   
   has_many :product_master_add_on, foreign_key: "product_master_id"
   has_many :distributor_stock_ledger, foreign_key: "product_master_id"
+  has_many :distributor_stock_summary, foreign_key: "product_master_id"
   
   #has_many :product_stock_book, foreign_key: "product_master_id"
   #has_many :product_stock, foreign_key: "product_master_id"

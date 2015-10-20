@@ -28,7 +28,7 @@ class DistributorStockSummariesController < ApplicationController
 
     respond_to do |format|
       if @distributor_stock_summary.save
-        format.html { redirect_to @distributor_stock_summary, notice: 'Distributor stock summary was successfully created.' }
+        format.html { redirect_to corporate_path @distributor_stock_summary.corporate_id, notice: 'Distributor stock summary was successfully created.' }
         format.json { render :show, status: :created, location: @distributor_stock_summary }
       else
         format.html { render :new }
@@ -42,7 +42,7 @@ class DistributorStockSummariesController < ApplicationController
   def update
     respond_to do |format|
       if @distributor_stock_summary.update(distributor_stock_summary_params)
-        format.html { redirect_to @distributor_stock_summary, notice: 'Distributor stock summary was successfully updated.' }
+        format.html { redirect_to corporate_path @distributor_stock_summary.corporate_id, notice: 'Distributor stock summary was successfully updated.' }
         format.json { render :show, status: :ok, location: @distributor_stock_summary }
       else
         format.html { render :edit }
@@ -56,7 +56,7 @@ class DistributorStockSummariesController < ApplicationController
   def destroy
     @distributor_stock_summary.destroy
     respond_to do |format|
-      format.html { redirect_to distributor_stock_summaries_url, notice: 'Distributor stock summary was successfully destroyed.' }
+      format.html { redirect_to corporate_path @distributor_stock_summary.corporate_id, notice: 'Distributor stock summary was successfully destroyed.' }
       format.json { head :no_content }
     end
   end
@@ -69,6 +69,13 @@ class DistributorStockSummariesController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def distributor_stock_summary_params
-      params.require(:distributor_stock_summary).permit(:corporate_id, :product_master_id, :product_variant_id, :product_list_id, :prod, :stock_balance, :rupee_balance, :stock_returned, :summary_date)
+      params.require(:distributor_stock_summary).permit(:corporate_id, 
+        :product_master_id, :product_variant_id, 
+        :product_list_id, :prod, 
+        :stock_value, 
+        :stock_qty, 
+        :stock_returned, 
+        :summary_date)
     end
 end
+
