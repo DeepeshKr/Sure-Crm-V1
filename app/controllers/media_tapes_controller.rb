@@ -162,7 +162,7 @@ class MediaTapesController < ApplicationController
       params.require(:media_tape).permit(:name,:release_date, :duration_secs, 
         :frames, :tape_ext_ref_id, :unique_tape_name, 
         :media_id, :product_variant_id, :description, :file_parts, 
-        :file_extenstion, :media_tape_head_id, :sort_order)
+        :file_extenstion, :media_tape_head_id, :sort_order, :frames)
 
     end
     def last_ext_tape_id
