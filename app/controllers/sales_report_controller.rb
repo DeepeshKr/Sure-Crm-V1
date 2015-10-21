@@ -380,31 +380,38 @@ class SalesReportController < ApplicationController
          @to_date =  Date.strptime(params[:to_date], "%Y-%m-%d")
          to_date = @to_date.end_of_day - 330.minutes
       end
+
+      total_count = 0
        
       if params.has_key?(:media_id)
-      #    order_masters = OrderMaster.where('orderdate >= ? AND orderdate <= ?', from_date, to_date)
-      #    .where(media_id: params[:media_id])
-      # .where('ORDER_STATUS_MASTER_ID > 10002').where('city IS NOT NULL').uniq.pluck(:city)
+        if params[:media_id].present?
+           @media_id = params[:media_id]
+            from_channel = Medium.find(params[:media_id]).name
+          #    order_masters = OrderMaster.where('orderdate >= ? AND orderdate <= ?', from_date, to_date)
+          #    .where(media_id: params[:media_id])
+          # .where('ORDER_STATUS_MASTER_ID > 10002').where('city IS NOT NULL').uniq.pluck(:city)
 
-      order_cities = OrderMaster.where('orderdate >= ? AND orderdate <= ?', from_date, to_date)
-      .where('ORDER_STATUS_MASTER_ID > 10002').where('city IS NOT NULL').where(media_id: params[:media_id])
-      .uniq.pluck(:city)
+          order_cities = OrderMaster.where('orderdate >= ? AND orderdate <= ?', from_date, to_date)
+          .where('ORDER_STATUS_MASTER_ID > 10002').where('city IS NOT NULL').where(media_id: params[:media_id])
+          .uniq.pluck(:city)
 
-      # order_id_1 = OrderMaster.where('orderdate >= ? AND orderdate <= ?', from_date, to_date)
-      # .where('ORDER_STATUS_MASTER_ID > 10002').where('city IS NOT NULL')
-      # .where(media_id: params[:media_id])
-      # .limit(1000).uniq.pluck(:id)
-      #  order_id_2 = OrderMaster.where('orderdate >= ? AND orderdate <= ?', from_date, to_date)
-      # .where('ORDER_STATUS_MASTER_ID > 10002').where('city IS NOT NULL')
-      # .where(media_id: params[:media_id])
-      # .offset(1000).limit(1000).uniq.pluck(:id)
-      #  order_id_3 = OrderMaster.where('orderdate >= ? AND orderdate <= ?', from_date, to_date)
-      # .where('ORDER_STATUS_MASTER_ID > 10002').where('city IS NOT NULL').where(media_id: params[:media_id])
-      # .offset(2000).limit(1000).uniq.pluck(:id)
-  
+          # order_id_1 = OrderMaster.where('orderdate >= ? AND orderdate <= ?', from_date, to_date)
+          # .where('ORDER_STATUS_MASTER_ID > 10002').where('city IS NOT NULL')
+          # .where(media_id: params[:media_id])
+          # .limit(1000).uniq.pluck(:id)
+          #  order_id_2 = OrderMaster.where('orderdate >= ? AND orderdate <= ?', from_date, to_date)
+          # .where('ORDER_STATUS_MASTER_ID > 10002').where('city IS NOT NULL')
+          # .where(media_id: params[:media_id])
+          # .offset(1000).limit(1000).uniq.pluck(:id)
+          #  order_id_3 = OrderMaster.where('orderdate >= ? AND orderdate <= ?', from_date, to_date)
+          # .where('ORDER_STATUS_MASTER_ID > 10002').where('city IS NOT NULL').where(media_id: params[:media_id])
+          # .offset(2000).limit(1000).uniq.pluck(:id)
       
-        @media_id = params[:media_id]
-        from_channel = Medium.find(params[:media_id]).name
+          
+           if order_cities.present?
+              total_count = order_cities.count
+           end            
+         end
       else
       #    order_masters = OrderMaster.where('orderdate >= ? AND orderdate <= ?', from_date, to_date)
       # .where('ORDER_STATUS_MASTER_ID > 10002').where('city IS NOT NULL')
@@ -421,9 +428,10 @@ class SalesReportController < ApplicationController
 
        end
 
-      @orderdate = "Searched for #{for_date} #{from_channel} found #{order_cities.count} cities!"
+      @orderdate = "Searched for #{for_date} #{from_channel} found #{total_count} cities!"
       employeeunorderlist ||= []
       num = 1
+      if order_cities.present?
       order_cities.each do |o|
       city = o #.city
       if city.present?
@@ -455,7 +463,7 @@ class SalesReportController < ApplicationController
 
           end
         end
-
+      end
         @employeeorderlist = employeeunorderlist.sort_by{|c| [c[:employee], c[:total]]}.reverse 
         respond_to do |format|
         csv_file_name = "city_sales_#{@or_for_date}.csv"
