@@ -63,7 +63,8 @@ Rails.application.routes.draw do
   get 'show_ppo' => 'sales_ppo_report#show'
   get 'sales_ppo_report/channel'
   get 'channel_ppo' => 'sales_ppo_report#channel'
-
+  get 'sales_ppo_report/hour_performance'
+  get 'hour_performance' => 'sales_ppo_report#hour_performance'
   get 'sales_ppo_report/ppo_details'
   get 'ppo_details' => 'sales_ppo_report#ppo_details'
   get 'sales_ppo_report/orders'
@@ -88,6 +89,7 @@ Rails.application.routes.draw do
   get 'sales_report/summary'
   get 'sales_report/hourly'
   get 'hourly_report' => 'sales_report#hourly'
+ 
   get 'sales_report/daily'
   get 'daily_report' => 'sales_report#daily'
   get 'sales_report/channel'

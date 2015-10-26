@@ -201,6 +201,130 @@ class SalesPpoReportController < ApplicationController
     @list_of_orders =  @list_of_orders.sort_by{ |c| c[:time_of_order]}
   end
 
+   def hour_performance
+    #@searchaction = "hourly"
+     #/sales_report/hourly?for_date=05%2F09%2F2015
+    @hourlist = "Time UTC is your zone #{Time.zone.now} while actual time is #{Time.now}"  
+    @sno = 1
+    @searchaction = "hourly"
+   for_date = (330.minutes).from_now.to_date
+    
+    if params.has_key?(:for_date)
+     for_date =  Date.strptime(params[:for_date], "%Y-%m-%d")
+
+      @or_for_date = for_date.strftime("%Y-%m-%d")
+
+    end
+        @total_nos = 0
+        @total_pieces = 0
+        @total_sales = 0
+        @total_revenue = 0
+
+        @total_product_cost = 0
+        @total_fixed_cost = 0
+        @total_var_cost = 0
+        @total_refund = 0
+
+        @total_profit = 0    
+       
+      #for_date = for_date - 330.minutes
+        @hourlist ||= []
+        @halfhourlist ||= []
+        employeeunorderlist ||= []
+    
+        from_date = for_date.beginning_of_day - 300.minutes
+        to_date = for_date.end_of_day - 300.minutes
+        #media segregation only HBN
+        
+        nos = 0
+        total_order_value = 0
+        s_no_i = 1
+        (from_date.to_datetime.to_i .. to_date.to_datetime.to_i).step(30.minutes) do |date|
+          @halfhourlist << {:id => s_no_i, :name => (Time.at(date - 30.minutes).strftime('%H:%M:%S')  + " to " + Time.at(date).strftime('%H:%M:%S'))}
+          s_no_i += 1
+        end
+        #start loop
+        
+        (from_date.to_datetime.to_i .. to_date.to_datetime.to_i).step(30.minutes) do |date|
+         
+          halfhourago = Time.at(date - 30.minutes) 
+        
+          orderlist = OrderMaster.where('ORDER_STATUS_MASTER_ID > 10002')
+          .where(media_id: @hbnlist)
+          .where('orderdate >= ? AND orderdate <= ?', halfhourago, Time.at(date))
+          #add orders of each cable tv operator
+
+          #split the fixed cost across the hour
+          revenue = 0
+          fixed_cost = 0
+          media_var_cost = 0
+          product_cost = 0
+          media_cost_master = 0
+          @list_of_orders ||= []
+          
+          orderlist.each do |med |
+
+            @list_of_orders << {order_no:  med.id,
+            time_of_order: med.orderdate.strftime('%Y-%b-%d %H:%M:%S')}
+            #error loggin
+            product_cost += med.productcost ||= 0
+            revenue += med.productrevenue  ||= 0
+            media_var_cost += med.media_commission ||= 0
+          end
+         
+          start_hr = halfhourago.strftime("%H")
+          start_min = halfhourago.strftime("%M")
+          end_hr = Time.at(date).strftime("%H")
+          end_min = Time.at(date).strftime("%M")
+          media_cost_master = MediaCostMaster.where(media_id: 11200).where("str_hr = ? AND str_min = ? AND end_hr = ? AND end_min = ?", start_hr, start_min, end_hr, end_min)
+          media_fixed_cost = media_cost_master.first.total_cost.to_i
+         
+          ## Apply all the corrections here ###
+          total_shipping = (orderlist.sum(:shipping)) 
+          total_sub_total = (orderlist.sum(:subtotal)) 
+          totalorders = (total_shipping + total_sub_total)
+
+           ## Apply all the corrections here ###
+          revenue = revenue * @correction
+          product_cost = product_cost * @correction
+          product_cost += product_cost * 0.10
+          totalorders = totalorders * @correction
+          refund = totalorders * 0.02
+          nos = (orderlist.count()) * @correction
+          pieces = orderlist.sum(:pieces) * @correction
+          profitability = (revenue - (product_cost + fixed_cost + media_var_cost + refund)).to_i 
+
+          
+          employeeunorderlist << {:total => totalorders.to_i,
+          :total_orders => totalorders.to_i,
+          :starttime =>  halfhourago.strftime("%H:%M %p"),
+          :endtime => Time.at(date).strftime("%H:%M %p"),
+          :start_time => halfhourago.strftime("%Y-%m-%d %H:%M"), 
+          :end_time => Time.at(date).strftime("%Y-%m-%d %H:%M"),
+          :pieces => pieces.to_i,
+          :total_pieces => pieces.to_i,
+          :refund => refund.to_i,
+          :nos => nos.to_i,
+          :total_nos => nos.to_i,
+          :revenue => revenue.to_i,
+          :product_cost => product_cost.to_i,
+          :variable_cost => media_var_cost.to_i,
+          :fixed_cost => media_fixed_cost.to_i,
+          :profitability => profitability.to_i}
+
+        end #end of hour loop
+        @employeeorderlist = employeeunorderlist #.sort_by{|c| c[:total]}.reverse 
+          respond_to do |format|
+            csv_file_name = "half_hourly_summary_#{@or_for_date}.csv"
+              format.html
+              format.csv do
+                headers['Content-Disposition'] = "attachment; filename=\"#{csv_file_name}\""
+                headers['Content-Type'] ||= 'text/csv'
+          end
+        end
+    @list_of_orders =  @list_of_orders.sort_by{ |c| c[:time_of_order]}
+  end
+
   def show
     #add this link to show
     #<%= link_to "View PPO", ppo_details_path(campaign_id: c[:campaign_id]), :target => "_blank" %> 
