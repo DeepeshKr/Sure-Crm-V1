@@ -8,6 +8,13 @@ class ProductCostMastersController < ApplicationController
     @product_cost_masters = ProductCostMaster.all.paginate(:page => params[:page])
     #update_all
     #reset_prices
+    respond_to do |format|
+      format.csv do
+        @product_cost_masters = ProductCostMaster.all
+              headers['Content-Disposition'] = "attachment; filename=\"product-costs\""
+              headers['Content-Type'] ||= 'text/csv'
+      end
+    end
   end
 
   def product_costs
@@ -45,8 +52,12 @@ class ProductCostMastersController < ApplicationController
         @inactive_product_lists = ProductList.where('id NOT IN (?)', @product_cost_masters).where('active_status_id = ?',  10000).order('updated_at DESC').paginate(:page => params[:page])
         @nos_with_out_price = @inactive_product_lists.count()
         @found = nil
-      
+        
     end
+        # format.csv do
+        #     headers['Content-Disposition'] = "attachment; filename=\"product-costs\""
+        #     headers['Content-Type'] ||= 'text/csv'
+        # end
      
   end
   # GET /product_cost_masters/1

@@ -3,6 +3,7 @@
 <div class="row">
     <div class="col-xs-6"><h3><%= @search %> <%= @found %>  </h3>    
     <small>These are list of products for sale.</small>
+    <%= link_to 'Download CSV list', product_cost_masters_path(showall: "true", format: :csv), class: "btn btn-success btn-sm" %>
     </div>
     <div class="col-xs-6"> 
     <div class="row">

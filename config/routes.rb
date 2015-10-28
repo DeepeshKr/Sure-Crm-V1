@@ -3,7 +3,7 @@ Rails.application.routes.draw do
   resources :distributor_stock_ledger_types
 
   get 'deal_tran/list'
-
+ 
   get 'deal_tran/search'
 
   get 'deal_tran/details'

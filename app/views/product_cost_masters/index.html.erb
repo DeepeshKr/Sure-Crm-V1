@@ -1,8 +1,10 @@
 <p id="notice"><%= notice %></p>
 <div class="row">
 <div class="col-xs-4">
-<h3>Product Cost Masters</h3>
+<h3>Product Cost Masters</h3> 
+<%= link_to 'Download CSV list', product_cost_masters_path(showall: "true", format: :csv), class: "btn btn-success btn-sm" %>
 </div>
+
 <div class="col-xs-8">
 <br>
 <div class="digg_pagination">

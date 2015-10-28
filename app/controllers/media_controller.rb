@@ -32,7 +32,7 @@ class MediaController < ApplicationController
       @inactivemedia = Medium.where(active:0).where("name like ? or ref_name like ?", "#{@search}%", "#{@search}%").order("updated_at DESC").paginate(:page => params[:page])
        @dnis = params[:dnis]
     end
-    #@commission
+    #@commission 
      if params.has_key?(:commission)
        @media = Medium.where(media_commision_id: params[:commission]).paginate(:page => params[:page])
        @commission = params[:commission]

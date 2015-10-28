@@ -1,0 +1,5 @@
+<% headers = ['Product','Prod', 'basic_cost', 'shipping_handling', 'product_cost', 'postage', 'tel_cost', 'royalty', 'cost_of_return', 'call_centre_commission', 'transf_order_basic', 'dealer_network_basic', 'wholesale_variable_cost' ] %>
+<%= CSV.generate_line headers %>
+	 <% @product_cost_masters.each do |product_cost_master| %>
+	 <%= CSV.generate_line([product_cost_master.details, product_cost_master.prod, product_cost_master.basic_cost, product_cost_master.shipping_handling,  product_cost_master.product_cost, product_cost_master.postage,  product_cost_master.tel_cost, product_cost_master.royalty, product_cost_master.cost_of_return, product_cost_master.call_centre_commission, product_cost_master.transf_order_basic, product_cost_master.dealer_network_basic, product_cost_master.wholesale_variable_cost]).html_safe.strip %>
+<% end %>

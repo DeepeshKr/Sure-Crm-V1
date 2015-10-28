@@ -5,6 +5,10 @@ class ProductCostMaster < ActiveRecord::Base
 
 	validates :prod ,  :presence => { :message => "Please select product!" }
 
+def details
+	self.product_master.name if self.product_master
+end
+
 	after_create :updateprice # :creator
 
   	after_save :updateprice # :updator
