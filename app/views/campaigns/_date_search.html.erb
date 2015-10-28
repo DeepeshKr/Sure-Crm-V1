@@ -1,7 +1,7 @@
 <div class="row">
  <%= bootstrap_form_tag url: campaigns_path, :method => :GET do |f| %>
 <div class="col-xs-9">
-<%= text_field_tag(:for_date, @for_date, :data => {:provide => "datepicker"}, :class => "form-control", :required => "true", :placeholder => "Search Campaign Date", :id => 'datepicker', :value => @for_date  )   %>
+<%= text_field_tag(:for_date, @for_date, :data => {:provide => "datepicker"}, :class => "form-control", :required => "true", :placeholder => "Search Campaign Date", :id => 'datepicker1')   %>
 
 </div>
 
@@ -13,6 +13,6 @@
 </div>
   <script>
   $(function() {
-    $('#datepicker').datepicker({format: 'yyyy-mm-dd'});
+    $('#datepicker1').datepicker({format: 'yyyy-mm-dd'});
   });
   </script>

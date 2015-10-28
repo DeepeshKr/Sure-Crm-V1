@@ -35,7 +35,7 @@ class CampaignsController < ApplicationController
     
     respond_with(@campaigns)
   end
-
+ 
   def show
     recent_campaigns
     proddropdown

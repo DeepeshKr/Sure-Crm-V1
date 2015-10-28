@@ -78,10 +78,10 @@
     </tr>
   </thead>
 
-  <tbody>
-    <% @vpp.each do |v| %>
-      <tr>
-        <td><%= v.orderdate %></td>
+<tbody>
+<% @vpp.each do |v| %>
+<tr>
+<td><%= v.orderdate %></td>
 <td><%= v.entrydate %></td>
 <td><%= v.ordersource %></td>
 <td><%= v.despatch %></td>
@@ -151,11 +151,9 @@
 <td><%= v.dt_hour %></td>
 <td><%= v.dt_min %></td>
 <td><%= v.convcharges %></td>
-
-        
-      </tr>
-    <% end %>
-  </tbody>
+</tr>
+<% end %>
+</tbody>
 </table>
 
 <br>

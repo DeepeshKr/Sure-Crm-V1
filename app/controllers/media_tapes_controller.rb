@@ -51,6 +51,7 @@ class MediaTapesController < ApplicationController
             description: tapename,
             release_date: release_date,
             duration_secs: media_tape_params[:duration_secs], 
+            frames: media_tape_params[:frames], 
             tape_ext_ref_id: media_tape_params[:tape_ext_ref_id],
             unique_tape_name: media_tape_params[:unique_tape_name],
             media_id: media_tape_params[:media_id],
