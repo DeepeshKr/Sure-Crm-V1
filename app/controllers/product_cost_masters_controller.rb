@@ -1,4 +1,5 @@
 class ProductCostMastersController < ApplicationController
+
   before_action :set_product_cost_master, only: [:show, :edit, :update, :destroy]
   before_action { protect_controllers(5) } 
   # GET /product_cost_masters
@@ -8,6 +9,7 @@ class ProductCostMastersController < ApplicationController
     @product_cost_masters = ProductCostMaster.all.paginate(:page => params[:page])
     #update_all
     #reset_prices
+    
     respond_to do |format|
       format.csv do
         @product_cost_masters = ProductCostMaster.all

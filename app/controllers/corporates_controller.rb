@@ -38,16 +38,32 @@ class CorporatesController < ApplicationController
     @distributor_stock_ledger_type = DistributorStockLedgerType.order('sort_order')
     @distributor_stock_ledger = DistributorStockLedger.new(corporate_id: @corporate.id)
     
-
+    india_pincode_lists = IndiaPincodeList.take(0)
 
     respond_with(@corporate)
   end
 
   def createnew
+
+    @india_pincode_lists = IndiaPincodeList.take(0)
+     
     @corporate = Corporate.new
     respond_with(@corporate)
   end
+  def show_pincode_list
+    #http://pullmonkey.com/2012/08/11/dynamic-select-boxes-ruby-on-rails-3/
+     #if media_tapes.present?
+    @searchvalue = params[:searchvalue]
+    @searchvalue =  @searchvalue.upcase
 
+   # @india_pincode_lists = IndiaPincodeList.where("UPPER(divisionname) like ? OR UPPER(pincode) like ? OR UPPER(districtname) like ? OR UPPER(regionname) like ? OR UPPER(taluk) like ? OR UPPER(circlename) like ? OR UPPER(statename) like ?", "#{@searchvalue}%", "#{@searchvalue}%", "#{@searchvalue}%", "#{@searchvalue}%", "#{@searchvalue}%", "#{@searchvalue}%", "#{@searchvalue}%")
+    @india_pincode_lists = IndiaPincodeList.where("UPPER(divisionname) like ? OR UPPER(pincode) like ? OR UPPER(districtname) like ? OR UPPER(regionname) like ? OR UPPER(taluk) like ? OR UPPER(circlename) like ?", "#{@searchvalue}%", "#{@searchvalue}%", "#{@searchvalue}%", "#{@searchvalue}%", "#{@searchvalue}%", "#{@searchvalue}%")
+
+    @india_pincode_lists = @india_pincode_lists.order(:pincode)
+     @india_pincode_lists = @india_pincode_lists.map{|s| [s.details, s.pincode]}
+
+    #render json: @india_pincode_lists
+  end
   def add
     @corporate = Corporate.new
     unless @corporate.valid?

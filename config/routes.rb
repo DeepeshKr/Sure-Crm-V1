@@ -35,6 +35,9 @@ Rails.application.routes.draw do
   resources :message_on_orders
 
   resources :product_cost_masters
+   resources :product_cost_masters do
+    collection { post :import }
+  end
 
   resources :product_test_ppos
 

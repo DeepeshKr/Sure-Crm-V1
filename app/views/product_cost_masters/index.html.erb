@@ -88,5 +88,24 @@
   </div>
   <br>
 <br>
+<div class="row">
+<div class="col-xs-4"> Import Product Costs: </div>
 
+<div class="col-xs-8">
+
+  <div class="row">
+  <%= form_tag import_product_cost_masters_path, multipart: true do %>
+    <div class="col-xs-6 col-offset-xs-2">
+        <%= file_field_tag :file %>
+    </div>
+    <div class="col-xs-3">
+        <%= submit_tag "Import CSV", class: "btn btn-warning btn-sm" %>
+    </div>
+  <% end %>
+  </div>
+</div> 
+
+</div>
+
+</div>
 <!--<%= link_to 'New Product cost master', new_product_cost_master_path %>-->

@@ -21,7 +21,7 @@ class ProductMaster < ActiveRecord::Base
   belongs_to :product_training_manual, foreign_key: "productid"
   validates_presence_of :name
   #validates :barcode, uniqueness: { case_sensitive: false }
-  #validates :extproductcode, uniqueness: { case_sensitive: false }
+  validates :extproductcode, uniqueness: { case_sensitive: false }
   
   validates_associated :product_variant
   
