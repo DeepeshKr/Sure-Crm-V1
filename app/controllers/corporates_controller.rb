@@ -21,8 +21,8 @@ class CorporatesController < ApplicationController
   def show
     #show pincode
     @distributor_pincode_lists = DistributorPincodeList.where(corporate_id: @corporate.id).paginate(:page => params[:page]) 
-      #.sort("pincode, name")
-    
+    #.sort("pincode, name")
+    @corporate_id = @corporate.id
     #add pincode
     @distributor_pincode_list = DistributorPincodeList.new(corporate_id: @corporate.id)
     
@@ -30,14 +30,14 @@ class CorporatesController < ApplicationController
     @distributor_stock_summaries = DistributorStockSummary.all.where(corporate_id: @corporate.id)
 
     #show stock ledger
-     @distributor_stock_ledgers = DistributorStockLedger.all.where(corporate_id: @corporate.id)
+     @distributor_stock_ledgers = DistributorStockLedger.all.where(corporate_id: @corporate.id).order("ledger_date DESC").limit(100)
 
      #add stock ledger
     @product_list = ProductList.joins(:product_variant).where("product_variants.activeid = 10000").order('product_lists.name') #.limit(10)
     @product_master = ProductMaster.where(productactivecodeid: 10000).order('name') #.limit(10)
     @distributor_stock_ledger_type = DistributorStockLedgerType.order('sort_order')
-    @distributor_stock_ledger = DistributorStockLedger.new(corporate_id: @corporate.id)
-    
+    @distributor_stock_ledger = DistributorStockLedger.new(corporate_id: @corporate.id) #
+    @distributor_missed_orders = DistributorMissedOrder.where(corporate_id: @corporate.id).order("id DESC").limit(100)
     india_pincode_lists = IndiaPincodeList.take(0)
 
     respond_with(@corporate)

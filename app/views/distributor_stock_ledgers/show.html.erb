@@ -1,49 +1,41 @@
-<p id="notice"><%= notice %></p>
+<div class="row">
+    <div class="col-xs-6">
+        <h3> <%= @corporate.name %> </h3>
+        <p> <%= @corporate.rupee_balance %>  <%= @corporate.corporate_type.name if @corporate.corporate_type %></p>
+        <p class="lead">Status: <%= @corporate.corporate_active_master.name if @corporate.corporate_active_master %></p>
+    </div>
+    <div class="col-xs-6">
+     <p>  <%= @corporate.website %></p>
+        <p> <strong>Telephone:</strong> <%= @corporate.telephone1 %></p>
+        <p> <strong>Telephone:</strong> <%= @corporate.telephone2 %> </p>
+        <p> <strong>Fax:</strong> <%= @corporate.fax %></p>
+    </div>
+</div>
+<div class="row">
+  <div class="col-xs-6">
 
-<p>
-  <strong>Corporate:</strong>
-  <%= @distributor_stock_ledger.corporate_id %>
-</p>
+  </div>
+</div>
+<hr>
+<br>
+<button class="btn btn-success btn-sm" type="button" data-toggle="collapse" data-target="#distributorDetails" aria-expanded="false" aria-controls="distributorDetails">
+  More Details
+</button>
+<div class="collapse" id="distributorDetails">
+  <div class="well">
+    <%= render partial: 'show_details' %>
+  </div>
+</div>
+<hr>
+<%= render partial: 'distributor_stock_ledgers/quick_list' %>
+<button class="btn btn-success btn-sm" type="button" data-toggle="collapse" data-target="#distributorLedger" aria-expanded="false" aria-controls="distributorLedger">
+  New Stock Ledger
+</button>
+<div class="collapse" id="distributorLedger">
+  <div class="well">
+    <%= render partial: 'distributor_stock_ledgers/form' %>
+  </div>
+</div>
 
-<p>
-  <strong>Product master:</strong>
-  <%= @distributor_stock_ledger.product_master_id %>
-</p>
 
-<p>
-  <strong>Product variant:</strong>
-  <%= @distributor_stock_ledger.product_variant_id %>
-</p>
-
-<p>
-  <strong>Product list:</strong>
-  <%= @distributor_stock_ledger.product_list_id %>
-</p>
-
-<p>
-  <strong>Prod:</strong>
-  <%= @distributor_stock_ledger.prod %>
-</p>
-
-<p>
-  <strong>Name:</strong>
-  <%= @distributor_stock_ledger.name %>
-</p>
-
-<p>
-  <strong>Description:</strong>
-  <%= @distributor_stock_ledger.description %>
-</p>
-
-<p>
-  <strong>Stock change:</strong>
-  <%= @distributor_stock_ledger.stock_change %>
-</p>
-
-<p>
-  <strong>Ledger date:</strong>
-  <%= @distributor_stock_ledger.ledger_date %>
-</p>
-
-<%= link_to 'Edit', edit_distributor_stock_ledger_path(@distributor_stock_ledger) %> |
-<%= link_to 'Back', distributor_stock_ledgers_path %>
+<%= link_to 'Back to Corporate', corporates_path, class:"btn btn-primary btn-sm" %>

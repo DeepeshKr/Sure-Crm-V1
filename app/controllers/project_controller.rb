@@ -1,10 +1,14 @@
 class ProjectController < ApplicationController
+   include FooTime
   
   #before_action { protect_controllers(20) } 
      skip_before_action :require_login, only: [:home, :help, :contact]
   def home
-    @timenow = (Time.zone.now + 330.minutes).strftime("%d-%b-%Y %H:%M")
+
+    #check class is working
+    @timenow = foo_hello_time
     
+
       # require 'gruff'
 
       # g = Gruff::Line.new

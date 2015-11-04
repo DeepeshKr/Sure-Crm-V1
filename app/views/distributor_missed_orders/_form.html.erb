@@ -1,0 +1,16 @@
+<%= simple_form_for(@distributor_missed_order) do |f| %>
+  <%= f.error_notification %>
+
+  <div class="form-inputs">
+    <%= f.input :corporate_id %>
+    <%= f.input :missed_type_id %>
+    <%= f.input :order_value %>
+    <%= f.input :order_no %>
+    <%= f.input :order_id %>
+    <%= f.input :description %>
+  </div>
+
+  <div class="form-actions">
+    <%= f.button :submit %>
+  </div>
+<% end %>

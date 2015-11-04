@@ -1,0 +1,34 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Corporate:</strong>
+  <%= @distributor_missed_order.corporate_id %>
+</p>
+
+<p>
+  <strong>Missed type:</strong>
+  <%= @distributor_missed_order.missed_type_id %>
+</p>
+
+<p>
+  <strong>Order value:</strong>
+  <%= @distributor_missed_order.order_value %>
+</p>
+
+<p>
+  <strong>Order no:</strong>
+  <%= @distributor_missed_order.order_no %>
+</p>
+
+<p>
+  <strong>Order:</strong>
+  <%= @distributor_missed_order.order_id %>
+</p>
+
+<p>
+  <strong>Description:</strong>
+  <%= @distributor_missed_order.description %>
+</p>
+
+<%= link_to 'Edit', edit_distributor_missed_order_path(@distributor_missed_order) %> |
+<%= link_to 'Back', distributor_missed_orders_path %>

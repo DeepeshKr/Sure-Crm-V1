@@ -1,5 +1,37 @@
-<h1>New Distributor Stock Ledger</h1>
+<% if @corporate.present? %>
+<div class="row">
+
+    <div class="col-xs-6">
+        <h3> <%= @corporate.name %> </h3>
+        <p> Status: <%= @corporate.corporate_active_master.name if @corporate.corporate_active_master %>  
+        <%= @corporate.corporate_type.name if @corporate.corporate_type %></p>
+        <p class="lead">INR Balance <%= @corporate.rupee_balance %> </p>
+    </div>
+    <div class="col-xs-6">
+     <p>  <%= @corporate.website %></p>
+        <p> <strong>Telephone:</strong> <%= @corporate.telephone1 %></p>
+        <p> <strong>Telephone:</strong> <%= @corporate.telephone2 %> </p>
+        <p> <strong>Fax:</strong> <%= @corporate.fax %></p>
+    </div>
+
+</div>
+
+<button class="btn btn-success btn-sm" type="button" data-toggle="collapse" data-target="#distributorDetails" aria-expanded="false" aria-controls="distributorDetails">
+  More Details
+</button>
+<div class="collapse" id="distributorDetails">
+  <div class="well">
+    <%= render partial: 'corporates/show_details' %>
+  </div>
+</div>
+    <% end %>
+<hr>
+<br>
+
+<h3>Add Distributor Stock Ledger</h3>
 
 <%= render 'form' %>
 
-<%= link_to 'Back', distributor_stock_ledgers_path %>
+<br>
+<hr>
+<%= link_to 'Back to Distributor', corporate_path(@corporate), class:"btn btn-primary btn-sm" %>

@@ -1,0 +1,31 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Listing Order Final Statuses</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Sort order</th>
+      <th>Description</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @order_final_statuses.each do |order_final_status| %>
+      <tr>
+        <td><%= order_final_status.name %></td>
+        <td><%= order_final_status.sort_order %></td>
+        <td><%= order_final_status.description %></td>
+        <td><%= link_to 'Show', order_final_status %></td>
+        <td><%= link_to 'Edit', edit_order_final_status_path(order_final_status) %></td>
+        <td><%= link_to 'Destroy', order_final_status, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Order final status', new_order_final_status_path %>

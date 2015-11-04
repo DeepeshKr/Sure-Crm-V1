@@ -1,0 +1,52 @@
+<div class="row">
+    <div class="col-xs-6">
+        <h3> <%= @corporate.name %> </h3>
+        <p> <%= @corporate.rupee_balance %>  <%= @corporate.corporate_type.name if @corporate.corporate_type %></p>
+        <p class="lead">Status: <%= @corporate.corporate_active_master.name if @corporate.corporate_active_master %></p>
+    </div>
+    <div class="col-xs-6">
+     <p>  <%= @corporate.website %></p>
+        <p> <strong>Telephone:</strong> <%= @corporate.telephone1 %></p>
+        <p> <strong>Telephone:</strong> <%= @corporate.telephone2 %> </p>
+        <p> <strong>Fax:</strong> <%= @corporate.fax %></p>
+    </div>
+</div>
+<div class="row">
+  <div class="col-xs-6">
+
+  </div>
+</div>
+<hr>
+<br>
+<button class="btn btn-success btn-sm" type="button" data-toggle="collapse" data-target="#distributorDetails" aria-expanded="false" aria-controls="distributorDetails">
+  More Details
+</button>
+<div class="collapse" id="distributorDetails">
+  <div class="well">
+    <%= render partial: 'corporates/show_details' %>
+  </div>
+</div>
+<hr>
+
+<h3>Missed Orders </h3>
+<div class="row">
+  <div class="col-xs-4">
+    <div class="btn-group" role="group" aria-label="...">
+      <%= link_to 'MIS Low', distributor_stock_ledgers_path(type_id: 10000, corporate_id:@corporate.id ), type:"button", class: @btn1 %>
+      <%= link_to 'Stock low', distributor_stock_ledgers_path(type_id: 10001, corporate_id:@corporate.id), type:"button", class: @btn2 %>
+     
+    </div>
+  </div>
+  <div class="col-xs-8">
+    <div class="digg_pagination">
+      <%= will_paginate @distributor_stock_ledgers, :container => false %>
+    </div>
+  </div>
+
+</div>
+<%= render partial: 'distributor_missed_orders/quick_list' %>
+
+<br>
+
+<%= link_to 'Back to Distributor', corporate_path(@corporate), class:"btn btn-primary btn-sm" %>
+

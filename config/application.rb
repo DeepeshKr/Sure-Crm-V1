@@ -14,6 +14,11 @@ module SureCrm1
     #config.encoding = "utf-8"
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration should go into files in config/initializers
+  
+    config.autoload_paths += %W(#{config.root}/lib) # add this line to include modules
+    # Autoload lib/ folder including all subdirectories
+    config.autoload_paths += Dir["#{config.root}/lib/**/"]
+    #config.autoload_paths += %W(#{config.root}/lib/mod) # add this line
     # -- all .rb files in that directory are automatically loaded.
 
     # Set Time.zone default to the specified zone and make Active Record auto-convert to this zone.

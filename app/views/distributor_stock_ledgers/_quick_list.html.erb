@@ -1,10 +1,14 @@
+
+
+
 <table class="table table-hover">
   <thead>
     <tr>
+      <th>Ledger date</th>
+      <th>Type</th>
       <th>Product</th>
       <th>Name<br>Description</th>
       <th>Stock<br>Value</th>
-      <th>Ledger date</th>
       <th></th>
     </tr>
   </thead>
@@ -12,12 +16,13 @@
   <tbody>
     <% @distributor_stock_ledgers.each do |distributor_stock_ledger| %>
       <tr>
+       <td><%= distributor_stock_ledger.ledger_date.strftime("%d-%b-%Y") %></td>
+       <td> <%= distributor_stock_ledger.distributor_stock_ledger_type.name if distributor_stock_ledger.distributor_stock_ledger_type %></td>
         <td><%= distributor_stock_ledger.product_list.name if distributor_stock_ledger.product_list %></td>
        
-        <td><%= distributor_stock_ledger.name %> <hr> <%= distributor_stock_ledger.description %></td>
-        <td><%= distributor_stock_ledger.stock_change %> Nos<hr>
-        Rs. <%= distributor_stock_ledger.stock_value %></td>
-        <td><%= distributor_stock_ledger.ledger_date.strftime("%d-%b-%Y") %></td>
+        <td><strong><%= distributor_stock_ledger.name %></strong><br><%= distributor_stock_ledger.description %></td>
+        <td> <%= distributor_stock_ledger.stock_change %><%= distributor_stock_ledger.stock_value %></td>
+       
         <td><%= link_to 'Destroy', distributor_stock_ledger, method: :delete, data: { confirm: 'Are you sure?' } %></td>
       </tr>
     <% end %>

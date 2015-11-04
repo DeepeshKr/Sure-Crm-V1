@@ -4,20 +4,55 @@ class DistributorStockLedgersController < ApplicationController
   # GET /distributor_stock_ledgers
   # GET /distributor_stock_ledgers.json
   def index
-    @distributor_stock_ledgers = DistributorStockLedger.all
+    if params.has_key?(:corporate_id)
+      @btn1 = "btn btn-default" 
+      @btn2 = "btn btn-default"
+      @btn3 = "btn btn-default"
+      @corporate = Corporate.find(params[:corporate_id])
+       @distributor_stock_ledgers = DistributorStockLedger.where(corporate_id: params[:corporate_id]).order("ledger_date DESC").paginate(:page => params[:page], :per_page => 100) 
+       if params.has_key?(:type_id)
+         @distributor_stock_ledgers =  @distributor_stock_ledgers.where(type_id: params[:type_id]).order("ledger_date DESC").paginate(:page => params[:page], :per_page => 100) 
+        status = params[:type_id].to_i
+        case status # a_variable is the variable we want to compare
+          when 10000    #compare to 1
+            @btn1 = "btn btn-success"
+            @message_details = "Showing MIS Entries"
+          when 10001    #compare to 2
+            @btn2 = "btn btn-success"
+             @message_details = "Showing all Purchases"
+          when 10002
+           @btn3 = "btn btn-success"
+            @message_details = "Showing all Sold to Customer"
+          else
+            @message_details = "Wrong Selection made"
+        end
+
+       end
+     else
+      @distributor_stock_ledgers = DistributorStockLedger.order("ledger_date DESC").limit(100).paginate(:page => params[:page], :per_page => 100) 
+     end
+   
+      
   end
 
   # GET /distributor_stock_ledgers/1
   # GET /distributor_stock_ledgers/1.json
   def show
+    @distributor_stock_book = DistributorStockBook.find(params[:id])
   end
 
   # GET /distributor_stock_ledgers/new
   def new
-    @product_master = ProductMaster.where(productactivecodeid: 10000) #.limit(10).order('name')
-    @product_list = ProductList.joins(:product_variant).where("product_variants.activeid = 10000") #.limit(10).order('name')
+    @product_list = ProductList.joins(:product_variant).where("product_variants.activeid = 10000").limit(10).order('product_lists.name')
+    if params.has_key?(:corporate_id)
+      @corporate_id = params[:corporate_id]
+    elsif distributor_stock_ledger_params.has_key?(:corporate_id)
+      @corporate_id = distributor_stock_ledger_params[:corporate_id]
+    end
+    @corporate = Corporate.find(@corporate_id)
+      #@product_master = ProductMaster.where(productactivecodeid: 10000) #.limit(10).order('name')
     @distributor_stock_ledger_type = DistributorStockLedgerType.order('sort_order')
-    @distributor_stock_ledger = DistributorStockLedger.new
+    @distributor_stock_ledger = DistributorStockLedger.new(corporate_id: @corporate_id)
   end
 
   # GET /distributor_stock_ledgers/1/edit
@@ -84,26 +119,39 @@ class DistributorStockLedgersController < ApplicationController
         :description, :stock_change, :stock_value, :ledger_date,
         :type_id)
     end
+
+    
     def update_product_details(distributor_stock_ledger_id)
        distributor_stock_ledger = DistributorStockLedger.find(distributor_stock_ledger_id)
-    if distributor_stock_ledger.product_list_id.present?
-      #product list details from product master id
-      product_list = ProductList.find(distributor_stock_ledger.product_list_id) #.joins(:product_variant).where("product_variants.activeid = 10000")
-      if product_list.present?
+      if distributor_stock_ledger.product_list_id.present?
         #product list details from product master id
-        #distributor_stock_ledger = DistributorStockLedger.find(self.id)
+        product_list = ProductList.find(distributor_stock_ledger.product_list_id) #.joins(:product_variant).where("product_variants.activeid = 10000")
+        if product_list.present?
+          #product list details from product master id
+          #distributor_stock_ledger = DistributorStockLedger.find(self.id)
 
-        distributor_stock_ledger.update(product_master_id: product_list.product_master_id,
-          product_variant_id: product_list.product_variant_id,
-          prod: product_list.extproductcode)
-        #product variant details from product master id
-        if distributor_stock_ledger.type_id != 10000
-          update_product_stock_summary(distributor_stock_ledger_id)
+          distributor_stock_ledger.update(product_master_id: product_list.product_master_id,
+            product_variant_id: product_list.product_variant_id,
+            prod: product_list.extproductcode)
+          #product variant details from product master id
+          if distributor_stock_ledger.type_id != 10000 #stock change
+              update_product_stock_summary(distributor_stock_ledger_id)
+            elsif distributor_stock_ledger.type_id == 10000 #mis additions
+              update_corporate_mis_balance(distributor_stock_ledger.corporate_id, distributor_stock_ledger.stock_value)
+            end
+          
         end
-        
       end
     end
-  end
+
+    def update_corporate_mis_balance(corporate_id, mis_value)
+
+       corporate = Corporate.find(corporate_id)
+       fin_value = corporate.rupee_balance ||= 0 #if corporate.rupee_balance.present?
+       fin_value += mis_value
+       corporate.update(rupee_balance: fin_value)
+       
+    end
 
     def update_product_stock_summary(distributor_stock_ledger_id)
       distributor_stock_ledger = DistributorStockLedger.find(distributor_stock_ledger_id)

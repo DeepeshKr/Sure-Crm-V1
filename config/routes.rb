@@ -1,11 +1,19 @@
 Rails.application.routes.draw do
 
+  resources :distributor_missed_orders
+
+  resources :distributor_missed_order_types
+
+  resources :order_final_statuses
+
+  resources :order_list_miles
+
+  resources :vpp_deal_trans
+
   resources :distributor_stock_ledger_types
 
   get 'deal_tran/list'
- 
   get 'deal_tran/search'
-
   get 'deal_tran/details'
 
   resources :distributor_stock_summaries

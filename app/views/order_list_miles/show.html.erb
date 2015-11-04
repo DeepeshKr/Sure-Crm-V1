@@ -1,0 +1,19 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @order_list_mile.name %>
+</p>
+
+<p>
+  <strong>Sort order:</strong>
+  <%= @order_list_mile.sort_order %>
+</p>
+
+<p>
+  <strong>Description:</strong>
+  <%= @order_list_mile.description %>
+</p>
+
+<%= link_to 'Edit', edit_order_list_mile_path(@order_list_mile) %> |
+<%= link_to 'Back', order_list_miles_path %>

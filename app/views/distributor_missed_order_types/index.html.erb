@@ -1,0 +1,31 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Listing Distributor Missed Order Types</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Sort order</th>
+      <th>Description</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @distributor_missed_order_types.each do |distributor_missed_order_type| %>
+      <tr>
+        <td><%= distributor_missed_order_type.name %></td>
+        <td><%= distributor_missed_order_type.sort_order %></td>
+        <td><%= distributor_missed_order_type.description %></td>
+        <td><%= link_to 'Show', distributor_missed_order_type %></td>
+        <td><%= link_to 'Edit', edit_distributor_missed_order_type_path(distributor_missed_order_type) %></td>
+        <td><%= link_to 'Destroy', distributor_missed_order_type, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Distributor missed order type', new_distributor_missed_order_type_path %>

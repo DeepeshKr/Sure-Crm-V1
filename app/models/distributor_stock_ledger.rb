@@ -7,7 +7,9 @@ class DistributorStockLedger < ActiveRecord::Base
 
 	validates :corporate_id,  :presence => { :message => "Need to select a distributor!" } 
 	validates :ledger_date,  :presence => { :message => "Need to select a date for entry!" } 
-	validates :stock_change,  :presence => { :message => "Need to select a stock change or keep the value 0" } 
+	validates_presence_of :stock_change, :unless => :stock_value? #, { :message => "Need to select a stock change or keep the value 0" }
+	validates_presence_of :stock_value, :unless => :stock_change? #, { :message => "Need to select a stock change or keep the value 0" }
+	#validates :stock_change,  :presence => { :message => "Need to select a stock change or keep the value 0" } 
 	validates :name,  :presence => { :message => "Need to give a name like stock addition, sale, bonus..." } 
 	validates :description,  :presence => { :message => "Description of ledger" } 
 
@@ -35,12 +37,22 @@ private
 	          product_variant_id: product_list.product_variant_id,
 	          prod: product_list.extproductcode)
 	        #product variant details from product master id
-	        if distributor_stock_ledger.type_id != 10000
+	        if distributor_stock_ledger.type_id != 10000 #stock change
 	          update_product_stock_summary(distributor_stock_ledger_id)
+	      	elsif distributor_stock_ledger.type_id == 10000 #mis additions
+	      	 	update_corporate_mis_balance(distributor_stock_ledger.corporate_id, distributor_stock_ledger.stock_value)
 	        end
 	        
 	      end
 	    end
+  	end
+  	def update_corporate_mis_balance(corporate_id, mis_value)
+
+  		 corporate = Corporate.find(corporate_id)
+  		 fin_value = corporate.rupee_balance ||= 0 #if corporate.rupee_balance.present?
+  		 fin_value += mis_value
+  		 corporate.update(rupee_balance: fin_value)
+  		 
   	end
 
     def update_product_stock_summary(distributor_stock_ledger_id)
@@ -57,10 +69,12 @@ private
 		             distributor_stock_summary = DistributorStockSummary.where("product_list_id = ? and corporate_id = ?",distributor_stock_ledger.product_list_id, distributor_stock_ledger.corporate_id).first
 		          #   #get current balance
 		             balance_qty = distributor_stock_summary.stock_qty
-		             balance_val = distributor_stock_summary.stock_value
+		             #balance_val = distributor_stock_summary.stock_value
+		             #balance_val = corporate.rupee_balance
 		          #   #if self.type_id == 10001 #Add
 		             balance_qty += distributor_stock_ledger.stock_change
-		             balance_val += distributor_stock_ledger.stock_value
+		             #balance_val += distributor_stock_ledger.stock_value
+		             #balance_val += corporate.rupee_balance
 		          #   #elsif self.type_id == 10002 #Remove
 		          #   # balance -= self.stock_change
 		          #   #end
@@ -69,7 +83,7 @@ private
 		             product_variant_id: product_list.product_variant_id,
 		             prod: product_list.extproductcode, 
 		             summary_date: distributor_stock_ledger.ledger_date,
-		             stock_qty: balance_qty, stock_value: balance_val)
+		             stock_qty: balance_qty, stock_value: 0)
 
 		           else
 		            
@@ -80,7 +94,7 @@ private
 		            corporate_id: distributor_stock_ledger.corporate_id,
 		            summary_date: distributor_stock_ledger.ledger_date, 
 		            stock_qty: distributor_stock_ledger.stock_change,
-		            stock_value: distributor_stock_ledger.stock_value,
+		            stock_value: 0,
 		            stock_returned: 0)
 
 		          end

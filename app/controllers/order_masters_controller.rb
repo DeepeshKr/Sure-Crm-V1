@@ -207,7 +207,7 @@ class OrderMastersController < ApplicationController
         @order_masters = OrderMaster.where(customer_id: customers).paginate(:page => params[:page])  
     elsif params[:order_id].present?
         @order_id = params[:order_id]
-        @order_masters = OrderMaster.where(id: @order_id).paginate(:page => params[:page]) 
+        @order_masters = OrderMaster.where('id = ? or original_order_id = ?', @order_id, @order_id).paginate(:page => params[:page]) 
 
      elsif params[:calledno].present?
         @calledno = params[:calledno]

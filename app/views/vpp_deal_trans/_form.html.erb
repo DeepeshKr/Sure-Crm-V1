@@ -1,0 +1,16 @@
+<%= simple_form_for(@vpp_deal_tran) do |f| %>
+  <%= f.error_notification %>
+
+  <div class="form-inputs">
+    <%= f.input :actdate %>
+    <%= f.input :action %>
+    <%= f.input :add1 %>
+    <%= f.input :add2 %>
+    <%= f.input :add3 %>
+    <%= f.input :barcode %>
+  </div>
+
+  <div class="form-actions">
+    <%= f.button :submit %>
+  </div>
+<% end %>

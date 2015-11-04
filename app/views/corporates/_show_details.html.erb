@@ -1,17 +1,6 @@
+
 <div class="well well-sm">
-<div class="row">
-    <div class="col-xs-6">
-        <h3> <%= @corporate.name %> </h3>
-        <p> <%= @corporate.rupee_balance %>  <%= @corporate.corporate_type.name if @corporate.corporate_type %></p>
-        <p class="lead">Status: <%= @corporate.corporate_active_master.name if @corporate.corporate_active_master %></p>
-    </div>
-    <div class="col-xs-6">
-     <p>  <%= @corporate.website %></p>
-        <p> <strong>Telephone:</strong> <%= @corporate.telephone1 %></p>
-        <p> <strong>Telephone:</strong> <%= @corporate.telephone2 %> </p>
-        <p> <strong>Fax:</strong> <%= @corporate.fax %></p>
-    </div>
-</div>
+
 
 <%= @corporate.description %>
 

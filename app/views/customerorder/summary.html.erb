@@ -41,7 +41,7 @@ Customer Order Summary
 &nbsp; <small><strong>DNIS:</strong>   <%= order_master.calledno %> </small>
 &nbsp; <small><strong>Completed Order No: 
 <% if order_master.external_order_no.blank? %>
- <%= link_to "Complete Order", review_path(:order_id => @order_id), class: "btn btn-warning btn-xs" %> 
+ <%= link_to "Complete Order", review_path(:order_id => order_master.id), class: "btn btn-warning btn-xs" %> 
 <% else %>
 <%= order_master.external_order_no %>
  <% end %>

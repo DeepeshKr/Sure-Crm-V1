@@ -1,0 +1,19 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @distributor_missed_order_type.name %>
+</p>
+
+<p>
+  <strong>Sort order:</strong>
+  <%= @distributor_missed_order_type.sort_order %>
+</p>
+
+<p>
+  <strong>Description:</strong>
+  <%= @distributor_missed_order_type.description %>
+</p>
+
+<%= link_to 'Edit', edit_distributor_missed_order_type_path(@distributor_missed_order_type) %> |
+<%= link_to 'Back', distributor_missed_order_types_path %>

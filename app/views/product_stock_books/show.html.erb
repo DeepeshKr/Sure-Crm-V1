@@ -13,8 +13,10 @@
     <strong>BARCODE:</strong>
   <%= @product_stock_book.list_barcode %>
   </div>
-  <div class="col-xs-5">
+  <div class="col-xs-1">
      <strong>PROD:</strong>
+     </div>
+      <div class="col-xs-4">
    <ul class="list-inline">
  <% @prod.each do |c| %>
   <li>
@@ -33,25 +35,29 @@
     <th>
       
     </th>
+    <th>
+        Data Table
+      </th>
       <th >
         Description
       </th>
       <th class="text-right">
-        Quantity
+        Pieces
       </th>
        <th class="text-right">
-        Running Total
+        Pieces Total
       </th>
        <th class="text-right">
-        
+        Value
       </th>
        <th class="text-right">
-       
+       Value Total
       </th>
     </tr>
   </thead>
   <tbody>
         <tr>
+    <td>No Table</td>
     <td>Previous Date</td>
     <td>
      <strong> Closing qty:</strong>
@@ -70,6 +76,7 @@
       </td>
     </tr>
     <tr>
+    <td>No Table</td>
     <td>Base</td>
     <td>
      <strong> Opening qty:</strong>
@@ -89,6 +96,7 @@
       </td>
     </tr>
     <tr>
+     <td>No Table</td>
     <td>Add (+)</td>
     <td>
         <strong>Purchased qty:</strong>
@@ -101,13 +109,14 @@
        <%= @running_total %>
       </td>
        <td class="text-right">
-      
+        
       </td>
       <td class="text-right">
        
       </td>
     </tr>
      <tr>
+      <td>No Table</td>
       <td>Add (+)</td>
     <td>
        <strong>Returned retail qty:</strong>
@@ -127,6 +136,7 @@
       </td>
     </tr>
     <tr>
+     <td>No Table</td>
      <td>Add (+)</td>
     <td>
        <strong>Returned wholesale qty:</strong>
@@ -146,6 +156,7 @@
       </td>
     </tr>
     <tr>
+     <td>No Table</td>
      <td>Add (+)</td>
     <td>
        <strong>Returned others qty:</strong>
@@ -165,6 +176,7 @@
       </td>
     </tr>
         <tr>
+         <td>No Table</td>
          <td>Less (-)</td>
     <td>
        <strong>Sold retail qty:</strong>
@@ -184,6 +196,7 @@
       </td>
     </tr>
        <tr>
+        <td>No Table</td>
        <td>Less (-)</td>
     <td>
       <strong>Sold wholesale:</strong>
@@ -203,6 +216,7 @@
       </td>
     </tr>
       <tr>
+       <td>No Table</td>
       <td>Less (-)</td>
     <td>
      <strong>Sold branch qty:</strong>
@@ -222,6 +236,7 @@
       </td>
     </tr>
         <tr>
+        <td>No Table</td>
         <td>Adjust (+/-)</td>
     <td>
      <strong>Corrections qty:</strong>
@@ -241,6 +256,7 @@
       </td>
     </tr>
     <tr>
+    <td>No Table</td>
     <td>Final</td>
     <td>
     <strong>Closing qty:</strong>

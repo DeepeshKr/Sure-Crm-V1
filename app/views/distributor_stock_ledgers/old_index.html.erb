@@ -1,0 +1,43 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Listing Distributor Stock Ledgers</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Corporate</th>
+      <th>Product master</th>
+      <th>Product variant</th>
+      <th>Product list</th>
+      <th>Prod</th>
+      <th>Name</th>
+      <th>Description</th>
+      <th>Stock change</th>
+      <th>Ledger date</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @distributor_stock_ledgers.each do |distributor_stock_ledger| %>
+      <tr>
+        <td><%= distributor_stock_ledger.corporate_id %></td>
+        <td><%= distributor_stock_ledger.product_master_id %></td>
+        <td><%= distributor_stock_ledger.product_variant_id %></td>
+        <td><%= distributor_stock_ledger.product_list_id %></td>
+        <td><%= distributor_stock_ledger.prod %></td>
+        <td><%= distributor_stock_ledger.name %></td>
+        <td><%= distributor_stock_ledger.description %></td>
+        <td><%= distributor_stock_ledger.stock_change %></td>
+        <td><%= distributor_stock_ledger.ledger_date %></td>
+        <td><%= link_to 'Show', distributor_stock_ledger %></td>
+        <td><%= link_to 'Edit', edit_distributor_stock_ledger_path(distributor_stock_ledger) %></td>
+        <td><%= link_to 'Destroy', distributor_stock_ledger, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Distributor stock ledger', new_distributor_stock_ledger_path %>

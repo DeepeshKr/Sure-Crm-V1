@@ -9,6 +9,8 @@ class OrderMaster < ActiveRecord::Base
   belongs_to :customer_address, foreign_key: "customer_address_id" #, polymorphic: true
   belongs_to :medium, foreign_key: "media_id"
   belongs_to :promotion, foreign_key: "promotion_id"
+  belongs_to :order_final_status, foreign_key: "order_final_status_id"
+  belongs_to :order_last_mile, foreign_key: "order_last_mile_id"
 
   has_many :interaction_master, foreign_key: "orderid"
   has_many :page_trail, foreign_key: "order_id" 

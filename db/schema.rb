@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151016164100) do
+ActiveRecord::Schema.define(version: 20151104040503) do
 
   create_table "address_types", force: :cascade do |t|
     t.string   "name"
@@ -313,6 +313,25 @@ ActiveRecord::Schema.define(version: 20151016164100) do
   add_index "devises", ["email"], name: "index_devises_on_email", unique: true
   add_index "devises", ["reset_password_token"], name: "i_devises_reset_password_token", unique: true
 
+  create_table "distributor_missed_order_types", force: :cascade do |t|
+    t.string   "name"
+    t.integer  "sort_order",  limit: 16, precision: 38
+    t.text     "description"
+    t.datetime "created_at",                            null: false
+    t.datetime "updated_at",                            null: false
+  end
+
+  create_table "distributor_missed_orders", force: :cascade do |t|
+    t.integer  "corporate_id",   limit: 16, precision: 38
+    t.integer  "missed_type_id", limit: 16, precision: 38
+    t.integer  "order_value",    limit: 16, precision: 38
+    t.integer  "order_no",       limit: 16, precision: 38
+    t.integer  "order_id",       limit: 16, precision: 38
+    t.text     "description"
+    t.datetime "created_at",                               null: false
+    t.datetime "updated_at",                               null: false
+  end
+
   create_table "distributor_pincode_lists", force: :cascade do |t|
     t.string   "city"
     t.string   "state"
@@ -323,6 +342,8 @@ ActiveRecord::Schema.define(version: 20151016164100) do
     t.datetime "updated_at",                             null: false
     t.integer  "corporate_id", limit: 16, precision: 38
   end
+
+  add_index "distributor_pincode_lists", ["pincode"], name: "i_dis_pin_lis_pin"
 
   create_table "distributor_stock_books", force: :cascade do |t|
     t.integer  "corporate_id",       limit: 16, precision: 38
@@ -648,6 +669,14 @@ ActiveRecord::Schema.define(version: 20151016164100) do
     t.datetime "updated_at",                            null: false
   end
 
+  create_table "order_final_statuses", force: :cascade do |t|
+    t.string   "name"
+    t.integer  "sort_order",  limit: 16, precision: 38
+    t.text     "description"
+    t.datetime "created_at",                            null: false
+    t.datetime "updated_at",                            null: false
+  end
+
   create_table "order_fors", force: :cascade do |t|
     t.string   "name"
     t.text     "description"
@@ -688,6 +717,14 @@ ActiveRecord::Schema.define(version: 20151016164100) do
     t.integer  "product_master_id",        limit: 16, precision: 38
   end
 
+  create_table "order_list_miles", force: :cascade do |t|
+    t.string   "name"
+    t.integer  "sort_order",  limit: 16, precision: 38
+    t.text     "description"
+    t.datetime "created_at",                            null: false
+    t.datetime "updated_at",                            null: false
+  end
+
   create_table "order_masters", force: :cascade do |t|
     t.datetime "orderdate"
     t.string   "employeecode"
@@ -720,7 +757,12 @@ ActiveRecord::Schema.define(version: 20151016164100) do
     t.integer  "promotion_id",           limit: 16, precision: 38
     t.string   "city"
     t.string   "pincode"
+    t.integer  "order_last_mile_id",     limit: 16, precision: 38
+    t.integer  "order_final_status_id",  limit: 16, precision: 38
   end
+
+  add_index "order_masters", ["city"], name: "index_order_masters_on_city"
+  add_index "order_masters", ["pincode"], name: "index_order_masters_on_pincode"
 
   create_table "order_payments", force: :cascade do |t|
     t.integer  "order_master_id",     limit: 16, precision: 38
@@ -1143,6 +1185,100 @@ ActiveRecord::Schema.define(version: 20151016164100) do
 
   add_index "users", ["email"], name: "index_users_on_email"
   add_index "users", ["employee_code"], name: "index_users_on_employee_code", unique: true
+
+  create_table "vpp_deal_trans", force: :cascade do |t|
+    t.datetime "actdate"
+    t.string   "action",                limit: 10
+    t.string   "add1",                  limit: 40
+    t.string   "add2",                  limit: 40
+    t.string   "add3",                  limit: 40
+    t.string   "barcode",               limit: 25
+    t.string   "barcode2",              limit: 25
+    t.string   "barcode3",              limit: 25
+    t.integer  "basicprice",            limit: 4,  precision: 5
+    t.string   "cfo",                   limit: 1
+    t.integer  "channel",               limit: 4,  precision: 3
+    t.string   "city",                  limit: 20
+    t.datetime "claimdate"
+    t.integer  "codamt",                limit: 4,  precision: 2
+    t.integer  "convcharges",           limit: 4,  precision: 5
+    t.string   "cou",                   limit: 1
+    t.integer  "custref",               limit: 8,  precision: 12
+    t.integer  "debitnote",             limit: 4,  precision: 5
+    t.datetime "debitnotedate"
+    t.datetime "delvdate"
+    t.string   "deo",                   limit: 10
+    t.string   "dept",                  limit: 20
+    t.string   "despatch",              limit: 3
+    t.string   "dist",                  limit: 1
+    t.integer  "distcode",              limit: 8,  precision: 10
+    t.string   "distname",              limit: 50
+    t.string   "dt_hour",               limit: 2
+    t.string   "dt_min",                limit: 2
+    t.string   "email",                 limit: 30
+    t.string   "emi",                   limit: 5
+    t.datetime "entrydate"
+    t.string   "fax",                   limit: 20
+    t.string   "fname",                 limit: 30
+    t.datetime "invdate"
+    t.string   "fsize",                 limit: 1
+    t.string   "invoice",               limit: 10
+    t.integer  "invoiceamount",         limit: 4,  precision: 6
+    t.string   "landmark",              limit: 30
+    t.boolean  "letter"
+    t.string   "lessprod",              limit: 6
+    t.string   "lname",                 limit: 30
+    t.datetime "loydate"
+    t.string   "manifest",              limit: 8
+    t.string   "modby",                 limit: 10
+    t.datetime "moddt"
+    t.boolean  "notice"
+    t.integer  "normal",                limit: 4,  precision: 6
+    t.integer  "operator",              limit: 4,  precision: 3
+    t.string   "order_number",          limit: 15
+    t.datetime "orderdate"
+    t.string   "orderno",               limit: 15
+    t.string   "ordersource",           limit: 1
+    t.integer  "paidamt",               limit: 4,  precision: 6
+    t.datetime "paiddate"
+    t.string   "ordertype",             limit: 1
+    t.integer  "pin",                   limit: 4,  precision: 6
+    t.integer  "postage",               limit: 4,  precision: 5
+    t.datetime "probag"
+    t.string   "prod",                  limit: 6
+    t.integer  "qty",                   limit: 4,  precision: 2
+    t.string   "remarks",               limit: 1
+    t.integer  "refundamt",             limit: 4,  precision: 5
+    t.string   "refundcheck",           limit: 10
+    t.datetime "refundcheckdate"
+    t.datetime "refunddate"
+    t.datetime "returndate"
+    t.integer  "sanction",              limit: 4,  precision: 5
+    t.datetime "shdate"
+    t.boolean  "shipped"
+    t.string   "state",                 limit: 3
+    t.string   "status",                limit: 20
+    t.datetime "statusdate"
+    t.integer  "taxamt",                limit: 4,  precision: 5
+    t.decimal  "taxper",                           precision: 5,  scale: 2
+    t.string   "tel1",                  limit: 20
+    t.string   "tel2",                  limit: 20
+    t.string   "tempstatus",            limit: 1
+    t.datetime "tempstatusdate"
+    t.datetime "temptrandate"
+    t.string   "title",                 limit: 3
+    t.datetime "trandate"
+    t.string   "transfer",              limit: 1
+    t.string   "trantype",              limit: 1
+    t.boolean  "vpp"
+    t.decimal  "weight",                           precision: 6,  scale: 2
+    t.integer  "invoicerefno",          limit: 8,  precision: 12
+    t.text     "description"
+    t.integer  "order_last_mile_id",    limit: 16, precision: 38
+    t.integer  "order_final_status_id", limit: 4,  precision: 6
+    t.datetime "created_at",                                                null: false
+    t.datetime "updated_at",                                                null: false
+  end
 
   create_table "vpp_test", id: false, force: :cascade do |t|
     t.integer "asd", limit: 4, precision: 5

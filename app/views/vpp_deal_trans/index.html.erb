@@ -1,0 +1,203 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Listing Vpp Deal Trans</h1>
+
+<table>
+  <thead>
+    <tr>
+    <th>  Actdate </th>
+    <th>  Action  </th>
+    <th>  Add1  </th>
+    <th>  Add2  </th>
+    <th>  Add3  </th>
+    <th>  Barcode   </th>
+    <th>  Barcode2  </th>
+    <th>  Barcode3  </th>
+    <th>  Basicprice  </th>
+    <th>  Cfo   </th>
+    <th>  Channel   </th>
+    <th>  City  </th>
+    <th>  Claimdate   </th>
+    <th>  Codamt  </th>
+    <th>  Convcharges   </th>
+    <th>  Cou   </th>
+    <th>  Custref   </th>
+    <th>  Debitnote   </th>
+    <th>  Debitnotedate   </th>
+    <th>  Delvdate  </th>
+    <th>  Deo   </th>
+    <th>  Dept  </th>
+    <th>  Despatch  </th>
+    <th>  Dist  </th>
+    <th>  Distcode  </th>
+    <th>  Distname  </th>
+    <th>  Dt_hour   </th>
+    <th>  Dt_min  </th>
+    <th>  Email   </th>
+    <th>  Emi   </th>
+    <th>  Entrydate   </th>
+    <th>  Fax   </th>
+    <th>  Fname   </th>
+    <th>  Invdate   </th>
+    <th>  Fsize   </th>
+    <th>  Invoice </th>
+    <th>  Invoiceamount   </th>
+    <th>  Landmark  </th>
+    <th>  Letter  </th>
+    <th>  Lessprod  </th>
+    <th>  Lname   </th>
+    <th>  Loydate   </th>
+    <th>  Manifest  </th>
+    <th>  Modby   </th>
+    <th>  Moddt   </th>
+    <th>  Notice  </th>
+    <th>  Normal  </th>
+    <th>  Operator  </th>
+    <th>  Order_number  </th>
+    <th>  Orderdate   </th>
+    <th>  Orderno   </th>
+    <th>  Ordersource   </th>
+    <th>  Paidamt   </th>
+    <th>  Paiddate  </th>
+    <th>  Ordertype   </th>
+    <th>  Pin   </th>
+    <th>  Postage   </th>
+    <th>  Probag  </th>
+    <th>  Prod  </th>
+    <th>  Qty   </th>
+    <th>  Remarks   </th>
+    <th>  Refundamt   </th>
+    <th>  Refundcheck   </th>
+    <th>  Refundcheckdate   </th>
+    <th>  Refunddate  </th>
+    <th>  Returndate  </th>
+    <th>  Sanction  </th>
+    <th>  Shdate  </th>
+    <th>  Shipped   </th>
+    <th>  State   </th>
+    <th>  Status  </th>
+    <th>  Statusdate  </th>
+    <th>  Taxamt  </th>
+    <th>  Taxper  </th>
+    <th>  Tel1  </th>
+    <th>  Tel2  </th>
+    <th>  Tempstatus  </th>
+    <th>  Tempstatusdate  </th>
+    <th>  Temptrandate  </th>
+    <th>  Title   </th>
+    <th>  Trandate  </th>
+    <th>  Transfer  </th>
+    <th>  Trantype  </th>
+    <th>  Vpp   </th>
+    <th>  Weight  </th>
+    <th>  Invoicerefno  </th>
+    <th>  Description </th>
+    <th>  Order_last_mile_id  </th>
+    <th>  Order_final_status_id </th>
+    <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @vpp_deal_trans.each do |vpp_deal_tran| %>
+      <tr>
+       <td> <%= vpp_deal_tran.actdate %>  </td>
+        <td>  <%= vpp_deal_tran.action %>  </td>
+        <td>  <%= vpp_deal_tran.add1 %>  </td>
+        <td>  <%= vpp_deal_tran.add2 %>  </td>
+        <td>  <%= vpp_deal_tran.add3 %>  </td>
+        <td>  <%= vpp_deal_tran.barcode %> </td>
+        <td>  <%= vpp_deal_tran.barcode2 %>  </td>
+        <td>  <%= vpp_deal_tran.barcode3 %>  </td>
+        <td>  <%= vpp_deal_tran.basicprice %>  </td>
+        <td>  <%= vpp_deal_tran.cfo %> </td>
+        <td>  <%= vpp_deal_tran.channel %> </td>
+        <td>  <%= vpp_deal_tran.city %>  </td>
+        <td>  <%= vpp_deal_tran.claimdate %> </td>
+        <td>  <%= vpp_deal_tran.codamt %>  </td>
+        <td>  <%= vpp_deal_tran.convcharges  %> </td>
+        <td>  <%= vpp_deal_tran.cou %> </td>
+        <td>  <%= vpp_deal_tran.custref  %> </td>
+        <td>  <%= vpp_deal_tran.debitnote  %> </td>
+        <td>  <%= vpp_deal_tran.debitnotedate  %> </td>
+        <td>  <%= vpp_deal_tran.delvdate  %>  </td>
+        <td>  <%= vpp_deal_tran.deo  %> </td>
+        <td>  <%= vpp_deal_tran.dept  %>  </td>
+        <td>  <%= vpp_deal_tran.despatch  %>  </td>
+        <td>  <%= vpp_deal_tran.dist  %>  </td>
+        <td>  <%= vpp_deal_tran.distcode %> </td>
+        <td>  <%= vpp_deal_tran.distname  %>  </td>
+        <td>  <%= vpp_deal_tran.dt_hour  %> </td>
+        <td>  <%= vpp_deal_tran.dt_min  %>  </td>
+        <td>  <%= vpp_deal_tran.email  %> </td>
+        <td>  <%= vpp_deal_tran.emi  %> </td>
+        <td>  <%= vpp_deal_tran.entrydate  %> </td>
+        <td>  <%= vpp_deal_tran.fax  %> </td>
+        <td>  <%= vpp_deal_tran.fname  %> </td>
+        <td>  <%= vpp_deal_tran.invdate  %> </td>
+        <td>  <%= vpp_deal_tran.fsize  %> </td>
+        <td>  <%= vpp_deal_tran.invoice %>  </td>
+        <td>  <%= vpp_deal_tran.invoiceamount  %> </td>
+        <td>  <%= vpp_deal_tran.landmark  %>  </td>
+        <td>  <%= vpp_deal_tran.letter  %>  </td>
+        <td>  <%= vpp_deal_tran.lessprod  %>  </td>
+        <td>  <%= vpp_deal_tran.lname  %> </td>
+        <td>  <%= vpp_deal_tran.loydate  %> </td>
+        <td>  <%= vpp_deal_tran.manifest  %>  </td>
+        <td>  <%= vpp_deal_tran.modby  %> </td>
+        <td>  <%= vpp_deal_tran.moddt  %> </td>
+        <td>  <%= vpp_deal_tran.notice  %>  </td>
+        <td>  <%= vpp_deal_tran.normal  %>  </td>
+        <td>  <%= vpp_deal_tran.operator  %>  </td>
+        <td>  <%= vpp_deal_tran.order_number %> </td>
+        <td>  <%= vpp_deal_tran.orderdate  %> </td>
+        <td>  <%= vpp_deal_tran.orderno  %> </td>
+        <td>  <%= vpp_deal_tran.ordersource  %> </td>
+        <td>  <%= vpp_deal_tran.paidamt  %> </td>
+        <td>  <%= vpp_deal_tran.paiddate  %>  </td>
+        <td>  <%= vpp_deal_tran.ordertype  %> </td>
+        <td>  <%= vpp_deal_tran.pin  %> </td>
+        <td>  <%= vpp_deal_tran.postage  %> </td>
+        <td>  <%= vpp_deal_tran.probag  %>  </td>
+        <td>  <%= vpp_deal_tran.prod  %>  </td>
+        <td>  <%= vpp_deal_tran.qty  %> </td>
+        <td>  <%= vpp_deal_tran.remarks  %> </td>
+        <td>  <%= vpp_deal_tran.refundamt  %> </td>
+        <td>  <%= vpp_deal_tran.refundcheck  %> </td>
+        <td>  <%= vpp_deal_tran.refundcheckdate  %> </td>
+        <td>  <%= vpp_deal_tran.refunddate  %>  </td>
+        <td>  <%= vpp_deal_tran.returndate  %>  </td>
+        <td>  <%= vpp_deal_tran.sanction  %>  </td>
+        <td>  <%= vpp_deal_tran.shdate  %>  </td>
+        <td>  <%= vpp_deal_tran.shipped  %> </td>
+        <td>  <%= vpp_deal_tran.state  %> </td>
+        <td>  <%= vpp_deal_tran.status  %>  </td>
+        <td>  <%= vpp_deal_tran.statusdate  %>  </td>
+        <td>  <%= vpp_deal_tran.taxamt  %>  </td>
+        <td>  <%= vpp_deal_tran.taxper  %>  </td>
+        <td>  <%= vpp_deal_tran.tel1  %>  </td>
+        <td>  <%= vpp_deal_tran.tel2 %> </td>
+        <td>  <%= vpp_deal_tran.tempstatus  %>  </td>
+        <td>  <%= vpp_deal_tran.tempstatusdate  %>  </td>
+        <td>  <%= vpp_deal_tran.temptrandate  %>  </td>
+        <td>  <%= vpp_deal_tran.title  %> </td>
+        <td>  <%= vpp_deal_tran.trandate %> </td>
+        <td>  <%= vpp_deal_tran.transfer  %>  </td>
+        <td>  <%= vpp_deal_tran.trantype  %>  </td>
+        <td>  <%= vpp_deal_tran.vpp  %> </td>
+        <td>  <%= vpp_deal_tran.weight  %>  </td>
+        <td>  <%= vpp_deal_tran.invoicerefno  %>  </td>
+        <td>  <%= vpp_deal_tran.description %>  </td>
+        <td>  <%= vpp_deal_tran.order_last_mile_id  %>  </td>
+        <td>  <%= vpp_deal_tran.order_final_status_id %>  </td>
+        <td><%= link_to 'Show', vpp_deal_tran %></td>
+        <td><%= link_to 'Edit', edit_vpp_deal_tran_path(vpp_deal_tran) %></td>
+        <td><%= link_to 'Destroy', vpp_deal_tran, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Vpp deal tran', new_vpp_deal_tran_path %>

@@ -1,0 +1,33 @@
+<table>
+  <thead>
+    <tr>
+      <th>Corporate</th>
+      <th>Missed type</th>
+      <th>Order value</th>
+      <th>Order no</th>
+      <th>Order</th>
+      <th>Description</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @distributor_missed_orders.each do |distributor_missed_order| %>
+      <tr>
+        <td><%= distributor_missed_order.corporate_id %></td>
+        <td><%= distributor_missed_order.missed_type_id %></td>
+        <td><%= distributor_missed_order.order_value %></td>
+        <td><%= distributor_missed_order.order_no %></td>
+        <td><%= distributor_missed_order.order_id %></td>
+        <td><%= distributor_missed_order.description %></td>
+        <td><%= link_to 'Show', distributor_missed_order %></td>
+        <td><%= link_to 'Edit', edit_distributor_missed_order_path(distributor_missed_order) %></td>
+        <td><%= link_to 'Destroy', distributor_missed_order, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Distributor missed order', new_distributor_missed_order_path %>
