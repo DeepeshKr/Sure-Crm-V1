@@ -43,7 +43,7 @@ class DistributorStockLedgersController < ApplicationController
 
   # GET /distributor_stock_ledgers/new
   def new
-    @product_list = ProductList.joins(:product_variant).where("product_variants.activeid = 10000").limit(10).order('product_lists.name')
+    @product_list = ProductList.joins(:product_variant).where("product_variants.activeid = 10000").order('product_lists.name') #.limit(10)
     if params.has_key?(:corporate_id)
       @corporate_id = params[:corporate_id]
     elsif distributor_stock_ledger_params.has_key?(:corporate_id)
@@ -68,7 +68,7 @@ class DistributorStockLedgersController < ApplicationController
     respond_to do |format|
       if @distributor_stock_ledger.save
 
-        #update_product_details(@distributor_stock_ledger.id)
+        update_product_details(@distributor_stock_ledger.id)
 
         format.html { redirect_to corporate_path @distributor_stock_ledger.corporate_id, notice: 'Distributor stock ledger was successfully created.' }
         format.json { render :show, status: :created, location: @distributor_stock_ledger }
@@ -129,18 +129,19 @@ class DistributorStockLedgersController < ApplicationController
         if product_list.present?
           #product list details from product master id
           #distributor_stock_ledger = DistributorStockLedger.find(self.id)
-
           distributor_stock_ledger.update(product_master_id: product_list.product_master_id,
             product_variant_id: product_list.product_variant_id,
             prod: product_list.extproductcode)
           #product variant details from product master id
           if distributor_stock_ledger.type_id != 10000 #stock change
+             flash[:error] = "Ledger details #{distributor_stock_ledger.type_id}"
+     
               update_product_stock_summary(distributor_stock_ledger_id)
-            elsif distributor_stock_ledger.type_id == 10000 #mis additions
-              update_corporate_mis_balance(distributor_stock_ledger.corporate_id, distributor_stock_ledger.stock_value)
-            end
-          
+          end
         end
+      elsif distributor_stock_ledger.type_id == 10000 #mis additions
+              update_corporate_mis_balance(distributor_stock_ledger.corporate_id, distributor_stock_ledger.stock_value)
+               flash[:error] = "Ledger details #{distributor_stock_ledger.type_id}"
       end
     end
 
@@ -148,6 +149,7 @@ class DistributorStockLedgersController < ApplicationController
 
        corporate = Corporate.find(corporate_id)
        fin_value = corporate.rupee_balance ||= 0 #if corporate.rupee_balance.present?
+       flash[:notice] = "Corporate MIS Balance #{corporate.rupee_balance} updating to #{fin_value}"
        fin_value += mis_value
        corporate.update(rupee_balance: fin_value)
        

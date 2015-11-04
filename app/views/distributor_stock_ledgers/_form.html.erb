@@ -21,12 +21,12 @@
 
   
 <div class="row">
-<% if @product_list.any? %>
+
  <div class="col-xs-8">
     <%= f.select :product_list_id,  options_from_collection_for_select(@product_list,
        :id, :productname, selected: @distributor_stock_ledger.product_list_id ),
              {:prompt => 'No Stock Change', label: "Select the Product if required " } %>
-<% end %>
+
   <!--%= f.select :product_master_id,  options_from_collection_for_select(@product_master,
        :id, :productname, selected: @distributor_stock_ledger.product_master_id ),
              {:prompt => 'No Stock Change', label: "Select the Product if required " } %-->

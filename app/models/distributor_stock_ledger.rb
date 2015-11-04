@@ -7,8 +7,8 @@ class DistributorStockLedger < ActiveRecord::Base
 
 	validates :corporate_id,  :presence => { :message => "Need to select a distributor!" } 
 	validates :ledger_date,  :presence => { :message => "Need to select a date for entry!" } 
-	validates_presence_of :stock_change, :unless => :stock_value? #, { :message => "Need to select a stock change or keep the value 0" }
-	validates_presence_of :stock_value, :unless => :stock_change? #, { :message => "Need to select a stock change or keep the value 0" }
+	#validates_presence_of :stock_change, :unless => :stock_value? #, { :message => "Need to select a stock change or keep the value 0" }
+	#validates_presence_of :stock_value, :unless => :stock_change? #, { :message => "Need to select a stock change or keep the value 0" }
 	#validates :stock_change,  :presence => { :message => "Need to select a stock change or keep the value 0" } 
 	validates :name,  :presence => { :message => "Need to give a name like stock addition, sale, bonus..." } 
 	validates :description,  :presence => { :message => "Description of ledger" } 
@@ -16,7 +16,7 @@ class DistributorStockLedger < ActiveRecord::Base
 
 	#on create change update stock summary
 	#on create change update stock summary
-	after_create :update_product_details 
+	#after_create :update_product_details 
 	#after_create :update_product_stock_summary
 
 	#after_update :update_product_details(self.id)
@@ -52,7 +52,7 @@ private
   		 fin_value = corporate.rupee_balance ||= 0 #if corporate.rupee_balance.present?
   		 fin_value += mis_value
   		 corporate.update(rupee_balance: fin_value)
-  		 
+
   	end
 
     def update_product_stock_summary(distributor_stock_ledger_id)
