@@ -94,26 +94,26 @@
     </div>
 
     <div class="col-xs-3">
-      <%= f.text_field :ref_no, label: "Ref No" %>
+      <%= f.text_field :commission_percent, label: "Commission Percent", placeholder: "0.20" %>
     </div>
 
 </div>
 
 <div class="row">
     <div class="col-xs-3">
-    <%= f.text_field :cst_no, label: "Tally Id", :required => true %>
+    <%= f.text_field :cst_no, label: "CST No", :required => true %>
     
     </div>
     <div class="col-xs-3">
     
-     <%= f.text_field :gst_no, label: "C-Form", placeholder: "Type YES / NO", :required => true %>
+     <%= f.text_field :pan_card_no, label: "PAN", placeholder: "PAN CARD", :required => true %>
     </div>
     <div class="col-xs-3">
-      <%= f.text_field :vat_no, label: "Web ID" %>
+      <%= f.text_field :vat_no, label: "VAT", placeholder: "VAT" , :required => true %>
     </div>
 
     <div class="col-xs-3">
-      <%= f.text_field :tin_no, label: "Ref No" %>
+      <%= f.text_field :tin_no, label: "TIN No", placeholder: "TIN" , :required => true %>
     </div>
 
 </div>

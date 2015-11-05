@@ -43,7 +43,7 @@ class DistributorStockLedgersController < ApplicationController
 
   # GET /distributor_stock_ledgers/new
   def new
-    @product_list = ProductList.joins(:product_variant).where("product_variants.activeid = 10000").order('product_lists.name') #.limit(10)
+    @product_list = ProductList.joins(:product_variant).where("product_variants.activeid = 10000").order('product_lists.name').limit(10)
     if params.has_key?(:corporate_id)
       @corporate_id = params[:corporate_id]
     elsif distributor_stock_ledger_params.has_key?(:corporate_id)
@@ -123,28 +123,36 @@ class DistributorStockLedgersController < ApplicationController
     
     def update_product_details(distributor_stock_ledger_id)
        distributor_stock_ledger = DistributorStockLedger.find(distributor_stock_ledger_id)
-      if distributor_stock_ledger.product_list_id.present?
-        #product list details from product master id
-        product_list = ProductList.find(distributor_stock_ledger.product_list_id) #.joins(:product_variant).where("product_variants.activeid = 10000")
-        if product_list.present?
+      
+      # corporate_type_ids = distributor_stock_ledger.corporate.corporate_type_id
+      # if ['10021', '10020'].include?('corporate_type_ids') #corporate.corporate_type_id 
+  
+        if distributor_stock_ledger.product_list_id.present?
           #product list details from product master id
-          #distributor_stock_ledger = DistributorStockLedger.find(self.id)
-          distributor_stock_ledger.update(product_master_id: product_list.product_master_id,
-            product_variant_id: product_list.product_variant_id,
-            prod: product_list.extproductcode)
-          #product variant details from product master id
-          if distributor_stock_ledger.type_id != 10000 #stock change
-             flash[:error] = "Ledger details #{distributor_stock_ledger.type_id}"
-     
-              update_product_stock_summary(distributor_stock_ledger_id)
-          end
-        end
-      elsif distributor_stock_ledger.type_id == 10000 #mis additions
-              update_corporate_mis_balance(distributor_stock_ledger.corporate_id, distributor_stock_ledger.stock_value)
+          product_list = ProductList.find(distributor_stock_ledger.product_list_id) #.joins(:product_variant).where("product_variants.activeid = 10000")
+          if product_list.present?
+            #product list details from product master id
+            #distributor_stock_ledger = DistributorStockLedger.find(self.id)
+            distributor_stock_ledger.update(product_master_id: product_list.product_master_id,
+              product_variant_id: product_list.product_variant_id,
+              prod: product_list.extproductcode)
+            #product variant details from product master id
+            if distributor_stock_ledger.type_id != 10000 #stock change
                flash[:error] = "Ledger details #{distributor_stock_ledger.type_id}"
-      end
+       
+                #update_product_stock_summary(distributor_stock_ledger_id)
+            end
+          end
+        elsif distributor_stock_ledger.type_id == 10000 #mis additions
+                update_corporate_mis_balance(distributor_stock_ledger.corporate_id, distributor_stock_ledger.stock_value)
+                 flash[:error] = "Ledger details #{distributor_stock_ledger.type_id}"
+        end
+      
+    # else
+    #   comments = distributor_stock_ledger.description + " No changes can be done to a regular distribuor"
+    #   distributor_stock_ledger.update(description: comments)
+    # end
     end
-
     def update_corporate_mis_balance(corporate_id, mis_value)
 
        corporate = Corporate.find(corporate_id)

@@ -122,7 +122,8 @@ class CorporatesController < ApplicationController
         :emailid3, :description, :corporate_type_id,
         :active, :tally_id,  :c_form, 
         :cst_no, :gst_no, :vat_no, :tin_no, :rupee_balance, 
-        :web_id, :ref_no)
+        :web_id, :ref_no, :commission_percent, :pan_card_no)
+      #:commission_percent, :decimal, precision: 4, scale: 5
     end
     def add_all
 
