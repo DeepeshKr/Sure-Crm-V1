@@ -16,7 +16,7 @@ class DistributorStockLedger < ActiveRecord::Base
 
 	#on create change update stock summary
 	#on create change update stock summary
-	#after_create :update_product_details 
+	after_create :update_product_details 
 	#after_create :update_product_stock_summary
 
 	#after_update :update_product_details(self.id)

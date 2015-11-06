@@ -68,7 +68,7 @@ class DistributorStockLedgersController < ApplicationController
     respond_to do |format|
       if @distributor_stock_ledger.save
 
-        update_product_details(@distributor_stock_ledger.id)
+        #update_product_details(@distributor_stock_ledger.id)
 
         format.html { redirect_to corporate_path @distributor_stock_ledger.corporate_id, notice: 'Distributor stock ledger was successfully created.' }
         format.json { render :show, status: :created, location: @distributor_stock_ledger }

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151105070546) do
+ActiveRecord::Schema.define(version: 20151105153726) do
 
   create_table "address_types", force: :cascade do |t|
     t.string   "name"
@@ -181,7 +181,7 @@ ActiveRecord::Schema.define(version: 20151105070546) do
     t.decimal  "rupee_balance",                 precision: 14, scale: 2
     t.integer  "web_id",             limit: 16, precision: 38
     t.integer  "ref_no",             limit: 16, precision: 38
-    t.decimal  "commission_percent",            precision: 4,  scale: 5
+    t.decimal  "commission_percent",            precision: 5,  scale: 4
     t.string   "pan_card_no"
   end
 
@@ -761,6 +761,7 @@ ActiveRecord::Schema.define(version: 20151105070546) do
     t.string   "pincode"
     t.integer  "order_last_mile_id",     limit: 16, precision: 38
     t.integer  "order_final_status_id",  limit: 16, precision: 38
+    t.decimal  "g_total",                           precision: 12, scale: 2
   end
 
   add_index "order_masters", ["city"], name: "index_order_masters_on_city"
