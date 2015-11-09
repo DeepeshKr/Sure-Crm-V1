@@ -15,7 +15,7 @@ class SalesPpoReportController < ApplicationController
           @up_to_date = for_date.to_date 
     else
           use_date = (330.minutes).from_now.to_date
-          @from_date = use_date.to_date - 1.days #30.days
+          @from_date = use_date.to_date - 0.days #30.days
           @up_to_date = use_date.to_date #- 5.days
     end
       
@@ -33,7 +33,7 @@ class SalesPpoReportController < ApplicationController
            
           orderlist = OrderMaster.where('ORDER_STATUS_MASTER_ID > 10002')
           .where('orderdate >= ? AND orderdate <= ?', @from_date, @to_date)
-          .where(media_id: @hbnlist)
+          .where(media_id: @hbnlist1).where(media_id: @hbnlist2)
 
           # #split the fixed cost across the hour
           revenue = 0
@@ -1192,7 +1192,9 @@ def shows_between
  end
 
  def media_segments
-  @hbnlist = Medium.where(media_group_id: 10000).pluck(:id)
+  @hbnlist1 = Medium.where(media_group_id: 10000).limit(1000).pluck(:id)
+  @hbnlist2 = Medium.where(media_group_id: 10000).offset(1000).limit(1000).pluck(:id)
+  @hbnlist3 = Medium.where(media_group_id: 10000).offset(2000).limit(1000).pluck(:id)
   @paid = Medium.where(media_commision_id: 10000).where("media_group_id IS NULL OR media_group_id <> 10000").select("id")
   @others = Medium.where('media_commision_id IS NULL').where("media_group_id IS NULL OR media_group_id <> 10000").select("id")
 
