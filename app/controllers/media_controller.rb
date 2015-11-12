@@ -128,7 +128,7 @@ class MediaController < ApplicationController
       @statelist = State.all
       @media_commission = MediaCommision.all
       @media_group = MediaGroup.all
-    @employees = Employee.all.order("first_name").joins(:employee_role) #.sort("employee_roles.sortorder desc")
+    @employees = Employee.all.order("first_name").where(:employee_role_id => 10121) #.sort("employee_roles.sortorder desc")
     end
     def set_medium
       @medium = Medium.find(params[:id])

@@ -14,16 +14,16 @@ module TransferOrders
 		if dis_pin.blank?
 			#create vpp order
 			create_vpp(order_id)
-			return 0
+			return "The pincode #{order_pin} is not serviced by any distributor"
 		end
 			#check if dealer mis balance more than order value
-		if dis_pin.corporate.rupee_balance == 0 || dis_pin.corporate.rupee_balance.blank?
+		if (dis_pin.corporate.rupee_balance == 0) || (dis_pin.corporate.rupee_balance.blank?) || (dis_pin.corporate.rupee_balance < order_total) 
 			#create dealer trail for less mis balance
 			missed_order(order_id, 10000, corporate_id, order_total, "This order was missed on account of low MIS balance")
 
 			#create vpp order
 			create_vpp(order_id)
-			return 0
+			return "The distributor balance is low #{rupee_balance.to_s} as compared to order total #{order_total}"
 		end
 		total_products_sold = order.first.pieces
 		total_product_found = 0
@@ -41,9 +41,9 @@ module TransferOrders
 			#create dealer trail for less mis balance
 			missed_order(order_id, 10001, corporate_id, order_total, "total product required #{total_products_sold} where we only have #{total_product_found} with the dealer")
 
-			#create vpp order
-			create_vpp(order_id)
-			return 0
+			#this is retail vpp order ignore it
+			#create_vpp(order_id)
+			return "The order has #{total_products_sold.to_s} products while distributor has stock for #{total_product_found.to_s}"
 		end
 		
 		#create dealer order
@@ -56,7 +56,14 @@ module TransferOrders
 			end
 		end
 		
-			
+		#update cust details with 1
+		custdetails = CUSTDETAILS.where(order_num: order_id).first
+
+		#update transfer order with this information to
+		#ensure that orders are not transffered to VPP
+		custdetails.update(transfer_ok: 1)
+		
+		return "Created customer order, skipped all parameters for Distributor Order"		
 	end 
 
 	
@@ -81,10 +88,16 @@ module TransferOrders
           nowhour = t.strftime('%H').to_i
           #=> returns a 0-padded string of the hour, like "07"
           nowminute = t.strftime('%M').to_i
+          pro_order_master = OrderMaster.where(external_order_no: order_id)
+		pro_order_master.first!
 
+		order_lines = OrderLine.where(orderid: pro_order_master.id)
+
+		order_lines.each do | order_line |
+	
 		vpp_deal_tran = VppDealTran.create(
-			actdate: (330.minutes).from_now.to_date,
-			action:          ,
+			actdate: t,
+			action: ,
 			add1: pro_order_master.customer_address.address1[0..29].upcase, 
           	add2: pro_order_master.customer_address.address2[0..29].upcase, 
           	add3: (pro_order_master.customer_address.address3[0..29].upcase if pro_order_master.customer_address.address3.present?),
@@ -95,16 +108,16 @@ module TransferOrders
 			cfo: ,
 			channel: pro_order_master.medium.name.strip[0..48].upcase, 
 			city: pro_order_master.customer_address.city[0..29].upcase,
-			claimdate:          ,
+			claimdate: ,
 			codamt: order_line.codcharges,
 			convcharges:  order_line.codcharges,
 			cou:,
-			custref:  , #external order id        ,
+			custref:  order_id, #external order id        ,
 			debitnote: ,
 			debitnotedate: ,
 			delvdate:,
 			deo: pro_order_master.employeecode,
-			dept:      #TOTDAIRTEL    ,
+			dept:      #TOTDAIRTEL naushad enters  no need for transfer order  ,
 			despatch: 'EPP',
 			dist: 'Y',
 			distcode:   corporate_code,
@@ -132,9 +145,9 @@ module TransferOrders
 			normal: ,
 			operator: (pro_order_master.employee.name[0..49].upcase || current_user.name.truncate(50).upcase if pro_order_master.employee.present?),
 			order_number:,
-			orderdate:      #    ,
+			orderdate:   pro_order_master.order_date    ,
 			orderno:pro_order_master.external_order_no,
-			ordersource:'T',
+			ordersource:'T', #'P' 'I'
 			paidamt: ,
 			paiddate: ,
 			ordertype: ,
@@ -142,38 +155,38 @@ module TransferOrders
 			postage: order_line.shipping,
 			probag:          ,
 			prod: order_line.product_list.extproductcode,
-			qty: 1 ,
-			remarks:          ,
-			refundamt:          ,
-			refundcheck:          ,
-			refundcheckdate:          ,
-			refunddate:          ,
-			returndate:          ,
-			sanction:          ,
-			shdate:          ,
-			shipped:          ,
+			qty: order_line.pieces ,
+			remarks: ,
+			refundamt:  ,
+			refundcheck:  ,
+			refundcheckdate:  ,
+			refunddate: ,
+			returndate: ,
+			sanction: ,
+			shdate: ,
+			shipped: ,
 			state: pro_order_master.customer_address.st[0..4].upcase, 
-			status:          ,
-			statusdate:          ,
-			taxamt:          ,
-			taxper:          ,
+			status: ,
+			statusdate: ,
+			taxamt: ,
+			taxper:  ,
 			tel1: pro_order_master.customer.mobile[0..19].upcase, 
           	tel2: (pro_order_master.customer_address.telephone2[0..17].upcase if pro_order_master.customer_address.telephone2.present?),
-			tempstatus:          ,
-			tempstatusdate:          ,
-			temptrandate:          ,
+			tempstatus: ,
+			tempstatusdate: ,
+			temptrandate:,
 			title: pro_order_master.customer.salute[0..4].upcase, 
 			trandate: t,
 			transfer:'N',
-			trantype:          ,
+			trantype: ,
 			vpp: 1,
 			weight: order_line.product_master.weight_kg ,
 			invoicerefno: order_line.id,
-			description:          ,
-			order_last_mile_id:          ,
-			order_final_status_id:          )
+			description: "Order under process by distributor",
+			order_last_mile_id: 10001,
+			order_final_status_id:10001)
 
-
+		end
 
 	end
 

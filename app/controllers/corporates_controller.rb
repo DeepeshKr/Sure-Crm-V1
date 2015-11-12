@@ -1,4 +1,5 @@
 class CorporatesController < ApplicationController
+  include TransferOrders
   before_action :set_corporate, only: [:show, :edit, :update, :destroy]
 
   respond_to :html
@@ -50,6 +51,7 @@ class CorporatesController < ApplicationController
     @corporate = Corporate.new
     respond_with(@corporate)
   end
+
   def show_pincode_list
     #http://pullmonkey.com/2012/08/11/dynamic-select-boxes-ruby-on-rails-3/
      #if media_tapes.present?
@@ -60,7 +62,7 @@ class CorporatesController < ApplicationController
     @india_pincode_lists = IndiaPincodeList.where("UPPER(divisionname) like ? OR UPPER(pincode) like ? OR UPPER(districtname) like ? OR UPPER(regionname) like ? OR UPPER(taluk) like ? OR UPPER(circlename) like ?", "#{@searchvalue}%", "#{@searchvalue}%", "#{@searchvalue}%", "#{@searchvalue}%", "#{@searchvalue}%", "#{@searchvalue}%")
 
     @india_pincode_lists = @india_pincode_lists.order(:pincode)
-     @india_pincode_lists = @india_pincode_lists.map{|s| [s.details, s.pincode]}
+    @india_pincode_lists = @india_pincode_lists.map{|s| [s.details, s.pincode]}
 
     #render json: @india_pincode_lists
   end
@@ -86,6 +88,13 @@ class CorporatesController < ApplicationController
   end
 
   def edit
+  end
+
+  def transfer_order
+    if params.has_key?(:order_id)
+      flash[:notice] = check_transfer(params[:order_id])
+      @order_id
+    end
   end
 
   def create

@@ -15,6 +15,7 @@ Rails.application.routes.draw do
   get 'deal_tran/list'
   get 'deal_tran/search'
   get 'deal_tran/details'
+  get 'transfer_order' => 'corporates#transfer_order'
 
   resources :distributor_stock_summaries
 

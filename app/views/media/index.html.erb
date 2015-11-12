@@ -51,7 +51,7 @@
         <td><%= medium.state %></td>
         <td><%= medium.active %></td>
         <td><%= medium.media_group.name if medium.media_group %></td>
-        <td><%= medium.employee.firstname || "NO BDM" if medium.employee %></td>
+        <td><%= medium.employee.name || "NO BDM" if medium.employee %></td>
          <% if (current_user.employee_role.sortorder < 6) %> 
         <td><%= medium.media_commision.name if medium.media_commision %></td>
          <td><%= medium.value %></td>

@@ -472,7 +472,15 @@ class SalesPpoReportController < ApplicationController
         end
         @employeeorderlist = employeeunorderlist
 
-   
+        respond_to do |format|
+        csv_file_name = "show_ppo_#{for_date}.csv"
+          format.html
+          format.csv do
+            headers['Content-Disposition'] = "attachment; filename=\"#{csv_file_name}\""
+            headers['Content-Type'] ||= 'text/csv'
+          end
+        end
+   #xcel download
   end
   def ppo_products
     if params.has_key?(:campaign_id)
