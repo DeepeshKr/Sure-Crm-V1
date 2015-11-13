@@ -33,10 +33,10 @@
   <thead>
     <tr>
     <th>
-      
+       Data Table
     </th>
     <th>
-        Data Table
+       Action
       </th>
       <th >
         Description
@@ -53,11 +53,14 @@
        <th class="text-right">
        Value Total
       </th>
+      <th>
+       
+      </th>
     </tr>
   </thead>
   <tbody>
         <tr>
-    <td>No Table</td>
+    <td>ProductStocks</td>
     <td>Previous Date</td>
     <td>
      <strong> Closing qty:</strong>
@@ -74,9 +77,13 @@
       <td class="text-right">
         
       </td>
+       <td>
+      
+
+      </td>
     </tr>
     <tr>
-    <td>No Table</td>
+    <td>ProductStocks</td>
     <td>Base</td>
     <td>
      <strong> Opening qty:</strong>
@@ -94,9 +101,12 @@
       <td class="text-right">
         
       </td>
+       <td>
+
+      </td>
     </tr>
     <tr>
-     <td>No Table</td>
+     <td>PURCHASES_NEW</td>
     <td>Add (+)</td>
     <td>
         <strong>Purchased qty:</strong>
@@ -114,9 +124,12 @@
       <td class="text-right">
        
       </td>
+       <td>
+ <%= link_to "Details", stockbook_details_path(route: "stock_purchased", from_date: @product_stock_book.stock_date.strftime("%Y-%m-%d"), barcode: @product_stock_book.list_barcode), :target => "_blank", class: "btn btn-primary btn-xs" %> 
+      </td>
     </tr>
      <tr>
-      <td>No Table</td>
+      <td>VPP (CFO == true)</td>
       <td>Add (+)</td>
     <td>
        <strong>Returned retail qty:</strong>
@@ -134,9 +147,12 @@
       <td class="text-right">
        
       </td>
+       <td>
+ <%= link_to "Details", stockbook_details_path(route: "returned_retail", from_date: @product_stock_book.stock_date.strftime("%Y-%m-%d"), barcode: @product_stock_book.list_barcode), :target => "_blank", class: "btn btn-primary btn-xs" %> 
+      </td>
     </tr>
     <tr>
-     <td>No Table</td>
+     <td>NEW_DEPT (rdate == date)</td>
      <td>Add (+)</td>
     <td>
        <strong>Returned wholesale qty:</strong>
@@ -154,8 +170,11 @@
       <td class="text-right">
       
       </td>
+       <td>
+ <%= link_to "Details", stockbook_details_path(route: "returned_wholesale", from_date: @product_stock_book.stock_date.strftime("%Y-%m-%d"), barcode: @product_stock_book.list_barcode), :target => "_blank", class: "btn btn-primary btn-xs" %> 
+      </td>
     </tr>
-    <tr>
+   <tr>
      <td>No Table</td>
      <td>Add (+)</td>
     <td>
@@ -174,9 +193,12 @@
       <td class="text-right">
         
       </td>
+      <td>
+ <!--%= link_to "Details", stockbook_details_path(route: "stock_journal", from_date: @product_stock_book.stock_date.strftime("%Y-%m-%d"), barcode: @product_stock_book.list_barcode), :target => "_blank", class: "btn btn-primary btn-xs" % --> 
+      </td>
     </tr>
         <tr>
-         <td>No Table</td>
+         <td>VPP</td>
          <td>Less (-)</td>
     <td>
        <strong>Sold retail qty:</strong>
@@ -194,9 +216,12 @@
       <td class="text-right">
        
       </td>
+       <td>
+ <%= link_to "Details", stockbook_details_path(route: "sold_retail", from_date: @product_stock_book.stock_date.strftime("%Y-%m-%d"), barcode: @product_stock_book.list_barcode), :target => "_blank", class: "btn btn-primary btn-xs" %> 
+      </td>
     </tr>
        <tr>
-        <td>No Table</td>
+        <td>NEWWLSDET</td>
        <td>Less (-)</td>
     <td>
       <strong>Sold wholesale:</strong>
@@ -214,9 +239,12 @@
       <td class="text-right">
         
       </td>
+        <td>
+ <%= link_to "Details", stockbook_details_path(route: "sold_wholesale", from_date: @product_stock_book.stock_date.strftime("%Y-%m-%d"), barcode: @product_stock_book.list_barcode), :target => "_blank", class: "btn btn-primary btn-xs" %> 
+      </td>
     </tr>
       <tr>
-       <td>No Table</td>
+       <td>TEMPINV_NEWWLSDET</td>
       <td>Less (-)</td>
     <td>
      <strong>Sold branch qty:</strong>
@@ -234,9 +262,12 @@
       <td class="text-right">
         
       </td>
+        <td>
+ <%= link_to "Details", stockbook_details_path(route: "sold_branch", from_date: @product_stock_book.stock_date.strftime("%Y-%m-%d"), barcode: @product_stock_book.list_barcode), :target => "_blank", class: "btn btn-primary btn-xs" %> 
+      </td>
     </tr>
         <tr>
-        <td>No Table</td>
+        <td>ProductStockAdjusts</td>
         <td>Adjust (+/-)</td>
     <td>
      <strong>Corrections qty:</strong>
@@ -254,9 +285,12 @@
       <td class="text-right">
         
       </td>
+      <td>
+
+      </td>
     </tr>
     <tr>
-    <td>No Table</td>
+    <td>ProductStocks</td>
     <td>Final</td>
     <td>
     <strong>Closing qty:</strong>
@@ -272,6 +306,9 @@
       </td>
       <td class="text-right">
         
+      </td>
+    <td>
+ 
       </td>
     </tr>
   </tbody>

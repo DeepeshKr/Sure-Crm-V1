@@ -18,13 +18,16 @@ class ProductReportController < ApplicationController
 	  @or_from_date = params[:from_date]
 	  @or_to_date = params[:to_date]
 	  
-	  from_date = Time.strptime(params[:from_date], '%m/%d/%Y')
-	  to_date = Time.strptime(params[:to_date], '%m/%d/%Y')
+	  from_date = Date.strptime(params[:from_date], "%Y-%m-%d")
+	  to_date = Date.strptime(params[:to_date], "%Y-%m-%d")
+
 	  @product_master_id = @productmasterlist.where(extproductcode: prod).first.id
 	  @prod = prod
-	  @from_date = from_date.to_formatted_s(:rfc822)
-	  @to_date =  to_date.to_formatted_s(:rfc822)
-	  
+	  @long_from_date = from_date.to_formatted_s(:rfc822)
+	  @long_to_date =  to_date.to_formatted_s(:rfc822)
+	  @from_date = from_date
+	  @to_date =  to_date
+	  @prod = prod
 	  #Opening Stock level on date
 	  @product_stocks = ProductStock.where(ext_prod_code: prod).where("TRUNC(checked_date) >= ? and TRUNC(checked_date) <= ?", from_date, to_date)
 	   if @product_stocks.present?

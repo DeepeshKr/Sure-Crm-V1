@@ -1,33 +1,6 @@
-<div class="row">
-<div class="col-xs-1">
-  <h3>Report</h3>
+<h3>Showing Details of <%= @route_details %></h3>
 
-</div>
-<div class="col-xs-11">
-  <div class="row">
-	<div class="col-xs-12"><small>General Accounting Report
-(currently showing some default value)</small></div>
-	<div class="col-xs-12"> <%= render 'search' %></div>
-  </div>
-  
-</div>
-</div>
-
-<br>
-<div class="well well-sm">
-<h4><%= @type %> Report for <%= @prod %> between <%= @long_from_date %> and <%= @long_to_date %></h4>
-</div>
-<br>
-<div class="alert alert-danger" role="alert">
-	<div class="row">
-	<div class="col-xs-12">
-	<%= render 'summary' %>
-	</div>
-	</div>
-</div>
-	<br>
-<br>
-
+<% if @route == "opening_stock" %>
 <div class="well well-sm">
 		<div class="row">
 		<div class="col-xs-4">
@@ -35,7 +8,7 @@
 			
 		</div>
 		<div class="col-xs-2">
-		<%= link_to 'Manage Product stock', product_stocks_path, class: "btn btn-success " %>
+		
 			 
 		</div>
 		<div class="col-xs-6">
@@ -44,15 +17,15 @@
 		
 		</div>
 </div>
-	<div class="row">
-<div class="col-xs-12">
-
-<%= render 'product_stocks/list' %>
+<div class="row">
+	<div class="col-xs-12">
+		<%= render 'product_stocks/list' %>
+	</div>
 </div>
-</div>
-   
-<br>
 
+
+<% end %>
+<% if @route == "stock_journal" %>
 <div class="well well-sm">
 		<div class="row">
 		<div class="col-xs-4">
@@ -60,7 +33,7 @@
 			
 		</div>
 		<div class="col-xs-3">
-		<%= link_to 'Manage Journal Entry', product_stock_adjusts_path, class: "btn btn-success " %>
+		
 			
 		</div>
 		<div class="col-xs-3">
@@ -76,10 +49,9 @@
 </div>
 </div>
    
-<br>
-
-
-	<div class="well well-sm">
+<% end %>
+<% if @route == "stock_purchases" %>
+<div class="well well-sm">
 		<div class="row">
 		<div class="col-xs-4 pull-left">
 		<h4> 	Purchases <small>Rdate in Purchase_New</small>  </h4> 
@@ -100,14 +72,15 @@
 </div>
 </div>
    
+<% end %>
 
-<br>
+<% if @route == "sold_retail" || @route == "returned_retail" %>
 
 
 	<div class="well well-sm">
 		<div class="row">
 		<div class="col-xs-4">
-		<h4> 	Customer Sales <small>Ship Date (shdate) in VPP</small> </h4> 
+		<h4> 	Customer Sales <small>(shdate / returndate)</small> </h4> 
 			
 		</div>
 		<div class="col-xs-4">
@@ -120,8 +93,8 @@
 		</div>
 	</div>
    <%= render 'vpp/list' %>
-<br>
-
+<% end %>
+<% if @route == "sold_wholesale" || @route == "returned_wholesale" %>
 <div class="well well-sm">
 		<div class="row">
 		<div class="col-xs-4">
@@ -139,8 +112,8 @@
 </div>
 <%= render 'newwlsdet/list' %>
 
-<br>
-
+<% end %>
+<% if @route == "sold_branch" %>
 <div class="well well-sm">
 		<div class="row">
 		<div class="col-xs-6">
@@ -159,5 +132,4 @@
 
 <%= render 'tempinv_newwlsdet/list' %>
 
-
-
+<% end %>

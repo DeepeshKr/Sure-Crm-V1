@@ -156,6 +156,8 @@ Rails.application.routes.draw do
   get 'dnismaster/details'
 
   get 'stockbook' => 'product_stock_books#index'
+  get 'stockbook_details' => 'product_stock_books#stockbook_details'
+ 
 
    resources :india_city_lists  
   resources :india_pincode_lists

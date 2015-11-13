@@ -2,18 +2,18 @@ module TransferOrders
 	def check_transfer(order_id)
 
 		order = OrderMaster.where(external_order_no: order_id)
-		order_details = OrderLines.joins(:order_master).where("order_masters.external_order_no = ?", order_id)
+		order_details = OrderLine.joins(:order_master).where("order_masters.external_order_no = ?", order_id)
 		order_pin = order.first.pincode
 		order_total = order.first.g_total
 		product_list = order_details.pluck(:product_list_id)
 
 		#valid pincode
 		dis_pin = DistributorPincodeList.where(pincode: order_pin).joins(:corporate).where("corporates.active = ? ", 10002)
-		corporate_id = dis_pin.first.corporate_id
+		corporate_id = dis_pin.first.corporate_id || 0 if dis_pin.present?
 		#check if order from valid pincode
 		if dis_pin.blank?
 			#create vpp order
-			create_vpp(order_id)
+			#create_vpp(order_id)
 			return "The pincode #{order_pin} is not serviced by any distributor"
 		end
 			#check if dealer mis balance more than order value
@@ -22,7 +22,7 @@ module TransferOrders
 			missed_order(order_id, 10000, corporate_id, order_total, "This order was missed on account of low MIS balance")
 
 			#create vpp order
-			create_vpp(order_id)
+			#create_vpp(order_id)
 			return "The distributor balance is low #{rupee_balance.to_s} as compared to order total #{order_total}"
 		end
 		total_products_sold = order.first.pieces
@@ -61,23 +61,21 @@ module TransferOrders
 
 		#update transfer order with this information to
 		#ensure that orders are not transffered to VPP
-		custdetails.update(transfer_ok: 1)
-		
+		#custdetails.update(transfer_ok: 1)
+		custdetails.update(transfer_ok: 0)
 		return "Created customer order, skipped all parameters for Distributor Order"		
 	end 
 
 	
 	def create_vpp(order_id)
 		#Direct Order 10002
-		pro_order_master = OrderMaster.where(external_order_no: order_id)
-		pro_order_master.first!
+		# pro_order_master = OrderMaster.where(external_order_no: order_id)
+		# pro_order_master.first!
 
-		order_lines = OrderLine.where(orderid: pro_order_master.id)
+		# order_lines = OrderLine.where(orderid: pro_order_master.id)
 
-		order_lines.each do | order_line |
-
-
-		end
+		# order_lines.each do | order_line |
+		#end
 
 	end
 
@@ -89,7 +87,7 @@ module TransferOrders
           #=> returns a 0-padded string of the hour, like "07"
           nowminute = t.strftime('%M').to_i
           pro_order_master = OrderMaster.where(external_order_no: order_id)
-		pro_order_master.first!
+		pro_order_master = pro_order_master.first
 
 		order_lines = OrderLine.where(orderid: pro_order_master.id)
 

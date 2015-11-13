@@ -69,39 +69,22 @@
     <% @product_stock_books.each do |product_stock_book| %>
       <tr>
         <td><%= product_stock_book.stock_date.strftime('%d-%b-%Y') %>         </td>
-        <td class="text-right">
-         <%= link_to product_stock_book.opening_qty, openingstockreport_path(prod: @prod, for_date: product_stock_book.stock_date.strftime('%m/%d/%Y')), :target => "_blank" %>
-     </td>
-       
-        <td class="text-right">
-        <%= link_to product_stock_book.purchased_qty, purchasedstockreport_path(prod: @prod, for_date: product_stock_book.stock_date.strftime('%m/%d/%Y')), :target => "_blank" %>
-       
-        </td>
+        <td class="text-right"><%= product_stock_book.opening_qty %></td>
+        <td class="text-right"><%= product_stock_book.purchased_qty  %></td>
         <td class="text-right"><%= product_stock_book.purchased_value %></td>
-        <td class="text-right"><%= link_to product_stock_book.returned_retail_qty, retailreturnedreport_path(prod: @prod, for_date: product_stock_book.stock_date.strftime('%m/%d/%Y')), :target => "_blank" %>
-        </td>
+        <td class="text-right"><%= product_stock_book.returned_retail_qty %>  </td>
         <td class="text-right"><%= product_stock_book.returned_retail_value %></td>
-        <td class="text-right"><%= link_to product_stock_book.returned_wholesale_qty, wholesalereturnreport_path(prod: @prod, for_date: product_stock_book.stock_date.strftime('%m/%d/%Y')), :target => "_blank" %>
-        </td>
+        <td class="text-right"><%= product_stock_book.returned_wholesale_qty %></td>
         <td class="text-right"><%= product_stock_book.returned_wholesale_value %></td>
         <td class="text-right"><%= product_stock_book.returned_others_qty %></td>
         <td class="text-right"><%= product_stock_book.returned_others_value %></td>
-        <td class="text-right">
-          <%= link_to product_stock_book.sold_retail_qty, retailsoldreport_path(prod: @prod, for_date: product_stock_book.stock_date.strftime('%m/%d/%Y')), :target => "_blank" %>
-          </td>
+        <td class="text-right"><%= product_stock_book.sold_retail_qty %></td>
         <td class="text-right"><%= product_stock_book.sold_retail_value %></td>
-        <td class="text-right">
-        <%= link_to product_stock_book.sold_wholesale, wholesalesoldreport_path(prod: @prod, for_date: product_stock_book.stock_date.strftime('%m/%d/%Y')), :target => "_blank" %>
-        
-        </td>
+        <td class="text-right"><%= product_stock_book.sold_wholesale %> </td>
         <td class="text-right"><%= product_stock_book.sold_wholesale_value %></td>
-        <td class="text-right">
-        <%= link_to product_stock_book.sold_branch_qty, branchsoldreport_path(prod: @prod, for_date: product_stock_book.stock_date.strftime('%m/%d/%Y')), :target => "_blank" %>
-        
-        </td>
+        <td class="text-right"><%= product_stock_book.sold_branch_qty %> </td>
         <td class="text-right"><%= product_stock_book.sold_branch_value %></td>
-        <td class="text-right">
-        <%= link_to product_stock_book.corrections_qty, correctionstockreport_path(prod: @prod, for_date: product_stock_book.stock_date.strftime('%m/%d/%Y')), :target => "_blank" %>
+        <td class="text-right"><%= product_stock_book.corrections_qty %>
        
         </td>
         <td class="text-right"><%= product_stock_book.corrections_value %></td>
@@ -114,7 +97,7 @@
 <% end %>
 <br>
 <% if @show_add_update == 1 %>
-<%= link_to 'Download CSV Stock Book', product_stock_books_path(prod: @prod, from_date: @or_from_date, to_date: @or_to_date , format: :csv), class: "btn btn-info btn-sm" %>
+<%= link_to 'Download CSV Stock Book', product_stock_books_path(barcode: @barcode, from_date: @or_from_date, to_date: @or_to_date , format: :csv), class: "btn btn-info btn-sm" %>
 <br>
 <br>
 <%= render('create_list') %>

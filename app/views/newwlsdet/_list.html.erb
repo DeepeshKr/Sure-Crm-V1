@@ -1,8 +1,11 @@
 <% if (@newwlsdet != nil) then %>
+<% @wholesalespieces = 0 %>
+<% @wholesalestotal = 0 %>
 <table class="table table-hover table-bordered">
   <thead>
     <tr>
     <th>Shdate</th>
+    <th>Ret date</th>
 	<th>Orderno</th>
 	<th>Invoice</th>
 	<th>Distcode</th>
@@ -16,16 +19,20 @@
   <tbody>
     <% @newwlsdet.each do |n| %>
 	<tr>
-		<td><%= n.shdate.strftime("%d-%b-%Y") || "NA" if n.shdate %></td>
+		<td><%= n.shdate.strftime("%d-%b-%Y") || "NA" if n.shdate.present? %></td>
+		<td><%= n.rdate.strftime("%d-%b-%Y") || "NA" if n.rdate %></td>
 		<td><%= n.orderno%></td>
 		<td><%= n.invoice%></td>
 		<td><%= n.distributor_name%></td>
 		<td><%= n.prod%></td>
 		<td><%= n.trantype%></td>
-		<td class="text-right"><%= n.quantity%></td>
-		<td class="text-right"><%= n.totamt%></td>
+		<td class="text-right"><%= n.quantity%> 
+		<% @wholesalespieces += n.quantity %> </td>
+		<td class="text-right"><%= n.totamt%> 
+		<% @wholesalestotal += n.totamt %></td>
 	</tr>
        <% end %>
+
   </tbody>
   <tfoot>
     <tr>

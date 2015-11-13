@@ -1,4 +1,6 @@
 <% if (@tempinv_newwlsdet != nil) then %>
+<% @branchsalespieces = 0 %>
+<% @branchsalestotal = 0 %>
   <table class="table table-hover table-bordered">
   <thead>
     <tr>
@@ -16,20 +18,21 @@
   <tbody>
     <% @tempinv_newwlsdet.each do |n| %>
   <tr>
-    <td><%= n.shdate.strftime("%d-%b-%Y") || "NA" if n.shdate %></td>
+    <td><%= n.shdate.strftime("%d-%b-%Y") || "NA" if n.shdate.present? %></td>
+    <td><%= n.rdate.strftime("%d-%b-%Y") || "NA" if n.rdate %></td>
     <td><%= n.orderno%></td>
     <td><%= n.invoice%></td>
     <td><%= n.distributor_name%></td>
     <td><%= n.prod%></td>
     <td><%= n.trantype%></td>
-    <td class="text-right"><%= n.quantity%></td>
-    <td class="text-right"><%= n.totamt%></td>
+    <td class="text-right"><%= n.quantity%> <% @branchsalespieces += n.quantity %> </td>
+    <td class="text-right"><%= n.totamt%> <% @branchsalestotal += n.totamt %></td>
   </tr>
        <% end %>
   </tbody>
      <tfoot>
     <tr>
-    <th colspan="6"><strong>Total :</strong></th>
+    <th colspan="7"><strong>Total :</strong></th>
   
   <th class="text-right"><strong><%= @branchsalespieces %></strong></th>
   <th class="text-right"><strong><%= number_with_delimiter(@branchsalestotal, locale: :en) %></strong></th>
