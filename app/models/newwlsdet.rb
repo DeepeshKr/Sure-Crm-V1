@@ -17,4 +17,5 @@ class  NEWWLSDET < ActiveRecord::Base
   		"NA for #{self.distcode}"
   	end
   end
+  
 end

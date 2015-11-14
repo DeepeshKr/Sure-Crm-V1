@@ -1,5 +1,11 @@
 Rails.application.routes.draw do
 
+  get 'new_dept/list'
+
+  get 'new_dept/search'
+
+  get 'new_dept/details'
+
   resources :distributor_missed_orders
 
   resources :distributor_missed_order_types

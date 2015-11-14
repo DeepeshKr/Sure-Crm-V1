@@ -1,0 +1,52 @@
+<% if (@new_depts != nil) then %>
+<% @wholesalespieces = 0 %>
+
+<table class="table table-hover table-bordered">
+  <thead>
+    <tr>
+    <th>Srno</th>
+    <th>Rdate</th>
+    <th>Distname</th>
+	<th>Pend Doc</th>
+	<th>Prod</th>
+	<th>Remarks</th>
+	<th>Action_taken</th>
+	<th class="text-right">Quantity</th>
+	
+</tr>
+</thead>
+
+  <tbody>
+    <% @new_depts.each do |n| %>
+	<tr>
+		<td><%= n.srno %></td>
+		<td><%= n.rdate.strftime("%d-%b-%Y") || "NA" if n.rdate.present? %></td>
+		<td><%= n.distname %> </td>
+		<td><%= n.pend_docs %></td>
+		<td><%= n.prod %></td>
+		<td><%= n.remarks%> </td>
+		<td><%= n.action_taken %></td>
+		<td class="text-right"><%= n.qty%> 
+		<% @wholesalespieces += n.qty if (n.qty.present? && n.qty > 0) %> </td>
+		
+	</tr>
+       <% end %>
+
+  </tbody>
+  <tfoot>
+    <tr>
+    <th colspan="7"><strong>Total :</strong></th>
+	
+	<th class="text-right"><strong><%= @wholesalespieces %></strong></th>
+	
+</tr>
+</tfoot>
+</table>
+
+ <% else %>
+ 	<div class="well well-lg">
+ 	No Whole sale returns found
+ 	</div>
+ <% end %>
+ <br>
+

@@ -1,3 +1,4 @@
+
 <% if (@newwlsdet != nil) then %>
 <% @wholesalespieces = 0 %>
 <% @wholesalestotal = 0 %>
@@ -5,8 +6,7 @@
   <thead>
     <tr>
     <th>Shdate</th>
-    <th>Ret date</th>
-	<th>Orderno</th>
+    <th>Orderno</th>
 	<th>Invoice</th>
 	<th>Distcode</th>
 	<th>Prod</th>
@@ -20,7 +20,6 @@
     <% @newwlsdet.each do |n| %>
 	<tr>
 		<td><%= n.shdate.strftime("%d-%b-%Y") || "NA" if n.shdate.present? %></td>
-		<td><%= n.rdate.strftime("%d-%b-%Y") || "NA" if n.rdate %></td>
 		<td><%= n.orderno%></td>
 		<td><%= n.invoice%></td>
 		<td><%= n.distributor_name%></td>
@@ -46,7 +45,7 @@
 
  <% else %>
  	<div class="well well-lg">
- 	No Whole sale orders found
+ 	No Whole sale returns found
  	</div>
  <% end %>
  <br>

@@ -152,13 +152,13 @@ def stockbook_details
       #sold_wholesale
       when @route = "sold_wholesale"
         @route_details = "Sold over Wholesale"
-        @newwlsdet = NEWWLSDET.where(prod: @prod_list).where("TRUNC(shdate) = ? ", @from_date).where("CFO != 'Y' OR CFO IS NULL")
+        @newwlsdet = NEWWLSDET.where(prod: @prod_list).where("TRUNC(shdate) = ? ", @from_date) #.where("CFO != 'Y' OR CFO IS NULL")
      
       
       #sold_branch
       when @route = "sold_branch"
         @route_details = "Sold over Branch"
-        @tempinv_newwlsdet = TEMPINV_NEWWLSDET.where(prod: @prod_list).where("TRUNC(shdate) = ?", @from_date).where("CFO != 'Y'")
+        @tempinv_newwlsdet = TEMPINV_NEWWLSDET.where(prod: @prod_list).where("TRUNC(shdate) = ?", @from_date) #.where("CFO != 'Y' OR CFO IS NULL")
     
       
       #returned_retail
@@ -175,14 +175,15 @@ def stockbook_details
 
       #returned_wholesale    
       when @route = "returned_wholesale"
-        @route_details = "Returned by wholesale"
+        @route_details = "Returned by wholesale - check"
+        
          #Returned whole sales
-       @new_dept = NEW_DEPT.where(prod: @prod_list).limit(10) #.where("TRUNC(rdate) = ?", @from_date) #.where("CFO != 'Y'")
+       @new_depts = NEW_DEPT.where(prod: @prod_list).where("TRUNC(rdate) = ?", @from_date) #.where("CFO != 'Y'")
        # @newwlsdet = NEWWLSDET.where(prod: prod).where("TRUNC(shdate) >= ? and TRUNC(shdate) <= ?", from_date, to_date).where("CFO != 'Y'")
-        @newwlsdet = NEW_DEPT.limit(10)
-        if @new_dept.present?
+       # @new_depts = NEW_DEPT.limit(10)
+        if @new_depts.present?
            
-          
+           @route_details = "Returned by wholesale - check found #{@new_depts.count}"
         end
 
       #returned_branch

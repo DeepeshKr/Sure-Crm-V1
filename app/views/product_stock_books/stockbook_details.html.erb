@@ -94,7 +94,7 @@
 	</div>
    <%= render 'vpp/list' %>
 <% end %>
-<% if @route == "sold_wholesale" || @route == "returned_wholesale" %>
+<% if @route == "sold_wholesale"  %>
 <div class="well well-sm">
 		<div class="row">
 		<div class="col-xs-4">
@@ -111,6 +111,25 @@
 		</div>
 </div>
 <%= render 'newwlsdet/list' %>
+
+<% end %>
+<% if  @route == "returned_wholesale" %>
+<div class="well well-sm">
+		<div class="row">
+		<div class="col-xs-4">
+		<h4>Wholesale Returns <small>rdate in NEW_DEPT</small>  </h4>
+			
+		</div>
+		<div class="col-xs-4">
+		<h4>Total Pieces Sold: <%= @wholesalepieces %></h4>
+		</div>
+		<div class="col-xs-4">
+		<h4>Total Amount: <%= number_with_delimiter(@wholesalestotal, locale: :en) %></h4>
+		</div>
+		
+		</div>
+</div>
+<%= render 'new_dept/list' %>
 
 <% end %>
 <% if @route == "sold_branch" %>

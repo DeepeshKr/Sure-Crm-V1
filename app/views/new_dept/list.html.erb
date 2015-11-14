@@ -1,0 +1,79 @@
+<h1>NewDept#list</h1>
+<p>Whole Returns </p>
+<table class="table table-hover">
+  <thead>
+    <tr>
+<th>Rdate</th>
+<th>Distname</th>
+<th>Recd_docs</th>
+<th>Pend_docs</th>
+<th>Sinv_date</th>
+<th>Actual_return_date</th>
+<th>Prod</th>
+<th>Prod_id</th>
+<th>Mktg_remarks</th>
+<th>Problem</th>
+<th>Defect_type</th>
+<th>Defect_status</th>
+<th>Part_name</th>
+<th>Action_taken</th>
+<th>Case_status</th>
+<th>Charges</th>
+<th>Remarks</th>
+<th>Type</th>
+<th>Store_remarks</th>
+<th>Qty</th>
+<th>Sp_1</th>
+<th>Sp_2</th>
+<th>Sp_3</th>
+<th>Sp_4</th>
+<th>Sp_5</th>
+<th>Sp_6</th>
+<th>Sp_7</th>
+<th>Sp_8</th>
+<th>Sp_9</th>
+<th>Sp_10</th>
+<th>Srno</th>
+</tr>
+</thead>
+
+  <tbody>
+    <% @new_depts.each do |n| %>
+      <tr>
+<td><%= n.rdate.strftime("%d-%b-%Y") %></td>
+<td><%= n.distname%></td>
+<td><%= n.recd_docs%></td>
+<td><%= n.pend_docs%></td>
+<td><%= n.sinv_date%></td>
+<td><%= n.actual_return_date%></td>
+<td><%= n.prod%></td>
+<td><%= n.prod_id%></td>
+<td><%= n.mktg_remarks%></td>
+<td><%= n.problem%></td>
+<td><%= n.defect_type%></td>
+<td><%= n.defect_status%></td>
+<td><%= n.part_name%></td>
+<td><%= n.action_taken%></td>
+<td><%= n.case_status%></td>
+<td><%= n.charges%></td>
+<td><%= n.remarks%></td>
+<td><%= n.type%></td>
+<td><%= n.store_remarks%></td>
+<td><%= n.qty%></td>
+<td><%= n.sp_1%></td>
+<td><%= n.sp_2%></td>
+<td><%= n.sp_3%></td>
+<td><%= n.sp_4%></td>
+<td><%= n.sp_5%></td>
+<td><%= n.sp_6%></td>
+<td><%= n.sp_7%></td>
+<td><%= n.sp_8%></td>
+<td><%= n.sp_9%></td>
+<td><%= n.sp_10%></td>
+<td><%= n.srno%></td>
+</tr>
+       <% end %>
+  </tbody>
+</table>
+
+<br>
