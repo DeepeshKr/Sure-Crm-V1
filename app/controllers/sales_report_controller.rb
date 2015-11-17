@@ -113,8 +113,8 @@ class SalesReportController < ApplicationController
            :order_lines => OrderLine.where(orderid: o.id).order(:id),
            :pieces => o.pieces }
         end
-        @from_date = @from_date.strftime("%Y-%m-%d")
-      @to_date = @to_date.strftime("%Y-%m-%d")
+        @from_date = (@from_date + 330.minutes).strftime("%Y-%m-%d")
+      @to_date = (@to_date + 330.minutes).strftime("%Y-%m-%d")
 
         @employeeorderlist = employeeunorderlist.sort_by{|c| c[:total]}.reverse 
         respond_to do |format|
