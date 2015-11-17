@@ -1,0 +1,91 @@
+   <%= form_tag  url_for(:controller => 'sales_report', :action => 'channel_sales'), method: "get" do  %>
+ <div class="row">
+	 <div class="col-xs-2">
+
+	 <h4>BDM Sales Report </h4>
+	 </div>
+
+   <div class="col-xs-4">
+         
+               <%= select_tag :bdm_id,  options_from_collection_for_select(@media_manager,
+             :id, :name, selected: @bdm_id ),
+                   {:class => "form-control", label: "Select the Product if required ", required: true } %>
+   </div>  
+	 <div class="col-xs-5">
+        <div class="input-daterange input-group">
+          <%= text_field_tag(:from_date, @from_date, :data => {:provide => "datepicker"}, :id => "datepicker_from", :class => "form-control", :required => "true" )   %>
+          <span class="input-group-addon">to</span>
+
+           <%= text_field_tag(:to_date, @to_date, :data => {:provide => "datepicker"}, :id => "datepicker_to", :class => "form-control", :required => "true" )   %>
+
+        </div>
+    </div>
+    <div class="col-xs-1">
+              <%= submit_tag "Show", name: nil, class: "btn btn-primary" %>
+    </div>
+        
+ </div>
+<% end %>
+
+<% if @employeeorderlist.present? %>
+<% total_value, total_piece = 0, 0 %>
+<table class="table table-hover table-bordered">
+  <thead>
+    <tr>
+     <th>No</th>
+     <th>Media</th>
+     <th>City </th>
+     <th>Products</th>
+     <th>Pieces</th>
+     <th>Value</th>
+     </tr>
+  </thead>
+<tbody>
+   <% @employeeorderlist.each do |c| %>
+   <tr>
+   <td><%= @sno %></td>
+<td>
+   <%= c[:channel] %> 
+</td>
+<td>
+   <%= c[:city] %> 
+</td>
+<td>
+<% c[:order_lines].each do |ord| %>
+ <%= ord.description %>
+<% end %>
+</td>
+
+<td class="text-right">
+   <%= c[:pieces] %> <% total_piece += c[:pieces] %>
+</td>
+<td class="text-right">
+   <%= c[:total] %> <% total_value += c[:total] %>
+</td>
+  </tr> 
+  <% @sno += 1 %> 
+ <% end %>
+
+ 
+
+  </tbody>
+<tfoot>
+  <tr>
+  <th colspan="4"><strong>Total</strong></th>
+  <th><strong> <%= total_piece %></strong></th>
+  <th><strong><%= total_value %></strong></th>
+  </tr>
+
+</tfoot>
+  </table>
+  <% else %>
+  <div class="well well-sm">
+  <h5>Please select a date to generate the report </h5>
+  </div>
+  <% end %>
+ <br>
+
+<script>
+$('#datepicker_to').datepicker({format: 'yyyy-mm-dd'});
+$('#datepicker_from').datepicker({format: 'yyyy-mm-dd'});
+</script>

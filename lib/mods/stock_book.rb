@@ -121,7 +121,7 @@ module StockBook
       end
 
        #Returned whole sales
-       @new_dept = NEW_DEPT.where(prod: prod).where("TRUNC(rdate) = ?", for_date) #.where("CFO != 'Y'")
+       @new_dept = NEW_DEPT.where(prod: prod).where("TRUNC(rdate) = ?", for_date).where(type: 'WLS') #.where("CFO != 'Y'")
       if @new_dept.present?
           @product_stock_book.update(returned_wholesale_qty: @new_dept.sum(:qty))
           @product_stock_book.update(returned_wholesale_rate: 0)

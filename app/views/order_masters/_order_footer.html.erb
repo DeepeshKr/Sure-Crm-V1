@@ -61,6 +61,14 @@
  			<%= @order_master.subtotal + @order_master.shipping + @order_master.creditcardcharges + @order_master.maharastraccextra %>
  				<% end %>
 			</td> </tr>
+			<tr>
+				<td><p class="lead"> <strong>Grand Total:</strong> </p></td>
+				<td class="text-right"> 
+			
+			<p class="lead">
+ 			<%= @order_master.g_total ||= (@order_master.subtotal + @order_master.shipping + @order_master.creditcardcharges + @order_master.maharastraccextra + @order_master.maharastracodextra + @order_master.codcharges) %>
+ 				</p>
+			</td> </tr>
 				</table>  
 		</div>
 

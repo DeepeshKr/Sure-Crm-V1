@@ -178,9 +178,9 @@ def stockbook_details
         @route_details = "Returned by wholesale - check"
         
          #Returned whole sales
-       @new_depts = NEW_DEPT.where(prod: @prod_list).where("TRUNC(rdate) = ?", @from_date) #.where("CFO != 'Y'")
+       @new_depts = NEW_DEPT.where(prod: @prod_list).where("TRUNC(rdate) = ?", @from_date).where(type: 'WLS')
        # @newwlsdet = NEWWLSDET.where(prod: prod).where("TRUNC(shdate) >= ? and TRUNC(shdate) <= ?", from_date, to_date).where("CFO != 'Y'")
-       # @new_depts = NEW_DEPT.limit(10)
+        #@new_depts = NEW_DEPT.where(prod: @prod_list).where(type: 'WLS').limit(10)
         if @new_depts.present?
            
            @route_details = "Returned by wholesale - check found #{@new_depts.count}"

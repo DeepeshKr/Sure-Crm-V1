@@ -5,6 +5,7 @@ class SalesReportController < ApplicationController
   # before_filter :authenticate_user!
   def index
     @product_master = ProductMaster.order('name') #.limit(10)
+     @media_manager = Employee.where(:employee_role_id => 10121).order("first_name")
      @from_date = (Date.current + 330.minutes).strftime("%Y-%m-%d") #.strftime("%Y-%m-%d")
   end
   def summary
@@ -37,6 +38,8 @@ class SalesReportController < ApplicationController
           orderlist = OrderMaster.where('ORDER_STATUS_MASTER_ID > 10002')
           .where('orderdate >= ? AND orderdate <= ?', @from_date, @to_date)
            #.where(media_id: @hbnlist)
+           @from_date = @from_date.strftime("%Y-%m-%d")
+           @to_date = @to_date.strftime("%Y-%m-%d")
 
           ccvalue = orderlist.where(orderpaymentmode_id: 10000).sum(:total)
           ccorders = orderlist.where(orderpaymentmode_id: 10000).count()
@@ -62,7 +65,72 @@ class SalesReportController < ApplicationController
         end
 
   end
-   def daily
+
+  def channel_sales
+    @media_manager = Employee.where(:employee_role_id => 10121).order("first_name")
+     @sno = 1
+      #@order_master.orderpaymentmode_id == 10000 #paid over CC
+      #@order_master.orderpaymentmode_id == 10001 #paid over COD
+    if params[:from_date].present?  
+      #@summary ||= []
+      @or_for_date = params[:from_date]
+      for_date =  Date.strptime(params[:from_date], "%Y-%m-%d")
+
+      @from_date = for_date.beginning_of_day - 330.minutes
+      @to_date = for_date.end_of_day - 330.minutes
+      #@to_date = @from_date + 1.day
+      
+      if params.has_key?(:to_date)
+        @to_date =  Date.strptime(params[:to_date], "%Y-%m-%d")
+      end
+      
+      @to_date = @to_date.end_of_day - 330.minutes    
+
+     @bdm_id = params[:bdm_id]
+
+      order_masters = OrderMaster.where('orderdate >= ? AND orderdate <= ?', @from_date, @to_date)
+      .where('ORDER_STATUS_MASTER_ID > 10002').joins(:medium).where("media.employee_id = ? ", @bdm_id)
+      
+      name = (Employee.find(@bdm_id))
+
+      @orderdate = "Searched for #{for_date} found #{order_masters.count} agents!"
+      employeeunorderlist ||= []
+      num = 1
+      order_masters.each do |o|
+        e = o.employee_id
+       
+         
+        # orderlist = OrderMaster.where('ORDER_STATUS_MASTER_ID > 10002')
+        # .where('orderdate >= ? AND orderdate <= ?', @from_date, @to_date).where(employee_id: e)
+        # timetaken = orderlist.sum(:codcharges)
+        
+        # totalorders = orderlist.sum(:total)
+        # noorders = orderlist.count()
+        employeeunorderlist << {:total => o.total,
+           :employee => name, :for_date =>  @or_for_date,
+           :city => o.city ,
+          :channel => o.medium.name,
+           :order_lines => OrderLine.where(orderid: o.id).order(:id),
+           :pieces => o.pieces }
+        end
+        @from_date = @from_date.strftime("%Y-%m-%d")
+      @to_date = @to_date.strftime("%Y-%m-%d")
+
+        @employeeorderlist = employeeunorderlist.sort_by{|c| c[:total]}.reverse 
+        respond_to do |format|
+        csv_file_name = "employee_sales_#{@or_for_date}.csv"
+          format.html
+          format.csv do
+            headers['Content-Disposition'] = "attachment; filename=\"#{csv_file_name}\""
+            headers['Content-Type'] ||= 'text/csv'
+          end
+        end
+
+    end
+  end
+  
+
+  def daily
       #media segregation only HBN
       media_segments
       @sno = 1
@@ -176,8 +244,8 @@ class SalesReportController < ApplicationController
  
 
   def channel
-    #/sales_report/channel?for_date=05%2F09%2F2015
-     @sno = 1
+      #/sales_report/channel?for_date=05%2F09%2F2015
+      @sno = 1
       #@order_master.orderpaymentmode_id == 10000 #paid over CC
       #@order_master.orderpaymentmode_id == 10001 #paid over COD
     if params[:from_date].present? 
@@ -198,18 +266,18 @@ class SalesReportController < ApplicationController
 
       hbn_order_masters = OrderMaster.where('orderdate >= ? AND orderdate <= ?', @from_date, @to_date)
       .where('ORDER_STATUS_MASTER_ID > 10002')
-      .where(media_id: @hbnlist).select(:media_id).distinct
+      .where(media_id: @hbnlist1).select(:media_id, :city).distinct
 
       paid_order_masters = OrderMaster.where('orderdate >= ? AND orderdate <= ?', @from_date, @to_date)
       .where('ORDER_STATUS_MASTER_ID > 10002')
-      .where(media_id: @paid).select(:media_id).distinct
+      .where(media_id: @paid).select(:media_id, :city).distinct
 
       other_order_masters = OrderMaster.where('orderdate >= ? AND orderdate <= ?', @from_date, @to_date)
       .where('ORDER_STATUS_MASTER_ID > 10002').where(media_id: @others)
-      .select(:media_id).distinct
+      .select(:media_id, :city).distinct
 
       total_hbn_order_masters = OrderMaster.where('orderdate >= ? AND orderdate <= ?', @from_date, @to_date)
-      .where('ORDER_STATUS_MASTER_ID > 10002').where(media_id: @hbnlist)
+      .where('ORDER_STATUS_MASTER_ID > 10002').where(media_id: @hbnlist1)
 
       total_paid_order_masters = OrderMaster.where('orderdate >= ? AND orderdate <= ?', @from_date, @to_date)
       .where('ORDER_STATUS_MASTER_ID > 10002').where(media_id: @paid)
@@ -224,11 +292,11 @@ class SalesReportController < ApplicationController
         #hbn channels
         hbn_order_masters.each do |o|
         e = o.media_id
-       
+        c = o.city
         name = (Medium.find(e).name  || "NA" if Medium.find(e).name.present?)
 
         orderlist = OrderMaster.where('ORDER_STATUS_MASTER_ID > 10002')
-        .where('orderdate >= ? AND orderdate <= ?', @from_date, @to_date).where(media_id: e)
+        .where('orderdate >= ? AND orderdate <= ?', @from_date, @to_date).where(media_id: e, city: c)
         timetaken = orderlist.sum(:codcharges)
         ccvalue = orderlist.where(orderpaymentmode_id: 10000).sum(:total)
         ccorders = orderlist.where(orderpaymentmode_id: 10000).count()
@@ -240,6 +308,7 @@ class SalesReportController < ApplicationController
         hbn_order_list << {:total => totalorders,
            :id => e, :channel => name, :for_date =>  @or_for_date,
           :nos => noorders, :codorders => codorders, :codvalue => codvalue,
+          :city => o.city,
            :ccorders => ccorders, :ccvalue => ccvalue  }
         end
 
@@ -860,7 +929,12 @@ media_bdm = Medium.all.select(:employee_id).distinct
 end
 
  def media_segments
-  @hbnlist = Medium.where(media_group_id: 10000).pluck(:id)
+  @hbnlist = Medium.where(media_group_id: 10000).limit(1000).pluck(:id)
+
+  @hbnlist1 = Medium.where(media_group_id: 10000).limit(1000).pluck(:id)
+  @hbnlist2 = Medium.where(media_group_id: 10000).offset(1000).limit(1000).pluck(:id)
+  @hbnlist3 = Medium.where(media_group_id: 10000).offset(2000).limit(1000).pluck(:id)
+
   @paid = Medium.where(media_commision_id: 10000).where("media_group_id IS NULL OR media_group_id <> 10000").select("id")
   @others = Medium.where('media_commision_id IS NULL').where("media_group_id IS NULL OR media_group_id <> 10000").select("id")
   

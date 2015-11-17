@@ -16,8 +16,15 @@
 			  </div>
 			  <div class="panel-footer">
 			   
-					 <%= bootstrap_form_tag url: url_for(:controller => 'sales_report', :action => 'summary'), :method => :GET, :enforce_utf8 => false do |f| %>
+					 <%= bootstrap_form_tag url: url_for(:controller => 'sales_report', :action => 'channel_sales'), :method => :GET, :enforce_utf8 => false do |f| %>
 					 <div class="row">
+<div class="col-xs-12">
+ <%= select_tag :bdm_id,  options_from_collection_for_select(@media_manager,
+       :id, :name, selected: @bdm_id ),
+             {:class => "form-control", label: "Select the Product if required ", required: true } %>
+</div>
+             </div>
+<div class="row">
 					<div class="col-xs-8">
 					 <%= text_field_tag(:from_date, @from_date, :data => {:provide => "datepicker"}, :id => "datepicker1", :class => "form-control", :required => "true" )   %>
 					          

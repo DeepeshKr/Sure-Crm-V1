@@ -165,6 +165,18 @@ class OrderMastersController < ApplicationController
     @vppsearch = "Please search for Order, Results across Ordering, Processing and Dispatch"
     @dealtransearch = "Please search for Orders in Transfer Orders"
 
+    if params.has_key?(:manifest)
+      @manifest = params[:manifest]
+      vpp_search = VPP.where(manifest: @manifest) #.where(custref: @ordernum)
+      if vpp_search.present?
+        #redirect_to custordersearch_path(:order_id => @order_id)
+        custref = vpp_search.first.custref
+        redirect_to custordersearch_path(:ordernum => vpp_search.first.custref)
+      else
+        flash[:error] = "The manifest does not exist!"
+      end
+    end
+
     if params[:ordernum].present?
       @ordernum = params[:ordernum]
       @custdetails = CUSTDETAILS.where("ORDERNUM = ?", @ordernum)
@@ -182,6 +194,10 @@ class OrderMastersController < ApplicationController
         #custref related to 
        # if VPP.where(custref: @ordernum).present?
           @vpp = VPP.where(custref: @ordernum)
+
+          if @vpp.present?
+            @manifest = @vpp.first.manifest
+          end
        # end 
 
         # if DEALTRAN.where(custref: @ordernum).present?
