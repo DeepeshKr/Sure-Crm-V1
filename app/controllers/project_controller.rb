@@ -92,5 +92,8 @@ class ProjectController < ApplicationController
     end
  
   end
- 
+  
+  def longtable
+    
+  end
 end
