@@ -1,6 +1,6 @@
 class SalesPpoReportController < ApplicationController
   before_action { protect_controllers(5) } 
-  before_action :media_segments, only: [:daily, :hourly, :show, :channel]
+  before_action :media_segments, only: [:daily,  :show, :channel]
   before_action :constants
   def summary
     @sno = 1
@@ -33,7 +33,7 @@ class SalesPpoReportController < ApplicationController
            
           orderlist = OrderMaster.where('ORDER_STATUS_MASTER_ID > 10002')
           .where('orderdate >= ? AND orderdate <= ?', @from_date, @to_date)
-          .where(media_id: @hbnlist1).where(media_id: @hbnlist2)
+           .joins(:medium).where("media.media_group_id = 10000")
 
           # #split the fixed cost across the hour
           revenue = 0
@@ -127,7 +127,7 @@ class SalesPpoReportController < ApplicationController
          halfhourago = Time.at(date - 30.minutes) 
         
           orderlist = OrderMaster.where('ORDER_STATUS_MASTER_ID > 10002')
-          .where(media_id: @hbnlist)
+          .joins(:medium).where("media.media_group_id = 10000")
           .where('orderdate >= ? AND orderdate <= ?', halfhourago, Time.at(date))
           #add orders of each cable tv operator
 
@@ -250,7 +250,7 @@ class SalesPpoReportController < ApplicationController
           halfhourago = Time.at(date - 30.minutes) 
         
           orderlist = OrderMaster.where('ORDER_STATUS_MASTER_ID > 10002')
-          .where(media_id: @hbnlist)
+           .joins(:medium).where("media.media_group_id = 10000")
           .where('orderdate >= ? AND orderdate <= ?', halfhourago, Time.at(date))
           #add orders of each cable tv operator
 
@@ -713,7 +713,7 @@ end
          halfhourago = Time.at(date - 1.minutes) 
         
           orderlist = OrderMaster.where('ORDER_STATUS_MASTER_ID > 10002')
-          .where(media_id: @hbnlist)
+           .joins(:medium).where("media.media_group_id = 10000")
           .where('orderdate >= ? AND orderdate <= ?', halfhourago, Time.at(date))
           #add orders of each cable tv operator
 
@@ -781,7 +781,8 @@ def hbn_channels_between
         
         hbn_order_masters = OrderMaster.where('ORDER_STATUS_MASTER_ID > 10002')
         .where('orderdate >= ? AND orderdate <= ?', @start_time, @end_time)
-        .where(media_id: @hbnlist).select(:media_id).distinct
+         .joins(:medium).where("media.media_group_id = 10000")
+         .select(:media_id).distinct
 
          hbn_order_list ||= []
 
@@ -822,9 +823,10 @@ def shows_between
     end
 
     #media segregation only HBN
-    media_segments
+    #media_segments
 
     @show_date = for_date.strftime("%d-%b-%Y")
+     campaigns = Campaign.joins(:medium).where("media.media_group_id = 10000").pluck(:id)
 
     if params.has_key?(:start_time) && params.has_key?(:end_time)
       
@@ -851,9 +853,10 @@ def shows_between
 
           @earlier_day = previous_day.strftime("%d-%b-%Y")
 
+         
           @old_campaign_playlists =  CampaignPlaylist.where("(start_hr * 60 * 60) + (start_min * 60) >= ? and (start_hr * 60 *60 )  + (start_min *60) <= ?", previous_startsecs, previous_endsecs)
          .joins(:campaign).where("campaigns.startdate = ?", previous_day)
-         .where('campaigns.mediumid IN (?)', @hbnlist)
+         .where('campaignid IN (?)', campaigns)
         .order(:start_hr, :start_min, :start_sec).where(list_status_id: 10000)
          
           @startsecs = 0
@@ -878,7 +881,7 @@ def shows_between
 
        @campaign_playlists =  CampaignPlaylist.where("(start_hr * 60 * 60) + (start_min * 60) >= ? and (start_hr * 60 *60 )  + (start_min *60) <= ?", @startsecs, @endsecs)
        .joins(:campaign).where("campaigns.startdate = ?", for_date)
-       .where('campaigns.mediumid IN (?)', @hbnlist)
+       .where('campaignid IN (?)', campaigns)
       .order(:start_hr, :start_min, :start_sec).where(list_status_id: 10000)
      
       
@@ -1154,7 +1157,7 @@ def shows_between
           @total_orders_pieces = order_master_list.sum(:pieces) * @correction
           @total_order_profitability = (@total_orders_revenue - (@total_orders_product_cost + @total_order_fix_media_cost + @total_order_media_var_cost + @total_orders_refund)).to_i 
 
-   @total_orders_product_cost_60 = 0
+        @total_orders_product_cost_60 = 0
         @total_orders_sales_60 = (@total_orders_sales * 0.6) || 0
         @total_orders_nos_60 = (@total_orders_nos * 0.6) || 0
         @total_orders_refund_60 = (@total_orders_refund * 0.6) || 0 if @total_orders_refund.presence
