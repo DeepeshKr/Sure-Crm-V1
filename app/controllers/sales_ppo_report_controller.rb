@@ -410,7 +410,7 @@ class SalesPpoReportController < ApplicationController
       media_cost = total_media_cost / secs_in_a_day
 
 
-
+      @serial_no = 1
      campaign_playlists.each do | playlist |
      orderlist = OrderMaster.where('ORDER_STATUS_MASTER_ID > 10002')
      .where(campaign_playlist_id: playlist.id)
@@ -469,6 +469,8 @@ class SalesPpoReportController < ApplicationController
           :fixed_cost => fixed_cost.to_i,
           :profitability => profitability,
           :product_variant_id => playlist.productvariantid}
+
+         @serial_no += 1
         end
         @employeeorderlist = employeeunorderlist
 

@@ -99,12 +99,26 @@ class CorporatesController < ApplicationController
 
   def create
     @corporate = Corporate.new(corporate_params)
-    @corporate.save
+    if @corporate.valid?
+          flash[:success] = "Distributor successfully added " 
+            @corporate.save
+           
+      else
+          flash[:error] = @corporate.errors.full_messages.join("<br/>")
+      end
+   
     respond_with(@corporate)
   end
 
   def update
     @corporate.update(corporate_params)
+    if @corporate.valid?
+          flash[:success] = "Distributor successfully added " 
+            @corporate.save
+           
+      else
+          flash[:error] = @corporate.errors.full_messages.join("<br/>")
+      end
     respond_with(@corporate)
   end
 

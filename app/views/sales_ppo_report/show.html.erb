@@ -45,7 +45,7 @@
 <tbody>
    <% @employeeorderlist.each do |c| %>
    <tr>
-   <td><%= @sno %></td>
+   <td><%= @serial_no %></td>
 
  <td><%= c[:show] %>
  <%= c[:more] %> Id: <%= c[:campaign_id] %><br>
@@ -164,7 +164,7 @@
   Download CSV file
   </div>
   <div class="col-xs-6">
-    <%= link_to 'Download CSV file', products_sold_path(from_date: @from_date, product_master_id: @product_master_id, format: :csv), class: "btn btn-info btn-sm" %>
+    <%= link_to 'Download CSV file', show_ppo_path(from_date: @from_date, format: :csv), class: "btn btn-info btn-sm" %>
   </div>
 </div>
 </div>
