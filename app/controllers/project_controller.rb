@@ -1,7 +1,8 @@
 class ProjectController < ApplicationController
    include FooTime
-  
-  #before_action { protect_controllers(20) } 
+  #<%= javascript_include_tag 'https://cdn.datatables.net/1.10.10/js/jquery.dataTables.min.js' %>
+
+    #before_action { protect_controllers(20) } 
      skip_before_action :require_login, only: [:home, :help, :contact]
   def home
 
@@ -94,6 +95,6 @@ class ProjectController < ApplicationController
   end
   
   def longtable
-    
+    #https://github.com/laertejjunior/freezeheader
   end
 end

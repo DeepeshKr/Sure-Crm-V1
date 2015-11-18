@@ -417,6 +417,7 @@ mount Upmin::Engine => '/admin'
   get 'oldhelp'    => 'product#help'
   get 'oldabout'   => 'product#about'
   get 'oldcontact' => 'product#contact'
+   get 'project/longtable'
  
   get 'dealers' => 'address_dealer#list'
  

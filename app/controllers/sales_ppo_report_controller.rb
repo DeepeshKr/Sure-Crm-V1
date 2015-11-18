@@ -15,7 +15,7 @@ class SalesPpoReportController < ApplicationController
           @up_to_date = for_date.to_date 
     else
           use_date = (330.minutes).from_now.to_date
-          @from_date = use_date.to_date - 10.days #30.days
+          @from_date = use_date.to_date - 1.days #30.days
           @up_to_date = use_date.to_date #- 5.days
     end
       

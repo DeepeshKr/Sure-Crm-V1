@@ -1,3 +1,5 @@
+
+<script src="/path/to/jquery.freezeheader.js"></script>
 <table id="example" class="display" width="100%" cellspacing="0">
         <thead>
             <tr>
@@ -478,3 +480,10 @@
             </tr>
         </tbody>
     </table>
+
+    <script type="text/javascript">
+      
+        $(document).ready(function () {
+            $("#example").freezeHeader({ 'height': '300px' });
+        })
+    </script>
