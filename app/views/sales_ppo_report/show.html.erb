@@ -4,8 +4,7 @@
 	 <h4>HBN Daily Show PPO Report <%= @or_for_date %> </h4>
 	 </div>
 	 <div class="col-xs-6">
-	 <%= render('date_search') %>
-	 		
+	 	<%= render partial: 'date_search', :locals => {:searchaction => "show"}  %>
 	</div>
  </div>
 <!--https://gist.github.com/flaviaza/3763015 scrollable headers-->
