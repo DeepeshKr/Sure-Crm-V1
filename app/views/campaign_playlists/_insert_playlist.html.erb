@@ -34,10 +34,13 @@
   <div class="col-xs-1">
    <%= f.select :start_sec, 0..59, label: "Start Sec", :selected => @campaign_playlist.start_sec  %>
  </div>
- <div class="col-xs-1 col-xs-offset-1">
+ <div class="col-xs-2 col-xs-offset-1">
    <%= f.text_field :duration_secs, :label => "Duration in Sec:", :placeholder => 'Duration in Seconds', required: true %>
  </div>
-
+ <div class="col-xs-4">
+ <label>Duration in Sec:</label>
+    <%=  collection_select(nil, :media_cost, @hbn_media_cost_master, :total_cost, :cost_segment, { :prompt => '-- Select Media Cost --'}, {:class => "form-control", :required => true }) %>
+  </div>
  </div>
 
  

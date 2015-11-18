@@ -113,7 +113,8 @@ class SalesReportController < ApplicationController
            :order_lines => OrderLine.where(orderid: o.id).order(:id),
            :pieces => o.pieces }
         end
-        @from_date = (@from_date + 330.minutes).strftime("%Y-%m-%d")
+      #this is for date on the view
+      @from_date = (@from_date + 330.minutes).strftime("%Y-%m-%d")
       @to_date = (@to_date + 330.minutes).strftime("%Y-%m-%d")
 
         @employeeorderlist = employeeunorderlist.sort_by{|c| c[:total]}.reverse 
@@ -174,6 +175,10 @@ class SalesReportController < ApplicationController
         end
         @employeeorderlist = employeeunorderlist.sort_by{|c| c[:total]}.reverse 
 
+      #this is for date on the view
+      @from_date = (@from_date + 330.minutes).strftime("%Y-%m-%d")
+      @to_date = (@to_date + 330.minutes).strftime("%Y-%m-%d")
+
         respond_to do |format|
         csv_file_name = "sales_on_#{@from_date}.csv"
           format.html
@@ -227,6 +232,10 @@ class SalesReportController < ApplicationController
            :ccorders => ccorders, :ccvalue => ccvalue  }
         end
        @employeeorderlist = employeeunorderlist #.sort_by{|c| c[:total]}.reverse 
+
+      #this is for date on the view
+      @from_date = (@from_date + 330.minutes).strftime("%Y-%m-%d")
+      @to_date = (@to_date + 330.minutes).strftime("%Y-%m-%d")
 
        respond_to do |format|
         csv_file_name = "sales_hourly_#{@from_date}.csv"
@@ -296,7 +305,8 @@ class SalesReportController < ApplicationController
         name = (Medium.find(e).name  || "NA" if Medium.find(e).name.present?)
 
         orderlist = OrderMaster.where('ORDER_STATUS_MASTER_ID > 10002')
-        .where('orderdate >= ? AND orderdate <= ?', @from_date, @to_date).where(media_id: e, city: c)
+        .where('orderdate >= ? AND orderdate <= ?', @from_date, @to_date)
+        .where(media_id: e, city: c)
         timetaken = orderlist.sum(:codcharges)
         ccvalue = orderlist.where(orderpaymentmode_id: 10000).sum(:total)
         ccorders = orderlist.where(orderpaymentmode_id: 10000).count()
@@ -318,11 +328,11 @@ class SalesReportController < ApplicationController
         
         paid_order_masters.each do |o|
         e = o.media_id
-       
+        c = o.city
         name = (Medium.find(e).name  || "NA" if Medium.find(e).name.present?)
         orderlist = OrderMaster.where('ORDER_STATUS_MASTER_ID > 10002')
         .where('orderdate >= ? AND orderdate <= ?', @from_date, @to_date)
-        .where(media_id: e)
+        .where(media_id: e, city: c)
         timetaken = orderlist.sum(:codcharges)
         ccvalue = orderlist.where(orderpaymentmode_id: 10000).sum(:total)
         ccorders = orderlist.where(orderpaymentmode_id: 10000).count()
@@ -334,6 +344,7 @@ class SalesReportController < ApplicationController
         paid_order_list << {:total => totalorders,
            :id => e, :channel => name, :for_date =>  @or_for_date,
           :nos => noorders, :codorders => codorders, :codvalue => codvalue,
+          :city => o.city,
            :ccorders => ccorders, :ccvalue => ccvalue  }
         end
 
@@ -343,11 +354,11 @@ class SalesReportController < ApplicationController
        
         other_order_masters.each do |o|
         e = o.media_id
-       
+        c = o.city
         name = (Medium.find(e).name  || "NA" if Medium.find(e).name.present?)
         orderlist = OrderMaster.where('ORDER_STATUS_MASTER_ID > 10002')
         .where('orderdate >= ? AND orderdate <= ?', @from_date, @to_date)
-        .where(media_id: e)
+        .where(media_id: e, city: c)
         timetaken = orderlist.sum(:codcharges)
         ccvalue = orderlist.where(orderpaymentmode_id: 10000).sum(:total)
         ccorders = orderlist.where(orderpaymentmode_id: 10000).count()
@@ -358,10 +369,15 @@ class SalesReportController < ApplicationController
         other_order_list << {:total => totalorders,
            :id => e, :channel => name, :for_date =>  @or_for_date,
           :nos => noorders, :codorders => codorders, :codvalue => codvalue,
+          :city => o.city,
            :ccorders => ccorders, :ccvalue => ccvalue}
         end
 
         @other_order_list = other_order_list.sort_by{|c| c[:total]}.reverse 
+
+      #this is for date on the view
+      @from_date = (@from_date + 330.minutes).strftime("%Y-%m-%d")
+      @to_date = (@to_date + 330.minutes).strftime("%Y-%m-%d")
 
         respond_to do |format|
         csv_file_name = "channel_sales_#{@or_for_date}.csv"
@@ -422,6 +438,11 @@ class SalesReportController < ApplicationController
            :ccorders => ccorders, :ccvalue => ccvalue  }
         end
         @employeeorderlist = employeeunorderlist.sort_by{|c| c[:total]}.reverse 
+
+      #this is for date on the view
+      @from_date = (@from_date + 330.minutes).strftime("%Y-%m-%d")
+      @to_date = (@to_date + 330.minutes).strftime("%Y-%m-%d")
+
         respond_to do |format|
         csv_file_name = "employee_sales_#{@or_for_date}.csv"
           format.html
@@ -534,6 +555,11 @@ class SalesReportController < ApplicationController
         end
       end
         @employeeorderlist = employeeunorderlist.sort_by{|c| [c[:employee], c[:total]]}.reverse 
+       
+      #this is for date on the view
+      @from_date = (@from_date + 330.minutes).strftime("%Y-%m-%d")
+      @to_date = (@to_date + 330.minutes).strftime("%Y-%m-%d")
+
         respond_to do |format|
         csv_file_name = "city_sales_#{@or_for_date}.csv"
           format.html
@@ -585,6 +611,11 @@ class SalesReportController < ApplicationController
             end
 
        @order_lines = sold_product_list #.order("orderdate")
+
+      #this is for date on the view
+      @from_date = (@from_date + 330.minutes).strftime("%Y-%m-%d")
+      @to_date = (@to_date + 330.minutes).strftime("%Y-%m-%d")
+
         respond_to do |format|
           csv_file_name = "#{product_name}_sold_#{@from_date}.csv"
             format.html
