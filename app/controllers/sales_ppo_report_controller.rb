@@ -359,7 +359,7 @@ class SalesPpoReportController < ApplicationController
      campaign_playlists =  CampaignPlaylist.joins(:campaign)
      .where("campaigns.startdate = ?", for_date)
      .order(:start_hr, :start_min, :start_sec)
-     .where(list_status_id: 10000).limit(30)
+     .where(list_status_id: 10000) #.limit(30)
 
       total_media_cost = Medium.where(media_group_id: 10000).sum(:daily_charges).to_f
       secs_in_a_day = (24*60*60)
