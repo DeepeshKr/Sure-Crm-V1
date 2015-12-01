@@ -32,7 +32,7 @@ def service_tax
 	return self.sub_total * 0.14
 end
 
-self total_charges
+def total_charges
 	return self.sub_total + self.service_tax
 end
 
