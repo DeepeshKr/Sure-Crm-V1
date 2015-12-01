@@ -1,0 +1,107 @@
+// Place all the styles related to the SalesPpoReport controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+
+table.scroll {
+    /* width: 100%; */ /* Optional */
+    /* border-collapse: collapse; */
+    border-spacing: 0;
+    border: 2px solid black;
+}
+
+table.scroll tbody,
+table.scroll thead { display: block; }
+
+thead tr th {
+    height: 30px;
+    line-height: 30px;
+    /* text-align: left; */
+}
+
+table.scroll tbody {
+    height: 100px;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+tbody { border-top: 2px solid black; }
+
+tbody td, thead th {
+    /* width: 20%; */ /* Optional */
+    border-right: 1px solid black;
+    /* white-space: nowrap; */
+}
+
+tbody td:last-child, thead th:last-child {
+    border-right: none;
+}
+/*table {
+        width: 100%;
+    }*/
+
+/*thead, tbody, tr, td, th { display: block; }*/
+
+/*tr:after {
+    content: ' ';
+    display: block;
+    visibility: hidden;
+    clear: both;
+}*/
+
+
+    /*text-align: left;*/
+/*thead th {
+    height: 30px;
+
+}*/
+
+/*tbody {
+    height: 400px;
+    overflow-y: auto;
+}*/
+
+/* fallback */
+/*thead {
+
+}*/
+
+
+/*tbody td, thead th {
+    width: 19.2%;
+    float: left;
+}*/
+/* comments for z-index: 1020; /* 10 less than .navbar-fixed to prevent any overlap */
+/*.fixed-table .header-fixed {
+  position: absolute;
+  top: 0px;
+  z-index: 1020;
+  border-bottom: 2px solid #d5d5d5;
+  -webkit-border-radius: 0;
+     -moz-border-radius: 0;
+          border-radius: 0;
+}*/
+/*.fixed-table{
+  display:block;
+  position:relative;
+}
+.fixed-table th{
+  padding: 8px;
+  line-height: 18px;
+  text-align: left;
+}
+/*comments for /*FIX THE HEIGHT YOU NEED*/
+/*
+.fixed-table .table-content{
+  display:block;
+  position: relative;
+  height: 500px;
+  overflow-y: auto;
+}
+.fixed-table .header-copy{
+  position:absolute;
+  top:0;
+  left:0;
+}
+.fixed-table .header-copy th{
+  background-color:#fff;
+}*/

@@ -6,46 +6,57 @@
 	 <div class="col-xs-6">
 	 	<%= render partial: 'date_search', :locals => {:searchaction => "show"}  %>
 	</div>
- </div>
-<!--https://gist.github.com/flaviaza/3763015 scrollable headers-->
 
  <br>
  <% if @employeeorderlist.present? %>
+ <div class="row">
+   <div class="col-xs-4">
+
+   </div>
+   <div class="col-xs-4">
+
+   </div>
+   <div class="col-xs-4">
+
+   </div>
+ </div>
+ <table class="table table-hover table-bordered table-striped scroll">
+
+ </table>
    <div class="row fixed-table">
       <div class="table-content">
-<table class="table table-hover table-bordered table-fixed-header" id="mytable">
-<thead class="header">
-   <tr>
-   <th  rowspan="2">No</th>
-   <th  rowspan="2">Show</th>
-     <th rowspan="2">Start Time</th>
-    
-      <th colspan="3">Income</th>
-       <th rowspan="2" class="text-right">Revenue</th>
-      <th colspan="4">Expense</th>
-     
-     <th rowspan="2">PPO </th>
-    <th></th>
-     </tr>
-    <tr>
-    
-      <th class="text-right">Orders</th>
-       <th class="text-right">Pieces*</th>
-     <th class="text-right">Sales</th>
-     
+<table class="table table-hover table-bordered table-striped">
+  <thead class="header">
+     <tr>
+     <th  rowspan="2">No</th>
+     <th  rowspan="2" style="width:">Show</th>
+       <th rowspan="2">Start Time</th>
 
-      <th class="text-right">Product Cost</th>
-       <th class="text-right">Commision</th>
-     <th class="text-right">Media Cost</th>
-       <th class="text-right">Refund</th>
-    
-     </tr>
-  </thead>
-  
+        <th colspan="3">Income</th>
+         <th rowspan="2" class="text-right">Revenue</th>
+        <th colspan="5">Expense</th>
+
+       <th rowspan="2">PPO </th>
+      <th>More </th>
+       </tr>
+      <tr>
+
+        <th class="text-right">Orders</th>
+         <th class="text-right">Pieces*</th>
+       <th class="text-right">Sales</th>
+
+
+        <th class="text-right">Product Cost</th>
+         <th class="text-right">Commision</th>
+       <th class="text-right">Media Cost</th>
+         <th class="text-right">Refund</th>
+            <th class="text-right">Damages</th>
+       </tr>
+    </thead>
 <tbody>
    <% @employeeorderlist.each do |c| %>
    <tr>
-   <td><%= @serial_no %></td>
+   <td><%= c[:serial_no] %></td>
 
  <td><%= c[:show] %>
  <%= c[:more] %> Id: <%= c[:campaign_id] %><br>
@@ -58,44 +69,48 @@
  </td>
 <td><%= c[:at_time] %></td>
 <td class="text-right">
-   <%= c[:nos] %> 
+   <%= c[:nos] %>
    <% @total_nos += c[:nos] %>
 </td>
 <td class="text-right">
-   <%= c[:pieces] %> 
+   <%= c[:pieces] %>
    <% @total_pieces += c[:pieces] %>
 </td>
 <td class="text-right">
-   <%= c[:total] %> 
+   <%= c[:total] %>
    <% @total_sales += c[:total] %>
 </td>
 <td class="text-right">
-   <%= c[:revenue] %> 
+   <%= c[:revenue] %>
    <% @total_revenue += c[:revenue] %>
 </td>
 <td class="text-right">
-   <%= c[:product_cost] %> 
+   <%= c[:product_cost] %>
    <% @total_product_cost += c[:product_cost] %>
 </td>
 <td class="text-right">
-   <%= c[:variable_cost] %> 
+   <%= c[:variable_cost] %>
    <% @total_var_cost += c[:variable_cost] %>
 </td>
-<td class="text-right"> <!--Media Cost--> 
-   <%= c[:fixed_cost] %> 
+<td class="text-right"> <!--Media Cost-->
+   <%= c[:fixed_cost] %>
    <% @total_fixed_cost += c[:fixed_cost] %>
 </td>
 <td class="text-right">
-<%= c[:refund] %> 
+<%= c[:refund] %>
 <% @total_refund += c[:refund] %>
+</td>
+<td class="text-right">
+<%= c[:product_damages] %>
+<% @total_damages += c[:product_damages] %>
 </td>
 <td class="text-right">   <%= c[:profitability] %>
 <% @total_profit += c[:profitability] %> </td>
 <td >
 <%= link_to "Details", ppo_products_path(campaign_id: c[:campaign_id]), :target => "_blank" %>
 </td>
-  </tr> 
-  <% @sno += 1 %> 
+  </tr>
+  <% @sno += 1 %>
  <% end %>
   </tbody>
 <tfoot>
@@ -109,11 +124,12 @@
     <th class="text-right"><%= @total_var_cost.to_i %></th>
     <th class="text-right"><%= @total_fixed_cost.to_i %></th>
     <th class="text-right"><%= @total_refund.to_i %></th>
+    <th class="text-right"><%= @total_damages.to_i %></th>
     <th class="text-right"><%= @total_profit.to_i %></th>
     <th></th>
      </tr>
 
-     
+
   </tfoot>
   </table>
   </div>
@@ -137,7 +153,7 @@
 
   </tr>
  <% @list_of_orders.each do |c| %>
-<tr>  
+<tr>
 <td> <%= @order_sno %></td>
 <td> <%= c[:order_no] %></td>
 <td> <%= c[:time_of_order] %></td>
@@ -170,14 +186,34 @@
 </div>
 
        <script language="javascript" type="text/javascript" >
-    $(document).ready(function(){
-      // add 30 more rows to the table
-      var row = $('table#mytable > tbody > tr:first');
-      for (i=0; i<30; i++) {
-        $('table#mytable > tbody').append(row.clone());
-      }
 
-      // make the header fixed on scroll
-      $('.table-fixed-header').fixedHeader();
+    $(document).ready(function(){
+    // Change the selector if needed
+var $table = $('table.scroll'),
+    $bodyCells = $table.find('tbody tr:first').children(),
+    colWidth;
+
+// Adjust the width of thead cells when window resizes
+$(window).resize(function() {
+    // Get the tbody columns width array
+    colWidth = $bodyCells.map(function() {
+        return $(this).width();
+    }).get();
+
+    // Set the width of thead columns
+    $table.find('thead tr').children().each(function(i, v) {
+        $(v).width(colWidth[i]);
+    });
+}).resize(); // Trigger resize handler
+
+ // Old version of freeze oane header
+      // add 30 more rows to the table
+      // var row = $('table#mytable > tbody > tr:first');
+      // for (i=0; i<30; i++) {
+      //   $('table#mytable > tbody').append(row.clone());
+      // }
+      //
+      // // make the header fixed on scroll
+      // $('.table-fixed-header').fixedHeader();
     });
   </script>

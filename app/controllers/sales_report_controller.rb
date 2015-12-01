@@ -107,11 +107,15 @@ class SalesReportController < ApplicationController
         # totalorders = orderlist.sum(:total)
         # noorders = orderlist.count()
         employeeunorderlist << {:total => o.total,
-           :employee => name, :for_date =>  @or_for_date,
-           :city => o.city ,
+          :employee => name, 
+          :for_date =>  @or_for_date,
+          :city => o.city ,
           :channel => o.medium.name,
-           :order_lines => OrderLine.where(orderid: o.id).order(:id),
-           :pieces => o.pieces }
+          :order_lines => OrderLine.where(orderid: o.id).order(:id),
+          :pieces => o.pieces,
+          :no_of =>  num}
+
+          num += 1
         end
       #this is for date on the view
       @from_date = (@from_date + 330.minutes).strftime("%Y-%m-%d")
@@ -227,9 +231,11 @@ class SalesReportController < ApplicationController
           employeeunorderlist << {:total => totalorders,
           :starttime =>  halfhourago.strftime("%d-%b %H:%M %p"),
           :endtime => Time.at(date).strftime("%d-%b %H:%M %p"),
-          :start_time => halfhourago.strftime("%Y-%m-%d %H:%M"), :end_time => Time.at(date).strftime("%Y-%m-%d %H:%M"),
-          :nos => noorders, :codorders => codorders, :codvalue => codvalue,
-           :ccorders => ccorders, :ccvalue => ccvalue  }
+          :start_time => halfhourago.strftime("%Y-%m-%d %H:%M"), 
+          :end_time => Time.at(date).strftime("%Y-%m-%d %H:%M"),
+          :nos => noorders, :codorders => codorders, 
+          :codvalue => codvalue,
+          :ccorders => ccorders, :ccvalue => ccvalue  }
         end
        @employeeorderlist = employeeunorderlist #.sort_by{|c| c[:total]}.reverse 
 
@@ -265,7 +271,7 @@ class SalesReportController < ApplicationController
       media_segments
 
       @from_date = @from_date.beginning_of_day - 330.minutes
-      @to_date = @from_date + 1.day
+      @to_date = @from_date.end_of_day - 330.minutes
       
       if params.has_key?(:to_date)
         @to_date =  Date.strptime(params[:to_date], "%Y-%m-%d")
@@ -466,10 +472,15 @@ class SalesReportController < ApplicationController
        @from_date = for_date
       from_date = for_date.beginning_of_day - 330.minutes
       to_date = for_date.end_of_day - 330.minutes
+      @to_date = for_date.end_of_day - 330.minutes
+      #@to_date = @from_date + 1.day
+      
       if params.has_key?(:to_date)
-         @to_date =  Date.strptime(params[:to_date], "%Y-%m-%d")
-         to_date = @to_date.end_of_day - 330.minutes
+        @to_date =  Date.strptime(params[:to_date], "%Y-%m-%d")
       end
+      
+      @to_date = @to_date.end_of_day - 330.minutes    
+
 
       total_count = 0
        

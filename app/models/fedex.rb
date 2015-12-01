@@ -1,24 +1,45 @@
-class Fedex < ActiveRecord::Base
+class Fedex
 # Rs. 8 Per kg and minimum chargeable rate is Rs.80 per shipment
+
 
 # Fuel Surcharge- 20% fixed
 # Service Tax-As applicable
 # COD surcharge-  Rs. 50
 # Waybill Surcharge – Nil
-attr_accessor :min, :basic, :surcharge, :cod, :service_tax, :total_charges
+attr_accessor :weight, :basic, :surcharge, :cod, :docket, :service_tax,  :sub_total, :total_charges
 
-def min
-	return 80
+def weight
+	return self.weight
 end
 
 def basic
-	return 80
+	return 80 if (self.weight * 8) < 80
+end
+
+def surcharge
+	return self.min * 0.2
+end
+
+def cod
+	return 50
+end
+
+def sub_total
+	return self.min + self.cod + self.surcharge
+end
+
+def service_tax
+	return self.sub_total * 0.14
+end
+
+self total_charges
+	return self.sub_total + self.service_tax
 end
 
 end
 
 # Outside Delivery Area Surcharge - INR 500 or INR 9.0 per kg, whichever is higher
-# Outside Pick  Up Area Surcharge-INR 1500 or INR 9.0 per kg,whichever is higher                
+# Outside Pick  Up Area Surcharge-INR 1500 or INR 9.0 per kg,whichever is higher
 # Sunday Delivery /Holiday Delivery-Higher of INR 2000 / waybill or INR15 per kg
 # Address Correction Charges INR 50.0 / waybill
 # Freight On Value (Owner’s Risk) -0.2% of the ‘Total Invoice Value’of Goods

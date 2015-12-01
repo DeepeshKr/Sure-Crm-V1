@@ -39,18 +39,18 @@
        <td><small>
        <%= (order_line.order_master.orderdate + 330.minutes).strftime('%d-%b %H:%M %P') %>
        </small></td>
-       <td class="text-right"><%= order_line.subtotal %>  </td></td>
+       <td class="text-right"><%= order_line.subtotal %> <% @regular_basic += order_line.subtotal %> </td></td>
         <td class="text-right">
-           <%= order_line.shipping %>    </td>
+           <%= order_line.shipping %>  <% @regular_basic += order_line.shipping %>  </td>
        <td class="text-right">
-        <%= order_line.total %>
+        <%= order_line.total %> <% @regular_total += order_line.total %>
        </td>
        <td class="text-right">
-          <%= order_line.productcost %>
+          <%= order_line.productcost %> <% @regular_cost += order_line.productcost %>
        </td>
 
         <td class="text-right">
-      <%= order_line.productrevenue.to_i %>
+      <%= order_line.productrevenue.to_i %> <% @regular_revenue += order_line.productrevenue %>
         </td>
       </tr>
       <% @sno += 1 %>
@@ -80,11 +80,16 @@
        <td><small>
        <%= (order_line.order_master.orderdate + 330.minutes).strftime('%d-%b %H:%M %P') %>
        </small></td>
-       <td class="text-right"><%= order_line.subtotal %> </td>
-        <td class="text-right"><%= order_line.shipping %> </td>
-       <td class="text-right"><%= order_line.total %> </td>
-       <td class="text-right"><%= order_line.productcost %> </td>
-        <td class="text-right"><%= order_line.productrevenue.to_i %> </td>
+       <td class="text-right"><%= order_line.subtotal %>
+       <% @basic_basic += order_line.subtotal %> </td>
+        <td class="text-right"><%= order_line.shipping %>
+        <% @basic_shipping += order_line.shipping %> </td>
+       <td class="text-right"><%= order_line.total %>
+       <% @basic_total += order_line.total %> </td>
+       <td class="text-right"><%= order_line.productcost %>
+       <% @basic_cost += order_line.productcost %> </td>
+        <td class="text-right"><%= order_line.productrevenue.to_i %>
+        <% @basic_revenue += order_line.productrevenue %>  </td>
       </tr>
        <% @sno += 1 %>
     <% end %>
@@ -113,18 +118,19 @@
        <td><small>
        <%= (order_line.order_master.orderdate + 330.minutes).strftime('%d-%b %H:%M %P') %>
        </small></td>
-       <td class="text-right"><%= order_line.subtotal %> </td>
+       <td class="text-right"><%= order_line.subtotal %>
+       <% @common_basic += order_line.subtotal %> </td>
         <td class="text-right">
-           <%= order_line.shipping %>    </td>
+           <%= order_line.shipping %>  <% @common_shipping += order_line.shipping %>   </td>
        <td class="text-right">
-        <%= order_line.total %>
+        <%= order_line.total %> <% @common_total += order_line.total %>
        </td>
        <td class="text-right">
-          <%= order_line.productcost %>
+          <%= order_line.productcost %> <% @common_cost += order_line.productcost %>
        </td>
 
         <td class="text-right">
-      <%= order_line.productrevenue.to_i %> 
+      <%= order_line.productrevenue.to_i %> <% @common_revenue += order_line.productrevenue %>
 
         </td>
 

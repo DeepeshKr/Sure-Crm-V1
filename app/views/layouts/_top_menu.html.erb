@@ -1,43 +1,45 @@
   <nav>
      <ul class="nav navbar-nav navbar-right">
-      	
+
 
        <!--   <li>          <p style="margin-top:12px;">   <%= link_to "Customer",  new_customer_path, class: "btn btn-info btn-sm" %>  </p>         </li> -->
          <% if logged_in? %>
          <li>          <p style="margin-top:12px;">         <%= link_to "Customer",  neworder_path, class: "btn btn-success btn-sm" %>         </p>         </li>
-      
-         <% if (current_user.employee_role.sortorder < 8) %> 
-         
+
+         <% if (current_user.employee_role.sortorder < 8) %>
+
           <li class="dropdown">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
             Distributors <b class="caret"></b> </a>
             <ul class="dropdown-menu">
               <li><%= link_to "New Distributor", "/corporates/new" %></li>
               <li><%= link_to "Distributor List", "/corporates" %></li>
-               <li><%= link_to "Check Order Validity", "/transfer_order" %></li>
-              
+              <li><%= link_to "Check Order Validity", "/transfer_order" %></li>
+              <li><%= link_to "Check Transfer Order Pricing", "/transfer_order_pricing" %></li>
+              <li class="divider"></li>
+              <li><%= link_to "Tax Rates", "/tax_rates"  %></li>               
             </ul>
          </li>
         <% end %>
-        <% if (current_user.employee_role.sortorder < 8) %> 
+        <% if (current_user.employee_role.sortorder < 8) %>
          <li class="dropdown">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
               Reports <b class="caret"></b> </a>
             <ul class="dropdown-menu">
              <li><%= link_to "Sales Summary Report", "/sales_reports" , data: { confirm: 'All the reports are listed here' } %></li>
              <li><%= link_to "Sales Summary Report", "/sales_report" , data: { confirm: 'This Report Will take some time to show, please have patience!' } %></li>
-              <% if (current_user.employee_role.sortorder < 5) %> 
+              <% if (current_user.employee_role.sortorder < 5) %>
                <li><%= link_to "PPO Report", "/ppo_report" , data: { confirm: 'This Report Will take some time to show, please dont refresh!'} %></li>
                <li><%= link_to "PPO Report (Test Products)", "/product_test_ppos" %></li>
             <% end %>
-              
-           
-            <% if (current_user.employee_role.sortorder < 5) %> 
+
+
+            <% if (current_user.employee_role.sortorder < 5) %>
             <li class="divider"></li>
-              
+
             <li><%= link_to "Product Master _B", "/bprodmaster" %></li>
             <li><%= link_to "Product Upsell (Ropupsprod)", "/productupsell"  %></li>
-           
+
             <li class="divider"></li>
             <li><%= link_to "Retail Orders", "/vpp/list"  %></li>
             <li><%= link_to "Whole sale Orders", "/newwlsdet/list"  %></li>
@@ -53,45 +55,45 @@
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
               Agents <b class="caret"></b> </a>
             <ul class="dropdown-menu">
-             <li><%= link_to "Your Recent Orders", "/recentorders" %></li>    
-                <li><%= link_to "Product Guides (Soon)"  %></li>  
+             <li><%= link_to "Your Recent Orders", "/recentorders" %></li>
+                <li><%= link_to "Product Guides (Soon)"  %></li>
             </ul>
          </li> -->
-         <% if (current_user.employee_role.sortorder < 10) %> 
+         <% if (current_user.employee_role.sortorder < 10) %>
          <li class="dropdown">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
             	Operations <b class="caret"></b> </a>
             <ul class="dropdown-menu">
               <li><%= link_to "Existing Dealers Old", "/dealers" %></li>
               <li><%= link_to "Existing Dealers New", "/dealers" %></li>
-              <li><%= link_to "List of Dealer Enquiries", "/dealer_enquiry?category=10020&status=10000" %></li>    
+              <li><%= link_to "List of Dealer Enquiries", "/dealer_enquiry?category=10020&status=10000" %></li>
                 <li class="divider"></li>
                  <li><%= link_to "SMS on Order", "/message_on_orders" %></li>
               <li class="divider"></li>
-            
+
              <li><%= link_to "Customer Orders (Search)", "/custordersearch"  %></li>
             <li><%= link_to "Customer Orders (Details Search)", "/detailedordersearch"  %></li>
-           
+
             <li class="divider"></li>
-            <li><%= link_to "All Interactions", "/interaction" %></li> 
-            <li><%= link_to "PINCODE List", "/india_pincode_lists" %></li>    
-            <li><%= link_to "City List ", "/india_city_lists" %></li>    
+            <li><%= link_to "All Interactions", "/interaction" %></li>
+            <li><%= link_to "PINCODE List", "/india_pincode_lists" %></li>
+            <li><%= link_to "City List ", "/india_city_lists" %></li>
             <li class="divider"></li>
-             
+
             <li><%= link_to "Salutes", "/salutes" %></li>
               <li><%= link_to "States", "/states" %></li>
-              <li><%= link_to "Interaction Categories", "/interaction_categories" %></li> 
+              <li><%= link_to "Interaction Categories", "/interaction_categories" %></li>
             <li class="divider"></li>
-            <% if (current_user.employee_role.sortorder < 8) %> 
-         
+            <% if (current_user.employee_role.sortorder < 8) %>
+
                 <li><%= link_to "New Employees", "/employees/new" %></li>
                 <li><%= link_to "Employee List", "/employees" %></li>
-            
-            <% end %>         
+
+            <% end %>
             </ul>
          </li>
          <% end %>
-          <% if (current_user.employee_role.sortorder < 8) %> 
+          <% if (current_user.employee_role.sortorder < 8) %>
         <li class="dropdown">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
             	Products <b class="caret"></b> </a>
@@ -101,7 +103,7 @@
               <li><%= link_to "Variant", "/product_variants" %></li>
                 <li><%= link_to "Product Lists", "/product_lists" %></li>
                  <li><%= link_to "Basic Upsell Lists", "/product_master_add_ons" %></li>
-              
+
                 <li class="divider">Set up</li>
                  <li><%= link_to "Product Spec List Code", "/product_spec_lists" %></li>
                   <li><%= link_to "Product Active Code", "/product_active_codes" %></li>
@@ -110,29 +112,29 @@
                   <li><%= link_to "Product Training", "/product_training_headings" %></li>
                   <li><%= link_to "Product Type", "/product_types" %></li>
                    <li><%= link_to "Product Sell Type", "/product_sell_types" %></li>
-                   <% if (current_user.employee_role.sortorder < 5) %> 
+                   <% if (current_user.employee_role.sortorder < 5) %>
                     <li class="divider">Set up</li>
-               
-                    
+
+
                      <li><%= link_to "Product Warehouse", "/product_warehouses" %></li>
                    <li><%= link_to "Product Inventory", "/product_inventories" %></li>
                     <% end %>
-                 
+
                    <li><%= link_to "Order Payment Mode", "/orderpaymentmodes" %></li>
                      <li class="divider">Set up</li>
-               
-                    
+
+
                      <li><%= link_to "Promotions", "/promotions" %></li>
             </ul>
 
          </li>
          <% end %>
-           <% if (current_user.employee_role.sortorder < 5) %> 
+           <% if (current_user.employee_role.sortorder < 5) %>
         <li class="dropdown">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
               Accounts <b class="caret"></b> </a>
             <ul class="dropdown-menu">
-           
+
             <!--   <li><%= link_to "Account Report (Mahabharata)", "/productreport" %></li> -->
                 <li><%= link_to "Stock Book", "/stockbook" %></li>
                 <li><%= link_to "Product Sales", "/productreport" %></li>
@@ -141,18 +143,18 @@
                   <li><%= link_to "Journal Entry", "/product_stock_adjusts" %></li>
             <li><%= link_to "Product List", "/product_cost/list" %></li>
              <li><%= link_to "Product Costs", "/productcost" %></li>
-            
-            <li><%= link_to "Tax Rates", "/tax_rates"  %></li> 
-               
+
+            <li><%= link_to "Tax Rates", "/tax_rates"  %></li>
+
               <li class="divider"></li>
                <li><%= link_to "Product with Costs", "/listofproducts" %></li>
                   <li><%= link_to "Product Packaging Costs", "/packing_cost/list" %></li>
-                 
+
             </ul>
          </li>
          <% end %>
 
-          <% if (current_user.employee_role.sortorder < 8) %> 
+          <% if (current_user.employee_role.sortorder < 8) %>
         <li class="dropdown">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
             	Campaign <b class="caret"></b> </a>
@@ -161,7 +163,7 @@
               <li><%= link_to "Campaign", "/campaigns" %></li>
               <li><%= link_to "Media", "/media" %></li>
                <li><%= link_to "Channel Tape Ids", "/tapeids/list"  %></li>
-              <% if (current_user.employee_role.sortorder < 6) %> 
+              <% if (current_user.employee_role.sortorder < 6) %>
                <li class="divider"></li>
 
                <li><%= link_to "Media Group", "/media_groups" %></li>
@@ -171,18 +173,18 @@
                 <li><%= link_to "Media Cost Master", "/media_cost_masters" %></li>
                  <li><%= link_to "Playlist Status", "/campaign_play_list_statuses" %></li>
               <li class="divider"></li>
-              
+
                   <li><%= link_to "Campaign Stages", "/campaign_stages" %></li>
                   <% end %>
             </ul>
          </li>
          <% end %>
-          <% if (current_user.employee_role.sortorder < 2) %> 
+          <% if (current_user.employee_role.sortorder < 2) %>
            <li class="dropdown">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
               Set up <b class="caret"></b>
             </a>
-            
+
                <ul class="dropdown-menu">
                	<li><%= link_to "Employment Type", "/employment_types" %></li>
              	<li><%= link_to "Employee Roles", "/employee_roles" %></li>
@@ -198,7 +200,7 @@
                    <li class="divider"></li>
                   <li><%= link_to "Message Type", "/message_types" %></li>
                   <li><%= link_to "Message Status", "/message_statuses" %></li>
-              	
+
               	 <li class="divider"></li>
               	 	<li><%= link_to "Interaction Categories", "/interaction_categories" %></li>
               	 	<li><%= link_to "Interaction Priorities", "/interaction_priorities" %></li>
@@ -211,7 +213,7 @@
           <% end %>
           <% else %>
           <li>          <p style="margin-top:12px;">         <%= link_to "Login",  login_path, class: "btn btn-info btn-sm" %>         </p>         </li>
-       
+
         <% end %>
         <% if logged_in? %>
         <li class="dropdown">

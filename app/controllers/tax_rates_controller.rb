@@ -1,5 +1,5 @@
 class TaxRatesController < ApplicationController
-  before_action { protect_controllers(5) } 
+  before_action { protect_controllers(8) } 
   before_action :set_tax_rate, only: [:show, :edit, :update, :destroy]
 
   # GET /tax_rates
@@ -7,7 +7,7 @@ class TaxRatesController < ApplicationController
   def index
     @tax_rates = TaxRate.all
   end
- 
+
   # GET /tax_rates/1
   # GET /tax_rates/1.json
   def show
@@ -15,16 +15,19 @@ class TaxRatesController < ApplicationController
 
   # GET /tax_rates/new
   def new
+    @states = State.all.order("name")
     @tax_rate = TaxRate.new
   end
 
   # GET /tax_rates/1/edit
   def edit
+    @states = State.all.order("name")
   end
 
   # POST /tax_rates
   # POST /tax_rates.json
   def create
+    @states = State.all.order("name")
     @tax_rate = TaxRate.new(tax_rate_params)
 
     respond_to do |format|
@@ -41,6 +44,7 @@ class TaxRatesController < ApplicationController
   # PATCH/PUT /tax_rates/1
   # PATCH/PUT /tax_rates/1.json
   def update
+    @states = State.all.order("name")
     respond_to do |format|
       if @tax_rate.update(tax_rate_params)
         format.html { redirect_to @tax_rate, notice: 'Tax rate was successfully updated.' }
@@ -65,6 +69,7 @@ class TaxRatesController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_tax_rate
+
       @tax_rate = TaxRate.find(params[:id])
     end
 

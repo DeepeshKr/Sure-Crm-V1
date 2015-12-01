@@ -1,14 +1,15 @@
 class CorporatesController < ApplicationController
   include TransferOrders
+  #include ProductPricing
   before_action :set_corporate, only: [:show, :edit, :update, :destroy]
 
   respond_to :html
 
   def index
-  
-      if params.has_key?(:search) 
+
+      if params.has_key?(:search)
          @search = "Search for " +  params[:search].upcase
-          @searchvalue = params[:search].upcase   
+          @searchvalue = params[:search].upcase
          @corporates = Corporate.where("name like ? OR city like ? or state like ?", "#{@searchvalue}%",
        "#{@searchvalue}%", "#{@searchvalue}%").paginate(:page => params[:page])
       respond_with(@corporates)
@@ -16,17 +17,17 @@ class CorporatesController < ApplicationController
          @corporates = Corporate.all.paginate(:page => params[:page])
       respond_with(@corporates)
       end
-     
+
   end
- 
+
   def show
     #show pincode
-    @distributor_pincode_lists = DistributorPincodeList.where(corporate_id: @corporate.id).paginate(:page => params[:page]) 
+    @distributor_pincode_lists = DistributorPincodeList.where(corporate_id: @corporate.id).paginate(:page => params[:page])
     #.sort("pincode, name")
     @corporate_id = @corporate.id
     #add pincode
     @distributor_pincode_list = DistributorPincodeList.new(corporate_id: @corporate.id)
-    
+
     #show distributor stock summary
     @distributor_stock_summaries = DistributorStockSummary.all.where(corporate_id: @corporate.id)
 
@@ -47,7 +48,7 @@ class CorporatesController < ApplicationController
   def createnew
 
     @india_pincode_lists = IndiaPincodeList.take(0)
-     
+
     @corporate = Corporate.new
     respond_with(@corporate)
   end
@@ -72,13 +73,13 @@ class CorporatesController < ApplicationController
      flash[:error] = @corporate.errors.full_messages.join(" ")
      redirect_to :action => 'createnew'
        else
-         flash[:success] = "Corporate added successfully"   
+         flash[:success] = "Corporate added successfully"
         #  @corporate = Corporate.new(corporate_params)
         #@corporate.save
         respond_with(@corporate)
        end
-   
-    
+
+
     #redirect_to :action => 'index'
   end
 
@@ -92,30 +93,46 @@ class CorporatesController < ApplicationController
 
   def transfer_order
     if params.has_key?(:order_id)
-      flash[:notice] = check_transfer(params[:order_id])
-      @order_id
+      @order_id = params[:order_id]
+      flash[:notice] = check_transfer(@order_id)
+    end
+  end
+
+  def transfer_order_pricing
+    @states = State.all.order("name")
+    @productlist = ProductList.all.order("name")
+    @transfer_order_pricing = nil
+    if params.has_key?(:product_code)
+      @state = nil
+      @product_code = params[:product_code]
+       if params.has_key?(:state)
+          @state = params[:state]
+       end
+       @transfer_order_pricing = wholesale_price(@product_code, @state)
+      flash[:notice] = "Checked Transfer order pricing for product #{@product_code} in state #{@state}"
+
     end
   end
 
   def create
     @corporate = Corporate.new(corporate_params)
     if @corporate.valid?
-          flash[:success] = "Distributor successfully added " 
+          flash[:success] = "Distributor successfully added "
             @corporate.save
-           
+
       else
           flash[:error] = @corporate.errors.full_messages.join("<br/>")
       end
-   
+
     respond_with(@corporate)
   end
 
   def update
     @corporate.update(corporate_params)
     if @corporate.valid?
-          flash[:success] = "Distributor successfully added " 
+          flash[:success] = "Distributor successfully added "
             @corporate.save
-           
+
       else
           flash[:error] = @corporate.errors.full_messages.join("<br/>")
       end
@@ -134,17 +151,17 @@ class CorporatesController < ApplicationController
 
     def corporate_params
       params.require(:corporate)
-      .permit(:name, :address1, :address2, :address3, 
-        :landmark, :city, :pincode, :state, :district, 
-        :country, :telephone1, :telephone2, :fax, 
-        :website, :salute1, :first_name1, :last_name1, 
-        :designation1, :mobile1, :emaild1, :salute2, 
-        :first_name2, :last_name2, :designation2, 
-        :mobile2, :emailid2, :salute3, :first_name3, 
-        :last_name3, :designation3, :mobile3, 
+      .permit(:name, :address1, :address2, :address3,
+        :landmark, :city, :pincode, :state, :district,
+        :country, :telephone1, :telephone2, :fax,
+        :website, :salute1, :first_name1, :last_name1,
+        :designation1, :mobile1, :emaild1, :salute2,
+        :first_name2, :last_name2, :designation2,
+        :mobile2, :emailid2, :salute3, :first_name3,
+        :last_name3, :designation3, :mobile3,
         :emailid3, :description, :corporate_type_id,
-        :active, :tally_id,  :c_form, 
-        :cst_no, :gst_no, :vat_no, :tin_no, :rupee_balance, 
+        :active, :tally_id,  :c_form,
+        :cst_no, :gst_no, :vat_no, :tin_no, :rupee_balance,
         :web_id, :ref_no, :commission_percent, :pan_card_no)
       #:commission_percent, :decimal, precision: 4, scale: 5
     end
@@ -154,13 +171,13 @@ class CorporatesController < ApplicationController
 
        # @address_dealer.each do |dealer|
        #  @corporate = Corporate.new(name: dealer.franchisee,
-       #    :address1 => dealer.add1, 
-       #    :address2 => dealer.add2, 
-       #    :address3 => dealer.add3,  
+       #    :address1 => dealer.add1,
+       #    :address2 => dealer.add2,
+       #    :address3 => dealer.add3,
        #   :state => dealer.state,
-       #   :country => "India", 
-       #   :telephone1 => dealer.phone, 
-       #   :telephone2 => dealer.mobile, 
+       #   :country => "India",
+       #   :telephone1 => dealer.phone,
+       #   :telephone2 => dealer.mobile,
        #   :fax => dealer.fax)
        #   @corporate.save
        # end
