@@ -1,0 +1,76 @@
+<div class="row">
+  <div class="col-xs-6">
+
+  <h4>Open Order Report  </h4>
+  </div>
+  <div class="col-xs-6">
+ <%= render partial: 'date_range_search', :locals => {:searchaction => "open_orders"}  %>
+
+ </div>
+</div>
+<div class="well well-sm">
+<h5><%= @orderdate %> </h5>
+</div>
+<% if @employeeorderlist.present? %>
+<% total_value, total_piece = 0, 0 %>
+<table class="table table-hover table-bordered">
+  <thead>
+    <tr>
+     <th>No</th>
+     <th>Media</th>
+     <th> Mobile   </th>
+     <th>City </th>
+     <th>Products</th>
+     <th>Pieces</th>
+     <th>Value</th>
+     </tr>
+  </thead>
+<tbody>
+   <% @employeeorderlist.each do |c| %>
+   <tr>
+   <td><%= c[:sno] %></td>
+<td>
+   <%= c[:channel] %>
+</td>
+<td>
+   <%= c[:mobile] %>
+</td>
+<td>
+   <%= c[:city] %>
+</td>
+<td>
+<% c[:order_lines].each do |ord| %>
+ <%= ord.description %>
+<% end %>
+</td>
+
+<td class="text-right">
+   <%= c[:pieces] %> <% total_piece += c[:pieces] %>
+</td>
+<td class="text-right">
+   <%= c[:total] %> <% total_value += c[:total] %>
+</td>
+  </tr>
+  <% @sno += 1 %>
+ <% end %>
+
+
+
+  </tbody>
+<tfoot>
+  <tr>
+  <th colspan="5"><strong>Total <%= @sno %> orders</strong></th>
+  <th><strong> <%= total_piece %></strong></th>
+  <th><strong><%= total_value %></strong></th>
+  </tr>
+
+</tfoot>
+  </table>
+
+  <% end %>
+ <br>
+
+<script>
+$('#datepicker_to').datepicker({format: 'yyyy-mm-dd'});
+$('#datepicker_from').datepicker({format: 'yyyy-mm-dd'});
+</script>

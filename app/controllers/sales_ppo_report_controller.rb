@@ -209,13 +209,21 @@ class SalesPpoReportController < ApplicationController
     @sno = 1
     @searchaction = "hourly"
    for_date = (330.minutes).from_now.to_date
-
-    if params.has_key?(:for_date)
-     for_date =  Date.strptime(params[:for_date], "%Y-%m-%d")
-
+   if params.has_key?(:hour_name)
+     start_hr = halfhourago.strftime("%H")
+     start_min = halfhourago.strftime("%M")
+     end_hr = Time.at(date).strftime("%H")
+     end_min = Time.at(date).strftime("%M")
+   end
+   if params.has_key?(:from_date)
+      @from_date =  Date.strptime(params[:from_date], "%Y-%m-%d")
       @or_for_date = for_date.strftime("%Y-%m-%d")
+   end
+   @to_date = Date.current
+   if params.has_key?(:to_date)
+      @to_date =  Date.strptime(params[:to_date], "%Y-%m-%d")
+   end
 
-    end
         @total_nos = 0
         @total_pieces = 0
         @total_sales = 0
@@ -240,10 +248,10 @@ class SalesPpoReportController < ApplicationController
         nos = 0
         total_order_value = 0
         s_no_i = 1
-        (from_date.to_datetime.to_i .. to_date.to_datetime.to_i).step(30.minutes) do |date|
-          @halfhourlist << {:id => s_no_i, :name => (Time.at(date - 30.minutes).strftime('%H:%M:%S')  + " to " + Time.at(date).strftime('%H:%M:%S'))}
-          s_no_i += 1
-        end
+        # (from_date.to_datetime.to_i .. to_date.to_datetime.to_i).step(30.minutes) do |date|
+        #   @halfhourlist << {:id => Time.at(date - 30.minutes).strftime('%H:%M:%S'), :name => (Time.at(date - 30.minutes).strftime('%H:%M:%S')  + " to " + Time.at(date).strftime('%H:%M:%S'))}
+        #   s_no_i += 1
+        # end
         #start loop
 
         (from_date.to_datetime.to_i .. to_date.to_datetime.to_i).step(30.minutes) do |date|
@@ -252,7 +260,7 @@ class SalesPpoReportController < ApplicationController
 
           orderlist = OrderMaster.where('ORDER_STATUS_MASTER_ID > 10002')
            .joins(:medium).where("media.media_group_id = 10000")
-          .where('orderdate >= ? AND orderdate <= ?', halfhourago, Time.at(date))
+          .where('orderdate >= ? AND orderdate <= ?', halfhourago, Time.at(date)).limit(5)
           #add orders of each cable tv operator
 
           #split the fixed cost across the hour
@@ -296,22 +304,22 @@ class SalesPpoReportController < ApplicationController
           profitability = (revenue - (product_cost + fixed_cost + media_var_cost + refund)).to_i
 
 
-          employeeunorderlist << {:total => totalorders.to_i,
-          :total_orders => totalorders.to_i,
-          :starttime =>  halfhourago.strftime("%H:%M %p"),
-          :endtime => Time.at(date).strftime("%H:%M %p"),
-          :start_time => halfhourago.strftime("%Y-%m-%d %H:%M"),
-          :end_time => Time.at(date).strftime("%Y-%m-%d %H:%M"),
-          :pieces => pieces.to_i,
-          :total_pieces => pieces.to_i,
-          :refund => refund.to_i,
-          :nos => nos.to_i,
-          :total_nos => nos.to_i,
-          :revenue => revenue.to_i,
-          :product_cost => product_cost.to_i,
-          :variable_cost => media_var_cost.to_i,
-          :fixed_cost => media_fixed_cost.to_i,
-          :profitability => profitability.to_i}
+          # employeeunorderlist << {:total => totalorders.to_i,
+          # :total_orders => totalorders.to_i,
+          # :starttime =>  halfhourago.strftime("%H:%M %p"),
+          # :endtime => Time.at(date).strftime("%H:%M %p"),
+          # :start_time => halfhourago.strftime("%Y-%m-%d %H:%M"),
+          # :end_time => Time.at(date).strftime("%Y-%m-%d %H:%M"),
+          # :pieces => pieces.to_i,
+          # :total_pieces => pieces.to_i,
+          # :refund => refund.to_i,
+          # :nos => nos.to_i,
+          # :total_nos => nos.to_i,
+          # :revenue => revenue.to_i,
+          # :product_cost => product_cost.to_i,
+          # :variable_cost => media_var_cost.to_i,
+          # :fixed_cost => media_fixed_cost.to_i,
+          # :profitability => profitability.to_i}
 
         end #end of hour loop
         @employeeorderlist = employeeunorderlist #.sort_by{|c| c[:total]}.reverse
@@ -359,7 +367,7 @@ class SalesPpoReportController < ApplicationController
      campaign_playlists =  CampaignPlaylist.joins(:campaign)
      .where("campaigns.startdate = ?", for_date)
      .order(:start_hr, :start_min, :start_sec)
-     .where(list_status_id: 10000) #.limit(30)
+     .where(list_status_id: 10000) #.limit(5)
 
       total_media_cost = Medium.where(media_group_id: 10000).sum(:daily_charges).to_f
       secs_in_a_day = (24*60*60)
@@ -375,8 +383,8 @@ class SalesPpoReportController < ApplicationController
           media_var_cost = 0
           product_cost = 0
           fixed_cost = playlist.cost
-          nos = 0
-          pieces = 0
+          nos = 0.0
+          pieces = 0.0
           orderlist.each do |med |
             product_cost += med.productcost
             revenue += med.productrevenue
@@ -396,7 +404,7 @@ class SalesPpoReportController < ApplicationController
           revenue = revenue * @correction
           # #product_cost = product_cost * nos
           product_cost = (product_cost * @correction)
-          product_damages = (product_cost * 0.10).to_i
+          product_damages = (product_cost * 0.10)
           totalorders = totalorders * @correction
           media_var_cost = media_var_cost * @correction
           refund = totalorders * 0.02
@@ -406,8 +414,8 @@ class SalesPpoReportController < ApplicationController
            else
              divide_nos = nos
            end
-
-          profitability = ((revenue - (product_cost + fixed_cost + product_damages + media_var_cost + refund))/ divide_nos).to_i
+          total_cost = (product_cost + fixed_cost + product_damages + media_var_cost + refund)
+          profitability = ((revenue - total_cost)/ divide_nos).to_i
 
           ### check if product cost is found in product master
           product_cost_master = 0
@@ -421,13 +429,14 @@ class SalesPpoReportController < ApplicationController
           :product_cost_master => product_cost_master,
           :pieces => pieces.to_i,
           :prod => playlist.product_variant.extproductcode,
-          :nos => nos.to_i,
+          :nos => nos.round(2),
           :at_time => playlist.starttime,
-          :product_damages => product_damages,
+          :product_damages => product_damages.to_i,
           :start_time => @from_date, end_time: @to_date,
           :total => totalorders.to_i,
           :refund => refund.to_i,
           :revenue => revenue.to_i,
+          :total_cost => total_cost.to_i,
           :product_cost => product_cost.to_i,
           :variable_cost => media_var_cost.to_i,
           :fixed_cost => fixed_cost.to_i,
@@ -511,55 +520,62 @@ class SalesPpoReportController < ApplicationController
 
 
         end
+        # All Costs
         @total_refund = @total_sales * 0.02
-        @total_profit = (@total_revenue - (@total_product_cost + @total_var_cost +  @total_refund + @total_promo_cost)).to_i
-
         @total_fixed_cost = @campaign_playlist.cost
         @total_product_dam_cost  = @total_product_cost * 0.10
-        @total_profit = @total_profit - @total_fixed_cost
-        @total_cost_per_order = (@total_product_cost  + @total_var_cost +  @total_refund + @total_promo_cost).to_i
-        @cost_per_order = (@total_cost_per_order + @total_fixed_cost) / @total_nos
+
+        @total_cost_per_order = (@total_product_cost  + @total_var_cost +  @total_refund + @total_promo_cost + @total_product_dam_cost + @total_fixed_cost)
+
+        @cost_per_order = (@total_cost_per_order) / @total_nos
+        @total_profit = @total_revenue - @total_cost_per_order
         @profit_per_order = @total_profit / @total_nos
 
+        # 60%
          @total_nos_60 = @total_nos * 0.6
          @total_pieces_60 = @total_pieces * 0.6
          @total_subtotal_60 = @total_subtotal * 0.6
          @total_shipping_60 = @total_shipping * 0.6
          @total_sales_60 = @total_sales * 0.6
          @total_revenue_60 = @total_revenue * 0.6
+         # 60 costs
          @total_product_cost_60 = @total_product_cost * 0.6
          @total_product_dam_cost_60 = @total_product_dam_cost * 0.6
          @total_promo_cost_60 = @total_promo_cost * 0.6
          @total_var_cost_60 = @total_var_cost * 0.6
          @total_fixed_cost_60 = @total_fixed_cost
          @total_refund_60 = @total_refund * 0.6
-         @total_profit_60 = (@total_profit * 0.6) - @total_fixed_cost_60
-         @total_cost_per_order_60 =  @total_cost_per_order * 0.6
-         @cost_per_order_60 = (@total_cost_per_order_60 + @total_fixed_cost_60) / @total_nos_60
 
+         @total_cost_per_order_60 = (@total_product_cost_60  + @total_var_cost_60 +  @total_refund_60 + @total_promo_cost_60 + @total_product_dam_cost_60 + @total_fixed_cost_60)
+
+        # @total_cost_per_order_60 =  @total_cost_per_order * 0.6
+         @cost_per_order_60 = (@total_cost_per_order_60) / @total_nos_60
+         @total_profit_60 = @total_revenue_60 - @total_cost_per_order_60
          @profit_per_order_60 = @total_profit_60 / @total_nos_60
 
-
+         # all details at 50%
          @total_nos_50 = @total_nos * 0.5
          @total_pieces_50 = @total_pieces * 0.5
          @total_subtotal_50 = @total_subtotal * 0.5
          @total_shipping_50 = @total_shipping * 0.5
          @total_sales_50 = @total_sales * 0.5
          @total_revenue_50 = @total_revenue * 0.5
+
          @total_product_cost_50 = @total_product_cost * 0.5
          @total_product_dam_cost_50 = @total_product_dam_cost * 0.5
          @total_promo_cost_50 = @total_promo_cost * 0.5
          @total_var_cost_50 = @total_var_cost * 0.5
          @total_fixed_cost_50 = @total_fixed_cost
          @total_refund_50 = @total_refund * 0.5
-         @total_profit_50 = (@total_profit * 0.5) - @total_fixed_cost_50
+         @total_profit_50 = (@total_profit * 0.5)
 
-         @total_cost_per_order_50 =  @total_cost_per_order * 0.5
-         @cost_per_order_50 = (@total_cost_per_order_50 + @total_fixed_cost_50)  / @total_nos_50
+         @total_cost_per_order_50 = (@total_product_cost_50  + @total_var_cost_50 +  @total_refund_50 + @total_promo_cost_50 + @total_product_dam_cost_50 + @total_fixed_cost_50)
 
+         @cost_per_order_50 = (@total_cost_per_order_50) / @total_nos_50
+         @total_profit_50 = @total_revenue_50 - @total_cost_per_order_50
          @profit_per_order_50 = @total_profit_50 / @total_nos_50
 
-
+         # all details at 40%
          @total_nos_40 = @total_nos * 0.4
          @total_pieces_40 = @total_pieces * 0.4
          @total_subtotal_40 = @total_subtotal * 0.4
@@ -572,10 +588,11 @@ class SalesPpoReportController < ApplicationController
          @total_var_cost_40 = @total_var_cost * 0.4
          @total_fixed_cost_40 = @total_fixed_cost
          @total_refund_40 = @total_refund * 0.4
-          @total_profit_40 = (@total_profit * 0.4) - @total_fixed_cost_40
 
-         @total_cost_per_order_40 =  @total_cost_per_order * 0.4
-         @cost_per_order_40 = (@total_cost_per_order_40 + @total_fixed_cost_40)  / @total_nos_40
+         @total_cost_per_order_40 = (@total_product_cost_40  + @total_var_cost_40 +  @total_refund_40 + @total_promo_cost_40 + @total_product_dam_cost_40 + @total_fixed_cost_40)
+
+         @cost_per_order_40 = (@total_cost_per_order_50) / @total_nos_50
+         @total_profit_40 = @total_revenue_40 - @total_cost_per_order_40
          @profit_per_order_40 = @total_profit_40 / @total_nos_40
 
 

@@ -1,5 +1,5 @@
 <% if @order_masters.present? %>
-<table class="table table-hover table-bordered">
+<table class="table table-hover table-bordered table-striped">
   <thead>
     <tr>
     <th>No</th>
@@ -8,11 +8,11 @@
       <th>Customer / Mobile</th>
       <th>City / State</th>
       <th colspan="8">Products</th>
-     
-    
+
+
        <th>Time Taken</th>
-      
-     
+
+
     </tr>
   </thead>
 
@@ -27,11 +27,11 @@
         <td><%= (order_master.orderdate + 330.minutes).strftime('%d-%b-%Y') %>
     <small><%= Time.at(order_master.orderdate + 330.minutes).strftime('%H:%M %P') %></small>
 <br>
-<%= order_master.employee.name if order_master.employee %> 
+<%= order_master.employee.name if order_master.employee %>
         <small><strong><%= order_master.employeecode %> </strong></small>
  <small><%= order_master.employee_id %> </small>
         </td>
-       
+
         <td><%= order_master.customer.first_name rescue nil %> <%= order_master.customer.last_name rescue nil %> <br>
           <%= order_master.mobile %>
         </td>
@@ -41,8 +41,8 @@
           <table class="table table-hover table-bordered">
           <tr>
           <td colspan="2"><strong>
-          <%= link_to order_master.external_order_no, custordersearch_path(ordernum: order_master.external_order_no), :target => "_blank" %></strong> 
-           <small>Ref: <%= order_master.id %></small> 
+          <%= link_to order_master.external_order_no, custordersearch_path(ordernum: order_master.external_order_no), :target => "_blank" %></strong>
+           <small>Ref: <%= order_master.id %></small>
           </td>
           </tr>
             <% order_master.order_line.each do |line| %>
@@ -64,32 +64,32 @@
           </table>
 
         </td>
-          
+
+
         
-        
-        
+
          <td><small><%= (order_master.timetaken) %> Secs</small>  <br>
-         
-           
+
+
          </td>
-       
-       
+
+
       </tr>
        <% @sno += 1 %>
-       <% totalnos += order_master.pieces %> 
+       <% totalnos += order_master.pieces %>
        <% totalvalue += order_master.total %>
     <% end %>
   </tbody>
   <tfoot>
-   
+
     <tr>
-    <th colspan="7">Total</th>  
-      <th colspan="2">Pieces: <%= totalnos %> </th>   
+    <th colspan="7">Total</th>
+      <th colspan="2">Pieces: <%= totalnos %> </th>
        <th colspan="2"> Value: <%= totalvalue %></th>
-      
+
 
     </tr>
-  
+
 
   </tfoot>
 </table>

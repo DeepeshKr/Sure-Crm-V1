@@ -7,10 +7,12 @@
     <%= render partial: 'hbn_media_list', :locals => {:searchaction => "city"}  %>
    <%= render partial: 'media_list', :locals => {:searchaction => "city"}  %>
    <%= render partial: 'date_range_search', :locals => {:searchaction => "city"}  %>
-	 		
+
 	</div>
  </div>
-
+ <div class="well well-sm">
+ <h5>@city_search_results </h5>
+ </div>
 <% if @employeeorderlist.present? %>
 <table class="table table-hover table-bordered">
   <thead>
@@ -35,30 +37,30 @@
 
 </td>
 <td class="text-right">
-   <%= c[:ccorders] %> 
+   <%= c[:ccorders] %>
 </td>
 <td class="text-right">
-   <%= c[:ccvalue] %> 
+   <%= c[:ccvalue] %>
 </td>
 <td class="text-right">
-   <%= c[:codorders] %> 
+   <%= c[:codorders] %>
 </td>
 <td class="text-right">
-   <%= c[:codvalue] %> 
+   <%= c[:codvalue] %>
 </td>
 
 <td class="text-right">
-   <%= c[:nos] %> 
+   <%= c[:nos] %>
 </td>
 <td class="text-right">
-   <%= c[:total] %> 
+   <%= c[:total] %>
 </td>
 
-  </tr> 
-  <% @sno += 1 %> 
+  </tr>
+  <% @sno += 1 %>
  <% end %>
 
- 
+
 
   </tbody>
 
@@ -66,10 +68,7 @@
 
   <%= link_to 'Download CSV file', city_report_path(from_date: @or_for_date, to_date: @to_date , format: :csv), class: "btn btn-info btn-sm" %>
 
-  <% else %>
-  <div class="well well-sm">
-  <h5>Please select a date to generate the report </h5>
-  </div>
+
+
   <% end %>
  <br>
-

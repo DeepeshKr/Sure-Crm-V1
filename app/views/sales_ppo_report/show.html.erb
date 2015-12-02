@@ -105,7 +105,8 @@
 <% @total_damages += c[:product_damages] %>
 </td>
 <td class="text-right">   <%= c[:profitability] %>
-<% @total_profit += c[:profitability] %> </td>
+<% @total_profit += c[:profitability] %>
+</td>
 <td >
 <%= link_to "Details", ppo_products_path(campaign_id: c[:campaign_id]), :target => "_blank" %>
 </td>
@@ -125,7 +126,9 @@
     <th class="text-right"><%= @total_fixed_cost.to_i %></th>
     <th class="text-right"><%= @total_refund.to_i %></th>
     <th class="text-right"><%= @total_damages.to_i %></th>
-    <th class="text-right"><%= @total_profit.to_i %></th>
+    <th class="text-right"><%= @total_profit.to_i %> <br>
+
+    </th>
     <th></th>
      </tr>
 
@@ -170,7 +173,7 @@
 <div class="well well-sm">
 <ul class="list-inline">
   <li>* The pieces are including upsell</li>
-  <li>ppo = (revenue - (product_cost + fixed_cost + media_var_cost + refund))</li>
+  <li>ppo = (revenue - (product_cost + fixed_cost + product_damages + media_var_cost + refund))</li>
 </ul>
 </div>
 
@@ -180,7 +183,7 @@
   Download CSV file
   </div>
   <div class="col-xs-6">
-    <%= link_to 'Download CSV file', show_ppo_path(from_date: @from_date, format: :csv), class: "btn btn-info btn-sm" %>
+    <%= link_to 'Download CSV file', show_ppo_path(for_date: @from_date, format: :csv), class: "btn btn-info btn-sm" %>
   </div>
 </div>
 </div>

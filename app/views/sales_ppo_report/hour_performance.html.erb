@@ -5,12 +5,12 @@
 	 </div>
     <div class="col-xs-4">
 
-    <%= select_tag('name', 
+    <%= select_tag('hour_name', 
     options_for_select(@halfhourlist.collect {|p| [ p[:name], p[:id] ] })) %>
     </div>
 	 <div class="col-xs-6">
      <%= render partial: 'date_range_search', :locals => {:searchaction => "hour_performance"}  %>
-	 		
+
 	</div>
  </div>
  <br>
@@ -48,56 +48,56 @@
  <td><%= c[:starttime] %></td>
  <td><%= c[:endtime] %></td>
 <td class="text-right">
-   <%= c[:nos] %> 
+   <%= c[:nos] %>
    <% @total_nos += c[:nos] %>
-  
+
 </td>
 <td class="text-right">
-   <%= c[:pieces] %> 
+   <%= c[:pieces] %>
    <% @total_pieces += c[:pieces] %>
-   
+
 </td>
 <td class="text-right">
-   <%= c[:total] %> 
+   <%= c[:total] %>
    <% @total_sales += c[:total] %>
 
 </td>
 <td class="text-right">
-   <%= c[:revenue] %> 
+   <%= c[:revenue] %>
    <% @total_revenue += c[:revenue] %>
 </td>
 <td class="text-right">
-   <%= c[:product_cost] %> 
+   <%= c[:product_cost] %>
    <% @total_product_cost += c[:product_cost] %>
 </td>
 <td class="text-right">
-   <%= c[:variable_cost] %> 
+   <%= c[:variable_cost] %>
    <% @total_var_cost += c[:variable_cost] %>
 </td>
 <td class="text-right">
-   <%= c[:fixed_cost] %> 
+   <%= c[:fixed_cost] %>
    <% @total_fixed_cost += c[:fixed_cost] %>
 </td>
 
 <td class="text-right">
-   <%= c[:refund] %> 
+   <%= c[:refund] %>
    <% @total_refund += c[:refund] %>
 </td>
 <td class="text-right">   <%= c[:profitability] %>
 <% @total_profit += c[:profitability] %> </td>
 
 
-  </tr> 
-  <% @sno += 1 %> 
+  </tr>
+  <% @sno += 1 %>
  <% end %>
 
- 
+
 
   </tbody>
  <tfoot>
     <tr>
      <th colspan="4" >Total</th>
-    
+
       <th class="text-right"><%= @total_nos %></th>
        <th class="text-right"><%= @total_pieces %></th>
      <th class="text-right"><%= @total_sales %></th>
@@ -129,7 +129,7 @@
 
   </tr>
  <% @list_of_orders.each do |c| %>
-<tr>  
+<tr>
 <td> <%= @order_sno %></td>
 <td> <%= c[:order_no] %></td>
 <td> <%= c[:time_of_order] %></td>

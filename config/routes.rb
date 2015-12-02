@@ -45,9 +45,9 @@ Rails.application.routes.draw do
   resources :promotions
 
   resources :message_types
- 
+
   resources :message_statuses
- 
+
   resources :message_on_orders
 
   resources :product_cost_masters
@@ -59,7 +59,7 @@ Rails.application.routes.draw do
 
   resources :product_sample_stocks
   #get 'test_ppo' => 'product_ppo_news#index'
- 
+
   mount Bootsy::Engine => '/bootsy', as: 'bootsy'
   get 'wholesale_distributors/list'
   get 'wholesale_distributors/search'
@@ -99,16 +99,17 @@ Rails.application.routes.draw do
   get 'showprod' => 'product_masters#showprod'
 
 
- 
+
   devise_for :logins
-#sales report 
-  get 'sales_reports' => 'sales_report#index' 
+#sales report
+  get 'sales_reports' => 'sales_report#index'
   get 'sales_report/index'
-  get 'sales_report' => 'sales_report#summary' 
+  get 'sales_report' => 'sales_report#summary'
   get 'sales_report/summary'
   get 'sales_report/hourly'
   get 'hourly_report' => 'sales_report#hourly'
- 
+  get 'sales_report/open_orders'
+  get 'open_orders' => 'sales_report#open_orders'
   get 'sales_report/daily'
   get 'daily_report' => 'sales_report#daily'
   get 'sales_report/channel'
@@ -129,7 +130,7 @@ Rails.application.routes.draw do
   get 'order_summary' => 'sales_report#order_summary'
   get 'sales_report/orders'
   get 'orders_list' => 'sales_report#orders'
-  
+
 
   resources :media_tape_heads
 
@@ -166,9 +167,9 @@ Rails.application.routes.draw do
 
   get 'stockbook' => 'product_stock_books#index'
   get 'stockbook_details' => 'product_stock_books#stockbook_details'
- 
 
-   resources :india_city_lists  
+
+   resources :india_city_lists
   resources :india_pincode_lists
 
   resources :india_city_lists do
@@ -199,7 +200,7 @@ Rails.application.routes.draw do
       get :autocomplete_product_list_name, on: :collection
   end
 
-  
+
 
   resources :product_stock_books
   resources :product_stock_adjusts
@@ -210,19 +211,19 @@ Rails.application.routes.draw do
   resources :media_cost_masters
   resources :product_spec_lists
   resources :media_tapes
- 
+
   get 'tapeiddet/list'
   get 'tapeiddet/search'
   get 'tapeiddet/details'
   get 'tapeids/list'
-  get 'tapeids/search' 
+  get 'tapeids/search'
   get 'tapeids/details'
   get 'purchase/list'
   get 'purchase/search'
   get 'purchase/details'
 
 
- 
+
   #step 1
   get 'neworder' => 'customerorder#newcall'
   get 'update_product_list' => 'customerorder#update_product_list'
@@ -231,7 +232,7 @@ Rails.application.routes.draw do
   post 'uploadcall' => 'customerorder#uploadcall'
   post 'addproducts' => 'customerorder#add_products'
   post 'addbasicupsellproducts' => 'customerorder#add_basic_upsell'
- 
+
   #step 2
   get 'address' => 'customerorder#address'
   post 'addaddress' => 'customerorder#add_address'
@@ -253,12 +254,12 @@ Rails.application.routes.draw do
   post 'addcard' => 'customerorder#add_credit_card'
   get "creditcardvalid" => 'customer_credit_cards#luhn'
   get "creditcardtype" => 'customer_credit_cards#card_type'
-  
+
   #step 4
   get 'channel' => 'customerorder#channel'
   post 'addchannel' => 'customerorder#add_channel'
 
-  
+
   get  'playlistvariant' => 'campaign_playlists#showproductvariant'
   post 'playlistupdatevariant' => 'campaign_playlists#updateproductvariant'
 
@@ -268,13 +269,13 @@ Rails.application.routes.draw do
   post 'processorder' => 'customerorder#process_order'
   get 'summary' => 'customerorder#summary'
 
-  get 'orderlist' => 'order_masters#list' 
+  get 'orderlist' => 'order_masters#list'
 
   get 'dailyreport' => 'order_masters#daily_report'
-  
-  get 'dailyschedule' => 'campaign_playlists#perday' 
-  
- # put 'groupdestroy' => 'campaign_playlists#groupdestroy' 
+
+  get 'dailyschedule' => 'campaign_playlists#perday'
+
+ # put 'groupdestroy' => 'campaign_playlists#groupdestroy'
  # put 'campaign_playlists#groupdestroy'
 
   #other activities
@@ -287,7 +288,7 @@ Rails.application.routes.draw do
   post 'inlinetraining' => 'product_training_manuals#inlinecreate'
   # get 'dealersearch' => 'address_dealer#list'
   # get 'newdealer' =>  'address_dealer#new_dealer'
- 
+
   post 'newdealerenquiry' =>  'address_dealer#dealer_enquiry'
   post 'updatestockbook' => 'product_stock_books#create'
   #this is a duplication of interaction below
@@ -320,7 +321,7 @@ Rails.application.routes.draw do
 
   post 'addmedia_togroup' => 'media_groups#addmedia'
   post 'addmedia_tocomission' => 'media_commisions#addmedia'
-    
+
     # get 'address_dealer/list'
     # get 'newdealer' =>  'address_dealer#new_dealer'
     # post 'newdealerenquiry' =>  'address_dealer#dealer_enquiry'
@@ -330,7 +331,7 @@ Rails.application.routes.draw do
   get 'newinteraction' => 'interaction_masters#new_ticket'
   post 'newticket' => 'interaction_masters#new_interaction'
   post 'disposecall' => 'interaction_masters#dispose_call'
-  post 'newcomments' => 'interaction_transcripts#quick_create' 
+  post 'newcomments' => 'interaction_transcripts#quick_create'
 
   get 'corporateorder/list'
   get 'corporateorder/new'
@@ -348,7 +349,7 @@ Rails.application.routes.draw do
     get 'duplicate_playlist' => 'campaign_playlists#duplicate'
     post 'create_duplicate_playlist' => 'campaign_playlists#create_duplicate'
     post 'create_new_quick_playlist' => 'campaign_playlists#quick_create'
-    
+
     get 'product_upsell/list'
     get 'product_upsell/search'
     get 'product_upsell/details'
@@ -357,7 +358,7 @@ Rails.application.routes.draw do
 
     get 'productreport' => 'product_report#list'
     get 'product_report/search'
-    get 'productdetails' => 'product_report#details' 
+    get 'productdetails' => 'product_report#details'
 
     get 'showproductstock' => 'product_stocks#showfordate'
     put 'updateproductstock' => 'product_stocks#updatefordate'
@@ -386,7 +387,7 @@ Rails.application.routes.draw do
     get 'product_cost/search'
     get 'product_cost/details'
     get 'productcost' => 'product_cost#details'
-    
+
     delete 'deleteproductstock' => 'product_stocks#destroy'
     # get 'deleteproductstock' => 'product_stocks#deletestock'
     delete 'deleteproductstockadjust' => 'product_stock_adjusts#delete'
@@ -401,7 +402,7 @@ mount Upmin::Engine => '/admin'
   resources :order_fors, :media_groups,  :create_order , :order_payments
   resources :media_groups, :media_commisions, :customer_credit_cards, :change_log_trails, :change_log_types
   resources :order_masters, :order_lines, :orderpaymentmodes, :interaction_transcripts, :interaction_masters
-  resources :product_training_manuals, :product_variants, :product_masters  
+  resources :product_training_manuals, :product_variants, :product_masters
   resources :media, :campaigns, :bills, :order_sources, :customers
   resources :customer_addresses, :address_valids, :address_types, :interaction_categories
   resources :campaign_stages, :product_types, :product_categories, :interaction_priorities
@@ -419,9 +420,9 @@ mount Upmin::Engine => '/admin'
   get 'oldabout'   => 'product#about'
   get 'oldcontact' => 'product#contact'
    get 'project/longtable'
- 
+
   get 'dealers' => 'address_dealer#list'
- 
+
  # get 'help'    => 'project#help'
   get 'about'   => 'project#about'
   get 'contact' => 'project#contact'
@@ -429,7 +430,7 @@ mount Upmin::Engine => '/admin'
   #get "project/update_text", as: "update_text"
   get "productdetails" => 'product_masters#details'
   get "producttraining" => 'product_training_manuals#training'
-  get "producttraining_text" => 'product_training_manuals#training_text'  
+  get "producttraining_text" => 'product_training_manuals#training_text'
   get "productvariantdetails" => 'product_variants#details'
   get "productvariantcombined" => 'product_variants#combined'
   post "updatevariantmaster" => 'product_variants#update_variant_master_id'
@@ -444,6 +445,6 @@ mount Upmin::Engine => '/admin'
   get    'login'   => 'sessions#new'
   post   'login'   => 'sessions#create'
   delete 'logout'  => 'sessions#destroy'
- 
- 
+
+
 end
