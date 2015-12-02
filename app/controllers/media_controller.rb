@@ -1,5 +1,5 @@
 class MediaController < ApplicationController
-   before_action { protect_controllers(10) } 
+   before_action { protect_controllers(10) }
   before_action :set_medium, :dropdowns, only: [ :show, :edit, :update, :destroy]
 
   respond_to :html
@@ -32,34 +32,34 @@ class MediaController < ApplicationController
       @inactivemedia = Medium.where(active:0).where("name like ? or ref_name like ?", "#{@search}%", "#{@search}%").order("updated_at DESC").paginate(:page => params[:page])
        @dnis = params[:dnis]
     end
-    #@commission 
+    #@commission
      if params.has_key?(:commission)
        @media = Medium.where(media_commision_id: params[:commission]).paginate(:page => params[:page])
        @commission = params[:commission]
        @inactivemedia = Medium.where(active:0).where(media_commision_id: params[:commission]).paginate(:page => params[:page])
     end
-    
+
       if params[:showall].present?
         if params[:showall] = "true"
           @showall = "true"
-           @media = Medium.all.order("name, updated_at DESC").paginate(:page => params[:page])
-           @inactivemedia = Medium.where(active:0).order("name, updated_at DESC").paginate(:page => params[:page])
+           @media = Medium.all.order("name, updated_at DESC") #.paginate(:page => params[:page])
+           @inactivemedia = Medium.where(active:0).order("name, updated_at DESC") #.paginate(:page => params[:page])
         respond_to do |format|
           format.html
           format.csv do
             headers['Content-Disposition'] = "attachment; filename=\"media-list\""
             headers['Content-Type'] ||= 'text/csv'
-            
+
           end
         end
         end
       end
-   
-     
+
+
   end
 
   def show
-    
+
     respond_with(@medium)
   end
 
@@ -70,7 +70,7 @@ class MediaController < ApplicationController
   end
 
   def edit
-    
+
     dropdowns
     if  params[:new_channel].present?
         #code
@@ -78,21 +78,21 @@ class MediaController < ApplicationController
         old_name = @medium.name
         @medium.name = new_name
        channel, slot = new_name.split(':')
-       
+
        if channel.present?
         #code
         @medium.channel = channel.strip
        end
-              
+
        if slot.present?
         #code
          @medium.slot = slot.strip
        end
-            
+
        @change_name = "Click on update to change channel name from #{old_name} to #{new_name}"
     end
-    
-    
+
+
   end
 
   def create
@@ -108,14 +108,14 @@ class MediaController < ApplicationController
       new_id = params[:id]
         if Medium.where('id > ?', params[:id]).present?
           @new_medium = Medium.where('id > ?', params[:id]).first
-         return redirect_to edit_medium_path(@new_medium) 
+         return redirect_to edit_medium_path(@new_medium)
         else
           flash[:error] = "You have reached last media <br/>"
         end
-       end   
+       end
     end
       respond_with(@medium)
-  
+
   end
 
   def destroy
@@ -133,10 +133,10 @@ class MediaController < ApplicationController
     def set_medium
       @medium = Medium.find(params[:id])
     end
- 
+
     def medium_params
       params.require(:medium).permit(:name, :telephone, :alttelephone, :state,
-       :active, :corporateid, :description, :ref_name, :media_commision_id, 
+       :active, :corporateid, :description, :ref_name, :media_commision_id,
         :value, :media_group_id, :dnis, :channel, :slot, :daily_charges,
          :paid_correction, :employee_id)
     end

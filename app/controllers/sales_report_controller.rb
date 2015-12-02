@@ -156,38 +156,33 @@ def open_orders
     @from_date = (@from_date + 330.minutes)
     @to_date = (@to_date + 330.minutes)
   #
-    @order_masters = OrderMaster.where('ORDER_STATUS_MASTER_ID < 10003')
+    order_masters = OrderMaster.where('ORDER_STATUS_MASTER_ID < 10003')
     .where('orderdate >= ? AND orderdate <= ?', @from_date, @to_date)
-  #
-  #     # .joins(:medium).where("media.media_group_id = 10000")
   #
     @orderdate = "Open order between #{@from_date} and #{@to_date} found #{order_masters.count} agents!"
   #
   #
       employeeunorderlist ||= []
       num = 1
-      order_masters.each do |o|
-        e = o.employee_id
-  #
-  #       name = (Employee.find(e).first_name ||= "NA" #if Employee.find(e).first_name.present?)
-  #
-  #       employeeunorderlist << {:total => o.amount,
-  #       :sno => num,
-  #       :employee => name,
-  #       :for_date =>  @or_for_date,
-  #       :city => o.city ,
-  #       :mobile => o.mobile,
-  #       :channel => o.medium.name ||= "None",
-  #       :order_lines => OrderLine.where(orderid: o.id).order(:id),
-  #       :pieces => o.pieces,
-  #       :no_of =>  num}
-  #
-  #       @from_date = (@from_date).strftime("%Y-%m-%d")
-  #       @to_date = (@to_date).strftime("%Y-%m-%d")
-  #
-  #       num += 1
-      end
-  #     @employeeorderlist = employeeunorderlist
+     #order_masters.each do |o|
+    #  e = o.employee_id
+      #name = (Employee.find(e).first_name #||= "NA" #if Employee.find(e).first_name.present?)
+
+      # employeeunorderlist << {:total => o.total,
+      # :employee => name,
+      # :for_date =>  @or_for_date,
+      # :city => o.city ,
+      # :channel => o.medium.name,
+      # :order_lines => OrderLine.where(orderid: o.id).order(:id),
+      # :pieces => o.pieces,
+      # :no_of =>  num}
+      # num += 1
+     # end # end do
+
+       @from_date = (@from_date).strftime("%Y-%m-%d")
+       @to_date = (@to_date).strftime("%Y-%m-%d")
+     #
+     @employeeorderlist = employeeunorderlist
       respond_to do |format|
         csv_file_name = "open_orders_on_#{@from_date}_to_#{@to_date}.csv"
           format.html
@@ -673,17 +668,18 @@ end #end function
       @from_date =  Date.strptime(params[:from_date], "%Y-%m-%d")
       #@from_date = for_date.beginning_of_day - 330.minutes
       product_name = " "
-      from_date = @from_date.beginning_of_day - 330.minutes
-      to_date = @from_date.end_of_day - 330.minutes
+      #from_date = @from_date.beginning_of_day - 330.minutes
+      @to_date = @from_date.end_of_day - 330.minutes
       if params.has_key?(:to_date)
          @to_date =  Date.strptime(params[:to_date], "%Y-%m-%d")
-         to_date = @to_date.end_of_day - 330.minutes
+         @to_date = @to_date.end_of_day - 330.minutes
+
       end
       sold_product_list ||= []
 
       if params.has_key?(:product_master_id)
         @product_master_id = params[:product_master_id]
-        sold_product_list = OrderLine.where('order_lines.orderdate >= ? and order_lines.orderdate <= ?', from_date, to_date)
+        sold_product_list = OrderLine.where('order_lines.orderdate >= ? and order_lines.orderdate <= ?', @from_date, @to_date)
         .where(product_master_id: @product_master_id).joins(:order_master)
         .where('ORDER_MASTERS.ORDER_STATUS_MASTER_ID > 10002')#.limit(10)
         #.uniq.pluck(:orderid)
