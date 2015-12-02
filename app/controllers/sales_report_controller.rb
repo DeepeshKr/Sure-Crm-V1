@@ -540,6 +540,7 @@ end #end function
       #@order_master.orderpaymentmode_id == 10001 #paid over COD
     if params[:from_date].present?
       #@summary ||= []
+      employeeunorderlist ||= []
       @or_for_date = params[:from_date]
       for_date =  Date.strptime(params[:from_date], "%Y-%m-%d")
        @from_date = for_date
@@ -608,7 +609,7 @@ end #end function
 
 
       @orderdate = "Searched for #{for_date} #{from_channel} found #{total_count} cities!"
-      employeeunorderlist ||= []
+
       num = 1
       if order_cities.present?
 
@@ -616,39 +617,35 @@ end #end function
          end
 
       order_cities.each do |o|
-      city = o #.city
-      if city.present?
-            #city = CustomerAddress.find(e).city  #  || "NA" if Employee.find(e).first_name.present?)
+        city = o #.city
+        if city.present?
+              #city = CustomerAddress.find(e).city  #  || "NA" if Employee.find(e).first_name.present?)
 
-           orderlist = OrderMaster.where('orderdate >= ? AND orderdate <= ?', from_date, to_date)
-          .where('ORDER_STATUS_MASTER_ID > 10002').where('city IS NOT NULL').where("city = ?", city)
-          # order_id_1 = order_id_1.flatten
-          # order_id_2 = order_id_2.flatten
-          # order_id_3 = order_id_3.flatten
+             orderlist = OrderMaster.where('orderdate >= ? AND orderdate <= ?', from_date, to_date)
+            .where('ORDER_STATUS_MASTER_ID > 10002').where('city IS NOT NULL').where("city = ?", city)
 
-          # orderlist = OrderMaster.where(id: order_id_1).where(id: order_id_2)
-          # .where(id: order_id_3).where("city = ?", city)
+           if params.has_key?(:media_id)
+            orderlist = orderlist.where(media_id: params[:media_id])
+           end
+          timetaken = orderlist.sum(:codcharges)
+          ccvalue = orderlist.where(orderpaymentmode_id: 10000).sum(:total)
+          ccorders = orderlist.where(orderpaymentmode_id: 10000).count()
+          codorders = orderlist.where(orderpaymentmode_id: 10001).count()
+          codvalue = orderlist.where(orderpaymentmode_id: 10001).sum(:total)
+          totalorders = orderlist.sum(:total)
+          noorders = orderlist.count()
+          employeeunorderlist << {:total => totalorders,
+              :employee => city, :for_date =>  @or_for_date,
+            :nos => noorders, :codorders => codorders, :codvalue => codvalue,
+             :ccorders => ccorders, :ccvalue => ccvalue  }
 
-             if params.has_key?(:media_id)
-              orderlist = orderlist.where(media_id: params[:media_id])
-             end
-            timetaken = orderlist.sum(:codcharges)
-            ccvalue = orderlist.where(orderpaymentmode_id: 10000).sum(:total)
-            ccorders = orderlist.where(orderpaymentmode_id: 10000).count()
-            codorders = orderlist.where(orderpaymentmode_id: 10001).count()
-            codvalue = orderlist.where(orderpaymentmode_id: 10001).sum(:total)
-            totalorders = orderlist.sum(:total)
-            noorders = orderlist.count()
-            employeeunorderlist << {:total => totalorders,
-                :employee => city, :for_date =>  @or_for_date,
-              :nos => noorders, :codorders => codorders, :codvalue => codvalue,
-               :ccorders => ccorders, :ccvalue => ccvalue  }
+        else
+            @city_search_results = "City search between dates #{@from_date} and #{@to_date} for all channels 0 results"
 
-          end
-        end
-      else
-        @city_search_results = "City search between dates #{@from_date} and #{@to_date} for all channels got 0 results"
       end
+
+      end
+    end
         @employeeorderlist = employeeunorderlist.sort_by{|c| [c[:employee], c[:total]]}.reverse
 
       #this is for date on the view
