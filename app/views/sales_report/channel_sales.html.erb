@@ -6,11 +6,11 @@
 	 </div>
 
    <div class="col-xs-4">
-         
+
                <%= select_tag :bdm_id,  options_from_collection_for_select(@media_manager,
              :id, :name, selected: @bdm_id ),
                    {:class => "form-control", label: "Select the Product if required ", required: true } %>
-   </div>  
+   </div>
 	 <div class="col-xs-5">
         <div class="input-daterange input-group">
           <%= text_field_tag(:from_date, @from_date, :data => {:provide => "datepicker"}, :id => "datepicker_from", :class => "form-control", :required => "true" )   %>
@@ -23,7 +23,7 @@
     <div class="col-xs-1">
               <%= submit_tag "Show", name: nil, class: "btn btn-primary" %>
     </div>
-        
+
  </div>
 <% end %>
 
@@ -43,17 +43,16 @@
 <tbody>
    <% @employeeorderlist.each do |c| %>
    <tr>
-   <td><%= @sno %></td>
+   <td><%= c[:sno] %></td>
 <td>
-   <%= c[:channel] %> 
+   <%= c[:channel] %>
 </td>
 <td>
-   <%= c[:city] %> 
+   <%= c[:city] %>
 </td>
 <td>
-<% c[:order_lines].each do |ord| %>
- <%= ord.description %>
-<% end %>
+  <%= c[:products] %>
+
 </td>
 
 <td class="text-right">
@@ -62,11 +61,11 @@
 <td class="text-right">
    <%= c[:total] %> <% total_value += c[:total] %>
 </td>
-  </tr> 
-  <% @sno += 1 %> 
+  </tr>
+  <% @sno += 1 %>
  <% end %>
 
- 
+
 
   </tbody>
 <tfoot>
@@ -78,6 +77,10 @@
 
 </tfoot>
   </table>
+  <div class="well well-sm">
+    <%= link_to 'Download CSV file', channel_sales_path(from_date: @or_for_date, to_date: @to_date , bdm_id: @bdm_id, format: :csv), class: "btn btn-info btn-sm" %>
+  </div>
+
   <% else %>
   <div class="well well-sm">
   <h5>Please select a date to generate the report </h5>

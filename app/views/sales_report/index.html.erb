@@ -15,7 +15,7 @@
 			   Get Sales report for each BDM Listed below for Channel Sales managed by them
 			  </div>
 			  <div class="panel-footer">
-			   
+
 					 <%= bootstrap_form_tag url: url_for(:controller => 'sales_report', :action => 'channel_sales'), :method => :GET, :enforce_utf8 => false do |f| %>
 					 <div class="row">
 <div class="col-xs-12">
@@ -27,9 +27,9 @@
 <div class="row">
 					<div class="col-xs-8">
 					 <%= text_field_tag(:from_date, @from_date, :data => {:provide => "datepicker"}, :id => "datepicker1", :class => "form-control", :required => "true" )   %>
-					          
+
 					</div>
-					
+
 					<div class="col-xs-4">
 						<%= submit_tag "Report", name: nil, class: "btn btn-success ", data: { confirm: 'Are you sure?'}  %>
 					</div>
@@ -38,7 +38,7 @@
 					<% end %>
 
 					</div>
-								  
+
 								  </div>
 	</div>
 	<div class="col-xs-4">
@@ -52,9 +52,9 @@
 					 <div class="row">
 					<div class="col-xs-8">
 					 <%= text_field_tag(:from_date, @from_date, :data => {:provide => "datepicker"}, :id => "datepicker2", :class => "form-control", :required => "true" )   %>
-					          
+
 					</div>
-					
+
 					<div class="col-xs-4">
 						<%= submit_tag "Report", name: nil, class: "btn btn-success ", data: { confirm: 'Are you sure?'}  %>
 					</div>
@@ -75,9 +75,9 @@
 					 <div class="row">
 					<div class="col-xs-8">
 					 <%= text_field_tag(:from_date, @from_date, :data => {:provide => "datepicker"}, :id => "datepicker3", :class => "form-control", :required => "true" )   %>
-					          
+
 					</div>
-					
+
 					<div class="col-xs-4">
 						<%= submit_tag "Report", name: nil, class: "btn btn-success ", data: { confirm: 'Are you sure?'}  %>
 					</div>
@@ -100,14 +100,14 @@
 			   Sales by individual agents for each day
 			  </div>
 			  <div class="panel-footer">
-			  
+
 					 <%= bootstrap_form_tag url: url_for(:controller => 'sales_report', :action => 'employee'), :method => :GET, :enforce_utf8 => false do |f| %>
 					 <div class="row">
 					<div class="col-xs-8">
 					 <%= text_field_tag(:from_date, @from_date, :data => {:provide => "datepicker"}, :id => "datepicker4", :class => "form-control", :required => "true" )   %>
-					          
+
 					</div>
-					
+
 					<div class="col-xs-4">
 						<%= submit_tag "Report", name: nil, class: "btn btn-success ", data: { confirm: 'Are you sure?'}  %>
 					</div>
@@ -116,7 +116,7 @@
 					<% end %>
 
 					</div>
-								  
+
 								  </div>
 	</div>
 	<div class="col-xs-4">
@@ -130,9 +130,9 @@
 					 <div class="row">
 					<div class="col-xs-8">
 					 <%= text_field_tag(:from_date, @from_date, :data => {:provide => "datepicker"}, :id => "datepicker5", :class => "form-control", :required => "true" )   %>
-					          
+
 					</div>
-					
+
 					<div class="col-xs-4">
 						<%= submit_tag "Report", name: nil, class: "btn btn-success ", data: { confirm: 'Are you sure?'}  %>
 			  </div>
@@ -152,9 +152,9 @@
 					 <div class="row">
 					<div class="col-xs-8">
 					 <%= text_field_tag(:from_date, @from_date, :data => {:provide => "datepicker"}, :id => "datepicker6", :class => "form-control", :required => "true" )   %>
-					          
+
 					</div>
-					
+
 					<div class="col-xs-4">
 						<%= submit_tag "Report", name: nil, class: "btn btn-success ", data: { confirm: 'Are you sure?'}  %>
 			  </div>
@@ -175,14 +175,14 @@
 			   Sales  Channelwise, citywise, prdt wise, valuewise
 			  </div>
 			  <div class="panel-footer">
-			  
+
 					 <%= bootstrap_form_tag url: url_for(:controller => 'sales_report', :action => 'channel'), :method => :GET, :enforce_utf8 => false do |f| %>
 					 <div class="row">
 					<div class="col-xs-8">
 					 <%= text_field_tag(:from_date, @from_date, :data => {:provide => "datepicker"}, :id => "datepicker7", :class => "form-control", :required => "true" )   %>
-					          
+
 					</div>
-					
+
 					<div class="col-xs-4">
 						<%= submit_tag "Report", name: nil, class: "btn btn-success ", data: { confirm: 'Are you sure?'}  %>
 					</div>
@@ -191,7 +191,7 @@
 					<% end %>
 
 					</div>
-								  
+
 								  </div>
 	</div>
 	<div class="col-xs-4">
@@ -205,9 +205,9 @@
 					 <div class="row">
 					<div class="col-xs-8">
 					 <%= text_field_tag(:from_date, @from_date, :data => {:provide => "datepicker"}, :id => "datepicker8", :class => "form-control", :required => "true" )   %>
-					          
+
 					</div>
-					
+
 					<div class="col-xs-4">
 						<%= submit_tag "Report", name: nil, class: "btn btn-success ", data: { confirm: 'Are you sure?'}  %>
 			  </div>
@@ -227,9 +227,9 @@
 					 <div class="row">
 					<div class="col-xs-8">
 					 <%= text_field_tag(:from_date, @from_date, :data => {:provide => "datepicker"}, :id => "datepicker9", :class => "form-control", :required => "true" )   %>
-					          
+
 					</div>
-					
+
 					<div class="col-xs-4">
 						<%= submit_tag "Search", name: nil, class: "btn btn-success ", data: { confirm: 'Are you sure?'}  %>
 			  </div>
@@ -249,14 +249,14 @@
 			  HBN and Pvt channel caller gender report (How many males/females place orders?)
 			  </div>
 			  <div class="panel-footer">
-			  
+
 					 <%= bootstrap_form_tag url: url_for(:controller => 'sales_report', :action => 'summary'), :method => :GET, :enforce_utf8 => false do |f| %>
 					 <div class="row">
 					<div class="col-xs-8">
 					 <%= text_field_tag(:from_date, @from_date, :data => {:provide => "datepicker"}, :id => "datepicker10", :class => "form-control", :required => "true" )   %>
-					          
+
 					</div>
-					
+
 					<div class="col-xs-4">
 						<%= submit_tag "Report", name: nil, class: "btn btn-success ", data: { confirm: 'Are you sure?'}  %>
 					</div>
@@ -265,7 +265,7 @@
 					<% end %>
 
 					</div>
-								  
+
 								  </div>
 	</div>
 	<div class="col-xs-4">
@@ -279,9 +279,9 @@
 					 <div class="row">
 					<div class="col-xs-8">
 					 <%= text_field_tag(:from_date, @from_date, :data => {:provide => "datepicker"}, :id => "datepicker11", :class => "form-control", :required => "true" )   %>
-					          
+
 					</div>
-					
+
 					<div class="col-xs-4">
 						<%= submit_tag "Report", name: nil, class: "btn btn-success ", data: { confirm: 'Are you sure?'}  %>
 			  </div>
@@ -301,9 +301,9 @@
 					 <div class="row">
 					<div class="col-xs-8">
 					 <%= text_field_tag(:from_date, @from_date, :data => {:provide => "datepicker"}, :id => "datepicker13", :class => "form-control", :required => "true" )   %>
-					          
+
 					</div>
-					
+
 					<div class="col-xs-4">
 						<%= submit_tag "Search", name: nil, class: "btn btn-success ", data: { confirm: 'Are you sure?'}  %>
 			  </div>
@@ -325,9 +325,9 @@
 					 <div class="row">
 					<div class="col-xs-8">
 					 <%= text_field_tag(:from_date, @from_date, :data => {:provide => "datepicker"}, :id => "datepicker14", :class => "form-control", :required => "true" )   %>
-					          
+
 					</div>
-					
+
 					<div class="col-xs-4">
 						<%= submit_tag "Search", name: nil, class: "btn btn-success ", data: { confirm: 'Are you sure?'}  %>
 			  </div>
@@ -336,7 +336,28 @@
 		</div>
 		</div>
 	</div>
+  <div class="col-xs-4">
+			<div class="panel panel-primary">
+			<div class="panel-heading"><h3 class="panel-title">Open Orders</h3></div>
+			  <div class="panel-body">
+			   Orders which are not completed
+			  </div>
+			  <div class="panel-footer">
+			  	<%= bootstrap_form_tag url: url_for(:controller => 'sales_report', :action => 'open_orders'), :method => :GET, :enforce_utf8 => false do |f| %>
+					 <div class="row">
+					<div class="col-xs-8">
+					 <%= text_field_tag(:from_date, @from_date, :data => {:provide => "datepicker"}, :id => "datepicker15", :class => "form-control", :required => "true" )   %>
 
+					</div>
+
+					<div class="col-xs-4">
+						<%= submit_tag "Search", name: nil, class: "btn btn-success ", data: { confirm: 'Are you sure?'}  %>
+			  </div>
+			</div>
+			<% end %>
+		</div>
+		</div>
+	</div>
  </div>
    <div class="panel panel-primary">
 			<div class="panel-heading"><h3 class="panel-title">Product Sold Report</h3></div>
@@ -353,16 +374,16 @@
              {:class => "form-control", label: "Select the Product if required " } %>
 	 </div>
       <div class="col-xs-3">
-       
-          <%= text_field_tag(:from_date, @from_date, :data => {:provide => "datepicker"}, :id => "datepicker15", :class => "form-control", :required => "true" )   %>
-          
+
+          <%= text_field_tag(:from_date, @from_date, :data => {:provide => "datepicker"}, :id => "datepicker16", :class => "form-control", :required => "true" )   %>
+
         </div>
           <div class="col-xs-2">
         <%= submit_tag "Show Report", name: nil, class: "btn btn-primary" %>
       </div>
-  
 
-    
+
+
   <% end %>
 </div>
 </div>
@@ -383,4 +404,5 @@ $('#datepicker12').datepicker({format: 'yyyy-mm-dd'});
 $('#datepicker13').datepicker({format: 'yyyy-mm-dd'});
 $('#datepicker14').datepicker({format: 'yyyy-mm-dd'});
 $('#datepicker15').datepicker({format: 'yyyy-mm-dd'});
+$('#datepicker16').datepicker({format: 'yyyy-mm-dd'});
 </script>

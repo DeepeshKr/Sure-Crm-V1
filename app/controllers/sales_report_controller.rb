@@ -69,6 +69,7 @@ class SalesReportController < ApplicationController
   def channel_sales
     @media_manager = Employee.where(:employee_role_id => 10121).order("first_name")
      @sno = 1
+
       #@order_master.orderpaymentmode_id == 10000 #paid over CC
       #@order_master.orderpaymentmode_id == 10001 #paid over COD
     if params[:from_date].present?
@@ -108,16 +109,23 @@ class SalesReportController < ApplicationController
           amount  = o.subtotal * reverse_vat_rate.reverse_rate
           amount = amount.round(2)
         end
+
+        products = ""
+        #cats.each do |cat| cat.name end
+        if o.order_line.present?
+          #products = o.order_line.each(&:description)
+          o.order_line.each do |ord| products << ord.description end
+        end
         # totalorders = orderlist.sum(:total)
         # noorders = orderlist.count()
         employeeunorderlist << {:total => o.amount,
+            :sno => num,
           :employee => name,
-          :for_date =>  @or_for_date,
+          :orderdate =>  o.orderdate.strftime("%Y-%m-%d"),
           :city => o.city ,
           :channel => o.medium.name,
-          :order_lines => OrderLine.where(orderid: o.id).order(:id),
-          :pieces => o.pieces,
-          :no_of =>  num}
+          :products => products,
+          :pieces => o.pieces}
 
           num += 1
         end
@@ -127,7 +135,7 @@ class SalesReportController < ApplicationController
 
         @employeeorderlist = employeeunorderlist.sort_by{|c| c[:total]}.reverse
         respond_to do |format|
-        csv_file_name = "employee_sales_#{@or_for_date}.csv"
+        csv_file_name = "#{name}_sales_#{@or_for_date}.csv"
           format.html
           format.csv do
             headers['Content-Disposition'] = "attachment; filename=\"#{csv_file_name}\""
@@ -146,38 +154,58 @@ def open_orders
   if params[:from_date].present?
   #     #@summary ||= []
       @orderdate =  "Please select a date to generate the report"
-    @from_date = Date.current - 1.days #30.days
+      for_date =  Date.strptime(params[:from_date], "%Y-%m-%d")
+      @from_date = for_date.beginning_of_day - 330.minutes
+      @to_date = for_date.end_of_day - 330.minutes
     if params.has_key?(:from_date)
       @from_date =  Date.strptime(params[:from_date], "%Y-%m-%d")
     end
     #@to_date =
     @to_date =  Date.strptime(params[:to_date], "%Y-%m-%d") || Date.current if params.has_key?(:to_date)
 
+    @to_date = @to_date.end_of_day - 330.minutes
+
     @from_date = (@from_date + 330.minutes)
     @to_date = (@to_date + 330.minutes)
   #
     order_masters = OrderMaster.where('ORDER_STATUS_MASTER_ID < 10003')
-    .where('orderdate >= ? AND orderdate <= ?', @from_date, @to_date)
+    .where('orderdate >= ? AND orderdate <= ?', @from_date, @to_date).limit(20)
   #
-    @orderdate = "Open order between #{@from_date} and #{@to_date} found #{order_masters.count} agents!"
+    @orderdate = "Open order between #{@from_date} and #{@to_date} found #{order_masters.count} order!"
   #
-  #
+  # =>
+  @sno = 1
       employeeunorderlist ||= []
       num = 1
-     #order_masters.each do |o|
-    #  e = o.employee_id
-      #name = (Employee.find(e).first_name #||= "NA" #if Employee.find(e).first_name.present?)
+      order_masters.each do |o|
+        e = o.employee_id
+        name = Employee.find(e).first_name ||= "NA" #if Employee.find(e).first_name.present?)
+        channel = Medium.find(o.media_id).name ||= "NA" if o.media_id.present?
+        customer_name = Customer.find(o.customer_id).fullname ||= "NA" if o.customer_id.present?
+        products = ""
+        #cats.each do |cat| cat.name end
+        if o.order_line.present?
+          #products = o.order_line.each(&:description)
+          o.order_line.each do |ord| products << ord.description end
+        end
 
-      # employeeunorderlist << {:total => o.total,
-      # :employee => name,
-      # :for_date =>  @or_for_date,
-      # :city => o.city ,
-      # :channel => o.medium.name,
-      # :order_lines => OrderLine.where(orderid: o.id).order(:id),
-      # :pieces => o.pieces,
-      # :no_of =>  num}
-      # num += 1
-     # end # end do
+
+        employeeunorderlist << {:total => o.total,
+          :sno => num,
+        :employee => name,
+        :mobile => o.mobile,
+        :customer => customer_name,
+        :orderdate =>  o.orderdate.strftime("%Y-%m-%d"),
+        :products => products,
+        :city => o.city ,
+        :channel => channel,
+        :order_lines => OrderLine.where(orderid: o.id).order(:id),
+        :pieces => o.pieces,
+        :no_of =>  num}
+         num += 1
+      end
+      # CSV.generate_line([c[:sno], c[:mobile], c[:employee], c[:order_date], c[:customer], c[:phone], c[:product], c[:total], c[:address], c[:city], c[:total]]).html_safe.strip
+
 
        @from_date = (@from_date).strftime("%Y-%m-%d")
        @to_date = (@to_date).strftime("%Y-%m-%d")

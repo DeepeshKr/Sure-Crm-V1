@@ -17,6 +17,8 @@
   <thead>
     <tr>
      <th>No</th>
+     <th> Mobile </th>
+     <th> Customer </th>
      <th>Media</th>
      <th>City </th>
      <th>Products</th>
@@ -27,7 +29,13 @@
 <tbody>
    <% @employeeorderlist.each do |c| %>
    <tr>
-   <td><%= @sno %></td>
+   <td><%= c[:sno] %></td>
+   <td>
+      <%= c[:mobile] %>
+   </td>
+   <td>
+      <%= c[:customer] %>
+   </td>
 <td>
    <%= c[:channel] %>
 </td>
@@ -35,9 +43,7 @@
    <%= c[:city] %>
 </td>
 <td>
-<% c[:order_lines].each do |ord| %>
- <%= ord.description %>
-<% end %>
+<%= c[:products]%>
 </td>
 
 <td class="text-right">
@@ -55,13 +61,16 @@
   </tbody>
 <tfoot>
   <tr>
-  <th colspan="4"><strong>Total</strong></th>
+  <th colspan="6"><strong>Total</strong></th>
   <th><strong> <%= total_piece %></strong></th>
   <th><strong><%= total_value %></strong></th>
   </tr>
 
 </tfoot>
   </table>
+  <div class="well well-sm">
+    <%= link_to 'Download CSV file', open_orders_path(from_date: @or_for_date, to_date: @to_date , format: :csv), class: "btn btn-info btn-sm" %>
+  </div>
   <% else %>
   <div class="well well-sm">
   <h5>Please select a date to generate the report </h5>
