@@ -11,14 +11,14 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151116100942) do
+ActiveRecord::Schema.define(version: 20151204050913) do
 
   create_table "address_types", force: :cascade do |t|
     t.string   "name"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
- 
+
   create_table "address_valids", force: :cascade do |t|
     t.string   "name"
     t.datetime "created_at"
@@ -401,6 +401,18 @@ ActiveRecord::Schema.define(version: 20151116100942) do
     t.integer  "stock_value",        limit: 16, precision: 38
     t.integer  "stock_returned",     limit: 16, precision: 38
     t.datetime "summary_date"
+    t.datetime "created_at",                                   null: false
+    t.datetime "updated_at",                                   null: false
+  end
+
+  create_table "distributor_upload_orders", force: :cascade do |t|
+    t.integer  "order_id",           limit: 16, precision: 38
+    t.integer  "ext_order_id",       limit: 16, precision: 38
+    t.datetime "last_ran_on"
+    t.text     "description"
+    t.integer  "online_order_id",    limit: 16, precision: 38
+    t.datetime "online_last_ran_on"
+    t.text     "online_description"
     t.datetime "created_at",                                   null: false
     t.datetime "updated_at",                                   null: false
   end

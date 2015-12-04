@@ -1,5 +1,7 @@
 Rails.application.routes.draw do
 
+  resources :distributor_upload_orders
+
   get 'new_dept/list'
 
   get 'new_dept/search'
@@ -110,6 +112,8 @@ Rails.application.routes.draw do
   get 'hourly_report' => 'sales_report#hourly'
   get 'sales_report/open_orders'
   get 'open_orders' => 'sales_report#open_orders'
+  get 'sales_report/pincode_orders'
+  get 'pincode_orders' => 'sales_report#pincode_orders'
   get 'sales_report/daily'
   get 'daily_report' => 'sales_report#daily'
   get 'sales_report/channel'

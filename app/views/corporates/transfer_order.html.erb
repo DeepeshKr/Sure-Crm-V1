@@ -1,3 +1,12 @@
+<div class="well well-sm">
+
+  <%= @distributor_upload_order.description %>
+<p>
+  You can report for sales in each pincode <%= link_to "Check Orders in Pincode", "/pincode_orders" %>
+</p>
+</div>
+
+<hr>
 <div class="row">
  <%= bootstrap_form_tag url: transfer_order_path, :method => :GET, :enforce_utf8 => false do |f| %>
 <div class="col-xs-8">
@@ -8,5 +17,5 @@
 	<%= submit_tag "Check", name: nil, class: "btn btn-primary" %>
 </div>
 <% end %>
-  
+
 </div>

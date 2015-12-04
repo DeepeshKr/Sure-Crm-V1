@@ -1,0 +1,103 @@
+<div class="row">
+  <div class="col-xs-6">
+
+  <h4>Pincode Order Report  </h4>
+  </div>
+  <div class="col-xs-6">
+    <div class="row">
+      <%= form_tag  url_for(:controller => 'sales_report', :action => 'pincode_orders'), method: "get" do  %>
+        <div class="col-xs-2">
+  <%= text_field_tag(:pincode, @pincode, :class => "form-control", :required => "true" )   %>
+        </div>
+          <div class="col-xs-6">
+            <div class="input-daterange input-group">
+              <%= text_field_tag(:from_date, @from_date, :data => {:provide => "datepicker"}, :id => "datepicker_from", :class => "form-control", :required => "true" )   %>
+              <span class="input-group-addon">to</span>
+
+               <%= text_field_tag(:to_date, @to_date, :data => {:provide => "datepicker"}, :id => "datepicker_to", :class => "form-control", :required => "true" )   %>
+
+            </div>
+          </div>
+
+          <div class="col-xs-2">
+            <%= submit_tag "Show Report", name: nil, class: "btn btn-primary" %>
+          </div>
+      <% end %>
+    </div>
+
+ </div>
+</div>
+<div class="well well-sm">
+<h5><%= @orderdate %> </h5>
+</div>
+<% if @employeeorderlist.present? %>
+<% total_value, total_piece = 0, 0 %>
+<table class="table table-hover table-bordered">
+  <thead>
+    <tr>
+     <th>No</th>
+     <th> Mobile </th>
+     <th> Customer </th>
+     <th>Media</th>
+     <th>City </th>
+     <th>Products</th>
+     <th>Pieces</th>
+     <th>Value</th>
+     </tr>
+  </thead>
+<tbody>
+   <% @employeeorderlist.each do |c| %>
+   <tr>
+   <td><%= c[:sno] %></td>
+   <td>
+      <%= c[:mobile] %>
+   </td>
+   <td>
+      <%= c[:customer] %>
+   </td>
+<td>
+   <%= c[:channel] %>
+</td>
+<td>
+   <%= c[:city] %>
+</td>
+<td>
+<%= c[:products]%>
+</td>
+
+<td class="text-right">
+   <%= c[:pieces] %> <% total_piece += c[:pieces] %>
+</td>
+<td class="text-right">
+   <%= c[:total] %> <% total_value += c[:total] %>
+</td>
+  </tr>
+  <% @sno += 1 %>
+ <% end %>
+
+
+
+  </tbody>
+<tfoot>
+  <tr>
+  <th colspan="6"><strong>Total</strong></th>
+  <th><strong> <%= total_piece %></strong></th>
+  <th><strong><%= total_value %></strong></th>
+  </tr>
+
+</tfoot>
+  </table>
+  <div class="well well-sm">
+    <%= link_to 'Download CSV file', pincode_orders_path(from_date: @or_for_date, to_date: @to_date, pincode: @pincode, format: :csv), class: "btn btn-info btn-sm" %>
+  </div>
+  <% else %>
+  <div class="well well-sm">
+  <h5>Please select a date to generate the report </h5>
+  </div>
+  <% end %>
+ <br>
+
+<script>
+$('#datepicker_to').datepicker({format: 'yyyy-mm-dd'});
+$('#datepicker_from').datepicker({format: 'yyyy-mm-dd'});
+</script>

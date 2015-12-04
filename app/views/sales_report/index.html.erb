@@ -358,6 +358,28 @@
 		</div>
 		</div>
 	</div>
+  <div class="col-xs-4">
+			<div class="panel panel-primary">
+			<div class="panel-heading"><h3 class="panel-title">Pincode Orders</h3></div>
+			  <div class="panel-body">
+			   Pincode Orders
+			  </div>
+			  <div class="panel-footer">
+			  	<%= bootstrap_form_tag url: url_for(:controller => 'sales_report', :action => 'pincode_orders'), :method => :GET, :enforce_utf8 => false do |f| %>
+					 <div class="row">
+					<div class="col-xs-8">
+					 <%= text_field_tag(:from_date, @from_date, :data => {:provide => "datepicker"}, :id => "datepicker16", :class => "form-control", :required => "true" )   %>
+
+					</div>
+
+					<div class="col-xs-4">
+						<%= submit_tag "Search", name: nil, class: "btn btn-success ", data: { confirm: 'Are you sure?'}  %>
+			  </div>
+			</div>
+			<% end %>
+		</div>
+		</div>
+	</div>
  </div>
    <div class="panel panel-primary">
 			<div class="panel-heading"><h3 class="panel-title">Product Sold Report</h3></div>
@@ -375,7 +397,7 @@
 	 </div>
       <div class="col-xs-3">
 
-          <%= text_field_tag(:from_date, @from_date, :data => {:provide => "datepicker"}, :id => "datepicker16", :class => "form-control", :required => "true" )   %>
+          <%= text_field_tag(:from_date, @from_date, :data => {:provide => "datepicker"}, :id => "datepicker17", :class => "form-control", :required => "true" )   %>
 
         </div>
           <div class="col-xs-2">
@@ -405,4 +427,5 @@ $('#datepicker13').datepicker({format: 'yyyy-mm-dd'});
 $('#datepicker14').datepicker({format: 'yyyy-mm-dd'});
 $('#datepicker15').datepicker({format: 'yyyy-mm-dd'});
 $('#datepicker16').datepicker({format: 'yyyy-mm-dd'});
+$('#datepicker17').datepicker({format: 'yyyy-mm-dd'});
 </script>

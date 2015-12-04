@@ -1,0 +1,17 @@
+<%= simple_form_for(@distributor_upload_order) do |f| %>
+  <%= f.error_notification %>
+
+  <div class="form-inputs">
+    <%= f.input :order_id %>
+    <%= f.input :ext_order_id %>
+    <%= f.input :last_ran_on %>
+    <%= f.input :description %>
+    <%= f.input :online_order_id %>
+    <%= f.input :online_last_ran_on %>
+    <%= f.input :online_description %>
+  </div>
+
+  <div class="form-actions">
+    <%= f.button :submit %>
+  </div>
+<% end %>

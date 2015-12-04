@@ -1,0 +1,39 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Order:</strong>
+  <%= @distributor_upload_order.order_id %>
+</p>
+
+<p>
+  <strong>Ext order:</strong>
+  <%= @distributor_upload_order.ext_order_id %>
+</p>
+
+<p>
+  <strong>Last ran on:</strong>
+  <%= @distributor_upload_order.last_ran_on %>
+</p>
+
+<p>
+  <strong>Description:</strong>
+  <%= @distributor_upload_order.description %>
+</p>
+
+<p>
+  <strong>Online order:</strong>
+  <%= @distributor_upload_order.online_order_id %>
+</p>
+
+<p>
+  <strong>Online last ran on:</strong>
+  <%= @distributor_upload_order.online_last_ran_on %>
+</p>
+
+<p>
+  <strong>Online description:</strong>
+  <%= @distributor_upload_order.online_description %>
+</p>
+
+<%= link_to 'Edit', edit_distributor_upload_order_path(@distributor_upload_order) %> |
+<%= link_to 'Back', distributor_upload_orders_path %>

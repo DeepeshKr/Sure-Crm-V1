@@ -1,0 +1,39 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Listing Distributor Upload Orders</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Order</th>
+      <th>Ext order</th>
+      <th>Last ran on</th>
+      <th>Description</th>
+      <th>Online order</th>
+      <th>Online last ran on</th>
+      <th>Online description</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @distributor_upload_orders.each do |distributor_upload_order| %>
+      <tr>
+        <td><%= distributor_upload_order.order_id %></td>
+        <td><%= distributor_upload_order.ext_order_id %></td>
+        <td><%= distributor_upload_order.last_ran_on %></td>
+        <td><%= distributor_upload_order.description %></td>
+        <td><%= distributor_upload_order.online_order_id %></td>
+        <td><%= distributor_upload_order.online_last_ran_on %></td>
+        <td><%= distributor_upload_order.online_description %></td>
+        <td><%= link_to 'Show', distributor_upload_order %></td>
+        <td><%= link_to 'Edit', edit_distributor_upload_order_path(distributor_upload_order) %></td>
+        <td><%= link_to 'Destroy', distributor_upload_order, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Distributor upload order', new_distributor_upload_order_path %>

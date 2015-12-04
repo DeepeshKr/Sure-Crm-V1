@@ -92,6 +92,15 @@ class CorporatesController < ApplicationController
   end
 
   def transfer_order
+    # t.integer :order_id
+    # t.integer :ext_order_id
+    # t.datetime :last_ran_on
+    # t.text :description
+    # t.integer :online_order_id
+    # t.datetime :online_last_ran_on
+    # t.text :online_description
+    @distributor_upload_order = DistributorUploadOrder.first
+    
     if params.has_key?(:order_id)
       @order_id = params[:order_id]
       flash[:notice] = check_transfer(@order_id)

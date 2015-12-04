@@ -168,11 +168,11 @@ def open_orders
     @from_date = (@from_date + 330.minutes)
     @to_date = (@to_date + 330.minutes)
   #
-    order_masters = OrderMaster.where('ORDER_STATUS_MASTER_ID < 10003')
-    .where('orderdate >= ? AND orderdate <= ?', @from_date, @to_date).limit(20)
+  order_masters = OrderMaster.where('ORDER_STATUS_MASTER_ID < 10003')
+  .where('orderdate >= ? AND orderdate <= ?', @from_date, @to_date) #.limit(20)
   #
-    @orderdate = "Open order between #{@from_date} and #{@to_date} found #{order_masters.count} order!"
-  #
+    @orderdate = "Open Orders order between #{@from_date} and #{@to_date} found #{order_masters.count} orders!"
+
   # =>
   @sno = 1
       employeeunorderlist ||= []
@@ -224,6 +224,94 @@ def open_orders
   #
 end #end function
 
+def pincode_orders
+  #     #media segregation only HBN
+  #     #media_segments
+  #     @sno = 1
+  #
+  order_master = OrderMaster.limit(0)
+  return order_master if params[:from_date].blank?
+  return order_master if params[:pincode].blank?
+  if params[:from_date].present?
+  #     #@summary ||= []
+      @orderdate =  "Please select a date to generate the report"
+      for_date =  Date.strptime(params[:from_date], "%Y-%m-%d")
+      @from_date = for_date.beginning_of_day - 330.minutes
+      @to_date = for_date.end_of_day - 330.minutes
+    if params.has_key?(:from_date)
+      @from_date =  Date.strptime(params[:from_date], "%Y-%m-%d")
+    end
+    #@to_date =
+    @to_date =  Date.strptime(params[:to_date], "%Y-%m-%d") || Date.current if params.has_key?(:to_date)
+
+    @to_date = @to_date.end_of_day - 330.minutes
+
+    @from_date = (@from_date + 330.minutes)
+    @to_date = (@to_date + 330.minutes)
+  #
+  @pincode = ""
+  if params[:pincode].present?
+    @pincode = params[:pincode]
+    order_masters = OrderMaster.where('ORDER_STATUS_MASTER_ID > 10002')
+    .where('orderdate >= ? AND orderdate <= ?', @from_date, @to_date).where("pincode = ?", @pincode).limit(20)
+  else
+      order_masters = OrderMaster.limit(0)
+  end
+    @orderdate = "Pincode orders for #{@pincode} between #{@from_date} and #{@to_date} found #{order_masters.count} orders!"
+  #
+  # =>
+  @sno = 1
+      employeeunorderlist ||= []
+      num = 1
+      order_masters.each do |o|
+        e = o.employee_id
+        name = Employee.find(e).first_name ||= "NA" #if Employee.find(e).first_name.present?)
+        channel = Medium.find(o.media_id).name ||= "NA" if o.media_id.present?
+        customer_name = Customer.find(o.customer_id).fullname ||= "NA" if o.customer_id.present?
+        products = ""
+        #cats.each do |cat| cat.name end
+        if o.order_line.present?
+          #products = o.order_line.each(&:description)
+          o.order_line.each do |ord| products << ord.description end
+        end
+
+
+        employeeunorderlist << {:total => o.total,
+          :sno => num,
+        :employee => name,
+        :mobile => o.mobile,
+        :customer => customer_name,
+        :orderdate =>  o.orderdate.strftime("%Y-%m-%d"),
+        :products => products,
+        :city => o.city ,
+        :channel => channel,
+        :order_lines => OrderLine.where(orderid: o.id).order(:id),
+        :pieces => o.pieces,
+        :no_of =>  num}
+         num += 1
+      end
+      # CSV.generate_line([c[:sno], c[:mobile], c[:employee], c[:order_date], c[:customer], c[:phone], c[:product], c[:total], c[:address], c[:city], c[:total]]).html_safe.strip
+
+
+       @from_date = (@from_date).strftime("%Y-%m-%d")
+       @to_date = (@to_date).strftime("%Y-%m-%d")
+     #
+     @employeeorderlist = employeeunorderlist
+     if @employeeorderlist.present?
+       respond_to do |format|
+         csv_file_name = "orders_from_pincode#{pincode}_#{@from_date}_to_#{@to_date}.csv"
+           format.html
+           format.csv do
+             headers['Content-Disposition'] = "attachment; filename=\"#{csv_file_name}\""
+             headers['Content-Type'] ||= 'text/csv'
+           end
+       end #end csv
+     end
+
+  #
+  end #end if
+  #
+end #end function
 
   def daily
       #media segregation only HBN
