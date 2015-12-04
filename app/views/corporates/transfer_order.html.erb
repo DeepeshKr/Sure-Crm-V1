@@ -1,6 +1,6 @@
 <div class="well well-sm">
 
-  <%= @distributor_upload_order.description %>
+  <%= @distributor_upload_order.description %> Last run at <%= @distributor_upload_order.last_ran_on.strftime("%d-%b-%Y %H:%M:%S") %>
 <p>
   You can report for sales in each pincode <%= link_to "Check Orders in Pincode", "/pincode_orders" %>
 </p>

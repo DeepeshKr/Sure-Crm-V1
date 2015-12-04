@@ -98,6 +98,7 @@ Rails.application.routes.draw do
   get 'packing_cost/details'
   get 'listofproducts' => 'product_masters#listofproducts'
   get 'productwithcosts' => 'product_cost_masters#product_costs'
+  get 'product_costs_not_found' => 'product_cost_masters#product_costs_not_found'
   get 'showprod' => 'product_masters#showprod'
 
 

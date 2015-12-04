@@ -1,0 +1,5 @@
+<% headers = ['details','prod', 'basic_cost', 'shipping_handling', 'product_cost', 'postage', 'tel_cost', 'royalty', 'cost_of_return', 'call_centre_commission', 'transf_order_basic', 'dealer_network_basic', 'wholesale_variable_cost' ] %>
+<%= CSV.generate_line headers %>
+	 <% @inactive_product_lists.each do |pr| %>
+	 <%= CSV.generate_line([pr.product_variant.name, pr.extproductcode,0,0,0,0,0,0,0,0,0,0,0]).html_safe.strip %>
+<% end %>

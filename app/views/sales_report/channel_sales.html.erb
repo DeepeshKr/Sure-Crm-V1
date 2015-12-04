@@ -2,7 +2,7 @@
  <div class="row">
 	 <div class="col-xs-2">
 
-	 <h4>BDM Sales Report </h4>
+	 <h4>CDM Sales Report </h4>
 	 </div>
 
    <div class="col-xs-4">
@@ -32,7 +32,7 @@
 <table class="table table-hover table-bordered">
   <thead>
     <tr>
-     <th>No</th>
+     <th>No of Order </th>
      <th>Media</th>
      <th>City </th>
      <th>Products</th>
@@ -43,7 +43,7 @@
 <tbody>
    <% @employeeorderlist.each do |c| %>
    <tr>
-   <td><%= c[:sno] %></td>
+   <td>1</td>
 <td>
    <%= c[:channel] %>
 </td>
@@ -71,7 +71,7 @@
 <tfoot>
   <tr>
   <th colspan="4"><strong>Total</strong></th>
-  <th><strong> <%= total_piece %></strong></th>
+  <th><strong> <%= @num %></strong></th>
   <th><strong><%= total_value %></strong></th>
   </tr>
 
@@ -81,10 +81,6 @@
     <%= link_to 'Download CSV file', channel_sales_path(from_date: @or_for_date, to_date: @to_date , bdm_id: @bdm_id, format: :csv), class: "btn btn-info btn-sm" %>
   </div>
 
-  <% else %>
-  <div class="well well-sm">
-  <h5>Please select a date to generate the report </h5>
-  </div>
   <% end %>
  <br>
 

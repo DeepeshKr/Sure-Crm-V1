@@ -1,6 +1,6 @@
 class OrderMaster < ActiveRecord::Base
   belongs_to :campaign_playlist, foreign_key: "campaign_playlist_id"
-  belongs_to :employee, foreign_key: "employee_id" 
+  belongs_to :employee, foreign_key: "employee_id"
   belongs_to :order_source
   belongs_to :order_status_master, foreign_key: "order_status_master_id" #, polymorphic: true
   belongs_to :order_source
@@ -13,9 +13,9 @@ class OrderMaster < ActiveRecord::Base
   belongs_to :order_last_mile, foreign_key: "order_last_mile_id"
 
   has_many :interaction_master, foreign_key: "orderid"
-  has_many :page_trail, foreign_key: "order_id" 
+  has_many :page_trail, foreign_key: "order_id"
   has_many :order_line, foreign_key: "orderid", :dependent => :destroy
-   
+
   accepts_nested_attributes_for :order_line,  :allow_destroy => true
 
   validates_presence_of :calledno , :mobile
@@ -25,7 +25,20 @@ class OrderMaster < ActiveRecord::Base
   #external order
   #order_for_id - Integer update with customer order id
   #external_order_no - string update with customer order id
-  
+
+
+  def fullname
+      self.customer.fullname if self.customer.present?
+  end
+  def customer_city
+    return self.customer_address.city  if self.customer_address.present?
+  end
+  def employee_name
+    return self.employee.fullname  if self.employee.present?
+  end
+  def lastvisitpage
+    return self.page_trail.name  if self.page_trail.present?
+  end
 
 #after_create :on_create
 
@@ -42,7 +55,7 @@ after_destroy :updateOrder
   def timetaken
     ended_on = self.updated_at.to_f
     started_at = self.created_at.to_f
-    return (ended_on - started_at).to_i 
+    return (ended_on - started_at).to_i
   end
 
   def promo_cost
@@ -58,11 +71,11 @@ after_destroy :updateOrder
       total += c.codcharges || 0
     end
     return total.round(2)
-    
+
   else
     return 0
   end
- 
+
 end
 
 def creditcardcharges
@@ -74,11 +87,11 @@ def creditcardcharges
       total += c.creditcardcharges || 0
     end
     return total.round(2)
-    
+
   else
     return 0
   end
- 
+
 end
 
 def maharastracodextra
@@ -91,11 +104,11 @@ def maharastracodextra
 
     end
     return total.round(2)
-    
+
   else
     return 0
   end
- 
+
 end
 
 def servicetax
@@ -108,7 +121,7 @@ def servicetax
 
     end
     return total.round(2)
-    
+
   else
     return 0
   end
@@ -125,13 +138,13 @@ def maharastraccextra
 
     end
     return total.round(2)
-    
+
   else
     return 0
   end
- 
+
 end
-# 10060 Based on Shipment 
+# 10060 Based on Shipment
 # 10020 Based on Orders Generated All orders less estimated cancel rate is used to calculate the commission
 # 10021 Based on Paid Order Commission is paid only on all fully paid orders
 # 10041 Daily Fixed and Percent on Shipped Orders Daily Fixed and Percent on Shipped Orders for cable TV operators
@@ -154,7 +167,7 @@ def mediacost
       end
   else
     return 0
-  end 
+  end
 end
 
 def media_commission
@@ -188,7 +201,7 @@ def mediacomission
       end
   else
     return 0
-  end  
+  end
 end
 
 def productcost
@@ -202,11 +215,11 @@ def productcost
       end
     end
     return total
-    
+
   else
     return 0
   end
- 
+
 end
 def productrevenue
    totalrevenue = 0
@@ -226,30 +239,30 @@ private
   #self.update_column(pieces: 0,subtotal: 0, taxes: 0, codcharges: 0, shipping:0, total: 0)
   self.update(pieces: OrderLine.where('orderid = ?', self.id).sum(:pieces),
      subtotal: OrderLine.where('orderid = ?', self.id).sum(:subtotal),
-     shipping: OrderLine.where('orderid = ?', self.id).sum(:shipping), 
-      taxes:  OrderLine.where('orderid = ?', self.id).sum(:taxes), 
-      codcharges: OrderLine.where('orderid = ?', self.id).sum(:codcharges), 
+     shipping: OrderLine.where('orderid = ?', self.id).sum(:shipping),
+      taxes:  OrderLine.where('orderid = ?', self.id).sum(:taxes),
+      codcharges: OrderLine.where('orderid = ?', self.id).sum(:codcharges),
       total: OrderLine.where('orderid = ?', self.id).sum(:total))
   end
 
    def on_update
     self.update(pieces: OrderLine.where('orderid = ?', self.id).sum(:pieces),
      subtotal: OrderLine.where('orderid = ?', self.id).sum(:subtotal),
-     shipping: OrderLine.where('orderid = ?', self.id).sum(:shipping), 
-      taxes:  OrderLine.where('orderid = ?', self.id).sum(:taxes), 
-      codcharges: OrderLine.where('orderid = ?', self.id).sum(:codcharges), 
+     shipping: OrderLine.where('orderid = ?', self.id).sum(:shipping),
+      taxes:  OrderLine.where('orderid = ?', self.id).sum(:taxes),
+      codcharges: OrderLine.where('orderid = ?', self.id).sum(:codcharges),
       total: OrderLine.where('orderid = ?', self.id).sum(:total))
- 
+
   end
 
    def on_destroy
     self.update(pieces: OrderLine.where('orderid = ?', self.id).sum(:pieces),
      subtotal: OrderLine.where('orderid = ?', self.id).sum(:subtotal),
-     shipping: OrderLine.where('orderid = ?', self.id).sum(:shipping), 
-      taxes:  OrderLine.where('orderid = ?', self.id).sum(:taxes), 
-      codcharges: OrderLine.where('orderid = ?', self.id).sum(:codcharges), 
+     shipping: OrderLine.where('orderid = ?', self.id).sum(:shipping),
+      taxes:  OrderLine.where('orderid = ?', self.id).sum(:taxes),
+      codcharges: OrderLine.where('orderid = ?', self.id).sum(:codcharges),
       total: OrderLine.where('orderid = ?', self.id).sum(:total))
   #self.update_column(pieces: 0,subtotal: 0, taxes: 0, codcharges: 0, shipping:0, total: 0)
   end
-  
+
 end

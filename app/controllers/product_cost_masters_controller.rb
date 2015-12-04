@@ -1,15 +1,15 @@
 class ProductCostMastersController < ApplicationController
 
   before_action :set_product_cost_master, only: [:show, :edit, :update, :destroy]
-  before_action { protect_controllers(5) } 
+  before_action { protect_controllers(5) }
   # GET /product_cost_masters
   # GET /product_cost_masters.json
   def index
-   
+
     @product_cost_masters = ProductCostMaster.all.paginate(:page => params[:page])
     #update_all
     #reset_prices
-    
+
     respond_to do |format|
       format.csv do
         @product_cost_masters = ProductCostMaster.all
@@ -24,43 +24,55 @@ class ProductCostMastersController < ApplicationController
     #reset_prices
       @product_cost_masters = ProductCostMaster.where("product_list_id IS NOT NULL").pluck(:product_list_id)
     if params.has_key?(:search)
-      
-    
-
       @search = "Search for " +  params[:search].upcase
-      @searchvalue = params[:search].upcase   
-      
+      @searchvalue = params[:search].upcase
+
       # @product_masters = ProductMaster.where('productactivecodeid = 10000').where("name like ? OR extproductcode like ? or list_barcode like ?", "#{@searchvalue}%", "#{@searchvalue}%", "#{@searchvalue}%")
       # @inactive_product_masters = ProductMaster.where('productactivecodeid <> 10000').where("name like ? OR extproductcode like ? or list_barcode like ?", "#{@searchvalue}%", "#{@searchvalue}%", "#{@searchvalue}%")
-      
+
       @product_lists = ProductList.where(id: @product_cost_masters).where('active_status_id = ?',  10000)
-      .where("name like ? OR extproductcode like ? or list_barcode like ?", "#{@searchvalue}%", 
+      .where("name like ? OR extproductcode like ? or list_barcode like ?", "#{@searchvalue}%",
         "#{@searchvalue}%", "#{@searchvalue}%")
       .paginate(:page => params[:page])
       @inactive_product_lists = ProductList.where('id NOT IN (?)', @product_cost_masters).where('active_status_id = ?',  10000)
-      .where("name like ? OR extproductcode like ? or list_barcode like ?", 
+      .where("name like ? OR extproductcode like ? or list_barcode like ?",
         "#{@searchvalue}%", "#{@searchvalue}%", "#{@searchvalue}%")
       .paginate(:page => params[:page])
 
-
       @found = @product_lists.count
-      
+
       else
         @search = "Product Sell List"
         @searchvalue = nil
 
         @product_lists = ProductList.where(id: @product_cost_masters).where('active_status_id = ?',  10000).order('updated_at DESC').paginate(:page => params[:page])
+
         @nos_with_price = @product_lists.count()
-        @inactive_product_lists = ProductList.where('id NOT IN (?)', @product_cost_masters).where('active_status_id = ?',  10000).order('updated_at DESC').paginate(:page => params[:page])
+
+        @inactive_product_lists = ProductList.where('id NOT IN (?)',   @product_cost_masters).where('active_status_id = ?',  10000).order('updated_at DESC').paginate(:page => params[:page])
+
         @nos_with_out_price = @inactive_product_lists.count()
         @found = nil
-        
+
     end
         # format.csv do
         #     headers['Content-Disposition'] = "attachment; filename=\"product-costs\""
         #     headers['Content-Type'] ||= 'text/csv'
         # end
-     
+
+  end
+
+  def product_costs_not_found
+    @product_cost_masters = ProductCostMaster.where("product_list_id IS NOT NULL").pluck(:product_list_id)
+
+    @inactive_product_lists = ProductList.where('id NOT IN (?)',   @product_cost_masters).where('active_status_id = ?',  10000).order('updated_at DESC')
+
+    respond_to do |format|
+      format.csv do
+              headers['Content-Disposition'] = "attachment; filename=\"product_costs_not_found.csv\""
+              headers['Content-Type'] ||= 'text/csv'
+      end
+    end
   end
   # GET /product_cost_masters/1
   # GET /product_cost_masters/1.json
@@ -79,9 +91,9 @@ class ProductCostMastersController < ApplicationController
       product_list = ProductList.find(product_list_id)
       product_id = product_list.product_master_id
     end
-    @product_cost_master = ProductCostMaster.new(prod: prod, 
-      product_list_id: product_list_id, product_id: product_id, :product_cost => 0, 
-      :basic_cost => 0, :shipping_handling => 0, :postage => 0, 
+    @product_cost_master = ProductCostMaster.new(prod: prod,
+      product_list_id: product_list_id, product_id: product_id, :product_cost => 0,
+      :basic_cost => 0, :shipping_handling => 0, :postage => 0,
       :tel_cost => 0, :transf_order_basic => 0, :dealer_network_basic => 0,
        :wholesale_variable_cost => 0, :royalty => 0, :cost_of_return => 0,
         :call_centre_commission => 0)
@@ -112,13 +124,13 @@ class ProductCostMastersController < ApplicationController
     #     format.json { render json: @product_cost_master.errors, status: :unprocessable_entity }
     #   end
     # end
-    
+
   end
 
   # PATCH/PUT /product_cost_masters/1
   # PATCH/PUT /product_cost_masters/1.json
   def update
-    
+
        @product_cost_master.update(product_cost_master_params)
         flash[:success] = 'You have updated prices successfully!'
         redirect_to productwithcosts_path
@@ -132,7 +144,7 @@ class ProductCostMastersController < ApplicationController
     #     format.json { render json: @product_cost_master.errors, status: :unprocessable_entity }
     #   end
     # end
-    
+
   end
 
   # DELETE /product_cost_masters/1
@@ -155,21 +167,21 @@ class ProductCostMastersController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def product_cost_master_params
-      params.require(:product_cost_master).permit(:product_id, :product_list_id, 
-        :prod, :barcode, :product_cost, :basic_cost, 
-        :shipping_handling, :postage, 
-        :tel_cost, :transf_order_basic, 
-        :dealer_network_basic, 
-        :wholesale_variable_cost, 
+      params.require(:product_cost_master).permit(:product_id, :product_list_id,
+        :prod, :barcode, :product_cost, :basic_cost,
+        :shipping_handling, :postage,
+        :tel_cost, :transf_order_basic,
+        :dealer_network_basic,
+        :wholesale_variable_cost,
         :royalty, :cost_of_return, :call_centre_commission)
     end
     def reset_prices
       product_cost_masters = ProductCostMaster.all
 
       product_cost_masters.each do |pc|
-        revenue = (pc.basic_cost || 0) + (pc.shipping_handling || 0) 
+        revenue = (pc.basic_cost || 0) + (pc.shipping_handling || 0)
 
-        cost = (pc.product_cost || 0) + (pc.tel_cost || 0) + (pc.postage || 0) + (pc.royalty || 0) + (pc.cost_of_return || 0) + (pc.call_centre_commission || 0)        
+        cost = (pc.product_cost || 0) + (pc.tel_cost || 0) + (pc.postage || 0) + (pc.royalty || 0) + (pc.cost_of_return || 0) + (pc.call_centre_commission || 0)
 
         pc.update(cost:cost, revenue:revenue)
       end
@@ -191,9 +203,9 @@ class ProductCostMastersController < ApplicationController
           end
           product_list_id = prod.first.id
         end
-        ProductCostMaster.create(product_id: product_id, 
+        ProductCostMaster.create(product_id: product_id,
           product_list_id: product_list_id,
-        prod: rop.prod,  
+        prod: rop.prod,
         product_cost: rop.pc1,
         basic_cost: rop.bp1,
         postage: rop.pcb1,
@@ -235,9 +247,9 @@ class ProductCostMastersController < ApplicationController
           end
           product_list_id = prod.first.id
         end
-        ProductCostMaster.create(product_id: product_id, 
+        ProductCostMaster.create(product_id: product_id,
         product_list_id: product_list_id,
-        prod: rop.prod,  
+        prod: rop.prod,
         product_cost: rop.pc1,
         basic_cost: rop.bp1,
         postage: rop.pcb1,
@@ -266,7 +278,7 @@ class ProductCostMastersController < ApplicationController
       end
 
     @ropupsprod = ROPUPSPROD.where("prod = ?", @prod)
-     
+
       @ropupsprod.each do |rop|
          #check if found earlier else add
         product_cost_master = ProductCostMaster.where(prod: rop.prod)

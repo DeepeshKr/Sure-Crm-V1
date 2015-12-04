@@ -1,14 +1,20 @@
 <p id="notice"><%= notice %></p>
 <div class="row">
-<div class="col-xs-4">
-<h3>Product Cost Masters</h3> 
+<div class="col-xs-2">
+<h3>Product Cost Masters</h3>
+
+</div>
+<div class="col-xs-2">
 <%= link_to 'Download CSV list', product_cost_masters_path(showall: "true", format: :csv), class: "btn btn-success btn-sm" %>
 </div>
+<div class="col-xs-2">
+<%= link_to 'No Price list', product_costs_not_found_path(showall: "true", format: :csv), class: "btn btn-success btn-sm" %>
+</div>
 
-<div class="col-xs-8">
+<div class="col-xs-6">
 <br>
 <div class="digg_pagination">
-    
+
     <%= will_paginate @product_cost_masters, :container => false %>
   </div>
   <br>
@@ -16,32 +22,32 @@
 </div>
 <div class="well well-sm">
 <strong>Cost:</strong> product_cost + tel_cost + royalty + Shipping handling + cost_of_return + call_centre_commission <br>
-<strong>Revenue:</strong> basic_cost + shipping_handling 
+<strong>Revenue:</strong> basic_cost + shipping_handling
 </div>
 
 <table class="table table-hover table-bordered">
   <thead>
   <tr>
-     
+
       <th rowspan="2">Product</th>
       <th rowspan="2">Prod </th>
-    
+
       <th colspan="2">Revenue</th>
-    
+
       <th colspan="6">Cost</th>
      <th colspan="3">Others</th>
       <th colspan="3" rowspan="2"></th>
     </tr>
     <tr>
-      
-     
+
+
       <th>Basic cost</th>
       <th>Shipping handling</th>
 
        <th>Product cost</th>
       <th>Postage</th>
       <th>Tel cost</th>
-      
+
       <th>Royalty</th>
       <th>Cost of return</th>
       <th>Call centre commission</th>
@@ -49,24 +55,24 @@
       <th>Transf order basic</th>
       <th>Dealer network basic</th>
       <th>Wholesale variable cost</th>
-      
+
     </tr>
   </thead>
 
   <tbody>
     <% @product_cost_masters.each do |product_cost_master| %>
       <tr>
-       
+
         <td><%= product_cost_master.product_list.name if product_cost_master.product_list %></td>
         <td><%= product_cost_master.prod %></td>
-       
-       
+
+
         <td><%= product_cost_master.basic_cost %></td>
         <td><%= product_cost_master.shipping_handling %></td>
          <td><%= product_cost_master.product_cost %></td>
         <td><%= product_cost_master.postage %></td>
         <td><%= product_cost_master.tel_cost %></td>
-       
+
         <td><%= product_cost_master.royalty %></td>
         <td><%= product_cost_master.cost_of_return %></td>
         <td><%= product_cost_master.call_centre_commission %></td>
@@ -83,7 +89,7 @@
   </tbody>
 </table>
 <div class="digg_pagination">
-    
+
     <%= will_paginate @product_cost_masters, :container => false %>
   </div>
   <br>
@@ -103,7 +109,7 @@
     </div>
   <% end %>
   </div>
-</div> 
+</div>
 
 </div>
 

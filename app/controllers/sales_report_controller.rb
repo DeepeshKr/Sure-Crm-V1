@@ -93,10 +93,10 @@ class SalesReportController < ApplicationController
       .where('ORDER_STATUS_MASTER_ID > 10002').joins(:medium).where("media.employee_id = ? ", @bdm_id)
 
       name = (Employee.find(@bdm_id))
-
+      amount = 0.0
       @orderdate = "Searched for #{for_date} found #{order_masters.count} agents!"
       employeeunorderlist ||= []
-      num = 1
+      @num = 1
       order_masters.each do |o|
         e = o.employee_id
 
@@ -106,7 +106,8 @@ class SalesReportController < ApplicationController
         # timetaken = orderlist.sum(:codcharges)
         reverse_vat_rate = TaxRate.find(10001)
         if reverse_vat_rate.present?
-          amount  = o.subtotal * reverse_vat_rate.reverse_rate
+          rate_charge = reverse_vat_rate.reverse_rate ||= 0.8888889
+          amount = o.subtotal * rate_charge
           amount = amount.round(2)
         end
 
@@ -118,22 +119,23 @@ class SalesReportController < ApplicationController
         end
         # totalorders = orderlist.sum(:total)
         # noorders = orderlist.count()
-        employeeunorderlist << {:total => o.amount,
-            :sno => num,
-          :employee => name,
-          :orderdate =>  o.orderdate.strftime("%Y-%m-%d"),
-          :city => o.city ,
-          :channel => o.medium.name,
-          :products => products,
-          :pieces => o.pieces}
 
-          num += 1
-        end
+          employeeunorderlist << {:total => amount,
+            :sno => @num,
+            :employee => name,
+            :orderdate =>  o.orderdate.strftime("%Y-%m-%d"),
+            :city => o.city ,
+            :channel => o.medium.name,
+            :products => products,
+            :pieces => o.pieces}
+            @num += 1
+          end
+
       #this is for date on the view
-      @from_date = (@from_date + 330.minutes).strftime("%Y-%m-%d")
-      @to_date = (@to_date + 330.minutes).strftime("%Y-%m-%d")
-
+        @from_date = (@from_date + 330.minutes).strftime("%Y-%m-%d")
+        @to_date = (@to_date + 330.minutes).strftime("%Y-%m-%d")
         @employeeorderlist = employeeunorderlist.sort_by{|c| c[:total]}.reverse
+
         respond_to do |format|
         csv_file_name = "#{name}_sales_#{@or_for_date}.csv"
           format.html
