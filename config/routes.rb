@@ -121,6 +121,8 @@ Rails.application.routes.draw do
   get 'channel_report' => 'sales_report#channel'
   get 'sales_report/channel_sales'
   get 'channel_sales' => 'sales_report#channel'
+  get 'sales_report/disposition_report'
+  get 'disposition_report' => 'sales_report#disposition_report'
   get 'sales_report/employee'
   get 'employee_report' => 'sales_report#employee'
   get 'sales_report/city'

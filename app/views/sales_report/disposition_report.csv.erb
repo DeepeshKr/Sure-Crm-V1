@@ -1,0 +1,2 @@
+<% headers = ['S No','Date','Disposition','Mobile','Channel','Customer', 'Media', 'City',  'Employee', 'Products','Value'] %><%= CSV.generate_line headers %><% @order_lines_csv.each do |c| %><%= CSV.generate_line(1, c[:sno], c[:on_date], c[:disposition], c[:mobile], c[:customer], c[:channel], c[:city], c[:employee], c[:products], c[:total]).html_safe.strip  %>
+	<% end %>

@@ -147,7 +147,83 @@ class SalesReportController < ApplicationController
 
     end
   end
+def disposition_report
+  if params[:from_date].present?
+  #     #@summary ||= []
+      @orderdate =  "Please select a date to generate the report"
+      for_date =  Date.strptime(params[:from_date], "%Y-%m-%d")
+      @from_date = for_date.beginning_of_day - 330.minutes
+      @to_date = for_date.end_of_day - 330.minutes
+    if params.has_key?(:from_date)
+      @from_date =  Date.strptime(params[:from_date], "%Y-%m-%d")
+    end
+    #@to_date =
+    @to_date =  Date.strptime(params[:to_date], "%Y-%m-%d") || Date.current if params.has_key?(:to_date)
 
+    @to_date = @to_date.end_of_day - 330.minutes
+
+    @from_date = (@from_date + 330.minutes)
+    @to_date = (@to_date + 330.minutes)
+  #
+interaction_masters = InteractionMaster.where('createdon >= ? AND createdon <= ?', @from_date, @to_date).limit(20)
+#.joins(:interaction_category).where('interaction_masters.interaction_categories.sort_no < 100')
+    @orderdate = "Open Orders order between #{@from_date} and #{@to_date} found records!"
+
+  # =>
+  @sno = 1
+      employeeunorderlist ||= []
+      num = 1
+    interaction_masters.each do |inm|
+        name = Employee.find(inm.employee_id).first_name ||= "NA" if Employee.find(inm.employee_id).present?
+        customer_name = Customer.find(inm.customer_id).fullname ||= "NA" if inm.customer_id.present?
+        e = inm.employee_id
+        name = Employee.find(e).first_name ||= "NA" #if Employee.find(e).first_name.present?)
+        customer_name = Customer.find(inm.customer_id).fullname ||= "NA" if inm.customer_id.present?
+        products = ""
+        #cats.each do |cat| cat.name end
+        if inm.orderid.present?
+
+        order_masters = OrderMaster.find(inm.orderid)
+        city = order_masters.city ||= "NA"
+        total = order_masters.g_total
+            channel = Medium.find(order_masters.media_id).name ||= "NA" if order_masters.media_id.present?
+            products << "Ref No: #{inm.orderid} Products: "
+          if order_masters.order_line.present?
+            inm.order_master.order_line.each do |ord| products << ord.description end
+          end
+        end
+        employeeunorderlist << {:total => total,
+        :sno => num,
+        :employee => name,
+        :mobile => inm.mobile,
+        :customer => customer_name,
+        :on_date =>  (inm.createdon + 330.minutes).strftime("%Y-%m-%d %H:%M"),
+        :products => products,
+        :city => city,
+        :channel => channel,
+        :disposition => inm.interaction_category.name,
+        :no_of =>  num}
+         num += 1
+      end
+      # CSV.generate_line([c[:sno], c[:mobile], c[:employee], c[:order_date], c[:customer], c[:phone], c[:product], c[:total], c[:address], c[:city], c[:total]]).html_safe.strip
+
+
+       @from_date = (@from_date).strftime("%Y-%m-%d")
+       @to_date = (@to_date).strftime("%Y-%m-%d")
+     #
+     @employeeorderlist = employeeunorderlist
+      respond_to do |format|
+        csv_file_name = "disposition_report_#{@from_date}_to_#{@to_date}.csv"
+          format.html
+          format.csv do
+            headers['Content-Disposition'] = "attachment; filename=\"#{csv_file_name}\""
+            headers['Content-Type'] ||= 'text/csv'
+          end
+      end #end csv
+  #
+  end #end if
+
+end
 def open_orders
   #     #media segregation only HBN
   #     #media_segments

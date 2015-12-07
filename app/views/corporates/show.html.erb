@@ -1,9 +1,9 @@
 <div class="row">
     <div class="col-xs-6">
         <h3> <%= @corporate.name %> </h3>
-        <p> Status: <%= @corporate.corporate_active_master.name if @corporate.corporate_active_master %>  
+        <p> Status: <%= @corporate.corporate_active_master.name if @corporate.corporate_active_master %>
         Type: <%= @corporate.corporate_type.name if @corporate.corporate_type %></p>
-        <p>Commission <%= number_to_percentage(@corporate.commission_percent * 100, precision: 0) %> </p>
+        <p>Commission <%= number_to_percentage(@corporate.commission_percent * 100, precision: 0) if @corporate.commission_percent.present? %> </p>
         <p class="lead">INR Balance <%= @corporate.rupee_balance %> </p>
     </div>
     <div class="col-xs-6">
@@ -25,7 +25,7 @@
 
 <hr>
 <br>
-<h3>Serviced Pincodes</h3> 
+<h3>Serviced Pincodes</h3>
 
 <%= render partial: 'distributor_pincode_lists/quick_list' %>
 
@@ -42,7 +42,7 @@
 
 <hr>
 
-<h3>Product Stock Summary (where available or Returns more than ZERO</h3> 
+<h3>Product Stock Summary (where available or Returns more than ZERO</h3>
 
 <hr>
 <%= render partial: 'distributor_stock_summaries/quick_list' %>
@@ -50,7 +50,7 @@
 <div class="well well-sm">
 <div class="row">
 <div class="col-xs-8">
-<h3>Recent Stock Ledger (Recent only)</h3> 
+<h3>Recent Stock Ledger (Recent only)</h3>
 </div>
 <div class="col-xs-2">
 
@@ -71,7 +71,7 @@
 <div class="well well-sm">
 <div class="row">
 <div class="col-xs-10">
-<h3>Missed Orders (Recent only)</h3> 
+<h3>Missed Orders (Recent only)</h3>
 </div>
 <div class="col-xs-2">
 
