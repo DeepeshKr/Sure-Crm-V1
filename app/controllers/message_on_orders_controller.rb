@@ -5,16 +5,16 @@ class MessageOnOrdersController < ApplicationController
   # GET /message_on_orders.json
   def index
    @message_details = "Recent Message On Orders"
-   @btn1 = "btn btn-default" 
+   @btn1 = "btn btn-default"
    @btn2 = "btn btn-default"
    @btn3 = "btn btn-default"
     if params.has_key?(:status)
      status = params[:status]
      status = status.to_i
-     
+
       @message_on_orders = MessageOnOrder.where(message_status_id: status)
       .order("updated_at DESC").limit(10000)
-      .paginate(:page => params[:page], :per_page => 100) 
+      .paginate(:page => params[:page], :per_page => 100)
       case status # a_variable is the variable we want to compare
         when 10000    #compare to 1
           @btn1 = "btn btn-info"
@@ -28,9 +28,9 @@ class MessageOnOrdersController < ApplicationController
         else
           @message_details = "Wrong Selection made"
       end
- 
+
     else
-    @message_on_orders = MessageOnOrder.all.order("updated_at DESC").limit(10000).paginate(:page => params[:page], :per_page => 100) 
+    @message_on_orders = MessageOnOrder.all.order("updated_at DESC").limit(10000).paginate(:page => params[:page], :per_page => 100)
     end
   end
 
@@ -78,6 +78,10 @@ class MessageOnOrdersController < ApplicationController
     end
   end
 
+  def send_demo_message
+    respose_code = sendmessage(params[:mobile], params[:order_no])
+    flash[:error] = "Response from webste #{respose_code}"
+  end
   # DELETE /message_on_orders/1
   # DELETE /message_on_orders/1.json
   def destroy
@@ -89,7 +93,7 @@ class MessageOnOrdersController < ApplicationController
   end
 
   private
-    
+
     # Use callbacks to share common setup or constraints between actions.
     def set_message_on_order
       @message_on_order = MessageOnOrder.find(params[:id])
@@ -99,4 +103,5 @@ class MessageOnOrdersController < ApplicationController
     def message_on_order_params
       params.require(:message_on_order).permit(:customer_id, :message_type_id, :message_status_id, :message, :response, :mobile_no, :alt_mobile_no)
     end
+
 end

@@ -215,7 +215,7 @@ def add_products
 
       #respond_with(@order_master, @order_lines, @customer_address, @customer)
       if @customer_address.pincode.present?
-        @india_pincode_lists = IndiaPincodeList.where("UPPER(pincode) = ?", @customer_address.pincode).limit(30)
+        @india_pincode_lists = IndiaPincodeList.where("UPPER(pincode) = ?", @customer_address.pincode).limit(100)
       else
         @india_pincode_lists = IndiaPincodeList.limit(0)
       end
@@ -231,7 +231,7 @@ def add_products
     @searchvalue =  @searchvalue.upcase
 
    # @india_pincode_lists = IndiaPincodeList.where("UPPER(divisionname) like ? OR UPPER(pincode) like ? OR UPPER(districtname) like ? OR UPPER(regionname) like ? OR UPPER(taluk) like ? OR UPPER(circlename) like ? OR UPPER(statename) like ?", "#{@searchvalue}%", "#{@searchvalue}%", "#{@searchvalue}%", "#{@searchvalue}%", "#{@searchvalue}%", "#{@searchvalue}%", "#{@searchvalue}%")
-    @india_pincode_lists = IndiaPincodeList.where("UPPER(divisionname) like ? OR UPPER(pincode) like ? OR UPPER(districtname) like ? OR UPPER(regionname) like ? OR UPPER(taluk) like ? OR UPPER(circlename) like ?", "#{@searchvalue}%", "#{@searchvalue}%", "#{@searchvalue}%", "#{@searchvalue}%", "#{@searchvalue}%", "#{@searchvalue}%").limit(100)
+    @india_pincode_lists = IndiaPincodeList.where("UPPER(divisionname) like ? OR UPPER(pincode) like ? OR UPPER(districtname) like ? OR UPPER(regionname) like ? OR UPPER(taluk) like ? OR UPPER(circlename) like ?", "#{@searchvalue}%", "#{@searchvalue}%", "#{@searchvalue}%", "#{@searchvalue}%", "#{@searchvalue}%", "#{@searchvalue}%").limit(250)
 
     @india_pincode_lists = @india_pincode_lists.order(:pincode)
      @india_pincode_lists = @india_pincode_lists.map{|s| [s.details, s.pincode]}
@@ -636,11 +636,11 @@ end
             payment_mode_id = payment_mode_id.to_i
             case payment_mode_id
             when 10000 #paid over CC
-              msg = " Thanks for payment "
+              msg = "."
             when 10001
-              msg = " Please pay cash on delivery. For any order related queries contact our customer care on 9223100730 9.30AM TO 06.30PM. TELEBRANDS"
+              msg = ". Please pay cash on delivery "
             when 10060 #paid over ATOM CC
-              msg = " Thanks for payment. For any order related queries contact our customer care on 9223100730 9.30AM TO 06.30PM. TELEBRANDS"
+              msg = "."
             end
 
 
@@ -655,11 +655,11 @@ end
             payment_mode_id = payment_mode_id.to_i
             case payment_mode_id
             when 10000 #paid over CC
-              msg = " Thanks for payment "
+              msg = "."
             when 10001
-              msg = " Please pay cash on delivery For any order related queries contact our customer care on 9223100730 9.30-6.30 TELEBRANDS"
+              msg = ". Please pay cash on delivery "
             when 10060 #paid over ATOM CC
-              msg = " Thanks for payment For queries contact 9223100730 9.30-6.30 TELEBRANDS"
+              msg = "."
             end
 
        end
@@ -669,9 +669,10 @@ end
 
 # CREDIT CARD/CC ON ATOM ORDER FORMAT:
 # THANKS FOR ORDER NO---------- FOR Rs.-----------, PRODUCTS WILL REACH YOU IN 7-10DAYS. FOR ANY ORDER RELATED QUERIES CONTACT OUR CUSTOMER CARE ON 9223100730 9.30AM TO 06.30PM. TELEBRANDS
+#Thks for order no <Variable1> For Rs. <Variable2> Products will reach in 7-10 days Pls pay cash on delivery Queries Call 9223100730 HBN / TELEBRANDS
+#Thks for order no <Variable1> For Rs. <Variable2> Products will reach in 7-10 days, any queries Call 9223100730 HBN / TELEBRANDS
 
-
-          message = "Thanks for Order, #{order_number.join(",")}, products will reach you in 7-10 days. #{msg} Telebrands"
+          message = "Thanks for Order, #{order_number.join(",")}, products will reach you in 7-10 days#{msg} Telebrands"
 
           message = message[0..159]
           @sms_message = MessageOnOrder.create(customer_id: @order_master.customer_id,

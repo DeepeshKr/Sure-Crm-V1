@@ -14,10 +14,10 @@
 <div class="col-xs-8">
 <br>
 <div class="digg_pagination">
-    
+
     <%= will_paginate @message_on_orders, :container => false %>
   </div>
- 
+
   <br>
 </div>
 </div>
@@ -49,7 +49,7 @@
         <td><%= message_on_order.message %><br>
         <small><%= message_on_order.response %></small></td>
         <td><%= message_on_order.mobile_no %><br> <%= message_on_order.alt_mobile_no %></td>
-      
+
         <td><%= (message_on_order.updated_at + 330.minutes).strftime("%d-%b-%y %H:%M") %></td>
         <td>
           <%= link_to 'Destroy', message_on_order, method: :delete, data: { confirm: 'Are you sure?' }, class:"btn btn-danger btn-xs" %>
@@ -64,7 +64,9 @@
 <% end %>
 <br>
 <div class="digg_pagination">
-    
+
     <%= will_paginate @message_on_orders, :container => false %>
   </div>
   <br>
+
+<%= render 'demo_message' %>

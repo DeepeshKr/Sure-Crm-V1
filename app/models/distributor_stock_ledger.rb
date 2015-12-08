@@ -37,7 +37,7 @@ private
 	            product_variant_id: product_list.product_variant_id,
 	            prod: product_list.extproductcode)
 	          #product variant details from product master id
-						update_corporate_mis_balance(distributor_stock_ledger.corporate_id, (distributor_stock_ledger.stock_value * -1))
+						# update_corporate_mis_balance(distributor_stock_ledger.corporate_id, (distributor_stock_ledger.stock_value * -1))
 
 	          # if distributor_stock_ledger.type_id != 10000 #stock change
 	          #    flash[:error] = "Ledger details #{distributor_stock_ledger.type_id}"
@@ -45,6 +45,9 @@ private
 	          #     #update_product_stock_summary(distributor_stock_ledger_id)
 	          # end
 	        end
+				# elsif distributor_stock_ledger.type_id == 10002 #customer stock movement
+				# 				update_corporate_mis_balance(distributor_stock_ledger.corporate_id, (distributor_stock_ledger.stock_value * -1))
+				# 				 flash[:error] = "Ledger stock value removed from stock #{distributor_stock_ledger.type_id}"
 	      elsif distributor_stock_ledger.type_id == 10000 #mis additions
 	              update_corporate_mis_balance(distributor_stock_ledger.corporate_id, distributor_stock_ledger.stock_value)
 	               flash[:error] = "Ledger details #{distributor_stock_ledger.type_id}"

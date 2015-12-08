@@ -1,0 +1,25 @@
+<div class="alert alert-info" role="alert">
+
+<%= form_tag(send_demo_message_path, method: "post") do %>
+
+<div class="row">
+  	<div class="col-xs-2">
+    <strong> Send Demo Message</strong>
+    </div>
+   	<div class="col-xs-4">
+
+    <%= select_text :mobile, :class => "form-control" %>
+
+  	</div>
+    <div class="col-xs-4">
+
+    <%= select_text :order_no, :class => "form-control" %>
+
+    </div>
+  	<div class="col-xs-2">
+         <%= submit_tag("Send Message", :class => "btn btn-success btn-sm") %>
+	</div>
+</div>
+<% end %>
+
+</div>
