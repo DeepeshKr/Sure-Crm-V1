@@ -1,6 +1,4 @@
 Rails.application.routes.draw do
-  get 'courier_bills/fedex'  post 'courier_bills/gati_import'
-  post 'courier_bills/fedex_import'
 
   resources :distributor_upload_orders
 
