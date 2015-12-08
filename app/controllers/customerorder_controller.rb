@@ -560,8 +560,9 @@ end
 
   def process_order
         #this is post
-         order_number = []
+        order_number = []
         msg = nil
+        order_total = 0
       #check for address
       if @order_master.customer_address_id.nil?
         flash[:error] = "Customer Address is missing "
@@ -577,7 +578,7 @@ end
         flash[:error] = "Media is missing "
         redirect_to orderreview_path(:order_id => @order_master.id)
       end
-
+      order_total = @order_master.grand_total
 
       if @order_lines_regular.blank?
         @show_process = 1
@@ -636,11 +637,11 @@ end
             payment_mode_id = payment_mode_id.to_i
             case payment_mode_id
             when 10000 #paid over CC
-              msg = "."
+              msg = ". "
             when 10001
               msg = ". Please pay cash on delivery "
             when 10060 #paid over ATOM CC
-              msg = "."
+              msg = ". "
             end
 
 
@@ -655,11 +656,11 @@ end
             payment_mode_id = payment_mode_id.to_i
             case payment_mode_id
             when 10000 #paid over CC
-              msg = "."
+              msg = ". "
             when 10001
               msg = ". Please pay cash on delivery "
             when 10060 #paid over ATOM CC
-              msg = "."
+              msg = ". "
             end
 
        end
@@ -672,7 +673,7 @@ end
 #Thks for order no <Variable1> For Rs. <Variable2> Products will reach in 7-10 days Pls pay cash on delivery Queries Call 9223100730 HBN / TELEBRANDS
 #Thks for order no <Variable1> For Rs. <Variable2> Products will reach in 7-10 days, any queries Call 9223100730 HBN / TELEBRANDS
 
-          message = "Thanks for Order, #{order_number.join(",")}, products will reach you in 7-10 days#{msg} Telebrands"
+          message = "Thanks for order no, #{order_number.join(",")}, products will reach you in 7-10 days#{msg}any queries Call 9223100730  HBN / TELEBRANDS"
 
           message = message[0..159]
           @sms_message = MessageOnOrder.create(customer_id: @order_master.customer_id,

@@ -591,7 +591,7 @@ class SalesPpoReportController < ApplicationController
 
          @total_cost_per_order_40 = (@total_product_cost_40  + @total_var_cost_40 +  @total_refund_40 + @total_promo_cost_40 + @total_product_dam_cost_40 + @total_fixed_cost_40)
 
-         @cost_per_order_40 = (@total_cost_per_order_50) / @total_nos_50
+         @cost_per_order_40 = (@total_cost_per_order_40) / @total_nos_40
          @total_profit_40 = @total_revenue_40 - @total_cost_per_order_40
          @profit_per_order_40 = @total_profit_40 / @total_nos_40
 

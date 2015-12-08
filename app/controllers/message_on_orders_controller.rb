@@ -12,9 +12,7 @@ class MessageOnOrdersController < ApplicationController
      status = params[:status]
      status = status.to_i
 
-      @message_on_orders = MessageOnOrder.where(message_status_id: status)
-      .order("updated_at DESC").limit(10000)
-      .paginate(:page => params[:page], :per_page => 100)
+      @message_on_orders = MessageOnOrder.where(message_status_id: status).order("updated_at DESC").limit(10).paginate(:page => params[:page], :per_page => 10)
       case status # a_variable is the variable we want to compare
         when 10000    #compare to 1
           @btn1 = "btn btn-info"
@@ -30,7 +28,8 @@ class MessageOnOrdersController < ApplicationController
       end
 
     else
-    @message_on_orders = MessageOnOrder.all.order("updated_at DESC").limit(10000).paginate(:page => params[:page], :per_page => 100)
+      #.limit(10000)
+    @message_on_orders = MessageOnOrder.all.order("updated_at DESC").limit(10).paginate(:page => params[:page], :per_page => 10)
     end
   end
 
@@ -79,8 +78,28 @@ class MessageOnOrdersController < ApplicationController
   end
 
   def send_demo_message
-    respose_code = sendmessage(params[:mobile], params[:order_no])
-    flash[:error] = "Response from webste #{respose_code}"
+    mobile = params[:mobile]
+    order_no = params[:order_no]
+    order_val = params[:order_val]
+    username = "Telebrands"
+    password = "Telebrands"
+    cdmaheader = "TBRAND"
+    senderid = "TBRAND"
+
+    require "net/http"
+    require "uri"
+    require 'open-uri'
+#Thanks for order no 3161275 for Rs 5767, products will reach you in 7-10 days. Please pay cash on delivery any queries Call 9223100730 HBN / TELEBRANDS
+          message = "Thanks for order no #{order_no} for Rs #{order_val}, products will reach you in 7-10 days. Please pay cash on delivery any queries Call 9223100730 HBN / TELEBRANDS"
+
+          message = message[0..159]
+          # "http://whitelist.smsapi.org/SendSMS.aspx?UserName=#{username}&password=#{password}&SenderID=#{senderid}&CDMAHeader=#{cdmaheader}&MobileNo=#{mobile}&Message=#{message}"
+# http://whitelist.smsapi.org/SendSMS.aspx?UserName=Telebrands&password=Telebrands&SenderID=TBRAND&CDMAHeader=TBRAND&MobileNo=xxxxxxxxxx&Message=Thanks for order no 3160089 for Rs 2618, products will reach you in 7-10 days. Please pay cash on delivery any queries Call 9223100730 HBN / TELEBRANDS
+          weburl = "http://whitelist.smsapi.org/SendSMS.aspx?UserName=#{username}&password=#{password}&SenderID=#{senderid}&CDMAHeader=#{cdmaheader}&MobileNo=#{mobile}&Message=#{message}"
+
+          response = url_response(weburl)
+    flash[:error] = "Sent to website #{weburl} Response from website #{response.body}"
+    redirect_to message_on_orders_path
   end
   # DELETE /message_on_orders/1
   # DELETE /message_on_orders/1.json
@@ -102,6 +121,15 @@ class MessageOnOrdersController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def message_on_order_params
       params.require(:message_on_order).permit(:customer_id, :message_type_id, :message_status_id, :message, :response, :mobile_no, :alt_mobile_no)
+    end
+
+    def url_response(weburl)
+      weburl = URI::encode(weburl)
+      uri = URI.parse(weburl)
+      http = Net::HTTP.new(uri.host, uri.port)
+      request = Net::HTTP::Get.new(uri.request_uri)
+      return response = http.request(request)
+
     end
 
 end

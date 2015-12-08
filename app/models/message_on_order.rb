@@ -3,7 +3,7 @@ class MessageOnOrder < ActiveRecord::Base
 	belongs_to :message_status, foreign_key: "message_status_id"
 	belongs_to :customer, foreign_key: "customer_id"
 
-	def sendmessage mobile, order_no
+	def send_message(mobile, order_no)
 			username = "Telebrands"
 		  password = "Telebrands"
 		  cdmaheader = "TBRAND"

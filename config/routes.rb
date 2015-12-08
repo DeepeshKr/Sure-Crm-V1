@@ -2,7 +2,7 @@ Rails.application.routes.draw do
 
   resources :distributor_upload_orders
 
-post "send_demo_message" => 'message_on_order#send_demo_message'
+post "send_demo_message" => 'message_on_orders#send_demo_message'
 
   get 'new_dept/list'
 

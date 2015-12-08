@@ -6,16 +6,9 @@
   	<div class="col-xs-2">
     <strong> Send Demo Message</strong>
     </div>
-   	<div class="col-xs-4">
-
-    <%= select_text :mobile, :class => "form-control" %>
-
-  	</div>
-    <div class="col-xs-4">
-
-    <%= select_text :order_no, :class => "form-control" %>
-
-    </div>
+   	<div class="col-xs-3">   <%= text_field_tag :mobile, nil, :label => "Mobile",  :class =>"form-control", :maxlength=> "30", :placeholder => "Mobile", :required => true %>  	</div>
+    <div class="col-xs-3">   <%= text_field_tag :order_no, nil, :label => "Order No",  :class =>"form-control", :maxlength=> "30", :placeholder => "Order No", :required => true %>   </div>
+    <div class="col-xs-2">  <%= text_field_tag :order_val, nil, :label => "Value",  :class =>"form-control", :maxlength=> "30", :placeholder => "Order Value", :required => true %> </div>
   	<div class="col-xs-2">
          <%= submit_tag("Send Message", :class => "btn btn-success btn-sm") %>
 	</div>
