@@ -673,7 +673,7 @@ end
 #Thks for order no <Variable1> For Rs. <Variable2> Products will reach in 7-10 days Pls pay cash on delivery Queries Call 9223100730 HBN / TELEBRANDS
 #Thks for order no <Variable1> For Rs. <Variable2> Products will reach in 7-10 days, any queries Call 9223100730 HBN / TELEBRANDS
 
-          message = "Thanks for order no, #{order_number.join(",")}, products will reach you in 7-10 days#{msg}any queries Call 9223100730  HBN / TELEBRANDS"
+          message = "Thanks for order no #{order_number.join(",")}, products will reach you in 7-10 days#{msg}any queries Call 9223100730 HBN / TELEBRANDS"
 
           message = message[0..159]
           @sms_message = MessageOnOrder.create(customer_id: @order_master.customer_id,

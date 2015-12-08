@@ -12,7 +12,7 @@ class MessageOnOrdersController < ApplicationController
      status = params[:status]
      status = status.to_i
 
-      @message_on_orders = MessageOnOrder.where(message_status_id: status).order("updated_at DESC").limit(10).paginate(:page => params[:page], :per_page => 10)
+      @message_on_orders = MessageOnOrder.where(message_status_id: status).order("updated_at DESC").limit(10000).paginate(:page => params[:page], :per_page => 100)
       case status # a_variable is the variable we want to compare
         when 10000    #compare to 1
           @btn1 = "btn btn-info"
@@ -29,7 +29,7 @@ class MessageOnOrdersController < ApplicationController
 
     else
       #.limit(10000)
-    @message_on_orders = MessageOnOrder.all.order("updated_at DESC").limit(10).paginate(:page => params[:page], :per_page => 10)
+    @message_on_orders = MessageOnOrder.all.order("updated_at DESC").limit(10000).paginate(:page => params[:page], :per_page => 100)
     end
   end
 

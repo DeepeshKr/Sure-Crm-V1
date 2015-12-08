@@ -111,7 +111,8 @@ class ProductCostMastersController < ApplicationController
     if  @product_cost_master.save
     flash[:success] = 'You have added prices successfully!'
    else
-     flash[:error] = 'You have not added any prices and cannot be processed!'
+     flash[:error] = @product_cost_master.errors.full_messages.to_sentence
+     flash[:notice] = @product_cost_master.errors.full_messages.to_sentence
    end
     redirect_to productwithcosts_path
     # respond_to do |format|

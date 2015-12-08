@@ -1,7 +1,7 @@
 class ProductCostMaster < ActiveRecord::Base
 require 'csv'
 	belongs_to :product_master, foreign_key: "product_id" #, polymorphic: true
-  	belongs_to :product_list, foreign_key: "product_list_id"
+  belongs_to :product_list, foreign_key: "product_list_id"
 
 	#validates :prod ,  :presence => { :message => "Please select product!" }
 	validates :prod,  uniqueness: true #=> { :message => "This product was already entered!" }
