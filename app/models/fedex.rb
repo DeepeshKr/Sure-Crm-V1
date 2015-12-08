@@ -1,4 +1,6 @@
 class Fedex
+	 include ActiveModel::Model
+	require 'csv'
 # Rs. 8 Per kg and minimum chargeable rate is Rs.80 per shipment
 
 
@@ -6,14 +8,26 @@ class Fedex
 # Service Tax-As applicable
 # COD surcharge-  Rs. 50
 # Waybill Surcharge – Nil
-attr_accessor :weight, :basic, :surcharge, :cod, :docket, :service_tax,  :sub_total, :total_charges
+attr_accessor :weight, :basic, :surcharge, :cod, :docket, :service_tax,  :sub_total, :total_charges, :calculate_weight, :comments, :weight_difference, :products
 
 def weight
 	return self.weight
 end
 
+def products
+	return self.products
+end
+
+def calculate_weight
+	return self.calculate_weight
+end
+
+def weight_difference
+	return self.calculate_weight - self.weight
+end
+
 def basic
-	return 80 if (self.weight * 8) < 80
+	return 80 if (self.calculate_weight * 8) < 80
 end
 
 def surcharge

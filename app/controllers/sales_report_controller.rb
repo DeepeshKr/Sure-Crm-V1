@@ -165,8 +165,7 @@ def disposition_report
     @from_date = (@from_date + 330.minutes)
     @to_date = (@to_date + 330.minutes)
   #
-interaction_masters = InteractionMaster.where('createdon >= ? AND createdon <= ?', @from_date, @to_date).limit(20)
-#.joins(:interaction_category).where('interaction_masters.interaction_categories.sort_no < 100')
+interaction_masters = InteractionMaster.where('createdon >= ? AND createdon <= ?', @from_date, @to_date).joins(:interaction_category).where("interaction_categories.sortorder < 100 and interaction_categories.sortorder <> 25 and interaction_categories.sortorder <> 26 and interaction_categories.sortorder <> 27")
     @orderdate = "Open Orders order between #{@from_date} and #{@to_date} found records!"
 
   # =>

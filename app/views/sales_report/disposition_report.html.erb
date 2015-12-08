@@ -56,15 +56,14 @@
   </tbody>
 <tfoot>
   <tr>
-  <th colspan="4"><strong>Total</strong></th>
-  <th><strong> <%= @num %></strong></th>
+  <th colspan="9"><strong>Total</strong></th>
   <th><strong><%= @total_value %></strong></th>
   </tr>
 
 </tfoot>
   </table>
   <div class="well well-sm">
-    <%= link_to 'Download CSV file', disposition_report_path(from_date: @or_for_date, to_date: @to_date , bdm_id: @bdm_id, format: :csv), class: "btn btn-info btn-sm" %>
+    <%= link_to 'Download CSV file', disposition_report_path(from_date: @from_date, to_date: @to_date, format: :csv), class: "btn btn-info btn-sm" %>
   </div>
 
   <% end %>

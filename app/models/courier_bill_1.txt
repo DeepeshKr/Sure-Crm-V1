@@ -1,0 +1,50 @@
+class CourierBill
+	 include ActiveModel::Model
+	require 'csv'
+
+
+  def self.fedex_import(file)
+      CSV.foreach(file.path, headers: true) do |row|
+        row_details = row.to_hash # exclude the price field
+  			#search all the details
+  			products = []
+  			tot_weight = 0.0
+  			vpp_prod = VPP.where(manifest: @manifest).pluck(:prod)
+  			vpp_prod.each do |vpr|
+  				product_master =	ProductMaster.where(extproductcode: vpr)
+  				if product_master.any?
+  					tot_weight += product_master.first.weight_kg
+  					products << product_master.first.extproductcode + " " + product_master.first.weight_kg
+  				end
+
+
+
+  			end
+
+
+  		end
+  end
+
+  def self.gati_import(file)
+      CSV.foreach(file.path, headers: true) do |row|
+        row_details = row.to_hash # exclude the price field
+        #search all the details
+        products = []
+        tot_weight = 0.0
+        vpp_prod = VPP.where(manifest: @manifest).pluck(:prod)
+        vpp_prod.each do |vpr|
+          product_master =	ProductMaster.where(extproductcode: vpr)
+          if product_master.any?
+            tot_weight += product_master.first.weight_kg
+            products << product_master.first.extproductcode + " " + product_master.first.weight_kg
+          end
+
+
+
+        end
+
+
+      end
+  end
+
+end
