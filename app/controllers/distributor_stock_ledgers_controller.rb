@@ -5,13 +5,13 @@ class DistributorStockLedgersController < ApplicationController
   # GET /distributor_stock_ledgers.json
   def index
     if params.has_key?(:corporate_id)
-      @btn1 = "btn btn-default" 
+      @btn1 = "btn btn-default"
       @btn2 = "btn btn-default"
       @btn3 = "btn btn-default"
       @corporate = Corporate.find(params[:corporate_id])
-       @distributor_stock_ledgers = DistributorStockLedger.where(corporate_id: params[:corporate_id]).order("ledger_date DESC").paginate(:page => params[:page], :per_page => 100) 
+       @distributor_stock_ledgers = DistributorStockLedger.where(corporate_id: params[:corporate_id]).order("ledger_date DESC").paginate(:page => params[:page], :per_page => 100)
        if params.has_key?(:type_id)
-         @distributor_stock_ledgers =  @distributor_stock_ledgers.where(type_id: params[:type_id]).order("ledger_date DESC").paginate(:page => params[:page], :per_page => 100) 
+         @distributor_stock_ledgers =  @distributor_stock_ledgers.where(type_id: params[:type_id]).order("ledger_date DESC").paginate(:page => params[:page], :per_page => 100)
         status = params[:type_id].to_i
         case status # a_variable is the variable we want to compare
           when 10000    #compare to 1
@@ -29,10 +29,10 @@ class DistributorStockLedgersController < ApplicationController
 
        end
      else
-      @distributor_stock_ledgers = DistributorStockLedger.order("ledger_date DESC").limit(100).paginate(:page => params[:page], :per_page => 100) 
+      @distributor_stock_ledgers = DistributorStockLedger.order("ledger_date DESC").limit(100).paginate(:page => params[:page], :per_page => 100)
      end
-   
-      
+
+
   end
 
   # GET /distributor_stock_ledgers/1
@@ -43,7 +43,7 @@ class DistributorStockLedgersController < ApplicationController
 
   # GET /distributor_stock_ledgers/new
   def new
-    @product_list = ProductList.joins(:product_variant).where("product_variants.activeid = 10000").order('product_lists.name').limit(10)
+    @product_list = ProductList.joins(:product_variant).where("product_variants.activeid = 10000").order('product_lists.name')
     if params.has_key?(:corporate_id)
       @corporate_id = params[:corporate_id]
     elsif distributor_stock_ledger_params.has_key?(:corporate_id)
@@ -112,21 +112,21 @@ class DistributorStockLedgersController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def distributor_stock_ledger_params
-      params.require(:distributor_stock_ledger).permit(:corporate_id, 
-        :product_master_id, 
-        :product_variant_id, 
-        :product_list_id, :prod, :name, 
+      params.require(:distributor_stock_ledger).permit(:corporate_id,
+        :product_master_id,
+        :product_variant_id,
+        :product_list_id, :prod, :name,
         :description, :stock_change, :stock_value, :ledger_date,
         :type_id)
     end
 
-    
+
     def update_product_details(distributor_stock_ledger_id)
        distributor_stock_ledger = DistributorStockLedger.find(distributor_stock_ledger_id)
-      
+
       # corporate_type_ids = distributor_stock_ledger.corporate.corporate_type_id
-      # if ['10021', '10020'].include?('corporate_type_ids') #corporate.corporate_type_id 
-  
+      # if ['10021', '10020'].include?('corporate_type_ids') #corporate.corporate_type_id
+
         if distributor_stock_ledger.product_list_id.present?
           #product list details from product master id
           product_list = ProductList.find(distributor_stock_ledger.product_list_id) #.joins(:product_variant).where("product_variants.activeid = 10000")
@@ -139,7 +139,7 @@ class DistributorStockLedgersController < ApplicationController
             #product variant details from product master id
             if distributor_stock_ledger.type_id != 10000 #stock change
                flash[:error] = "Ledger details #{distributor_stock_ledger.type_id}"
-       
+
                 #update_product_stock_summary(distributor_stock_ledger_id)
             end
           end
@@ -147,7 +147,7 @@ class DistributorStockLedgersController < ApplicationController
                 update_corporate_mis_balance(distributor_stock_ledger.corporate_id, distributor_stock_ledger.stock_value)
                  flash[:error] = "Ledger details #{distributor_stock_ledger.type_id}"
         end
-      
+
     # else
     #   comments = distributor_stock_ledger.description + " No changes can be done to a regular distribuor"
     #   distributor_stock_ledger.update(description: comments)
@@ -160,7 +160,7 @@ class DistributorStockLedgersController < ApplicationController
        flash[:notice] = "Corporate MIS Balance #{corporate.rupee_balance} updating to #{fin_value}"
        fin_value += mis_value
        corporate.update(rupee_balance: fin_value)
-       
+
     end
 
     def update_product_stock_summary(distributor_stock_ledger_id)
@@ -173,7 +173,7 @@ class DistributorStockLedgersController < ApplicationController
         if product_list.present?
           #product list details from product master id
            if DistributorStockSummary.where("product_list_id = ? and corporate_id = ?",distributor_stock_ledger.product_list_id, distributor_stock_ledger.corporate_id).present?
-            
+
              distributor_stock_summary = DistributorStockSummary.where("product_list_id = ? and corporate_id = ?",distributor_stock_ledger.product_list_id, distributor_stock_ledger.corporate_id).first
           #   #get current balance
              balance_qty = distributor_stock_summary.stock_qty
@@ -187,18 +187,18 @@ class DistributorStockLedgersController < ApplicationController
 
              distributor_stock_summary.update(product_master_id: product_list.product_master_id,
              product_variant_id: product_list.product_variant_id,
-             prod: product_list.extproductcode, 
+             prod: product_list.extproductcode,
              summary_date: distributor_stock_ledger.ledger_date,
              stock_qty: balance_qty, stock_value: balance_val)
 
            else
-            
+
             DistributorStockSummary.create(product_list_id: distributor_stock_ledger.product_list_id,
             product_variant_id: distributor_stock_ledger.product_variant_id,
             product_master_id: distributor_stock_ledger.product_master_id,
-            prod: distributor_stock_ledger.prod, 
+            prod: distributor_stock_ledger.prod,
             corporate_id: distributor_stock_ledger.corporate_id,
-            summary_date: distributor_stock_ledger.ledger_date, 
+            summary_date: distributor_stock_ledger.ledger_date,
             stock_qty: distributor_stock_ledger.stock_change,
             stock_value: distributor_stock_ledger.stock_value,
             stock_returned: 0)
