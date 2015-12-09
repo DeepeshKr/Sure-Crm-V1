@@ -1,8 +1,31 @@
 <p id="notice"><%= notice %></p>
+<div class="row">
+<div class="col-xs-2">
+<h3>Fedex Bill Checks</h3>
 
-<h1>Listing Fedex Bill Checks</h1>
+</div>
+<div class="col-xs-2">
+<%= link_to 'Download CSV list', product_cost_masters_path(showall: "true", format: :csv), class: "btn btn-success btn-sm" %>
+</div>
+<div class="col-xs-2">
+<%= link_to 'No Price list', product_costs_not_found_path(showall: "true", format: :csv), class: "btn btn-success btn-sm" %>
+</div>
 
-<table>
+<div class="col-xs-6">
+<br>
+<div class="digg_pagination">
+
+    <%= will_paginate @fedex_bill_checks, :container => false %>
+  </div>
+  <br>
+</div>
+</div>
+<div class="well well-sm">
+<strong>Cost:</strong> product_cost + tel_cost + royalty + Shipping handling + cost_of_return + call_centre_commission <br>
+<strong>Revenue:</strong> basic_cost + shipping_handling
+</div>
+
+<table class="table table-hover table-bordered table-stripped">
   <thead>
     <tr>
       <th>Shp cust nbr</th>
@@ -40,7 +63,6 @@
       <th>Out of delivery area</th>
       <th>Billedamt</th>
       <th>Recp pstl cd</th>
-      <th colspan="3"></th>
     </tr>
   </thead>
 
@@ -82,14 +104,31 @@
         <td><%= fedex_bill_check.out_of_delivery_area %></td>
         <td><%= fedex_bill_check.billedamt %></td>
         <td><%= fedex_bill_check.recp_pstl_cd %></td>
-        <td><%= link_to 'Show', fedex_bill_check %></td>
-        <td><%= link_to 'Edit', edit_fedex_bill_check_path(fedex_bill_check) %></td>
-        <td><%= link_to 'Destroy', fedex_bill_check, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+
       </tr>
     <% end %>
   </tbody>
 </table>
 
 <br>
+<div class="row">
+<div class="col-xs-4"> Import Product Costs: </div>
 
-<%= link_to 'New Fedex bill check', new_fedex_bill_check_path %>
+<div class="col-xs-8">
+
+  <div class="row">
+  <%= form_tag import_fedex_bill_checks_path, multipart: true do %>
+
+	<div class="col-xs-3">   <%= text_field_tag :ref_name, nil, :label => "ref_name",  :class =>"form-control", :maxlength=> "30", :placeholder => "ref_name", :required => true %>  	</div>
+    <div class="col-xs-6">
+        <%= file_field_tag :file %>
+    </div>
+    <div class="col-xs-2">
+        <%= submit_tag "Import CSV", class: "btn btn-warning btn-sm" %>
+    </div>
+  <% end %>
+  </div>
+</div>
+
+</div>
+<!-- %= link_to 'New Fedex bill check', new_fedex_bill_check_path % -->

@@ -4,7 +4,7 @@ class FedexBillChecksController < ApplicationController
   # GET /fedex_bill_checks
   # GET /fedex_bill_checks.json
   def index
-    @fedex_bill_checks = FedexBillCheck.all
+    @fedex_bill_checks = FedexBillCheck.all.paginate(:page => params[:page])
   end
 
   # GET /fedex_bill_checks/1

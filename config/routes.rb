@@ -1,7 +1,9 @@
 Rails.application.routes.draw do
 
-  resources :fedex_bill_checks
-
+resources :fedex_bill_checks
+  resources :fedex_bill_checks do
+   collection { post :import }
+ end
   resources :distributor_upload_orders
 
 post "send_demo_message" => 'message_on_orders#send_demo_message'
