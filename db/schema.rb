@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151204050913) do
+ActiveRecord::Schema.define(version: 20151209053458) do
 
   create_table "address_types", force: :cascade do |t|
     t.string   "name"
@@ -462,6 +462,59 @@ ActiveRecord::Schema.define(version: 20151204050913) do
     t.text     "user_agent"
     t.datetime "created_at"
     t.datetime "updated_at"
+  end
+
+  create_table "fedex_bill_checks", force: :cascade do |t|
+    t.integer  "shp_cust_nbr",                   limit: 16, precision: 38
+    t.integer  "acctno",                         limit: 16, precision: 38
+    t.integer  "invno",                          limit: 16, precision: 38
+    t.datetime "invdate"
+    t.integer  "awb",                            limit: 16, precision: 38
+    t.datetime "shipdate"
+    t.string   "shprname"
+    t.string   "coname"
+    t.string   "shipadd"
+    t.string   "shprlocation"
+    t.string   "shp_postal_code"
+    t.string   "shipreference"
+    t.string   "origloc",                        limit: 5
+    t.string   "origctry",                       limit: 5
+    t.string   "destloc",                        limit: 5
+    t.string   "destctry",                       limit: 5
+    t.integer  "svc1",                           limit: 16, precision: 38
+    t.integer  "pcs",                            limit: 16, precision: 38
+    t.integer  "weight",                         limit: 16, precision: 38
+    t.integer  "dimwgt",                         limit: 16, precision: 38
+    t.string   "wgttype",                        limit: 5
+    t.string   "dimflag",                        limit: 5
+    t.string   "billflag",                       limit: 5
+    t.decimal  "ratedamt"
+    t.decimal  "discount"
+    t.decimal  "address_correction"
+    t.decimal  "cod_fee"
+    t.decimal  "freight_on_value_carriers_risk"
+    t.decimal  "freight_on_value_own_risk"
+    t.decimal  "fuel_surcharge"
+    t.decimal  "higher_floor_delivery"
+    t.decimal  "india_service_tax"
+    t.decimal  "out_of_delivery_area"
+    t.decimal  "billedamt"
+    t.string   "recp_pstl_cd"
+    t.string   "verif_name"
+    t.integer  "verif_order_ref_id",             limit: 16, precision: 38
+    t.integer  "verif_order_no",                 limit: 16, precision: 38
+    t.string   "verif_products"
+    t.integer  "verif_weight",                   limit: 16, precision: 38
+    t.integer  "verif_weight_diff",              limit: 16, precision: 38
+    t.text     "verif_comments"
+    t.decimal  "verif_basic"
+    t.decimal  "verif_fuel_surcharge"
+    t.decimal  "verif_cod"
+    t.decimal  "verif_service_tax"
+    t.decimal  "verif_total_charges"
+    t.datetime "verif_upload_date"
+    t.datetime "created_at",                                               null: false
+    t.datetime "updated_at",                                               null: false
   end
 
   create_table "help_files", force: :cascade do |t|
@@ -1188,6 +1241,18 @@ ActiveRecord::Schema.define(version: 20151204050913) do
     t.text     "description"
     t.datetime "created_at",                            null: false
     t.datetime "updated_at",                            null: false
+  end
+
+  create_table "user_names", force: :cascade do |t|
+    t.string   "name"
+    t.string   "company_name"
+    t.text     "description"
+    t.boolean  "approved"
+    t.string   "password"
+    t.string   "emailid"
+    t.string   "mobile"
+    t.datetime "created_at",   null: false
+    t.datetime "updated_at",   null: false
   end
 
   create_table "users", force: :cascade do |t|

@@ -1,0 +1,95 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Listing Fedex Bill Checks</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Shp cust nbr</th>
+      <th>Acctno</th>
+      <th>Invno</th>
+      <th>Invdate</th>
+      <th>Awb</th>
+      <th>Shipdate</th>
+      <th>Shprname</th>
+      <th>Coname</th>
+      <th>Shipadd</th>
+      <th>Shprlocation</th>
+      <th>Shp postal code</th>
+      <th>Shipreference</th>
+      <th>Origloc</th>
+      <th>Origctry</th>
+      <th>Destloc</th>
+      <th>Destctry</th>
+      <th>Svc1</th>
+      <th>Pcs</th>
+      <th>Weight</th>
+      <th>Dimwgt</th>
+      <th>Wgttype</th>
+      <th>Dimflag</th>
+      <th>Billflag</th>
+      <th>Ratedamt</th>
+      <th>Discount</th>
+      <th>Address correction</th>
+      <th>Cod fee</th>
+      <th>Freight on value carriers risk</th>
+      <th>Freight on value own risk</th>
+      <th>Fuel surcharge</th>
+      <th>Higher floor delivery</th>
+      <th>India service tax</th>
+      <th>Out of delivery area</th>
+      <th>Billedamt</th>
+      <th>Recp pstl cd</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @fedex_bill_checks.each do |fedex_bill_check| %>
+      <tr>
+        <td><%= fedex_bill_check.shp_cust_nbr %></td>
+        <td><%= fedex_bill_check.acctno %></td>
+        <td><%= fedex_bill_check.invno %></td>
+        <td><%= fedex_bill_check.invdate %></td>
+        <td><%= fedex_bill_check.awb %></td>
+        <td><%= fedex_bill_check.shipdate %></td>
+        <td><%= fedex_bill_check.shprname %></td>
+        <td><%= fedex_bill_check.coname %></td>
+        <td><%= fedex_bill_check.shipadd %></td>
+        <td><%= fedex_bill_check.shprlocation %></td>
+        <td><%= fedex_bill_check.shp_postal_code %></td>
+        <td><%= fedex_bill_check.shipreference %></td>
+        <td><%= fedex_bill_check.origloc %></td>
+        <td><%= fedex_bill_check.origctry %></td>
+        <td><%= fedex_bill_check.destloc %></td>
+        <td><%= fedex_bill_check.destctry %></td>
+        <td><%= fedex_bill_check.svc1 %></td>
+        <td><%= fedex_bill_check.pcs %></td>
+        <td><%= fedex_bill_check.weight %></td>
+        <td><%= fedex_bill_check.dimwgt %></td>
+        <td><%= fedex_bill_check.wgttype %></td>
+        <td><%= fedex_bill_check.dimflag %></td>
+        <td><%= fedex_bill_check.billflag %></td>
+        <td><%= fedex_bill_check.ratedamt %></td>
+        <td><%= fedex_bill_check.discount %></td>
+        <td><%= fedex_bill_check.address_correction %></td>
+        <td><%= fedex_bill_check.cod_fee %></td>
+        <td><%= fedex_bill_check.freight_on_value_carriers_risk %></td>
+        <td><%= fedex_bill_check.freight_on_value_own_risk %></td>
+        <td><%= fedex_bill_check.fuel_surcharge %></td>
+        <td><%= fedex_bill_check.higher_floor_delivery %></td>
+        <td><%= fedex_bill_check.india_service_tax %></td>
+        <td><%= fedex_bill_check.out_of_delivery_area %></td>
+        <td><%= fedex_bill_check.billedamt %></td>
+        <td><%= fedex_bill_check.recp_pstl_cd %></td>
+        <td><%= link_to 'Show', fedex_bill_check %></td>
+        <td><%= link_to 'Edit', edit_fedex_bill_check_path(fedex_bill_check) %></td>
+        <td><%= link_to 'Destroy', fedex_bill_check, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Fedex bill check', new_fedex_bill_check_path %>

@@ -8,7 +8,7 @@ class Fedex
 # Service Tax-As applicable
 # COD surcharge-  Rs. 50
 # Waybill Surcharge – Nil
-attr_accessor :weight, :basic, :surcharge, :cod, :docket, :service_tax,  :sub_total, :total_charges, :calculate_weight, :comments, :weight_difference, :products
+attr_accessor :weight, :basic, :fuel_surcharge, :cod, :docket, :service_tax,  :sub_total, :total_charges, :calculate_weight, :comments, :weight_difference, :products
 
 def weight
 	return self.weight
@@ -30,7 +30,7 @@ def basic
 	return 80 if (self.calculate_weight * 8) < 80
 end
 
-def surcharge
+def fuel_surcharge
 	return self.min * 0.2
 end
 

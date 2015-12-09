@@ -1,0 +1,45 @@
+<%= simple_form_for(@fedex_bill_check) do |f| %>
+  <%= f.error_notification %>
+
+  <div class="form-inputs">
+    <%= f.input :shp_cust_nbr %>
+    <%= f.input :acctno %>
+    <%= f.input :invno %>
+    <%= f.input :invdate %>
+    <%= f.input :awb %>
+    <%= f.input :shipdate %>
+    <%= f.input :shprname %>
+    <%= f.input :coname %>
+    <%= f.input :shipadd %>
+    <%= f.input :shprlocation %>
+    <%= f.input :shp_postal_code %>
+    <%= f.input :shipreference %>
+    <%= f.input :origloc %>
+    <%= f.input :origctry %>
+    <%= f.input :destloc %>
+    <%= f.input :destctry %>
+    <%= f.input :svc1 %>
+    <%= f.input :pcs %>
+    <%= f.input :weight %>
+    <%= f.input :dimwgt %>
+    <%= f.input :wgttype %>
+    <%= f.input :dimflag %>
+    <%= f.input :billflag %>
+    <%= f.input :ratedamt %>
+    <%= f.input :discount %>
+    <%= f.input :address_correction %>
+    <%= f.input :cod_fee %>
+    <%= f.input :freight_on_value_carriers_risk %>
+    <%= f.input :freight_on_value_own_risk %>
+    <%= f.input :fuel_surcharge %>
+    <%= f.input :higher_floor_delivery %>
+    <%= f.input :india_service_tax %>
+    <%= f.input :out_of_delivery_area %>
+    <%= f.input :billedamt %>
+    <%= f.input :recp_pstl_cd %>
+  </div>
+
+  <div class="form-actions">
+    <%= f.button :submit %>
+  </div>
+<% end %>

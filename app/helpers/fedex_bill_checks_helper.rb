@@ -1,0 +1,2 @@
+module FedexBillChecksHelper
+end

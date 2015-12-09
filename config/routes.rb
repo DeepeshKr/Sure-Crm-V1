@@ -1,5 +1,7 @@
 Rails.application.routes.draw do
 
+  resources :fedex_bill_checks
+
   resources :distributor_upload_orders
 
 post "send_demo_message" => 'message_on_orders#send_demo_message'
