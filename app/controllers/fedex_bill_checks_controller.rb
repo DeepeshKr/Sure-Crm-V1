@@ -4,12 +4,36 @@ class FedexBillChecksController < ApplicationController
   # GET /fedex_bill_checks
   # GET /fedex_bill_checks.json
   def index
-    @fedex_bill_checks = FedexBillCheck.all.paginate(:page => params[:page])
+    @fedex_bill_checks = FedexBillCheck.limit(100).paginate(:page => params[:page])
+    if params.has_key?(:ref_name)
+        @fedex_bill_checks = FedexBillCheck.where(verif_name: params[:ref_name]).paginate(:page => params[:page])
+    end
   end
 
+  # GET /fedex_bill_checks/download
+  def download
+    if params.has_key?(:ref_name)
+        ref_name = params[:ref_name]
+        respond_to do |format|
+          format.csv do
+            @fedex_bill_checks = FedexBillCheck.where(verif_name: ref_name)
+                  headers['Content-Disposition'] = "attachment; filename=\"#{ref_name}fedex-bill-check.csv\""
+                  headers['Content-Type'] ||= 'text/csv'
+          end
+        end
+      else
+
+    end
+  end
   # GET /fedex_bill_checks/1
   # GET /fedex_bill_checks/1.json
   def show
+  end
+
+  # GET /fedex_bill_checks/import
+  def import
+    FedexBillCheck.import(params[:file], params[:ref_name])
+    redirect_to fedex_bill_checks_path(ref_name: params[:ref_name]), notice: "File imported."
   end
 
   # GET /fedex_bill_checks/new

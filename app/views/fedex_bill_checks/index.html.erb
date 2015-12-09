@@ -1,15 +1,13 @@
 <p id="notice"><%= notice %></p>
 <div class="row">
-<div class="col-xs-2">
+<div class="col-xs-4">
 <h3>Fedex Bill Checks</h3>
 
 </div>
 <div class="col-xs-2">
-<%= link_to 'Download CSV list', product_cost_masters_path(showall: "true", format: :csv), class: "btn btn-success btn-sm" %>
+<%= link_to 'Download CSV list', fedex_bill_checks_path(showall: "true", format: :csv), class: "btn btn-success btn-sm" %>
 </div>
-<div class="col-xs-2">
-<%= link_to 'No Price list', product_costs_not_found_path(showall: "true", format: :csv), class: "btn btn-success btn-sm" %>
-</div>
+
 
 <div class="col-xs-6">
 <br>
@@ -20,10 +18,7 @@
   <br>
 </div>
 </div>
-<div class="well well-sm">
-<strong>Cost:</strong> product_cost + tel_cost + royalty + Shipping handling + cost_of_return + call_centre_commission <br>
-<strong>Revenue:</strong> basic_cost + shipping_handling
-</div>
+
 
 <table class="table table-hover table-bordered table-stripped">
   <thead>

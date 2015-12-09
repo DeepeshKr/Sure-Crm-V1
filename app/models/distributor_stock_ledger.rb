@@ -41,7 +41,7 @@ private
 
 	      elsif distributor_stock_ledger.type_id == 10000 #mis additions
 	              update_corporate_mis_balance(distributor_stock_ledger.corporate_id, distributor_stock_ledger.stock_value)
-	               flash[:error] = "Ledger details #{distributor_stock_ledger.type_id}"
+	               #flash[:error] = "Ledger details #{distributor_stock_ledger.type_id}"
 	      end
   	  #end
     end
@@ -50,7 +50,7 @@ private
 
        corporate = Corporate.find(corporate_id)
        fin_value = corporate.rupee_balance ||= 0 #if corporate.rupee_balance.present?
-       flash[:notice] = "Corporate MIS Balance #{corporate.rupee_balance} updating to #{fin_value}"
+       #flash[:notice] = "Corporate MIS Balance #{corporate.rupee_balance} updating to #{fin_value}"
        fin_value += mis_value
        corporate.update(rupee_balance: fin_value)
 

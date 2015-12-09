@@ -1,27 +1,28 @@
 class FedexBillCheck < ActiveRecord::Base
 require 'csv'
  validates :shipreference,  allow_nil: true, uniqueness: true
- validates :ref_name,  allow_nil: false, uniqueness: true
+ validates_presence_of :ref_name
 
   def self.import(file, ref_name)
     t = Time.zone.now + 330.minutes
       CSV.foreach(file.path, headers: true) do |row|
 
         fedex_bill_check_hash = row.to_hash # exclude the price field
-        fedex_bill_checks = FedexBillCheck.where(shipreference: fedex_bill_check_hash["ShipReference"])
+        manifest_no = fedex_bill_check_hash["ShipReference"]
+        fedex_bill_checks = FedexBillCheck.where(shipreference: manifest_no)
         comments = nil
         products = []
         tot_weight = 0.0
         order_ref_no = nil
         order_no = nil
-        vpp_prod = VPP.where(manifest: @manifest).pluck(:prod)
+        vpp_prod = VPP.where(manifest: manifest_no).pluck(:custref, :prod)
         if vpp_prod.present?
           order_no = vpp_prod.first.custref
-          order_master = OrderMaster.where(external_order_no: order_no)
-          order_ref_no = order_master.first.id
+          order_master = OrderMaster.where(external_order_no: order_no).pluck(:id)
+          order_ref_no = order_master.first
           #custref         #external_order_no
           vpp_prod.each do |vpr|
-            product_master =	ProductMaster.where(extproductcode: vpr)
+            product_master =	ProductMaster.where(extproductcode: vpr.prod)
             if product_master.present?
               tot_weight += product_master.first.weight_kg
               products << product_master.first.extproductcode + " " + product_master.first.weight_kg
@@ -39,7 +40,17 @@ require 'csv'
   end # end CSV.foreach
 end # end self.import(file)
 
+#spreadsheet = open_spreadsheet(file)
+#use this to open file
+def self.open_spreadsheet(file)
+  case File.extname(file.original_filename)
+  when ".csv" then Roo::Csv.new(file.path, :ignore)
+  when ".xls" then Roo::Excel.new(file.path, nil, :ignore)
+  when ".xlsx" then Roo::Excelx.new(file.path, nil, :ignore)
+  else raise "Unknown file type: #{file.original_filename}"
+  end
 
+end
 end
 #shp_cust_nbr	AcctNo	InvNo	InvDate	AWB	Shipdate	ShprName	CoName	ShipAdd	ShprLocation	Shp_Postal_Code	ShipReference	OrigLoc	OrigCtry	DestLoc	DestCtry	Svc1	Pcs	Weight	Dimwgt	WgtType	DIMFlag	BillFlag	 RatedAmt 	 Discount 	 Address Correction 	 COD Fee 	 Freight on Value Carriers Risk 	 Freight on Value Own Risk 	 Fuel Surcharge 	 Higher Floor Delivery 	 India Service Tax 	 Out of Delivery Area 	 BilledAmt 	recp_pstl_cd
 
