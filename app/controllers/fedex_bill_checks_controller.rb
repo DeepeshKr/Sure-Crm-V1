@@ -4,9 +4,11 @@ class FedexBillChecksController < ApplicationController
   # GET /fedex_bill_checks
   # GET /fedex_bill_checks.json
   def index
+    @show_csv = false
     @fedex_bill_checks = FedexBillCheck.limit(100).paginate(:page => params[:page])
     if params.has_key?(:ref_name)
         @fedex_bill_checks = FedexBillCheck.where(verif_name: params[:ref_name]).paginate(:page => params[:page])
+        @show_csv = true
     end
   end
 

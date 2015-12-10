@@ -1,39 +1,29 @@
-<p id="notice"><%= notice %></p>
-<div class="row">
-<div class="col-xs-4">
-<h3>Fedex Bill Checks</h3>
-
-</div>
-<div class="col-xs-2">
-  <% if @show_csv == true %>
-<%= link_to 'Download CSV list', fedex_bill_checks_path(showall: "true", format: :csv), class: "btn btn-success btn-sm" %>
-<% end %>
-</div>
-
-
-<div class="col-xs-6">
-<br>
-<div class="digg_pagination">
-
-    <%= will_paginate @fedex_bill_checks, :container => false %>
-  </div>
-  <br>
-</div>
-</div>
-
-:verif_name, :verif_order_ref_id, :verif_order_no, :verif_products, :verif_weight, :verif_weight_diff, :verif_comments, :verif_basic, :verif_fuel_surcharge, :verif_cod, :verif_service_tax, :verif_total_charges, :verif_upload_date
 <table class="table table-hover table-bordered table-stripped">
   <thead>
     <tr>
+      <th>Shp cust nbr</th>
+      <th>Acctno</th>
       <th>Invno</th>
       <th>Invdate</th>
       <th>Awb</th>
       <th>Shipdate</th>
       <th>Shprname</th>
+      <th>Coname</th>
+      <th>Shipadd</th>
+      <th>Shprlocation</th>
       <th>Shp postal code</th>
       <th>Shipreference</th>
+      <th>Origloc</th>
+      <th>Origctry</th>
+      <th>Destloc</th>
+      <th>Destctry</th>
+      <th>Svc1</th>
       <th>Pcs</th>
       <th>Weight</th>
+      <th>Dimwgt</th>
+      <th>Wgttype</th>
+      <th>Dimflag</th>
+      <th>Billflag</th>
       <th>Ratedamt</th>
       <th>Discount</th>
       <th>Address correction</th>
@@ -52,15 +42,29 @@
   <tbody>
     <% @fedex_bill_checks.each do |fedex_bill_check| %>
       <tr>
+        <td><%= fedex_bill_check.shp_cust_nbr %></td>
+        <td><%= fedex_bill_check.acctno %></td>
         <td><%= fedex_bill_check.invno %></td>
         <td><%= fedex_bill_check.invdate %></td>
         <td><%= fedex_bill_check.awb %></td>
         <td><%= fedex_bill_check.shipdate %></td>
         <td><%= fedex_bill_check.shprname %></td>
+        <td><%= fedex_bill_check.coname %></td>
+        <td><%= fedex_bill_check.shipadd %></td>
+        <td><%= fedex_bill_check.shprlocation %></td>
         <td><%= fedex_bill_check.shp_postal_code %></td>
         <td><%= fedex_bill_check.shipreference %></td>
+        <td><%= fedex_bill_check.origloc %></td>
+        <td><%= fedex_bill_check.origctry %></td>
+        <td><%= fedex_bill_check.destloc %></td>
+        <td><%= fedex_bill_check.destctry %></td>
+        <td><%= fedex_bill_check.svc1 %></td>
         <td><%= fedex_bill_check.pcs %></td>
         <td><%= fedex_bill_check.weight %></td>
+        <td><%= fedex_bill_check.dimwgt %></td>
+        <td><%= fedex_bill_check.wgttype %></td>
+        <td><%= fedex_bill_check.dimflag %></td>
+        <td><%= fedex_bill_check.billflag %></td>
         <td><%= fedex_bill_check.ratedamt %></td>
         <td><%= fedex_bill_check.discount %></td>
         <td><%= fedex_bill_check.address_correction %></td>
@@ -78,26 +82,3 @@
     <% end %>
   </tbody>
 </table>
-
-<br>
-<div class="row">
-<div class="col-xs-4"> Import Product Costs: </div>
-
-<div class="col-xs-8">
-
-  <div class="row">
-  <%= form_tag import_fedex_bill_checks_path, multipart: true do %>
-
-	<div class="col-xs-3">   <%= text_field_tag :ref_name, nil, :label => "ref_name",  :class =>"form-control", :maxlength=> "30", :placeholder => "ref_name", :required => true %>  	</div>
-    <div class="col-xs-6">
-        <%= file_field_tag :file %>
-    </div>
-    <div class="col-xs-2">
-        <%= submit_tag "Import CSV", class: "btn btn-warning btn-sm" %>
-    </div>
-  <% end %>
-  </div>
-</div>
-
-</div>
-<!-- %= link_to 'New Fedex bill check', new_fedex_bill_check_path % -->

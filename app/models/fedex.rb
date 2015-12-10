@@ -8,33 +8,7 @@ class Fedex
 # Waybill Surcharge – Nil
 attr_accessor :weight, :basic, :fuel_surcharge, :cod, :docket, :service_tax,  :sub_total, :total_charges
 
-def weight
-	return self.weight
-end
 
-def basic
-	return 80 if (self.weight * 8) < 80
-end
-
-def fuel_surcharge
-	return self.basic * 0.2
-end
-
-def cod
-	return 50
-end
-
-def sub_total
-	return self.basic + self.cod + self.surcharge
-end
-
-def service_tax
-	return self.sub_total * 0.14
-end
-
-def total_charges
-	return self.sub_total + self.service_tax
-end
 
 end
 
