@@ -22,35 +22,35 @@ class ProductCostMastersController < ApplicationController
   def product_costs
     @showall = true
     #reset_prices
+    @all_product_cost_masters = ProductCostMaster.pluck(:product_list_id)
       @product_cost_masters = ProductCostMaster.where("product_list_id IS NOT NULL").pluck(:product_list_id)
     if params.has_key?(:search)
       @search = "Search for " +  params[:search].upcase
       @searchvalue = params[:search].upcase
 
-      # @product_masters = ProductMaster.where('productactivecodeid = 10000').where("name like ? OR extproductcode like ? or list_barcode like ?", "#{@searchvalue}%", "#{@searchvalue}%", "#{@searchvalue}%")
-      # @inactive_product_masters = ProductMaster.where('productactivecodeid <> 10000').where("name like ? OR extproductcode like ? or list_barcode like ?", "#{@searchvalue}%", "#{@searchvalue}%", "#{@searchvalue}%")
+      # @product_lists = ProductList.where(id: @product_cost_masters).where("name like ? OR extproductcode like ? or list_barcode like ?", "#{@searchvalue}%",
+      #   "#{@searchvalue}%", "#{@searchvalue}%")
+      # .paginate(:page => params[:page])
 
-      @product_lists = ProductList.where(id: @product_cost_masters).where('active_status_id = ?',  10000)
-      .where("name like ? OR extproductcode like ? or list_barcode like ?", "#{@searchvalue}%",
-        "#{@searchvalue}%", "#{@searchvalue}%")
-      .paginate(:page => params[:page])
-      @inactive_product_lists = ProductList.where('id NOT IN (?)', @product_cost_masters).where('active_status_id = ?',  10000)
+      @product_cost_masters = ProductCostMaster.all.where("prod like ? OR barcode like ?", "#{@searchvalue}%", "#{@searchvalue}%").paginate(:page => params[:page])
+
+      @inactive_product_lists = ProductList.where('id NOT IN (?)', @all_product_cost_masters)
       .where("name like ? OR extproductcode like ? or list_barcode like ?",
         "#{@searchvalue}%", "#{@searchvalue}%", "#{@searchvalue}%")
       .paginate(:page => params[:page])
 
-      @found = @product_lists.count
+      @found = @product_cost_masters.count
 
       else
         @search = "Product Sell List"
         @searchvalue = nil
 
-        @product_lists = ProductList.where(id: @product_cost_masters).where('active_status_id = ?',  10000).order('updated_at DESC').paginate(:page => params[:page])
+        @product_cost_masters = ProductCostMaster.all.paginate(:page => params[:page])
 
-        @nos_with_price = @product_lists.count()
+        @nos_with_price = @product_cost_masters.count()
 
-        @inactive_product_lists = ProductList.where('id NOT IN (?)',   @product_cost_masters).where('active_status_id = ?',  10000).order('updated_at DESC').paginate(:page => params[:page])
-
+        @inactive_product_lists = ProductList.where('id NOT IN (?)',   @all_product_cost_masters).order('updated_at DESC').paginate(:page => params[:page])
+        #.where('active_status_id = ?',  10000)
         @nos_with_out_price = @inactive_product_lists.count()
         @found = nil
 
@@ -110,11 +110,17 @@ class ProductCostMastersController < ApplicationController
     @product_cost_master = ProductCostMaster.new(product_cost_master_params)
     if  @product_cost_master.save
     flash[:success] = 'You have added prices successfully!'
+    redirect_to productwithcosts_path
    else
      flash[:error] = @product_cost_master.errors.full_messages.to_sentence
      flash[:notice] = @product_cost_master.errors.full_messages.to_sentence
+     respond_to do |format|
+       format.html { render :new }
+       format.json { render json: @product_cost_master.errors, status: :unprocessable_entity }
+     end
+
    end
-    redirect_to productwithcosts_path
+
     # respond_to do |format|
     #   if @product_cost_master.save
     #     redirect_to productwithcosts_path

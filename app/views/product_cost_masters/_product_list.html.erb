@@ -1,0 +1,49 @@
+<table class="table table-hover">
+  <thead>
+    <tr>
+     <th>Sell Type</th>
+    <th>Name</th>
+      <th>Specs</th>
+      <th>PROD</th>
+        <th>Active</th>
+        <th>Cost</th>
+        <th>Revenue</th>
+      <th colspan="1"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @product_lists.each do |product_list| %>
+      <tr>
+    <td><%= product_list.product_variant.product_sell_type.name if product_list.product_variant %></td>
+    <td><%= product_list.name %></td>
+
+    <td><%= product_list.product_spec_list.name if product_list.product_spec_list %></td>
+    <td><%= product_list.extproductcode %></td>
+    <td>  <%= product_list.product_active_code.name if product_list.product_active_code %> </td>
+    <td colspan="3">
+    <% if product_list.product_cost_master %>
+    <table class="table">
+    <% product_list.product_cost_master.each do | pc| %>
+      <tr>
+        <td>
+          <%= pc.cost %>
+        </td>
+        <td>
+          <%= pc.revenue %>
+        </td>
+        <td><%= link_to 'Edit', edit_product_cost_master_path(pc), class: "btn btn-info btn-xs" %></td>
+      </tr>
+      <% end %>
+    </table>
+    <% end %>
+    </td>
+
+
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+
+  <br>

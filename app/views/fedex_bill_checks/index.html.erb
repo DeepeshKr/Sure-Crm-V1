@@ -21,59 +21,42 @@
 </div>
 </div>
 
-:verif_name, :verif_order_ref_id, :verif_order_no, :verif_products, :verif_weight, :verif_weight_diff, :verif_comments, :verif_basic, :verif_fuel_surcharge, :verif_cod, :verif_service_tax, :verif_total_charges, :verif_upload_date
+:, :, :, :, :, :, :verif_comments, :, :, :, :, :, :
 <table class="table table-hover table-bordered table-stripped">
   <thead>
     <tr>
-      <th>Invno</th>
-      <th>Invdate</th>
-      <th>Awb</th>
-      <th>Shipdate</th>
-      <th>Shprname</th>
-      <th>Shp postal code</th>
-      <th>Shipreference</th>
-      <th>Pcs</th>
-      <th>Weight</th>
-      <th>Ratedamt</th>
-      <th>Discount</th>
-      <th>Address correction</th>
-      <th>Cod fee</th>
-      <th>Freight on value carriers risk</th>
-      <th>Freight on value own risk</th>
-      <th>Fuel surcharge</th>
-      <th>Higher floor delivery</th>
-      <th>India service tax</th>
-      <th>Out of delivery area</th>
-      <th>Billedamt</th>
-      <th>Recp pstl cd</th>
+      <th>Ref Name / Date</th>
+      <th>Invno <br> Invdate <br> Awb</th>
+      <th>Ship reference <br>Internal Order No <br> Id</th>
+      <th>Pcs <br> Weight /Verify (Diff)</th>
+      <th>Ratedamt <br> Discount</th>
+      <th>Basic Billed / Cal</th>
+      <th>Add corr</th>
+      <th>Cod fee / Cal </th>
+      <th>Surcharge bill / Cal </th>
+      <th>Higher floor <br> Out of del</th>
+      <th>Service tax / Cal </th>
+      <th>Billed Amt / Cal </th>
+      <th>Products</th>
     </tr>
   </thead>
 
   <tbody>
     <% @fedex_bill_checks.each do |fedex_bill_check| %>
       <tr>
-        <td><%= fedex_bill_check.invno %></td>
-        <td><%= fedex_bill_check.invdate %></td>
-        <td><%= fedex_bill_check.awb %></td>
-        <td><%= fedex_bill_check.shipdate %></td>
-        <td><%= fedex_bill_check.shprname %></td>
-        <td><%= fedex_bill_check.shp_postal_code %></td>
-        <td><%= fedex_bill_check.shipreference %></td>
-        <td><%= fedex_bill_check.pcs %></td>
-        <td><%= fedex_bill_check.weight %></td>
-        <td><%= fedex_bill_check.ratedamt %></td>
-        <td><%= fedex_bill_check.discount %></td>
+        <td><%= fedex_bill_check.verif_name %> <br> <%= fedex_bill_check.verif_upload_date %></td>
+        <td><%= fedex_bill_check.invno %><br> <%= fedex_bill_check.invdate %><br><%= fedex_bill_check.awb %></td>
+        <td><%= fedex_bill_check.shipreference %><br><%= fedex_bill_check.verif_order_no %><br> <%= fedex_bill_check.verif_order_ref_id %></td>
+        <td><%= fedex_bill_check.pcs %><br><%= fedex_bill_check.weight %> <br><%= fedex_bill_check.verif_weight %> (<%= fedex_bill_check.verif_weight_diff %>)</td>
+        <td><%= fedex_bill_check.ratedamt %><br><%= fedex_bill_check.discount %></td>
+          <td><%= (fedex_bill_check.ratedamt ||= 0) - (fedex_bill_check.discount ||= 0)  %><br><%= fedex_bill_check.verif_basic %></td>
         <td><%= fedex_bill_check.address_correction %></td>
-        <td><%= fedex_bill_check.cod_fee %></td>
-        <td><%= fedex_bill_check.freight_on_value_carriers_risk %></td>
-        <td><%= fedex_bill_check.freight_on_value_own_risk %></td>
-        <td><%= fedex_bill_check.fuel_surcharge %></td>
-        <td><%= fedex_bill_check.higher_floor_delivery %></td>
-        <td><%= fedex_bill_check.india_service_tax %></td>
-        <td><%= fedex_bill_check.out_of_delivery_area %></td>
-        <td><%= fedex_bill_check.billedamt %></td>
-        <td><%= fedex_bill_check.recp_pstl_cd %></td>
-
+        <td><%= fedex_bill_check.cod_fee %> <br><%= fedex_bill_check.verif_cod %></td>
+        <td><%= fedex_bill_check.fuel_surcharge %><br><%= fedex_bill_check.verif_fuel_surcharge.round(2) %></td>
+        <td><%= fedex_bill_check.higher_floor_delivery %> <br> <%= fedex_bill_check.out_of_delivery_area %></td>
+        <td><%= fedex_bill_check.india_service_tax %><br><%= fedex_bill_check.verif_service_tax.round(2) %></td>
+        <td><%= fedex_bill_check.billedamt %><br><%= fedex_bill_check.verif_total_charges.round(2) %></td>
+        <td><%= fedex_bill_check.verif_products %>       </td>
       </tr>
     <% end %>
   </tbody>

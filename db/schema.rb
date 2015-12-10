@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151209053458) do
+ActiveRecord::Schema.define(version: 20151210115652) do
 
   create_table "address_types", force: :cascade do |t|
     t.string   "name"
@@ -832,6 +832,7 @@ ActiveRecord::Schema.define(version: 20151209053458) do
   end
 
   add_index "order_masters", ["city"], name: "index_order_masters_on_city"
+  add_index "order_masters", ["external_order_no"], name: "i_ord_mas_ext_ord_no"
   add_index "order_masters", ["pincode"], name: "index_order_masters_on_pincode"
 
   create_table "order_payments", force: :cascade do |t|
