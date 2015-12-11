@@ -413,7 +413,7 @@ class SalesPpoReportController < ApplicationController
            else
              divide_nos = nos
            end
-          total_cost = (product_cost + fixed_cost + product_damages + media_var_cost + refund)
+          total_cost = (product_cost + @fixed_cost + product_damages + media_var_cost + refund)
           profitability = ((revenue - total_cost)/ divide_nos).to_i
 
           ### check if product cost is found in product master
