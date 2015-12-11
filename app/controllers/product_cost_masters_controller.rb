@@ -23,7 +23,7 @@ class ProductCostMastersController < ApplicationController
     @showall = true
     #reset_prices
     @all_product_cost_masters = ProductCostMaster.where("product_list_id IS NOT NULL").pluck(:product_list_id)
-      @product_cost_masters = ProductCostMaster.where("product_list_id IS NOT NULL").pluck(:product_list_id)
+      # @product_cost_masters = ProductCostMaster.where("product_list_id IS NOT NULL").pluck(:product_list_id)
     if params.has_key?(:search)
       @search = "Search for " +  params[:search].upcase
       @searchvalue = params[:search].upcase
