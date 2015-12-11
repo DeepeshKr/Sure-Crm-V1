@@ -55,13 +55,15 @@ class ProductCostMastersController < ApplicationController
         @searchvalue = nil
 
         @product_cost_masters = ProductCostMaster.all.paginate(:page => params[:page])
-
+        #.limit(10)
         @nos_with_price = @product_cost_masters.count()
 
         @inactive_product_lists = ProductList.where('id NOT IN (?)',   @all_product_cost_masters).order('updated_at DESC').paginate(:page => params[:page])
-        #.where('active_status_id = ?',  10000)
+        #.where('active_status_id = ?',  10000) .limit(10)
         @nos_with_out_price = @inactive_product_lists.count()
         @found = nil
+
+        @inactive_product_variants = ProductVariant.where('extproductcode NOT IN (?)', @all_product_cost_masters_prod).where("name like ? OR extproductcode like ?", "#{@searchvalue}%", "#{@searchvalue}%") #.limit(10)
 
     end
         # format.csv do

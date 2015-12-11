@@ -4,6 +4,7 @@
 	 <h4>HBN Half Hourly Orders for Date: <%= @or_for_date %></h4>
 	 </div>
 	 <div class="col-xs-6">
+    
     <%= render partial: 'date_search', :locals => {:searchaction => "hourly"}  %>
 	</div>
  </div>
@@ -15,23 +16,23 @@
    <tr>
    <th  rowspan="2">No</th>
      <th  colspan="2">Time</th>
-    
+
       <th colspan="3">Income</th>
 <th class="text-right" rowspan="2">Revenue</th>
       <th colspan="4">Expense</th>
-      
+
      <th rowspan="2">Profitability</th>
     <th   rowspan="2"></th>
      </tr>
     <tr>
-    
+
     <th class="text-right">Start Time</th>
     <th class="text-right">End Time</th>
-     
+
     <th class="text-right">Orders</th>
     <th class="text-right">Pieces</th>
     <th class="text-right">Sales</th>
-   
+
 
     <th class="text-right">Produst Cost</th>
     <th class="text-right">Comm</th>
@@ -47,39 +48,39 @@
  <td><%= c[:starttime] %></td>
  <td><%= c[:endtime] %></td>
 <td class="text-right">
-   <%= c[:nos] %> 
+   <%= c[:nos] %>
    <% @total_nos += c[:nos] %>
-  
+
 </td>
 <td class="text-right">
-   <%= c[:pieces] %> 
+   <%= c[:pieces] %>
    <% @total_pieces += c[:pieces] %>
-   
+
 </td>
 <td class="text-right">
-   <%= c[:total] %> 
+   <%= c[:total] %>
    <% @total_sales += c[:total] %>
 
 </td>
 <td class="text-right">
-   <%= c[:revenue] %> 
+   <%= c[:revenue] %>
    <% @total_revenue += c[:revenue] %>
 </td>
 <td class="text-right">
-   <%= c[:product_cost] %> 
+   <%= c[:product_cost] %>
    <% @total_product_cost += c[:product_cost] %>
 </td>
 <td class="text-right">
-   <%= c[:variable_cost] %> 
+   <%= c[:variable_cost] %>
    <% @total_var_cost += c[:variable_cost] %>
 </td>
 <td class="text-right">
-   <%= c[:fixed_cost] %> 
+   <%= c[:fixed_cost] %>
    <% @total_fixed_cost += c[:fixed_cost] %>
 </td>
 
 <td class="text-right">
-   <%= c[:refund] %> 
+   <%= c[:refund] %>
    <% @total_refund += c[:refund] %>
 </td>
 <td class="text-right">   <%= c[:profitability] %>
@@ -88,17 +89,17 @@
 <td >
 <%= link_to "Details", ppo_details_path(start_time: c[:start_time], end_time: c[:end_time]), :target => "_blank" %>
 </td>
-  </tr> 
-  <% @sno += 1 %> 
+  </tr>
+  <% @sno += 1 %>
  <% end %>
 
- 
+
 
   </tbody>
  <tfoot>
     <tr>
      <th colspan="3" >Total</th>
-    
+
       <th class="text-right"><%= @total_nos %></th>
        <th class="text-right"><%= @total_pieces %></th>
      <th class="text-right"><%= @total_sales %></th>
@@ -130,7 +131,7 @@
 
   </tr>
  <% @list_of_orders.each do |c| %>
-<tr>  
+<tr>
 <td> <%= @order_sno %></td>
 <td> <%= c[:order_no] %></td>
 <td> <%= c[:time_of_order] %></td>

@@ -1,0 +1,30 @@
+<h4>Product Variant List Not Entered - These Products are NOT Available in download </h4>
+
+<table class="table table-hover">
+  <thead>
+    <tr>
+
+    <th>Name</th>
+<th>Sold as</th>
+      <th>PROD</th>
+        <th>Active</th>
+
+      <th colspan="1"></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @inactive_product_variants.each do |product_var| %>
+      <tr>
+          <td><%= product_var.productinfo %></td>
+    <td><%= product_var.product_sell_type.name if product_var.product_sell_type %></td>
+
+    <td><%= product_var.extproductcode %></td>
+    <td>  <%= product_var.product_active_code.name if product_var.product_active_code %> </td>
+      <td><%= link_to 'Add Costs', new_product_cost_master_path(:prod => product_var.extproductcode), class: "btn btn-info btn-xs" %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+
+  <br>

@@ -369,7 +369,8 @@ class SalesPpoReportController < ApplicationController
 
      @total_media_cost = Medium.where(media_group_id: 10000).sum(:daily_charges).to_f
 
-      @hbn_media_cost = Medium.where(media_group_id: 10000).sum(:daily_charges).to_f
+    @hbn_media_cost = Medium.where(media_group_id: 10000, active: true).sum(:daily_charges).to_f
+
       secs_in_a_day = (24*60*60)
       media_cost = @hbn_media_cost / secs_in_a_day
 

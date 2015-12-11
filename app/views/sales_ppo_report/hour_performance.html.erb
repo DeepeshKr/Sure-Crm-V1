@@ -3,15 +3,27 @@
 
 	 <h4>HBN Orders between</h4>
 	 </div>
-    <div class="col-xs-4">
+   <%= form_tag  url_for(:controller => 'sales_ppo_report', :action => "hourly_performance"), method: "get" do  %>
+   <div class="col-xs-4">
+<%=  collection_select(nil, :media_cost, @hbn_media_cost_master, :total_cost, :cost_segment, { :prompt => '-- Select Media Cost --'}, {:class => "form-control", :required => true }) %>
+   <%= select_tag('hour_name',
+   options_for_select(@halfhourlist.collect {|p| [ p[:name], p[:id] ] })) %>
+   </div>
+       <div class="col-xs-6">
+         <div class="input-daterange input-group">
+           <%= text_field_tag(:from_date, @from_date, :data => {:provide => "datepicker"}, :id => "datepicker_from", :class => "form-control", :required => "true" )   %>
+           <span class="input-group-addon">to</span>
 
-    <%= select_tag('hour_name', 
-    options_for_select(@halfhourlist.collect {|p| [ p[:name], p[:id] ] })) %>
-    </div>
-	 <div class="col-xs-6">
-     <%= render partial: 'date_range_search', :locals => {:searchaction => "hour_performance"}  %>
+            <%= text_field_tag(:to_date, @to_date, :data => {:provide => "datepicker"}, :id => "datepicker_to", :class => "form-control", :required => "true" )   %>
 
-	</div>
+         </div>
+       </div>
+
+       <div class="col-xs-2">
+         <%= submit_tag "Show Report", name: nil, class: "btn btn-primary" %>
+       </div>
+   <% end %>
+
  </div>
  <br>
 

@@ -118,5 +118,11 @@
 <h4>No Products without costs available, cool! </h4>
 <% end %>
 <br>
+
+<% if @inactive_product_variants.present? %>
+<%= render 'variant' %>
+<% else %>
+<h4>No Product Variants without costs available, cool! </h4>
+<% end %>
 </small>
 </div>
