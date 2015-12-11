@@ -335,8 +335,6 @@ class SalesPpoReportController < ApplicationController
   end
 
   def show
-    #add this link to show
-    #<%= link_to "View PPO", ppo_details_path(campaign_id: c[:campaign_id]), :target => "_blank" %>
 
     @searchaction = "show"
     for_date = (330.minutes).from_now.to_date
@@ -369,10 +367,11 @@ class SalesPpoReportController < ApplicationController
      .order(:start_hr, :start_min, :start_sec)
      .where(list_status_id: 10000) #.limit(5)
 
-      total_media_cost = Medium.where(media_group_id: 10000).sum(:daily_charges).to_f
-      secs_in_a_day = (24*60*60)
-      media_cost = total_media_cost / secs_in_a_day
+     @total_media_cost = Medium.where(media_group_id: 10000).sum(:daily_charges).to_f
 
+      @hbn_media_cost = Medium.where(media_group_id: 10000).sum(:daily_charges).to_f
+      secs_in_a_day = (24*60*60)
+      media_cost = @hbn_media_cost / secs_in_a_day
 
       @serial_no = 1
      campaign_playlists.each do | playlist |
@@ -382,7 +381,7 @@ class SalesPpoReportController < ApplicationController
           revenue = 0
           media_var_cost = 0
           product_cost = 0
-          fixed_cost = playlist.cost
+          @fixed_cost = playlist.cost
           nos = 0.0
           pieces = 0.0
           orderlist.each do |med |
@@ -439,7 +438,7 @@ class SalesPpoReportController < ApplicationController
           :total_cost => total_cost.to_i,
           :product_cost => product_cost.to_i,
           :variable_cost => media_var_cost.to_i,
-          :fixed_cost => fixed_cost.to_i,
+          :fixed_cost => @fixed_cost.to_i,
           :profitability => profitability,
           :product_variant_id => playlist.productvariantid}
 
