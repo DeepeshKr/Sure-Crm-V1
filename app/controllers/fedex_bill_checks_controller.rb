@@ -1,5 +1,6 @@
 class FedexBillChecksController < ApplicationController
   before_action :set_fedex_bill_check, only: [:show, :edit, :update, :destroy]
+  #
 
   # GET /fedex_bill_checks
   # GET /fedex_bill_checks.json
@@ -78,14 +79,28 @@ class FedexBillChecksController < ApplicationController
     end
   end
 
+  def delete
+    if params.has_key?(:ref_name)
+      records = 0
+      ref_name =params[:ref_name]
+        fedex_bill_checks = FedexBillCheck.where(verif_name: ref_name)
+        fedex_bill_checks.each do |fedex|
+          fedex.destroy
+          records += 1
+        end
+          format.html { redirect_to fedex_bill_checks_url, notice: '#{records} Fedex bills with reference name #{ref_name} was successfully destroyed.'}
+    end
+  end
   # DELETE /fedex_bill_checks/1
   # DELETE /fedex_bill_checks/1.json
   def destroy
-    @fedex_bill_check.destroy
-    respond_to do |format|
-      format.html { redirect_to fedex_bill_checks_url, notice: 'Fedex bill check was successfully destroyed.' }
-      format.json { head :no_content }
-    end
+
+      @fedex_bill_check.destroy
+      respond_to do |format|
+        format.html { redirect_to fedex_bill_checks_url, notice: 'Fedex bill check was successfully destroyed.' }
+        format.json { head :no_content }
+      end
+
   end
 
 

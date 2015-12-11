@@ -63,7 +63,8 @@ post "send_demo_message" => 'message_on_orders#send_demo_message'
     resources :fedex_bill_checks do
      collection { post :import }
    end
-   get "fedex_bill_download" => "fedex_bill_checks#download"
+  get "fedex_bill_download" => "fedex_bill_checks#download"
+  delete "fedex_bill_delete" => "fedex_bill_checks#delete"
   resources :product_test_ppos
 
   resources :product_sample_stocks
