@@ -23,6 +23,13 @@ class ProductCostMastersController < ApplicationController
     @showall = true
     #reset_prices
     @all_product_cost_masters = ProductCostMaster.where("product_list_id IS NOT NULL").pluck(:product_list_id)
+
+    @all_product_cost_masters_prod = ProductCostMaster.where("prod IS NOT NULL").pluck(:prod)
+
+    @all_product_variant_prod = ProductVariant.where("extproductcode IS NOT NULL").pluck(:extproductcode)
+
+    @all_product_master_prod = ProductMaster.where("extproductcode IS NOT NULL").pluck(:extproductcode)
+
       # @product_cost_masters = ProductCostMaster.where("product_list_id IS NOT NULL").pluck(:product_list_id)
     if params.has_key?(:search)
       @search = "Search for " +  params[:search].upcase
@@ -38,6 +45,8 @@ class ProductCostMastersController < ApplicationController
       .where("name like ? OR extproductcode like ? or list_barcode like ?",
         "#{@searchvalue}%", "#{@searchvalue}%", "#{@searchvalue}%")
       .paginate(:page => params[:page])
+
+      @inactive_product_variants = ProductVariant.where('extproductcode NOT IN (?)', @all_product_cost_masters_prod).where("name like ? OR extproductcode like ?", "#{@searchvalue}%", "#{@searchvalue}%")
 
       @found = @product_cost_masters.count
 
