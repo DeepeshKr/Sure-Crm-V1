@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151210115652) do
+ActiveRecord::Schema.define(version: 20151210160023) do
 
   create_table "address_types", force: :cascade do |t|
     t.string   "name"
@@ -1005,6 +1005,8 @@ ActiveRecord::Schema.define(version: 20151210115652) do
     t.integer  "sel_m_cc",               limit: 16, precision: 38
     t.integer  "sel_cc",                 limit: 16, precision: 38
   end
+
+  add_index "product_masters", ["extproductcode"], name: "i_pro_mas_ext"
 
   create_table "product_sample_stocks", force: :cascade do |t|
     t.integer  "product_master_id", limit: 16, precision: 38

@@ -1,14 +1,10 @@
 class Fedex
 # Rs. 8 Per kg and minimum chargeable rate is Rs.80 per shipment
-
-
 # Fuel Surcharge- 20% fixed
 # Service Tax-As applicable
 # COD surcharge-  Rs. 50
 # Waybill Surcharge – Nil
 attr_accessor :weight, :basic, :fuel_surcharge, :cod, :docket, :service_tax,  :sub_total, :total_charges
-
-
 
 end
 

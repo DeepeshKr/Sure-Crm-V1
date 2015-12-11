@@ -4,11 +4,12 @@ class FedexBillChecksController < ApplicationController
   # GET /fedex_bill_checks
   # GET /fedex_bill_checks.json
   def index
+    @list_of_uploads = FedexBillCheck.select("verif_name as reference, count(verif_name) as records").group("verif_name").limit(10)
     @show_csv = false
-    @fedex_bill_checks = FedexBillCheck.limit(100).paginate(:page => params[:page])
+    @fedex_bill_checks = FedexBillCheck.paginate(:page => params[:page])
     if params.has_key?(:ref_name)
         @fedex_bill_checks = FedexBillCheck.where(verif_name: params[:ref_name]).paginate(:page => params[:page])
-        @show_csv = true
+        @show_csv = params[:ref_name]
     end
   end
 

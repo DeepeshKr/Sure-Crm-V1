@@ -1,12 +1,18 @@
 <p id="notice"><%= notice %></p>
+<div class="well well-sm">
+  <% @list_of_uploads.each do |list| %>
+  <%= link_to 'View ' + list.reference + ' ' + list.records.to_s + ' records', fedex_bill_checks_path(ref_name: list.reference), class: "btn btn-primary btn-xs" %>
+<!-- % = list.reference % > < % = list.records % -->
+  <% end %>
+</div>
 <div class="row">
 <div class="col-xs-4">
 <h3>Fedex Bill Checks</h3>
 
 </div>
 <div class="col-xs-2">
-  <% if @show_csv == true %>
-<%= link_to 'Download CSV list', fedex_bill_checks_path(showall: "true", format: :csv), class: "btn btn-success btn-sm" %>
+  <% if @show_csv != 'false' %>
+<%= link_to 'Download CSV list', fedex_bill_download_path(ref_name: @show_csv, format: :csv), class: "btn btn-success btn-sm" %>
 <% end %>
 </div>
 
@@ -21,7 +27,7 @@
 </div>
 </div>
 
-:, :, :, :, :, :, :verif_comments, :, :, :, :, :, :
+
 <table class="table table-hover table-bordered table-stripped">
   <thead>
     <tr>
@@ -56,7 +62,7 @@
         <td><%= fedex_bill_check.higher_floor_delivery %> <br> <%= fedex_bill_check.out_of_delivery_area %></td>
         <td><%= fedex_bill_check.india_service_tax %><br><%= fedex_bill_check.verif_service_tax.round(2) %></td>
         <td><%= fedex_bill_check.billedamt %><br><%= fedex_bill_check.verif_total_charges.round(2) %></td>
-        <td><%= fedex_bill_check.verif_products %>       </td>
+        <td><%= fedex_bill_check.verif_products %>  <%= fedex_bill_check.verif_comments %>     </td>
       </tr>
     <% end %>
   </tbody>
