@@ -38,6 +38,8 @@ post "send_demo_message" => 'message_on_orders#send_demo_message'
   resources :distributor_stock_summaries
 
   resources :distributor_pincode_lists
+  post "distributor_quick_add_pincode" => 'distributor_pincode_lists#quick_add_pincode'
+
 
   resources :distributor_stock_ledgers
 

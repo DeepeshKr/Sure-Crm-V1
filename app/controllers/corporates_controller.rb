@@ -28,6 +28,7 @@ class CorporatesController < ApplicationController
     #add pincode
     @distributor_pincode_list = DistributorPincodeList.new(corporate_id: @corporate.id,sort_order: 1)
 
+
     #show distributor stock summary
     @distributor_stock_summaries = DistributorStockSummary.all.where(corporate_id: @corporate.id)
 

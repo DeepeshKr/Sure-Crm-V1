@@ -7,10 +7,10 @@ class DistributorPincodeListsController < ApplicationController
     if params.has_key? :corporate_id
       @distributor_pincode_lists = DistributorPincodeList.where(corporate_id: params[:corporate_id]).sort("pincode, name").paginate(:page => params[:page])
     else
-      @distributor_pincode_lists = DistributorPincodeList.all.order("pincode, name").paginate(:page => params[:page]) 
+      @distributor_pincode_lists = DistributorPincodeList.all.order("pincode, name").paginate(:page => params[:page])
       #.sort("pincode, name")
     end
-    
+
   end
 
   # GET /distributor_pincode_lists/1
@@ -26,7 +26,37 @@ class DistributorPincodeListsController < ApplicationController
   # GET /distributor_pincode_lists/1/edit
   def edit
   end
+  # $( "#distributor_pincode_list_pincode" ).val( ui.item.pincode);
+  # $( "#distributor_pincode_list_city" ).val( ui.item.regionname);
+  #  $( "#distributor_pincode_list_locality" ).val( ui.item.officename);
+  # $( "#distributor_pincode_list_state" ).val( ui.item.statename );
+  def quick_add_pincode
+    corporate_id = params[:corporate_id]
+    pincode = params[:pincode]
+    @distributor_pincode_list = DistributorPincodeList.new(corporate_id: corporate_id, pincode: pincode)
+    pin_codes = IndiaPincodeList.where(pincode: pincode)
+    if !pin_codes.present?
+      flash[:error] = "Pincode #{pincode} was incorrect. "
+      return redirect_to corporate_path @distributor_pincode_list.corporate_id
 
+    end
+    locality = pin_codes.first.officename
+    city = pin_codes.first.officename
+    state = pin_codes.first.regionname
+    #:corporate_id, :sort_order, :city, :state, :locality, :pincode
+    @distributor_pincode_list.sort_order = 1
+    @distributor_pincode_list.city = city
+    @distributor_pincode_list.state = state
+    @distributor_pincode_list.locality = locality
+    if  @distributor_pincode_list.save
+    flash[:success] = 'Pincode was added successfully successfully!'
+    else
+     flash[:error] = @distributor_pincode_list.errors.full_messages.to_sentence
+     flash[:notice] = @distributor_pincode_list.errors.full_messages.to_sentence
+    end
+
+    redirect_to corporate_path @distributor_pincode_list.corporate_id
+  end
   # POST /distributor_pincode_lists
   # POST /distributor_pincode_lists.json
   def create

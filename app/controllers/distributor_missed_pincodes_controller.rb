@@ -11,7 +11,7 @@ class DistributorMissedPincodesController < ApplicationController
         @distributor_missed_pincodes = DistributorMissedPincode.where(pincode: @pincode).order("total_value DESC").paginate(:page => params[:page])
     elsif params.has_key?(:high_order)
       if params[:high_order] == "high"
-        @distributor_missed_pincodes = DistributorMissedPincode..order("total_value DESC").paginate(:page => params[:page])
+        @distributor_missed_pincodes = DistributorMissedPincode.order("total_value DESC").paginate(:page => params[:page])
         @order_sort = "low"
         @btn_class = "btn btn-info btn-xs"
       elsif params[:high_order] == "low"

@@ -1,5 +1,5 @@
 class IndiaPincodeListsController < ApplicationController
-   before_action { protect_controllers(8) } 
+   before_action { protect_controllers(8) }
   before_action :set_india_pincode_list, only: [:show, :edit, :update, :destroy]
 
   autocomplete :india_pincode_list, :pincode
@@ -9,19 +9,19 @@ class IndiaPincodeListsController < ApplicationController
   # GET /india_pincode_lists
   # GET /india_pincode_lists.json
   def index
-    #    <%= @search %> <%= @found %> 
+    #    <%= @search %> <%= @found %>
     if params[:pincode].present?
       @searchvalue = params[:pincode]
       @india_pincode_lists = IndiaPincodeList.where(pincode:  @searchvalue).paginate(:page => params[:page])
       @search = "Seached for #{@searchvalue}"
       @found = "Found of over #{@india_pincode_lists.count()} Cities"
     elsif params[:location].present?
-      @searchvalue = params[:location]     
+      @searchvalue = params[:location]
       @india_pincode_lists = IndiaPincodeList.where("taluk like ? OR districtname like ? or regionname like ? or pincode like ?", "#{@searchvalue}%", "#{@searchvalue}%", "#{@searchvalue}%", "#{@searchvalue}%").paginate(:page => params[:page])
       @search = "Seached for #{@searchvalue}"
       @found = "Found of over #{@india_pincode_lists.count()} Cities"
     else
-      nos = IndiaPincodeList.all.count() 
+      nos = IndiaPincodeList.all.count()
       @search = ""
       @found = "Total Listings of over #{nos} Cities"
       @india_pincode_lists = IndiaPincodeList.all.paginate(:page => params[:page])
@@ -30,11 +30,11 @@ class IndiaPincodeListsController < ApplicationController
 
   def show_pincode
     if params.has_key?(:term)
-      @searchvalue = params[:term].upcase   
-      @india_pincode_lists = IndiaPincodeList.where("pincode like ? OR districtname like ?", "#{@searchvalue}%", "#{@searchvalue}%")
+      @searchvalue = params[:term].upcase
+      @india_pincode_lists = IndiaPincodeList.where("pincode like ? OR districtname like ?", "#{@searchvalue}%", "#{@searchvalue}%").limit(200)
       #respond_to do |format|
    render json: @india_pincode_lists
-     # end  
+     # end
     end
   end
 
@@ -110,8 +110,8 @@ class IndiaPincodeListsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def india_pincode_list_params
-      params.require(:india_pincode_list).permit(:officename, :pincode, 
-        :deliverystatus, :divisionname, :regionname, :circlename, :taluk, 
+      params.require(:india_pincode_list).permit(:officename, :pincode,
+        :deliverystatus, :divisionname, :regionname, :circlename, :taluk,
         :districtname, :statename)
     end
 end
