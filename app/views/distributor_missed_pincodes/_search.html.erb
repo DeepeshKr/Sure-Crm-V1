@@ -1,0 +1,10 @@
+<div class="row">
+ <%= bootstrap_form_tag url: distributor_missed_pincodes_path, :method => :GET, :enforce_utf8 => false do |f| %>
+<div class="col-xs-8">
+<%= text_field_tag(:pincode, nil, :class => "form-control", :required => "true", :placeholder => "Search pincode", :value => @pincode  )   %>
+</div>
+
+<div class="col-xs-2">
+	<%= submit_tag "Search", name: nil, class: "btn btn-primary" %>
+</div>
+<% end %>

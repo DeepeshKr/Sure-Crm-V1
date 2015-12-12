@@ -203,6 +203,7 @@ class SalesPpoReportController < ApplicationController
   end
 
    def hour_performance
+     @hbn_media_cost_master = MediaCostMaster.where(media_id: 11200).order(:total_cost)
     #@searchaction = "hourly"
      #/sales_report/hourly?for_date=05%2F09%2F2015
     @hourlist = "Time UTC is your zone #{Time.zone.now} while actual time is #{Time.now}"
@@ -371,6 +372,7 @@ class SalesPpoReportController < ApplicationController
 
     @hbn_media_cost = Medium.where(media_group_id: 10000, active: true).sum(:daily_charges).to_f
 
+    @total_fixed_cost = Mcampaign_playlists.sum(:cost).to_f
       secs_in_a_day = (24*60*60)
       media_cost = @hbn_media_cost / secs_in_a_day
 

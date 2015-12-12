@@ -1,0 +1,44 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @courier_list.name %>
+</p>
+
+<p>
+  <strong>Description:</strong>
+  <%= @courier_list.description %>
+</p>
+
+<p>
+  <strong>Contact details:</strong>
+  <%= @courier_list.contact_details %>
+</p>
+
+<p>
+  <strong>Tracking url:</strong>
+  <%= @courier_list.tracking_url %>
+</p>
+
+<p>
+  <strong>Helpline:</strong>
+  <%= @courier_list.helpline %>
+</p>
+
+<p>
+  <strong>Sort order:</strong>
+  <%= @courier_list.sort_order %>
+</p>
+
+<p>
+  <strong>Ref code:</strong>
+  <%= @courier_list.ref_code %>
+</p>
+
+<p>
+  <strong>Active:</strong>
+  <%= @courier_list.active %>
+</p>
+
+<%= link_to 'Edit', edit_courier_list_path(@courier_list) %> |
+<%= link_to 'Back', courier_lists_path %>

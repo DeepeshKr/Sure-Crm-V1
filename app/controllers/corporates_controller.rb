@@ -26,7 +26,7 @@ class CorporatesController < ApplicationController
     #.sort("pincode, name")
     @corporate_id = @corporate.id
     #add pincode
-    @distributor_pincode_list = DistributorPincodeList.new(corporate_id: @corporate.id)
+    @distributor_pincode_list = DistributorPincodeList.new(corporate_id: @corporate.id,sort_order: 1)
 
     #show distributor stock summary
     @distributor_stock_summaries = DistributorStockSummary.all.where(corporate_id: @corporate.id)
@@ -100,7 +100,7 @@ class CorporatesController < ApplicationController
     # t.datetime :online_last_ran_on
     # t.text :online_description
     @distributor_upload_order = DistributorUploadOrder.first
-    
+
     if params.has_key?(:order_id)
       @order_id = params[:order_id]
       flash[:notice] = check_transfer(@order_id)

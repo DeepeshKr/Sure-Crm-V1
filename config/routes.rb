@@ -1,6 +1,12 @@
 Rails.application.routes.draw do
 
 
+  resources :distributor_missed_pincodes
+
+  resources :pincode_service_levels
+
+  resources :courier_lists
+
   resources :distributor_upload_orders
 
 post "send_demo_message" => 'message_on_orders#send_demo_message'

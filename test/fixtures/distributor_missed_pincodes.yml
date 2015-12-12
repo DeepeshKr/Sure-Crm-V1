@@ -1,0 +1,15 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  pincode: MyString
+  no_of_orders: 1
+  total_value: 1.5
+  last_ran_on: 2015-12-12 11:13:56
+  description: MyText
+
+two:
+  pincode: MyString
+  no_of_orders: 1
+  total_value: 1.5
+  last_ran_on: 2015-12-12 11:13:56
+  description: MyText

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151210160023) do
+ActiveRecord::Schema.define(version: 20151212054356) do
 
   create_table "address_types", force: :cascade do |t|
     t.string   "name"
@@ -185,6 +185,19 @@ ActiveRecord::Schema.define(version: 20151210160023) do
     t.string   "pan_card_no"
   end
 
+  create_table "courier_lists", force: :cascade do |t|
+    t.string   "name"
+    t.text     "description"
+    t.text     "contact_details"
+    t.string   "tracking_url"
+    t.string   "helpline"
+    t.integer  "sort_order",      limit: 16, precision: 38
+    t.string   "ref_code"
+    t.integer  "active",          limit: 16, precision: 38
+    t.datetime "created_at",                                null: false
+    t.datetime "updated_at",                                null: false
+  end
+
   create_table "customer_addresses", force: :cascade do |t|
     t.integer  "customer_id",   limit: 16, precision: 38
     t.string   "name"
@@ -332,6 +345,16 @@ ActiveRecord::Schema.define(version: 20151210160023) do
     t.text     "description"
     t.datetime "created_at",                               null: false
     t.datetime "updated_at",                               null: false
+  end
+
+  create_table "distributor_missed_pincodes", force: :cascade do |t|
+    t.string   "pincode"
+    t.integer  "no_of_orders", limit: 16, precision: 38
+    t.decimal  "total_value"
+    t.datetime "last_ran_on"
+    t.text     "description"
+    t.datetime "created_at",                             null: false
+    t.datetime "updated_at",                             null: false
   end
 
   create_table "distributor_pincode_lists", force: :cascade do |t|
@@ -902,6 +925,22 @@ ActiveRecord::Schema.define(version: 20151210160023) do
     t.integer  "duration_secs", limit: 16, precision: 38
     t.datetime "created_at",                              null: false
     t.datetime "updated_at",                              null: false
+  end
+
+  create_table "pincode_service_levels", force: :cascade do |t|
+    t.string   "pincode"
+    t.integer  "total_orders",      limit: 16, precision: 38
+    t.decimal  "total_value"
+    t.datetime "last_ran_on"
+    t.text     "description"
+    t.integer  "courier_id",        limit: 16, precision: 38
+    t.integer  "time_to_deliver",   limit: 16, precision: 38
+    t.integer  "cod_avail",         limit: 16, precision: 38
+    t.integer  "distributor_avail", limit: 16, precision: 38
+    t.integer  "paid_order",        limit: 16, precision: 38
+    t.decimal  "paid_value"
+    t.datetime "created_at",                                  null: false
+    t.datetime "updated_at",                                  null: false
   end
 
   create_table "product_active_codes", force: :cascade do |t|

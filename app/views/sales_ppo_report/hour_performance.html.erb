@@ -5,9 +5,8 @@
 	 </div>
    <%= form_tag  url_for(:controller => 'sales_ppo_report', :action => "hourly_performance"), method: "get" do  %>
    <div class="col-xs-4">
-<%=  collection_select(nil, :media_cost, @hbn_media_cost_master, :total_cost, :cost_segment, { :prompt => '-- Select Media Cost --'}, {:class => "form-control", :required => true }) %>
-   <%= select_tag('hour_name',
-   options_for_select(@halfhourlist.collect {|p| [ p[:name], p[:id] ] })) %>
+<%=  collection_select(nil, :media_cost, @hbn_media_cost_master, :total_cost, :cost_segment, { :prompt => '-- Select Time Band --'}, {:class => "form-control", :required => true }) %>
+
    </div>
        <div class="col-xs-6">
          <div class="input-daterange input-group">

@@ -1,0 +1,59 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Pincode:</strong>
+  <%= @pincode_service_level.pincode %>
+</p>
+
+<p>
+  <strong>Total orders:</strong>
+  <%= @pincode_service_level.total_orders %>
+</p>
+
+<p>
+  <strong>Total value:</strong>
+  <%= @pincode_service_level.total_value %>
+</p>
+
+<p>
+  <strong>Last ran on:</strong>
+  <%= @pincode_service_level.last_ran_on %>
+</p>
+
+<p>
+  <strong>Description:</strong>
+  <%= @pincode_service_level.description %>
+</p>
+
+<p>
+  <strong>Courier:</strong>
+  <%= @pincode_service_level.courier_id %>
+</p>
+
+<p>
+  <strong>Time to deliver:</strong>
+  <%= @pincode_service_level.time_to_deliver %>
+</p>
+
+<p>
+  <strong>Cod avail:</strong>
+  <%= @pincode_service_level.cod_avail %>
+</p>
+
+<p>
+  <strong>Distributor avail:</strong>
+  <%= @pincode_service_level.distributor_avail %>
+</p>
+
+<p>
+  <strong>Paid order:</strong>
+  <%= @pincode_service_level.paid_order %>
+</p>
+
+<p>
+  <strong>Paid value:</strong>
+  <%= @pincode_service_level.paid_value %>
+</p>
+
+<%= link_to 'Edit', edit_pincode_service_level_path(@pincode_service_level) %> |
+<%= link_to 'Back', pincode_service_levels_path %>

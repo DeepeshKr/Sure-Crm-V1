@@ -1,0 +1,41 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Listing Courier Lists</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Description</th>
+      <th>Contact details</th>
+      <th>Tracking url</th>
+      <th>Helpline</th>
+      <th>Sort order</th>
+      <th>Ref code</th>
+      <th>Active</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @courier_lists.each do |courier_list| %>
+      <tr>
+        <td><%= courier_list.name %></td>
+        <td><%= courier_list.description %></td>
+        <td><%= courier_list.contact_details %></td>
+        <td><%= courier_list.tracking_url %></td>
+        <td><%= courier_list.helpline %></td>
+        <td><%= courier_list.sort_order %></td>
+        <td><%= courier_list.ref_code %></td>
+        <td><%= courier_list.active %></td>
+        <td><%= link_to 'Show', courier_list %></td>
+        <td><%= link_to 'Edit', edit_courier_list_path(courier_list) %></td>
+        <td><%= link_to 'Destroy', courier_list, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Courier list', new_courier_list_path %>

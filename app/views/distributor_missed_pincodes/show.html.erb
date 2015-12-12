@@ -1,0 +1,29 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Pincode:</strong>
+  <%= @distributor_missed_pincode.pincode %>
+</p>
+
+<p>
+  <strong>No of orders:</strong>
+  <%= @distributor_missed_pincode.no_of_orders %>
+</p>
+
+<p>
+  <strong>Total value:</strong>
+  <%= @distributor_missed_pincode.total_value %>
+</p>
+
+<p>
+  <strong>Last ran on:</strong>
+  <%= @distributor_missed_pincode.last_ran_on %>
+</p>
+
+<p>
+  <strong>Description:</strong>
+  <%= @distributor_missed_pincode.description %>
+</p>
+
+<%= link_to 'Edit', edit_distributor_missed_pincode_path(@distributor_missed_pincode) %> |
+<%= link_to 'Back', distributor_missed_pincodes_path %>

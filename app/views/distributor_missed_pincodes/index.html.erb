@@ -1,0 +1,42 @@
+<p id="notice"><%= notice %></p>
+<div class="row">
+  <div class="col-xs-6">
+    <h3>Distributor Missed Pincodes</h3>
+    <p>
+      <small>All Values are retails value</small>
+    </p>
+  </div>
+  <div class="col-xs-6">
+    <%= render 'search' %>
+  </div>
+</div>
+<div class="digg_pagination">
+    <%= will_paginate @distributor_missed_pincodes, :container => false %>
+</div>
+
+<table class="table table-hover table-stripped">
+  <thead>
+    <tr>
+      <th>Pincode</th>
+      <th>No of orders</th>
+      <th><%= link_to 'Total value', distributor_missed_pincodes_path(high_order: @order_sort), class: @btn_class %></th>
+      <th>Last ran on</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @distributor_missed_pincodes.each do |distributor_missed_pincode| %>
+      <tr>
+        <td><%= distributor_missed_pincode.pincode %></td>
+        <td><%= distributor_missed_pincode.no_of_orders %></td>
+        <td><%= distributor_missed_pincode.total_value %></td>
+        <td><%= distributor_missed_pincode.last_ran_on.strftime("%d-%b-%Y %H:%M") %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+<div class="digg_pagination">
+    <%= will_paginate @distributor_missed_pincodes, :container => false %>
+</div>

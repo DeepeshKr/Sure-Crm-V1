@@ -1,0 +1,47 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Listing Pincode Service Levels</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Pincode</th>
+      <th>Total orders</th>
+      <th>Total value</th>
+      <th>Last ran on</th>
+      <th>Description</th>
+      <th>Courier</th>
+      <th>Time to deliver</th>
+      <th>Cod avail</th>
+      <th>Distributor avail</th>
+      <th>Paid order</th>
+      <th>Paid value</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @pincode_service_levels.each do |pincode_service_level| %>
+      <tr>
+        <td><%= pincode_service_level.pincode %></td>
+        <td><%= pincode_service_level.total_orders %></td>
+        <td><%= pincode_service_level.total_value %></td>
+        <td><%= pincode_service_level.last_ran_on %></td>
+        <td><%= pincode_service_level.description %></td>
+        <td><%= pincode_service_level.courier_id %></td>
+        <td><%= pincode_service_level.time_to_deliver %></td>
+        <td><%= pincode_service_level.cod_avail %></td>
+        <td><%= pincode_service_level.distributor_avail %></td>
+        <td><%= pincode_service_level.paid_order %></td>
+        <td><%= pincode_service_level.paid_value %></td>
+        <td><%= link_to 'Show', pincode_service_level %></td>
+        <td><%= link_to 'Edit', edit_pincode_service_level_path(pincode_service_level) %></td>
+        <td><%= link_to 'Destroy', pincode_service_level, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Pincode service level', new_pincode_service_level_path %>

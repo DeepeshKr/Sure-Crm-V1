@@ -1,0 +1,18 @@
+<%= simple_form_for(@courier_list) do |f| %>
+  <%= f.error_notification %>
+
+  <div class="form-inputs">
+    <%= f.input :name %>
+    <%= f.input :description %>
+    <%= f.input :contact_details %>
+    <%= f.input :tracking_url %>
+    <%= f.input :helpline %>
+    <%= f.input :sort_order %>
+    <%= f.input :ref_code %>
+    <%= f.input :active %>
+  </div>
+
+  <div class="form-actions">
+    <%= f.button :submit %>
+  </div>
+<% end %>
