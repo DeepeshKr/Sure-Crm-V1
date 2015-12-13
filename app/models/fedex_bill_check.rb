@@ -18,7 +18,7 @@ require 'roo'
         order_ref_no = nil
         order_no = nil
         manifest_no = manifest_no || nil if manifest_no.match(/[mM]\d*/)
-        if manifest.present?
+        if manifest_no.present?
 
           vpp_prod = VPP.where(manifest: manifest_no) #.pluck(:custref, :prod)
           if vpp_prod.present?
@@ -47,6 +47,27 @@ require 'roo'
   end # end CSV.foreach
 end # end self.import(file)
 
+# def self.import(file)
+#   allowed_attributes = ["identifier","first_name","last_name","address","phone"]
+#   spreadsheet = open_spreadsheet(file)
+#   header = spreadsheet.row(1)
+#   (2..spreadsheet.last_row).each do |i|
+#     row = Hash[[header, spreadsheet.row(i)].transpose]
+#     employee = find_by_identifier(row["identifier"]) || new
+#     employee.attributes = row.to_hash.select { |k,v| allowed_attributes.include? k }
+#     employee.save!
+#   end
+# end
+#
+# def self.open_spreadsheet(file)
+#   case File.extname(file.original_filename)
+#   when ".csv" then Roo::Csv.new(file.path, :ignore)
+#   when ".xls" then Roo::Excel.new(file.path, nil, :ignore)
+#   when ".xlsx" then Roo::Excelx.new(file.path, nil, :ignore)
+#   else raise "Unknown file type: #{file.original_filename}"
+#   end
+#
+# end
 #spreadsheet = open_spreadsheet(file)
 #use this to open file
   def self.open_spreadsheet(file)
