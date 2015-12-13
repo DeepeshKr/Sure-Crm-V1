@@ -1,5 +1,5 @@
 class IndiaPincodeListsController < ApplicationController
-   before_action { protect_controllers(8) }
+  before_action { protect_controllers(8) }, only: [:import, :edit, :update, :destroy]
   before_action :set_india_pincode_list, only: [:show, :edit, :update, :destroy]
 
   autocomplete :india_pincode_list, :pincode

@@ -21,10 +21,13 @@ gem 'luhn'
 ## Gemfile for Rails 3+, Sinatra, and Merb
 gem 'will_paginate', '~> 3.0.6'
 
-#get multi form  
+#get multi form
 #gem 'wicked'
 #gem for getting csv files
 #gem 'fastercsv', '~> 1.5.5'
+#gem for parsing excel, ods or any spreadsheet
+#https://github.com/roo-rb/roo
+gem 'roo', '~> 2.3'
 
 #get auto complete
 gem 'rails4-autocomplete'
@@ -126,7 +129,7 @@ gem 'gruff'
 # gem 'debugger', group: [:development, :test]
 #gem 'request-log-analyzer'
 group :production do
-  
+
   gem 'rails_12factor', '0.0.2'
   #gem 'unicorn',        '4.8.3'
   #gem 'passenger'

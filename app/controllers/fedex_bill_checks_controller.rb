@@ -1,4 +1,5 @@
 class FedexBillChecksController < ApplicationController
+  require 'roo'
   before_action :set_fedex_bill_check, only: [:show, :edit, :update, :destroy]
   #
 
@@ -88,7 +89,8 @@ class FedexBillChecksController < ApplicationController
           fedex.destroy
           records += 1
         end
-          format.html { redirect_to fedex_bill_checks_url, notice: '#{records} Fedex bills with reference name #{ref_name} was successfully destroyed.'}
+        flash[:success] = '#{records} Fedex bills with reference name #{ref_name} was successfully destroyed.'
+          redirect_to fedex_bill_checks_url
     end
   end
   # DELETE /fedex_bill_checks/1
