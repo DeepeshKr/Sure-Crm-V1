@@ -20,35 +20,35 @@
   </div>
   <div class="field">
      <%= f.text_field :ref_name, label: "Reference Name - Please ensure it is unique", placeholder: "Unique general name of Channel" %>
-  </div> 
+  </div>
  <div class="row">
     <div class="col-xs-2">
     <%= f.text_field :dnis, placeholder: "dnis", required: true,  label: "4 digit dnis" %>
     </div>
   <div class="col-xs-3">
-   
+
     <%= f.text_field :telephone, required: true,  label: "Incoming Telephone" %>
   </div>
     <div class="col-xs-4">
-    <%= f.select(:state, 
-        content_tag(:option,'All India',:value=>"")+options_from_collection_for_select(@statelist, :name, :name, @medium.state), 
+    <%= f.select(:state,
+        content_tag(:option,'All India',:value=>"")+options_from_collection_for_select(@statelist, :name, :name, @medium.state),
         {:prompt => 'All India'}, :class => "form-control col-xs-1")  %>
   </div>
   <div class="col-xs-3">
-  
+
     <%= f.text_field :alttelephone, label: "Alternate Telephone" %>
   </div>
 
   </div>
- <% if (current_user.employee_role.sortorder < 5) %> 
- 
+ <% if (current_user.employee_role.sortorder < 8) %>
+
   <div class="row">
   <div class="col-xs-4 col-offset-xs-2">
-    <%= f.select(:media_commision_id, 
+    <%= f.select(:media_commision_id,
        options_from_collection_for_select(@media_commission, :id, :name, @medium.media_commision_id), {:prompt => 'None'}, :class => "form-control col-xs-1")  %>
 </div>
 <div class="col-xs-2">
-   
+
     <%= f.text_field :value, placeholder: "e.g. 0.20", label: "Commission Percent" %>
   </div>
  <div class="col-xs-2">
@@ -63,11 +63,11 @@
   <% end %>
    <div class="row">
     <div class="col-xs-3">
-      <%= f.select(:media_group_id, 
-        options_from_collection_for_select(@media_group, :id, :name, @medium.media_group_id), 
+      <%= f.select(:media_group_id,
+        options_from_collection_for_select(@media_group, :id, :name, @medium.media_group_id),
         {:prompt => 'None', include_blank: 'None'}, :class => "form-control col-xs-1")  %>
     </div>
- 
+
     <div class="col-xs-4">
     <%= f.text_field :channel, placeholder: "Chanel", required: true, label: "Channel" %>
     </div>
@@ -79,19 +79,19 @@
     </div>
   </div>
 <div class="field">
- <%= f.select(:employee_id, 
-    options_from_collection_for_select(@employees, :id, :name, selected: @medium.employee_id), 
-        {:prompt => '-Select Managed by-'} , 
+ <%= f.select(:employee_id,
+    options_from_collection_for_select(@employees, :id, :name, selected: @medium.employee_id),
+        {:prompt => '-Select Managed by-'} ,
     {label: " Managed By"})  %>
  </div>
   <div class="field">
-   
+
     <%= f.text_area :description, label: "Description" %>
   </div>
   <div class="row">
   		<div class="col-xs-4 col-xs-offset-1">
 	    <%= f.check_box :active, label: "Active Media" %>
-		</div>  
+		</div>
 	</div>
 
  	<div class="row">
@@ -101,10 +101,10 @@
   <label>Jump to next</label>
   </div>
   		<div class="col-xs-2 ">
-  			
+
     		<%= f.submit  class: "btn btn-primary" %>
-  
-  			
+
+
   		</div>
   </div>
 <% end %>

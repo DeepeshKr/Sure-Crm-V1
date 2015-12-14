@@ -1,9 +1,10 @@
  <div class="row">
-	 <div class="col-xs-6">
+	 <div class="col-xs-7">
 
 	 <h4><strong>All HBN Order Summary for past few days</strong></h4>
+     <%= @from_date %> <%= @to_date %>
 	 </div>
-	 <div class="col-xs-6">
+	 <div class="col-xs-5">
 	 	<%= render partial: 'date_search', :locals => {:searchaction => "summary"}  %>
 	</div>
  </div>
@@ -14,17 +15,19 @@
    <tr>
    <th  rowspan="2">No</th>
      <th  rowspan="2">Date</th>
-    
+
       <th colspan="4">Income</th>
+      <th rowspan="2" class="text-right">Total Revenue</th>
       <th colspan="5">Expense</th>
-    
+      <th rowspan="2" class="text-right">Total Expense</th>
+    <th rowspan="2" class="text-right">Profitability</th>
      <th rowspan="2">Half Hourly</th>
     <th rowspan="2">Show wise</th>
      </tr>
     <tr>
-    
-     
-     
+
+
+
        <th class="text-right">Orders</th>
        <th class="text-right">Pieces</th>
      <th class="text-right">Sales</th>
@@ -34,7 +37,8 @@
        <th class="text-right">Commision</th>
      <th class="text-right">Media Cost</th>
       <th class="text-right">Refund</th>
-     <th class="text-right">Profitability</th>
+      <th class="text-right">Damage</th>
+
      </tr>
   </thead>
 
@@ -42,42 +46,37 @@
    <% @employeeorderlist.each do |c| %>
    <tr>
    <td><%= @sno %></td>
-
  <td><%= c[:for_date] %></td>
 
 <td class="text-right">
-   <%= c[:nos] %> 
+   <%= c[:nos] %>
 </td>
 <td class="text-right">
-   <%= c[:pieces] %> 
-  
+   <%= c[:pieces] %>
+
 </td>
 <td class="text-right">
-   <%= c[:total] %> 
-   
+   <%= c[:total] %>
+
 </td>
 <td class="text-right">
-   <%= c[:revenue] %> 
-  
+   <%= c[:revenue] %>
+
 </td>
 <td class="text-right">
-   <%= c[:product_cost] %> 
-  
+<strong><%= c[:revenue] %></strong>
+
 </td>
+<td class="text-right">   <%= c[:product_cost] %></td>
+<td class="text-right">   <%= c[:variable_cost] %></td>
+<td class="text-right">   <%= c[:fixed_cost] %></td>
+<td class="text-right">   <%= c[:refund] %></td>
+<td class="text-right">   <%= c[:product_damages] %></td>
+<td class="text-right"> <strong><%= c[:total_cost] %></strong>
+
+</td >
 <td class="text-right">
-   <%= c[:variable_cost] %> 
-  
-</td>
-<td class="text-right">
-   <%= c[:fixed_cost] %> 
-  
-</td>
-<td class="text-right">
-   <%= c[:refund] %> 
-  
-</td>
-<td class="text-right">  
- <%= c[:profitability] %>
+ <strong><%= c[:profitability] %></strong>
 
 </td >
 
@@ -88,8 +87,8 @@
 <%= link_to "View PPO", show_ppo_path(for_date: c[:for_date]), :target => "_blank", class: "btn btn-info btn-xs" %>
 </td>
 
-  </tr> 
-  <% @sno += 1 %> 
+  </tr>
+  <% @sno += 1 %>
  <% end %>
   </tbody>
 
@@ -112,7 +111,7 @@
 
   </tr>
  <% @list_of_orders.each do |c| %>
-<tr>  
+<tr>
 <td> <%= @order_sno %></td>
 <td> <%= c[:order_no] %></td>
 <td> <%= c[:time_of_order] %></td>

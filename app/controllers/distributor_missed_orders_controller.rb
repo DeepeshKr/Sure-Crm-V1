@@ -4,13 +4,13 @@ class DistributorMissedOrdersController < ApplicationController
   # GET /distributor_missed_orders
   # GET /distributor_missed_orders.json
   def index
-    @btn1 = "btn btn-default" 
+    @btn1 = "btn btn-default"
     @btn2 = "btn btn-default"
     if params.has_key?(:corporate_id)
       @corporate = Corporate.find(params[:corporate_id])
-      @distributor_missed_orders = DistributorMissedOrder.where(corporate_id: params[:corporate_id]).paginate(:page => params[:page], :per_page => 100) 
+      @distributor_missed_orders = DistributorMissedOrder.where(corporate_id: params[:corporate_id]).paginate(:page => params[:page], :per_page => 100)
       if params.has_key?(:type_id)
-        @distributor_missed_orders =  @distributor_missed_orders.where(type_id: params[:type_id]).paginate(:page => params[:page], :per_page => 100) 
+        @distributor_missed_orders =  @distributor_missed_orders.where(type_id: params[:type_id]).paginate(:page => params[:page], :per_page => 100)
         status = params[:type_id].to_i
         case status # a_variable is the variable we want to compare
           when 10000    #compare to 1
@@ -24,12 +24,16 @@ class DistributorMissedOrdersController < ApplicationController
         end
       end
     else
-      @distributor_missed_orders = DistributorMissedOrder.order("summary_date DESC").limit(100).paginate(:page => params[:page], :per_page => 100) 
+      @distributor_missed_orders = DistributorMissedOrder.order("summary_date DESC").limit(100).paginate(:page => params[:page], :per_page => 100)
     end
-   
- 
+
+
   end
- 
+
+  def index
+
+      @distributor_missed_orders = DistributorMissedOrder.order("summary_date DESC").limit(1000).paginate(:page => params[:page], :per_page => 100)
+  end
 
   # GET /distributor_missed_orders/1
   # GET /distributor_missed_orders/1.json

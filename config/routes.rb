@@ -9,6 +9,8 @@ Rails.application.routes.draw do
 
   resources :distributor_upload_orders
 
+get "recent_missed_orders" => 'distributor_missed_orders#recent'
+
 post "send_demo_message" => 'message_on_orders#send_demo_message'
 
   get 'new_dept/list'

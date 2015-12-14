@@ -20,7 +20,7 @@ class SalesPpoReportController < ApplicationController
           @up_to_date = use_date.to_date #- 5.days
     end
 
-    media_segments
+    #media_segments
 
     @up_to_date.downto(@from_date).each do |day|
            # day = day - 330.minutes
@@ -34,7 +34,7 @@ class SalesPpoReportController < ApplicationController
 
           orderlist = OrderMaster.where('ORDER_STATUS_MASTER_ID > 10002')
           .where('orderdate >= ? AND orderdate <= ?', @from_date, @to_date)
-           .joins(:medium).where("media.media_group_id = 10000")
+           .joins(:medium).where("media.media_group_id = 10000") #.limit(1)
 
           # #split the fixed cost across the hour
           revenue = 0
@@ -53,7 +53,11 @@ class SalesPpoReportController < ApplicationController
             product_cost += OrderMaster.find(med.id).productcost ||= 0
 
           end
-          fixed_cost = Medium.where(media_group_id: 10000).sum(:daily_charges)
+          fixed_cost = Medium.where(media_group_id: 10000, active: true).sum(:daily_charges).to_f
+
+          @total_media_cost = Medium.where(media_group_id: 10000).sum(:daily_charges).to_f
+
+         @hbn_media_cost = Medium.where(media_group_id: 10000, active: true).sum(:daily_charges).to_f
 
           # nos =  nos * @correction
           # pieces = pieces * @correction
@@ -80,7 +84,7 @@ class SalesPpoReportController < ApplicationController
           refund = totalorders * 0.02
           nos = (orderlist.count()) * @correction
           pieces = orderlist.sum(:pieces) * @correction
-          total_cost = (product_cost + fixed_cost + media_var_cost + refund)
+          total_cost = (product_cost + fixed_cost + media_var_cost + refund + product_damages)
           profitability = (revenue - total_cost).to_i
 
           employeeunorderlist << {:total => totalorders.to_i,
@@ -219,8 +223,14 @@ class SalesPpoReportController < ApplicationController
   end
 
    def hour_performance
-     @hbn_media_cost_master = MediaCostMaster.where(media_id: 11200).order(:total_cost)
-    #@searchaction = "hourly"
+     @hbn_media_cost_master = MediaCostMaster.where(media_id: 11200).order("str_hr, str_min")
+    # #@searchaction = "hourly"
+    # t.integer  "str_hr",        limit: 16, precision: 38
+    # t.integer  "str_min",       limit: 16, precision: 38
+    # t.integer  "str_sec",       limit: 16, precision: 38
+    # t.integer  "end_hr",        limit: 16, precision: 38
+    # t.integer  "end_min",       limit: 16, precision: 38
+    # t.integer  "end_sec",       limit: 16, precision: 38
      #/sales_report/hourly?for_date=05%2F09%2F2015
     @hourlist = "Time UTC is your zone #{Time.zone.now} while actual time is #{Time.now}"
     @sno = 1
@@ -321,22 +331,22 @@ class SalesPpoReportController < ApplicationController
           profitability = (revenue - (product_cost + fixed_cost + media_var_cost + refund)).to_i
 
 
-          # employeeunorderlist << {:total => totalorders.to_i,
-          # :total_orders => totalorders.to_i,
-          # :starttime =>  halfhourago.strftime("%H:%M %p"),
-          # :endtime => Time.at(date).strftime("%H:%M %p"),
-          # :start_time => halfhourago.strftime("%Y-%m-%d %H:%M"),
-          # :end_time => Time.at(date).strftime("%Y-%m-%d %H:%M"),
-          # :pieces => pieces.to_i,
-          # :total_pieces => pieces.to_i,
-          # :refund => refund.to_i,
-          # :nos => nos.to_i,
-          # :total_nos => nos.to_i,
-          # :revenue => revenue.to_i,
-          # :product_cost => product_cost.to_i,
-          # :variable_cost => media_var_cost.to_i,
-          # :fixed_cost => media_fixed_cost.to_i,
-          # :profitability => profitability.to_i}
+          employeeunorderlist << {:total => totalorders.to_i,
+          :total_orders => totalorders.to_i,
+          :starttime =>  halfhourago.strftime("%H:%M %p"),
+          :endtime => Time.at(date).strftime("%H:%M %p"),
+          :start_time => halfhourago.strftime("%Y-%m-%d %H:%M"),
+          :end_time => Time.at(date).strftime("%Y-%m-%d %H:%M"),
+          :pieces => pieces.to_i,
+          :total_pieces => pieces.to_i,
+          :refund => refund.to_i,
+          :nos => nos.to_i,
+          :total_nos => nos.to_i,
+          :revenue => revenue.to_i,
+          :product_cost => product_cost.to_i,
+          :variable_cost => media_var_cost.to_i,
+          :fixed_cost => media_fixed_cost.to_i,
+          :profitability => profitability.to_i}
 
         end #end of hour loop
         @employeeorderlist = employeeunorderlist #.sort_by{|c| c[:total]}.reverse
