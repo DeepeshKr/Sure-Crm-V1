@@ -1,4 +1,5 @@
 class FedexBillChecksController < ApplicationController
+  before_action {protect_controllers(6)}
   require 'roo'
   before_action :set_fedex_bill_check, only: [:show, :edit, :update, :destroy]
   #

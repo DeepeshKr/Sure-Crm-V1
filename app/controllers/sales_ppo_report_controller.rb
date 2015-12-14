@@ -55,19 +55,33 @@ class SalesPpoReportController < ApplicationController
           end
           fixed_cost = Medium.where(media_group_id: 10000).sum(:daily_charges)
 
+          # nos =  nos * @correction
+          # pieces = pieces * @correction
+
+          # # #product_cost = product_cost * nos
+          # product_cost = (product_cost * @correction)
+          # product_damages = (product_cost * 0.10)
+          # totalorders = totalorders * @correction
+
+          # refund = totalorders * 0.02
+
           ## Apply all the corrections here ###
           total_shipping = (orderlist.sum(:shipping))
           total_sub_total = (orderlist.sum(:subtotal))
           totalorders = (total_shipping + total_sub_total)
 
+
            ## Apply all the corrections here ###
+          revenue = revenue * @correction
+          media_var_cost = media_var_cost * @correction
           product_cost = product_cost * @correction
-          product_cost += product_cost * 0.10
+          product_damages = (product_cost * 0.10)
           totalorders = totalorders * @correction
           refund = totalorders * 0.02
           nos = (orderlist.count()) * @correction
           pieces = orderlist.sum(:pieces) * @correction
-          profitability = (revenue - (product_cost + fixed_cost + media_var_cost + refund)).to_i
+          total_cost = (product_cost + fixed_cost + media_var_cost + refund)
+          profitability = (revenue - total_cost).to_i
 
           employeeunorderlist << {:total => totalorders.to_i,
           :for_date =>  for_date.strftime("%Y-%m-%d"),
@@ -77,8 +91,10 @@ class SalesPpoReportController < ApplicationController
           :total_nos => nos.to_i,
           :revenue => revenue.to_i,
           :product_cost => product_cost.to_i,
+          :product_damages => product_damages.to_i,
           :variable_cost => media_var_cost.to_i,
           :fixed_cost => fixed_cost.to_i,
+          :total_cost => total_cost.to_i,
           :profitability => profitability}
     end
         @list_of_orders =  @list_of_orders.sort_by{ |c| c[:time_of_order]}
@@ -372,7 +388,7 @@ class SalesPpoReportController < ApplicationController
 
     @hbn_media_cost = Medium.where(media_group_id: 10000, active: true).sum(:daily_charges).to_f
 
-    @total_fixed_cost = Mcampaign_playlists.sum(:cost).to_f
+    @total_fixed_cost = campaign_playlists.sum(:cost).to_f
       secs_in_a_day = (24*60*60)
       media_cost = @hbn_media_cost / secs_in_a_day
 
