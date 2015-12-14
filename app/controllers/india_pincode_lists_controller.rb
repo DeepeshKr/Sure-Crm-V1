@@ -1,5 +1,5 @@
 class IndiaPincodeListsController < ApplicationController
-  before_action { protect_controllers(8) }, only: [:import, :edit, :update, :destroy]
+ #, only: [:import, :edit, :update, :destroy]
   before_action :set_india_pincode_list, only: [:show, :edit, :update, :destroy]
 
   autocomplete :india_pincode_list, :pincode
@@ -60,11 +60,13 @@ class IndiaPincodeListsController < ApplicationController
 
   # GET /india_pincode_lists/1/edit
   def edit
+      before_action {protect_controllers(8)}
   end
 
   # POST /india_pincode_lists
   # POST /india_pincode_lists.json
   def create
+      before_action {protect_controllers(8)}
     @india_pincode_list = IndiaPincodeList.new(india_pincode_list_params)
 
     respond_to do |format|
@@ -81,6 +83,7 @@ class IndiaPincodeListsController < ApplicationController
   # PATCH/PUT /india_pincode_lists/1
   # PATCH/PUT /india_pincode_lists/1.json
   def update
+      before_action {protect_controllers(8)}
     respond_to do |format|
       if @india_pincode_list.update(india_pincode_list_params)
         format.html { redirect_to @india_pincode_list, notice: 'India pincode list was successfully updated.' }
@@ -95,6 +98,7 @@ class IndiaPincodeListsController < ApplicationController
   # DELETE /india_pincode_lists/1
   # DELETE /india_pincode_lists/1.json
   def destroy
+      before_action {protect_controllers(8)}
     @india_pincode_list.destroy
     respond_to do |format|
       format.html { redirect_to india_pincode_lists_url, notice: 'India pincode list was successfully destroyed.' }

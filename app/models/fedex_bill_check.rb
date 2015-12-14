@@ -18,6 +18,7 @@ require 'roo'
         order_ref_no = nil
         order_no = nil
         manifest_no = manifest_no || nil if manifest_no.match(/[mM]\d*/)
+          fedex_cal = Fedex.calculate_fedex_billing(0, 0)
         if manifest_no.present?
 
           vpp_prod = VPP.where(manifest: manifest_no) #.pluck(:custref, :prod)

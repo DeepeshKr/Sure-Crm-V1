@@ -89,7 +89,7 @@ class FedexBillChecksController < ApplicationController
           fedex.destroy
           records += 1
         end
-        flash[:success] = '#{records} Fedex bills with reference name #{ref_name} was successfully destroyed.'
+        flash[:success] = "#{records} Fedex bills with reference name #{ref_name} was successfully destroyed."
           redirect_to fedex_bill_checks_url
     end
   end
