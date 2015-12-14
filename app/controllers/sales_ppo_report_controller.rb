@@ -222,6 +222,17 @@ class SalesPpoReportController < ApplicationController
     @list_of_orders =  @list_of_orders.sort_by{ |c| c[:time_of_order]}
   end
 
+  def corrected_date_time(for_date, for_hour, for_minute)
+    for_hour = for_hour.to_s.rjust(2, '0')
+    for_minute = for_minute.to_s.rjust(2, '0')
+    for_date = for_date.strftime("%Y-%m-%d")
+    #string_date = for_date + " " + for_hour + ":" + for_minute + ":00"
+    base_date = DateTime.strptime("#{for_date} #{for_hour}:#{for_minute}:00 + 5:30", "%Y-%m-%d %H:%M:%S")
+    #return return_date = DateTime.strptime(string_date, "%Y-%m-%d %H:%M:%S")
+    return (base_date - 300.minutes).strftime("%Y-%m-%d %H:%M:%S")
+
+  end
+
    def hour_performance
      @hbn_media_cost_master = MediaCostMaster.where(media_id: 11200).order("str_hr, str_min")
     # #@searchaction = "hourly"
@@ -235,35 +246,35 @@ class SalesPpoReportController < ApplicationController
     @hourlist = "Time UTC is your zone #{Time.zone.now} while actual time is #{Time.now}"
     @sno = 1
     @searchaction = "hourly"
+
    for_date = (330.minutes).from_now.to_date
-   if params.has_key?(:hour_name)
-     start_hr = halfhourago.strftime("%H")
-     start_min = halfhourago.strftime("%M")
-     end_hr = Time.at(date).strftime("%H")
-     end_min = Time.at(date).strftime("%M")
+   @from_date = (330.minutes).from_now.to_date
+   if params.has_key?(:time_id)
+     @time_id = params[:time_id]
+     @time_slot = MediaCostMaster.find(@time_id)
+     @start_hr = @time_slot.str_hr
+     @start_min = @time_slot.str_min
+     @end_hr = @time_slot.end_hr
+     @end_min = @time_slot.end_min
    end
    if params.has_key?(:from_date)
       @from_date =  Date.strptime(params[:from_date], "%Y-%m-%d")
       @or_for_date = for_date.strftime("%Y-%m-%d")
    end
-   @to_date = Date.current
+   @to_date = (330.minutes).from_now.to_date
    if params.has_key?(:to_date)
       @to_date =  Date.strptime(params[:to_date], "%Y-%m-%d")
    end
-
         @total_nos = 0
         @total_pieces = 0
         @total_sales = 0
         @total_revenue = 0
-
         @total_product_cost = 0
         @total_fixed_cost = 0
         @total_var_cost = 0
         @total_refund = 0
-
         @total_profit = 0
 
-      #for_date = for_date - 330.minutes
         @hourlist ||= []
         @halfhourlist ||= []
         employeeunorderlist ||= []
@@ -271,6 +282,8 @@ class SalesPpoReportController < ApplicationController
         from_date = for_date.beginning_of_day - 300.minutes
         to_date = for_date.end_of_day - 300.minutes
         #media segregation only HBN
+        check_from_date = corrected_date_time(to_date, "9", "30")
+        check_upto_date = corrected_date_time(to_date, "10", "00")
 
         nos = 0
         total_order_value = 0
@@ -280,15 +293,19 @@ class SalesPpoReportController < ApplicationController
         #   s_no_i += 1
         # end
         #start loop
-
-        (from_date.to_datetime.to_i .. to_date.to_datetime.to_i).step(30.minutes) do |date|
-
-          halfhourago = Time.at(date - 30.minutes)
-
+        @to_date.downto(@from_date).each do |one_day|
+          @check_from_date = corrected_date_time(one_day, @start_hr, @start_min)
+          @check_upto_date = corrected_date_time(one_day, @end_hr, @end_min)
           orderlist = OrderMaster.where('ORDER_STATUS_MASTER_ID > 10002')
            .joins(:medium).where("media.media_group_id = 10000")
-          .where('orderdate >= ? AND orderdate <= ?', halfhourago, Time.at(date)).limit(5)
-          #add orders of each cable tv operator
+           .where("orderdate >= ?", @check_from_date)
+           .where("orderdate <= ?", @check_upto_date)
+          .limit(5)
+          #@check_for_date
+          # .where("orderdate.minute >= @str_min")
+          # .where("orderdate.hour <= @end_hr")
+          # .where("orderdate.minute <= @end_min")
+
 
           #split the fixed cost across the hour
           revenue = 0
@@ -296,30 +313,22 @@ class SalesPpoReportController < ApplicationController
           media_var_cost = 0
           product_cost = 0
           media_cost_master = 0
-          @list_of_orders ||= []
+          totalorders = 0
 
-          orderlist.each do |med |
+          # start_hr = halfhourago.strftime("%H")
+          # start_min = halfhourago.strftime("%M")
+          # end_hr = Time.at(date).strftime("%H")
+          # end_min = Time.at(date).strftime("%M")
+          media_cost_master = MediaCostMaster.where(media_id: 11200).where("str_hr = ? AND str_min = ? AND end_hr = ? AND end_min = ?", @start_hr, @start_min, @end_hr, @end_min)
 
-            @list_of_orders << {order_no:  med.id,
-            time_of_order: med.orderdate.strftime('%Y-%b-%d %H:%M:%S')}
-            #error loggin
-            product_cost += med.productcost ||= 0
-            revenue += med.productrevenue  ||= 0
-            media_var_cost += med.media_commission ||= 0
-          end
-
-          start_hr = halfhourago.strftime("%H")
-          start_min = halfhourago.strftime("%M")
-          end_hr = Time.at(date).strftime("%H")
-          end_min = Time.at(date).strftime("%M")
-          media_cost_master = MediaCostMaster.where(media_id: 11200).where("str_hr = ? AND str_min = ? AND end_hr = ? AND end_min = ?", start_hr, start_min, end_hr, end_min)
-          media_fixed_cost = media_cost_master.first.total_cost.to_i
+          media_fixed_cost = media_cost_master.first.total_cost.to_i || 0 if media_cost_master.present?
 
           ## Apply all the corrections here ###
-          total_shipping = (orderlist.sum(:shipping))
-          total_sub_total = (orderlist.sum(:subtotal))
-          totalorders = (total_shipping + total_sub_total)
-
+          if orderlist.present?
+            total_shipping = orderlist.sum(:shipping) || 0
+            total_sub_total = orderlist.sum(:subtotal) || 0
+            totalorders = (total_shipping + total_sub_total)
+          end
            ## Apply all the corrections here ###
           revenue = revenue * @correction
           product_cost = product_cost * @correction
@@ -330,13 +339,19 @@ class SalesPpoReportController < ApplicationController
           pieces = orderlist.sum(:pieces) * @correction
           profitability = (revenue - (product_cost + fixed_cost + media_var_cost + refund)).to_i
 
+          shows_list = []
+          orderlist.each do |show|
+            shows_list << show.campaign_playlist.product_variant.name if show.campaign_playlist
+          end
 
           employeeunorderlist << {:total => totalorders.to_i,
           :total_orders => totalorders.to_i,
-          :starttime =>  halfhourago.strftime("%H:%M %p"),
-          :endtime => Time.at(date).strftime("%H:%M %p"),
-          :start_time => halfhourago.strftime("%Y-%m-%d %H:%M"),
-          :end_time => Time.at(date).strftime("%Y-%m-%d %H:%M"),
+          :shows_list => shows_list,
+          :date => one_day.strftime("%d-%b-%Y"),
+          :starttime =>  @check_from_date, #.strftime("%Y-%m-%d %H:%M %p")
+          :endtime => @check_upto_date,
+          :start_time => @check_from_date,
+          :end_time => @check_upto_date,
           :pieces => pieces.to_i,
           :total_pieces => pieces.to_i,
           :refund => refund.to_i,
@@ -351,14 +366,13 @@ class SalesPpoReportController < ApplicationController
         end #end of hour loop
         @employeeorderlist = employeeunorderlist #.sort_by{|c| c[:total]}.reverse
           respond_to do |format|
-            csv_file_name = "half_hourly_summary_#{@or_for_date}.csv"
+            csv_file_name = "half_hourly_summary_#{@from_date}.csv"
               format.html
               format.csv do
                 headers['Content-Disposition'] = "attachment; filename=\"#{csv_file_name}\""
                 headers['Content-Type'] ||= 'text/csv'
           end
         end
-    @list_of_orders =  @list_of_orders.sort_by{ |c| c[:time_of_order]}
   end
 
   def show
