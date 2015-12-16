@@ -41,7 +41,7 @@ post "send_demo_message" => 'message_on_orders#send_demo_message'
 
   resources :distributor_pincode_lists
   post "distributor_quick_add_pincode" => 'distributor_pincode_lists#quick_add_pincode'
-
+  post "distributor_quick_add_state_pincode" => "distributor_pincode_lists#quick_add_state_pincode"
 
   resources :distributor_stock_ledgers
 
@@ -104,6 +104,10 @@ post "send_demo_message" => 'message_on_orders#send_demo_message'
   get 'channel_ppo' => 'sales_ppo_report#channel'
   get 'sales_ppo_report/hour_performance'
   get 'hour_performance' => 'sales_ppo_report#hour_performance'
+  get 'sales_ppo_report/product_performance'
+  get 'product_performance' => 'sales_ppo_report#product_performance'
+  get 'sales_ppo_report/operator_performance'
+  get 'operator_performance' => 'sales_ppo_report#operator_performance'
   get 'sales_ppo_report/ppo_details'
   get 'ppo_details' => 'sales_ppo_report#ppo_details'
   get 'sales_ppo_report/orders'

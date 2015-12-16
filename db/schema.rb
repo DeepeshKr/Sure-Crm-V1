@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151212054356) do
+ActiveRecord::Schema.define(version: 20151216045711) do
 
   create_table "address_types", force: :cascade do |t|
     t.string   "name"
@@ -852,6 +852,7 @@ ActiveRecord::Schema.define(version: 20151212054356) do
     t.integer  "order_last_mile_id",     limit: 16, precision: 38
     t.integer  "order_final_status_id",  limit: 16, precision: 38
     t.decimal  "g_total",                           precision: 12, scale: 2
+    t.integer  "weight_kg",              limit: 16, precision: 38
   end
 
   add_index "order_masters", ["city"], name: "index_order_masters_on_city"

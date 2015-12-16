@@ -15,7 +15,7 @@ class SalesPpoReportController < ApplicationController
           @from_date = for_date.to_date - 0.days #30.days
           @up_to_date = for_date.to_date
     else
-          use_date = (330.minutes).from_now.to_date
+          use_date = (300.minutes).from_now.to_date
           @from_date = use_date.to_date - 0.days #30.days
           @up_to_date = use_date.to_date #- 5.days
     end
@@ -135,15 +135,15 @@ class SalesPpoReportController < ApplicationController
         @hourlist ||= []
         employeeunorderlist ||= []
 
-        from_date = for_date.beginning_of_day - 300.minutes
-        to_date = for_date.end_of_day - 300.minutes
+        @from_date = for_date.beginning_of_day - 300.minutes
+        @to_date = for_date.end_of_day - 300.minutes
         #media segregation only HBN
 
         nos = 0
         total_order_value = 0
         #start loop
 
-        (from_date.to_datetime.to_i .. to_date.to_datetime.to_i).step(30.minutes) do |date|
+        (@from_date.to_datetime.to_i .. @to_date.to_datetime.to_i).step(30.minutes) do |date|
 
          halfhourago = Time.at(date - 30.minutes)
 
@@ -157,6 +157,7 @@ class SalesPpoReportController < ApplicationController
           fixed_cost = 0
           media_var_cost = 0
           product_cost = 0
+          product_damages = 0
           media_cost_master = 0
           @list_of_orders ||= []
 
@@ -185,12 +186,13 @@ class SalesPpoReportController < ApplicationController
            ## Apply all the corrections here ###
           revenue = revenue * @correction
           product_cost = product_cost * @correction
-          product_cost += product_cost * 0.10
+          product_damages = product_cost * 0.10
           totalorders = totalorders * @correction
           refund = totalorders * 0.02
           nos = (orderlist.count()) * @correction
           pieces = orderlist.sum(:pieces) * @correction
-          profitability = (revenue - (product_cost + fixed_cost + media_var_cost + refund)).to_i
+          total_cost = (product_cost + fixed_cost + media_var_cost + refund + product_damages).to_i
+          profitability = (revenue - total_cost).to_i
 
 
           employeeunorderlist << {:total => totalorders.to_i,
@@ -207,6 +209,7 @@ class SalesPpoReportController < ApplicationController
           :revenue => revenue.to_i,
           :product_cost => product_cost.to_i,
           :variable_cost => media_var_cost.to_i,
+          :product_damages => product_damages.to_i,
           :fixed_cost => media_fixed_cost.to_i,
           :profitability => profitability.to_i}
         end
@@ -233,38 +236,30 @@ class SalesPpoReportController < ApplicationController
 
   end
 
-   def hour_performance
-     @hbn_media_cost_master = MediaCostMaster.where(media_id: 11200).order("str_hr, str_min")
-    # #@searchaction = "hourly"
-    # t.integer  "str_hr",        limit: 16, precision: 38
-    # t.integer  "str_min",       limit: 16, precision: 38
-    # t.integer  "str_sec",       limit: 16, precision: 38
-    # t.integer  "end_hr",        limit: 16, precision: 38
-    # t.integer  "end_min",       limit: 16, precision: 38
-    # t.integer  "end_sec",       limit: 16, precision: 38
-     #/sales_report/hourly?for_date=05%2F09%2F2015
+  def hour_performance
+    @hbn_media_cost_master = MediaCostMaster.where(media_id: 11200).order("str_hr, str_min")
     @hourlist = "Time UTC is your zone #{Time.zone.now} while actual time is #{Time.now}"
     @sno = 1
     @searchaction = "hourly"
 
-   for_date = (330.minutes).from_now.to_date
-   @from_date = (330.minutes).from_now.to_date
-   if params.has_key?(:time_id)
-     @time_id = params[:time_id]
-     @time_slot = MediaCostMaster.find(@time_id)
-     @start_hr = @time_slot.str_hr
-     @start_min = @time_slot.str_min
-     @end_hr = @time_slot.end_hr
-     @end_min = @time_slot.end_min
-   end
-   if params.has_key?(:from_date)
-      @from_date =  Date.strptime(params[:from_date], "%Y-%m-%d")
-      @or_for_date = for_date.strftime("%Y-%m-%d")
-   end
-   @to_date = (330.minutes).from_now.to_date
-   if params.has_key?(:to_date)
-      @to_date =  Date.strptime(params[:to_date], "%Y-%m-%d")
-   end
+     for_date = (330.minutes).from_now.to_date
+     @from_date = (330.minutes).from_now.to_date
+     if params.has_key?(:time_id)
+       @time_id = params[:time_id]
+       @time_slot = MediaCostMaster.find(@time_id)
+       @start_hr = @time_slot.str_hr
+       @start_min = @time_slot.str_min
+       @end_hr = @time_slot.end_hr
+       @end_min = @time_slot.end_min
+     end
+     if params.has_key?(:from_date)
+        @from_date =  Date.strptime(params[:from_date], "%Y-%m-%d")
+        @or_for_date = for_date.strftime("%Y-%m-%d")
+     end
+     @to_date = (330.minutes).from_now.to_date
+     if params.has_key?(:to_date)
+        @to_date =  Date.strptime(params[:to_date], "%Y-%m-%d")
+     end
         @total_nos = 0
         @total_pieces = 0
         @total_sales = 0
@@ -274,7 +269,7 @@ class SalesPpoReportController < ApplicationController
         @total_var_cost = 0
         @total_refund = 0
         @total_profit = 0
-
+        @total_damages = 0
         @hourlist ||= []
         @halfhourlist ||= []
         employeeunorderlist ||= []
@@ -288,85 +283,377 @@ class SalesPpoReportController < ApplicationController
         nos = 0
         total_order_value = 0
         s_no_i = 1
-        # (from_date.to_datetime.to_i .. to_date.to_datetime.to_i).step(30.minutes) do |date|
-        #   @halfhourlist << {:id => Time.at(date - 30.minutes).strftime('%H:%M:%S'), :name => (Time.at(date - 30.minutes).strftime('%H:%M:%S')  + " to " + Time.at(date).strftime('%H:%M:%S'))}
-        #   s_no_i += 1
-        # end
-        #start loop
-        @to_date.downto(@from_date).each do |one_day|
-          @check_from_date = corrected_date_time(one_day, @start_hr, @start_min)
-          @check_upto_date = corrected_date_time(one_day, @end_hr, @end_min)
-          orderlist = OrderMaster.where('ORDER_STATUS_MASTER_ID > 10002')
-           .joins(:medium).where("media.media_group_id = 10000")
-           .where("orderdate >= ?", @check_from_date)
-           .where("orderdate <= ?", @check_upto_date)
-          .limit(5)
-          #@check_for_date
-          # .where("orderdate.minute >= @str_min")
-          # .where("orderdate.hour <= @end_hr")
-          # .where("orderdate.minute <= @end_min")
+        @serial_no = 0
+           campaign_playlists = CampaignPlaylist.where("for_date >= ? and for_date <= ?", @from_date, @to_date)
+           .where("start_hr >= ? AND start_min >= ? AND start_hr <= ? AND start_min <= ?", @start_hr, @start_min, @end_hr, @end_min)
+           .where(list_status_id: 10000).order("for_date, start_hr, start_min")#.limit(15)
 
+           @total_media_cost = Medium.where(media_group_id: 10000).sum(:daily_charges).to_f
+           @hbn_media_cost = Medium.where(media_group_id: 10000, active: true).sum(:daily_charges).to_f
+           @total_fixed_cost = campaign_playlists.sum(:cost).to_f
 
-          #split the fixed cost across the hour
-          revenue = 0
-          fixed_cost = 0
-          media_var_cost = 0
-          product_cost = 0
-          media_cost_master = 0
-          totalorders = 0
+           campaign_playlists.each do | playlist |
+           orderlist = OrderMaster.where('ORDER_STATUS_MASTER_ID > 10002')
+           .where(campaign_playlist_id: playlist.id)
 
-          # start_hr = halfhourago.strftime("%H")
-          # start_min = halfhourago.strftime("%M")
-          # end_hr = Time.at(date).strftime("%H")
-          # end_min = Time.at(date).strftime("%M")
-          media_cost_master = MediaCostMaster.where(media_id: 11200).where("str_hr = ? AND str_min = ? AND end_hr = ? AND end_min = ?", @start_hr, @start_min, @end_hr, @end_min)
+                revenue = 0
+                media_var_cost = 0
+                product_cost = 0
+                @fixed_cost = playlist.cost
+                nos = 0.0
+                pieces = 0.0
+                orderlist.each do |med |
+                  product_cost += med.productcost
+                  revenue += med.productrevenue
+                  media_var_cost += med.media_commission
+                  nos += 1
+                  pieces += med.pieces
+                end
 
-          media_fixed_cost = media_cost_master.first.total_cost.to_i || 0 if media_cost_master.present?
+                total_shipping = orderlist.sum(:shipping)
+                total_sub_total = orderlist.sum(:subtotal)
+                totalorders = total_shipping + total_sub_total
+                #nos = orderlist.count()
+                #pieces = orderlist.sum(:pieces)
 
-          ## Apply all the corrections here ###
-          if orderlist.present?
-            total_shipping = orderlist.sum(:shipping) || 0
-            total_sub_total = orderlist.sum(:subtotal) || 0
-            totalorders = (total_shipping + total_sub_total)
-          end
-           ## Apply all the corrections here ###
-          revenue = revenue * @correction
-          product_cost = product_cost * @correction
-          product_cost += product_cost * 0.10
-          totalorders = totalorders * @correction
-          refund = totalorders * 0.02
-          nos = (orderlist.count()) * @correction
-          pieces = orderlist.sum(:pieces) * @correction
-          profitability = (revenue - (product_cost + fixed_cost + media_var_cost + refund)).to_i
+                nos =  nos * @correction
+                pieces = pieces * @correction
+                revenue = revenue * @correction
+                # #product_cost = product_cost * nos
+                product_cost = (product_cost * @correction)
+                product_damages = (product_cost * 0.10)
+                totalorders = totalorders * @correction
+                media_var_cost = media_var_cost * @correction
+                refund = totalorders * 0.02
 
-          shows_list = []
-          orderlist.each do |show|
-            shows_list << show.campaign_playlist.product_variant.name if show.campaign_playlist
-          end
+                 if nos == 0
+                   divide_nos = 1
+                 else
+                   divide_nos = nos
+                 end
+                total_cost = (product_cost + @fixed_cost + product_damages + media_var_cost + refund)
+                profitability = ((revenue - total_cost)/ divide_nos).to_i
 
-          employeeunorderlist << {:total => totalorders.to_i,
-          :total_orders => totalorders.to_i,
-          :shows_list => shows_list,
-          :date => one_day.strftime("%d-%b-%Y"),
-          :starttime =>  @check_from_date, #.strftime("%Y-%m-%d %H:%M %p")
-          :endtime => @check_upto_date,
-          :start_time => @check_from_date,
-          :end_time => @check_upto_date,
-          :pieces => pieces.to_i,
-          :total_pieces => pieces.to_i,
-          :refund => refund.to_i,
-          :nos => nos.to_i,
-          :total_nos => nos.to_i,
-          :revenue => revenue.to_i,
-          :product_cost => product_cost.to_i,
-          :variable_cost => media_var_cost.to_i,
-          :fixed_cost => media_fixed_cost.to_i,
-          :profitability => profitability.to_i}
+                ### check if product cost is found in product master
+                product_cost_master = 0
+                if ProductCostMaster.where(prod: playlist.product_variant.extproductcode).present?
+                  product_cost_master = ProductCostMaster.where(prod: playlist.product_variant.extproductcode).first.cost
+                end
 
-        end #end of hour loop
+                employeeunorderlist << {:serial_no => @serial_no,
+                  :show =>  playlist.product_variant.name,
+                  :for_date => playlist.for_date,
+                :campaign_id => playlist.id,
+                :product_cost_master => product_cost_master,
+                :pieces => pieces.to_i,
+                :prod => playlist.product_variant.extproductcode,
+                :nos => nos.round(2),
+                :at_time => playlist.starttime,
+                :product_damages => product_damages.to_i,
+                :start_time => @from_date, end_time: @to_date,
+                :total => totalorders.to_i,
+                :refund => refund.to_i,
+                :revenue => revenue.to_i,
+                :total_cost => total_cost.to_i,
+                :product_cost => product_cost.to_i,
+                :variable_cost => media_var_cost.to_i,
+                :fixed_cost => @fixed_cost.to_i,
+                :profitability => profitability,
+                :product_variant_id => playlist.productvariantid}
+
+               @serial_no += 1
+              end
+
         @employeeorderlist = employeeunorderlist #.sort_by{|c| c[:total]}.reverse
           respond_to do |format|
-            csv_file_name = "half_hourly_summary_#{@from_date}.csv"
+            csv_file_name = "Performance_from_#{@str_hr}_#{@str_min}_to_#{@end_hr}_#{@end_min}_between_#{@from_date}_ #{@to_date}.csv"
+              format.html
+              format.csv do
+                headers['Content-Disposition'] = "attachment; filename=\"#{csv_file_name}\""
+                headers['Content-Type'] ||= 'text/csv'
+          end
+        end
+  end
+
+
+  def product_performance
+    @hbn_media_cost_master = MediaCostMaster.where(media_id: 11200).order("str_hr, str_min")
+    @hourlist = "Time UTC is your zone #{Time.zone.now} while actual time is #{Time.now}"
+    @sno = 1
+    @searchaction = "hourly"
+
+     for_date = (330.minutes).from_now.to_date
+     @from_date = (330.minutes).from_now.to_date
+     if params.has_key?(:time_id)
+       @time_id = params[:time_id]
+       @time_slot = MediaCostMaster.find(@time_id)
+       @start_hr = @time_slot.str_hr
+       @start_min = @time_slot.str_min
+       @end_hr = @time_slot.end_hr
+       @end_min = @time_slot.end_min
+     end
+     @product_variants = ProductVariant.all.order("name")
+     if params.has_key?(:product_variant_id)
+        @product_variant_id = params[:product_variant_id]
+        @product_name = ProductVariant.find(@product_variant_id)
+     end
+     if params.has_key?(:from_date)
+        @from_date =  Date.strptime(params[:from_date], "%Y-%m-%d")
+        @or_for_date = for_date.strftime("%Y-%m-%d")
+     end
+     @to_date = (330.minutes).from_now.to_date
+     if params.has_key?(:to_date)
+        @to_date =  Date.strptime(params[:to_date], "%Y-%m-%d")
+     end
+        @total_nos = 0
+        @total_pieces = 0
+        @total_sales = 0
+        @total_revenue = 0
+        @total_product_cost = 0
+        @total_fixed_cost = 0
+        @total_var_cost = 0
+        @total_refund = 0
+        @total_profit = 0
+        @total_damages = 0
+        @hourlist ||= []
+        @halfhourlist ||= []
+        employeeunorderlist ||= []
+
+        from_date = for_date.beginning_of_day - 300.minutes
+        to_date = for_date.end_of_day - 300.minutes
+        #media segregation only HBN
+        check_from_date = corrected_date_time(to_date, "9", "30")
+        check_upto_date = corrected_date_time(to_date, "10", "00")
+
+        nos = 0
+        total_order_value = 0
+        s_no_i = 1
+        @serial_no = 0
+           campaign_playlists = CampaignPlaylist.where("for_date >= ? and for_date <= ?", @from_date, @to_date)
+           .where("start_hr >= ? AND start_min >= ? AND start_hr <= ? AND start_min <= ?", @start_hr, @start_min, @end_hr, @end_min)
+           .where(list_status_id: 10000).order("for_date, start_hr, start_min")
+           #.limit(150)
+
+           @total_media_cost = Medium.where(media_group_id: 10000).sum(:daily_charges).to_f
+           @hbn_media_cost = Medium.where(media_group_id: 10000, active: true).sum(:daily_charges).to_f
+           @total_fixed_cost = campaign_playlists.sum(:cost).to_f
+
+           campaign_playlists.each do | playlist |
+           orderlist = OrderMaster.where('ORDER_STATUS_MASTER_ID > 10002')
+           .where(campaign_playlist_id: playlist.id).joins(:order_line)
+           .where("order_lines.productvariant_id = ?", @productvariant_id)
+
+                revenue = 0
+                media_var_cost = 0
+                product_cost = 0
+                @fixed_cost = playlist.cost
+                nos = 0.0
+                pieces = 0.0
+                orderlist.each do |med |
+                  product_cost += med.productcost
+                  revenue += med.productrevenue
+                  media_var_cost += med.media_commission
+                  nos += 1
+                  pieces += med.pieces
+                end
+
+                total_shipping = orderlist.sum(:shipping)
+                total_sub_total = orderlist.sum(:subtotal)
+                totalorders = total_shipping + total_sub_total
+                #nos = orderlist.count()
+                #pieces = orderlist.sum(:pieces)
+
+                nos =  nos * @correction
+                pieces = pieces * @correction
+                revenue = revenue * @correction
+                # #product_cost = product_cost * nos
+                product_cost = (product_cost * @correction)
+                product_damages = (product_cost * 0.10)
+                totalorders = totalorders * @correction
+                media_var_cost = media_var_cost * @correction
+                refund = totalorders * 0.02
+
+                 if nos == 0
+                   divide_nos = 1
+                 else
+                   divide_nos = nos
+                 end
+                total_cost = (product_cost + @fixed_cost + product_damages + media_var_cost + refund)
+                profitability = ((revenue - total_cost)/ divide_nos).to_i
+
+                ### check if product cost is found in product master
+                product_cost_master = 0
+                if ProductCostMaster.where(prod: playlist.product_variant.extproductcode).present?
+                  product_cost_master = ProductCostMaster.where(prod: playlist.product_variant.extproductcode).first.cost
+                end
+
+                employeeunorderlist << {:serial_no => @serial_no,
+                  :show =>  playlist.product_variant.name,
+                  :for_date => playlist.for_date,
+                :campaign_id => playlist.id,
+                :product_cost_master => product_cost_master,
+                :pieces => pieces.to_i,
+                :prod => playlist.product_variant.extproductcode,
+                :nos => nos.round(2),
+                :at_time => playlist.starttime,
+                :product_damages => product_damages.to_i,
+                :start_time => @from_date, end_time: @to_date,
+                :total => totalorders.to_i,
+                :refund => refund.to_i,
+                :revenue => revenue.to_i,
+                :total_cost => total_cost.to_i,
+                :product_cost => product_cost.to_i,
+                :variable_cost => media_var_cost.to_i,
+                :fixed_cost => @fixed_cost.to_i,
+                :profitability => profitability,
+                :product_variant_id => playlist.productvariantid}
+
+               @serial_no += 1
+              end
+
+        @employeeorderlist = employeeunorderlist #.sort_by{|c| c[:total]}.reverse
+          respond_to do |format|
+            csv_file_name = "Product_performance_between_#{@from_date}_ #{@to_date}.csv"
+              format.html
+              format.csv do
+                headers['Content-Disposition'] = "attachment; filename=\"#{csv_file_name}\""
+                headers['Content-Type'] ||= 'text/csv'
+          end
+        end
+  end
+
+  def operator_performance
+
+    @medias = Medium.where(media_group_id: 10000, active: true,media_commision_id: 10000).where("id <> 11200")
+    #media_commision_id = 10000 or
+    @sno = 1
+
+     for_date = (330.minutes).from_now.to_date
+     @from_date = (330.minutes).from_now.to_date
+
+     if params.has_key?(:media_id)
+        @media_id =  params[:media_id]
+        @media = Medium.find(@media_id)
+     end
+     if params.has_key?(:from_date)
+        @from_date =  Date.strptime(params[:from_date], "%Y-%m-%d")
+        @or_for_date = for_date.strftime("%Y-%m-%d")
+     end
+     @to_date = (330.minutes).from_now.to_date
+     if params.has_key?(:to_date)
+        @to_date =  Date.strptime(params[:to_date], "%Y-%m-%d")
+     end
+        @total_nos = 0
+        @total_pieces = 0
+        @total_sales = 0
+        @total_revenue = 0
+        @total_product_cost = 0
+        @total_fixed_cost = 0
+        @total_var_cost = 0
+        @total_refund = 0
+        @total_profit = 0
+        @total_damages = 0
+        @hourlist ||= []
+        @halfhourlist ||= []
+        employeeunorderlist ||= []
+
+        from_date = for_date.beginning_of_day - 300.minutes
+        to_date = for_date.end_of_day - 300.minutes
+        #media segregation only HBN
+        check_from_date = corrected_date_time(to_date, "9", "30")
+        check_upto_date = corrected_date_time(to_date, "10", "00")
+
+        nos = 0
+        total_order_value = 0
+        s_no_i = 1
+        @serial_no = 0
+
+           campaign_playlists = CampaignPlaylist.where("for_date >= ? and for_date <= ?", @from_date, @to_date).where(list_status_id: 10000).order("for_date, start_hr, start_min").joins(:campaign) #.limit(15)
+
+           @total_media_cost = Medium.where(media_group_id: 10000).sum(:daily_charges).to_f
+
+           @hbn_media_cost = Medium.where(media_group_id: 10000, active: true).sum(:daily_charges).to_f
+
+           @total_fixed_cost = @media.daily_charges.to_f || 0 if @media.present?
+
+           if @media_id.blank?
+             return
+           end
+           campaign_playlists.each do | playlist |
+           orderlist = OrderMaster.where('ORDER_STATUS_MASTER_ID > 10002')
+           .where(campaign_playlist_id: playlist.id).where(media_id: @media_id)
+
+                revenue = 0
+                media_var_cost = 0
+                product_cost = 0
+                @fixed_cost = playlist.cost
+                nos = 0.0
+                pieces = 0.0
+                orderlist.each do |med |
+                  product_cost += med.productcost
+                  revenue += med.productrevenue
+                  media_var_cost += med.media_commission
+                  nos += 1
+                  pieces += med.pieces
+                end
+
+                total_shipping = orderlist.sum(:shipping)
+                total_sub_total = orderlist.sum(:subtotal)
+                totalorders = total_shipping + total_sub_total
+                #nos = orderlist.count()
+                #pieces = orderlist.sum(:pieces)
+
+                nos =  nos * @correction
+                pieces = pieces * @correction
+                revenue = revenue * @correction
+                # #product_cost = product_cost * nos
+                product_cost = (product_cost * @correction)
+                product_damages = (product_cost * 0.10)
+                totalorders = totalorders * @correction
+                media_var_cost = media_var_cost * @correction
+                refund = totalorders * 0.02
+
+                 if nos == 0
+                   divide_nos = 1
+                 else
+                   divide_nos = nos
+                 end
+                total_cost = (product_cost + @fixed_cost + product_damages + media_var_cost + refund)
+                profitability = ((revenue - total_cost)/ divide_nos).to_i
+
+                ### check if product cost is found in product master
+                product_cost_master = 0
+                if ProductCostMaster.where(prod: playlist.product_variant.extproductcode).present?
+                  product_cost_master = ProductCostMaster.where(prod: playlist.product_variant.extproductcode).first.cost
+                end
+
+                employeeunorderlist << {:serial_no => @serial_no,
+                  :show =>  playlist.product_variant.name,
+                  :for_date => playlist.for_date,
+                :campaign_id => playlist.id,
+                :product_cost_master => product_cost_master,
+                :pieces => pieces.to_i,
+                :prod => playlist.product_variant.extproductcode,
+                :nos => nos.round(2),
+                :at_time => playlist.starttime,
+                :product_damages => product_damages.to_i,
+                :start_time => @from_date, end_time: @to_date,
+                :total => totalorders.to_i,
+                :refund => refund.to_i,
+                :revenue => revenue.to_i,
+                :total_cost => total_cost.to_i,
+                :product_cost => product_cost.to_i,
+                :variable_cost => media_var_cost.to_i,
+                :fixed_cost => @fixed_cost.to_i,
+                :profitability => profitability,
+                :product_variant_id => playlist.productvariantid}
+
+               @serial_no += 1
+              end
+              @media_name = @media.name || "None" if @media.present?
+        @employeeorderlist = employeeunorderlist #.sort_by{|c| c[:total]}.reverse
+          respond_to do |format|
+            csv_file_name = "#{}_performance_between_#{@from_date}_ #{@to_date}.csv"
               format.html
               format.csv do
                 headers['Content-Disposition'] = "attachment; filename=\"#{csv_file_name}\""
@@ -409,10 +696,8 @@ class SalesPpoReportController < ApplicationController
      .where(list_status_id: 10000) #.limit(5)
 
      @total_media_cost = Medium.where(media_group_id: 10000).sum(:daily_charges).to_f
-
-    @hbn_media_cost = Medium.where(media_group_id: 10000, active: true).sum(:daily_charges).to_f
-
-    @total_fixed_cost = campaign_playlists.sum(:cost).to_f
+     @hbn_media_cost = Medium.where(media_group_id: 10000, active: true).sum(:daily_charges).to_f
+     @total_fixed_cost = campaign_playlists.sum(:cost).to_f
       secs_in_a_day = (24*60*60)
       media_cost = @hbn_media_cost / secs_in_a_day
 

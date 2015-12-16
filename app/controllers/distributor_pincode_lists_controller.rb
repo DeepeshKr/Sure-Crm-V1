@@ -57,6 +57,47 @@ class DistributorPincodeListsController < ApplicationController
 
     redirect_to corporate_path @distributor_pincode_list.corporate_id
   end
+
+  # $( "#distributor_pincode_list_state" ).val( ui.item.statename );
+  def quick_add_state_pincode
+    corporate_id = params[:corporate_id]
+    state = params[:state]
+
+    state_pin_codes = IndiaPincodeList.where(state: state).uniq.pluck(:pincode)
+    if !pin_codes.present?
+      flash[:error] = "State has 0 pincodes. "
+      return redirect_to corporate_path @distributor_pincode_list.corporate_id
+
+    end
+    @success_message = nil
+    @error_messages = nil
+
+    state_pin_codes.each do |pincode|
+        @distributor_pincode_list = DistributorPincodeList.new(corporate_id: corporate_id, pincode: pincode)
+      pin_codes = IndiaPincodeList.where(pincode: pincode)
+      locality = pin_codes.first.officename
+      city = pin_codes.first.officename
+      state = pin_codes.first.regionname
+      #:corporate_id, :sort_order, :city, :state, :locality, :pincode
+      @distributor_pincode_list.sort_order = 1
+      @distributor_pincode_list.city = city
+      @distributor_pincode_list.state = state
+      @distributor_pincode_list.locality = locality
+      if  @distributor_pincode_list.save
+        @success_message += "#{pincode} added successfully"
+      #flash[:success] = 'Pincode was added successfully successfully!'
+      else
+        @error_messages += "#{pincode} error #{@distributor_pincode_list.errors.full_messages.to_sentence}"
+      #flash[:error] = @distributor_pincode_list.errors.full_messages.to_sentence
+       #flash[:notice] = @distributor_pincode_list.errors.full_messages.to_sentence
+      end
+
+    end
+    flash[:success] = @success_message if @success_message.present?
+    flash[:error] = @error_messages if @error_messages.present?
+
+    redirect_to corporate_path @distributor_pincode_list.corporate_id
+  end
   # POST /distributor_pincode_lists
   # POST /distributor_pincode_lists.json
   def create

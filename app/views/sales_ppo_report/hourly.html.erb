@@ -2,9 +2,12 @@
 	 <div class="col-xs-6">
 
 	 <h4>HBN Half Hourly Orders for Date: <%= @or_for_date %></h4>
+   <p>
+     <%= @from_date %> <%= @to_date %>
+   </p>
 	 </div>
 	 <div class="col-xs-6">
-    
+
     <%= render partial: 'date_search', :locals => {:searchaction => "hourly"}  %>
 	</div>
  </div>

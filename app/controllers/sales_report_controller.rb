@@ -376,7 +376,7 @@ def pincode_orders
      @employeeorderlist = employeeunorderlist
      if @employeeorderlist.present?
        respond_to do |format|
-         csv_file_name = "orders_from_pincode#{pincode}_#{@from_date}_to_#{@to_date}.csv"
+         csv_file_name = "orders_from_pincode#{@pincode}_#{@from_date}_to_#{@to_date}.csv"
            format.html
            format.csv do
              headers['Content-Disposition'] = "attachment; filename=\"#{csv_file_name}\""

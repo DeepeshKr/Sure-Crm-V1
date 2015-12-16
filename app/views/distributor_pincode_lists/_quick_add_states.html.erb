@@ -1,0 +1,16 @@
+<div class="well well-sm">
+<div class="row">
+ <%= bootstrap_form_tag url: distributor_quick_add_pincode_path, :method => :POST, :enforce_utf8 => false do |f| %>
+ <%= hidden_field_tag :corporate_id, @corporate_id %>
+ <div class="col-xs-4">
+   Directly Enter a Pincode
+ </div>
+<div class="col-xs-4">
+<%= text_field_tag(:pincode, nil, :class => "form-control", :required => "true", :placeholder => "Search pincode", :value => @pincode  )   %>
+</div>
+
+<div class="col-xs-2">
+	<%= submit_tag "Quick Add", name: nil, class: "btn btn-primary" %>
+</div>
+<% end %>
+</div>

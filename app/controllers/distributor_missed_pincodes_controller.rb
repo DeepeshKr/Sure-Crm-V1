@@ -19,8 +19,12 @@ class DistributorMissedPincodesController < ApplicationController
         @order_sort = "high"
         @btn_class = "btn btn-success btn-xs"
       end
+    elsif params.has_key?(:recent)
+      @distributor_missed_pincodes = DistributorMissedPincode.order("id DESC").paginate(:page => params[:page])
+      @order_sort = "high"
+      @btn_class = "btn btn-primary btn-xs"
     else
-        @distributor_missed_pincodes = DistributorMissedPincode.order(:updated_at).order("updated_at DESC").paginate(:page => params[:page])
+        @distributor_missed_pincodes = DistributorMissedPincode.order("updated_at DESC").paginate(:page => params[:page])
     end
 
   end
