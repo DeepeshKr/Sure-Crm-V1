@@ -377,6 +377,142 @@ class SalesPpoReportController < ApplicationController
 
 
   def product_performance
+    @hourlist = "Time UTC is your zone #{Time.zone.now} while actual time is #{Time.now}"
+    @sno = 1
+    @searchaction = "hourly"
+
+     for_date = (330.minutes).from_now.to_date
+
+     @product_variants = ProductVariant.all.order("name")
+     if params.has_key?(:product_variant_id)
+        @product_variant_id = params[:product_variant_id]
+        @product_name = ProductVariant.find(@product_variant_id)
+     end
+     if params.has_key?(:from_date)
+        @from_date =  Date.strptime(params[:from_date], "%Y-%m-%d")
+        @or_for_date = for_date.strftime("%Y-%m-%d")
+     end
+     @to_date = (330.minutes).from_now.to_date
+     if params.has_key?(:to_date)
+        @to_date =  Date.strptime(params[:to_date], "%Y-%m-%d")
+     end
+        @total_nos = 0
+        @total_pieces = 0
+        @total_sales = 0
+        @total_revenue = 0
+        @total_product_cost = 0
+        @total_fixed_cost = 0
+        @total_var_cost = 0
+        @total_refund = 0
+        @total_profit = 0
+        @total_damages = 0
+        @hourlist ||= []
+        @halfhourlist ||= []
+        employeeunorderlist ||= []
+
+        from_date = for_date.beginning_of_day - 300.minutes
+        to_date = for_date.end_of_day - 300.minutes
+        #media segregation only HBN
+        check_from_date = corrected_date_time(to_date, "9", "30")
+        check_upto_date = corrected_date_time(to_date, "10", "00")
+
+        nos = 0
+        total_order_value = 0
+        s_no_i = 1
+        @serial_no = 0
+           campaign_playlists = CampaignPlaylist.where("for_date >= ? and for_date <= ?", @from_date, @to_date).where(productvariantid: @productvariant_id)
+           .where(list_status_id: 10000).order("for_date, start_hr, start_min")
+           #.limit(150)
+
+           @total_media_cost = Medium.where(media_group_id: 10000).sum(:daily_charges).to_f
+           @hbn_media_cost = Medium.where(media_group_id: 10000, active: true).sum(:daily_charges).to_f
+           @total_fixed_cost = campaign_playlists.sum(:cost).to_f
+
+           campaign_playlists.each do | playlist |
+           orderlist = OrderMaster.where('ORDER_STATUS_MASTER_ID > 10002')
+           .where(campaign_playlist_id: playlist.id).joins(:order_line)
+           .where("order_lines.productvariant_id = ?", @productvariant_id)
+
+                revenue = 0
+                media_var_cost = 0
+                product_cost = 0
+                @fixed_cost = playlist.cost
+                nos = 0.0
+                pieces = 0.0
+                orderlist.each do |med |
+                  product_cost += med.productcost
+                  revenue += med.productrevenue
+                  media_var_cost += med.media_commission
+                  nos += 1
+                  pieces += med.pieces
+                end
+
+                total_shipping = orderlist.sum(:shipping)
+                total_sub_total = orderlist.sum(:subtotal)
+                totalorders = total_shipping + total_sub_total
+                #nos = orderlist.count()
+                #pieces = orderlist.sum(:pieces)
+
+                nos =  nos * @correction
+                pieces = pieces * @correction
+                revenue = revenue * @correction
+                # #product_cost = product_cost * nos
+                product_cost = (product_cost * @correction)
+                product_damages = (product_cost * 0.10)
+                totalorders = totalorders * @correction
+                media_var_cost = media_var_cost * @correction
+                refund = totalorders * 0.02
+
+                 if nos == 0
+                   divide_nos = 1
+                 else
+                   divide_nos = nos
+                 end
+                total_cost = (product_cost + @fixed_cost + product_damages + media_var_cost + refund)
+                profitability = ((revenue - total_cost)/ divide_nos).to_i
+
+                ### check if product cost is found in product master
+                product_cost_master = 0
+                if ProductCostMaster.where(prod: playlist.product_variant.extproductcode).present?
+                  product_cost_master = ProductCostMaster.where(prod: playlist.product_variant.extproductcode).first.cost
+                end
+
+                employeeunorderlist << {:serial_no => @serial_no,
+                  :show =>  playlist.product_variant.name,
+                  :for_date => playlist.for_date,
+                :campaign_id => playlist.id,
+                :product_cost_master => product_cost_master,
+                :pieces => pieces.to_i,
+                :prod => playlist.product_variant.extproductcode,
+                :nos => nos.round(2),
+                :at_time => playlist.starttime,
+                :product_damages => product_damages.to_i,
+                :start_time => @from_date, end_time: @to_date,
+                :total => totalorders.to_i,
+                :refund => refund.to_i,
+                :revenue => revenue.to_i,
+                :total_cost => total_cost.to_i,
+                :product_cost => product_cost.to_i,
+                :variable_cost => media_var_cost.to_i,
+                :fixed_cost => @fixed_cost.to_i,
+                :profitability => profitability,
+                :product_variant_id => playlist.productvariantid}
+
+               @serial_no += 1
+              end
+
+        @employeeorderlist = employeeunorderlist #.sort_by{|c| c[:total]}.reverse
+          respond_to do |format|
+            csv_file_name = "Product_performance_between_#{@from_date}_ #{@to_date}.csv"
+              format.html
+              format.csv do
+                headers['Content-Disposition'] = "attachment; filename=\"#{csv_file_name}\""
+                headers['Content-Type'] ||= 'text/csv'
+          end
+        end
+  end
+
+  def product_hour_performance
     @hbn_media_cost_master = MediaCostMaster.where(media_id: 11200).order("str_hr, str_min")
     @hourlist = "Time UTC is your zone #{Time.zone.now} while actual time is #{Time.now}"
     @sno = 1
