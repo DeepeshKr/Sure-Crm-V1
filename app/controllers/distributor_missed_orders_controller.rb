@@ -24,15 +24,14 @@ class DistributorMissedOrdersController < ApplicationController
         end
       end
     else
-      @distributor_missed_orders = DistributorMissedOrder.order("summary_date DESC").limit(100).paginate(:page => params[:page], :per_page => 100)
+      @distributor_missed_orders = DistributorMissedOrder.order("created_at DESC").limit(1000).paginate(:page => params[:page], :per_page => 100)
     end
 
 
   end
 
-  def index
-
-      @distributor_missed_orders = DistributorMissedOrder.order("summary_date DESC").limit(1000).paginate(:page => params[:page], :per_page => 100)
+  def recent
+      @distributor_missed_orders = DistributorMissedOrder.order("created_at DESC").limit(1000).paginate(:page => params[:page], :per_page => 100)
   end
 
   # GET /distributor_missed_orders/1

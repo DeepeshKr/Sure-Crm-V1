@@ -2,26 +2,26 @@
 <table class="table table-hover">
   <thead>
     <tr>
-     
+
       <th>Missed type</th>
       <th>Order value</th>
       <th>Order no</th>
       <th>Order</th>
       <th>Description</th>
-     
+
     </tr>
   </thead>
 
   <tbody>
     <% @distributor_missed_orders.each do |distributor_missed_order| %>
       <tr>
-       
-        <td><%= distributor_missed_order.missed_type.name if distributor_missed_order.distributor_missed_order_type %></td>
+
+        <td><%= distributor_missed_order.distributor_missed_order_type.name if distributor_missed_order.distributor_missed_order_type %></td>
         <td><%= distributor_missed_order.order_value %></td>
         <td><%= distributor_missed_order.order_no %></td>
         <td><%= distributor_missed_order.order_id %></td>
         <td><%= distributor_missed_order.description %></td>
-       
+
       </tr>
     <% end %>
   </tbody>

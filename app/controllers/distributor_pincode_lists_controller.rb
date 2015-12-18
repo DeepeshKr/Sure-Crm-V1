@@ -5,9 +5,11 @@ class DistributorPincodeListsController < ApplicationController
   # GET /distributor_pincode_lists.json
   def index
     if params.has_key? :corporate_id
-      @distributor_pincode_lists = DistributorPincodeList.where(corporate_id: params[:corporate_id]).sort("pincode, name").paginate(:page => params[:page])
+      @distributor_pincode_lists = DistributorPincodeList.where(corporate_id: params[:corporate_id]).sort("pincode, updated_at").paginate(:page => params[:page])
+    elsif  params.has_key? :pincode
+        @distributor_pincode_lists = DistributorPincodeList.where(pincode: params[:pincode]).sort("pincode, updated_at").paginate(:page => params[:page])  
     else
-      @distributor_pincode_lists = DistributorPincodeList.all.order("pincode, name").paginate(:page => params[:page])
+      @distributor_pincode_lists = DistributorPincodeList.all.order("pincode, corporate_id").paginate(:page => params[:page])
       #.sort("pincode, name")
     end
 

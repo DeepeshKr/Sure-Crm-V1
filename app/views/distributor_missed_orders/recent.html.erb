@@ -4,13 +4,13 @@
 </div>
 <div class="col-xs-8">
   <div class="digg_pagination">
-    <% if @distributor_stock_ledgers.present? %>
-    <%= will_paginate @distributor_stock_ledgers, :container => false %>
+    <% if @distributor_missed_orders.present? %>
+    <%= will_paginate @distributor_missed_orders, :container => false %>
     <% end %>
   </div>
 </div>
 </div>
-<table class="table table-hover table-stripped">
+<table class="table table-hover table-striped">
   <thead>
     <tr>
       <th>Corporate</th>
@@ -21,12 +21,12 @@
       <th>Description</th>
     </tr>
   </thead>
-  <% if @distributor_stock_ledgers.present? %>
+  <% if @distributor_missed_orders.present? %>
   <tbody>
     <% @distributor_missed_orders.each do |distributor_missed_order| %>
       <tr>
         <td><%= distributor_missed_order.corporate.name if distributor_missed_order.corporate %></td>
-        <td><%= distributor_missed_order.missed_type.name if distributor_missed_order %></td>
+        <td><%= distributor_missed_order.distributor_missed_order_type.name if distributor_missed_order %></td>
         <td><%= distributor_missed_order.order_value %></td>
         <td><%= distributor_missed_order.order_no %></td>
         <td><%= distributor_missed_order.order_id %></td>
