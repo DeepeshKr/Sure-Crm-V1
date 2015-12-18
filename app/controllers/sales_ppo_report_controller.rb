@@ -15,9 +15,10 @@ class SalesPpoReportController < ApplicationController
           @from_date = for_date.to_date - 0.days #30.days
           @up_to_date = for_date.to_date
     else
-          use_date = (300.minutes).from_now.to_date
-          @from_date = use_date.to_date - 0.days #30.days
-          @up_to_date = use_date.to_date #- 5.days
+      return
+    #       use_date = (300.minutes).from_now.to_date
+    #       @from_date = use_date.to_date - 0.days #30.days
+    #       @up_to_date = use_date.to_date #- 5.days
     end
 
     #media_segments
@@ -420,8 +421,7 @@ class SalesPpoReportController < ApplicationController
         total_order_value = 0
         s_no_i = 1
         @serial_no = 0
-           campaign_playlists = CampaignPlaylist.where("for_date >= ? and for_date <= ?", @from_date, @to_date).where(productvariantid: @productvariant_id)
-           .where(list_status_id: 10000).order("for_date, start_hr, start_min")
+           campaign_playlists = CampaignPlaylist.where("for_date >= ? and for_date <= ?", @from_date, @to_date).where(list_status_id: 10000).order("for_date, start_hr, start_min")
            #.limit(150)
 
            @total_media_cost = Medium.where(media_group_id: 10000).sum(:daily_charges).to_f
@@ -710,7 +710,11 @@ class SalesPpoReportController < ApplicationController
 
            @hbn_media_cost = Medium.where(media_group_id: 10000, active: true).sum(:daily_charges).to_f
 
-           @total_fixed_cost = @media.daily_charges.to_f || 0 if @media.present?
+
+           (@from_date).upto(@to_date).each do |day|
+               @total_fixed_cost += @media.daily_charges.to_f || 0 if @media.present?
+           end
+
 
            if @media_id.blank?
              return
