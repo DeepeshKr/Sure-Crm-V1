@@ -43,7 +43,8 @@ class DistributorStockLedgersController < ApplicationController
 
   # GET /distributor_stock_ledgers/new
   def new
-    @product_list = ProductList.joins(:product_variant).where("product_variants.activeid = 10000").order('product_lists.name') #.limit(10)
+    @all_product_list = DistributorProductList.all.pluck(:product_list_id)
+    @product_list = ProductList.joins(:product_variant).where("product_variants.activeid = 10000").where('id IN (?)', @all_product_list).order('product_lists.name') #.limit(10)
     if params.has_key?(:corporate_id)
       @corporate_id = params[:corporate_id]
     elsif distributor_stock_ledger_params.has_key?(:corporate_id)

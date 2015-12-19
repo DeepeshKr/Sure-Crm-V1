@@ -1,0 +1,19 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Product list:</strong>
+  <%= @distributor_product_list.product_list_id %>
+</p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @distributor_product_list.name %>
+</p>
+
+<p>
+  <strong>Sort order:</strong>
+  <%= @distributor_product_list.sort_order %>
+</p>
+
+<%= link_to 'Edit', edit_distributor_product_list_path(@distributor_product_list) %> |
+<%= link_to 'Back', distributor_product_lists_path %>

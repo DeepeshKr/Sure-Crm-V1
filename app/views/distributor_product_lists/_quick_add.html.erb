@@ -1,0 +1,26 @@
+<%= bootstrap_form_for(@distributor_product_list) do |f| %>
+  <%= f.error_notification %>
+  <div class="row">
+
+   <div class="col-xs-8">
+      <%= f.select :product_list_id,  options_from_collection_for_select(@product_list,
+         :id, :productname),
+               {label: "Select the Product" } %>
+
+    <!--%= f.select :product_master_id,  options_from_collection_for_select(@product_master,
+         :id, :productname, selected: @distributor_stock_ledger.product_master_id ),
+               {:prompt => 'No Stock Change', label: "Select the Product if required " } %-->
+   </div>
+    <div class="col-xs-2">
+        <%= f.number_field :sort_order %>
+
+
+   </div>
+   <div class="col-xs-2">
+        <%= submit_tag "Save Details", name: nil, class: "btn btn-primary" %>
+
+
+  </div>
+   </div>
+
+<% end %>

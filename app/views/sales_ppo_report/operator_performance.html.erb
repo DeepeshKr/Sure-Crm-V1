@@ -196,13 +196,20 @@
   <div class="col-xs-2">
   HBN Media Cost -We use only Active <%= @hbn_media_cost.round(0) %>
   </div>
-  <div class="col-xs-2">
-  This Operator Cost <%= @total_fixed_cost.round(0) %>
+  <div class="col-xs-4">
+
+      <strong>Total Sales <%= @total_sales.round(0) %></strong><br>
+      <strong>Total Revenue <%= @total_revenue.round(0) %></strong><br>
+      <strong>Total Cost <%= @media_total_fixed_cost.round(0) %></strong>
+      <br>
+      <%= @daily_charge %> x <%= @days %>
+
+
   </div>
-  <div class="col-xs-3">
+  <div class="col-xs-2">
   Download CSV file
   </div>
-  <div class="col-xs-3">
+  <div class="col-xs-2">
    <%= link_to 'Download CSV file', operator_performance_path(for_date: @or_for_date , format: :csv), class: "btn btn-info btn-sm" %>
   </div>
 </div>

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151216045711) do
+ActiveRecord::Schema.define(version: 20151218174047) do
 
   create_table "address_types", force: :cascade do |t|
     t.string   "name"
@@ -369,6 +369,14 @@ ActiveRecord::Schema.define(version: 20151216045711) do
   end
 
   add_index "distributor_pincode_lists", ["pincode"], name: "i_dis_pin_lis_pin"
+
+  create_table "distributor_product_lists", force: :cascade do |t|
+    t.integer  "product_list_id", limit: 16, precision: 38
+    t.string   "name"
+    t.integer  "sort_order",      limit: 16, precision: 38
+    t.datetime "created_at",                                null: false
+    t.datetime "updated_at",                                null: false
+  end
 
   create_table "distributor_stock_books", force: :cascade do |t|
     t.integer  "corporate_id",       limit: 16, precision: 38

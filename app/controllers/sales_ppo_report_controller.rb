@@ -383,19 +383,29 @@ class SalesPpoReportController < ApplicationController
     @searchaction = "hourly"
 
      for_date = (330.minutes).from_now.to_date
-
-     @product_variants = ProductVariant.all.order("name")
+     @product_lists = ProductList.joins(:product_variant).where("product_variants.activeid = 10000").order('product_lists.name')
+     #@product_variants = ProductVariant.all.order("name")
      if params.has_key?(:product_variant_id)
-        @product_variant_id = params[:product_variant_id]
-        @product_name = ProductVariant.find(@product_variant_id)
+      @product_variant_id = params[:product_variant_id]
+      @product_name = ProductVariant.find(@product_variant_id)
+     end
+     if params.has_key?(:product_list_id)
+      @product_list_id = params[:product_list_id]
+      @product_list = ProductVariant.find(@product_list_id)
      end
      if params.has_key?(:from_date)
-        @from_date =  Date.strptime(params[:from_date], "%Y-%m-%d")
-        @or_for_date = for_date.strftime("%Y-%m-%d")
+      @from_date =  Date.strptime(params[:from_date], "%Y-%m-%d")
+      @or_for_date = for_date.strftime("%Y-%m-%d")
      end
      @to_date = (330.minutes).from_now.to_date
      if params.has_key?(:to_date)
-        @to_date =  Date.strptime(params[:to_date], "%Y-%m-%d")
+      @to_date =  Date.strptime(params[:to_date], "%Y-%m-%d")
+     end
+    #  if @product_variant_id == nil && @from_date == nil && @to_date == nil
+    #    return
+    #  end
+     if @product_list_id == nil && @from_date == nil && @to_date == nil
+       return
      end
         @total_nos = 0
         @total_pieces = 0
@@ -431,7 +441,7 @@ class SalesPpoReportController < ApplicationController
            campaign_playlists.each do | playlist |
            orderlist = OrderMaster.where('ORDER_STATUS_MASTER_ID > 10002')
            .where(campaign_playlist_id: playlist.id).joins(:order_line)
-           .where("order_lines.productvariant_id = ?", @productvariant_id)
+           .where("order_lines.product_list_id = ?", @product_list_id)
 
                 revenue = 0
                 media_var_cost = 0
@@ -540,6 +550,9 @@ class SalesPpoReportController < ApplicationController
      @to_date = (330.minutes).from_now.to_date
      if params.has_key?(:to_date)
         @to_date =  Date.strptime(params[:to_date], "%Y-%m-%d")
+     end
+     if @product_variant_id == nil && @from_date == nil && @to_date == nil
+       return
      end
         @total_nos = 0
         @total_pieces = 0
@@ -710,9 +723,12 @@ class SalesPpoReportController < ApplicationController
 
            @hbn_media_cost = Medium.where(media_group_id: 10000, active: true).sum(:daily_charges).to_f
 
-
+           @daily_charge = @media.daily_charges || 0 if @media.present?
+           @days = 0
+           @media_total_fixed_cost = 0
            (@from_date).upto(@to_date).each do |day|
-               @total_fixed_cost += @media.daily_charges.to_f || 0 if @media.present?
+               @media_total_fixed_cost += @media.daily_charges.to_f || 0 if @media.present?
+               @days += 1
            end
 
 

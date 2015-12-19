@@ -8,6 +8,9 @@ class IndiaPincodeListsController < ApplicationController
   autocomplete :india_pincode_list, :regionname, :full => true
   # GET /india_pincode_lists
   # GET /india_pincode_lists.json
+  # officename, :pincode,
+  #   :deliverystatus, :divisionname, :regionname, :circlename, :taluk,
+  #   :districtname, :statename
   def index
     #    <%= @search %> <%= @found %>
     if params[:pincode].present?
@@ -17,7 +20,7 @@ class IndiaPincodeListsController < ApplicationController
       @found = "Found of over #{@india_pincode_lists.count()} Cities"
     elsif params[:location].present?
       @searchvalue = params[:location]
-      @india_pincode_lists = IndiaPincodeList.where("taluk like ? OR districtname like ? or regionname like ? or pincode like ?", "#{@searchvalue}%", "#{@searchvalue}%", "#{@searchvalue}%", "#{@searchvalue}%").paginate(:page => params[:page])
+      @india_pincode_lists = IndiaPincodeList.where("taluk like ? OR districtname like ? or regionname like ? or pincode like ? or divisionname like ? or circlename like ? or statename like ?", "#{@searchvalue}%", "#{@searchvalue}%", "#{@searchvalue}%", "#{@searchvalue}%", "#{@searchvalue}%", "#{@searchvalue}%", "#{@searchvalue}%").paginate(:page => params[:page])
       @search = "Seached for #{@searchvalue}"
       @found = "Found of over #{@india_pincode_lists.count()} Cities"
     else

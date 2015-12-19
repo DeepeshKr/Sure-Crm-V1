@@ -1,6 +1,8 @@
 Rails.application.routes.draw do
 
 
+  resources :distributor_product_lists
+
   resources :distributor_missed_pincodes
 
   resources :pincode_service_levels
