@@ -724,7 +724,7 @@ class SalesPpoReportController < ApplicationController
            @hbn_media_cost = Medium.where(media_group_id: 10000, active: true).sum(:daily_charges).to_f
 
            @daily_charge = @media.daily_charges || 0 if @media.present?
-           @days = 1
+           @days = 0
            @media_total_fixed_cost = 0
            (@from_date).upto(@to_date).each do |day|
                @media_total_fixed_cost += @media.daily_charges.to_f || 0 if @media.present?
@@ -807,7 +807,7 @@ class SalesPpoReportController < ApplicationController
 
                @serial_no += 1
               end
-              
+
               @media_name = @media.name || "None" if @media.present?
         @employeeorderlist = employeeunorderlist #.sort_by{|c| c[:total]}.reverse
           respond_to do |format|
