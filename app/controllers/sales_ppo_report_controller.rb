@@ -807,7 +807,7 @@ class SalesPpoReportController < ApplicationController
 
                @serial_no += 1
               end
-               @media_profitability = @media_total_fixed_cost - @total_revenue
+              
               @media_name = @media.name || "None" if @media.present?
         @employeeorderlist = employeeunorderlist #.sort_by{|c| c[:total]}.reverse
           respond_to do |format|

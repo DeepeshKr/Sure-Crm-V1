@@ -208,7 +208,7 @@
   </div>
   <div class="col-xs-3">
     <p class="lead">
-        Profitability <%= @media_profitability %>
+        Profitability <%= @media_total_fixed_cost.round(0) - @total_revenue.round(0) %>
     </p>
 
   </div>
