@@ -783,7 +783,7 @@ class SalesPpoReportController < ApplicationController
                 if ProductCostMaster.where(prod: playlist.product_variant.extproductcode).present?
                   product_cost_master = ProductCostMaster.where(prod: playlist.product_variant.extproductcode).first.cost
                 end
-
+                row_css = "row-highlight" || nil if totalorders > 0
                 employeeunorderlist << {:serial_no => @serial_no,
                   :show =>  playlist.product_variant.name,
                   :for_date => playlist.for_date,
@@ -796,6 +796,7 @@ class SalesPpoReportController < ApplicationController
                 :product_damages => product_damages.to_i,
                 :start_time => @from_date, end_time: @to_date,
                 :total => totalorders.to_i,
+                :row_css => row_css,
                 :refund => refund.to_i,
                 :revenue => revenue.to_i,
                 :total_cost => total_cost.to_i,

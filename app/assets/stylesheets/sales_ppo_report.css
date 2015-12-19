@@ -24,6 +24,10 @@ table.scroll tbody {
     overflow-x: hidden;
 }
 
+.row-highlight>tbody>tr:hover>td, .row-highlight>tbody>tr:hover>th {
+  background-color: #550055;
+  color:#eeeeee;
+}
 /*tbody { border-top: 2px solid black; }*/
 
 /*tbody td, thead th {*/

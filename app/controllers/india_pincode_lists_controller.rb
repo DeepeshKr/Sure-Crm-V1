@@ -20,7 +20,8 @@ class IndiaPincodeListsController < ApplicationController
       @found = "Found of over #{@india_pincode_lists.count()} Cities"
     elsif params[:location].present?
       @searchvalue = params[:location]
-      @india_pincode_lists = IndiaPincodeList.where("taluk like ? OR districtname like ? or regionname like ? or pincode like ? or divisionname like ? or circlename like ? or statename like ?", "#{@searchvalue}%", "#{@searchvalue}%", "#{@searchvalue}%", "#{@searchvalue}%", "#{@searchvalue}%", "#{@searchvalue}%", "#{@searchvalue}%").paginate(:page => params[:page])
+      @searchvalue = @searchvalue.upcase
+      @india_pincode_lists = IndiaPincodeList.where("UPPER(taluk) like ? OR UPPER(districtname) like ? or UPPER(regionname) like ? or UPPER(pincode) like ? or UPPER(divisionname) like ? or UPPER(circlename) like ? or UPPER(statename) like ?", "#{@searchvalue}%", "#{@searchvalue}%", "#{@searchvalue}%", "#{@searchvalue}%", "#{@searchvalue}%", "#{@searchvalue}%", "#{@searchvalue}%").paginate(:page => params[:page])
       @search = "Seached for #{@searchvalue}"
       @found = "Found of over #{@india_pincode_lists.count()} Cities"
     else

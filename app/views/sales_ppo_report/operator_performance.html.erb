@@ -167,7 +167,7 @@
 
   </tr>
  <% @list_of_orders.each do |c| %>
-<tr>
+<tr class=<%= c[:row_css] %>>
 <td> <%= @order_sno %></td>
 <td> <%= c[:order_no] %></td>
 <td> <%= c[:time_of_order] %></td>
