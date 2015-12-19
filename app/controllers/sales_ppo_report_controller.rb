@@ -381,7 +381,7 @@ class SalesPpoReportController < ApplicationController
     @hourlist = "Time UTC is your zone #{Time.zone.now} while actual time is #{Time.now}"
     @sno = 1
     @searchaction = "hourly"
-
+     @from_date = (330.minutes).from_now.to_date
      for_date = (330.minutes).from_now.to_date
      @product_lists = ProductList.joins(:product_variant).where("product_variants.activeid = 10000").order('product_lists.name')
      #@product_variants = ProductVariant.all.order("name")
@@ -724,12 +724,13 @@ class SalesPpoReportController < ApplicationController
            @hbn_media_cost = Medium.where(media_group_id: 10000, active: true).sum(:daily_charges).to_f
 
            @daily_charge = @media.daily_charges || 0 if @media.present?
-           @days = 0
+           @days = 1
            @media_total_fixed_cost = 0
            (@from_date).upto(@to_date).each do |day|
                @media_total_fixed_cost += @media.daily_charges.to_f || 0 if @media.present?
                @days += 1
            end
+
 
 
            if @media_id.blank?
@@ -806,6 +807,7 @@ class SalesPpoReportController < ApplicationController
 
                @serial_no += 1
               end
+               @media_profitability = @media_total_fixed_cost - @total_revenue
               @media_name = @media.name || "None" if @media.present?
         @employeeorderlist = employeeunorderlist #.sort_by{|c| c[:total]}.reverse
           respond_to do |format|
