@@ -391,7 +391,7 @@ class SalesPpoReportController < ApplicationController
      end
      if params.has_key?(:product_list_id)
       @product_list_id = params[:product_list_id]
-      @product_list = ProductVariant.find(@product_list_id)
+      @product_list = ProductList.find(@product_list_id)
      end
      if params.has_key?(:from_date)
       @from_date =  Date.strptime(params[:from_date], "%Y-%m-%d")
