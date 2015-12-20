@@ -1,12 +1,11 @@
 <p id="notice"><%= notice %></p>
 
-<h3>List of Product Sold to Distirbutors</h3>
+<h3>List of Product Sold to Distributors</h3>
 
 <table class="table table-hover table-striped">
   <thead>
     <tr>
-      <th>Product</th>
-      <th>Name</th>
+      <th>Product Name</th>
       <th>Order</th>
       <th colspan="2"></th>
     </tr>
@@ -15,8 +14,7 @@
   <tbody>
     <% @distributor_product_lists.each do |distributor_product_list| %>
       <tr>
-        <td><%= distributor_product_list.product_list_id %></td>
-        <td><%= distributor_product_list.name %></td>
+        <td><%= distributor_product_list.product_list.productname if distributor_product_list.product_list %></td>
         <td><%= distributor_product_list.sort_order %></td>
 
         <td><%= link_to 'Edit', edit_distributor_product_list_path(distributor_product_list) %></td>

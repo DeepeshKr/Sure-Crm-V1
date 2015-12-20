@@ -1,5 +1,5 @@
 <%= bootstrap_form_for(@distributor_product_list) do |f| %>
-  <%= f.error_notification %>
+
   <div class="row">
 
    <div class="col-xs-8">
@@ -17,6 +17,7 @@
 
    </div>
    <div class="col-xs-2">
+     <label>Add to Master List</label>
         <%= submit_tag "Save Details", name: nil, class: "btn btn-primary" %>
 
 

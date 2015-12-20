@@ -5,7 +5,14 @@ class DistributorProductListsController < ApplicationController
   # GET /distributor_product_lists.json
   def index
       @all_product_list = DistributorProductList.all.pluck(:product_list_id)
-      @product_list = ProductList.joins(:product_variant).where("product_variants.activeid = 10000").where('id NOT IN (?)', @all_product_list).order('product_lists.name')
+
+      if @all_product_list.present?
+          @product_list = ProductList.joins(:product_variant).where("product_variants.activeid = 10000").where('product_lists.id NOT IN (?)', @all_product_list).order('product_lists.name')
+      else
+            @product_list = ProductList.joins(:product_variant).where("product_variants.activeid = 10000").order('product_lists.name')
+      end
+
+
     @distributor_product_lists = DistributorProductList.all.paginate(:page => params[:page])
 
       @distributor_product_list = DistributorProductList.new
@@ -18,7 +25,7 @@ class DistributorProductListsController < ApplicationController
 
   # GET /distributor_product_lists/new
   def new
-    @distributor_product_list = DistributorProductList.new
+    @distributor_product_list = DistributorProductList.new(sort_order: 1)
   end
 
   # GET /distributor_product_lists/1/edit
@@ -32,7 +39,7 @@ class DistributorProductListsController < ApplicationController
 
     respond_to do |format|
       if @distributor_product_list.save
-        format.html { redirect_to @distributor_product_list, notice: 'Distributor product list was successfully created.' }
+        format.html { redirect_to distributor_product_lists_url, notice: 'Distributor product list was successfully created.' }
         format.json { render :show, status: :created, location: @distributor_product_list }
       else
         format.html { render :new }
@@ -46,7 +53,7 @@ class DistributorProductListsController < ApplicationController
   def update
     respond_to do |format|
       if @distributor_product_list.update(distributor_product_list_params)
-        format.html { redirect_to @distributor_product_list, notice: 'Distributor product list was successfully updated.' }
+        format.html { redirect_to distributor_product_lists_url, notice: 'Distributor product list was successfully updated.' }
         format.json { render :show, status: :ok, location: @distributor_product_list }
       else
         format.html { render :edit }

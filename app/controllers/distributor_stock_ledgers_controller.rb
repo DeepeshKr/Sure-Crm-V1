@@ -4,11 +4,15 @@ class DistributorStockLedgersController < ApplicationController
   # GET /distributor_stock_ledgers
   # GET /distributor_stock_ledgers.json
   def index
+    #update_stock_for_all_distributors
     if params.has_key?(:corporate_id)
       @btn1 = "btn btn-default"
       @btn2 = "btn btn-default"
       @btn3 = "btn btn-default"
       @corporate = Corporate.find(params[:corporate_id])
+      if @corporate.blank?
+        return
+      end
        @distributor_stock_ledgers = DistributorStockLedger.where(corporate_id: params[:corporate_id]).order("ledger_date DESC").paginate(:page => params[:page], :per_page => 100)
        if params.has_key?(:type_id)
          @distributor_stock_ledgers =  @distributor_stock_ledgers.where(type_id: params[:type_id]).order("ledger_date DESC").paginate(:page => params[:page], :per_page => 100)
@@ -44,7 +48,7 @@ class DistributorStockLedgersController < ApplicationController
   # GET /distributor_stock_ledgers/new
   def new
     @all_product_list = DistributorProductList.all.pluck(:product_list_id)
-    @product_list = ProductList.joins(:product_variant).where("product_variants.activeid = 10000").where('id IN (?)', @all_product_list).order('product_lists.name') #.limit(10)
+    @product_list = ProductList.joins(:product_variant).where("product_variants.activeid = 10000").where('product_lists.id IN (?)', @all_product_list).order('product_lists.name') #.limit(10)
     if params.has_key?(:corporate_id)
       @corporate_id = params[:corporate_id]
     elsif distributor_stock_ledger_params.has_key?(:corporate_id)
@@ -68,10 +72,9 @@ class DistributorStockLedgersController < ApplicationController
 
     respond_to do |format|
       if @distributor_stock_ledger.save
-
         #update_product_details(@distributor_stock_ledger.id)
-
-        format.html { redirect_to corporate_path @distributor_stock_ledger.corporate_id, notice: 'Distributor stock ledger was successfully created.' }
+        flash[:notice] = @distributor_stock_ledger.flash_notice
+        format.html { redirect_to corporate_path @distributor_stock_ledger.corporate_id }
         format.json { render :show, status: :created, location: @distributor_stock_ledger }
       else
         format.html { render :new }
@@ -121,6 +124,11 @@ class DistributorStockLedgersController < ApplicationController
         :type_id)
     end
 
+    def update_stock_for_all_distributors
+      distributor_stock = DistributorStockLedger.new
+  		message = distributor_stock.all_update_distributor_stock
+      flash[:error] = "Updated by #{message}"
+    end
 
   #   def update_product_details(distributor_stock_ledger_id)
   #      distributor_stock_ledger = DistributorStockLedger.find(distributor_stock_ledger_id)

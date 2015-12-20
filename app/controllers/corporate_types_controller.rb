@@ -1,5 +1,5 @@
 class CorporateTypesController < ApplicationController
-   before_action { protect_controllers(8) } 
+   before_action { protect_controllers(8) }
   before_action :set_corporate_type, only: [:show, :edit, :update, :destroy]
 
   respond_to :html
@@ -10,6 +10,8 @@ class CorporateTypesController < ApplicationController
   end
 
   def show
+    @total_corporates = Corporate.all.count
+      @corporates = Corporate.where("corporate_type_id = ?", @corporate_type.id).order(:updated_at).paginate(:page => params[:page])
     respond_with(@corporate_type)
   end
 

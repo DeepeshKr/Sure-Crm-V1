@@ -19,7 +19,7 @@
 <%= f.hidden_field :product_master_id %>
 <%= f.hidden_field :prod %>
 
-  
+
 <div class="row">
 
  <div class="col-xs-8">
@@ -41,13 +41,13 @@
  </div>
 <div class="row">
  <div class="col-xs-6">
- <%= f.text_field :name, label: "Name of Entry", :required => "true" %> 
+ <%= f.text_field :name, label: "Name of Entry", :required => "true" %>
  </div>
  <div class="col-xs-2">
   <%= f.text_field :ledger_date,  :data => {:provide => "datepicker"}, :id => "datepicker", :class => "form-control", label: "Date of Entry",  :required => "true"   %>
   </div>
   <div class="col-xs-4" id="stock_value">
-    <%= f.number_field :stock_value,  label: "Stock Value", :class => "form-control", :placeholder => "Value in Rs"  %>
+    <%= f.number_field :stock_value,  label: "MIS Amount", :class => "form-control", :placeholder => "Value in Rs"  %>
   </div>
   <div class="col-xs-4" id="stock_nos">
     <%= f.number_field :stock_change,  min: -100, max: 100, step: 1, label: "Change Stock", :class => "form-control", :placeholder => "Select No"  %>
@@ -57,11 +57,11 @@
  <div class="form-inputs">
     <%= f.text_area :description, label: "Description of entry", :required => "true" %>
    </div>
-   
+
   <div class="row">
-  
+
   </div>
-   
+
 
    <div class="col-xs-3">
         <%= submit_tag "Save Details", name: nil, class: "btn btn-primary" %>
@@ -86,10 +86,21 @@ $(document).ready(function(){
       //
       //$("#stock_nos").removeAttr('required');​​​​​
       $("#stock_nos").hide();
-      
+
       //window.alert("MIS Balance");
       }
-      else if ( this.value > '10000')
+      else if ( this.value == '10020')
+      {
+      $("#stock_value").prop('required', true);
+      $("#stock_value").show();
+      $("#stock_value").prop("disabled", false);
+      //
+      //$("#stock_nos").removeAttr('required');​​​​​
+      $("#stock_nos").hide();
+
+      //window.alert("MIS Balance");
+      }
+      else if ( this.value == '10002')
       {
       //$("#stock_value").removeAttr('required');​​​​​
       $("#stock_value").hide();
@@ -100,7 +111,18 @@ $(document).ready(function(){
       //
       //window.alert("Stock Transfer");
       }
-      else 
+      else if ( this.value == '10001')
+      {
+      //$("#stock_value").removeAttr('required');​​​​​
+      $("#stock_value").hide();
+      //
+      $("#stock_nos").attr('required', true);
+      $("#stock_nos").prop("disabled", false);
+      $("#stock_nos").show();
+      //
+      //window.alert("Stock Transfer");
+      }
+      else
       {
       $("#stock_value").hide();
       $("#stock_nos").hide();
@@ -108,5 +130,5 @@ $(document).ready(function(){
       }
     });
 });
-  
+
 </script>

@@ -6,19 +6,50 @@ class CorporatesController < ApplicationController
   respond_to :html
 
   def index
-
+    @corporate_types = CorporateType.all
       if params.has_key?(:search)
          @search = "Search for " +  params[:search].upcase
           @searchvalue = params[:search].upcase
-         @corporates = Corporate.where("name like ? OR city like ? or state like ?", "#{@searchvalue}%",
+
+            #Super Distributor
+         @supercorporates = Corporate.where(corporate_type_id: 10020).where("UPPER(name) like ? OR UPPER(city) like ? or UPPER(state) like ?", "#{@searchvalue}%",
        "#{@searchvalue}%", "#{@searchvalue}%").paginate(:page => params[:page])
-      respond_with(@corporates)
+       #Transfer Order Distributor
+       @transferordercorporates = Corporate.where(corporate_type_id: 10021).where("UPPER(name) like ? OR UPPER(city like ? or UPPER(state) like ?", "#{@searchvalue}%",
+     "#{@searchvalue}%", "#{@searchvalue}%").paginate(:page => params[:page])
+     #REgular Distributor
+      @regularcorporates = Corporate.where(corporate_type_id: 10000).where("UPPER(name) like ? OR UPPER(city) like ? or UPPER(state) like ?", "#{@searchvalue}%",
+   "#{@searchvalue}%", "#{@searchvalue}%").paginate(:page => params[:page])
+   #Others Distributor
+    @corporates = Corporate.where("corporate_type_id IS NULL").where("UPPER(name) like ? OR UPPER(city) like ? or UPPER(state) like ?", "#{@searchvalue}%",
+ "#{@searchvalue}%", "#{@searchvalue}%").paginate(:page => params[:page])
+
+
       else
-         @corporates = Corporate.all.paginate(:page => params[:page])
-      respond_with(@corporates)
+        #Super Distributor
+        @supercorporates = Corporate.where(corporate_type_id: 10020).order(:updated_at).paginate(:page => params[:page])
+        #Transfer Order Distributor
+        @transferordercorporates = Corporate.where(corporate_type_id: 10021).order(:updated_at).paginate(:page => params[:page])
+        #REgular Distributor
+         @regularcorporates = Corporate.where(corporate_type_id: 10000).order(:updated_at).paginate(:page => params[:page])
+
+         #Others Distributor
+          @corporates = Corporate.where("corporate_type_id IS NULL").order(:updated_at).paginate(:page => params[:page])
+
+
+
       end
 
   end
+  #
+  # def list_type
+  #   if params.has_key(:corporate_type_id)
+  #   params[:page]
+  #
+  #   else
+  #     return redirect_to corporates_path
+  #   end
+  # end
 
   def show
     #show pincode
@@ -33,11 +64,11 @@ class CorporatesController < ApplicationController
     @distributor_stock_summaries = DistributorStockSummary.all.where(corporate_id: @corporate.id)
 
     #show stock ledger
-     @distributor_stock_ledgers = DistributorStockLedger.all.where(corporate_id: @corporate.id).order("ledger_date DESC").limit(100)
+     @distributor_stock_ledgers = DistributorStockLedger.all.where(corporate_id: @corporate.id).order("created_at DESC, ledger_date DESC").limit(100)
 
      #add stock ledger
     @product_list = ProductList.joins(:product_variant).where("product_variants.activeid = 10000").order('product_lists.name') #.limit(10)
-    @product_master = ProductMaster.where(productactivecodeid: 10000).order('name') #.limit(10)
+    #@product_master = ProductMaster.where(productactivecodeid: 10000).order('name') #.limit(10)
     @distributor_stock_ledger_type = DistributorStockLedgerType.order('sort_order')
     @distributor_stock_ledger = DistributorStockLedger.new(corporate_id: @corporate.id) #
     @distributor_missed_orders = DistributorMissedOrder.where(corporate_id: @corporate.id).order("id DESC").limit(100)

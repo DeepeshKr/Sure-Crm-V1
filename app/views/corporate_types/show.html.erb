@@ -1,14 +1,26 @@
 <p id="notice"><%= notice %></p>
+<div class="well well-sm">
+  <div class="row">
+    <div class="col-xs-6">
+      <h3><strong><%= @corporate_type.name %></strong></h3>
+    </div>
+    <div class="col-xs-3">
+      <h3>No of: <strong><%= @corporate_type.no_of_corporates %></strong></h3>
 
-<p>
-  <strong>Name:</strong>
-  <%= @corporate_type.name %>
-</p>
+    </div>
+    <div class="col-xs-3">
+      <h3>Total: <strong><%= @total_corporates %></strong></h3>
+
+    </div>
+  </div>
 
 <p>
   <strong>Description:</strong>
   <%= @corporate_type.description %>
 </p>
 
-<%= link_to 'Edit', edit_corporate_type_path(@corporate_type) %> |
-<%= link_to 'Back', corporate_types_path %>
+<%= link_to 'Edit', edit_corporate_type_path(@corporate_type), class: "btn btn-primary btn-sm" %> |
+<%= link_to 'Back', corporate_types_path, class: "btn btn-primary btn-sm"  %>
+</div>
+<hr>
+<%= render 'corporates/basic_list' %>

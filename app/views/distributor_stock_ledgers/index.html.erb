@@ -1,16 +1,18 @@
+<% if @corporate.present? %>
 <div class="row">
     <div class="col-xs-6">
-        <h3> <%= @corporate.name %> </h3>
-        <p> <%= @corporate.rupee_balance %>  <%= @corporate.corporate_type.name if @corporate.corporate_type %></p>
-        <p class="lead">Status: <%= @corporate.corporate_active_master.name if @corporate.corporate_active_master %></p>
+        <h3> <%= @corporate.name if @corporate.present? %> </h3>
+        <p> <%= @corporate.rupee_balance if @corporate.present? %>  <%= @corporate.corporate_type.name if @corporate.present? && @corporate.corporate_type %></p>
+        <p class="lead">Status: <%= @corporate.corporate_active_master.name if @corporate.present? && @corporate.corporate_active_master %></p>
     </div>
     <div class="col-xs-6">
-     <p>  <%= @corporate.website %></p>
+     <p>  <%= @corporate.website  %></p>
         <p> <strong>Telephone:</strong> <%= @corporate.telephone1 %></p>
         <p> <strong>Telephone:</strong> <%= @corporate.telephone2 %> </p>
         <p> <strong>Fax:</strong> <%= @corporate.fax %></p>
     </div>
 </div>
+
 <div class="row">
   <div class="col-xs-6">
 
@@ -21,19 +23,25 @@
 <button class="btn btn-success btn-sm" type="button" data-toggle="collapse" data-target="#distributorDetails" aria-expanded="false" aria-controls="distributorDetails">
   More Details
 </button>
+<% end %>
 <div class="collapse" id="distributorDetails">
+  <% if @corporate.present? %>
   <div class="well">
     <%= render partial: 'corporates/show_details' %>
   </div>
+  <% end %>
 </div>
 <hr>
 <div class="row">
   <div class="col-xs-4">
+    <% if @corporate.present? %>
     <div class="btn-group" role="group" aria-label="...">
       <%= link_to 'MIS Entry', distributor_stock_ledgers_path(type_id: 10000, corporate_id:@corporate.id ), type:"button", class: @btn1 %>
       <%= link_to 'Purchases', distributor_stock_ledgers_path(type_id: 10001, corporate_id:@corporate.id), type:"button", class: @btn2 %>
       <%= link_to 'Sales', distributor_stock_ledgers_path(type_id: 10002, corporate_id:@corporate.id), type:"button", class: @btn3 %>
+
     </div>
+      <% end %>
   </div>
   <div class="col-xs-8">
     <div class="digg_pagination">
@@ -52,4 +60,6 @@
 </div>
 
 <br>
+<% if @corporate.present? %>
 <%= link_to 'Back to Distributor', corporate_path(@corporate), class:"btn btn-primary btn-sm" %>
+<% end %>

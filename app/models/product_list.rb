@@ -1,13 +1,14 @@
 class ProductList < ActiveRecord::Base
 
   belongs_to :product_variant, foreign_key: "product_variant_id"
-  belongs_to :product_master, foreign_key: "product_master_id" 
-  belongs_to :product_spec_list, foreign_key: "product_spec_list_id" 
+  belongs_to :product_master, foreign_key: "product_master_id"
+  belongs_to :product_spec_list, foreign_key: "product_spec_list_id"
   belongs_to :product_active_code, foreign_key: "active_status_id"
-  
+
   has_many :product_master_add_on, foreign_key: "product_list_id"
   has_many :product_sample_stock, foreign_key: "product_list_id"
   has_many :product_cost_master, foreign_key: "product_list_id"
+  has_many :distributor_product_list, foreign_key: "product_list_id"
 
   has_many :distributor_stock_ledger, foreign_key: "product_variant_id"
   has_many :distributor_stock_summary, foreign_key: "product_variant_id"
@@ -17,7 +18,7 @@ class ProductList < ActiveRecord::Base
   #has_many :product_master_add_on, :class_name => 'PointOfContact',  foreign_key: "replace_by_product_id"
   #coding not completed for this
   #has_many :interaction_master, foreign_key: "productvariantid"
-    
+
     #ordering is related to this
     has_many :order_line, foreign_key: "product_list_id" #, polymorphic: true
     validates_presence_of :extproductcode
@@ -52,7 +53,7 @@ class ProductList < ActiveRecord::Base
     if self.product_variant_id.present?
       if ProductVariant.where(id: self.product_variant_id).present?
         product_variant = ProductVariant.find(self.product_variant_id)
-        
+
         return "Basic Price : " << (product_variant.price || 0).to_s << "  Shipping : " << (product_variant.shipping || 0).to_s
       end
     end
@@ -62,7 +63,7 @@ class ProductList < ActiveRecord::Base
     if self.product_variant_id.present?
       if ProductVariant.find(self.product_variant_id).present?
       product_variant = ProductVariant.find(self.product_variant_id)
-      
+
       return  "Shipping : " << (product_variant.shipping || 0).to_i.to_s
       end
     end
@@ -85,19 +86,19 @@ class ProductList < ActiveRecord::Base
         servicetaxid = 10040
         servicetax = 1 + Orderpaymentmode.find(servicetaxid).charges
         servicetaxcharges = (price * Orderpaymentmode.find(cashondeliveryid).charges ) * Orderpaymentmode.find(servicetaxid).charges
-        
+
         total = total + servicetaxcharges
       end
-          
+
     return total
   end
 
   def maharastracodextra
       price = (product_variant.price  || 0) + (product_variant.shipping || 0)
       total = price
-     
+
       if self.product_master.sel_m_cod.blank? || self.product_master.sel_m_cod == 1
-           
+
       surchargeid = 10020
       surcharge = 1 + Orderpaymentmode.find(surchargeid).charges
       total = price * surcharge
@@ -109,7 +110,7 @@ class ProductList < ActiveRecord::Base
       servicetaxid = 10040
       servicetax = 1 + Orderpaymentmode.find(servicetaxid).charges
       servicetaxcharges = (price * Orderpaymentmode.find(cashondeliveryid).charges ) * Orderpaymentmode.find(servicetaxid).charges
-      
+
       total = total + servicetaxcharges
       end
 
@@ -129,7 +130,7 @@ class ProductList < ActiveRecord::Base
       servicetax = 1 + Orderpaymentmode.find(servicetaxid).charges
       total = total * codcharges * surcharge
      end
-  return total 
+  return total
   end
 
   def creditcardcharges
@@ -139,23 +140,23 @@ class ProductList < ActiveRecord::Base
         charges = 1 +  Orderpaymentmode.find(creditcardid).charges
         total = ((product_variant.price  || 0) * charges ) + (product_variant.shipping || 0)
       end
-    
-    return total  
+
+    return total
   end
 
   def maharastraccextra
     total = (product_variant.price  || 0) + (product_variant.shipping || 0)
     if self.product_master.sel_m_cc.blank? || self.product_master.sel_m_cc == 1
-    
+
       creditcardid = 10000
       charges = 1 +  Orderpaymentmode.find(creditcardid).charges
-      total = ((product_variant.price  || 0) * charges ) + (product_variant.shipping || 0) 
+      total = ((product_variant.price  || 0) * charges ) + (product_variant.shipping || 0)
 
       surchargeid = 10020
       surcharge = 1 + Orderpaymentmode.find(surchargeid).charges
       total = total * surcharge
     end
-    
+
     return total
   end
 

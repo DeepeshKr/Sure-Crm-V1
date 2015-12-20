@@ -50,6 +50,7 @@ post "send_demo_message" => 'message_on_orders#send_demo_message'
   resources :distributor_stock_books
 
   resources :corporate_active_masters
+  # get 'corporate_type' => 'corporates#list_type'
 
   resources :help_files
   get 'help' => 'help_files#index'

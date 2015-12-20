@@ -1,62 +1,15 @@
 <div class="row">
 <div class="col-xs-6">
-<h3>corporates</h3>
+<h3>Corporates</h3>
 </div>
 <div class="col-xs-6">
 <%= render 'search' %>
 </div>
 </div>
-
 <br>
-<div class="digg_pagination">
-    <%= will_paginate @corporates, :container => false %>
-</div>
+<%= render 'list_of_corporates' %>
 <br>
+<%= render 'all_others' %>
 
-
-
-<table class="table table-hover ">
-  <thead>
-    <tr>
-      <th>Name</th>
-      <th>People</th>
-      <th>Address</th>
-      
-      <th>Landmark</th>
-      <th>District City - Pincode</th>
-      <th>State - Country</th>
-      <th>Telephone</th>
-      <th>Website</th>
-      
-      <th colspan="2"></th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <% @corporates.each do |corporate| %>
-      <tr>
-        <td><%= corporate.name %></td>
-        <td> <%= corporate.salute1 %> <%= corporate.first_name1 %> <%= corporate.last_name1 %> <%= corporate.designation1 %> <%= corporate.mobile1 %> <%= corporate.emaild1 %> <br>
-        <%= corporate.salute2 %> <%= corporate.first_name2 %> <%= corporate.last_name2 %> <%= corporate.designation2 %> <%= corporate.mobile2 %> <%= corporate.emailid2 %> <br>
-        <%= corporate.salute3 %> <%= corporate.first_name3 %> <%= corporate.last_name3 %> <%= corporate.designation3 %> <%= corporate.mobile3 %> <%= corporate.emailid3 %> <br>
-        <td><%= corporate.address1 %> <br>
-        <%= corporate.address2 %> <br>
-        <td><%= corporate.address3 %> <br>
-        <td><%= corporate.landmark %></td>
-        <td><%= corporate.district %> <%= corporate.city %> <%= corporate.pincode %></td>
-        <td><%= corporate.state %> - <%= corporate.country %></td>
-        <td><%= corporate.telephone1 %> <br>
-        <%= corporate.telephone2 %> <br>
-       Fax: <%= corporate.fax %></td>
-        <td><%= corporate.website %></td>
-         <td><%= link_to 'Show', corporate %></td>
-        <td><%= link_to 'Edit', edit_corporate_path(corporate) %></td>
-       
-      </tr>
-    <% end %>
-  </tbody>
-</table>
-
-<br>
 
 <%= link_to 'New Corporate', new_corporate_path, class:"btn btn-primary" %>
