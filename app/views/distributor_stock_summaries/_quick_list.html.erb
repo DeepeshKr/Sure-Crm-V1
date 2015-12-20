@@ -6,7 +6,7 @@
       <th>Rupee balance</th>
       <th>Stock returned</th>
       <th>Date</th>
-      <th></th>
+    
     </tr>
   </thead>
 
@@ -18,7 +18,7 @@
         <td><%= distributor_stock_summary.stock_value %></td>
         <td><%= distributor_stock_summary.stock_returned %></td>
         <td><%= distributor_stock_summary.summary_date.strftime("%d-%b-%Y") %></td>
-        <td><%= link_to 'Destroy', distributor_stock_summary, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+
       </tr>
     <% end %>
   </tbody>

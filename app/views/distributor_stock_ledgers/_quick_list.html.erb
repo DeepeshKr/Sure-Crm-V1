@@ -9,7 +9,6 @@
       <th>Product</th>
       <th>Name<br>Description</th>
       <th>Stock<br>Value</th>
-      <th></th>
     </tr>
   </thead>
 
@@ -19,11 +18,9 @@
        <td><%= distributor_stock_ledger.ledger_date.strftime("%d-%b-%Y") %></td>
        <td> <%= distributor_stock_ledger.distributor_stock_ledger_type.name if distributor_stock_ledger.distributor_stock_ledger_type %></td>
         <td><%= distributor_stock_ledger.product_list.name if distributor_stock_ledger.product_list %></td>
-       
+
         <td><strong><%= distributor_stock_ledger.name %></strong><br><%= distributor_stock_ledger.description %></td>
         <td> <%= distributor_stock_ledger.stock_change %><%= distributor_stock_ledger.stock_value %></td>
-       
-        <td><%= link_to 'Destroy', distributor_stock_ledger, method: :delete, data: { confirm: 'Are you sure?' } %></td>
       </tr>
     <% end %>
   </tbody>

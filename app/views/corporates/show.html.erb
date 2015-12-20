@@ -26,18 +26,26 @@
 <hr>
 <br>
 <div class="row">
-  <div class="col-xs-4">
-    <h3>Serviced Pincodes</h3>
+  <div class="col-xs-2">
+    <h3>Serviced Pincodes </h3>
   </div>
+    <div class="col-xs-2">
+      <button class="btn btn-primary btn-sm" type="button" data-toggle="collapse" data-target="#listofservicedPincode" aria-expanded="false" aria-controls="listofservicedPincode">
+        Show all <%= @distributor_pincode_list_nos %> Pincodes
+      </button>
+    </div>
   <div class="col-xs-8">
     <%= render partial: 'distributor_pincode_lists/quick_add' %>
   </div>
 
 </div>
-
-
-<%= render partial: 'distributor_pincode_lists/quick_list' %>
-
+<div class="row">
+  <div class="col-xs-12">
+    <div class="collapse" id="listofservicedPincode">
+    <%= render partial: 'distributor_pincode_lists/quick_list' %>
+    </div>
+  </div>
+</div
 <br>
 
 <button class="btn btn-success btn-sm" type="button" data-toggle="collapse" data-target="#servicedPincode" aria-expanded="false" aria-controls="servicedPincode">
@@ -48,7 +56,7 @@
     <%= render partial: 'distributor_pincode_lists/form' %>
   </div>
 </div>
-
+<br>
 <hr>
 
 <h3>Product Stock Summary (where available or Returns more than ZERO</h3>

@@ -49,10 +49,14 @@ def update_product_details_for_id(ledger_id)
 				end
 
 			elsif distributor_stock_ledger.type_id == 10000 #mis additions
-							update_corporate_mis_balance(distributor_stock_ledger.corporate_id, distributor_stock_ledger.stock_value)
-							self.flash_notice = "Ledger details updated with MIS value of Rs #{distributor_stock_ledger.stock_change}"
+						message = add_corporate_mis_balance(distributor_stock_ledger.corporate_id, distributor_stock_ledger.stock_value.to_f)
+						self.flash_notice = "Ledger #{message}"
 							 # flash[:error] = "Ledger details #{distributor_stock_ledger.type_id}"
+		 elsif distributor_stock_ledger.type_id == 10020 #mis removal
+						message = remove_corporate_mis_balance(distributor_stock_ledger.corporate_id, distributor_stock_ledger.stock_value.to_f)
+						self.flash_notice = "Ledger #{message}"
 			end
+		
 		#end
 	end
 	# on create update variant id and list id
