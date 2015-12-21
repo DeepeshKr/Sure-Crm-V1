@@ -1,4 +1,5 @@
 class DistributorStockLedger < ActiveRecord::Base
+	attr_accessor  :flash_notice
 	belongs_to :corporate, foreign_key: "corporate_id"
 	belongs_to :product_master, foreign_key: "product_master_id"
 	belongs_to :product_variant, foreign_key: "product_variant_id"
@@ -12,7 +13,7 @@ class DistributorStockLedger < ActiveRecord::Base
 	#validates :stock_change,  :presence => { :message => "Need to select a stock change or keep the value 0" }
 	validates :name,  :presence => { :message => "Need to give a name like stock addition, sale, bonus..." }
 	validates :description,  :presence => { :message => "Description of ledger" }
-attr_accessor  :flash_notice
+
 def all_update_distributor_stock
 	no_of_records = 0
 	distributor_stock_ledgers = DistributorStockLedger.all
@@ -56,7 +57,7 @@ def update_product_details_for_id(ledger_id)
 						message = remove_corporate_mis_balance(distributor_stock_ledger.corporate_id, distributor_stock_ledger.stock_value.to_f)
 						self.flash_notice = "Ledger #{message}"
 			end
-		
+
 		#end
 	end
 	# on create update variant id and list id

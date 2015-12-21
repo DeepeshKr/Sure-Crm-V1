@@ -439,6 +439,7 @@ class SalesPpoReportController < ApplicationController
            @total_fixed_cost = campaign_playlists.sum(:cost).to_f
 
            campaign_playlists.each do | playlist |
+
            orderlist = OrderMaster.where('ORDER_STATUS_MASTER_ID > 10002')
            .where(campaign_playlist_id: playlist.id).joins(:order_line)
            .where("order_lines.product_list_id = ?", @product_list_id)
@@ -449,17 +450,18 @@ class SalesPpoReportController < ApplicationController
                 @fixed_cost = playlist.cost
                 nos = 0.0
                 pieces = 0.0
+                totalorders = 0.0
+
                 orderlist.each do |med |
                   product_cost += med.productcost
                   revenue += med.productrevenue
                   media_var_cost += med.media_commission
                   nos += 1
                   pieces += med.pieces
-                end
 
-                total_shipping = orderlist.sum(:shipping)
-                total_sub_total = orderlist.sum(:subtotal)
-                totalorders = total_shipping + total_sub_total
+
+                  totalorders = med.shipping + med.subtotal
+
                 #nos = orderlist.count()
                 #pieces = orderlist.sum(:pieces)
 
@@ -509,7 +511,8 @@ class SalesPpoReportController < ApplicationController
                 :product_variant_id => playlist.productvariantid}
 
                @serial_no += 1
-              end
+             end # ORDER LIST LOOP END
+           end
 
         @employeeorderlist = employeeunorderlist #.sort_by{|c| c[:total]}.reverse
           respond_to do |format|
@@ -746,6 +749,7 @@ class SalesPpoReportController < ApplicationController
                 @fixed_cost = playlist.cost
                 nos = 0.0
                 pieces = 0.0
+
                 orderlist.each do |med |
                   product_cost += med.productcost
                   revenue += med.productrevenue
