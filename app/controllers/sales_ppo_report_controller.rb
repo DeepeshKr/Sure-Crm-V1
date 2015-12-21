@@ -453,11 +453,11 @@ class SalesPpoReportController < ApplicationController
                 totalorders = 0.0
 
                 orderlist.each do |med |
-                  product_cost += med.productcost
-                  revenue += med.productrevenue
-                  media_var_cost += med.media_commission
-                  nos += 1
-                  pieces += med.pieces
+                  product_cost = med.productcost
+                  revenue = med.productrevenue
+                  media_var_cost = med.media_commission
+                  nos = 1
+                  pieces = med.pieces
 
 
                   totalorders = med.shipping + med.subtotal

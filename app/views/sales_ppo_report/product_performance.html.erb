@@ -197,16 +197,16 @@
   <div class="col-xs-2">
   HBN Media Cost -We use only Active <%= @hbn_media_cost.round(0) %>
   </div>
-  <div class="col-xs-2">
-    <p class="lead">
+  <div class="col-xs-4">
+
       <strong>Total Sales <%= @total_sales.round(0) %></strong><br>
       <strong>Total Revenue <%= @total_revenue.round(0) %></strong>
-    </p>
+
   </div>
-  <div class="col-xs-3">
+  <div class="col-xs-2">
   Download CSV file
   </div>
-  <div class="col-xs-3">
+  <div class="col-xs-2">
    <%= link_to 'Download CSV file', product_performance_path(from_date: @from_date, to_date: @to_date, product_variant_id: @product_variant_id, format: :csv), class: "btn btn-info btn-sm" %>
   </div>
 </div>

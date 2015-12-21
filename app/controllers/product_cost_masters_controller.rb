@@ -39,14 +39,14 @@ class ProductCostMastersController < ApplicationController
       #   "#{@searchvalue}%", "#{@searchvalue}%")
       # .paginate(:page => params[:page])
 
-      @product_cost_masters = ProductCostMaster.all.where("prod like ? OR barcode like ?", "#{@searchvalue}%", "#{@searchvalue}%").paginate(:page => params[:page])
+      @product_cost_masters = ProductCostMaster.all.where("UPPER(prod) like ? OR UPPER(barcode) like ?", "#{@searchvalue}%", "#{@searchvalue}%").paginate(:page => params[:page])
 
       @inactive_product_lists = ProductList.where('id NOT IN (?)', @all_product_cost_masters)
-      .where("name like ? OR extproductcode like ? or list_barcode like ?",
+      .where("UPPER(name) like ? OR UPPER(extproductcode) like ? or UPPER(list_barcode) like ?",
         "#{@searchvalue}%", "#{@searchvalue}%", "#{@searchvalue}%")
       .paginate(:page => params[:page])
 
-      @inactive_product_variants = ProductVariant.where('extproductcode NOT IN (?)', @all_product_cost_masters_prod).where("name like ? OR extproductcode like ?", "#{@searchvalue}%", "#{@searchvalue}%")
+      @inactive_product_variants = ProductVariant.where('extproductcode NOT IN (?)', @all_product_cost_masters_prod).where("UPPER(name) like ? OR UPPER(extproductcode) like ?", "#{@searchvalue}%", "#{@searchvalue}%")
 
       @found = @product_cost_masters.count
 
@@ -63,7 +63,7 @@ class ProductCostMastersController < ApplicationController
         @nos_with_out_price = @inactive_product_lists.count()
         @found = nil
 
-        @inactive_product_variants = ProductVariant.where('extproductcode NOT IN (?)', @all_product_cost_masters_prod).where("name like ? OR extproductcode like ?", "#{@searchvalue}%", "#{@searchvalue}%") #.limit(10)
+        @inactive_product_variants = ProductVariant.where('extproductcode NOT IN (?)', @all_product_cost_masters_prod) #.limit(10)
 
     end
         # format.csv do
