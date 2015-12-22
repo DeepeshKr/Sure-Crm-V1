@@ -431,7 +431,7 @@ class SalesPpoReportController < ApplicationController
         nos = 0
         total_order_value = 0
         s_no_i = 1
-        @serial_no = 0
+        @serial_no = 1
            campaign_playlists = CampaignPlaylist.where("for_date >= ? and for_date <= ?", @from_date, @to_date).where(list_status_id: 10000).order("for_date, start_hr, start_min")    #.limit(150)
 
            @total_media_cost = Medium.where(media_group_id: 10000).sum(:daily_charges).to_f
@@ -458,13 +458,15 @@ class SalesPpoReportController < ApplicationController
                 pieces = 0.0
                 totalorders = 0.0
                 @fixed_cost = playlist.cost
-                OrderMaster.where(id: @orderlist).each { |med_com| media_var_cost += med_com.media_commission}
+                OrderMaster.where(id: @orderlist).each { |med_com|
+                  media_var_cost += med_com.media_commission
+                  revenue += med_com.productrevenue
+                }
 
                 order_lines = OrderLine.where(orderid: @orderlist)
                 order_lines.each do |med |
                 #orderlist.each do |med |
                   product_cost += med.productcost
-                  revenue += med.productrevenue
                   pieces += med.pieces
                   totalorders += med.shipping + med.subtotal
                 end # ORDER LIST LOOP END
