@@ -80,6 +80,33 @@ class DistributorMissedOrdersController < ApplicationController
 
   # DELETE /distributor_missed_orders/1
   # DELETE /distributor_missed_orders/1.json
+  def remove_missed
+      if params.has_key?(:destroy_all)
+          distributor_missed_orders = DistributorMissedOrder.all
+          @records = 0
+          distributor_missed_orders.each do |distri_order|
+            distri_order.destroy
+            @records += 1
+          end
+          flash[:success] = "#{@records} missed order details were successfully destroyed."
+      end
+      if params.has_key?(:corporate_id)
+        @corporate_id = params[:corporate_id]
+          distributor_missed_orders = DistributorMissedOrder.where(corporate_id: @corporate_id)
+
+          if params.has_key?(:missed_type_id)
+            @missed_type_id = params[:missed_type_id]
+            distributor_missed_orders = distributor_missed_orders.where(missed_type_id: @missed_type_id)
+          end
+          @records = 0
+          distributor_missed_orders.each do |distri_order|
+            distri_order.destroy
+            @records += 1
+          end
+          flash[:success] = "#{@records} missed order details were successfully destroyed."
+      end
+  end
+
   def destroy
     @distributor_missed_order.destroy
     respond_to do |format|

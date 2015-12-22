@@ -78,6 +78,8 @@ post "send_demo_message" => 'message_on_orders#send_demo_message'
    end
   get "fedex_bill_download" => "fedex_bill_checks#download"
   delete "fedex_bill_delete" => "fedex_bill_checks#delete"
+  delete "remove_missed_orders" => "distributor_missed_orders#remove_missed"
+
   resources :product_test_ppos
 
   resources :product_sample_stocks

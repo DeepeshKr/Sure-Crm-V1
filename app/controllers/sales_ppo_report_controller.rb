@@ -447,12 +447,13 @@ class SalesPpoReportController < ApplicationController
                 revenue = 0
                 media_var_cost = 0
                 product_cost = 0
-                @fixed_cost = playlist.cost
+
                 nos = 0.0
                 pieces = 0.0
                 totalorders = 0.0
 
                 orderlist.each do |med |
+                  @fixed_cost = playlist.cost
                   product_cost = med.productcost
                   revenue = med.productrevenue
                   media_var_cost = med.media_commission
@@ -464,7 +465,7 @@ class SalesPpoReportController < ApplicationController
 
                 #nos = orderlist.count()
                 #pieces = orderlist.sum(:pieces)
-
+                @correction = 1 if nos <= 1
                 nos =  nos * @correction
                 pieces = pieces * @correction
                 revenue = revenue * @correction
@@ -816,7 +817,7 @@ class SalesPpoReportController < ApplicationController
               @media_name = @media.name || "None" if @media.present?
         @employeeorderlist = employeeunorderlist #.sort_by{|c| c[:total]}.reverse
           respond_to do |format|
-            csv_file_name = "#{}_performance_between_#{@from_date}_ #{@to_date}.csv"
+            csv_file_name = "#{@media_name}_performance_between_#{@from_date}_ #{@to_date}.csv"
               format.html
               format.csv do
                 headers['Content-Disposition'] = "attachment; filename=\"#{csv_file_name}\""
