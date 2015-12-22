@@ -447,7 +447,7 @@ class SalesPpoReportController < ApplicationController
           #  order_lists = OrderMaster.where('ORDER_STATUS_MASTER_ID > 10002')
           #  .where(campaign_playlist_id: playlist.id).joins(:order_line)
           #  .where("order_lines.product_list_id = ?", @product_list_id)
-          if order_list.present?
+          if orderlist.present?
                 revenue = 0
                 media_var_cost = 0
                 product_cost = 0
