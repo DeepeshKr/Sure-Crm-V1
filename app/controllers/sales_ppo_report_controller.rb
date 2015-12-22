@@ -444,10 +444,13 @@ class SalesPpoReportController < ApplicationController
            .where(campaign_playlist_id: playlist.id).joins(:order_line)
            .where("order_lines.product_list_id = ?", @product_list_id)
 
+          #  order_lists = OrderMaster.where('ORDER_STATUS_MASTER_ID > 10002')
+          #  .where(campaign_playlist_id: playlist.id).joins(:order_line)
+          #  .where("order_lines.product_list_id = ?", @product_list_id)
+          if order_list.present?
                 revenue = 0
                 media_var_cost = 0
                 product_cost = 0
-
                 nos = 0.0
                 pieces = 0.0
                 totalorders = 0.0
@@ -459,10 +462,8 @@ class SalesPpoReportController < ApplicationController
                   media_var_cost = med.media_commission
                   nos = 1
                   pieces = med.pieces
-
-
                   totalorders = med.shipping + med.subtotal
-
+                end # ORDER LIST LOOP END
                 #nos = orderlist.count()
                 #pieces = orderlist.sum(:pieces)
                 @correction = 1 if nos <= 1
@@ -512,7 +513,7 @@ class SalesPpoReportController < ApplicationController
                 :product_variant_id => playlist.productvariantid}
 
                @serial_no += 1
-             end # ORDER LIST LOOP END
+            end #if order list present
            end
 
         @employeeorderlist = employeeunorderlist #.sort_by{|c| c[:total]}.reverse
