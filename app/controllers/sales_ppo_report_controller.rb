@@ -463,16 +463,14 @@ class SalesPpoReportController < ApplicationController
                 order_lines = OrderLine.where(orderid: @orderlist)
                 order_lines.each do |med |
                 #orderlist.each do |med |
-
                   product_cost += med.productcost
                   revenue += med.productrevenue
-
-                  nos += 1
                   pieces += med.pieces
                   totalorders += med.shipping + med.subtotal
                 end # ORDER LIST LOOP END
                 #nos = orderlist.count()
                 #pieces = orderlist.sum(:pieces)
+                nos = @orderlist.count
                 nos =  nos * @correction
                 if nos < 1
                     @correction = 1
