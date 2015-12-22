@@ -3,10 +3,9 @@
     <tr>
       <th>Product</th>
       <th>Stock balance</th>
-      <th>Rupee balance</th>
-      <th>Stock returned</th>
+      <th>Product List Id*</th>
       <th>Date</th>
-    
+
     </tr>
   </thead>
 
@@ -14,12 +13,11 @@
     <% @distributor_stock_summaries.each do |distributor_stock_summary| %>
       <tr>
         <td><%= distributor_stock_summary.product_list.name if distributor_stock_summary.product_list %></td>
+        <td><%= distributor_stock_summary.product_list_id %></td>
         <td><%= distributor_stock_summary.stock_qty %></td>
-        <td><%= distributor_stock_summary.stock_value %></td>
-        <td><%= distributor_stock_summary.stock_returned %></td>
         <td><%= distributor_stock_summary.summary_date.strftime("%d-%b-%Y") %></td>
-
       </tr>
     <% end %>
   </tbody>
 </table>
+<small>* The system checks to exact same id of product always to transfer order</small>

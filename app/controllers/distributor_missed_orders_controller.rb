@@ -82,6 +82,8 @@ class DistributorMissedOrdersController < ApplicationController
   # DELETE /distributor_missed_orders/1.json
   def remove_missed
       if params.has_key?(:destroy_all)
+        @destroy_all = params[:destroy_all]
+        if @destroy_all == 'true'
           distributor_missed_orders = DistributorMissedOrder.all
           @records = 0
           distributor_missed_orders.each do |distri_order|
@@ -89,6 +91,7 @@ class DistributorMissedOrdersController < ApplicationController
             @records += 1
           end
           flash[:success] = "#{@records} missed order details were successfully destroyed."
+        end
       end
       if params.has_key?(:corporate_id)
         @corporate_id = params[:corporate_id]

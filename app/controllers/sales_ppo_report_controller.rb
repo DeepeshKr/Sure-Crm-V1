@@ -417,6 +417,7 @@ class SalesPpoReportController < ApplicationController
         @total_refund = 0
         @total_profit = 0
         @total_damages = 0
+        @total_ppo = 0
         @hourlist ||= []
         @halfhourlist ||= []
         employeeunorderlist ||= []
@@ -431,8 +432,7 @@ class SalesPpoReportController < ApplicationController
         total_order_value = 0
         s_no_i = 1
         @serial_no = 0
-           campaign_playlists = CampaignPlaylist.where("for_date >= ? and for_date <= ?", @from_date, @to_date).where(list_status_id: 10000).order("for_date, start_hr, start_min")
-           #.limit(150)
+           campaign_playlists = CampaignPlaylist.where("for_date >= ? and for_date <= ?", @from_date, @to_date).where(list_status_id: 10000).order("for_date, start_hr, start_min")    #.limit(150)
 
            @total_media_cost = Medium.where(media_group_id: 10000).sum(:daily_charges).to_f
            @hbn_media_cost = Medium.where(media_group_id: 10000, active: true).sum(:daily_charges).to_f
@@ -440,34 +440,44 @@ class SalesPpoReportController < ApplicationController
 
            campaign_playlists.each do | playlist |
 
-           orderlist = OrderMaster.where('ORDER_STATUS_MASTER_ID > 10002')
+           @orderlist = OrderMaster.where('ORDER_STATUS_MASTER_ID > 10002')
            .where(campaign_playlist_id: playlist.id).joins(:order_line)
-           .where("order_lines.product_list_id = ?", @product_list_id)
+           .where("order_lines.product_list_id in (?)", @product_list_id)
+           .pluck(:id)
+           #.limit(10)
 
-          #  order_lists = OrderMaster.where('ORDER_STATUS_MASTER_ID > 10002')
-          #  .where(campaign_playlist_id: playlist.id).joins(:order_line)
-          #  .where("order_lines.product_list_id = ?", @product_list_id)
-          if orderlist.present?
+          #  @orderlist = OrderLine.where(product_list_id: @product_list_id).joins(:order_master).where('order_masters.ORDER_STATUS_MASTER_ID > 10002')
+          #  .where("order_masters.campaign_playlist_id = ?", playlist.id).pluck(:orderid)
+           @orderlistcount = @orderlist.count
+          if @orderlist.present?
                 revenue = 0
+                #OrderLine.where(orderid: orderlist)
                 media_var_cost = 0
                 product_cost = 0
                 nos = 0.0
                 pieces = 0.0
                 totalorders = 0.0
+                @fixed_cost = playlist.cost
+                OrderMaster.where(id: @orderlist).each { |med_com| media_var_cost += med_com.media_commission}
 
-                orderlist.each do |med |
-                  @fixed_cost = playlist.cost
-                  product_cost = med.productcost
-                  revenue = med.productrevenue
-                  media_var_cost = med.media_commission
-                  nos = 1
-                  pieces = med.pieces
-                  totalorders = med.shipping + med.subtotal
+                order_lines = OrderLine.where(orderid: @orderlist)
+                order_lines.each do |med |
+                #orderlist.each do |med |
+
+                  product_cost += med.productcost
+                  revenue += med.productrevenue
+
+                  nos += 1
+                  pieces += med.pieces
+                  totalorders += med.shipping + med.subtotal
                 end # ORDER LIST LOOP END
                 #nos = orderlist.count()
                 #pieces = orderlist.sum(:pieces)
-                @correction = 1 if nos <= 1
                 nos =  nos * @correction
+                if nos < 1
+                    @correction = 1
+                    @nos = 1
+                end
                 pieces = pieces * @correction
                 revenue = revenue * @correction
                 # #product_cost = product_cost * nos
@@ -483,7 +493,8 @@ class SalesPpoReportController < ApplicationController
                    divide_nos = nos
                  end
                 total_cost = (product_cost + @fixed_cost + product_damages + media_var_cost + refund)
-                profitability = ((revenue - total_cost)/ divide_nos).to_i
+                profitability = revenue - total_cost
+                ppo = (profitability/ divide_nos).to_i
 
                 ### check if product cost is found in product master
                 product_cost_master = 0
@@ -492,8 +503,8 @@ class SalesPpoReportController < ApplicationController
                 end
 
                 employeeunorderlist << {:serial_no => @serial_no,
-                  :show =>  playlist.product_variant.name,
-                  :for_date => playlist.for_date,
+                :show =>  playlist.product_variant.name,
+                :for_date => playlist.for_date,
                 :campaign_id => playlist.id,
                 :product_cost_master => product_cost_master,
                 :pieces => pieces.to_i,
@@ -509,7 +520,8 @@ class SalesPpoReportController < ApplicationController
                 :product_cost => product_cost.to_i,
                 :variable_cost => media_var_cost.to_i,
                 :fixed_cost => @fixed_cost.to_i,
-                :profitability => profitability,
+                :ppo => ppo,
+                :profitability => profitability.round(0),
                 :product_variant_id => playlist.productvariantid}
 
                @serial_no += 1

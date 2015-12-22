@@ -2,6 +2,7 @@
 	 <div class="col-xs-4">
 
 	 <h4>HBN Product Orders various Time</h4>
+orderlist count <%= @orderlistcount %>
 
 	 </div>
    <%= form_tag  url_for(:controller => 'sales_ppo_report', :action => "product_performance"), method: "get" do  %>
@@ -116,7 +117,12 @@
 <%= c[:product_damages] %>
 <% @total_damages += c[:product_damages] %>
 </td>
-<td class="text-right" title="Profitability">   <%= c[:profitability] %>
+<td class="text-right" title="Profitability">
+  <small>
+<%= c[:profitability] %> / <%= c[:nos] %></small>
+  <hr>
+  <%= c[:ppo] %>
+<% @total_ppo += c[:ppo] %>
 <% @total_profit += c[:profitability] %>
 </td>
 <td >

@@ -180,7 +180,7 @@ def media_commission
         if media_variable.first.paid_correction.present?
          media_correction = media_variable.first.paid_correction #||= 0.5
         end
-        return ((self.subtotal * 0.888889) * media_variable.first.value.to_f) * media_correction
+        return ((self.subtotal * 0.888889) * media_variable.first.value.to_f) #* media_correction
       else
         return 0
       end
