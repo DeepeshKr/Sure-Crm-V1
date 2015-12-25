@@ -2,8 +2,7 @@ class SalesPpoReportController < ApplicationController
   before_action { protect_controllers(5) }
   before_action :media_segments, only: [:daily,  :show, :channel]
   before_action :constants
-  before_action :hbn_fixed_costs, only: [:summary]
-  # , :hourly, :hour_performance, :product_performance, :product_hour_performance, :operator_performance, :show, :ppo_products, :channel]
+  before_action :hbn_fixed_costs, only: [:summary , :hourly, :hour_performance, :product_performance, :product_hour_performance, :operator_performance, :show, :ppo_products, :channel]
 
   require 'will_paginate/array'
   def summary
@@ -113,9 +112,7 @@ class SalesPpoReportController < ApplicationController
 
     if params.has_key?(:for_date)
      for_date =  Date.strptime(params[:for_date], "%Y-%m-%d")
-
       @or_for_date = for_date.strftime("%Y-%m-%d")
-
     end
         @total_nos = 0
         @total_pieces = 0
@@ -174,7 +171,7 @@ class SalesPpoReportController < ApplicationController
           end_hr = Time.at(date).strftime("%H")
           end_min = Time.at(date).strftime("%M")
           media_cost_master = MediaCostMaster.where(media_id: 11200).where("str_hr = ? AND str_min = ? AND end_hr = ? AND end_min = ?", start_hr, start_min, end_hr, end_min)
-          media_fixed_cost = media_cost_master.first.total_cost.to_i
+          @media_fixed_cost = media_cost_master.first.total_cost.to_i
 
           ## Apply all the corrections here ###
           total_shipping = (orderlist.sum(:shipping))
@@ -189,7 +186,7 @@ class SalesPpoReportController < ApplicationController
           refund = totalorders * 0.02
           nos = (orderlist.count()) * @correction
           pieces = orderlist.sum(:pieces) * @correction
-          total_cost = (product_cost + fixed_cost + media_var_cost + refund + product_damages).to_i
+          total_cost = (product_cost + @media_fixed_cost + media_var_cost + refund + product_damages).to_i
           profitability = (revenue - total_cost).to_i
 
 
@@ -286,9 +283,6 @@ class SalesPpoReportController < ApplicationController
            .where("start_hr >= ? AND start_min >= ? AND start_hr <= ? AND start_min <= ?", @start_hr, @start_min, @end_hr, @end_min)
            .where(list_status_id: 10000).order("for_date, start_hr, start_min")#.limit(15)
 
-           @total_media_cost = Medium.where(media_group_id: 10000).sum(:daily_charges).to_f
-           @hbn_media_cost = Medium.where(media_group_id: 10000, active: true).sum(:daily_charges).to_f
-           @total_fixed_cost = campaign_playlists.sum(:cost).to_f
 
            campaign_playlists.each do | playlist |
            orderlist = OrderMaster.where('ORDER_STATUS_MASTER_ID > 10002')
@@ -355,7 +349,7 @@ class SalesPpoReportController < ApplicationController
                 :total_cost => total_cost.to_i,
                 :product_cost => product_cost.to_i,
                 :variable_cost => media_var_cost.to_i,
-                :fixed_cost => @@hbn_fixed_cost.to_i,
+                :fixed_cost => @fixed_cost.to_i,
                 :profitability => profitability,
                 :product_variant_id => playlist.productvariantid}
 
@@ -1698,13 +1692,17 @@ def shows_between
  def hbn_fixed_costs
   #  @fixed_cost = Medium.where(media_group_id: 10000, active: true, media_commision_id: 10045).sum(:daily_charges).to_f
 
-  @all_fixed_media  = Medium.where(media_commision_id: 10045)
-   @hbn_media = @all_fixed_media.where(media_group_id: 10000, active: true, media_commision_id: 10045)
+  @all_fixed_media  = Medium.where(media_commision_id: 10000)
+   @hbn_media = @all_fixed_media.where(media_group_id: 10000, active: true, media_commision_id: 10000)
    @total_media_cost = @all_fixed_media.sum(:daily_charges).to_f
    @hbn_media_fixed_cost = @hbn_media.sum(:daily_charges).to_f
    @fixed_cost = @hbn_media.sum(:daily_charges).to_f
 
   #  @total_media_cost = Medium.where(media_group_id: 10000).sum(:daily_charges).to_f
   #  @hbn_media_cost = Medium.where(media_group_id: 10000, active: true).sum(:daily_charges).to_f
+
+            #  @total_media_cost = Medium.where(media_group_id: 10000).sum(:daily_charges).to_f
+            #  @hbn_media_cost = Medium.where(media_group_id: 10000, active: true).sum(:daily_charges).to_f
+            #  @total_fixed_cost = campaign_playlists.sum(:cost).to_f
  end
 end
