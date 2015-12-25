@@ -81,7 +81,7 @@ class SalesPpoReportController < ApplicationController
           refund = totalorders * 0.02
           nos = (orderlist.count()) * @correction
           pieces = orderlist.sum(:pieces) * @correction
-          total_cost = (product_cost + @hbn_fixed_cost + media_var_cost + refund + product_damages)
+          total_cost = (product_cost + @hbn_media_fixed_cost + media_var_cost + refund + product_damages)
           profitability = (revenue - total_cost).to_i
 
           employeeunorderlist << {:total => totalorders.to_i,
@@ -94,7 +94,7 @@ class SalesPpoReportController < ApplicationController
           :product_cost => product_cost.to_i,
           :product_damages => product_damages.to_i,
           :variable_cost => media_var_cost.to_i,
-          :fixed_cost => @hbn_fixed_cost.to_i,
+          :fixed_cost => @hbn_media_fixed_cost.to_i,
           :total_cost => total_cost.to_i,
           :profitability => profitability}
     end
@@ -1696,6 +1696,7 @@ def shows_between
    @hbn_media = @all_fixed_media.where(media_group_id: 10000, active: true, media_commision_id: 10000)
    @total_media_cost = @all_fixed_media.sum(:daily_charges).to_f
    @hbn_media_fixed_cost = @hbn_media.sum(:daily_charges).to_f
+   @hbn_media_cost = @hbn_media_fixed_cost.round(2)
    @fixed_cost = @hbn_media.sum(:daily_charges).to_f
 
   #  @total_media_cost = Medium.where(media_group_id: 10000).sum(:daily_charges).to_f
