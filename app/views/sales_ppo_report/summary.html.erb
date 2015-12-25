@@ -129,7 +129,9 @@
         <td><%= medium.media_group.name if medium.media_group %></td>
         <td><%= medium.employee.name || "NO BDM" if medium.employee %></td>
         <td><%= medium.media_commision.name if medium.media_commision %></td>
-        <td><%= medium.daily_charges  %> <% @total_daily_charges += medium.daily_charges %></td>
+        <td><%= medium.daily_charges  %> <% if medium.daily_charges.present? %>
+           <% @total_daily_charges += medium.daily_charges %> <% end %>
+         </td>
       </tr>
     <% end %>
   </tbody>

@@ -2,7 +2,8 @@ class SalesPpoReportController < ApplicationController
   before_action { protect_controllers(5) }
   before_action :media_segments, only: [:daily,  :show, :channel]
   before_action :constants
-  before_action :hbn_fixed_costs, only: [:summary, :hourly, :hour_performance, :product_performance, :product_hour_performance, :operator_performance, :show, :ppo_products, :channel]
+  before_action :hbn_fixed_costs, only: [:summary]
+  # , :hourly, :hour_performance, :product_performance, :product_hour_performance, :operator_performance, :show, :ppo_products, :channel]
 
   require 'will_paginate/array'
   def summary
