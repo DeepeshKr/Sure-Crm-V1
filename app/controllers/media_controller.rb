@@ -21,9 +21,9 @@ class MediaController < ApplicationController
        @inactivemedia = Medium.where(active:0).where(state: params[:state]).paginate(:page => params[:page])
     end
     if params[:dnis].present?
-       @media = Medium.where(dnis: params[:dnis]).order("updated_at DESC")
+       @media = Medium.where(dnis: params[:dnis]).order("updated_at DESC").paginate(:page => params[:page])
        @dnis = params[:dnis]
-       @inactivemedia = Medium.where(active:0).where(dnis: params[:dnis]).order("updated_at DESC")
+       @inactivemedia = Medium.where(active:0).where(dnis: params[:dnis]).order("updated_at DESC").paginate(:page => params[:page])
     end
     if params[:name].present?
       @search = params[:name]

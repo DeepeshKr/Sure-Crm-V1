@@ -15,7 +15,8 @@ class Medium < ActiveRecord::Base
    validates_numericality_of :daily_charges, numericality: { only_integer: true }, allow_nil: true
    validates_numericality_of :paid_correction, allow_nil: true , numericality: { only_integer: true }, :less_than_or_equal_to => 1
 
-   after_save :recalculate_media_total_cost
+   after_update :recalculate_media_total_cost
+   after_create :recalculate_media_total_cost
 
    def mediainfo
       if self.media_group_id.present?
@@ -28,7 +29,7 @@ class Medium < ActiveRecord::Base
    def recalculate_media_total_cost
      hbn_media_cost = Medium.where(media_group_id: 10000, active: true).sum(:daily_charges).to_f
 
-     hbn_list = MediaCostMaster.where(media_id: 11200).order("str_hr, str_min")
+     hbn_list = MediaCostMaster.where(media_id: 11200) #.order("str_hr, str_min")
      hbn_list.each do |hbn|
       new_total = hbn_media_cost * hbn.slot_percent
       hbn.update(total_cost: new_total)
