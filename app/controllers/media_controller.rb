@@ -5,8 +5,8 @@ class MediaController < ApplicationController
   respond_to :html
 
   def index
-    @media_all = Medium.all
-      @media_all.recalculate_media_total_cost
+  #Medium.recalculate_media_total_cost
+  #recalculate_media_total_cost
     dropdowns
      @statelists = State.all
     @showall = true
@@ -100,13 +100,13 @@ class MediaController < ApplicationController
   def create
     @medium = Medium.new(medium_params)
     @medium.save
-    @medium.recalculate_media_total_cost
+    recalculate_media_total_cost
     respond_with(@medium)
   end
 
   def update
     @medium.update(medium_params)
-    @medium.recalculate_media_total_cost
+    recalculate_media_total_cost
     if params[:next].present?
       if params[:next] == "next"
       new_id = params[:id]
@@ -138,7 +138,16 @@ class MediaController < ApplicationController
     def set_medium
       @medium = Medium.find(params[:id])
     end
+    def recalculate_media_total_cost
+      hbn_media_cost = Medium.where(media_group_id: 10000, active: true).sum(:daily_charges).to_f
 
+      hbn_list = MediaCostMaster.where(media_id: 11200) #.order("str_hr, str_min")
+      hbn_list.each do |hbn|
+       new_total = hbn_media_cost * hbn.slot_percent
+       hbn.update(total_cost: new_total)
+      end
+
+    end
     def medium_params
       params.require(:medium).permit(:name, :telephone, :alttelephone, :state,
        :active, :corporateid, :description, :ref_name, :media_commision_id,
