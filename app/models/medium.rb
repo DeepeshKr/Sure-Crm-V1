@@ -15,8 +15,8 @@ class Medium < ActiveRecord::Base
    validates_numericality_of :daily_charges, numericality: { only_integer: true }, allow_nil: true
    validates_numericality_of :paid_correction, allow_nil: true , numericality: { only_integer: true }, :less_than_or_equal_to => 1
 
-   after_update :recalculate_media_total_cost
-   after_create :recalculate_media_total_cost
+  #  after_update :recalculate_media_total_cost
+  #  after_create :recalculate_media_total_cost
 
    def mediainfo
       if self.media_group_id.present?
