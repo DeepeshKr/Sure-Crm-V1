@@ -98,16 +98,19 @@ class MediaController < ApplicationController
   def create
     @medium = Medium.new(medium_params)
     @medium.save
+    @medium.recalculate_media_total_cost
     respond_with(@medium)
   end
 
   def update
     @medium.update(medium_params)
+    @medium.recalculate_media_total_cost
     if params[:next].present?
       if params[:next] == "next"
       new_id = params[:id]
         if Medium.where('id > ?', params[:id]).present?
           @new_medium = Medium.where('id > ?', params[:id]).first
+
          return redirect_to edit_medium_path(@new_medium)
         else
           flash[:error] = "You have reached last media <br/>"
