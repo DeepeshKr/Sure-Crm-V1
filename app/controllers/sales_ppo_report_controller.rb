@@ -722,10 +722,6 @@ class SalesPpoReportController < ApplicationController
 
            campaign_playlists = CampaignPlaylist.where("for_date >= ? and for_date <= ?", @from_date, @to_date).where(list_status_id: 10000).order("for_date, start_hr, start_min").joins(:campaign) #.limit(15)
 
-           @total_media_cost = Medium.where(media_group_id: 10000).sum(:daily_charges).to_f
-
-           @hbn_media_cost = Medium.where(media_group_id: 10000, active: true).sum(:daily_charges).to_f
-
            @daily_charge = @media.daily_charges || 0 if @media.present?
            @days = 0
            @media_total_fixed_cost = 0
@@ -858,8 +854,8 @@ class SalesPpoReportController < ApplicationController
      .order(:start_hr, :start_min, :start_sec)
      .where(list_status_id: 10000) #.limit(5)
 
-     @total_media_cost = Medium.where(media_group_id: 10000).sum(:daily_charges).to_f
-     @hbn_media_cost = Medium.where(media_group_id: 10000, active: true).sum(:daily_charges).to_f
+    #  @total_media_cost = Medium.where(media_group_id: 10000).sum(:daily_charges).to_f
+    #  @hbn_media_cost = Medium.where(media_group_id: 10000, active: true).sum(:daily_charges).to_f
      @total_fixed_cost = campaign_playlists.sum(:cost).to_f
       secs_in_a_day = (24*60*60)
       media_cost = @hbn_media_cost / secs_in_a_day
@@ -1392,7 +1388,7 @@ def shows_between
 
         order_masters = OrderMaster.where('orderdate >= ? AND orderdate <= ?',
           @start_time, @end_time).where('ORDER_STATUS_MASTER_ID > 10002')
-        .where(media_id: @hbnlist).pluck(:id)
+        .where("media.media_group_id = 10000").pluck(:id)
 
 
         total_order_summary(order_masters, @start_time, @end_time )
@@ -1698,6 +1694,10 @@ def shows_between
    @hbn_media_fixed_cost = @hbn_media.sum(:daily_charges).to_f
    @hbn_media_cost = @hbn_media_fixed_cost.round(2)
    @fixed_cost = @hbn_media.sum(:daily_charges).to_f
+   #
+  #  @total_media_cost = Medium.where(media_group_id: 10000).sum(:daily_charges).to_f
+   #
+  #  @hbn_media_cost = Medium.where(media_group_id: 10000, active: true).sum(:daily_charges).to_f
 
   #  @total_media_cost = Medium.where(media_group_id: 10000).sum(:daily_charges).to_f
   #  @hbn_media_cost = Medium.where(media_group_id: 10000, active: true).sum(:daily_charges).to_f

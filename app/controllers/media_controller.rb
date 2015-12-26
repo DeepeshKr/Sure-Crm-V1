@@ -5,6 +5,8 @@ class MediaController < ApplicationController
   respond_to :html
 
   def index
+    @media_all = Medium.all
+      @media_all.recalculate_media_total_cost
     dropdowns
      @statelists = State.all
     @showall = true
