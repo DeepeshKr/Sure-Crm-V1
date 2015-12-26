@@ -1,0 +1,128 @@
+
+<div class="row">
+  <div class="col-xs-8">
+   <h3> Listing of HBN Channel (Active)</h3>
+  </div>
+
+</div>
+
+<br>
+
+<table class="table table-hover">
+  <thead>
+    <tr>
+
+      <th>Name</th>
+      <th>Telephone</th>
+      <th>DNIS </th>
+      <th>State</th>
+      <th>Active</th>
+      <th>Group</th>
+       <th>BDM</th>
+       <% if (current_user.employee_role.sortorder < 6) %>
+      <th>Commission Type</th>
+       <th>Percent </th>
+      <th>Daily Charges</th>
+      <th>Correction</th>
+     <% end %>
+
+       <% if (current_user.employee_role.sortorder < 6) %>
+       <th>Ads</th>
+      <% end %>
+
+      <th colspan=""></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @media.each do |medium| %>
+      <tr>
+
+        <td><%= medium.name %></td>
+        <td><%= medium.telephone %></td>
+        <td><%= medium.dnis %></td>
+        <td><%= medium.state %></td>
+        <td><%= medium.active %></td>
+        <td><%= medium.media_group.name if medium.media_group %></td>
+        <td><%= medium.employee.name || "NO BDM" if medium.employee %></td>
+         <% if (current_user.employee_role.sortorder < 6) %>
+        <td><%= medium.media_commision.name if medium.media_commision %></td>
+         <td><%= medium.value %></td>
+        <td><%= medium.daily_charges  %></td>
+        <td><%= medium.paid_correction %></td>
+        <% end %>
+         <% if (current_user.employee_role.sortorder < 6) %>
+        <td><%= link_to 'Add Ad Slots', media_cost_masters_path(media_id: medium.id), class: "btn btn-primary btn-xs" %></td>
+         <% end %>
+        <td><%= link_to 'Edit', edit_medium_path(medium), class: "btn btn-info btn-xs" %></td>
+
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+<br>
+
+<br>
+<div class="row">
+  <div class="col-xs-8">
+   <h3> Listing of HBN Channel (In-Active)</h3>
+  </div>
+
+</div>
+
+<hr>
+<% if @inactivemedia.present? %>
+<div class="well well-sm">
+<table class="table table-hover">
+  <thead>
+    <tr>
+
+      <th>Name</th>
+      <th>Telephone</th>
+      <th>DNIS </th>
+      <th>State</th>
+      <th>Active</th>
+      <th>Group</th>
+       <th>BDM</th>
+       <% if (current_user.employee_role.sortorder < 6) %>
+      <th>Commission Type</th>
+       <th>Percent </th>
+      <th>Daily Charges</th>
+      <th>Correction</th>
+     <% end %>
+
+       <% if (current_user.employee_role.sortorder < 6) %>
+       <th>Ads</th>
+      <% end %>
+      <th colspan="2"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @inactivemedia.each do |medium| %>
+      <tr>
+
+        <td><%= medium.name %></td>
+        <td><%= medium.telephone %></td>
+        <td><%= medium.dnis %></td>
+        <td><%= medium.state %></td>
+        <td><%= medium.active %></td>
+        <td><%= medium.media_group.name if medium.media_group %></td>
+        <td><%= medium.employee.name || "NO BDM" if medium.employee %></td>
+         <% if (current_user.employee_role.sortorder < 6) %>
+        <td><%= medium.media_commision.name if medium.media_commision %></td>
+         <td><%= medium.value %></td>
+        <td><%= medium.daily_charges  %></td>
+        <td><%= medium.paid_correction %></td>
+        <% end %>
+         <% if (current_user.employee_role.sortorder < 6) %>
+        <td><%= link_to 'Add Ad Slots', media_cost_masters_path(media_id: medium.id), class: "btn btn-primary btn-xs" %></td>
+         <% end %>
+        <td><%= link_to 'Edit', edit_medium_path(medium), class: "btn btn-info btn-xs" %></td>
+
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+</div>
+<% end %>

@@ -14,7 +14,7 @@ belongs_to :medium, foreign_key: "media_id"
 	after_save :recalculate_media_total_cost
 
 	def recalculate_media_total_cost
-		hbn_media_cost = Medium.where(media_group_id: 10000, active: true).sum(:daily_charges).to_f
+		hbn_media_cost = Medium.where(media_group_id: 10000, active: true, media_commision_id: 10000).sum(:daily_charges).to_f
 
 		hbn_list = MediaCostMaster.where(media_id: 11200).order("str_hr, str_min")
 		hbn_list.each do |hbn|

@@ -13,6 +13,8 @@ Rails.application.routes.draw do
 
 get "recent_missed_orders" => 'distributor_missed_orders#recent'
 
+get "hbn_channels" => "media#all_hbn"
+
 post "send_demo_message" => 'message_on_orders#send_demo_message'
 
   get 'new_dept/list'
