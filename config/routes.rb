@@ -11,6 +11,8 @@ Rails.application.routes.draw do
 
   resources :distributor_upload_orders
 
+get "cinergy_xml" => "campaign_playlists#cinergy_xml"
+
 get "recent_missed_orders" => 'distributor_missed_orders#recent'
 
 get "hbn_channels" => "media#all_hbn"

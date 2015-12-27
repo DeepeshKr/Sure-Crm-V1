@@ -1,4 +1,6 @@
 class CampaignPlaylist < ActiveRecord::Base
+  require 'securerandom'
+  attr_accessor :generate_unique_secure_token
   belongs_to :campaign, foreign_key: "campaignid"
   belongs_to :product_variant, foreign_key: "productvariantid"
   belongs_to :media_tape, foreign_key: "tape_id"
@@ -46,6 +48,14 @@ class CampaignPlaylist < ActiveRecord::Base
       end
   end
 
+  def to_xml
+
+  end
+
+  def generate_unique_secure_token
+    SecureRandom.uuid
+      #  SecureRandom.base58(24)
+  end
  def starttime
  # str = ":"
      #  self.end_hr + ":" + self.end_min + ":" + self.end_sec

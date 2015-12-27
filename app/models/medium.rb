@@ -1,4 +1,5 @@
 class Medium < ActiveRecord::Base
+   attr_accessor :recalculate_media_total_cost
    has_many :campaign, foreign_key: "mediumid" , dependent: :destroy
    has_one :corporate
    has_many :campaign_playlist, through: :campaign

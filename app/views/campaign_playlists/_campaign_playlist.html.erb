@@ -2,15 +2,22 @@
 
 
 	 <%= render 'campaign_playlists/editable_playlist' %>
- 
-<br> 
+
+<br>
+
+<div class="row">
+	<div class="col-xs-3">
+		<%= link_to 'Download CSV list', campaign_playlists_path(campaignid: @campaign_id , format: :csv), class: "btn btn-info btn-sm" %>
+	</div>
+	<div class="col-xs-4">
+		<%= link_to 'Download XML Playout list', campaign_playlists_path(campaignid: @campaign_id , format: :xml), class: "btn btn-primary btn-sm" %>
+	</div>
+</div>
 
 
-<%= link_to 'Download CSV list', campaign_playlists_path(campaignid: @campaign_id , format: :csv), class: "btn btn-info btn-sm" %>
 
 
 
- 
 
 
 
@@ -18,7 +25,7 @@
     <div class="well well-sm">
     <h4>Please create a campaign playlist</h4>
     </div>
-    
+
 <% end%>
 
 <br>
