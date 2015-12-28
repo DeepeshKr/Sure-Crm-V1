@@ -34,7 +34,9 @@
      <% @order_lines_regular.each do |order_line| %>
       <tr>
        <td><%= @sno %></td>
-       <td><%= order_line.order_master.external_order_no %></td>
+       <td><%= order_line.order_master.external_order_no %>
+         <small><%= order_line.order_master.id %></small>
+       </td>
         <td><%= order_line.description %></td>
        <td><small>
        <%= (order_line.order_master.orderdate + 330.minutes).strftime('%d-%b %H:%M %P') %>
@@ -124,7 +126,7 @@
        </td>
 
         <td class="text-right">
-      <%= order_line.productrevenue.to_i %> 
+      <%= order_line.productrevenue.to_i %>
 
         </td>
 
