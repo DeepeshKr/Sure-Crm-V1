@@ -433,7 +433,7 @@ class SalesPpoReportController < ApplicationController
            .where("order_lines.product_list_id in (?)", @product_list_id)
            .pluck(:id)
            #.limit(10)
-
+             @correction = 0.5
            @orderlistcount = @orderlist.count
           if @orderlist.present?
                 revenue = 0
@@ -469,7 +469,7 @@ class SalesPpoReportController < ApplicationController
 
                 if nos <= 1
                     @correction = 1
-                    @nos = 1
+                    nos = 1
                 end
 
                 pieces = pieces * @correction
