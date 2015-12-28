@@ -8,7 +8,8 @@
       <th>Type</th>
       <th>Product</th>
       <th>Name<br>Description</th>
-      <th>Stock<br>Value</th>
+      <th>Stock</th>
+      <th>Value</th>
     </tr>
   </thead>
 
@@ -20,7 +21,8 @@
         <td><%= distributor_stock_ledger.product_list.name if distributor_stock_ledger.product_list %></td>
 
         <td><strong><%= distributor_stock_ledger.name %></strong><br><%= distributor_stock_ledger.description %></td>
-        <td> <%= distributor_stock_ledger.stock_change %><%= distributor_stock_ledger.stock_value %></td>
+        <td> <%= distributor_stock_ledger.stock_change %> </td>
+        <td>  <%= distributor_stock_ledger.stock_value %></td>
       </tr>
     <% end %>
   </tbody>

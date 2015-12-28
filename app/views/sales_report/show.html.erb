@@ -4,8 +4,8 @@
    <h4>HBN Daily Show Report <%= @orderdate %> </h4>
    </div>
    <div class="col-xs-6">
-   <%= render('date_search') %>
-      
+   <%=render partial: 'date_search', :locals => {:searchaction => "show"} %>
+
   </div>
  </div>
 
@@ -18,23 +18,23 @@
    <th  rowspan="2">No</th>
    <th  rowspan="2">Show</th>
      <th rowspan="2">Start Time</th>
-    
+
       <th colspan="3">Order Details</th>
-     
-     
-     
-   
+
+
+
+
      </tr>
     <tr>
-    
+
       <th class="text-right">Orders</th>
        <th class="text-right">Pieces</th>
      <th class="text-right">Sales</th>
-      
-    
+
+
      </tr>
   </thead>
-  
+
 <tbody>
    <% @employeeorderlist.each do |c| %>
    <tr>
@@ -43,30 +43,30 @@
  <td><%= c[:show] %></td>
 <td><%= c[:at_time] %></td>
 <td class="text-right">
-   <%= c[:nos] %> 
+   <%= c[:nos] %>
    <% @total_nos += c[:nos] %>
 </td>
 <td class="text-right">
-   <%= c[:pieces] %> 
+   <%= c[:pieces] %>
    <% @total_pieces += c[:pieces] %>
 </td>
 <td class="text-right">
-   <%= c[:total] %> 
+   <%= c[:total] %>
    <% @total_sales += c[:total] %>
 </td>
 <td class="text-right">
 
-  <% @sno += 1 %> 
+  <% @sno += 1 %>
  <% end %>
   </tbody>
 <tfoot>
     <tr>
      <th colspan="3" >Total</th>
-    
+
       <th class="text-right"><%= @total_nos %></th>
        <th class="text-right"><%= @total_pieces %></th>
      <th class="text-right"><%= @total_sales %></th>
-    
+
     <th></th>
      </tr>
   </tfoot>
@@ -77,4 +77,3 @@
   </div>
   <% end %>
  <br>
-
