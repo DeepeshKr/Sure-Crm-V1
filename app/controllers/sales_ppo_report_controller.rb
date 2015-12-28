@@ -460,10 +460,18 @@ class SalesPpoReportController < ApplicationController
                 #pieces = orderlist.sum(:pieces)
                 nos = @orderlist.count
                 nos =  nos * @correction
-                if nos < 1
+
+                if nos == 0
+                  divide_nos = 1
+                else
+                  divide_nos = nos
+                end
+
+                if nos <= 1
                     @correction = 1
                     @nos = 1
                 end
+
                 pieces = pieces * @correction
                 revenue = revenue * @correction
                 # #product_cost = product_cost * nos
@@ -473,11 +481,7 @@ class SalesPpoReportController < ApplicationController
                 media_var_cost = media_var_cost * @correction
                 refund = totalorders * 0.02
 
-                 if nos == 0
-                   divide_nos = 1
-                 else
-                   divide_nos = nos
-                 end
+
                 total_cost = (product_cost + @fixed_cost + product_damages + media_var_cost + refund)
                 profitability = revenue - total_cost
                 ppo = (profitability/ divide_nos).to_i
@@ -490,6 +494,7 @@ class SalesPpoReportController < ApplicationController
 
                 employeeunorderlist << {:serial_no => @serial_no,
                 :show =>  playlist.product_variant.name,
+                :correction =>  @correction,
                 :for_date => playlist.for_date,
                 :campaign_id => playlist.id,
                 :product_cost_master => product_cost_master,

@@ -83,7 +83,8 @@
 </td>
 <td class="text-right" title="Orders">
    <%= c[:nos] %>
-   <% @total_nos += c[:nos] %>
+   <% @total_nos += c[:nos] %><br>
+   <small>corr <%=c[:correction] %> </small>
 </td>
 <td class="text-right" title="Pieces">
    <%= c[:pieces] %>

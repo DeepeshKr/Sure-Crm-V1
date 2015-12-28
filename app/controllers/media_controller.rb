@@ -151,7 +151,7 @@ class MediaController < ApplicationController
        new_total = hbn_media_cost * hbn.slot_percent
        hbn.update(total_cost: new_total)
       end
-
+      return "Total Cost Master for HBN is now divided by #{hbn_media_cost}"
     end
     def medium_params
       params.require(:medium).permit(:name, :telephone, :alttelephone, :state,

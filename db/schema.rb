@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151218174047) do
+ActiveRecord::Schema.define(version: 20151228170349) do
 
   create_table "address_types", force: :cascade do |t|
     t.string   "name"
@@ -1328,13 +1328,13 @@ ActiveRecord::Schema.define(version: 20151218174047) do
     t.string   "barcode",               limit: 25
     t.string   "barcode2",              limit: 25
     t.string   "barcode3",              limit: 25
-    t.integer  "basicprice",            limit: 4,  precision: 5
+    t.decimal  "basicprice",                       precision: 8,  scale: 2
     t.string   "cfo",                   limit: 1
     t.integer  "channel",               limit: 4,  precision: 3
     t.string   "city",                  limit: 20
     t.datetime "claimdate"
-    t.integer  "codamt",                limit: 4,  precision: 2
-    t.integer  "convcharges",           limit: 4,  precision: 5
+    t.decimal  "codamt",                           precision: 8,  scale: 2
+    t.decimal  "convcharges",                      precision: 8,  scale: 2
     t.string   "cou",                   limit: 1
     t.integer  "custref",               limit: 8,  precision: 12
     t.integer  "debitnote",             limit: 4,  precision: 5
@@ -1356,7 +1356,7 @@ ActiveRecord::Schema.define(version: 20151218174047) do
     t.datetime "invdate"
     t.string   "fsize",                 limit: 1
     t.string   "invoice",               limit: 10
-    t.integer  "invoiceamount",         limit: 4,  precision: 6
+    t.decimal  "invoiceamount",                    precision: 8,  scale: 2
     t.string   "landmark",              limit: 30
     t.boolean  "letter"
     t.string   "lessprod",              limit: 6

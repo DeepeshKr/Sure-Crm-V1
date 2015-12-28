@@ -7,7 +7,7 @@ class MediaCostMastersController < ApplicationController
 
   def index
     # @media_cost_masters = MediaCostMaster.order('updated_at DESC').limit(10)
-    #recalculate_media_total_cost
+    flash[:success] = recalculate_media_total_cost
      @summary = 'Recently updated Masters'
      @totalmediacost = 0
       @showhbn = 1
@@ -158,7 +158,16 @@ class MediaCostMastersController < ApplicationController
   end
 
   private
-    
+  def recalculate_media_total_cost
+    hbn_media_cost = Medium.where(media_group_id: 10000, active: true, media_commision_id: 10000).sum(:daily_charges).to_f
+
+    hbn_list = MediaCostMaster.where(media_id: 11200) #.order("str_hr, str_min")
+    hbn_list.each do |hbn|
+     new_total = hbn_media_cost * hbn.slot_percent
+     hbn.update(total_cost: new_total)
+    end
+    return "Total Cost Master for HBN is now divided by #{hbn_media_cost}"
+  end
     def set_media_cost_master
       @media_cost_master = MediaCostMaster.find(params[:id])
     end
