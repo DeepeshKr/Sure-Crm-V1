@@ -6,7 +6,7 @@ class MediaController < ApplicationController
 
   def index
   #Medium.recalculate_media_total_cost
-  recalculate_media_total_cost
+  #recalculate_media_total_cost
     dropdowns
      @statelists = State.all
     @showall = true
