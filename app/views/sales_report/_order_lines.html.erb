@@ -17,7 +17,7 @@
       <th class="text-right">Basic</th>
       <th class="text-right">Shipping</th>
       <th class="text-right">Total</th>
-      <th class="text-right">Cost</th>
+      <th class="text-right">Employee</th>
       <th class="text-right">Duration</th>
 
     </tr>
@@ -34,7 +34,7 @@
      <% @order_lines_regular.each do |order_line| %>
       <tr>
        <td><%= @sno %></td>
-       <td><%= order_line.order_master.external_order_no %> <br>
+       <td><%= link_to order_line.order_master.external_order_no, custordersearch_path(ordernum: order_line.order_master.external_order_no), :target => "_blank" if order_line.order_master.external_order_no.present? %> <br>
          <small><%= order_line.order_master.id %></small>
          <small></small>
        </td>
@@ -49,7 +49,7 @@
         <%= order_line.total %>
        </td>
        <td class="text-right">
-          <%= order_line.productcost %>
+          <%= order_line.order_master.employee_name %>
        </td>
 
         <td class="text-right">
@@ -63,8 +63,8 @@
     <th class="text-right"><%= @regular_basic.to_i %></th>
     <th class="text-right"><%= @regular_shipping.to_i %></th>
     <th class="text-right"><%= @regular_total.to_i %></th>
-    <th class="text-right"><%= @regular_cost.to_i %></th>
-    <th class="text-right"><%= @regular_revenue.to_i %></th>
+    <th class="text-right"></th>
+    <th class="text-right"></th>
     </tr>
 
     <% end %>
@@ -87,7 +87,7 @@
        <td class="text-right"><%= order_line.subtotal %> </td>
         <td class="text-right"><%= order_line.shipping %> </td>
        <td class="text-right"><%= order_line.total %> </td>
-       <td class="text-right"><%= order_line.productcost %> </td>
+       <td class="text-left">  <%= order_line.order_master.employee_name %> </td>
         <td class="text-right"><%= order_line.order_master.timetaken %> </td>
       </tr>
        <% @sno += 1 %>
@@ -97,8 +97,8 @@
     <th class="text-right"> <%= @basic_basic.to_i %></th>
     <th class="text-right"><%= @basic_shipping.to_i %></th>
     <th class="text-right"><%= @basic_total.to_i %></th>
-    <th class="text-right"><%= @basic_cost.to_i %></th>
-    <th class="text-right"><%= @basic_revenue.to_i %></th>
+    <th class="text-right"></th>
+    <th class="text-right"></th>
     </tr>
      <% end %>
     <tr>
@@ -124,8 +124,8 @@
        <td class="text-right">
         <%= order_line.total %>
        </td>
-       <td class="text-right">
-          <%= order_line.productcost %>
+       <td class="text-left">
+          <%= order_line.order_master.employee_name %>
        </td>
 
         <td class="text-right">
@@ -142,8 +142,8 @@
     <th class="text-right"> <%= @common_basic.to_i %></th>
     <th class="text-right"><%= @common_shipping.to_i %></th>
     <th class="text-right"><%= @common_total.to_i %></th>
-    <th class="text-right"><%= @common_cost.to_i %></th>
-    <th class="text-right"><%= @common_revenue.to_i %></th>
+    <th class="text-right"></th>
+    <th class="text-right"></th>
     </tr>
     <% end %>
   </tbody>

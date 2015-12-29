@@ -52,7 +52,7 @@
    <%= c[:total] %>
 </td>
 <td>
-  <%= link_to "Details", hourly_products_path(from_date: c[:start_time], to_date: c[:end_time]), :target => "_blank" %>
+  <%= link_to "Details", hourly_products_path(from_date: c[:start_time], to_date: c[:end_time]), :target => "_blank", class: "btn btn-primary btn-sm" %>
 </td>
   </tr>
   <% @sno += 1 %>

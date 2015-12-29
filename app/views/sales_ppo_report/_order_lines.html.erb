@@ -35,7 +35,7 @@
       <tr>
        <td><%= @sno %></td>
        <td>
-         <%= link_to order_line.order_master.external_order_no, custordersearch_path(ordernum: order_line.order_master.external_order_no), :target => "_blank" %> <br>
+        <%= link_to order_line.order_master.external_order_no, custordersearch_path(ordernum: order_line.order_master.external_order_no), :target => "_blank" if order_line.order_master.external_order_no.present? %></small>   <br>
          <small><%= order_line.order_master.id %></small>
        </td>
         <td><%= order_line.description %></td>
@@ -79,7 +79,7 @@
        <tr>
         <td><%= @sno %></td>
         <td>
-          <%= link_to order_line.order_master.external_order_no, custordersearch_path(ordernum: order_line.order_master.external_order_no), :target => "_blank" %> <br>
+          <%= link_to order_line.order_master.external_order_no, custordersearch_path(ordernum: order_line.order_master.external_order_no), :target => "_blank" if order_line.order_master.external_order_no.present? %></small>   <br>
           <small><%= order_line.order_master.id %></small>
         </td>
         <td><%= order_line.description %></td>
@@ -115,7 +115,7 @@
        <tr>
         <td><%= @sno %></td>
         <td>
-          <%= link_to order_line.order_master.external_order_no, custordersearch_path(ordernum: order_line.order_master.external_order_no), :target => "_blank" %> <br>
+        <small><%= link_to order_line.order_master.external_order_no, custordersearch_path(ordernum: order_line.order_master.external_order_no), :target => "_blank" if order_line.order_master.external_order_no.present? %></small>   <br>
           <small><%= order_line.order_master.id %></small>
         </td>
         <td><%= order_line.description %></td>

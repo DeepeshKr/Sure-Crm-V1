@@ -854,6 +854,8 @@ end
           nowhour = t.strftime('%H').to_i
           nowminute = t.strftime('%M').to_i
           todaydate = (330.minutes).from_now.to_date
+          #maxuptodate = (2880.minutes).from_now.to_date
+          max_go_back_date = (todaydate.to_time - 48.hours).to_datetime
           @nowsecs = (nowhour * 60 * 60) + (nowminute * 60)
           # check if media is part of HBN group
           # check if media is part of HBN group, if yes, update the HBN group
@@ -867,28 +869,30 @@ end
             #HBN Master Media Id 11200
             #select the campaign from HBN Master Campaign List
             channel = "HBN Shows on #{channelname}"
-            campaignlist =  Campaign.where(mediumid: 11200).where('TRUNC(startdate) =  ?', todaydate)
+            campaignlist =  Campaign.where(mediumid: 11200).where("TRUNC(startdate) <= ? AND TRUNC(startdate) >= ?", todaydate, max_go_back_date)
           else
             channel = "#{channelname} Private Channel Shows"
-            campaignlist =  Campaign.where(mediumid: mediumid).where('TRUNC(startdate) =  ?', todaydate)
+            campaignlist =  Campaign.where(mediumid: mediumid).where("TRUNC(startdate) <= ? AND TRUNC(startdate) >= ?", todaydate, max_go_back_date)
           end
           updates = "Updated at #{t} order for #{channel} without any specific show at Hour:#{nowhour}  Minutes:#{nowminute}"
           if campaignlist.present?
             campaign_playlist = CampaignPlaylist.where({campaignid: campaignlist})
             .where(list_status_id: 10000).where(productvariantid: product_variant_id)
             .where("(start_hr * 60 * 60) + (start_min * 60) <= ?", @nowsecs)
-            .order("start_hr DESC, start_min DESC")
+            .where("TRUNC(for_date) <= ?", todaydate)
+            .order("for_date DESC, start_hr DESC, start_min DESC")
              updates = "Updated at #{t} order for #{channel} without any relevant show name at Hour:#{nowhour}  Minutes:#{nowminute}"
             if campaign_playlist.count > 0
               @order_master.update(campaign_playlist_id: campaign_playlist.first.id)
               updates = "Updated at #{t} order for #{channel} with show #{campaign_playlist.name} at Hour:#{nowhour}  Minutes:#{nowminute}"
             else
               #update for earlier date playlists
+
               #this is designed for the playlist to go back as as required to assign this order for
               # a particular date
-              older_campaign_playlist = CampaignPlaylist.where("TRUNC(for_date) <  ?", todaydate)
+              older_campaign_playlist = CampaignPlaylist.where("TRUNC(for_date) <= ? AND TRUNC(for_date) >= ?", todaydate, max_go_back_date)
               .where(list_status_id: 10000).where(productvariantid: product_variant_id)
-              .order("start_hr DESC, start_min DESC")
+              .order("for_date DESC, start_hr DESC, start_min DESC")
               if older_campaign_playlist.count > 0
                 @order_master.update(campaign_playlist_id: older_campaign_playlist.first.id)
                 updates = "Updated at #{t} order for #{channel} with show #{older_campaign_playlist.name} at Hour:#{nowhour}  Minutes:#{nowminute}"

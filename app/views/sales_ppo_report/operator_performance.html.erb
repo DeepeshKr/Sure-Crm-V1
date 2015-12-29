@@ -134,10 +134,10 @@
     <th class="text-right"><%= @total_revenue.to_i %></th>
     <th class="text-right"><%= @total_product_cost.to_i %></th>
     <th class="text-right"><%= @total_var_cost.to_i %></th>
-    <th class="text-right"><%= @total_fixed_cost.to_i %></th>
+    <th class="text-right"></th>
     <th class="text-right"><%= @total_refund.to_i %></th>
     <th class="text-right"><%= @total_damages.to_i %></th>
-    <th class="text-right"><%= @total_profit.to_i %> <br>
+    <th class="text-right"><br>
 
     </th>
     <th></th>
@@ -212,6 +212,8 @@
         Profitability :<%=@total_revenue.round(0) - @media_total_fixed_cost.round(0) %><br>
         Total Orders  :<%= @total_nos.to_i %> <br>
         PPO           :<%= (@total_revenue.round(0) - @media_total_fixed_cost.round(0)) / @total_nos.to_i %>
+        <br>
+      <small>PPO formula = (Total Revenue - Total Cost) / Total Orders </small>
     </p>
 
   </div>
