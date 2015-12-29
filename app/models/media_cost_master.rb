@@ -10,8 +10,8 @@ belongs_to :medium, foreign_key: "media_id"
 	def cost_segment
     return self.total_cost.to_s + " - " + (self.slot_percent * 100).to_s + "%" + " - (" + (self.str_hr).to_s + ":"  + (self.str_min).to_s  + "-" + (self.end_hr).to_s + ":"  + (self.end_min).to_s + ")"
 	end
-
-	after_save :recalculate_media_total_cost
+	# after_create :recalculate_media_total_cost
+	# after_update :recalculate_media_total_cost
 
 	def recalculate_media_total_cost
 		hbn_media_cost = Medium.where(media_group_id: 10000, active: true, media_commision_id: 10000).sum(:daily_charges).to_f
