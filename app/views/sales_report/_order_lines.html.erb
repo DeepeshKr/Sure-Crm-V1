@@ -18,7 +18,7 @@
       <th class="text-right">Shipping</th>
       <th class="text-right">Total</th>
       <th class="text-right">Cost</th>
-      <th class="text-right">Revenue</th>
+      <th class="text-right">Duration</th>
 
     </tr>
   </thead>
@@ -34,7 +34,7 @@
      <% @order_lines_regular.each do |order_line| %>
       <tr>
        <td><%= @sno %></td>
-       <td><%= order_line.order_master.external_order_no %>
+       <td><%= order_line.order_master.external_order_no %> <br>
          <small><%= order_line.order_master.id %></small>
          <small></small>
        </td>
@@ -53,7 +53,7 @@
        </td>
 
         <td class="text-right">
-      <%= order_line.productrevenue.to_i %>
+      <%= order_line.order_master.timetaken %>
         </td>
       </tr>
       <% @sno += 1 %>
@@ -78,7 +78,8 @@
      <% @order_lines_basic.each do |order_line| %>
        <tr>
         <td><%= @sno %></td>
-        <td><%= order_line.order_master.external_order_no %></td>
+        <td><%= order_line.order_master.external_order_no %><br>
+          <small><%= order_line.order_master.id %></small></td>
         <td><%= order_line.description %></td>
        <td><small>
        <%= (order_line.order_master.orderdate + 330.minutes).strftime('%d-%b %H:%M %P') %>
@@ -87,7 +88,7 @@
         <td class="text-right"><%= order_line.shipping %> </td>
        <td class="text-right"><%= order_line.total %> </td>
        <td class="text-right"><%= order_line.productcost %> </td>
-        <td class="text-right"><%= order_line.productrevenue.to_i %> </td>
+        <td class="text-right"><%= order_line.order_master.timetaken %> </td>
       </tr>
        <% @sno += 1 %>
     <% end %>
@@ -111,7 +112,8 @@
      <% @order_lines_common.each do |order_line| %>
        <tr>
         <td><%= @sno %></td>
-        <td><%= order_line.order_master.external_order_no %></td>
+        <td><%= order_line.order_master.external_order_no %><br>
+          <small><%= order_line.order_master.id %></small></td>
         <td><%= order_line.description %></td>
        <td><small>
        <%= (order_line.order_master.orderdate + 330.minutes).strftime('%d-%b %H:%M %P') %>
@@ -127,7 +129,7 @@
        </td>
 
         <td class="text-right">
-      <%= order_line.productrevenue.to_i %>
+      <%= order_line.order_master.timetaken %>
 
         </td>
 

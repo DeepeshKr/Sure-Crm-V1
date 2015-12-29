@@ -1,0 +1,14 @@
+<div class="row">
+  <div class="col-xs-4">
+	 <h4>HBN Hourly Orders</h4>
+  </div>
+   <div class="col-xs-4">
+    From: <%= @from_date %>
+   </div>
+   <div class="col-xs-4">
+     Upto: <%= @to_date %>
+   </div>   	
+</div>
+<br>
+<hr>
+<%=render partial: 'order_lines' %>

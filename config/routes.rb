@@ -160,6 +160,10 @@ post "send_demo_message" => 'message_on_orders#send_demo_message'
   get 'channel_sales' => 'sales_report#channel'
   get 'sales_report/disposition_report'
   get 'disposition_report' => 'sales_report#disposition_report'
+
+  get 'sales_report/hourly_products'
+  get 'hourly_products' => 'sales_report#hourly_products'
+
   get 'sales_report/employee'
   get 'employee_report' => 'sales_report#employee'
   get 'sales_report/city'
