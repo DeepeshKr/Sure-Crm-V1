@@ -512,7 +512,9 @@ class SalesReportController < ApplicationController
 
   end
 
+  def hourly_products
 
+  end
 
   def channel
         #/sales_report/channel?for_date=05%2F09%2F2015

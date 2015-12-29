@@ -6,6 +6,7 @@
     <th>Order date</th>
     <th>Customer</th>
     <th>Phone</th>
+    <th>Email Id</th>
     <th>Address</th>
     <th>City</th>
     <th>State</th>
@@ -21,33 +22,35 @@
     <td><%= order_line.order_master.external_order_no %> (<small>Ref No: <%= order_line.order_master.id %></small>) </td>
     <td> <%= (order_line.order_master.orderdate + 330.minutes).strftime('%d-%b-%Y') %> </td>
     <td>
-      <%= order_line.order_master.customer.first_name if order_line.order_master.customer %> 
+      <%= order_line.order_master.customer.first_name if order_line.order_master.customer %>
       <%= order_line.order_master.customer.last_name if order_line.order_master.customer %> </td>
-    <td>  <%= order_line.order_master.mobile %> 
+    <td>  <%= order_line.order_master.mobile %>
       <%= order_line.order_master.customer_address.telephone1  if order_line.order_master.customer_address %> </td>
+      <td>  <%= order_line.order_master.customer.emailid if order_line.order_master.customer %> 
+         </td>
     <td>
-      <%= order_line.order_master.customer_address.address1  if order_line.order_master.customer_address %> 
-      <%= order_line.order_master.customer_address.address2  if order_line.order_master.customer_address %> 
-      <%= order_line.order_master.customer_address.address3  if order_line.order_master.customer_address %> 
-      <%= order_line.order_master.customer_address.landmark  if order_line.order_master.customer_address %> 
+      <%= order_line.order_master.customer_address.address1  if order_line.order_master.customer_address %>
+      <%= order_line.order_master.customer_address.address2  if order_line.order_master.customer_address %>
+      <%= order_line.order_master.customer_address.address3  if order_line.order_master.customer_address %>
+      <%= order_line.order_master.customer_address.landmark  if order_line.order_master.customer_address %>
     </td>
     <td>
       <%= order_line.order_master.customer_address.city  if order_line.order_master.customer_address %>
       <%= order_line.order_master.customer_address.pincode  if order_line.order_master.customer_address %>
-    </td> 
+    </td>
     <td>
       <%= order_line.order_master.customer_address.state  if order_line.order_master.customer_address %>
     </td>
     <td> <%= order_line.product_variant.name  if order_line.product_variant %></td>
      <td> <%= order_line.subtotal %></td>
-          
-       
+
+
       </tr>
        <% @sno += 1 %>
-     
+
     <% end %>
   </tbody>
-  
+
 </table>
 <% else %>
 <div class="well well-sm">
