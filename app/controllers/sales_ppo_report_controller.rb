@@ -680,7 +680,7 @@ class SalesPpoReportController < ApplicationController
   end
 
   def operator_performance
-
+    @revised_per_day_rate = 0
     @medias = Medium.where(media_group_id: 10000, active: true,media_commision_id: 10000).where("id <> 11200")
     #media_commision_id = 10000 or
     @sno = 1
@@ -700,8 +700,9 @@ class SalesPpoReportController < ApplicationController
      if params.has_key?(:to_date)
         @to_date =  Date.strptime(params[:to_date], "%Y-%m-%d")
      end
+
      if params.has_key?(:revised_per_day_rate)
-        @revised_per_day_rate =  params[:revised_per_day_rate]
+        @revised_per_day_rate =  params[:revised_per_day_rate].to_i ||= 0
      end
         @total_nos = 0
         @total_pieces = 0
@@ -738,7 +739,7 @@ class SalesPpoReportController < ApplicationController
            (@from_date).upto(@to_date).each do |day|
               @media_total_fixed_cost += @media.daily_charges.to_f || 0 if @media.present?
               @days += 1
-              @revised_media_total_fixed_cost += @revised_per_day_rate || 0 if @revised_per_day_rate.present?
+              @revised_media_total_fixed_cost += @revised_per_day_rate || 0 if @revised_per_day_rate > 0
            end
 
 

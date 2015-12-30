@@ -153,9 +153,10 @@
       <strong>Original Media Cost <%= @media_total_fixed_cost.round(0) %></strong>
       <%= @daily_charge %> x <%= @days %>
       <hr>
+      <% if @revised_media_total_fixed_cost.present? %>
       <strong>Revised Media Cost <%= @revised_media_total_fixed_cost.round(0) %></strong>
       <%= @revised_per_day_rate %> x <%= @days %>
-
+      <% end %>
   </div>
   <div class="col-xs-3">
     <h4>Expense</h4>
@@ -177,9 +178,11 @@
     </div>
     <div class="well well-sm">
       <h4>Revised PPO</h4>
-      Profitability :<%=@total_revenue.round(0) - (@total_expenses.round(0) + @revised_per_day_rate.round(0)) %><br>
+      <% if @revised_media_total_fixed_cost.present? %>
+      Profitability :<%= @total_revenue.round(0) - (@total_expenses.round(0) + @revised_per_day_rate.round(0)) %><br>
       Total Orders  :<%= @total_nos.to_i %> <br>
       PPO           :<%= (@total_revenue.round(0) - (@total_expenses.round(0) + @revised_per_day_rate.round(0))) / @total_nos.to_i %>
+      <% end %>
     </div>
 
       <small>PPO formula = (Total Revenue - Total Cost) / Total Orders </small>
