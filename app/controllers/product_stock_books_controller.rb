@@ -1,10 +1,10 @@
 class ProductStockBooksController < ApplicationController
 
    include StockBook
-    before_action { protect_controllers_specific(4) }
-  before_action :set_product_stock_book, only: [:show, :edit, :update, :destroy]
-  before_action :get_variables, only: [:index, :show, :edit, :update, :destroy]
-  before_action :dropdowns, only: [:index, :edit, :update]
+   before_action { protect_controllers_specific(4) }
+   before_action :set_product_stock_book, only: [:show, :edit, :update, :destroy]
+   before_action :get_variables, only: [:index, :show, :edit, :update, :destroy]
+   before_action :dropdowns, only: [:index, :edit, :update]
   # GET /product_stock_books
   # GET /product_stock_books.json
   def index

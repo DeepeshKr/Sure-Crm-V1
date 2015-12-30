@@ -1,29 +1,28 @@
+<div class="row">
+  <div class="col-xs-12">
+    <h4>DTH operator performance</h4>
+  </div>
+</div>
  <div class="row">
-	 <div class="col-xs-3">
-
-	 <h4>HBN Product Orders</h4>
-
-	 </div>
    <%= form_tag  url_for(:controller => 'sales_ppo_report', :action => "operator_performance"), method: "get" do  %>
-   <div class="col-xs-4">
-
-         <%= select_tag :media_id, options_from_collection_for_select(@medias, :id, :name, :selected => @media_id), {:class => "form-control",  :required => true} %>
-
-
-   </div>
-       <div class="col-xs-4">
-         <div class="input-daterange input-group">
+    <div class="col-xs-4">
+           <%= select_tag :media_id, options_from_collection_for_select(@medias, :id, :name, :selected => @media_id), {:class => "form-control",  :required => true} %>
+    </div>
+    <div class="col-xs-4">
+      <div class="input-daterange input-group">
            <%= text_field_tag(:from_date, @from_date, :data => {:provide => "datepicker"}, :id => "datepicker_from", :class => "form-control", :required => "true" )   %>
            <span class="input-group-addon">to</span>
 
             <%= text_field_tag(:to_date, @to_date, :data => {:provide => "datepicker"}, :id => "datepicker_to", :class => "form-control", :required => "true" )   %>
 
-         </div>
-       </div>
-
-       <div class="col-xs-1">
+      </div>
+    </div>
+    <div class="col-xs-2">
+        <%= text_field_tag(:revised_per_day_rate, @revised_per_day_rate, :class => "form-control", :placeholder => "Revised day rate" )   %>
+    </div>
+    <div class="col-xs-2">
          <%= submit_tag "Report", name: nil, class: "btn btn-primary" %>
-       </div>
+    </div>
    <% end %>
 
  </div>
@@ -44,8 +43,6 @@
         <th colspan="3">Income</th>
          <th rowspan="2" class="text-right">Revenue</th>
         <th colspan="5">Expense</th>
-
-       <th rowspan="2">PPO </th>
       <th>More </th>
        </tr>
       <tr>
@@ -103,10 +100,6 @@
    <%= c[:variable_cost] %>
    <% @total_var_cost += c[:variable_cost] %>
 </td>
-<td class="text-right" title="Fixed Media Cost"> <!--Media Cost-->
-   <%= c[:fixed_cost] %>
-   <% @total_fixed_cost += c[:fixed_cost] %>
-</td>
 <td class="text-right" title="Refunds">
 <%= c[:refund] %>
 <% @total_refund += c[:refund] %>
@@ -115,35 +108,24 @@
 <%= c[:product_damages] %>
 <% @total_damages += c[:product_damages] %>
 </td>
-<td class="text-right" title="Profitability">   <%= c[:profitability] %>
-<% @total_profit += c[:profitability] %>
-</td>
-<td >
-<%= link_to "Details", ppo_products_path(campaign_id: c[:campaign_id]), :target => "_blank" %>
-</td>
+
+
   </tr>
   <% @sno += 1 %>
  <% end %>
   </tbody>
 <tfoot>
     <tr>
-    <th colspan="3" >Total</th>
-    <th class="text-right"><%= @total_nos.to_i %></th>
-    <th class="text-right"><%= @total_pieces.to_i %></th>
-    <th class="text-right"><%= @total_sales.to_i %></th>
-    <th class="text-right"><%= @total_revenue.to_i %></th>
-    <th class="text-right"><%= @total_product_cost.to_i %></th>
-    <th class="text-right"><%= @total_var_cost.to_i %></th>
-    <th class="text-right"></th>
-    <th class="text-right"><%= @total_refund.to_i %></th>
-    <th class="text-right"><%= @total_damages.to_i %></th>
-    <th class="text-right"><br>
-
-    </th>
-    <th></th>
-     </tr>
-
-
+      <th colspan="3" >Total</th>
+      <th class="text-right"><%= @total_nos.to_i %></th>
+      <th class="text-right"><%= @total_pieces.to_i %></th>
+      <th class="text-right"><%= @total_sales.to_i %></th>
+      <th class="text-right"><%= @total_revenue.to_i %></th>
+      <th class="text-right"><%= @total_product_cost.to_i %></th>
+      <th class="text-right"><%= @total_var_cost.to_i %></th>
+      <th class="text-right"><%= @total_refund.to_i %></th>
+      <th class="text-right"><%= @total_damages.to_i %></th>
+    </tr>
   </tfoot>
   </table>
   </div>
@@ -154,32 +136,6 @@
   </div>
   <% end %>
  <br>
-<% @hidelist = true %>
-<% if @hidelist == false %>
-<div style="visibility:hidden">
-
-<%= link_to "Details", ppo_details_path(start_time: @from_date, end_time: @to_date, product_variant: c[:product_variant_id]), :target => "_blank" %>
-
-<% @order_sno = 1 %>
-<table class="table table-bordered">
-  <tr>
-    <td>Order No</td> <td>Date Time</td>
-
-  </tr>
- <% @list_of_orders.each do |c| %>
-<tr class=<%= c[:row_css] %>>
-<td> <%= @order_sno %></td>
-<td> <%= c[:order_no] %></td>
-<td> <%= c[:time_of_order] %></td>
-</tr>
-<% @order_sno += 1 %></td>
-</tr>
- <% end -%>
-</table>
-</div>
-<%= link_to "Details", ppo_details_path(for_date: @or_for_date, product_variant: c[:product_variant_id]), :target => "_blank" %>
-<% end %>
-
 
 <div class="well well-sm">
 <ul class="list-inline">
@@ -190,22 +146,23 @@
 
 <div class="well well-sm">
 <div class="row">
-  <div class="col-xs-2">
-  Total Media Cost - Including Active and Inactive <%= @total_media_cost.round(0) %>
-  </div>
-  <div class="col-xs-2">
-  HBN Media Cost -We use only Active <%= @hbn_media_cost.round(0) %>
-  </div>
   <div class="col-xs-3">
-
+    <h4>Income</h4>
       <strong>Total Sales <%= @total_sales.round(0) %></strong><br>
       <strong>Total Revenue <%= @total_revenue.round(0) %></strong><br>
       <strong>Total Cost <%= @media_total_fixed_cost.round(0) %></strong>
-      <br>
+
       <%= @daily_charge %> x <%= @days %>
-
-
   </div>
+  <div class="col-xs-3">
+    <h4>Expense</h4>
+      <strong>Total Product Cost <%= @total_product_cost.round(0) %></strong><br>
+      <strong>Total variable Cost <%= @total_var_cost.round(0) %></strong><br>
+      <strong>Total Refund <%= @total_refund.round(0) %></strong>
+      <strong>Total Damages <%= @total_damages.round(0) %></strong>
+      <%= @daily_charge %> x <%= @days %>
+  </div>
+
   <% if @total_nos.to_i > 0 %>
   <div class="col-xs-3">
     <p class="lead">
