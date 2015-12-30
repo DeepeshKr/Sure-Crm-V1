@@ -62,11 +62,11 @@ class ProductStockBooksController < ApplicationController
           @product_stock_books = ProductStockBook.where(list_barcode: @barcode)
           .where("TRUNC(stock_date) >= ? AND TRUNC(stock_date) <= ?", from_date, to_date)
           .order("stock_date")
-
+          file_name = "stock_book_#{@from_date_text}_#{@to_date_text}.csv"
           respond_to do |format|
             format.html
             format.csv do
-              headers['Content-Disposition'] = "attachment; filename=\"stock-book\""
+              headers['Content-Disposition'] = "attachment; filename=\"#{file_name}\""
               headers['Content-Type'] ||= 'text/csv'
             end
           end

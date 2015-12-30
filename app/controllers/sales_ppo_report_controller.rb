@@ -968,7 +968,7 @@ class SalesPpoReportController < ApplicationController
       @total_promo_cost = 0
 
       @campaign_playlist =  CampaignPlaylist.find(params[:campaign_id])
-      @order_masters = OrderMaster.where(campaign_playlist_id: params[:campaign_id]).order("created_at")
+      @order_masters = OrderMaster.where(campaign_playlist_id: params[:campaign_id]).where('ORDER_STATUS_MASTER_ID > 10002').order("created_at")
 
       start_hr = @campaign_playlist.start_hr
       start_min = @campaign_playlist.start_min
