@@ -700,6 +700,9 @@ class SalesPpoReportController < ApplicationController
      if params.has_key?(:to_date)
         @to_date =  Date.strptime(params[:to_date], "%Y-%m-%d")
      end
+     if params.has_key?(:revised_per_day_rate)
+        @revised_per_day_rate =  params[:revised_per_day_rate]
+     end
         @total_nos = 0
         @total_pieces = 0
         @total_sales = 0
@@ -710,6 +713,7 @@ class SalesPpoReportController < ApplicationController
         @total_refund = 0
         @total_profit = 0
         @total_damages = 0
+        @total_expenses = 0
         @hourlist ||= []
         @halfhourlist ||= []
         employeeunorderlist ||= []
@@ -730,9 +734,11 @@ class SalesPpoReportController < ApplicationController
            @daily_charge = @media.daily_charges || 0 if @media.present?
            @days = 0
            @media_total_fixed_cost = 0
+           @revised_media_total_fixed_cost = 0
            (@from_date).upto(@to_date).each do |day|
-               @media_total_fixed_cost += @media.daily_charges.to_f || 0 if @media.present?
-               @days += 1
+              @media_total_fixed_cost += @media.daily_charges.to_f || 0 if @media.present?
+              @days += 1
+              @revised_media_total_fixed_cost += @revised_per_day_rate || 0 if @revised_per_day_rate.present?
            end
 
 

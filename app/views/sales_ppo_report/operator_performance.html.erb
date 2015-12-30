@@ -54,7 +54,6 @@
 
         <th class="text-right">Product Cost</th>
          <th class="text-right">Commision</th>
-       <th class="text-right">Media Cost</th>
          <th class="text-right">Refund</th>
             <th class="text-right">Damages</th>
        </tr>
@@ -150,9 +149,13 @@
     <h4>Income</h4>
       <strong>Total Sales <%= @total_sales.round(0) %></strong><br>
       <strong>Total Revenue <%= @total_revenue.round(0) %></strong><br>
-      <strong>Total Cost <%= @media_total_fixed_cost.round(0) %></strong>
-
+      <hr>
+      <strong>Original Media Cost <%= @media_total_fixed_cost.round(0) %></strong>
       <%= @daily_charge %> x <%= @days %>
+      <hr>
+      <strong>Revised Media Cost <%= @revised_media_total_fixed_cost.round(0) %></strong>
+      <%= @revised_per_day_rate %> x <%= @days %>
+
   </div>
   <div class="col-xs-3">
     <h4>Expense</h4>
@@ -160,22 +163,31 @@
       <strong>Total variable Cost <%= @total_var_cost.round(0) %></strong><br>
       <strong>Total Refund <%= @total_refund.round(0) %></strong>
       <strong>Total Damages <%= @total_damages.round(0) %></strong>
-      <%= @daily_charge %> x <%= @days %>
+      <% @total_expenses = @total_product_cost + @total_var_cost + @total_refund + @total_damages %>
   </div>
 
-  <% if @total_nos.to_i > 0 %>
+
   <div class="col-xs-3">
-    <p class="lead">
-        Profitability :<%=@total_revenue.round(0) - @media_total_fixed_cost.round(0) %><br>
-        Total Orders  :<%= @total_nos.to_i %> <br>
-        PPO           :<%= (@total_revenue.round(0) - @media_total_fixed_cost.round(0)) / @total_nos.to_i %>
-        <br>
-      <small>PPO formula = (Total Revenue - Total Cost) / Total Orders </small>
-    </p>
+      <% if @total_nos.to_i > 0 %>
+    <div class="well well-sm">
+      <h4>Original PPO</h4>
+      Profitability :<%=@total_revenue.round(0) - (@total_expenses.round(0) + @media_total_fixed_cost.round(0)) %><br>
+      Total Orders  :<%= @total_nos.to_i %> <br>
+      PPO           :<%= (@total_revenue.round(0) - (@total_expenses.round(0) + @media_total_fixed_cost.round(0))) / @total_nos.to_i %>
+    </div>
+    <div class="well well-sm">
+      <h4>Revised PPO</h4>
+      Profitability :<%=@total_revenue.round(0) - (@total_expenses.round(0) + @revised_per_day_rate.round(0)) %><br>
+      Total Orders  :<%= @total_nos.to_i %> <br>
+      PPO           :<%= (@total_revenue.round(0) - (@total_expenses.round(0) + @revised_per_day_rate.round(0))) / @total_nos.to_i %>
+    </div>
 
+      <small>PPO formula = (Total Revenue - Total Cost) / Total Orders </small>
+
+      <% end %>
   </div>
-  <% end %>
-  <div class="col-xs-2">
+
+  <div class="col-xs-1">
    <%= link_to 'Download CSV file', operator_performance_path(from_date: @from_date, to_date: @to_date, media_id: @media_id, format: :csv), class: "btn btn-info btn-sm" %>
   </div>
 </div>
