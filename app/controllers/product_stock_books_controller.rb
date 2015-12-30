@@ -1,13 +1,39 @@
 class ProductStockBooksController < ApplicationController
 
    include StockBook
-    before_action { protect_controllers_specific(4) } 
+    before_action { protect_controllers_specific(4) }
   before_action :set_product_stock_book, only: [:show, :edit, :update, :destroy]
   before_action :get_variables, only: [:index, :show, :edit, :update, :destroy]
   before_action :dropdowns, only: [:index, :edit, :update]
   # GET /product_stock_books
   # GET /product_stock_books.json
   def index
+    @show
+    @retail_sales_qty = 0
+    @retail_sales_val = 0
+    @retail_returns_qty = 0
+    @retail_returns_val = 0
+    @wholesale_sale_qty = 0
+    @wholesale_sale_val = 0
+    @wholesale_returns_qty = 0
+    @wholesale_returns_val = 0
+    @other_returns_val = 0
+    @other_returns_qty = 0
+    @branch_sales_qty = 0
+    @branch_sales_val = 0
+    @branch_returns_qty = 0
+    @branch_returns_val = 0
+    @opening_val = 0
+    @opening_qty = 0
+    @purchased_val = 0
+    @purchased_qty = 0
+    @corrections_qty = 0
+    @corrections_val = 0
+    @closing_qty = 0
+    @closing_val = 0
+
+
+
      @prev_datelist = Date.today.in_time_zone
      @or_from_date = Date.today #.in_time_zone - 30.days
      @or_to_date =  Date.today #.in_time_zone
@@ -21,7 +47,7 @@ class ProductStockBooksController < ApplicationController
       @or_to_date = params[:to_date]
       #Date.strptime(params[:for_date], "%Y-%m-%d")
       from_date =  Date.strptime(@or_from_date, "%Y-%m-%d") if @or_from_date.present?
-      to_date =  Date.strptime(@or_to_date, "%Y-%m-%d") if @or_to_date.present? 
+      to_date =  Date.strptime(@or_to_date, "%Y-%m-%d") if @or_to_date.present?
 
       @datelist ||= []
       (from_date..to_date).each do |day|
@@ -36,7 +62,7 @@ class ProductStockBooksController < ApplicationController
           @product_stock_books = ProductStockBook.where(list_barcode: @barcode)
           .where("TRUNC(stock_date) >= ? AND TRUNC(stock_date) <= ?", from_date, to_date)
           .order("stock_date")
-         
+
           respond_to do |format|
             format.html
             format.csv do
@@ -44,12 +70,12 @@ class ProductStockBooksController < ApplicationController
               headers['Content-Type'] ||= 'text/csv'
             end
           end
-      
+
     else
       @show_add_update = 0
     end
    # @product_stock_books = ProductStockBook.all.limit(100)
-   
+
   end
 
   # GET /product_stock_books/1
@@ -66,8 +92,8 @@ class ProductStockBooksController < ApplicationController
         @old_product_stock = @old_product_stocks.order("stock_date DESC").first
         if (@old_product_stock.stock_date.month != 3 && @old_product_stock.stock_date.day != 31)
          @prev_closing_stock =  @old_product_stock.closing_qty
-        
-         @prev_date = @old_product_stock.stock_date            
+
+         @prev_date = @old_product_stock.stock_date
         else
            @prev_closing_stock = 0
             @prev_date = "Not Applicable"
@@ -94,7 +120,7 @@ class ProductStockBooksController < ApplicationController
       barcode = params[:barcode]
 
       from_date =  Date.strptime(params[:from_date], "%Y-%m-%d") if params[:from_date].present?
-      to_date =  Date.strptime(params[:to_date], "%Y-%m-%d") if params[:to_date].present? 
+      to_date =  Date.strptime(params[:to_date], "%Y-%m-%d") if params[:to_date].present?
 
       #@datelist ||= []
       (from_date..to_date).each do |day|
@@ -123,7 +149,7 @@ def stockbook_details
   if params.has_key?(:route)
     @from_date = Date.strptime(params[:from_date], "%Y-%m-%d")
     @prod_list = ProductList.where(list_barcode: params[:barcode]).pluck(:extproductcode)
-   
+
     case @route = params[:route]# a_variable is the variable we want to compare
       #opening_stock
       when @route = "opening_stock"
@@ -136,7 +162,7 @@ def stockbook_details
       when @route = "stock_purchased"
         @route_details = "Stock Purchased on #{@from_date}"
         @purchases_new = PURCHASES_NEW.where(prod: @prod_list).where("TRUNC(rdate) = ?", @from_date)
-        
+
 
       #sold_retail
       when @route = "sold_retail"
@@ -153,14 +179,14 @@ def stockbook_details
       when @route = "sold_wholesale"
         @route_details = "Sold over Wholesale"
         @newwlsdet = NEWWLSDET.where(prod: @prod_list).where("TRUNC(shdate) = ? ", @from_date) #.where("CFO != 'Y' OR CFO IS NULL")
-     
-      
+
+
       #sold_branch
       when @route = "sold_branch"
         @route_details = "Sold over Branch"
         @tempinv_newwlsdet = TEMPINV_NEWWLSDET.where(prod: @prod_list).where("TRUNC(shdate) = ?", @from_date) #.where("CFO != 'Y' OR CFO IS NULL")
-    
-      
+
+
       #returned_retail
       when @route = "returned_retail"
         @route_details = "Returned by Retail"
@@ -173,29 +199,29 @@ def stockbook_details
           @retailsalespieces = @vpp.sum(:quantity)
         end
 
-      #returned_wholesale    
+      #returned_wholesale
       when @route = "returned_wholesale"
         @route_details = "Returned by wholesale - check"
-        
+
          #Returned whole sales
        @new_depts = NEW_DEPT.where(prod: @prod_list).where("TRUNC(rdate) = ?", @from_date).where(type: 'WLS')
        # @newwlsdet = NEWWLSDET.where(prod: prod).where("TRUNC(shdate) >= ? and TRUNC(shdate) <= ?", from_date, to_date).where("CFO != 'Y'")
         #@new_depts = NEW_DEPT.where(prod: @prod_list).where(type: 'WLS').limit(10)
         if @new_depts.present?
-           
+
            @route_details = "Returned by wholesale - check found #{@new_depts.count}"
         end
 
       #returned_branch
       when @route = "returned_branch"
         @route_details = "Returned by branch selected"
-    
+
 
       else
         @route_details = "Nothing selected #{route}"
     end
   end
-  
+
 end
 
 
@@ -217,7 +243,7 @@ end
   # DELETE /product_stock_books/1.json
   def destroy
     if params[:prod].present? && params[:from_date].present? && params[:to_date].present?
-    
+
       @product_stock_book.destroy
       # respond_to do |format|
       #   format.html { redirect_to product_stock_books_url, notice: 'Product stock book was successfully destroyed.' }
@@ -228,7 +254,7 @@ end
   end
 
   private
- 
+
     # Use callbacks to share common setup or constraints between actions.
     def set_product_stock_book
       @product_stock_book = ProductStockBook.find(params[:id])
@@ -244,22 +270,22 @@ end
       @to_date = params[:to_date]
     end
 
-   
+
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def product_stock_book_params
-      params.require(:product_stock_book).permit(:stock_date, :product_master_id, 
-        :product_list_id, :ext_prod_code, 
-        :name, :opening_qty, :opening_rate, :opening_value, :purchased_qty, 
-        :purchased_rate, :purchased_value, :returned_retail_qty, 
-        :returned_retail_rate, :returned_retail_value, 
-        :returned_wholesale_qty, :returned_wholesale_rate, 
-        :returned_wholesale_value, :returned_others_qty, 
-        :returned_others_rate, :returned_others_value, 
-        :sold_retail_qty, :sold_retail_rate, :sold_retail_value, 
-        :sold_wholesale, :sold_wholesale_rate, :sold_wholesale_value, 
-        :sold_branch_qty, :sold_branch_rate, :sold_branch_value, 
-        :corrections_qty, :corrections_rate, :corrections_value, 
+      params.require(:product_stock_book).permit(:stock_date, :product_master_id,
+        :product_list_id, :ext_prod_code,
+        :name, :opening_qty, :opening_rate, :opening_value, :purchased_qty,
+        :purchased_rate, :purchased_value, :returned_retail_qty,
+        :returned_retail_rate, :returned_retail_value,
+        :returned_wholesale_qty, :returned_wholesale_rate,
+        :returned_wholesale_value, :returned_others_qty,
+        :returned_others_rate, :returned_others_value,
+        :sold_retail_qty, :sold_retail_rate, :sold_retail_value,
+        :sold_wholesale, :sold_wholesale_rate, :sold_wholesale_value,
+        :sold_branch_qty, :sold_branch_rate, :sold_branch_value,
+        :corrections_qty, :corrections_rate, :corrections_value,
         :closing_qty, :closing_rate, :closing_value, :list_barcode)
     end
 
