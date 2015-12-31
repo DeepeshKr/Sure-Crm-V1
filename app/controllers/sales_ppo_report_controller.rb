@@ -367,7 +367,6 @@ class SalesPpoReportController < ApplicationController
         end
   end
 
-
   def product_performance
     @hourlist = "Time UTC is your zone #{Time.zone.now} while actual time is #{Time.now}"
     @sno = 1
@@ -956,6 +955,7 @@ class SalesPpoReportController < ApplicationController
 
    #xcel download
   end
+
   def ppo_products
     if params.has_key?(:campaign_id)
       @total_nos = 0
@@ -1142,27 +1142,27 @@ class SalesPpoReportController < ApplicationController
     #end of class
   end
 
-def ppo_details
-  @sno = 1
-  between_time
-  hbn_channels_between
-  shows_between
-  showproducts
-end
+  def ppo_details
+    @sno = 1
+    between_time
+    hbn_channels_between
+    shows_between
+    showproducts
+  end
 
 
 private
-def totalseconds(playlist_group_id)
-totalsecs = 0
-  all_grp_playlists = CampaignPlaylist.where(playlist_group_id: playlist_group_id)
+  def totalseconds(playlist_group_id)
+    totalsecs = 0
+    all_grp_playlists = CampaignPlaylist.where(playlist_group_id: playlist_group_id)
 
-    all_grp_playlists.each  do | grp|
-      totalsecs += grp.duration_secs.to_i
-    end
-return totalsecs
-end
+      all_grp_playlists.each  do | grp|
+        totalsecs += grp.duration_secs.to_i
+      end
+    return totalsecs
+  end
 
- def between_time
+  def between_time
 
     if params.has_key?(:start_time) & params.has_key?(:end_time)
 
@@ -1250,13 +1250,13 @@ end
      end
   end
 
-def hbn_channels_between
+  def hbn_channels_between
    #media segregation only HBN
     media_segments
     value_now = 0
-   media_correction = 0.5
-   timetaken = 0
-   media_var_cost = 0
+    media_correction = 0.5
+    timetaken = 0
+    media_var_cost = 0
     if params.has_key?(:start_time) && params.has_key?(:end_time)
       #  @or_for_date = params[:for_date]
       # for_date =  Date.strptime(params[:for_date], "%Y-%m-%d")
@@ -1299,84 +1299,83 @@ def hbn_channels_between
     end
 
 
-end
+  end
 
-def shows_between
-    for_date = (330.minutes).from_now.to_date
+  def shows_between
+      for_date = (330.minutes).from_now.to_date
 
-    if params.has_key?(:for_date)
-     for_date =  Date.strptime(params[:for_date], "%Y-%m-%d")
-    end
+      if params.has_key?(:for_date)
+       for_date =  Date.strptime(params[:for_date], "%Y-%m-%d")
+      end
 
-    #media segregation only HBN
-    #media_segments
+      #media segregation only HBN
+      #media_segments
 
-    @show_date = for_date.strftime("%d-%b-%Y")
-     campaigns = Campaign.joins(:medium).where("media.media_group_id = 10000").pluck(:id)
+      @show_date = for_date.strftime("%d-%b-%Y")
+       campaigns = Campaign.joins(:medium).where("media.media_group_id = 10000").pluck(:id)
 
-    if params.has_key?(:start_time) && params.has_key?(:end_time)
+      if params.has_key?(:start_time) && params.has_key?(:end_time)
 
-       @start_time = Time.strptime(params[:start_time], "%Y-%m-%d %H:%M")
-        @end_time = Time.strptime(params[:end_time], "%Y-%m-%d %H:%M")
+         @start_time = Time.strptime(params[:start_time], "%Y-%m-%d %H:%M")
+          @end_time = Time.strptime(params[:end_time], "%Y-%m-%d %H:%M")
 
-        @startsecs = ((@start_time.hour) * 60 * 60) + ((@start_time.min) * 60)
-        if @start_time.hour <= 4
-          #show previous day shows as well
-          previous_start_hr = 20
-          case @start_time.hour # a_variable is the variable we want to compare
-            when 3   #compare to 1
-              previous_start_hr = 23
-            when 2    #compare to 2
-             previous_start_hr = 22
-            when 1
-             previous_start_hr = 21
-            end
-
-
-          previous_startsecs = (previous_start_hr * 60 * 60)
-          previous_endsecs = (23 * 60 * 60) + (59 * 60)
-          previous_day = for_date - 1.day
-
-          @earlier_day = previous_day.strftime("%d-%b-%Y")
+          @startsecs = ((@start_time.hour) * 60 * 60) + ((@start_time.min) * 60)
+          if @start_time.hour <= 4
+            #show previous day shows as well
+            previous_start_hr = 20
+            case @start_time.hour # a_variable is the variable we want to compare
+              when 3   #compare to 1
+                previous_start_hr = 23
+              when 2    #compare to 2
+               previous_start_hr = 22
+              when 1
+               previous_start_hr = 21
+              end
 
 
-          @old_campaign_playlists =  CampaignPlaylist.where("(start_hr * 60 * 60) + (start_min * 60) >= ? and (start_hr * 60 *60 )  + (start_min *60) <= ?", previous_startsecs, previous_endsecs)
-         .joins(:campaign).where("campaigns.startdate = ?", previous_day)
+            previous_startsecs = (previous_start_hr * 60 * 60)
+            previous_endsecs = (23 * 60 * 60) + (59 * 60)
+            previous_day = for_date - 1.day
+
+            @earlier_day = previous_day.strftime("%d-%b-%Y")
+
+
+            @old_campaign_playlists =  CampaignPlaylist.where("(start_hr * 60 * 60) + (start_min * 60) >= ? and (start_hr * 60 *60 )  + (start_min *60) <= ?", previous_startsecs, previous_endsecs)
+           .joins(:campaign).where("campaigns.startdate = ?", previous_day)
+           .where('campaignid IN (?)', campaigns)
+          .order(:start_hr, :start_min, :start_sec).where(list_status_id: 10000)
+
+            @startsecs = 0
+          else
+
+            @start_time = Time.strptime(params[:start_time], "%Y-%m-%d %H:%M")
+            @end_time = Time.strptime(params[:end_time], "%Y-%m-%d %H:%M")
+
+            @start_time = @start_time - 4.hours
+            @end_time = @end_time
+
+
+          end
+
+
+        @Show_start_time = @start_time.strftime("%H:%M") || 0
+        @Show_end_time = @end_time.strftime("%H:%M") || 0
+
+        # @campaign_playlists =  CampaignPlaylist.where(list_status_id: 10000).limit(10)
+
+        @endsecs = (@end_time.hour * 60 * 60) + (@end_time.min * 60)
+
+         @campaign_playlists =  CampaignPlaylist.where("(start_hr * 60 * 60) + (start_min * 60) >= ? and (start_hr * 60 *60 )  + (start_min *60) <= ?", @startsecs, @endsecs)
+         .joins(:campaign).where("campaigns.startdate = ?", for_date)
          .where('campaignid IN (?)', campaigns)
         .order(:start_hr, :start_min, :start_sec).where(list_status_id: 10000)
 
-          @startsecs = 0
-        else
 
-          @start_time = Time.strptime(params[:start_time], "%Y-%m-%d %H:%M")
-          @end_time = Time.strptime(params[:end_time], "%Y-%m-%d %H:%M")
+      end
 
-          @start_time = @start_time - 4.hours
-          @end_time = @end_time
+   end
 
-
-        end
-
-
-      @Show_start_time = @start_time.strftime("%H:%M") || 0
-      @Show_end_time = @end_time.strftime("%H:%M") || 0
-
-      # @campaign_playlists =  CampaignPlaylist.where(list_status_id: 10000).limit(10)
-
-      @endsecs = (@end_time.hour * 60 * 60) + (@end_time.min * 60)
-
-       @campaign_playlists =  CampaignPlaylist.where("(start_hr * 60 * 60) + (start_min * 60) >= ? and (start_hr * 60 *60 )  + (start_min *60) <= ?", @startsecs, @endsecs)
-       .joins(:campaign).where("campaigns.startdate = ?", for_date)
-       .where('campaignid IN (?)', campaigns)
-      .order(:start_hr, :start_min, :start_sec).where(list_status_id: 10000)
-
-
-    end
-
- end
-
-
- def showproducts
+  def showproducts
    #@summary ||= []
 
     ccvalue = 0
@@ -1584,8 +1583,9 @@ def shows_between
 
       end
 
- end
- def total_order_summary(order_masters,start_time,end_time)
+  end
+
+  def total_order_summary(order_masters,start_time,end_time)
 
         @Show_start_time = start_time.strftime("%H:%M")
         @Show_end_time = end_time.strftime("%H:%M")
@@ -1600,7 +1600,7 @@ def shows_between
         @total_order_fix_media_cost = media_cost_master.first.total_cost
       end
 
-  @total_orders_sales = 0
+    @total_orders_sales = 0
     @total_orders_nos = 0
     @total_orders_revenue = 0
     @total_Orders_product_cost = 0
@@ -1681,41 +1681,42 @@ def shows_between
           @total_orders_refund_40 +
          @total_order_fix_media_cost +  @total_order_media_var_cost_40)) || 0
 
- end
- def constants
-   @correction = 0.5
-   @shipping_tax_less = 0.98125
-   @subtotal_vat_less = 0.888889
- end
+  end
 
- def media_segments
-  @hbnlist1 = Medium.where(media_group_id: 10000).limit(1000).pluck(:id)
-  @hbnlist2 = Medium.where(media_group_id: 10000).offset(1000).limit(1000).pluck(:id)
-  @hbnlist3 = Medium.where(media_group_id: 10000).offset(2000).limit(1000).pluck(:id)
-  @paid = Medium.where(media_commision_id: 10000).where("media_group_id IS NULL OR media_group_id <> 10000").select("id")
-  @others = Medium.where('media_commision_id IS NULL').where("media_group_id IS NULL OR media_group_id <> 10000").select("id")
+  def constants
+     @correction = 0.5
+     @shipping_tax_less = 0.98125
+     @subtotal_vat_less = 0.888889
+  end
 
- end
+  def media_segments
+    @hbnlist1 = Medium.where(media_group_id: 10000).limit(1000).pluck(:id)
+    @hbnlist2 = Medium.where(media_group_id: 10000).offset(1000).limit(1000).pluck(:id)
+    @hbnlist3 = Medium.where(media_group_id: 10000).offset(2000).limit(1000).pluck(:id)
+    @paid = Medium.where(media_commision_id: 10000).where("media_group_id IS NULL OR media_group_id <> 10000").select("id")
+    @others = Medium.where('media_commision_id IS NULL').where("media_group_id IS NULL OR media_group_id <> 10000").select("id")
 
- def hbn_fixed_costs
-  #  @fixed_cost = Medium.where(media_group_id: 10000, active: true, media_commision_id: 10045).sum(:daily_charges).to_f
+  end
 
-  @all_fixed_media  = Medium.where(media_commision_id: 10000)
-   @hbn_media = @all_fixed_media.where(media_group_id: 10000, active: true, media_commision_id: 10000)
-   @total_media_cost = @all_fixed_media.sum(:daily_charges).to_f
-   @hbn_media_fixed_cost = @hbn_media.sum(:daily_charges).to_f
-   @hbn_media_cost = @hbn_media_fixed_cost.round(2)
-   @fixed_cost = @hbn_media.sum(:daily_charges).to_f
-   #
-  #  @total_media_cost = Medium.where(media_group_id: 10000).sum(:daily_charges).to_f
-   #
-  #  @hbn_media_cost = Medium.where(media_group_id: 10000, active: true).sum(:daily_charges).to_f
+  def hbn_fixed_costs
+    #  @fixed_cost = Medium.where(media_group_id: 10000, active: true, media_commision_id: 10045).sum(:daily_charges).to_f
 
-  #  @total_media_cost = Medium.where(media_group_id: 10000).sum(:daily_charges).to_f
-  #  @hbn_media_cost = Medium.where(media_group_id: 10000, active: true).sum(:daily_charges).to_f
+    @all_fixed_media  = Medium.where(media_commision_id: 10000)
+    @hbn_media = @all_fixed_media.where(media_group_id: 10000, active: true, media_commision_id: 10000)
+    @total_media_cost = @all_fixed_media.sum(:daily_charges).to_f
+    @hbn_media_fixed_cost = @hbn_media.sum(:daily_charges).to_f
+    @hbn_media_cost = @hbn_media_fixed_cost.round(2)
+    @fixed_cost = @hbn_media.sum(:daily_charges).to_f
+    #
+    #  @total_media_cost = Medium.where(media_group_id: 10000).sum(:daily_charges).to_f
+    #
+    #  @hbn_media_cost = Medium.where(media_group_id: 10000, active: true).sum(:daily_charges).to_f
+
+    #  @total_media_cost = Medium.where(media_group_id: 10000).sum(:daily_charges).to_f
+    #  @hbn_media_cost = Medium.where(media_group_id: 10000, active: true).sum(:daily_charges).to_f
 
             #  @total_media_cost = Medium.where(media_group_id: 10000).sum(:daily_charges).to_f
             #  @hbn_media_cost = Medium.where(media_group_id: 10000, active: true).sum(:daily_charges).to_f
             #  @total_fixed_cost = campaign_playlists.sum(:cost).to_f
- end
+  end
 end

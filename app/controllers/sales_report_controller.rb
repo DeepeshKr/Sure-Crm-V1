@@ -307,6 +307,7 @@ class SalesReportController < ApplicationController
     end #end if
 
   end
+
   def open_orders
     #     #media segregation only HBN
     #     #media_segments
@@ -1392,6 +1393,7 @@ class SalesReportController < ApplicationController
 
 
   end
+  
 end
     #<%= render 'my_partial', :locals => {:greeting => 'Hello world', :x => 36} %>
     #<h1> <%= locals[:greeting] %> , my x value is <%= locals[:x] %> </h1>

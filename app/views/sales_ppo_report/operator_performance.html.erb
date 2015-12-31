@@ -43,7 +43,6 @@
         <th colspan="3">Income</th>
          <th rowspan="2" class="text-right">Revenue</th>
         <th colspan="5">Expense</th>
-      <th>More </th>
        </tr>
       <tr>
 
@@ -179,9 +178,9 @@
     <div class="well well-sm">
       <h4>Revised PPO</h4>
       <% if @revised_media_total_fixed_cost.present? %>
-      Profitability :<%= @total_revenue.round(0) - (@total_expenses.round(0) + @revised_per_day_rate.round(0)) %><br>
+      Profitability :<%= @total_revenue.round(0) - (@total_expenses.round(0) + @revised_media_total_fixed_cost.round(0)) %><br>
       Total Orders  :<%= @total_nos.to_i %> <br>
-      PPO           :<%= (@total_revenue.round(0) - (@total_expenses.round(0) + @revised_per_day_rate.round(0))) / @total_nos.to_i %>
+      PPO           :<%= (@total_revenue.round(0) - (@total_expenses.round(0) + @revised_media_total_fixed_cost.round(0))) / @total_nos.to_i %>
       <% end %>
     </div>
 
