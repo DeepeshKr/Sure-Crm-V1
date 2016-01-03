@@ -84,7 +84,12 @@ class CampaignPlaylist < ActiveRecord::Base
 
   def playlistinfo
     #self.product_variant.name + " between " + self.start_hr || 0 + ":" + self.start_min + ":" + self.start_sec + " to " + self.end_hr + ":" + self.end_min + ":" + self.end_sec + " (" + self.name + ") "
-    self.product_variant.name + " between " + self.start_hr.to_s || 0 + ":"  +  " (" + self.name + ") "
+    self.product_variant.name + " between " + self.start_hr.to_s.rjust(2, '0') || 0 + ":"  +  " (" + self.name + ") "
+  end
+
+  def playlist_details
+    #self.product_variant.name + " between " + self.start_hr || 0 + ":" + self.start_min + ":" + self.start_sec + " to " + self.end_hr + ":" + self.end_min + ":" + self.end_sec + " (" + self.name + ") "
+    self.product_variant.name + " on " + self.for_date.strftime("%d-%b-%y") || nil + " " + self.start_hr.to_s.rjust(2, '0') || "00" + ":" + self.start_min.to_s.rjust(2, '0') || "00" 
   end
 
 def productrevenue

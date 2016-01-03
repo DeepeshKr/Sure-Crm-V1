@@ -1,3 +1,4 @@
+<% title "All Sales Reports" %>
 <div class="jumbotron">
  <div class="container">
   <h1>Sales Reports</h1>
@@ -16,7 +17,7 @@
 			  </div>
 			  <div class="panel-footer">
 
-					 <%= bootstrap_form_tag url: url_for(:controller => 'sales_report', :action => 'channel_sales'), :method => :GET, :enforce_utf8 => false do |f| %>
+					 <%= bootstrap_form_tag url: url_for(:controller => 'sales_report', :action => 'channel_sales_summary'), :method => :GET, :enforce_utf8 => false do |f| %>
 					 <div class="row">
 <div class="col-xs-12">
  <%= select_tag :bdm_id,  options_from_collection_for_select(@media_manager,

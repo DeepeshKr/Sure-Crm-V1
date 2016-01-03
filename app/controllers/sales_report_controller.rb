@@ -90,45 +90,41 @@ class SalesReportController < ApplicationController
      @bdm_id = params[:bdm_id]
 
       order_masters = OrderMaster.where('orderdate >= ? AND orderdate <= ?', @from_date, @to_date)
-      .where('ORDER_STATUS_MASTER_ID > 10002').joins(:medium).where("media.employee_id = ? ", @bdm_id)
-
+      .where('ORDER_STATUS_MASTER_ID > 10002').joins(:medium).where("media.employee_id = ? ", @bdm_id).distinct.pluck(:media_id)
+      #.select("date(orderdate) as ordered_date, sum(subtotal) as total_value")
       name = (Employee.find(@bdm_id))
       amount = 0.0
-      @orderdate = "Searched for #{for_date} found #{order_masters.count} agents!"
+      #@orderdate = "Searched for #{for_date} found #{order_masters.count} agents!"
       employeeunorderlist ||= []
-      @num = 1
-      order_masters.each do |o|
-        e = o.employee_id
 
-
+      order_masters.each do |ord|
+        @num = 0
+        amount = 0
         # orderlist = OrderMaster.where('ORDER_STATUS_MASTER_ID > 10002')
         # .where('orderdate >= ? AND orderdate <= ?', @from_date, @to_date).where(employee_id: e)
         # timetaken = orderlist.sum(:codcharges)
-        reverse_vat_rate = TaxRate.find(10001)
-        if reverse_vat_rate.present?
-          rate_charge = reverse_vat_rate.reverse_rate ||= 0.8888889
-          amount = o.subtotal * rate_charge
-          amount = amount.round(2)
+         reverse_vat_rate = TaxRate.find(10001)
+         order_master_calculations = OrderMaster.where('orderdate >= ? AND orderdate <= ?', @from_date, @to_date)
+         .where('ORDER_STATUS_MASTER_ID > 10002').where(:media_id => ord)
+         order_master_calculations.each do |orc|
+           if reverse_vat_rate.present?
+             rate_charge = reverse_vat_rate.reverse_rate ||= 0.8888889
+             amount += orc.subtotal * rate_charge
+
+           end
+           @num += 1
         end
 
-        products = ""
-        #cats.each do |cat| cat.name end
-        if o.order_line.present?
-          #products = o.order_line.each(&:description)
-          o.order_line.each do |ord| products << ord.description end
-        end
-        # totalorders = orderlist.sum(:total)
-        # noorders = orderlist.count()
+        amount = amount.round(2)
+        media_name = Medium.find(ord).name
+          employeeunorderlist << {
+            :from_date => (@from_date + 330.minutes).strftime("%Y-%m-%d"),
+            :to_date => (@to_date + 330.minutes).strftime("%Y-%m-%d"),
+            :channel => media_name,
+            :media_id => ord,
+            :total_nos => @num,
+            :total_value => amount}
 
-          employeeunorderlist << {:total => amount,
-            :sno => @num,
-            :employee => name,
-            :orderdate =>  o.orderdate.strftime("%Y-%m-%d"),
-            :city => o.city ,
-            :channel => o.medium.name,
-            :products => products,
-            :pieces => o.pieces}
-            @num += 1
           end
 
       #this is for date on the view
@@ -137,7 +133,7 @@ class SalesReportController < ApplicationController
         @employeeorderlist = employeeunorderlist.sort_by{|c| c[:total]}.reverse
 
         respond_to do |format|
-        csv_file_name = "#{name}_sales_#{@or_for_date}.csv"
+        csv_file_name = "#{name}_sales_#{@from_date}_#{@to_date}.csv"
           format.html
           format.csv do
             headers['Content-Disposition'] = "attachment; filename=\"#{csv_file_name}\""
@@ -170,23 +166,30 @@ class SalesReportController < ApplicationController
       @to_date = @to_date.end_of_day - 330.minutes
 
      @bdm_id = params[:bdm_id]
+     @media_id = params[:media_id] || nil if params.has_key?(:media_id)
+     if @media_id.blank?
+       return
+     end
+     if @media_id == nil && @from_date == nil && @to_date == nil
+       return
+     end
 
+       @media_name = Medium.find(@media_id).name
+         reverse_vat_rate = TaxRate.find(10001)
+         
       order_masters = OrderMaster.where('orderdate >= ? AND orderdate <= ?', @from_date, @to_date)
-      .where('ORDER_STATUS_MASTER_ID > 10002').joins(:medium).where("media.employee_id = ? ", @bdm_id)
+      .where('ORDER_STATUS_MASTER_ID > 10002').where(media_id: @media_id)
 
       name = (Employee.find(@bdm_id))
       amount = 0.0
-      @orderdate = "Searched for #{for_date} found #{order_masters.count} agents!"
+      #@orderdate = "Searched for #{for_date} found #{order_masters.count} agents!"
       employeeunorderlist ||= []
       @num = 1
+      amount = 0
       order_masters.each do |o|
         e = o.employee_id
 
 
-        # orderlist = OrderMaster.where('ORDER_STATUS_MASTER_ID > 10002')
-        # .where('orderdate >= ? AND orderdate <= ?', @from_date, @to_date).where(employee_id: e)
-        # timetaken = orderlist.sum(:codcharges)
-        reverse_vat_rate = TaxRate.find(10001)
         if reverse_vat_rate.present?
           rate_charge = reverse_vat_rate.reverse_rate ||= 0.8888889
           amount = o.subtotal * rate_charge
@@ -199,17 +202,18 @@ class SalesReportController < ApplicationController
           #products = o.order_line.each(&:description)
           o.order_line.each do |ord| products << ord.description end
         end
+        # orderlist = OrderMaster.where('ORDER_STATUS_MASTER_ID > 10002')
+        # .where('orderdate >= ? AND orderdate <= ?', @from_date, @to_date).where(employee_id: e)
+        # timetaken = orderlist.sum(:codcharges)
         # totalorders = orderlist.sum(:total)
         # noorders = orderlist.count()
 
           employeeunorderlist << {:total => amount,
             :sno => @num,
-            :employee => name,
-            :orderdate =>  o.orderdate.strftime("%Y-%m-%d"),
-            :city => o.city ,
+            :orderdate =>  (o.orderdate + 330.minutes).strftime("%Y-%m-%d"),
+            :city => o.city,
             :channel => o.medium.name,
-            :products => products,
-            :pieces => o.pieces}
+            :products => products}
             @num += 1
           end
 
@@ -219,7 +223,7 @@ class SalesReportController < ApplicationController
         @employeeorderlist = employeeunorderlist.sort_by{|c| c[:total]}.reverse
 
         respond_to do |format|
-        csv_file_name = "#{name}_sales_#{@or_for_date}.csv"
+        csv_file_name = "#{name}_#{@media_name}_sales_#{@from_date}_#{@to_date}.csv"
           format.html
           format.csv do
             headers['Content-Disposition'] = "attachment; filename=\"#{csv_file_name}\""
@@ -238,6 +242,7 @@ class SalesReportController < ApplicationController
         for_date =  Date.strptime(params[:from_date], "%Y-%m-%d")
         @from_date = for_date.beginning_of_day - 330.minutes
         @to_date = for_date.end_of_day - 330.minutes
+
       if params.has_key?(:from_date)
         @from_date =  Date.strptime(params[:from_date], "%Y-%m-%d")
       end
@@ -245,23 +250,24 @@ class SalesReportController < ApplicationController
       @to_date =  Date.strptime(params[:to_date], "%Y-%m-%d") || Date.current if params.has_key?(:to_date)
 
       @to_date = @to_date.end_of_day - 330.minutes
+      @from_date = for_date.beginning_of_day - 330.minutes
 
-      @from_date = (@from_date + 330.minutes)
-      @to_date = (@to_date + 330.minutes)
+      #@to_date = (@to_date + 330.minutes)
     #
       interaction_masters = InteractionMaster.where('createdon >= ? AND createdon <= ?', @from_date, @to_date).joins(:interaction_category).where("interaction_categories.sortorder < 100 and interaction_categories.sortorder <> 25 and interaction_categories.sortorder <> 26 and interaction_categories.sortorder <> 27")
       @orderdate = "Open Orders order between #{@from_date} and #{@to_date} found records!"
 
-    # =>
+    # => Customer.find(inm.customer_id).fullname ||= "NA" if inm.customer?
+    # Customer.find(inm.customer_id).fullname ||= "NA" if inm.customer_id.present?
+    #   name = Employee.find(inm.employee_id).first_name ||= "NA" if Employee.find(inm.employee_id).present?
+    # #Employee.find(e).first_name ||= "NA" #if Employee.find(e).first_name.present?)
       @sno = 1
         employeeunorderlist ||= []
         num = 1
       interaction_masters.each do |inm|
-          name = Employee.find(inm.employee_id).first_name ||= "NA" if Employee.find(inm.employee_id).present?
-          customer_name = Customer.find(inm.customer_id).fullname ||= "NA" if inm.customer_id.present?
-          e = inm.employee_id
-          name = Employee.find(e).first_name ||= "NA" #if Employee.find(e).first_name.present?)
-          customer_name = Customer.find(inm.customer_id).fullname ||= "NA" if inm.customer_id.present?
+
+          customer_name = inm.customer_id
+          name = inm.employee_id
           products = ""
           #cats.each do |cat| cat.name end
           if inm.orderid.present?
@@ -1393,7 +1399,7 @@ class SalesReportController < ApplicationController
 
 
   end
-  
+
 end
     #<%= render 'my_partial', :locals => {:greeting => 'Hello world', :x => 36} %>
     #<h1> <%= locals[:greeting] %> , my x value is <%= locals[:x] %> </h1>

@@ -1,16 +1,21 @@
 module ApplicationHelper
 
   # Returns the full title on a per-page basis.
-  def full_title(page_title = '')
+  def page_title(page_title = '')
     base_title = "Sure CRM Telebrands Internal App"
-    if page_title.empty?
+  if page_title.empty?
       base_title
     else
       "#{page_title} | #{base_title}"
     end
   end
 
-  	def row_classname(type = '')
+  def title(page_title)
+    content_for(:title) { page_title }
+    #<% title "Opened at #{@timenow}" %> in view
+  end
+
+  def row_classname(type = '')
 	  switch type
 	    if type == "Active"
 	      classname = "text-muted"
