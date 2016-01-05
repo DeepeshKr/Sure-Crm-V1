@@ -24,6 +24,53 @@
 </div>
 
 <hr>
+<div class="well well-sm">
+<div class="row">
+<div class="col-xs-8">
+<h3>Recent Stock Ledger (Recent only)</h3>
+</div>
+<div class="col-xs-2">
+
+<%= link_to 'Show Stock Ledger', distributor_stock_ledgers_path(corporate_id: @corporate.id) , class:"btn btn-success btn-md" %>
+
+</div>
+<div class="col-xs-2">
+
+<%= link_to 'Add Stock / MIS ', new_distributor_stock_ledger_path(corporate_id: @corporate.id) , class:"btn btn-warning btn-md" %>
+
+</div>
+</div>
+</div>
+
+<hr>
+<%= render partial: 'distributor_stock_ledgers/quick_list' %>
+<br>
+
+<hr>
+
+<h3>Product Stock Summary (where available or Returns more than ZERO</h3>
+
+<hr>
+<%= render partial: 'distributor_stock_summaries/quick_list' %>
+<br>
+
+<div class="well well-sm">
+<div class="row">
+<div class="col-xs-10">
+<h3>Missed Orders (Recent only)</h3>
+</div>
+<div class="col-xs-2">
+
+<%= link_to 'Show Missed Orders', distributor_missed_orders_path(corporate_id: @corporate.id) , class:"btn btn-success btn-sm" %>
+
+</div>
+
+</div>
+</div>
+
+<hr>
+<%= render partial: 'distributor_missed_orders/quick_list' %>
+<br>
 <br>
 <div class="row">
   <div class="col-xs-2">
@@ -56,49 +103,4 @@
     <%= render partial: 'distributor_pincode_lists/form' %>
   </div>
 </div>
-<br>
-<hr>
-
-<h3>Product Stock Summary (where available or Returns more than ZERO</h3>
-
-<hr>
-<%= render partial: 'distributor_stock_summaries/quick_list' %>
-<br>
-<div class="well well-sm">
-<div class="row">
-<div class="col-xs-8">
-<h3>Recent Stock Ledger (Recent only)</h3>
-</div>
-<div class="col-xs-2">
-
-<%= link_to 'Show Stock Ledger', distributor_stock_ledgers_path(corporate_id: @corporate.id) , class:"btn btn-success btn-sm" %>
-
-</div>
-<div class="col-xs-2">
-
-<%= link_to 'Add Stock / MIS ', new_distributor_stock_ledger_path(corporate_id: @corporate.id) , class:"btn btn-warning btn-sm" %>
-
-</div>
-</div>
-</div>
-
-<hr>
-<%= render partial: 'distributor_stock_ledgers/quick_list' %>
-<br>
-<div class="well well-sm">
-<div class="row">
-<div class="col-xs-10">
-<h3>Missed Orders (Recent only)</h3>
-</div>
-<div class="col-xs-2">
-
-<%= link_to 'Show Missed Orders', distributor_missed_orders_path(corporate_id: @corporate.id) , class:"btn btn-success btn-sm" %>
-
-</div>
-
-</div>
-</div>
-
-<hr>
-<%= render partial: 'distributor_missed_orders/quick_list' %>
 <br>
