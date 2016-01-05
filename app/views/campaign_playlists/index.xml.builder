@@ -21,14 +21,14 @@ xml.mcrs_playlist do
               xml.group(:type => "video", :width => "1920", :height => "1080", :aspect => "16:9", :framerate => "25", :progressive => "n"){
                 xml.track {
                   xml.clip(:srcref => "0", :start => c.starttime, :stop => c.endtime, :mstart => c.starttime, :mstop => c.endtime){
-                    xml.quality(:src => c.filename id="0")
+                    xml.quality(:src => c.filename, :id => "0")
                   }
                 }
               }
               xml.group(:type => "audio", :channels => "2"){
                 xml.track {
                   xml.clip(:srcref => "1", :start => c.starttime, :stop => c.endtime, :mstart => c.starttime, :mstop => c.endtime){
-                      xml.quality(:src => c.filename id="0")
+                      xml.quality(:src => c.filename, :id =>"0")
                   }
                 }
               }
@@ -43,11 +43,5 @@ xml.mcrs_playlist do
         end
       end
 		end
-	end
 end
-
-
-#duration_secs
-	# xml.item(:name => c.product_variant.name, :src_in => c.starttime, :src_out => c.endtime, :in => c.starttime, :out => c.endtime, :type => "clip", :flags => "0") {}
-# xml.src_path c.filename
-# xml.descr "Playout file for #{c.filename}"
+#end
