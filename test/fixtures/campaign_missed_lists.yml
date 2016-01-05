@@ -1,0 +1,17 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  product_list_id: 1
+  product_variant_id: 1
+  productmaster_id: 1
+  external_prod: MyString
+  reason: MyString
+  description: MyText
+
+two:
+  product_list_id: 1
+  product_variant_id: 1
+  productmaster_id: 1
+  external_prod: MyString
+  reason: MyString
+  description: MyText

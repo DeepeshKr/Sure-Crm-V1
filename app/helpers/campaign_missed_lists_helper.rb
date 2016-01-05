@@ -1,0 +1,2 @@
+module CampaignMissedListsHelper
+end

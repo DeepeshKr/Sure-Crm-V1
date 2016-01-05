@@ -4,6 +4,7 @@ class SalesReportController < ApplicationController
    before_action :drop_downs, only: [:city, :update, :destroy, :deleteupsell]
   # before_filter :authenticate_user!
   def index
+    @sales_agents = Employee.all.where(:employee_role_id => 10003).order("first_name")
     @product_master = ProductMaster.order('name') #.limit(10)
      @media_manager = Employee.where(:employee_role_id => 10121).order("first_name")
      @from_date = (Date.current + 330.minutes).strftime("%Y-%m-%d") #.strftime("%Y-%m-%d")

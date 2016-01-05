@@ -1,6 +1,8 @@
 Rails.application.routes.draw do
 
 
+  resources :campaign_missed_lists
+
   resources :distributor_product_lists
 
   resources :distributor_missed_pincodes

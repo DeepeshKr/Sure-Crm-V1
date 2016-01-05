@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151228170349) do
+ActiveRecord::Schema.define(version: 20160105081907) do
 
   create_table "address_types", force: :cascade do |t|
     t.string   "name"
@@ -46,6 +46,17 @@ ActiveRecord::Schema.define(version: 20151228170349) do
     t.integer  "image_gallery_id", limit: 16, precision: 38
     t.datetime "created_at"
     t.datetime "updated_at"
+  end
+
+  create_table "campaign_missed_lists", force: :cascade do |t|
+    t.integer  "product_list_id",    limit: 16, precision: 38
+    t.integer  "product_variant_id", limit: 16, precision: 38
+    t.integer  "productmaster_id",   limit: 16, precision: 38
+    t.string   "external_prod"
+    t.string   "reason"
+    t.text     "description"
+    t.datetime "created_at",                                   null: false
+    t.datetime "updated_at",                                   null: false
   end
 
   create_table "campaign_play_list_statuses", force: :cascade do |t|

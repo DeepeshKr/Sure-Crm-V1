@@ -1,0 +1,34 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Product list:</strong>
+  <%= @campaign_missed_list.product_list_id %>
+</p>
+
+<p>
+  <strong>Product variant:</strong>
+  <%= @campaign_missed_list.product_variant_id %>
+</p>
+
+<p>
+  <strong>Productmaster:</strong>
+  <%= @campaign_missed_list.productmaster_id %>
+</p>
+
+<p>
+  <strong>External prod:</strong>
+  <%= @campaign_missed_list.external_prod %>
+</p>
+
+<p>
+  <strong>Reason:</strong>
+  <%= @campaign_missed_list.reason %>
+</p>
+
+<p>
+  <strong>Description:</strong>
+  <%= @campaign_missed_list.description %>
+</p>
+
+<%= link_to 'Edit', edit_campaign_missed_list_path(@campaign_missed_list) %> |
+<%= link_to 'Back', campaign_missed_lists_path %>
