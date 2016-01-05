@@ -6,41 +6,41 @@
  </div>
 </div>
  <div class="container">
-	<div class="row">
+<div class="row">
 	<div class="col-xs-4">
 			<div class="panel panel-primary">
-			<div class="panel-heading">
-			 <h3 class="panel-title">BDM Channel Sales</h3>
-			</div>
-			  <div class="panel-body">
-			   Get Sales report for each BDM Listed below for Channel Sales managed by them
+        			<div class="panel-heading">
+        			 <h3 class="panel-title">BDM Channel Sales</h3>
+        			</div>
+        			  <div class="panel-body">
+        			   Get Sales report for each BDM Listed below for Channel Sales managed by them
+        			  </div>
+        			  <div class="panel-footer">
+
+        					 <%= bootstrap_form_tag url: url_for(:controller => 'sales_report', :action => 'channel_sales_summary'), :method => :GET, :enforce_utf8 => false do |f| %>
+        					 <div class="row">
+        <div class="col-xs-12">
+         <%= select_tag :bdm_id,  options_from_collection_for_select(@media_manager,
+               :id, :name, selected: @bdm_id ),
+                     {:class => "form-control", label: "Select the Product if required ", required: true } %>
+        </div>
+                     </div>
+                      <div class="row">
+        					<div class="col-xs-8">
+        					 <%= text_field_tag(:from_date, @from_date, :data => {:provide => "datepicker"}, :id => "datepicker1", :class => "form-control", :required => "true" )   %>
+
+        					</div>
+
+        					<div class="col-xs-4">
+        						<%= submit_tag "Report", name: nil, class: "btn btn-success ", data: { confirm: 'Are you sure?'}  %>
+        					</div>
+        					</div>
+
+        					<% end %>
+
+        					</div>
+
 			  </div>
-			  <div class="panel-footer">
-
-					 <%= bootstrap_form_tag url: url_for(:controller => 'sales_report', :action => 'channel_sales_summary'), :method => :GET, :enforce_utf8 => false do |f| %>
-					 <div class="row">
-<div class="col-xs-12">
- <%= select_tag :bdm_id,  options_from_collection_for_select(@media_manager,
-       :id, :name, selected: @bdm_id ),
-             {:class => "form-control", label: "Select the Product if required ", required: true } %>
-</div>
-             </div>
-<div class="row">
-					<div class="col-xs-8">
-					 <%= text_field_tag(:from_date, @from_date, :data => {:provide => "datepicker"}, :id => "datepicker1", :class => "form-control", :required => "true" )   %>
-
-					</div>
-
-					<div class="col-xs-4">
-						<%= submit_tag "Report", name: nil, class: "btn btn-success ", data: { confirm: 'Are you sure?'}  %>
-					</div>
-					</div>
-
-					<% end %>
-
-					</div>
-
-								  </div>
 	</div>
 	<div class="col-xs-4">
 			<div class="panel panel-primary">
@@ -88,10 +88,9 @@
 			  </div>
 			</div>
 	</div>
+</div>
 
-	</div>
-
-	<div class="row">
+<div class="row">
 	<div class="col-xs-4">
 			<div class="panel panel-primary">
 			<div class="panel-heading">
@@ -382,6 +381,41 @@
 		</div>
 	</div>
  </div>
+ <div class="row">
+   <div class="col-xs-4">
+     <div class="panel panel-primary">
+             <div class="panel-heading">
+              <h3 class="panel-title">Sales Incentives</h3>
+             </div>
+               <div class="panel-body">
+                Last 6 Month Sales Incentives
+               </div>
+               <div class="panel-footer">
+
+                  <%= bootstrap_form_tag url: url_for(:controller => 'sales_report', :action => 'sales_incentives'), :method => :GET, :enforce_utf8 => false do |f| %>
+                  <div class="row">
+        <div class="col-xs-12">
+         <%= select_tag :employee_id,  options_from_collection_for_select(@sales_agents,
+               :id, :name, selected: @bdm_id ),
+                     {:class => "form-control", label: "Select the Employee", required: true } %>
+        </div>
+                     </div>
+                      <div class="row">
+
+
+                 <div class="col-xs-4">
+                   <%= submit_tag "Report", name: nil, class: "btn btn-success ", data: { confirm: 'Are you sure?'}  %>
+                 </div>
+                 </div>
+
+                 <% end %>
+
+                 </div>
+
+       </div>
+   </div>
+ </div>
+ 
    <div class="panel panel-primary">
 			<div class="panel-heading"><h3 class="panel-title">Product Sold Report</h3></div>
 			  <div class="panel-body">

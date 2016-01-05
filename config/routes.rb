@@ -162,6 +162,9 @@ post "send_demo_message" => 'message_on_orders#send_demo_message'
   get 'sales_report/channel_sales_summary'
   get 'sales_report/channel_sales'
   get 'channel_sales' => 'sales_report#channel_sales'
+
+  get 'sales_report/sales_incentives'
+  get 'sales_incentives' => 'sales_report#sales_incentives'
   get 'sales_report/disposition_report'
   get 'disposition_report' => 'sales_report#disposition_report'
 

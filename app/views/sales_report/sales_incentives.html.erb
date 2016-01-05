@@ -1,0 +1,37 @@
+<% title "Sales Incentives #{@employee_name}" %>
+
+<%= form_tag  url_for(:controller => 'sales_report', :action => 'sales_incentives'), method: "get" do  %>
+<div class="row">
+<div class="col-xs-4">
+
+<h3>Sales Incentives</h3>
+</div>
+
+<div class="col-xs-6">
+
+  <%= select_tag :employee_id,  options_from_collection_for_select(@sales_agents,
+ :id, :employee_name, selected: @employee_id ),
+      {:class => "form-control", label: "Select the Product if required ", required: true }  %>
+
+</div>
+
+ <div class="col-xs-1">
+           <%= submit_tag "Show", name: nil, class: "btn btn-primary" %>
+ </div>
+
+</div>
+<% end %>
+
+<% if @show_results == "true" %>
+<div class="row">
+  <div class="col-xs-4">
+    <%= render partial: 'one_report', :locals => {:employeesales => @employee_sales_3}  %>
+  </div>
+  <div class="col-xs-4">
+    <%= render partial: 'one_report', :locals => {:employeesales => @employee_sales_2}  %>
+  </div>
+  <div class="col-xs-4">
+    <%= render partial: 'one_report', :locals => {:employeesales => @employee_sales_1}  %>
+  </div>
+</div>
+<% end %>

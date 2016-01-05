@@ -1,0 +1,84 @@
+<div class="panel panel-primary">
+  <div class="panel-heading">
+    <h3 class="panel-title">
+      <div class="row">
+        <div class="col-xs-8">
+          <%= employeesales.for_month %> <%= employeesales.for_year %>
+        </div>
+        <div class="col-xs-4">
+          <small>Updated <%= employeesales.last_updated_date %></small>
+        </div>
+      </div>
+  </div>
+
+    <table class="table table-striped table-hover">
+      <thead>
+        <tr>
+          <th>Category</th>
+          <th class="text-right">Nos</th>
+          <th class="text-right">Value</th>
+          <th class="text-right">Earnings</th>
+        </tr>
+      </thead>
+      <tr>
+        <td><strong>Processed</strong></td>
+        <td class="text-right">
+          <%= number_with_delimiter(employeesales.all_processed_nos, :delimiter => ',') %>
+        </td>
+        <td class="text-right">
+          <%= number_with_delimiter(employeesales.all_processed_value, :delimiter => ',') %>
+        </td>
+        <td class="text-right">
+          <%= number_with_delimiter(employeesales.all_processed_earnings, :delimiter => ',') %>
+        </td>
+      </tr>
+      <tr>
+        <td><strong>Shipped</strong></td>
+        <td class="text-right">
+          <%= number_with_delimiter(employeesales.all_shipped_nos, :delimiter => ',') %>
+        </td>
+        <td class="text-right">
+          <%= number_with_delimiter(employeesales.all_shipped_value, :delimiter => ',') %>
+        </td>
+        <td class="text-right">
+          <%= number_with_delimiter(employeesales.all_shipped_earnings, :delimiter => ',') %>
+        </td>
+      </tr>
+      <tr>
+        <td><strong>Cancelled</strong></td>
+        <td class="text-right">
+          <%= number_with_delimiter(employeesales.all_cancelled_nos, :delimiter => ',') %>
+        </td>
+        <td class="text-right">
+          <%= number_with_delimiter(employeesales.all_cancelled_value, :delimiter => ',') %>
+        </td>
+        <td class="text-right">
+          <%= number_with_delimiter(employeesales.all_cancelled_earnings, :delimiter => ',') %>
+        </td>
+      </tr>
+      <tr>
+        <td><strong>Returned</strong></td>
+        <td class="text-right">
+          <%= number_with_delimiter(employeesales.all_returned_nos, :delimiter => ',') %>
+        </td>
+        <td class="text-right">
+          <%= number_with_delimiter(employeesales.all_returned_value, :delimiter => ',') %>
+        </td>
+        <td class="text-right">
+          <%= number_with_delimiter(employeesales.all_returned_earnings, :delimiter => ',') %>
+        </td>
+      </tr>
+      <tr>
+        <td><strong>Paid</strong></td>
+        <td class="text-right">
+          <%= number_with_delimiter(employeesales.all_paid_nos, :delimiter => ',') %>
+        </td>
+        <td class="text-right">
+          <%= number_with_delimiter(employeesales.all_paid_value, :delimiter => ',') %>
+        </td>
+        <td class="text-right">
+          <%= number_with_delimiter(employeesales.all_paid_earnings, :delimiter => ',') %>
+        </td>
+      </tr>
+    </table>
+</div>

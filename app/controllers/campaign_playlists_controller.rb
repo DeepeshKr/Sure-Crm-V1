@@ -10,8 +10,13 @@ class CampaignPlaylistsController < ApplicationController
   def index
     @timestamp = "Created for Cinergy Playout on #{DateTime.now}"
     campaignplaylist = CampaignPlaylist.new
-    @guid1 = campaignplaylist.generate_unique_secure_token #.offset(1).limit(1)
-    @guid2 = campaignplaylist.generate_unique_secure_token
+    @guid1 = "{#{campaignplaylist.generate_unique_secure_token}}" #.offset(1).limit(1)
+    @guid2 = "{#{campaignplaylist.generate_unique_secure_token}}"
+    @guid3 = "{#{campaignplaylist.generate_unique_secure_token}}"
+    @guid4 = "{#{campaignplaylist.generate_unique_secure_token}}"
+    @guid5 = "{#{campaignplaylist.generate_unique_secure_token}}"
+    @created_time = DateTime.now
+    
     if(params.has_key?(:campaignid))
       @campaign_playlists = CampaignPlaylist.where("campaignid = ?" , params[:campaignid]).order(:start_hr, :start_min, :start_sec)
         respond_to do |format|

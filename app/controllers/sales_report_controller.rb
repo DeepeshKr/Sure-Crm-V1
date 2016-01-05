@@ -176,7 +176,7 @@ class SalesReportController < ApplicationController
 
        @media_name = Medium.find(@media_id).name
          reverse_vat_rate = TaxRate.find(10001)
-         
+
       order_masters = OrderMaster.where('orderdate >= ? AND orderdate <= ?', @from_date, @to_date)
       .where('ORDER_STATUS_MASTER_ID > 10002').where(media_id: @media_id)
 
@@ -1118,7 +1118,25 @@ class SalesReportController < ApplicationController
       shows_between
 
   end #end of def
+  def sales_incentives
+    @show_results = "false"
+    @sales_agents = Employee.all.where(:employee_role_id => 10003).order("first_name")
+          @employee_id = params[:employee_id]
+          if @employee_id.blank?
+            return
+          end
+          @employee_name = Employee.find(@employee_id).fullname
+          @this_month = Date.today.strftime("%Y-%m")
+          @last_month = (Date.today - 1.month).strftime("%Y-%m")
+          @earlier_month = (Date.today - 2.month).strftime("%Y-%m")
 
+          employee_sale = EmployeeSales.new
+          @employee_sales_1 = employee_sale.sales_data @this_month, @employee_id
+          @employee_sales_2 = employee_sale.sales_data @last_month, @employee_id
+          @employee_sales_3 = employee_sale.sales_data @earlier_month, @employee
+
+            @show_results = "true"
+  end
   def orderlisting
       @t = (330.minutes).from_now
       @sno = 1
