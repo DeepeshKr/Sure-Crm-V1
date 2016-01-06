@@ -4,7 +4,7 @@ class CampaignMissedListsController < ApplicationController
   # GET /campaign_missed_lists
   # GET /campaign_missed_lists.json
   def index
-    @campaign_missed_lists = CampaignMissedList.all
+    @campaign_missed_lists = CampaignMissedList.all.order("created_at DESC").paginate(:page => params[:page])
   end
 
   # GET /campaign_missed_lists/1
@@ -69,6 +69,8 @@ class CampaignMissedListsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def campaign_missed_list_params
-      params.require(:campaign_missed_list).permit(:product_list_id, :product_variant_id, :productmaster_id, :external_prod, :reason, :description)
+      params.require(:campaign_missed_list).permit(:product_list_id, :product_variant_id, :productmaster_id, :external_prod, :reason, :description, :time_diff, :order_time,
+      :play_list_time, :order_id, :campaign_id, :campaign_playlist_id, :called_no, :customer_state, :media_id)
     end
+    #  <td><%= link_to 'Edit', edit_campaign_missed_list_path(campaign_missed_list) %></td>
 end

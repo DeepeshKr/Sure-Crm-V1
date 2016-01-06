@@ -5,7 +5,7 @@ class Customer < ActiveRecord::Base
   has_many :customer_address, foreign_key: "customer_id"
   has_many :interaction_master, foreign_key: "customer_id"
   has_many :order_master, foreign_key: "customer_id"
-  has_many :order_line, through: :order_master
+  has_many :order_line, :through => :order_master, foreign_key: "customer_id" #, :source => :customer
 
   has_many :customer_credit_card, foreign_key: "customer_id"
   has_many :message_on_order, foreign_key: "customer_id"

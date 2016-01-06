@@ -1,0 +1,2 @@
+module NestedHasManyThrough
+end

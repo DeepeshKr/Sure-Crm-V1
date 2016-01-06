@@ -235,7 +235,6 @@ class SalesReportController < ApplicationController
     end
   end
 
-
   def disposition_report
     if params[:from_date].present?
     #     #@summary ||= []
@@ -1119,6 +1118,7 @@ class SalesReportController < ApplicationController
       shows_between
 
   end #end of def
+
   def sales_incentives
     @show_results = "false"
     @sales_agents = Employee.all.where(:employee_role_id => 10003).order("first_name")
@@ -1138,6 +1138,7 @@ class SalesReportController < ApplicationController
 
             @show_results = "true"
   end
+
   def orderlisting
       @t = (330.minutes).from_now
       @sno = 1
@@ -1208,6 +1209,64 @@ class SalesReportController < ApplicationController
 
 
   end #end of def
+
+  def fitness_products_sold
+      @ordersearch = "No Products sold for the period / day"
+      @fitness_prods = ["1AK", "1AZF", "ABT", "MBL", "SCP", "TGR2", "2FP", "PMP", "MXC", "TOTS", "TOTD", "3BCR", "PBS", "BTN", "WCS1", "BFA5", "3AC", "1IZN", "HTS", "1HTB", "2HTB", "2SU"]
+
+    if params[:from_date].present?
+        #@summary ||= []
+        @or_for_date = params[:from_date]
+        @from_date =  Date.strptime(params[:from_date], "%Y-%m-%d")
+        @from_date = @from_date.beginning_of_day - 330.minutes
+        #from_date = @from_date.beginning_of_day - 330.minutes
+        @to_date = @from_date.end_of_day - 330.minutes
+        if params.has_key?(:to_date)
+           @to_date =  Date.strptime(params[:to_date], "%Y-%m-%d")
+           @to_date = @to_date.end_of_day - 330.minutes
+
+        end
+
+        product_list_id = ProductList.where(extproductcode: @fitness_prods).pluck(:id)
+        #order_list =
+
+        sold_product_list ||= []
+
+        sold_product_list = OrderLine.where('order_lines.orderdate >= ? and order_lines.orderdate <= ?', @from_date, @to_date)
+        .where(product_list_id: product_list_id).joins(:order_master)
+        .where('ORDER_MASTERS.ORDER_STATUS_MASTER_ID > 10002')#.limit(10)
+          #.uniq.pluck(:orderid)
+
+          @order_lines_csv ||= []
+               sold_product_list.each do |o|
+                 @order_lines_csv << {:order_no => o.order_master.external_order_no,
+               :ref_no => o.orderid, :order_date =>  (o.order_master.orderdate + 330.minutes).strftime('%d-%b-%Y'),
+               :customer => o.order_master.customer.first_name + " " + o.order_master.customer.last_name,
+               :phone => o.order_master.mobile + " / " + o.order_master.customer_address.telephone1,
+               :city => o.order_master.customer_address.city + " " + o.order_master.customer_address.pincode,
+               :state => o.order_master.customer_address.state,
+               :product => o.product_variant.name,
+               :total => o.subtotal}
+             end
+
+        @order_lines = sold_product_list #.order("orderdate")
+
+        #this is for date on the view
+        @from_date = (@from_date + 330.minutes).strftime("%Y-%m-%d")
+        @to_date = (@to_date + 330.minutes).strftime("%Y-%m-%d")
+
+          respond_to do |format|
+            csv_file_name = "fitness_products_sold_#{@from_date}_#{@to_date}.csv"
+              format.html
+              format.csv do
+                headers['Content-Disposition'] = "attachment; filename=\"#{csv_file_name}\""
+                headers['Content-Type'] ||= 'text/csv'
+              end
+          end
+
+        end
+
+  end
 
 
   private

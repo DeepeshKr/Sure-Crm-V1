@@ -1,0 +1,60 @@
+<% if @order_lines.present? %>
+<table class="table table-hover table-bordered">
+  <thead>
+  <tr>
+    <th>Ref No</th>
+    <th>Order date</th>
+    <th>Customer</th>
+    <th>Phone</th>
+    <th>Email Id</th>
+    <th>Address</th>
+    <th>City</th>
+    <th>State</th>
+    <th>Product</th>
+    <th>Total</th>
+  </tr>
+  </thead>
+
+  <tbody>
+  <% @sno = 1 %> <% totalnos = 0 %> <% totalvalue = 0 %>
+    <% @order_masters.each do |order_master| %>
+    <tr>
+    <td><%= order_master.external_order_no %> (<small>Ref No: <%= order_master.id %></small>) </td>
+    <td> <%= (order_master.orderdate + 330.minutes).strftime('%d-%b-%Y') %> </td>
+    <td>
+      <%= order_master.customer.first_name if order_master.customer %>
+      <%= order_master.customer.last_name if order_master.customer %> </td>
+    <td>  <%= order_master.mobile %>
+      <%= order_master.customer_address.telephone1  if order_master.customer_address %> </td>
+      <td>  <%= order_master.customer.emailid if order_master.customer %>
+         </td>
+    <td>
+      <%= order_master.customer_address.address1  if order_master.customer_address %>
+      <%= order_master.customer_address.address2  if order_master.customer_address %>
+      <%= order_master.customer_address.address3  if order_master.customer_address %>
+      <%= order_master.customer_address.landmark  if order_master.customer_address %>
+    </td>
+    <td>
+      <%= order_master.customer_address.city  if order_master.customer_address %>
+      <%= order_master.customer_address.pincode  if order_master.customer_address %>
+    </td>
+    <td>
+      <%= order_master.customer_address.state  if order_master.customer_address %>
+    </td>
+    <td> </td>
+     <td> <%= order_master.subtotal %></td>
+
+
+      </tr>
+       <% @sno += 1 %>
+
+    <% end %>
+  </tbody>
+
+</table>
+<% else %>
+<div class="well well-sm">
+<h4> <%= @ordersearch %></h4>
+
+</div>
+<% end %>

@@ -882,9 +882,14 @@ end
             .where("TRUNC(for_date) <= ?", todaydate)
             .order("for_date DESC, start_hr DESC, start_min DESC")
              updates = "Updated at #{t} order for #{channel} without any relevant show name at Hour:#{nowhour}  Minutes:#{nowminute}"
+
+
             if campaign_playlist.count > 0
               @order_master.update(campaign_playlist_id: campaign_playlist.first.id)
               updates = "Updated at #{t} order for #{channel} with show #{campaign_playlist.name} at Hour:#{nowhour}  Minutes:#{nowminute}"
+
+              CampaignMissedLists.create(reason: "Current campaign found", order_id: @order_master.id, called_no: @order_master.calledno, customer_state: @order_master.customer_address.state, media_id: @order_master.media_id,
+              campaign_playlist_id: older_campaign_playlist.first.id)
             else
               #update for earlier date playlists
 
@@ -896,9 +901,18 @@ end
               if older_campaign_playlist.count > 0
                 @order_master.update(campaign_playlist_id: older_campaign_playlist.first.id)
                 updates = "Updated at #{t} order for #{channel} with show #{older_campaign_playlist.name} at Hour:#{nowhour}  Minutes:#{nowminute}"
+
+                CampaignMissedLists.create(reason: "Older campaign used", order_id: @order_master.id, called_no: @order_master.calledno, customer_state: @order_master.customer_address.state, media_id: @order_master.media_id,
+                campaign_playlist_id: older_campaign_playlist.first.id)
+
+              else
+                  CampaignMissedLists.create(reason: "Checked current and old no relevant campaign found", order_id: @order_master.id, called_no: @order_master.calledno, customer_state: @order_master.customer_address.state, media_id: @order_master.media_id)
               end
             end
+          else
+            CampaignMissedLists.create(reason: "Checked none relevant campaign found", order_id: @order_master.id, called_no: @order_master.calledno, customer_state: @order_master.customer_address.state, media_id: @order_master.media_id)
           end
+
           total_notes = @order_master.notes + updates
           @order_master.update(notes: total_notes)
     end

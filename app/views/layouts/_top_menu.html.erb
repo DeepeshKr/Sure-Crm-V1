@@ -179,6 +179,11 @@
 
                   <li><%= link_to "Campaign Stages", "/campaign_stages" %></li>
                   <% end %>
+                  <% if (current_user.employee_role.sortorder < 2) %>
+                  <li class="divider"></li>
+
+                      <li><%= link_to "Campaign Missed List", "/campaign_missed_lists" %></li>
+                  <% end %>
             </ul>
          </li>
          <% end %>
