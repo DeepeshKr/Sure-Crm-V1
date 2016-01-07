@@ -331,28 +331,28 @@ def add_products
    # promotion_id = params[:promotion_id]
     @valid_promo = Promotion.find(promotion_id)
     #check if promo id already added
-    flash[:success] = "You have added the offer #{@valid_promo.name} to the order"
+    free_product_list_id = @valid_promo.free_product_list_id
+    #flash[:success] = "You have added the offer #{@valid_promo.name} to the order"
     if @order_master.promotion_id.to_i != promotion_id.to_i
       #existingnotes = @order_master.notes || " " if @order_master.notes.present?
       existingnotes = " Promo added #{@valid_promo.name}"
       @order_master.update(notes: existingnotes, promotion_id: promotion_id)
-
-      flash[:success] = "You have added the offer #{@valid_promo.name} to the order"
-
-      if params[:free_product_list_id].present?
-        #check if order found in the order lines
-        if OrderLine.where(product_list_id: params[:free_product_list_id]).blank?
-          addproducts_to_order(@order_id, params[:free_product_list_id], 1)
-          flash[:success] = "You have added the offer #{@valid_promo.name} to the order"
-        else
-          flash[:success] = "You have previously added the offer #{@valid_promo.name} to the order"
-        end
-      end
-    else
-      flash[:success] = "You have already added the offer #{@valid_promo.name} to the order"
+    #else
+      #flash[:success] = "You have already added the offer #{@valid_promo.name} to the order"
     end
 
-     redirect_to payment_path(:order_id => @order_id)
+    if free_product_list_id.present?
+        #check if order found in the order lines
+      order_lines =  OrderLine.where(product_list_id: free_product_list_id, orderid: @order_id)
+        if order_lines.blank?
+          product_list = ProductList.find(free_product_list_id)
+          addproducts_to_order(@order_id, free_product_list_id, 1)
+          flash[:success] = "You have added the offer #{product_list.name} to the order"
+        else
+          flash[:error] = "You have previously added the offer #{@valid_promo.name} to the order"
+        end
+    end
+    redirect_to payment_path(:order_id => @order_id)
   end
 
   def payment
@@ -883,13 +883,12 @@ end
             .order("for_date DESC, start_hr DESC, start_min DESC")
              updates = "Updated at #{t} order for #{channel} without any relevant show name at Hour:#{nowhour}  Minutes:#{nowminute}"
 
-
             if campaign_playlist.count > 0
               @order_master.update(campaign_playlist_id: campaign_playlist.first.id)
-              updates = "Updated at #{t} order for #{channel} with show #{campaign_playlist.name} at Hour:#{nowhour}  Minutes:#{nowminute}"
+              updates = "Updated at #{t} order for #{channel} with show #{campaign_playlist.name}  (id #{campaign_playlist.first.id}) at Hour:#{nowhour}  Minutes:#{nowminute}"
 
-              CampaignMissedLists.create(reason: "Current campaign found", order_id: @order_master.id, called_no: @order_master.calledno, customer_state: @order_master.customer_address.state, media_id: @order_master.media_id,
-              campaign_playlist_id: older_campaign_playlist.first.id)
+              CampaignMissedList.create(reason: "Current campaign found", order_id: @order_master.id, called_no: @order_master.calledno, customer_state: @order_master.customer_address.state, media_id: @order_master.media_id,
+              campaign_playlist_id: campaign_playlist.first.id)
             else
               #update for earlier date playlists
 
@@ -900,17 +899,18 @@ end
               .order("for_date DESC, start_hr DESC, start_min DESC")
               if older_campaign_playlist.count > 0
                 @order_master.update(campaign_playlist_id: older_campaign_playlist.first.id)
-                updates = "Updated at #{t} order for #{channel} with show #{older_campaign_playlist.name} at Hour:#{nowhour}  Minutes:#{nowminute}"
+                updates = "Updated at #{t} order for #{channel} with show #{older_campaign_playlist.name}  (id #{older_campaign_playlist.id} ) at Hour:#{nowhour}  Minutes:#{nowminute}"
 
-                CampaignMissedLists.create(reason: "Older campaign used", order_id: @order_master.id, called_no: @order_master.calledno, customer_state: @order_master.customer_address.state, media_id: @order_master.media_id,
+                CampaignMissedList.create(reason: "Older campaign used", order_id: @order_master.id, called_no: @order_master.calledno, customer_state: @order_master.customer_address.state, media_id: @order_master.media_id,
                 campaign_playlist_id: older_campaign_playlist.first.id)
-
               else
-                  CampaignMissedLists.create(reason: "Checked current and old no relevant campaign found", order_id: @order_master.id, called_no: @order_master.calledno, customer_state: @order_master.customer_address.state, media_id: @order_master.media_id)
+                  CampaignMissedList.create(reason: "Checked current and old no relevant campaign found", order_id: @order_master.id, called_no: @order_master.calledno, customer_state: @order_master.customer_address.state, media_id: @order_master.media_id)
+
               end
             end
+
           else
-            CampaignMissedLists.create(reason: "Checked none relevant campaign found", order_id: @order_master.id, called_no: @order_master.calledno, customer_state: @order_master.customer_address.state, media_id: @order_master.media_id)
+            CampaignMissedList.create(reason: "Checked no relevant campaign found", order_id: @order_master.id, called_no: @order_master.calledno, customer_state: @order_master.customer_address.state, media_id: @order_master.media_id)
           end
 
           total_notes = @order_master.notes + updates

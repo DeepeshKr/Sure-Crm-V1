@@ -1,14 +1,14 @@
 class CampaignMissedList < ActiveRecord::Base
 
-  after_save :calculate_time_diff
+  after_create :calculate_time_diff
   private
   def calculate_time_diff
     if self.campaign_playlist_id.present?
       campaign_playlist = CampaignPlaylist.find(self.campaign_playlist_id)
 
-      campaign_date_time = corrected_date_time Date.strptime(campaign_playlist.for_date, "%Y-%m-%d"), campaign_playlist.start_hr, campaign_playlist.start_min
+      campaign_date_time = corrected_date_time campaign_playlist.for_date.strftime("%Y-%m-%d"), campaign_playlist.start_hr, campaign_playlist.start_min
 
-      curent_date_time = Datetime.now - 300.minutes
+      curent_date_time = t = (330.minutes).from_now #Datetime.now - 300.minutes
 
       date_diff = curent_date_time - DateTime.strptime(campaign_date_time, "%Y-%m-%d %H:%M:%S")
 
@@ -24,7 +24,7 @@ class CampaignMissedList < ActiveRecord::Base
   def corrected_date_time(for_date, for_hour, for_minute)
     for_hour = for_hour.to_s.rjust(2, '0')
     for_minute = for_minute.to_s.rjust(2, '0')
-    for_date = for_date.strftime("%Y-%m-%d")
+    #for_date = for_date.strftime("%Y-%m-%d")
     #string_date = for_date + " " + for_hour + ":" + for_minute + ":00"
     base_date = DateTime.strptime("#{for_date} #{for_hour}:#{for_minute}:00 + 5:30", "%Y-%m-%d %H:%M:%S")
     #return return_date = DateTime.strptime(string_date, "%Y-%m-%d %H:%M:%S")
