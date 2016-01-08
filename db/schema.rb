@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160105181259) do
+ActiveRecord::Schema.define(version: 20160108081047) do
 
   create_table "address_types", force: :cascade do |t|
     t.string   "name"
@@ -100,6 +100,8 @@ ActiveRecord::Schema.define(version: 20160105181259) do
     t.integer  "total_revenue",     limit: 16, precision: 38
     t.integer  "playlist_group_id", limit: 16, precision: 38
   end
+
+  add_index "campaign_playlists", ["for_date"], name: "i_campaign_playlists_for_date"
 
   create_table "campaign_stages", force: :cascade do |t|
     t.string   "name"

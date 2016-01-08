@@ -35,7 +35,8 @@
     <% @campaign_missed_lists.each do |campaign_missed_list| %>
       <tr>
         <td><%= campaign_missed_list.reason %></td>
-        <td><%= campaign_missed_list.time_diff %></td>
+        <td>Secs <%= (campaign_missed_list.time_diff.to_i / 1000) || 0 if campaign_missed_list.time_diff.present? %> ago <br>
+        Mins <%= ((campaign_missed_list.time_diff.to_i / 1000)/60 ) || 0 if campaign_missed_list.time_diff.present? %> ago </td>
         <td><%= campaign_missed_list.order_time %></td>
         <td><%= campaign_missed_list.play_list_time %></td>
         <td><%= campaign_missed_list.order_id %></td>

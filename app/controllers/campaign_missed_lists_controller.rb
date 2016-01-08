@@ -4,6 +4,7 @@ class CampaignMissedListsController < ApplicationController
   # GET /campaign_missed_lists
   # GET /campaign_missed_lists.json
   def index
+    delete_irrelevant
     @campaign_missed_lists = CampaignMissedList.all.order("created_at DESC").paginate(:page => params[:page])
   end
 
@@ -62,6 +63,20 @@ class CampaignMissedListsController < ApplicationController
   end
 
   private
+    def delete_irrelevant
+      campaign_missed_lists = CampaignMissedList.where("campaign_playlist_id is NULL")
+      campaign_missed_lists.each do |camp_miss|
+        camp_miss.destroy
+      end
+    end
+    def humanize secs
+      [[60, :seconds], [60, :minutes], [24, :hours], [1000, :days]].map{ |count, name|
+        if secs > 0
+          secs, n = secs.divmod(count)
+          "#{n.to_i} #{name}"
+        end
+      }.compact.reverse.join(' ')
+    end
     # Use callbacks to share common setup or constraints between actions.
     def set_campaign_missed_list
       @campaign_missed_list = CampaignMissedList.find(params[:id])

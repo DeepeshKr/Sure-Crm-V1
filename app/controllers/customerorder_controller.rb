@@ -894,15 +894,15 @@ end
 
               #this is designed for the playlist to go back as as required to assign this order for
               # a particular date
-              older_campaign_playlist = CampaignPlaylist.where("TRUNC(for_date) <= ? AND TRUNC(for_date) >= ?", todaydate, max_go_back_date)
+              older_campaign_playlist = CampaignPlaylist.where("TRUNC(for_date) < ? AND TRUNC(for_date) >= ?", todaydate, max_go_back_date)
               .where(list_status_id: 10000).where(productvariantid: product_variant_id)
               .order("for_date DESC, start_hr DESC, start_min DESC")
               if older_campaign_playlist.count > 0
                 @order_master.update(campaign_playlist_id: older_campaign_playlist.first.id)
-                updates = "Updated at #{t} order for #{channel} with show #{older_campaign_playlist.name}  (id #{older_campaign_playlist.id} ) at Hour:#{nowhour}  Minutes:#{nowminute}"
+                updates = "Updated at #{t} order for #{channel} with show #{older_campaign_playlist.name}  (id #{older_campaign_playlist.first.id} ) at Hour:#{nowhour}  Minutes:#{nowminute}"
 
                 CampaignMissedList.create(reason: "Older campaign used", order_id: @order_master.id, called_no: @order_master.calledno, customer_state: @order_master.customer_address.state, media_id: @order_master.media_id,
-                campaign_playlist_id: older_campaign_playlist.first.id)
+                campaign_playlist_id: older_campaign_playlist.first.id, description: "Query range used dates between #{todaydate} and #{max_go_back_date}")
               else
                   CampaignMissedList.create(reason: "Checked current and old no relevant campaign found", order_id: @order_master.id, called_no: @order_master.calledno, customer_state: @order_master.customer_address.state, media_id: @order_master.media_id)
 
