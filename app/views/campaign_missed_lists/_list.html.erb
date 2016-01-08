@@ -1,0 +1,52 @@
+<div class="row">
+  <div class="col-xs-4">
+    <h3> <%= list_name %></h3>
+  </div>
+  <div class="col-xs-6">
+    <br>
+    <div class="digg_pagination">
+        <% if @showall != "true" %>
+        <%= will_paginate campaign_missed_lists, :container => false %>
+        <% end %>
+    </div>
+    <br>
+  </div>
+</div>
+
+
+<table class="table table-hover table-striped table-bordered">
+  <thead>
+    <tr>
+      <th>Reason</th>
+      <th>Diff</th>
+      <th>Time</th>
+      <th>Order</th>
+      <th>Campaign <br>
+        Playlist</th>
+      <th>Called No</th>
+      <th>State</th>
+      <th>Media</th>
+      <th colspan="2"></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% campaign_missed_lists.each do |campaign_missed_list| %>
+      <tr>
+        <td><%= campaign_missed_list.reason %></td>
+        <td>
+          <%= (campaign_missed_list.time_diff.to_i / 60 ) || 0 if campaign_missed_list.time_diff.present? %> Mins ago
+       </td>
+        <td>Order: <%= campaign_missed_list.order_time if campaign_missed_list.order_time.present? %> <br>
+          Played: <%= campaign_missed_list.play_list_time if campaign_missed_list.play_list_time.present? %></td>
+        <td><%= campaign_missed_list.order_id %></td>
+        <td><%= campaign_missed_list.campaign_id %> <br>
+          <%= campaign_missed_list.campaign_playlist_id %></td>
+        <td><%= campaign_missed_list.called_no %></td>
+        <td><%= campaign_missed_list.customer_state %></td>
+        <td><%= campaign_missed_list.media_id %></td>
+        <td><%= link_to 'Show', campaign_missed_list %></td>
+        <td><%= link_to 'Destroy', campaign_missed_list, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

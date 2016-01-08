@@ -1,55 +1,8 @@
 <p id="notice"><%= notice %></p>
-<div class="row">
-  <div class="col-xs-4">
-    <h3>Campaign Missed</h3>
-  </div>
-  <div class="col-xs-6">
-    <br>
-    <div class="digg_pagination">
-        <% if @showall != "true" %>
-        <%= will_paginate @campaign_missed_lists, :container => false %>
-        <% end %>
-    </div>
-    <br>
-  </div>
-</div>
 
-
-<table class="table table-hover table-striped table-bordered">
-  <thead>
-    <tr>
-      <th>Reason</th>
-      <th>Diff</th>
-      <th>Order Time</th>
-      <th>Playlist Time</th>
-      <th>Order</th>
-      <th>Campaign</th>
-      <th>Playlist</th>
-      <th>Called No</th>
-      <th>State</th>
-      <th>Media</th>
-      <th colspan="2"></th>
-    </tr>
-  </thead>
-  <tbody>
-    <% @campaign_missed_lists.each do |campaign_missed_list| %>
-      <tr>
-        <td><%= campaign_missed_list.reason %></td>
-        <td>Secs <%= (campaign_missed_list.time_diff.to_i / 1000) || 0 if campaign_missed_list.time_diff.present? %> ago <br>
-        Mins <%= ((campaign_missed_list.time_diff.to_i / 1000)/60 ) || 0 if campaign_missed_list.time_diff.present? %> ago </td>
-        <td><%= campaign_missed_list.order_time %></td>
-        <td><%= campaign_missed_list.play_list_time %></td>
-        <td><%= campaign_missed_list.order_id %></td>
-        <td><%= campaign_missed_list.campaign_id %></td>
-        <td><%= campaign_missed_list.campaign_playlist_id %></td>
-        <td><%= campaign_missed_list.called_no %></td>
-        <td><%= campaign_missed_list.customer_state %></td>
-        <td><%= campaign_missed_list.media_id %></td>
-        <td><%= link_to 'Show', campaign_missed_list %></td>
-        <td><%= link_to 'Destroy', campaign_missed_list, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
-
+    <%= render partial: 'list', :locals => {:campaign_missed_lists => @campaign_missed_playlists, :list_name => "Missed Orders"}  %>
+<br>
+<%= render partial: 'list', :locals => {:campaign_missed_lists => @campaign_missed_lists, :list_name => "Aligned Orders"}  %>
+<br>
+<%= render partial: 'list', :locals => {:campaign_missed_lists => @campaign_missed_rev, :list_name => "Wrongly Aligned Orders"}  %>
 <br>

@@ -5,7 +5,11 @@ class CampaignMissedListsController < ApplicationController
   # GET /campaign_missed_lists.json
   def index
     delete_irrelevant
-    @campaign_missed_lists = CampaignMissedList.all.order("created_at DESC").paginate(:page => params[:page])
+    @campaign_missed_playlists = CampaignMissedList.where("campaign_playlist_id is NULL").order("created_at DESC").paginate(:page => params[:page])
+
+    @campaign_missed_lists = CampaignMissedList.where("campaign_playlist_id is not NULL").order("created_at DESC").paginate(:page => params[:page])
+
+    @campaign_missed_rev = CampaignMissedList.where("campaign_playlist_id is not NULL AND time_diff < 0").order("created_at DESC").paginate(:page => params[:page])
   end
 
   # GET /campaign_missed_lists/1
@@ -64,10 +68,10 @@ class CampaignMissedListsController < ApplicationController
 
   private
     def delete_irrelevant
-      campaign_missed_lists = CampaignMissedList.where("campaign_playlist_id is NULL")
-      campaign_missed_lists.each do |camp_miss|
-        camp_miss.destroy
-      end
+      # campaign_missed_lists = CampaignMissedList.where("campaign_playlist_id is NULL") #.limit(100)
+      # campaign_missed_lists.each do |camp_miss|
+      #   camp_miss.destroy
+      # end
     end
     def humanize secs
       [[60, :seconds], [60, :minutes], [24, :hours], [1000, :days]].map{ |count, name|
