@@ -297,8 +297,9 @@ class SalesReportController < ApplicationController
         # CSV.generate_line([c[:sno], c[:mobile], c[:employee], c[:order_date], c[:customer], c[:phone], c[:product], c[:total], c[:address], c[:city], c[:total]]).html_safe.strip
 
 
-         @from_date = (@from_date).strftime("%Y-%m-%d")
-         @to_date = (@to_date).strftime("%Y-%m-%d")
+        @from_date = (@from_date + 330.minutes).strftime("%Y-%m-%d")
+        @to_date = (@to_date + 330.minutes).strftime("%Y-%m-%d")
+
        #
        @employeeorderlist = employeeunorderlist
         respond_to do |format|
@@ -375,8 +376,9 @@ class SalesReportController < ApplicationController
         # CSV.generate_line([c[:sno], c[:mobile], c[:employee], c[:order_date], c[:customer], c[:phone], c[:product], c[:total], c[:address], c[:city], c[:total]]).html_safe.strip
 
 
-         @from_date = (@from_date).strftime("%Y-%m-%d")
-         @to_date = (@to_date).strftime("%Y-%m-%d")
+        @from_date = (@from_date + 330.minutes).strftime("%Y-%m-%d")
+        @to_date = (@to_date + 330.minutes).strftime("%Y-%m-%d")
+
        #
        @employeeorderlist = employeeunorderlist
         respond_to do |format|
@@ -461,8 +463,9 @@ class SalesReportController < ApplicationController
         # CSV.generate_line([c[:sno], c[:mobile], c[:employee], c[:order_date], c[:customer], c[:phone], c[:product], c[:total], c[:address], c[:city], c[:total]]).html_safe.strip
 
 
-         @from_date = (@from_date).strftime("%Y-%m-%d")
-         @to_date = (@to_date).strftime("%Y-%m-%d")
+        @from_date = (@from_date + 330.minutes).strftime("%Y-%m-%d")
+        @to_date = (@to_date + 330.minutes).strftime("%Y-%m-%d")
+
        #
        @employeeorderlist = employeeunorderlist
        if @employeeorderlist.present?
@@ -1239,10 +1242,13 @@ class SalesReportController < ApplicationController
 
           @order_lines_csv ||= []
                sold_product_list.each do |o|
+                 email_id = o.order_master.customer.emailid || nil if o.order_master.customer.emailid.present?
+
                  @order_lines_csv << {:order_no => o.order_master.external_order_no,
                :ref_no => o.orderid, :order_date =>  (o.order_master.orderdate + 330.minutes).strftime('%d-%b-%Y'),
                :customer => o.order_master.customer.first_name + " " + o.order_master.customer.last_name,
                :phone => o.order_master.mobile + " / " + o.order_master.customer_address.telephone1,
+               :email_id => o.order_master.customer.emailid,
                :city => o.order_master.customer_address.city + " " + o.order_master.customer_address.pincode,
                :state => o.order_master.customer_address.state,
                :product => o.product_variant.name,
