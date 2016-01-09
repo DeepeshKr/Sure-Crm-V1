@@ -158,12 +158,30 @@ post "send_demo_message" => 'message_on_orders#send_demo_message'
   get 'pincode_orders' => 'sales_report#pincode_orders'
   get 'sales_report/daily'
   get 'daily_report' => 'sales_report#daily'
+  
+  ################3
+  # redundant reports
+  #############
+  get 'sales_report/channel_sales'
+  get 'channel_sales' => 'sales_report#channel_sales'
   get 'sales_report/channel'
   get 'channel_report' => 'sales_report#channel'
   get 'channel_sales_summary' => 'sales_report#channel_sales_summary'
   get 'sales_report/channel_sales_summary'
-  get 'sales_report/channel_sales'
-  get 'channel_sales' => 'sales_report#channel_sales'
+  ################3
+  # redundant reports
+  #############
+
+  get 'sales_report/channel_report'
+  get 'channel_report' => 'sales_report#channel_report'
+  get 'channel_sales_summary' => 'sales_report#channel_sales_summary'
+  get 'sales_report/channel_sales_summary'
+
+  get 'sales_report/cdm_report'
+  get 'cdm_report' => 'sales_report#cdm_report'
+  get 'cdm_sales_summary' => 'sales_report#cdm_sales_summary'
+  get 'sales_report/cdm_sales_summary'
+
 
   get 'sales_report/sales_incentives'
   get 'sales_incentives' => 'sales_report#sales_incentives'

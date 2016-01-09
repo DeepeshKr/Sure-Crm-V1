@@ -47,6 +47,7 @@ class DistributorStockLedgersController < ApplicationController
 
   # GET /distributor_stock_ledgers/new
   def new
+    todaydate = ((330.minutes).from_now.to_date).strftime("%Y-%m-%d")
     @all_product_list = DistributorProductList.all.pluck(:product_list_id)
     @product_list = ProductList.joins(:product_variant).where("product_variants.activeid = 10000").where('product_lists.id IN (?)', @all_product_list).order('product_lists.name') #.limit(10)
     if params.has_key?(:corporate_id)
@@ -57,7 +58,7 @@ class DistributorStockLedgersController < ApplicationController
     @corporate = Corporate.find(@corporate_id)
       #@product_master = ProductMaster.where(productactivecodeid: 10000) #.limit(10).order('name')
     @distributor_stock_ledger_type = DistributorStockLedgerType.order('sort_order')
-    @distributor_stock_ledger = DistributorStockLedger.new(corporate_id: @corporate_id)
+    @distributor_stock_ledger = DistributorStockLedger.new(corporate_id: @corporate_id, ledger_date: todaydate)
   end
 
   # GET /distributor_stock_ledgers/1/edit

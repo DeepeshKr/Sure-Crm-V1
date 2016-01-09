@@ -1,15 +1,22 @@
 <div class="row">
 <div class="col-xs-6">
-<h3>Corporates</h3>
+<h3>Distributors</h3>
 </div>
 <div class="col-xs-6">
 <%= render 'search' %>
 </div>
 </div>
 <br>
-<%= render 'list_of_corporates' %>
+<%= link_to 'New Corporate', new_corporate_path, class:"btn btn-primary" %>
 <br>
-<%= render 'all_others' %>
+<%= render partial: 'list_of_corporates', :locals => {:corporates => @supercorporates, :list_name => "Super Distributors"}  %>
+<hr>
+<%= render partial: 'list_of_corporates', :locals => {:corporates => @transferordercorporates, :list_name => "Transfer Order Distributors"}  %>
+<br>
+<%= render partial: 'list_of_corporates', :locals => {:corporates => @regularcorporates, :list_name => "Other Distributors"}  %>
+
+<br>
+
 
 
 <%= link_to 'New Corporate', new_corporate_path, class:"btn btn-primary" %>

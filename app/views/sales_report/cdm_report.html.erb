@@ -1,6 +1,5 @@
-<% title "Channel Sales Summary #{@from_date} to #{@to_date}" %>
-
-<%= form_tag  url_for(:controller => 'sales_report', :action => 'channel_sales_summary'), method: "get" do  %>
+<% title "Channel Sales Details for #{@media_name} #{@from_date} to #{@to_date}" %>
+   <%= form_tag  url_for(:controller => 'sales_report', :action => 'channel_sales_summary'), method: "get" do  %>
  <div class="row">
 	 <div class="col-xs-2">
 
@@ -30,38 +29,39 @@
 <% end %>
 
 <% if @employeeorderlist.present? %>
-<% total_value, total_piece = 0, 0 %>
+<% @sno, total_value, total_piece = 0, 0, 0 %>
 <table class="table table-hover table-bordered">
   <thead>
     <tr>
-     <th>S No</th>
-     <th>From</th>
-     <th>Upto</th>
-     <th>Channel</th>
-     <th>Nos</th>
-     <th>Value</th>
-     <th> More </th>
-     </tr>
+    <th>S No</th>
+    <th>Date</th>
+    <th>Media</th>
+    <th>City</th>
+    <th>Products</th>
+    <th>Value</th>
+    </tr>
   </thead>
 <tbody>
    <% @employeeorderlist.each do |c| %>
    <tr>
-     <td><%= @sno %></td>
-     <td><%= c[:from_date] %></td>
-     <td><%= c[:to_date] %></td>
-     <td><%= c[:channel] %></td>
-     <td class="text-right"><%= c[:total_nos] %> </td>
-     <td class="text-right"><%= c[:total_value] %> </td>
-     <td>
-         <%= link_to 'More', channel_sales_path(from_date: @from_date, to_date: @to_date , bdm_id: @bdm_id, media_id: c[:media_id]), :target => "_blank", class: "btn btn-info btn-xs" %>
-     </td>
-   </tr>
-  <% @sno += 1 %>
+   <td><% @sno += 1 %> <%= @sno %> </td>
+   <td><%= c[:orderdate] %></td>
+  <td> <%= c[:channel] %></td>
+  <td> <%= c[:city] %></td>
+  <td> <%= c[:products] %></td>
+  <td class="text-right"><%= c[:total] %> <% total_value += c[:total] %></td>
+  </tr>
+
  <% end %>
-</tbody>
-</table>
+  </tbody>
+  <tfoot>
+    <th colspan="4">Total</th>
+    <th><%= @sno %></th>
+    <th class="text-right"><%= total_value %></th>
+  </tfoot>
+  </table>
   <div class="well well-sm">
-    <%= link_to 'Download CSV file', channel_sales_summary_path(from_date: @or_for_date, to_date: @to_date , bdm_id: @bdm_id, format: :csv), class: "btn btn-info btn-sm" %>
+    <%= link_to 'Download CSV file', cdm_report_path(from_date: @or_for_date, to_date: @to_date , bdm_id: @bdm_id, media_id: @media_id, format: :csv), class: "btn btn-info btn-sm" %>
   </div>
 
   <% end %>

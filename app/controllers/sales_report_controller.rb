@@ -67,7 +67,7 @@ class SalesReportController < ApplicationController
 
   end
 
-  def channel_sales_summary
+  def cdm_sales_summary
     @media_manager = Employee.where(:employee_role_id => 10121).order("first_name")
      @sno = 1
 
@@ -89,9 +89,9 @@ class SalesReportController < ApplicationController
       @to_date = @to_date.end_of_day - 330.minutes
 
      @bdm_id = params[:bdm_id]
-
+     #  # Unclaimed order 10006
       order_masters = OrderMaster.where('orderdate >= ? AND orderdate <= ?', @from_date, @to_date)
-      .where('ORDER_STATUS_MASTER_ID > 10002').joins(:medium).where("media.employee_id = ? ", @bdm_id).distinct.pluck(:media_id)
+      .where('ORDER_STATUS_MASTER_ID > 10002').where('ORDER_STATUS_MASTER_ID <> 10006').joins(:medium).where("media.employee_id = ? ", @bdm_id).distinct.pluck(:media_id)
       #.select("date(orderdate) as ordered_date, sum(subtotal) as total_value")
       name = (Employee.find(@bdm_id))
       amount = 0.0
@@ -145,7 +145,7 @@ class SalesReportController < ApplicationController
     end
   end
 
-  def channel_sales
+  def cdm_report
     @media_manager = Employee.where(:employee_role_id => 10121).order("first_name")
      @sno = 1
 
@@ -179,7 +179,175 @@ class SalesReportController < ApplicationController
          reverse_vat_rate = TaxRate.find(10001)
 
       order_masters = OrderMaster.where('orderdate >= ? AND orderdate <= ?', @from_date, @to_date)
-      .where('ORDER_STATUS_MASTER_ID > 10002').where(media_id: @media_id)
+      .where('ORDER_STATUS_MASTER_ID > 10002').where('ORDER_STATUS_MASTER_ID <> 10006').where(media_id: @media_id)
+
+      name = (Employee.find(@bdm_id))
+      amount = 0.0
+      #@orderdate = "Searched for #{for_date} found #{order_masters.count} agents!"
+      employeeunorderlist ||= []
+      @num = 1
+      amount = 0
+      order_masters.each do |o|
+        e = o.employee_id
+
+
+        if reverse_vat_rate.present?
+          rate_charge = reverse_vat_rate.reverse_rate ||= 0.8888889
+          amount = o.subtotal * rate_charge
+          amount = amount.round(2)
+        end
+
+        products = ""
+        #cats.each do |cat| cat.name end
+        if o.order_line.present?
+          #products = o.order_line.each(&:description)
+          o.order_line.each do |ord| products << ord.description end
+        end
+        # orderlist = OrderMaster.where('ORDER_STATUS_MASTER_ID > 10002')
+        # .where('orderdate >= ? AND orderdate <= ?', @from_date, @to_date).where(employee_id: e)
+        # timetaken = orderlist.sum(:codcharges)
+        # totalorders = orderlist.sum(:total)
+        # noorders = orderlist.count()
+
+          employeeunorderlist << {:total => amount,
+            :sno => @num,
+            :orderdate =>  (o.orderdate + 330.minutes).strftime("%Y-%m-%d"),
+            :city => o.city,
+            :channel => o.medium.name,
+            :products => products}
+            @num += 1
+          end
+
+      #this is for date on the view
+        @from_date = (@from_date + 330.minutes).strftime("%Y-%m-%d")
+        @to_date = (@to_date + 330.minutes).strftime("%Y-%m-%d")
+        @employeeorderlist = employeeunorderlist.sort_by{|c| c[:total]}.reverse
+
+        respond_to do |format|
+        csv_file_name = "#{name}_#{@media_name}_sales_#{@from_date}_#{@to_date}.csv"
+          format.html
+          format.csv do
+            headers['Content-Disposition'] = "attachment; filename=\"#{csv_file_name}\""
+            headers['Content-Type'] ||= 'text/csv'
+          end
+        end
+
+    end
+  end
+
+  def channel_sales_summary
+    @media_manager = Employee.where(:employee_role_id => 10121).order("first_name")
+     @sno = 1
+
+      #@order_master.orderpaymentmode_id == 10000 #paid over CC
+      #@order_master.orderpaymentmode_id == 10001 #paid over COD
+    if params[:from_date].present?
+      #@summary ||= []
+      @or_for_date = params[:from_date]
+      for_date =  Date.strptime(params[:from_date], "%Y-%m-%d")
+
+      @from_date = for_date.beginning_of_day - 330.minutes
+      @to_date = for_date.end_of_day - 330.minutes
+      #@to_date = @from_date + 1.day
+
+      if params.has_key?(:to_date)
+        @to_date =  Date.strptime(params[:to_date], "%Y-%m-%d")
+      end
+
+      @to_date = @to_date.end_of_day - 330.minutes
+
+     @bdm_id = params[:bdm_id]
+     #  # Unclaimed order 10006
+      order_masters = OrderMaster.where('orderdate >= ? AND orderdate <= ?', @from_date, @to_date)
+      .where('ORDER_STATUS_MASTER_ID > 10002').where('ORDER_STATUS_MASTER_ID <> 10006').joins(:medium).where("media.employee_id = ? ", @bdm_id).distinct.pluck(:media_id)
+      #.select("date(orderdate) as ordered_date, sum(subtotal) as total_value")
+      name = (Employee.find(@bdm_id))
+      amount = 0.0
+      #@orderdate = "Searched for #{for_date} found #{order_masters.count} agents!"
+      employeeunorderlist ||= []
+
+      order_masters.each do |ord|
+        @num = 0
+        amount = 0
+        # orderlist = OrderMaster.where('ORDER_STATUS_MASTER_ID > 10002')
+        # .where('orderdate >= ? AND orderdate <= ?', @from_date, @to_date).where(employee_id: e)
+        # timetaken = orderlist.sum(:codcharges)
+         reverse_vat_rate = TaxRate.find(10001)
+         order_master_calculations = OrderMaster.where('orderdate >= ? AND orderdate <= ?', @from_date, @to_date)
+         .where('ORDER_STATUS_MASTER_ID > 10002').where(:media_id => ord)
+         order_master_calculations.each do |orc|
+           if reverse_vat_rate.present?
+             rate_charge = reverse_vat_rate.reverse_rate ||= 0.8888889
+             amount += orc.subtotal * rate_charge
+
+           end
+           @num += 1
+        end
+
+        amount = amount.round(2)
+        media_name = Medium.find(ord).name
+          employeeunorderlist << {
+            :from_date => (@from_date + 330.minutes).strftime("%Y-%m-%d"),
+            :to_date => (@to_date + 330.minutes).strftime("%Y-%m-%d"),
+            :channel => media_name,
+            :media_id => ord,
+            :total_nos => @num,
+            :total_value => amount}
+
+          end
+
+      #this is for date on the view
+        @from_date = (@from_date + 330.minutes).strftime("%Y-%m-%d")
+        @to_date = (@to_date + 330.minutes).strftime("%Y-%m-%d")
+        @employeeorderlist = employeeunorderlist.sort_by{|c| c[:total]}.reverse
+
+        respond_to do |format|
+        csv_file_name = "#{name}_sales_#{@from_date}_#{@to_date}.csv"
+          format.html
+          format.csv do
+            headers['Content-Disposition'] = "attachment; filename=\"#{csv_file_name}\""
+            headers['Content-Type'] ||= 'text/csv'
+          end
+        end
+
+    end
+  end
+
+  def channel_report
+    @media_manager = Employee.where(:employee_role_id => 10121).order("first_name")
+     @sno = 1
+
+      #@order_master.orderpaymentmode_id == 10000 #paid over CC
+      #@order_master.orderpaymentmode_id == 10001 #paid over COD
+    if params[:from_date].present?
+      #@summary ||= []
+      @or_for_date = params[:from_date]
+      for_date =  Date.strptime(params[:from_date], "%Y-%m-%d")
+
+      @from_date = for_date.beginning_of_day - 330.minutes
+      @to_date = for_date.end_of_day - 330.minutes
+      #@to_date = @from_date + 1.day
+
+      if params.has_key?(:to_date)
+        @to_date =  Date.strptime(params[:to_date], "%Y-%m-%d")
+      end
+
+      @to_date = @to_date.end_of_day - 330.minutes
+
+     @bdm_id = params[:bdm_id]
+     @media_id = params[:media_id] || nil if params.has_key?(:media_id)
+     if @media_id.blank?
+       return
+     end
+     if @media_id == nil && @from_date == nil && @to_date == nil
+       return
+     end
+
+       @media_name = Medium.find(@media_id).name
+         reverse_vat_rate = TaxRate.find(10001)
+
+      order_masters = OrderMaster.where('orderdate >= ? AND orderdate <= ?', @from_date, @to_date)
+      .where('ORDER_STATUS_MASTER_ID > 10002').where('ORDER_STATUS_MASTER_ID <> 10006').where(media_id: @media_id)
 
       name = (Employee.find(@bdm_id))
       amount = 0.0

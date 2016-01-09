@@ -30,7 +30,7 @@ end
 
 	#after_update :update_product_details(self.id)
 private
-def update_product_details_for_id(ledger_id)
+	def update_product_details_for_id(ledger_id)
 		 distributor_stock_ledger = DistributorStockLedger.find(ledger_id)
 		 #10001	Add Stock to Distributor
 		 #10002	Remove Stock from Distributor
@@ -92,10 +92,11 @@ def update_product_details_for_id(ledger_id)
     end
 
     def add_corporate_mis_balance(corporate_id, mis_value)
-
+			 fin_value = 0.0
        corporate = Corporate.find(corporate_id)
-       fin_value = corporate.rupee_balance.to_f || 0.0 if corporate.rupee_balance.present?
+       fin_value = corporate.rupee_balance.to_f if corporate.rupee_balance.present?
        #flash[:notice] = "Corporate MIS Balance #{corporate.rupee_balance} updating to #{fin_value}"
+			 mis_value = mis_value ||= 0 if mis_value.present?
 			 fin_value += mis_value
 
 			corporate.update_attribute(:rupee_balance, fin_value)
