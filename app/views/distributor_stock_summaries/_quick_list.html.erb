@@ -2,11 +2,9 @@
   <thead>
     <tr>
       <th>Product</th>
-      <th>Stock balance</th>
       <th>Product List Id*</th>
-      <th>Quantity</th>
+      <th>Stock balance</th>
       <th>Date</th>
-
     </tr>
   </thead>
 
@@ -16,8 +14,7 @@
         <td><%= distributor_stock_summary.product_list.name if distributor_stock_summary.product_list %></td>
         <td><%= distributor_stock_summary.product_list_id %></td>
         <td><%= distributor_stock_summary.stock_qty %></td>
-        <td><%= distributor_stock_summary.summary_date.strftime("%d-%b-%Y") %><br>
-        <small><%= distributor_stock_summary.summary_date.strftime("%H:%M:%S") %></small></td>
+        <td><%= distributor_stock_summary.summary_date.strftime("%d-%b-%Y") %></td>
       </tr>
     <% end %>
   </tbody>
