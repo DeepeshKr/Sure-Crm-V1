@@ -14,8 +14,12 @@ class DistributorStockLedgersController < ApplicationController
         return
       end
        @distributor_stock_ledgers = DistributorStockLedger.where(corporate_id: params[:corporate_id]).order("ledger_date DESC").paginate(:page => params[:page], :per_page => 100)
+        if params.has_key?(:type_id)
+
+        end
        if params.has_key?(:type_id)
-         @distributor_stock_ledgers =  @distributor_stock_ledgers.where(type_id: params[:type_id]).order("ledger_date DESC").paginate(:page => params[:page], :per_page => 100)
+         @distributor_stock_ledgers =  @distributor_stock_ledgers.where(type_id: params[:type_id]).order("ledger_date DESC").paginate(:page => params[:page])
+         #, :per_page => 100
         status = params[:type_id].to_i
         case status # a_variable is the variable we want to compare
           when 10000    #compare to 1

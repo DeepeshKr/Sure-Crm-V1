@@ -51,6 +51,12 @@
 
 </div>
 <hr>
+<div class="row">
+  <div class="col-xs-12">
+      <%= render partial: 'date_range', :locals => {:searchaction => "distributor_stock_ledgers", :searchaction => "index", :corporate_id => @corporate.id }  %>
+  </div>
+</div>
+<hr>
 <%= render partial: 'distributor_stock_ledgers/quick_list' %>
 <br>
 <div class="row">

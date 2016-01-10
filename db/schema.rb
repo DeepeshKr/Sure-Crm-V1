@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160108081047) do
+ActiveRecord::Schema.define(version: 20160110152917) do
 
   create_table "address_types", force: :cascade do |t|
     t.string   "name"
@@ -101,7 +101,17 @@ ActiveRecord::Schema.define(version: 20160108081047) do
     t.integer  "playlist_group_id", limit: 16, precision: 38
   end
 
+  add_index "campaign_playlists", ["campaignid"], name: "i_cam_pla_cam"
+  add_index "campaign_playlists", ["channeltapeid"], name: "i_cam_pla_cha"
+  add_index "campaign_playlists", ["end_hr"], name: "i_campaign_playlists_end_hr"
+  add_index "campaign_playlists", ["end_min"], name: "i_campaign_playlists_end_min"
+  add_index "campaign_playlists", ["end_sec"], name: "i_campaign_playlists_end_sec"
   add_index "campaign_playlists", ["for_date"], name: "i_campaign_playlists_for_date"
+  add_index "campaign_playlists", ["playlist_group_id"], name: "i_cam_pla_pla_gro_id"
+  add_index "campaign_playlists", ["productvariantid"], name: "i_cam_pla_pro"
+  add_index "campaign_playlists", ["start_hr"], name: "i_campaign_playlists_start_hr"
+  add_index "campaign_playlists", ["start_min"], name: "i_campaign_playlists_start_min"
+  add_index "campaign_playlists", ["start_sec"], name: "i_campaign_playlists_start_sec"
 
   create_table "campaign_stages", force: :cascade do |t|
     t.string   "name"
@@ -122,6 +132,9 @@ ActiveRecord::Schema.define(version: 20160108081047) do
     t.integer  "total_cost",    limit: 16, precision: 38
     t.integer  "total_revenue", limit: 16, precision: 38
   end
+
+  add_index "campaigns", ["mediumid"], name: "index_campaigns_on_mediumid"
+  add_index "campaigns", ["startdate"], name: "index_campaigns_on_startdate"
 
   create_table "change_log_trails", force: :cascade do |t|
     t.integer  "changelogtype_id", limit: 16, precision: 38
@@ -839,6 +852,12 @@ ActiveRecord::Schema.define(version: 20160108081047) do
     t.integer  "product_master_id",        limit: 16, precision: 38
   end
 
+  add_index "order_lines", ["orderdate"], name: "index_order_lines_on_orderdate"
+  add_index "order_lines", ["orderid"], name: "index_order_lines_on_orderid"
+  add_index "order_lines", ["product_list_id"], name: "i_order_lines_product_list_id"
+  add_index "order_lines", ["product_master_id"], name: "i_ord_lin_pro_mas_id"
+  add_index "order_lines", ["productvariant_id"], name: "i_ord_lin_pro_id"
+
   create_table "order_list_miles", force: :cascade do |t|
     t.string   "name"
     t.integer  "sort_order",  limit: 16, precision: 38
@@ -885,8 +904,15 @@ ActiveRecord::Schema.define(version: 20160108081047) do
     t.integer  "weight_kg",              limit: 16, precision: 38
   end
 
+  add_index "order_masters", ["campaign_playlist_id"], name: "i_ord_mas_cam_pla_id"
   add_index "order_masters", ["city"], name: "index_order_masters_on_city"
+  add_index "order_masters", ["customer_id"], name: "i_order_masters_customer_id"
+  add_index "order_masters", ["employee_id"], name: "i_order_masters_employee_id"
   add_index "order_masters", ["external_order_no"], name: "i_ord_mas_ext_ord_no"
+  add_index "order_masters", ["media_id"], name: "i_order_masters_media_id"
+  add_index "order_masters", ["order_source_id"], name: "i_ord_mas_ord_sou_id"
+  add_index "order_masters", ["order_status_master_id"], name: "i_ord_mas_ord_sta_mas_id"
+  add_index "order_masters", ["orderdate"], name: "i_order_masters_orderdate"
   add_index "order_masters", ["pincode"], name: "index_order_masters_on_pincode"
 
   create_table "order_payments", force: :cascade do |t|
