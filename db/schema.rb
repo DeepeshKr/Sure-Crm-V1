@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160110152917) do
+ActiveRecord::Schema.define(version: 20160111040137) do
 
   create_table "address_types", force: :cascade do |t|
     t.string   "name"
@@ -107,6 +107,7 @@ ActiveRecord::Schema.define(version: 20160110152917) do
   add_index "campaign_playlists", ["end_min"], name: "i_campaign_playlists_end_min"
   add_index "campaign_playlists", ["end_sec"], name: "i_campaign_playlists_end_sec"
   add_index "campaign_playlists", ["for_date"], name: "i_campaign_playlists_for_date"
+  add_index "campaign_playlists", ["list_status_id"], name: "i_cam_pla_lis_sta_id"
   add_index "campaign_playlists", ["playlist_group_id"], name: "i_cam_pla_pla_gro_id"
   add_index "campaign_playlists", ["productvariantid"], name: "i_cam_pla_pro"
   add_index "campaign_playlists", ["start_hr"], name: "i_campaign_playlists_start_hr"

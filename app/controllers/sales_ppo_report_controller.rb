@@ -370,6 +370,7 @@ class SalesPpoReportController < ApplicationController
   end
 
   def product_performance
+    @report_results = "Please select date range to show report"
     @hourlist = "Time UTC is your zone #{Time.zone.now} while actual time is #{Time.now}"
     @sno = 1
     @searchaction = "hourly"
@@ -519,7 +520,7 @@ class SalesPpoReportController < ApplicationController
                @serial_no += 1
             end #if order list present
            end
-
+           @report_results = "Searched for dates #{@from_date} to #{@to_date} and nothing found"
         @employeeorderlist = employeeunorderlist #.sort_by{|c| c[:total]}.reverse
           respond_to do |format|
             csv_file_name = "Product_performance_between_#{@from_date}_ #{@to_date}.csv"
