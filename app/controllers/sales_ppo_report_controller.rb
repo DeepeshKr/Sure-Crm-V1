@@ -244,8 +244,10 @@ class SalesPpoReportController < ApplicationController
        @time_slot = MediaCostMaster.find(@time_id)
        @start_hr = @time_slot.str_hr
        @start_min = @time_slot.str_min
+       @start_total_secs = (@start_hr * 60) + (@start_min)
        @end_hr = @time_slot.end_hr
        @end_min = @time_slot.end_min
+       @end_total_secs = (@end_hr * 60) + (@end_min)
      end
      if params.has_key?(:from_date)
         @from_date =  Date.strptime(params[:from_date], "%Y-%m-%d")
@@ -282,7 +284,7 @@ class SalesPpoReportController < ApplicationController
           orderlist = OrderMaster.where('ORDER_STATUS_MASTER_ID > 10002') .joins(:medium).where("media.media_group_id = 10000").where('orderdate >= ? AND orderdate <= ?',  @from_date, @to_date)
 
            campaign_playlists = CampaignPlaylist.where("for_date >= ? and for_date <= ?", @from_date, @to_date)
-           .where("start_hr >= ? AND start_min >= ? AND start_hr <= ? AND start_min <= ?", @start_hr, @start_min, @end_hr, @end_min)
+           .where("(start_hr * 60) + (start_min) >= ? AND ((start_hr * 60) + start_min) <= ?", @start_total_secs, @end_total_secs)
            .where(list_status_id: 10000).order("for_date, start_hr, start_min")#.limit(15)
 
 
