@@ -53,7 +53,7 @@
      <td class="text-right"><%= c[:total_nos] %> </td>
      <td class="text-right"><%= c[:total_value] %> </td>
      <td>
-         <%= link_to 'More', channel_sales_path(from_date: @from_date, to_date: @to_date , bdm_id: @bdm_id, media_id: c[:media_id]), :target => "_blank", class: "btn btn-info btn-xs" %>
+         <%= link_to 'More', cdm_report_path(from_date: @from_date, to_date: @to_date , bdm_id: @bdm_id, media_id: c[:media_id]), :target => "_blank", class: "btn btn-info btn-xs" %>
      </td>
    </tr>
   <% @sno += 1 %>
