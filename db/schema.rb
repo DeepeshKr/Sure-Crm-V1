@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160111040137) do
+ActiveRecord::Schema.define(version: 20160111101548) do
 
   create_table "address_types", force: :cascade do |t|
     t.string   "name"
@@ -99,6 +99,8 @@ ActiveRecord::Schema.define(version: 20160111040137) do
     t.datetime "for_date"
     t.integer  "total_revenue",     limit: 16, precision: 38
     t.integer  "playlist_group_id", limit: 16, precision: 38
+    t.integer  "start_frame",       limit: 16, precision: 38
+    t.integer  "end_frame",         limit: 16, precision: 38
   end
 
   add_index "campaign_playlists", ["campaignid"], name: "i_cam_pla_cam"

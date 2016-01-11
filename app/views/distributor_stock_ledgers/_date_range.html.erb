@@ -1,5 +1,5 @@
 <div class="row">
-  <%= form_tag  url_for(:controller => searchaction, :action => searchaction), method: "get" do  %>
+  <%= form_tag  url_for(:controller => controller, :action => searchaction), method: "get" do  %>
 <%= hidden_field_tag :corporate_id, corporate_id %>
       <div class="col-xs-8">
         <div class="input-daterange input-group">
