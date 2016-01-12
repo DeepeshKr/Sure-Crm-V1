@@ -11,11 +11,11 @@ class CorporatesController < ApplicationController
          @search = "Search for " +  params[:search].upcase
           @searchvalue = params[:search].upcase
 
-            #Super Distributor
+            #Super Distributor 10020
          @supercorporates = Corporate.where(corporate_type_id: 10020).where("UPPER(name) like ? OR UPPER(city) like ? or UPPER(state) like ?", "#{@searchvalue}%",
        "#{@searchvalue}%", "#{@searchvalue}%").paginate(:page => params[:page])
-       #Transfer Order Distributor
-       @transferordercorporates = Corporate.where(corporate_type_id: 10021).where("UPPER(name) like ? OR UPPER(city like ? or UPPER(state) like ?", "#{@searchvalue}%",
+       #Transfer Order Distributor 10021
+       @transferordercorporates = Corporate.where(corporate_type_id: 10021).where("UPPER(name) like ? OR UPPER(city) like ? or UPPER(state) like ?", "#{@searchvalue}%",
      "#{@searchvalue}%", "#{@searchvalue}%").paginate(:page => params[:page])
      #REgular Distributor
       @regularcorporates = Corporate.where(corporate_type_id: 10000).where("UPPER(name) like ? OR UPPER(city) like ? or UPPER(state) like ?", "#{@searchvalue}%",
