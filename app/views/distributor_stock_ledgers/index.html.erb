@@ -51,11 +51,17 @@
 
 </div>
 <hr>
-<div class="row">
-  <div class="col-xs-12">
-      <%= render partial: 'date_range', :locals => {:controller => "distributor_stock_ledgers", :searchaction => "index", :corporate_id => @corporate.id }  %>
+<% if @corporate.id.present? %>
+  <div class="row">
+    <div class="col-xs-4">
+      Search Ledger between
+    </div
+    <div class="col-xs-8">
+        <%= render partial: 'date_range', :locals => {:controller => "distributor_stock_ledgers", :searchaction => "index", :corporate_id => @corporate.id }  %>
+    </div>
   </div>
-</div>
+  </div>
+<% end %>
 <hr>
 <%= render partial: 'distributor_stock_ledgers/quick_list' %>
 <br>

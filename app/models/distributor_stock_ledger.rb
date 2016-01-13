@@ -192,9 +192,15 @@ private
 			commission = 0.14 if commission.blank?
 
 			transfer_order_pricing = TransferOrderPricing.new
-		#	productlists = ProductList.where(extproductcode: product_code)
-		#	productlist = productlists.first
-			productlist = ProductList.find(product_list_id)
+			productlists = ProductList.where(id: product_list_id)
+
+			if productlists.blank?
+				return transfer_order_pricing
+			end
+
+			productlist = productlists.first
+			#productlist = ProductList.find()
+
 			transfer_order_pricing.full_product_name = productlist.productname
 			transfer_order_pricing.product_code
 			transfer_order_pricing.state
