@@ -14,7 +14,10 @@ class DistributorStockLedgersController < ApplicationController
         return
       end
        @distributor_stock_ledgers = DistributorStockLedger.where(corporate_id: params[:corporate_id]).order("ledger_date DESC").paginate(:page => params[:page], :per_page => 100)
-        if params.has_key?(:type_id)
+        if params.has_key?(:from_date)
+          
+        end
+        if params.has_key?(:to_date)
 
         end
        if params.has_key?(:type_id)
