@@ -104,7 +104,8 @@ module StockBook
         end
 
       #Returned Retail
-      @returned_vpp = VPP.where(prod: prod).where("TRUNC(returndate) = ?", for_date) #.where("CFO = 'Y'")
+      # using refund details not returned
+      @returned_vpp = VPP.where(prod: prod).where("TRUNC(refunddate) = ?", for_date) #.where("CFO = 'Y'")
       if @returned_vpp.present?
           @product_stock_book.update(returned_retail_qty: @returned_vpp.sum(:quantity))
           @product_stock_book.update(returned_retail_rate: 0)
@@ -152,7 +153,7 @@ module StockBook
       end
 
       #Sold Retail
-      @sold_vpp = VPP.where(prod: prod).where("TRUNC(shdate) = ?", for_date)
+      @sold_vpp = VPP.where(prod: prod).where("TRUNC(paiddate) = ?", for_date)
       .where("CFO != 'Y' OR CFO IS NULL")
       #.where("CFO != 'Y'")
       if @sold_vpp.present?

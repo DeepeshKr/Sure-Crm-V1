@@ -1,0 +1,67 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  campaign_playlist_id: 1
+  campaign_id: 1
+  product_master_id: 1
+  product_variant_id: 1
+  product_list_id: 1
+  prod: MyString
+  name: MyString
+  start_time: 2016-01-18 10:48:57
+  order_id: 1
+  order_line_id: 1
+  product_cost: 9.99
+  pieces: 1
+  revenue: 9.99
+  damages: 9.99
+  returns: 9.99
+  commission_cost: 9.99
+  promotion_cost: 9.99
+  media_cost: 9.99
+  gross_sales: 9.99
+  net_sale: 9.99
+  external_order_no: 1
+  order_status_id: 1
+  order_last_mile_id: 1
+  order_pincode: MyString
+  media_id: 1
+  media_cost_total: 9.99
+  promo_cost_total: 9.99
+  dnis: MyString
+  city: MyString
+  state: MyString
+  mobile_no: MyString
+
+two:
+  campaign_playlist_id: 1
+  campaign_id: 1
+  product_master_id: 1
+  product_variant_id: 1
+  product_list_id: 1
+  prod: MyString
+  name: MyString
+  start_time: 2016-01-18 10:48:57
+  order_id: 1
+  order_line_id: 1
+  product_cost: 9.99
+  pieces: 1
+  revenue: 9.99
+  damages: 9.99
+  returns: 9.99
+  commission_cost: 9.99
+  promotion_cost: 9.99
+  media_cost: 9.99
+  gross_sales: 9.99
+  net_sale: 9.99
+  external_order_no: 1
+  order_status_id: 1
+  order_last_mile_id: 1
+  order_pincode: MyString
+  media_id: 1
+  media_cost_total: 9.99
+  promo_cost_total: 9.99
+  dnis: MyString
+  city: MyString
+  state: MyString
+  mobile_no: MyString

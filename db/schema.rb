@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160111101548) do
+ActiveRecord::Schema.define(version: 20160118051857) do
 
   create_table "address_types", force: :cascade do |t|
     t.string   "name"
@@ -1307,6 +1307,42 @@ ActiveRecord::Schema.define(version: 20160111101548) do
     t.decimal  "promo_cost",                      precision: 12, scale: 2
     t.datetime "created_at",                                               null: false
     t.datetime "updated_at",                                               null: false
+  end
+
+  create_table "sales_ppos", force: :cascade do |t|
+    t.integer  "campaign_playlist_id", limit: 16, precision: 38
+    t.integer  "campaign_id",          limit: 16, precision: 38
+    t.integer  "product_master_id",    limit: 16, precision: 38
+    t.integer  "product_variant_id",   limit: 16, precision: 38
+    t.integer  "product_list_id",      limit: 16, precision: 38
+    t.string   "prod"
+    t.string   "name"
+    t.datetime "start_time"
+    t.integer  "order_id",             limit: 16, precision: 38
+    t.integer  "order_line_id",        limit: 16, precision: 38
+    t.integer  "product_cost",         limit: 16, precision: 38
+    t.integer  "pieces",               limit: 16, precision: 38
+    t.integer  "revenue",              limit: 16, precision: 38
+    t.integer  "damages",              limit: 16, precision: 38
+    t.integer  "returns",              limit: 16, precision: 38
+    t.integer  "commission_cost",      limit: 16, precision: 38
+    t.integer  "promotion_cost",       limit: 16, precision: 38
+    t.integer  "media_cost",           limit: 16, precision: 38
+    t.integer  "gross_sales",          limit: 16, precision: 38
+    t.integer  "net_sale",             limit: 16, precision: 38
+    t.integer  "external_order_no",    limit: 16, precision: 38
+    t.integer  "order_status_id",      limit: 16, precision: 38
+    t.integer  "order_last_mile_id",   limit: 16, precision: 38
+    t.string   "order_pincode"
+    t.integer  "media_id",             limit: 16, precision: 38
+    t.integer  "media_cost_total",     limit: 16, precision: 38
+    t.integer  "promo_cost_total",     limit: 16, precision: 38
+    t.string   "dnis"
+    t.string   "city"
+    t.string   "state"
+    t.string   "mobile_no"
+    t.datetime "created_at",                                     null: false
+    t.datetime "updated_at",                                     null: false
   end
 
   create_table "salutes", force: :cascade do |t|

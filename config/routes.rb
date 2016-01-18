@@ -1,6 +1,8 @@
 Rails.application.routes.draw do
 
 
+  resources :sales_ppos
+
   resources :campaign_missed_lists
 
   resources :distributor_product_lists
@@ -158,7 +160,7 @@ post "send_demo_message" => 'message_on_orders#send_demo_message'
   get 'pincode_orders' => 'sales_report#pincode_orders'
   get 'sales_report/daily'
   get 'daily_report' => 'sales_report#daily'
-  
+
   ################3
   # redundant reports
   #############
@@ -166,16 +168,14 @@ post "send_demo_message" => 'message_on_orders#send_demo_message'
   get 'channel_sales' => 'sales_report#channel_sales'
   get 'sales_report/channel'
   get 'channel_report' => 'sales_report#channel'
-  get 'channel_sales_summary' => 'sales_report#channel_sales_summary'
-  get 'sales_report/channel_sales_summary'
   ################3
   # redundant reports
   #############
 
-  get 'sales_report/channel_report'
-  get 'channel_report' => 'sales_report#channel_report'
-  get 'channel_sales_summary' => 'sales_report#channel_sales_summary'
+  get 'sales_report/channel_summary_report'
+  get 'channel_summary_report' => 'sales_report#channel_summary_report'
   get 'sales_report/channel_sales_summary'
+  get 'channel_sales_summary' => 'sales_report#channel_sales_summary'
 
   get 'sales_report/cdm_report'
   get 'cdm_report' => 'sales_report#cdm_report'

@@ -236,7 +236,7 @@ class SalesReportController < ApplicationController
   end
 
   def channel_sales_summary
-    @media_manager = Employee.where(:employee_role_id => 10121).order("first_name")
+    # @media_manager = Medium.where(:media_commision_id => 10000).where("id <> 11200 and id <> 11700")
      @sno = 1
 
       #@order_master.orderpaymentmode_id == 10000 #paid over CC
@@ -259,9 +259,9 @@ class SalesReportController < ApplicationController
      @bdm_id = params[:bdm_id]
      #  # Unclaimed order 10006
       order_masters = OrderMaster.where('orderdate >= ? AND orderdate <= ?', @from_date, @to_date)
-      .where('ORDER_STATUS_MASTER_ID > 10002').where('ORDER_STATUS_MASTER_ID <> 10006').joins(:medium).where("media.employee_id = ? ", @bdm_id).distinct.pluck(:media_id)
+      .where('ORDER_STATUS_MASTER_ID > 10002').where('ORDER_STATUS_MASTER_ID <> 10006').joins(:medium).distinct.pluck(:media_id)
       #.select("date(orderdate) as ordered_date, sum(subtotal) as total_value")
-      name = (Employee.find(@bdm_id))
+    #  name = (Employee.find(@bdm_id))
       amount = 0.0
       #@orderdate = "Searched for #{for_date} found #{order_masters.count} agents!"
       employeeunorderlist ||= []
@@ -302,7 +302,7 @@ class SalesReportController < ApplicationController
         @employeeorderlist = employeeunorderlist.sort_by{|c| c[:total]}.reverse
 
         respond_to do |format|
-        csv_file_name = "#{name}_sales_#{@from_date}_#{@to_date}.csv"
+        csv_file_name = "channel_sales_#{@from_date}_#{@to_date}.csv"
           format.html
           format.csv do
             headers['Content-Disposition'] = "attachment; filename=\"#{csv_file_name}\""
@@ -313,8 +313,8 @@ class SalesReportController < ApplicationController
     end
   end
 
-  def channel_report
-    @media_manager = Employee.where(:employee_role_id => 10121).order("first_name")
+  def channel_summary_report
+    #@media_manager = Employee.where(:employee_role_id => 10121).order("first_name")
      @sno = 1
 
       #@order_master.orderpaymentmode_id == 10000 #paid over CC
@@ -334,7 +334,7 @@ class SalesReportController < ApplicationController
 
       @to_date = @to_date.end_of_day - 330.minutes
 
-     @bdm_id = params[:bdm_id]
+     #@bdm_id = params[:bdm_id]
      @media_id = params[:media_id] || nil if params.has_key?(:media_id)
      if @media_id.blank?
        return
@@ -349,7 +349,7 @@ class SalesReportController < ApplicationController
       order_masters = OrderMaster.where('orderdate >= ? AND orderdate <= ?', @from_date, @to_date)
       .where('ORDER_STATUS_MASTER_ID > 10002').where('ORDER_STATUS_MASTER_ID <> 10006').where(media_id: @media_id)
 
-      name = (Employee.find(@bdm_id))
+    #  name = (Employee.find(@bdm_id))
       amount = 0.0
       #@orderdate = "Searched for #{for_date} found #{order_masters.count} agents!"
       employeeunorderlist ||= []
@@ -392,7 +392,7 @@ class SalesReportController < ApplicationController
         @employeeorderlist = employeeunorderlist.sort_by{|c| c[:total]}.reverse
 
         respond_to do |format|
-        csv_file_name = "#{name}_#{@media_name}_sales_#{@from_date}_#{@to_date}.csv"
+        csv_file_name = "#{@media_name}_sales_#{@from_date}_#{@to_date}.csv"
           format.html
           format.csv do
             headers['Content-Disposition'] = "attachment; filename=\"#{csv_file_name}\""
