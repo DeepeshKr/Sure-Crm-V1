@@ -24,8 +24,8 @@ class CampaignPlaylist < ActiveRecord::Base
   validates :start_hr, :inclusion => { :in => 0..23, :message => "The hours should be between 0 and 23" }
   validates :end_hr, :inclusion => { :in => 0..23, :message => "The hours should be between 0 and 23" }
   #validate :time_validation
-  validates :start_frame, :inclusion => { :in => 1..24, :message => "The hours should be between 0 and 23" }
-  validates :end_frame, :inclusion => { :in => 1..24, :message => "The hours should be between 0 and 23" }
+  validates :start_frame, :inclusion => { :in => 1..24, :message => "The hours should be between 0 and 23" }, presence: false
+  validates :end_frame, :inclusion => { :in => 1..24, :message => "The hours should be between 0 and 23" }, presence: false
 
   #validate :time_validation
 

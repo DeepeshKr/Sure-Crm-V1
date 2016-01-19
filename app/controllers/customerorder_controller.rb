@@ -124,6 +124,28 @@ def add_products
      else
       @cli = params[:mobile]
       @dnis = params[:calledno]
+
+      if Customer.where(mobile: @cli).present?
+        @customer = Customer.where(mobile: @cli).last
+
+        #check the last place order
+        old_orders = OrderMaster.where(customer_id: @customer.id).where("order_status_master_id > 10002") #.where("external_order_no is not null")
+        if old_orders.present?
+
+          old_order = old_orders.last
+          #check the order Date
+        order_date =  (old_order.orderdate + 330.minutes).strftime("%d-%b-%Y")
+
+        order_lines = OrderLine.where(orderid: old_orders.last.id)
+          if order_lines.present?
+            order_lines.each { |ord| products << ord.description  }
+          end
+          message = "Earlier called Customer found order #{old_order.external_order_no} on date #{order_date} for #{products}"
+        else
+          message = "First time order mobile number!"
+        end
+        flash[:error] = message
+      end
       @order_id = neworder(10000, @cli, @dnis)
       order_line_params[:orderid] = @order_id
 
@@ -186,30 +208,51 @@ def add_products
 
   def address
       @states = State.all.order("name")
-
+      products = ""
+      message = ""
+      #show customer has called earlier
       if @order_master.customer_id.present?
         @customer = Customer.find(@order_master.customer_id)
         flash[:notice] = "Existing Customer found #{@customer.id}"
         @customer_id = @customer.id
       elsif Customer.where(mobile: @order_master.mobile).present?
         @customer = Customer.where(mobile: @order_master.mobile).last
-        flash[:notice] = "Earlier called Customer found #{@customer.id}"
+
+        #check the last place order
+        old_orders = OrderMaster.where(customer_id: @customer.id).where("order_status_master_id > 10002") #.where("external_order_no is not null")
+        if old_orders.present?
+
+          old_order = old_orders.last
+          #check the order Date
+        order_date =  (old_order.orderdate + 330.minutes).strftime("%d-%b-%Y")
+
+        order_lines = OrderLine.where(orderid: old_orders.last.id)
+          if order_lines.present?
+            order_lines.each { |ord| products << ord.description  }
+          end
+          message = "Earlier called Customer found order #{old_order.external_order_no} on date #{order_date} for #{products}"
+        else
+          message = "No past orders found for this mobile number!"
+        end
+        flash[:error] = message
+        #flash[:notice] = "Earlier called Customer found #{@customer.id}"
         @customer_id = @customer.id
       else
         @customer = Customer.new(mobile: @order_master.mobile)
         flash[:notice] = "Add Customer Name"
       end
 
-      if @order_master.customer_address_id.present?
-        @customer_address = CustomerAddress.find(@order_master.customer_address_id)
-        flash[:notice] = " An address has been added for the customer"
-      elsif CustomerAddress.where(telephone1: @order_master.mobile).present?
-        @customer_address = CustomerAddress.where(telephone1: @order_master.mobile).last
-        flash[:notice] = " Existing address is available for the number #{@order_master.mobile}"
-      else
+      #show existing address
+      # if @order_master.customer_address_id.present?
+      #   @customer_address = CustomerAddress.find(@order_master.customer_address_id)
+      #   flash[:notice] = " An address has been added for the customer"
+      # elsif CustomerAddress.where(telephone1: @order_master.mobile).present?
+      #   @customer_address = CustomerAddress.where(telephone1: @order_master.mobile).last
+      #   flash[:notice] = " Existing address is available for the number #{@order_master.mobile}"
+      # else
         @customer_address = CustomerAddress.new(telephone1: @order_master.mobile)
          flash[:notice] = "Add Customer Address."
-      end
+      #end
 
       #flash[:notice] = "#{notice}"
 
@@ -363,7 +406,7 @@ def add_products
     end
 
     if @order_master.customer_id.present?
-        @customer_credit_card_o = CustomerCreditCard.where(customer_id: @order_master.customer_id).last
+        # @customer_credit_card_o = CustomerCreditCard.where(customer_id: @order_master.customer_id).last
     end
 
     @customer_credit_card = CustomerCreditCard.new(customer_id:  @order_master.customer_id)
@@ -783,22 +826,28 @@ end
   def dealers
 
        #@customer = Customer.find(@order_master.customer_id)
-       @states = ADDRESS_DEALER.select(:state).distinct
+       @states = Corporate.select(:state).distinct.order(:state)
 
       if params[:from_state].present?
         @state = params[:from_state]
-        @address_dealer = ADDRESS_DEALER.where(state: @state)
+        search_state = @state.capitalize
+        @address_dealer = Corporate.where("state like ?", "#{@state}%")
+
+      #ADDRESS_DEALER.where(state: @state)
         state_c = @state.capitalize
         nos = @address_dealer.count
-        @state_searched = "Search for #{state_c} and found #{nos}"
-        @cities = @address_dealer.select(:add3).distinct
-        if params[:city].present?
-          @address_dealer = @address_dealer.where(add3:params[:city])
-          state_c = params[:city].capitalize << " in " << @state.capitalize
-          nos = @address_dealer.count
-          @state_searched = "#{state_c} and found #{nos}"
-        end
 
+        @cities = @address_dealer.select(:city).distinct
+        if params[:city].present?
+            @city = params[:city].capitalize
+          @address_dealer = Corporate.where("UPPER(district) like ? OR UPPER(city) like ? or UPPER(state) like ?", "#{@city}%",
+        "#{@city}%", "#{@city}%")
+        #@address_dealer.where(add3:params[:city])
+          state_c = @city.capitalize << " in " << @state.capitalize
+          nos = @address_dealer.count
+
+        end
+          @state_searched = "Search for #{state_c} and found #{nos}"
       end
       #update_page_trail(page_name)
       update_page_trail("existing dealers")
