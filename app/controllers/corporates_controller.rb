@@ -1,4 +1,5 @@
 class CorporatesController < ApplicationController
+  before_action { protect_controllers(6) }
   include TransferOrders
   #include ProductPricing
   before_action :set_corporate, only: [:show, :edit, :update, :destroy]
@@ -39,7 +40,7 @@ class CorporatesController < ApplicationController
 
 
       end
-
+      @distributor_upload_order = DistributorUploadOrder.first
   end
   #
   # def list_type

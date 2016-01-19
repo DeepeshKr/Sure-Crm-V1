@@ -50,8 +50,8 @@
      <td><%= c[:from_date] %></td>
      <td><%= c[:to_date] %></td>
      <td><%= c[:channel] %></td>
-     <td class="text-right"><%= c[:total_nos] %> </td>
-     <td class="text-right"><%= c[:total_value] %> </td>
+     <td class="text-right"><%= c[:total_nos] %> <% total_piece += c[:total_nos] %></td>
+     <td class="text-right"><%= c[:total_value] %> <% total_value += c[:total_value] %> </td>
      <td>
          <%= link_to 'More', cdm_report_path(from_date: @from_date, to_date: @to_date , bdm_id: @bdm_id, media_id: c[:media_id]), :target => "_blank", class: "btn btn-info btn-xs" %>
      </td>
@@ -59,6 +59,14 @@
   <% @sno += 1 %>
  <% end %>
 </tbody>
+<tfoot>
+  <tr>
+   <th colspan="4">Total</th>
+   <th class="text-right"><%= total_piece %></th>
+   <th class="text-right"><%= total_value %></th>
+   <th> </th>
+   </tr>
+</tfoot>
 </table>
   <div class="well well-sm">
     <%= link_to 'Download CSV file', cdm_sales_summary_path(from_date: @or_for_date, to_date: @to_date , bdm_id: @bdm_id, format: :csv), class: "btn btn-info btn-sm" %>

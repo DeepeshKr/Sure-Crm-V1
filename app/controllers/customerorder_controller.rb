@@ -1,6 +1,6 @@
 class CustomerorderController < ApplicationController
 
-before_action { protect_controllers(20) }
+before_action { protect_controllers(19) }
 #before_action :productlist, only: [:products, :offline, :add_products]
 before_action :order_line_params, only: [ :add_products]
 before_action :set_order, except: [:summary]

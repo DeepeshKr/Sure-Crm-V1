@@ -7,5 +7,4 @@ class TransferOrderPricing
 
     validates :state,  :presence => { :message => "Please select the state" }
 
-
 end

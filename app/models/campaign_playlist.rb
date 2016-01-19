@@ -24,7 +24,8 @@ class CampaignPlaylist < ActiveRecord::Base
   validates :start_hr, :inclusion => { :in => 0..23, :message => "The hours should be between 0 and 23" }
   validates :end_hr, :inclusion => { :in => 0..23, :message => "The hours should be between 0 and 23" }
   #validate :time_validation
-
+  validates :start_frame, :inclusion => { :in => 1..24, :message => "The hours should be between 0 and 23" }
+  validates :end_frame, :inclusion => { :in => 1..24, :message => "The hours should be between 0 and 23" }
 
   #validate :time_validation
 
@@ -89,7 +90,7 @@ class CampaignPlaylist < ActiveRecord::Base
 
   def playlist_details
     #self.product_variant.name + " between " + self.start_hr || 0 + ":" + self.start_min + ":" + self.start_sec + " to " + self.end_hr + ":" + self.end_min + ":" + self.end_sec + " (" + self.name + ") "
-    self.product_variant.name + " on " + self.for_date.strftime("%d-%b-%y") || nil + " " + self.start_hr.to_s.rjust(2, '0') || "00" + ":" + self.start_min.to_s.rjust(2, '0') || "00" 
+    self.product_variant.name + " on " + self.for_date.strftime("%d-%b-%y") || nil + " " + self.start_hr.to_s.rjust(2, '0') || "00" + ":" + self.start_min.to_s.rjust(2, '0') || "00"
   end
 
 def productrevenue

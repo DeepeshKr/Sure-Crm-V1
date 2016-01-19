@@ -1,4 +1,5 @@
 class DistributorStockLedgersController < ApplicationController
+    before_action { protect_controllers(7) }
   before_action :set_distributor_stock_ledger, only: [:show, :edit, :update, :destroy]
 
   # GET /distributor_stock_ledgers
@@ -15,7 +16,7 @@ class DistributorStockLedgersController < ApplicationController
       end
        @distributor_stock_ledgers = DistributorStockLedger.where(corporate_id: params[:corporate_id]).order("ledger_date DESC").paginate(:page => params[:page], :per_page => 100)
         if params.has_key?(:from_date)
-          
+
         end
         if params.has_key?(:to_date)
 

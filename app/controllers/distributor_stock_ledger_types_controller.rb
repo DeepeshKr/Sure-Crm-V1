@@ -1,4 +1,5 @@
 class DistributorStockLedgerTypesController < ApplicationController
+    before_action { protect_controllers(7) }
   before_action :set_distributor_stock_ledger_type, only: [:show, :edit, :update, :destroy]
 
   # GET /distributor_stock_ledger_types

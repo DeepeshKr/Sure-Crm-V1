@@ -1,0 +1,104 @@
+<% title "Channel Sales Summary #{@from_date} to #{@to_date}" %>
+
+<%= form_tag  url_for(:controller => 'sales_report', :action => 'channel_consolidated_daily_report'), method: "get" do  %>
+ <div class="row">
+	 <div class="col-xs-6">
+
+	 <h4>Channel Sales Report </h4>
+
+   </div>
+	 <div class="col-xs-5">
+        <div class="input-daterange input-group">
+          <%= text_field_tag(:from_date, @from_date, :data => {:provide => "datepicker"}, :id => "datepicker_from", :class => "form-control", :required => "true" )   %>
+          <span class="input-group-addon">to</span>
+
+           <%= text_field_tag(:to_date, @to_date, :data => {:provide => "datepicker"}, :id => "datepicker_to", :class => "form-control", :required => "true" )   %>
+
+        </div>
+    </div>
+    <div class="col-xs-1">
+              <%= submit_tag "Show", name: nil, class: "btn btn-primary" %>
+    </div>
+
+ </div>
+<% end %>
+
+<% if @mainlist.present? %>
+<% total_value, total_piece = 0, 0 %>
+<table class="table table-hover table-bordered table-striped">
+  <thead>
+    <tr>
+     <th>S No</th>
+     <th>From</th>
+     <th>Upto</th>
+     <th>Channel</th>
+     <th>Nos</th>
+     <th>Value</th>
+     <th> More </th>
+     </tr>
+  </thead>
+<tbody>
+   <% @mainlist.each do |c| %>
+   <tr>
+     <td><%= @sno %></td>
+     <td><%= c[:from_date] %></td>
+     <td><%= c[:to_date] %></td>
+     <td><%= c[:channel] %></td>
+     <td class="text-right"><%= c[:total_nos] %> </td>
+     <td class="text-right"><%= c[:total_value] %> </td>
+     <td>
+         <%= link_to 'More', channel_summary_report_path(from_date: @from_date, to_date: @to_date , media_id: c[:media_id]), :target => "_blank", class: "btn btn-info btn-xs" %>
+     </td>
+   </tr>
+   <tr>
+     <td>
+
+     </td>
+     <td colspan="5">
+       <div class="row">
+         <div class="col-xs-4">
+           <table class="table table-bordered">
+              <% c[:city_list].each do |cy| %>
+             <tr>
+                <td>
+                  <%= cy[0] %>
+                </td>
+                <td>
+                  <%= cy[1] %>
+                </td>
+             </tr>
+             <% end %>
+           </table>
+         </div>
+         <div class="col-xs-8">
+           <table class="table table-bordered">
+              <% c[:product_list].each do |pl| %>
+             <tr>
+                <td>
+                  <%= pl[0] %>
+                </td>
+                <td>
+                  <%= pl[1] %>
+                </td>
+             </tr>
+             <% end %>
+           </table>
+         </div>
+       </div>
+     </td>
+   </tr>
+  <% @sno += 1 %>
+ <% end %>
+</tbody>
+</table>
+  <div class="well well-sm">
+    <%= link_to 'Download CSV file', channel_sales_summary_path(from_date: @or_for_date, to_date: @to_date , format: :csv), class: "btn btn-info btn-sm" %>
+  </div>
+
+  <% end %>
+ <br>
+
+<script>
+$('#datepicker_to').datepicker({format: 'yyyy-mm-dd'});
+$('#datepicker_from').datepicker({format: 'yyyy-mm-dd'});
+</script>

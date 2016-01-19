@@ -1,27 +1,19 @@
 Rails.application.routes.draw do
 
-
   resources :sales_ppos
-
   resources :campaign_missed_lists
-
   resources :distributor_product_lists
-
   resources :distributor_missed_pincodes
-
   resources :pincode_service_levels
-
   resources :courier_lists
-
   resources :distributor_upload_orders
 
 get "cinergy_xml" => "campaign_playlists#cinergy_xml"
-
 get "recent_missed_orders" => 'distributor_missed_orders#recent'
-
 get "hbn_channels" => "media#all_hbn"
-
 post "send_demo_message" => 'message_on_orders#send_demo_message'
+post 'distributor_upload_orders/switch_on'
+post 'distributor_upload_orders/switch_off'
 
   get 'new_dept/list'
 
@@ -181,6 +173,9 @@ post "send_demo_message" => 'message_on_orders#send_demo_message'
   get 'cdm_report' => 'sales_report#cdm_report'
   get 'cdm_sales_summary' => 'sales_report#cdm_sales_summary'
   get 'sales_report/cdm_sales_summary'
+
+  get 'channel_consolidated_daily_report' => 'sales_report#channel_consolidated_daily_report'
+  get 'sales_report/channel_consolidated_daily_report'
 
 
   get 'sales_report/sales_incentives'

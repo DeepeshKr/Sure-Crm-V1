@@ -1,4 +1,5 @@
 class DistributorUploadOrdersController < ApplicationController
+    before_action { protect_controllers(6) }
   before_action :set_distributor_upload_order, only: [:show, :edit, :update, :destroy]
 
   # GET /distributor_upload_orders
@@ -19,6 +20,23 @@ class DistributorUploadOrdersController < ApplicationController
 
   # GET /distributor_upload_orders/1/edit
   def edit
+  end
+
+  def switch_on
+    switch
+    @distributor_upload_order = DistributorUploadOrder.first
+    @distributor_upload_order.update(online_order_id: 0, online_description: @message, online_last_ran_on: t)
+    flash[:notice] = "Switched on #{@message}"
+    redirect corporates_path
+  end
+
+  def switch_off
+    switch
+    @distributor_upload_order = DistributorUploadOrder.new
+    @distributor_upload_order.update(online_order_id: 1, online_description: @message, online_last_ran_on: t)
+
+    flash[:notice] = "Switched off #{@message}"
+    redirect corporates_path
   end
 
   # POST /distributor_upload_orders
@@ -67,6 +85,13 @@ class DistributorUploadOrdersController < ApplicationController
       @distributor_upload_order = DistributorUploadOrder.find(params[:id])
     end
 
+    def switch
+      t = Time.zone.now + 330.minutes
+      @empcode = current_user.employee_code
+      #@empid = current_user.id
+      @employee = Employee.where(employeecode: @empcode).first
+      @message = "Update by #{@employee.employee_name} at time #{t.strftime("%d-%b-%Y %H:%M:%SS")}"
+    end
     # Never trust parameters from the scary internet, only allow the white list through.
     def distributor_upload_order_params
       params.require(:distributor_upload_order).permit(:order_id, :ext_order_id, :last_ran_on, :description, :online_order_id, :online_last_ran_on, :online_description)

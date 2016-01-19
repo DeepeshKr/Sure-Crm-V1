@@ -235,6 +235,101 @@ class SalesReportController < ApplicationController
     end
   end
 
+  def channel_consolidated_daily_report
+    # @media_manager = Medium.where(:media_commision_id => 10000).where("id <> 11200 and id <> 11700")
+     @sno = 1
+
+      #@order_master.orderpaymentmode_id == 10000 #paid over CC
+      #@order_master.orderpaymentmode_id == 10001 #paid over COD
+    if params[:from_date].present?
+      #@summary ||= []
+      @or_for_date = params[:from_date]
+      for_date =  Date.strptime(params[:from_date], "%Y-%m-%d")
+
+      @from_date = for_date.beginning_of_day - 330.minutes
+      @to_date = for_date.end_of_day - 330.minutes
+      #@to_date = @from_date + 1.day
+
+      if params.has_key?(:to_date)
+        @to_date =  Date.strptime(params[:to_date], "%Y-%m-%d")
+      end
+
+      @to_date = @to_date.end_of_day - 330.minutes
+
+     @bdm_id = params[:bdm_id]
+     #  # Unclaimed order 10006
+      order_masters = OrderMaster.where('orderdate >= ? AND orderdate <= ?', @from_date, @to_date)
+      .where('ORDER_STATUS_MASTER_ID > 10002').where('ORDER_STATUS_MASTER_ID <> 10006').joins(:medium).distinct.pluck(:media_id)
+      # .limit(10)
+      #.select("date(orderdate) as ordered_date, sum(subtotal) as total_value")
+    #  name = (Employee.find(@bdm_id))
+      amount = 0.0
+      #@orderdate = "Searched for #{for_date} found #{order_masters.count} agents!"
+      mainlist ||= []
+      sublist ||= []
+
+      order_masters.each do |ord|
+        @num = 0
+        amount = 0
+        # orderlist = OrderMaster.where('ORDER_STATUS_MASTER_ID > 10002')
+        # .where('orderdate >= ? AND orderdate <= ?', @from_date, @to_date).where(employee_id: e)
+        # timetaken = orderlist.sum(:codcharges)
+         reverse_vat_rate = TaxRate.find(10001)
+         order_master_calculations = OrderMaster.where('orderdate >= ? AND orderdate <= ?', @from_date, @to_date)
+         .where('ORDER_STATUS_MASTER_ID > 10002').where(:media_id => ord)
+
+         order_master_calculations.each do |orc|
+           if reverse_vat_rate.present?
+             rate_charge = reverse_vat_rate.reverse_rate ||= 0.8888889
+             amount += orc.subtotal * rate_charge
+
+           end
+           @num += 1
+         end
+
+        amount = amount.round(2)
+        media_name = Medium.find(ord).name
+
+        @order_cities = OrderMaster.where('orderdate >= ? AND orderdate <= ?', @from_date, @to_date)
+        .where('ORDER_STATUS_MASTER_ID > 10002').where('ORDER_STATUS_MASTER_ID <> 10006').where(media_id: ord).group(:city).count
+
+        @order_products = OrderLine.joins(:order_master).where('order_masters.orderdate >= ? AND order_masters.orderdate <= ?', @from_date, @to_date)
+        .where('order_masters.ORDER_STATUS_MASTER_ID > 10002').where('order_masters.ORDER_STATUS_MASTER_ID <> 10006').where("order_masters.media_id = ?", ord).joins(:product_list).group("product_lists.name").count(:id)
+
+        #.joins(:product_list).select('product_lists.name as name, count(*) as count, sum(order_lines.total) as total').group('product_list_id')
+
+        #.group_by{|oc| oc.city}
+
+          mainlist << {
+            :from_date => (@from_date + 330.minutes).strftime("%Y-%m-%d"),
+            :to_date => (@to_date + 330.minutes).strftime("%Y-%m-%d"),
+            :channel => media_name,
+            :media_id => ord,
+            :total_nos => @num,
+            :total_value => amount,
+            :city_list => @order_cities,
+            :product_list => @order_products}
+
+          end
+
+      #this is for date on the view
+        @from_date = (@from_date + 330.minutes).strftime("%Y-%m-%d")
+        @to_date = (@to_date + 330.minutes).strftime("%Y-%m-%d")
+        @mainlist = mainlist.sort_by{|c| c[:total]}.reverse
+
+        respond_to do |format|
+        csv_file_name = "channel_sales_#{@from_date}_#{@to_date}.csv"
+          format.html
+          format.csv do
+            headers['Content-Disposition'] = "attachment; filename=\"#{csv_file_name}\""
+            headers['Content-Type'] ||= 'text/csv'
+          end
+        end
+
+    end
+  end
+
+
   def channel_sales_summary
     # @media_manager = Medium.where(:media_commision_id => 10000).where("id <> 11200 and id <> 11700")
      @sno = 1
