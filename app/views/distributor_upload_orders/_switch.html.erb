@@ -5,38 +5,26 @@
   </p>
   <div class="col-xs-4">
     <% if @distributor_upload_order.online_order_id == 1 %>
-        <div class="panel panel-primary">
-          <div class="panel-heading">
-                 <h3 class="panel-title">Switch Off</h3>
-          </div>
-          <div class="panel-body">
-                     <%= bootstrap_form_tag url: url_for(:controller => 'distributor_upload_orders', :action => 'switch_off'), :method => :POST, :enforce_utf8 => false do |f| %>
+      <%= bootstrap_form_tag url: url_for(:controller => 'distributor_upload_orders', :action => 'switch_off'), :method => :POST, :enforce_utf8 => false do |f| %>
             <div class="row">
               <div class="col-xs-12">
-                          <%= submit_tag "Switch Off", name: nil, class: "btn btn-warning ", data: { confirm: 'Are you sure this would switch off?'}  %>
+                          <%= submit_tag "Switch Off", name: nil, class: "btn btn-danger ", data: { confirm: 'Are you sure this would switch off?'}  %>
               </div>
             </div>
-          </div>
-          <% end %>
-        </div>
+      <% end %>
     <% end %>
   </div>
   <div class="col-xs-4 col-xs-offset-4">
-    <% if @distributor_upload_order.online_order_id == 0 || @distributor_upload_order.online_order_id.blank? %>
-    <div class="panel panel-primary">
-      <div class="panel-heading">
-             <h3 class="panel-title">Switch On</h3>
-      </div>
-      <div class="panel-body">
-                 <%= bootstrap_form_tag url: url_for(:controller => 'distributor_upload_orders', :action => 'switch_on'), :method => :POST, :enforce_utf8 => false do |f| %>
+    <% if @distributor_upload_order.online_order_id == 0 %>
+     <%= bootstrap_form_tag url: url_for(:controller => 'distributor_upload_orders', :action => 'switch_on'), :method => :POST, :enforce_utf8 => false do |f| %>
         <div class="row">
           <div class="col-xs-12">
-                      <%= submit_tag "Switch On", name: nil, class: "btn btn-success ", data: { confirm: 'Auto order picking would switch on?'}  %>
+            <%= submit_tag "Switch On", name: nil, class: "btn btn-success ", data: { confirm: 'Auto order picking would switch on?'}  %>
           </div>
         </div>
-      </div>
       <% end %>
-    </div>
     <% end %>
   </div>
+  <br>
+  <%= @distributor_upload_order.online_order_id %>
 </div>

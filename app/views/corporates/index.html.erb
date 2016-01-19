@@ -16,11 +16,9 @@
 <%= render partial: 'list_of_corporates', :locals => {:corporates => @regularcorporates, :list_name => "Other Distributors"}  %>
 
 <br>
-
-
-
 <%= link_to 'New Corporate', new_corporate_path, class:"btn btn-primary" %>
-
 <br>
+<br>
+<hr>
 
 <%= render partial: 'distributor_upload_orders/switch'  %>

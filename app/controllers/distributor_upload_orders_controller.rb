@@ -25,18 +25,18 @@ class DistributorUploadOrdersController < ApplicationController
   def switch_on
     switch
     @distributor_upload_order = DistributorUploadOrder.first
-    @distributor_upload_order.update(online_order_id: 0, online_description: @message, online_last_ran_on: t)
+    @distributor_upload_order.update(online_order_id: 1, online_description: @message, online_last_ran_on: t)
     flash[:notice] = "Switched on #{@message}"
-    redirect corporates_path
+    redirect_to corporates_path
   end
 
   def switch_off
     switch
     @distributor_upload_order = DistributorUploadOrder.new
-    @distributor_upload_order.update(online_order_id: 1, online_description: @message, online_last_ran_on: t)
+    @distributor_upload_order.update(online_order_id: 0, online_description: @message, online_last_ran_on: t)
 
     flash[:notice] = "Switched off #{@message}"
-    redirect corporates_path
+    redirect_to corporates_path
   end
 
   # POST /distributor_upload_orders
