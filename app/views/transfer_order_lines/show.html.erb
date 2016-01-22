@@ -1,0 +1,69 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Transfer order:</strong>
+  <%= @transfer_order_line.transfer_order_id %>
+</p>
+
+<p>
+  <strong>Prod:</strong>
+  <%= @transfer_order_line.prod %>
+</p>
+
+<p>
+  <strong>Description:</strong>
+  <%= @transfer_order_line.description %>
+</p>
+
+<p>
+  <strong>Product list:</strong>
+  <%= @transfer_order_line.product_list_id %>
+</p>
+
+<p>
+  <strong>Product variant:</strong>
+  <%= @transfer_order_line.product_variant_id %>
+</p>
+
+<p>
+  <strong>Product master:</strong>
+  <%= @transfer_order_line.product_master_id %>
+</p>
+
+<p>
+  <strong>Pieces:</strong>
+  <%= @transfer_order_line.pieces %>
+</p>
+
+<p>
+  <strong>Sub total:</strong>
+  <%= @transfer_order_line.sub_total %>
+</p>
+
+<p>
+  <strong>Shipping:</strong>
+  <%= @transfer_order_line.shipping %>
+</p>
+
+<p>
+  <strong>Codcharges:</strong>
+  <%= @transfer_order_line.codcharges %>
+</p>
+
+<p>
+  <strong>Total:</strong>
+  <%= @transfer_order_line.total %>
+</p>
+
+<p>
+  <strong>Transfer order status:</strong>
+  <%= @transfer_order_line.transfer_order_status_id %>
+</p>
+
+<p>
+  <strong>Notes:</strong>
+  <%= @transfer_order_line.notes %>
+</p>
+
+<%= link_to 'Edit', edit_transfer_order_line_path(@transfer_order_line) %> |
+<%= link_to 'Back', transfer_order_lines_path %>

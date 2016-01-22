@@ -25,6 +25,11 @@
     <small> Email Id  <%= @order_master.customer.alt_emailid if @order_master.customer %></small>
     </div>
   </div>
+  <div class="row">
+    <div class="col-xs-12">
+      Related Order Id: <%= @order_master.original_order_id if @order_master.original_order_id.preset? %>
+    </div>
+  </div>
 </div>
 </div>
 <% else %>

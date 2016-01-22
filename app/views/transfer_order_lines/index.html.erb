@@ -1,0 +1,51 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Listing Transfer Order Lines</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Transfer order</th>
+      <th>Prod</th>
+      <th>Description</th>
+      <th>Product list</th>
+      <th>Product variant</th>
+      <th>Product master</th>
+      <th>Pieces</th>
+      <th>Sub total</th>
+      <th>Shipping</th>
+      <th>Codcharges</th>
+      <th>Total</th>
+      <th>Transfer order status</th>
+      <th>Notes</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @transfer_order_lines.each do |transfer_order_line| %>
+      <tr>
+        <td><%= transfer_order_line.transfer_order_id %></td>
+        <td><%= transfer_order_line.prod %></td>
+        <td><%= transfer_order_line.description %></td>
+        <td><%= transfer_order_line.product_list_id %></td>
+        <td><%= transfer_order_line.product_variant_id %></td>
+        <td><%= transfer_order_line.product_master_id %></td>
+        <td><%= transfer_order_line.pieces %></td>
+        <td><%= transfer_order_line.sub_total %></td>
+        <td><%= transfer_order_line.shipping %></td>
+        <td><%= transfer_order_line.codcharges %></td>
+        <td><%= transfer_order_line.total %></td>
+        <td><%= transfer_order_line.transfer_order_status_id %></td>
+        <td><%= transfer_order_line.notes %></td>
+        <td><%= link_to 'Show', transfer_order_line %></td>
+        <td><%= link_to 'Edit', edit_transfer_order_line_path(transfer_order_line) %></td>
+        <td><%= link_to 'Destroy', transfer_order_line, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Transfer order line', new_transfer_order_line_path %>

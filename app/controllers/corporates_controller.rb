@@ -76,7 +76,19 @@ class CorporatesController < ApplicationController
     @distributor_missed_orders = DistributorMissedOrder.where(corporate_id: @corporate.id).order("id DESC").limit(10)
     india_pincode_lists = IndiaPincodeList.take(0)
 
-    respond_with(@corporate)
+    chkuser = User.where(employee_code: @corporate.id)
+     #@addnewlogin = false
+     @addnewlogin = true || false if chkuser.present?
+    if chkuser.present?
+      @userpas = chkuser.first
+      @userstatus = "#{chkuser.first.name} has already got a Login Id: #{chkuser.first.employee_code} and password, you may change the password here"
+   else
+     emailid = @corporate.emaild1 || nil if @corporate.emaild1.present?
+     @user = User.new(name: @corporate.name, employee_code: @corporate.id,
+      email: emailid, role: 10141) #distributor role id
+      @userstatus = "This distributor has does not have Login Id"
+    end
+    #@corporate
   end
 
   def createnew

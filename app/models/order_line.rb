@@ -277,9 +277,47 @@ end
 
 def productrevenue
   totalrevenue = 0
-    totalrevenue += ((self.subtotal * self.pieces) * 0.888889)|| 0
-    totalrevenue += ((self.shipping * self.pieces) *0.98125)|| 0
+    totalrevenue += (self.subtotal * (self.pieces ||= 1) * 0.888889) || 0
+    totalrevenue += (self.shipping * (self.pieces ||= 1) * 0.98125) || 0
      return totalrevenue
+end
+
+def gross_sales
+  totalrevenue = 0
+    totalrevenue += (self.subtotal * (self.pieces ||= 1)) || 0
+    totalrevenue += (self.shipping * (self.pieces ||= 1)) || 0
+     return totalrevenue
+end
+
+def net_sales
+  totalrevenue = 0
+  totalrevenue += (self.subtotal * (self.pieces ||= 1) * 0.888889) || 0
+  totalrevenue += (self.shipping * (self.pieces ||= 1) * 0.98125) || 0
+  return totalrevenue
+end
+
+def refund
+  # return
+  totalrevenue = 0
+  totalrevenue += (self.subtotal * (self.pieces ||= 1)) || 0
+  totalrevenue += (self.shipping * (self.pieces ||= 1)) || 0
+  return totalrevenue * 0.02
+end
+
+def media_commission
+   media_variable = Medium.where('id = ? AND value is not null', self.order_master.media_id)
+    .where(:media_commision_id => [10020, 10021, 10040, 10041, 10060]) #.pluck(:value)
+     if media_variable.present?
+         #discount the total value by 50% as media_correction
+       media_correction = 0.5
+       #PAID_CORRECTION
+        if media_variable.first.paid_correction.present?
+         media_correction = media_variable.first.paid_correction #||= 0.5
+        end
+        return ((self.subtotal * 0.888889) * media_variable.first.value.to_f) * media_correction
+      else
+        return 0
+      end
 end
 # def productrevenue
 #   if self.product_list.present? #&& self.pieces.present?

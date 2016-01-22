@@ -1,0 +1,19 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @transfer_order_status.name %>
+</p>
+
+<p>
+  <strong>Sort order:</strong>
+  <%= @transfer_order_status.sort_order %>
+</p>
+
+<p>
+  <strong>Description:</strong>
+  <%= @transfer_order_status.description %>
+</p>
+
+<%= link_to 'Edit', edit_transfer_order_status_path(@transfer_order_status) %> |
+<%= link_to 'Back', transfer_order_statuses_path %>

@@ -1,0 +1,31 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Listing Transfer Order Statuses</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Sort order</th>
+      <th>Description</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @transfer_order_statuses.each do |transfer_order_status| %>
+      <tr>
+        <td><%= transfer_order_status.name %></td>
+        <td><%= transfer_order_status.sort_order %></td>
+        <td><%= transfer_order_status.description %></td>
+        <td><%= link_to 'Show', transfer_order_status %></td>
+        <td><%= link_to 'Edit', edit_transfer_order_status_path(transfer_order_status) %></td>
+        <td><%= link_to 'Destroy', transfer_order_status, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Transfer order status', new_transfer_order_status_path %>

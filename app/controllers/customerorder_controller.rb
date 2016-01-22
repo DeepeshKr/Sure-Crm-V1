@@ -124,28 +124,6 @@ def add_products
      else
       @cli = params[:mobile]
       @dnis = params[:calledno]
-
-      if Customer.where(mobile: @cli).present?
-        @customer = Customer.where(mobile: @cli).last
-
-        #check the last place order
-        old_orders = OrderMaster.where(customer_id: @customer.id).where("order_status_master_id > 10002") #.where("external_order_no is not null")
-        if old_orders.present?
-
-          old_order = old_orders.last
-          #check the order Date
-        order_date =  (old_order.orderdate + 330.minutes).strftime("%d-%b-%Y")
-
-        order_lines = OrderLine.where(orderid: old_orders.last.id)
-          if order_lines.present?
-            order_lines.each { |ord| products << ord.description  }
-          end
-          message = "Earlier called Customer found order #{old_order.external_order_no} on date #{order_date} for #{products}"
-        else
-          message = "First time order mobile number!"
-        end
-        flash[:error] = message
-      end
       @order_id = neworder(10000, @cli, @dnis)
       order_line_params[:orderid] = @order_id
 
@@ -216,25 +194,7 @@ def add_products
         flash[:notice] = "Existing Customer found #{@customer.id}"
         @customer_id = @customer.id
       elsif Customer.where(mobile: @order_master.mobile).present?
-        @customer = Customer.where(mobile: @order_master.mobile).last
-
-        #check the last place order
-        old_orders = OrderMaster.where(customer_id: @customer.id).where("order_status_master_id > 10002") #.where("external_order_no is not null")
-        if old_orders.present?
-
-          old_order = old_orders.last
-          #check the order Date
-        order_date =  (old_order.orderdate + 330.minutes).strftime("%d-%b-%Y")
-
-        order_lines = OrderLine.where(orderid: old_orders.last.id)
-          if order_lines.present?
-            order_lines.each { |ord| products << ord.description  }
-          end
-          message = "Earlier called Customer found order #{old_order.external_order_no} on date #{order_date} for #{products}"
-        else
-          message = "No past orders found for this mobile number!"
-        end
-        flash[:error] = message
+        check_for_most_recent_order @order_master.mobile
         #flash[:notice] = "Earlier called Customer found #{@customer.id}"
         @customer_id = @customer.id
       else
@@ -970,6 +930,9 @@ end
       set_order
       @calledno = params[:calledno] #|| if params[:calledno].present?
       @mobile = params[:mobile] #|| if params[:mobile].present?
+      if @mobile.present?
+        check_for_most_recent_order @mobile
+      end
        @channellist =  Medium.where(active: 1).where('dnis = ?',  params[:calledno]).where('active = 1')
       if params[:order_id].present?
        @order_id = params[:order_id]
@@ -1010,6 +973,30 @@ end
 
     end
 
+    def check_for_most_recent_order mobile
+
+      if Customer.where(mobile:mobile).present?
+        customer = Customer.where(mobile:mobile).last
+
+        #check the last place order
+        old_orders = OrderMaster.where(customer_id: customer.id).where("order_status_master_id > 10002") #.where("external_order_no is not null")
+        if old_orders.present?
+
+          old_order = old_orders.last
+          #check the order Date
+        order_date =  (old_order.orderdate + 330.minutes).strftime("%d-%b-%Y")
+
+        order_lines = OrderLine.where(orderid: old_orders.last.id)
+          if order_lines.present?
+            order_lines.each { |ord| products << ord.description  }
+          end
+          message = "Earlier called Customer found order #{old_order.external_order_no} on date #{order_date} for #{products}"
+        else
+          message = "First time order from #{mobile} number!"
+        end
+        flash[:error] = message
+      end
+    end
 
     def neworder(source, cli, dnis)
 

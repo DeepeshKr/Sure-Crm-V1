@@ -8,13 +8,16 @@ has_many :distributor_stock_ledger, foreign_key: "corporate_id"
 has_many :distributor_stock_book, foreign_key: "corporate_id"
 has_many :distributor_missed_order, foreign_key: "corporate_id"
 
+
 validates :tally_id,  allow_blank: true, uniqueness: true
 validates :cst_no,  allow_blank: true, uniqueness: true
-validates :gst_no,  allow_blank: true, uniqueness: true
+#validates :gst_no,  allow_blank: true, uniqueness: true
 validates :vat_no,  allow_blank: true, uniqueness: true
 validates :tin_no,  allow_blank: true, uniqueness: true
 validates :web_id,  allow_blank: true, uniqueness: true
 validates :pan_card_no,  allow_blank: true, uniqueness: true
+
+validates :commission_percent, :inclusion => { :in => 0.0..1.0, :message => "The commission percent should be between 0 and 1"}, allow_nil: true
 
 # :name, :address1, :address2, :address3,
 #   :landmark, :city, :pincode, :state, :district,

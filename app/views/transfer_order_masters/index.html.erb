@@ -1,0 +1,79 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Listing Transfer Order Masters</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Corporate</th>
+      <th>Orderdate</th>
+      <th>Customer</th>
+      <th>Order</th>
+      <th>Order no</th>
+      <th>Customer name</th>
+      <th>Mobile</th>
+      <th>Email</th>
+      <th>Address1</th>
+      <th>Address2</th>
+      <th>Address3</th>
+      <th>Landmark</th>
+      <th>District</th>
+      <th>City</th>
+      <th>State</th>
+      <th>Country</th>
+      <th>Pincode</th>
+      <th>Phone1</th>
+      <th>Phone2</th>
+      <th>Pieces</th>
+      <th>Sub total</th>
+      <th>Shipping</th>
+      <th>Codcharges</th>
+      <th>Total</th>
+      <th>G total</th>
+      <th>Transfer order status</th>
+      <th>Notes</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @transfer_order_masters.each do |transfer_order_master| %>
+      <tr>
+        <td><%= transfer_order_master.corporate_id %></td>
+        <td><%= transfer_order_master.orderdate %></td>
+        <td><%= transfer_order_master.customer_id %></td>
+        <td><%= transfer_order_master.order_id %></td>
+        <td><%= transfer_order_master.order_no %></td>
+        <td><%= transfer_order_master.customer_name %></td>
+        <td><%= transfer_order_master.mobile %></td>
+        <td><%= transfer_order_master.email %></td>
+        <td><%= transfer_order_master.address1 %></td>
+        <td><%= transfer_order_master.address2 %></td>
+        <td><%= transfer_order_master.address3 %></td>
+        <td><%= transfer_order_master.landmark %></td>
+        <td><%= transfer_order_master.district %></td>
+        <td><%= transfer_order_master.city %></td>
+        <td><%= transfer_order_master.state %></td>
+        <td><%= transfer_order_master.country %></td>
+        <td><%= transfer_order_master.pincode %></td>
+        <td><%= transfer_order_master.phone1 %></td>
+        <td><%= transfer_order_master.phone2 %></td>
+        <td><%= transfer_order_master.pieces %></td>
+        <td><%= transfer_order_master.sub_total %></td>
+        <td><%= transfer_order_master.shipping %></td>
+        <td><%= transfer_order_master.codcharges %></td>
+        <td><%= transfer_order_master.total %></td>
+        <td><%= transfer_order_master.g_total %></td>
+        <td><%= transfer_order_master.transfer_order_status_id %></td>
+        <td><%= transfer_order_master.notes %></td>
+        <td><%= link_to 'Show', transfer_order_master %></td>
+        <td><%= link_to 'Edit', edit_transfer_order_master_path(transfer_order_master) %></td>
+        <td><%= link_to 'Destroy', transfer_order_master, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Transfer order master', new_transfer_order_master_path %>

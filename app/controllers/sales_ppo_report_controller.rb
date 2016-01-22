@@ -379,10 +379,12 @@ class SalesPpoReportController < ApplicationController
      @from_date = (330.minutes).from_now.to_date
      for_date = (330.minutes).from_now.to_date
      @product_lists = ProductList.joins(:product_variant).where("product_variants.activeid = 10000").order('product_lists.name')
-     #@product_variants = ProductVariant.all.order("name")
+
+     @product_variants = ProductVariant.all.order("name").where("activeid = 10000")
+
      if params.has_key?(:product_variant_id)
       @product_variant_id = params[:product_variant_id]
-      @product_name = ProductVariant.find(@product_variant_id)
+      @product_variant = ProductVariant.find(@product_variant_id)
      end
      if params.has_key?(:product_list_id)
       @product_list_id = params[:product_list_id]
@@ -432,9 +434,14 @@ class SalesPpoReportController < ApplicationController
 
            campaign_playlists.each do | playlist |
 
+          #  @orderlist = OrderMaster.where('ORDER_STATUS_MASTER_ID > 10002')
+          #  .where(campaign_playlist_id: playlist.id).joins(:order_line)
+          #  .where("order_lines.product_list_id in (?)", @product_list_id)
+          #  .pluck(:id)
+
            @orderlist = OrderMaster.where('ORDER_STATUS_MASTER_ID > 10002')
            .where(campaign_playlist_id: playlist.id).joins(:order_line)
-           .where("order_lines.product_list_id in (?)", @product_list_id)
+           .where("order_lines.productvariant_id in (?)", @product_variant_id)
            .pluck(:id)
            #.limit(10)
              @correction = 0.5

@@ -1,0 +1,69 @@
+<%= form_for(@transfer_order_line) do |f| %>
+  <% if @transfer_order_line.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@transfer_order_line.errors.count, "error") %> prohibited this transfer_order_line from being saved:</h2>
+
+      <ul>
+      <% @transfer_order_line.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :transfer_order_id %><br>
+    <%= f.number_field :transfer_order_id %>
+  </div>
+  <div class="field">
+    <%= f.label :prod %><br>
+    <%= f.text_field :prod %>
+  </div>
+  <div class="field">
+    <%= f.label :description %><br>
+    <%= f.text_area :description %>
+  </div>
+  <div class="field">
+    <%= f.label :product_list_id %><br>
+    <%= f.number_field :product_list_id %>
+  </div>
+  <div class="field">
+    <%= f.label :product_variant_id %><br>
+    <%= f.number_field :product_variant_id %>
+  </div>
+  <div class="field">
+    <%= f.label :product_master_id %><br>
+    <%= f.number_field :product_master_id %>
+  </div>
+  <div class="field">
+    <%= f.label :pieces %><br>
+    <%= f.number_field :pieces %>
+  </div>
+  <div class="field">
+    <%= f.label :sub_total %><br>
+    <%= f.text_field :sub_total %>
+  </div>
+  <div class="field">
+    <%= f.label :shipping %><br>
+    <%= f.text_field :shipping %>
+  </div>
+  <div class="field">
+    <%= f.label :codcharges %><br>
+    <%= f.text_field :codcharges %>
+  </div>
+  <div class="field">
+    <%= f.label :total %><br>
+    <%= f.text_field :total %>
+  </div>
+  <div class="field">
+    <%= f.label :transfer_order_status_id %><br>
+    <%= f.number_field :transfer_order_status_id %>
+  </div>
+  <div class="field">
+    <%= f.label :notes %><br>
+    <%= f.text_area :notes %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

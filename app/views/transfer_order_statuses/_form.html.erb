@@ -1,0 +1,29 @@
+<%= form_for(@transfer_order_status) do |f| %>
+  <% if @transfer_order_status.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@transfer_order_status.errors.count, "error") %> prohibited this transfer_order_status from being saved:</h2>
+
+      <ul>
+      <% @transfer_order_status.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :name %><br>
+    <%= f.text_field :name %>
+  </div>
+  <div class="field">
+    <%= f.label :sort_order %><br>
+    <%= f.number_field :sort_order %>
+  </div>
+  <div class="field">
+    <%= f.label :description %><br>
+    <%= f.text_area :description %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>
