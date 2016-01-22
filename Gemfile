@@ -55,6 +55,7 @@ gem 'kaminari'
 #what you see if what you get form
 gem 'bootsy'
 
+gem 'byebug'
 #date picker
 #gem 'jquery-ui-rails'
 #https://github.com/joliss/jquery-ui-rails

@@ -186,6 +186,10 @@ post 'distributor_upload_orders/switch_off'
   get 'sales_report/hourly_products'
   get 'hourly_products' => 'sales_report#hourly_products'
 
+  get 'sales_report/hour_sales'
+  get 'hour_sales' => 'sales_report#hour_sales'
+
+
   get 'sales_report/employee'
   get 'employee_report' => 'sales_report#employee'
   get 'sales_report/city'

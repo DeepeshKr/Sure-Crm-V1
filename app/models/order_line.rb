@@ -252,7 +252,7 @@ def maharastraccextra
 end
 
 def productcost
-  pcode = self.product_list.extproductcode
+  pcode = self.product_list.product_variant.extproductcode
   cost_master =  ProductCostMaster.where("prod = ?", pcode).first
   if cost_master.present?
     return cost_master.cost * self.pieces || 0

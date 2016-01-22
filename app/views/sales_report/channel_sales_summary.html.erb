@@ -5,9 +5,10 @@
 	 <div class="col-xs-6">
 
 	 <h4>Channel Sales Report </h4>
-	 
+
    </div>
 	 <div class="col-xs-5">
+    <%= hidden_field_tag :source, @source %>
         <div class="input-daterange input-group">
           <%= text_field_tag(:from_date, @from_date, :data => {:provide => "datepicker"}, :id => "datepicker_from", :class => "form-control", :required => "true" )   %>
           <span class="input-group-addon">to</span>
@@ -55,7 +56,7 @@
 </tbody>
 </table>
   <div class="well well-sm">
-    <%= link_to 'Download CSV file', channel_sales_summary_path(from_date: @or_for_date, to_date: @to_date , format: :csv), class: "btn btn-info btn-sm" %>
+    <%= link_to 'Download CSV file', channel_sales_summary_path(from_date: @or_for_date, to_date: @to_date, source: @source, format: :csv), class: "btn btn-info btn-sm" %>
   </div>
 
   <% end %>
