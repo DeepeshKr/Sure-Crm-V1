@@ -844,7 +844,34 @@ class SalesReportController < ApplicationController
 
            halfhourago = Time.at(date - 30.minutes)
 
-            orderlist = OrderMaster.where('ORDER_STATUS_MASTER_ID > 10002').where('ORDER_STATUS_MASTER_ID <> 10006') .joins(:medium).where("media.media_group_id = 10000").where('orderdate >= ? AND orderdate <= ?', halfhourago, Time.at(date))
+
+            orderlist = OrderMaster.where('ORDER_STATUS_MASTER_ID > 10002').where('ORDER_STATUS_MASTER_ID <> 10006')
+            .where('orderdate >= ? AND orderdate <= ?', halfhourago, Time.at(date))
+            #.joins(:medium).where("media.media_group_id = 10000")
+
+            # orderlists = OrderMaster.where('ORDER_STATUS_MASTER_ID > 10002').where('ORDER_STATUS_MASTER_ID <> 10006')
+            # .where('orderdate >= ? AND orderdate <= ?', halfhourago, Time.at(date))
+
+
+            #halfhourlist ||= []
+              #  orderlists.each do |order_list|
+              #     campaign_name = order_list.campaign_playlist.playlist_details + " " + order_list.campaign_playlist.starttime if order_list.campaign_playlist
+               #
+              #     products = ""
+              #     #cats.each do |cat| cat.name end
+              #     if order_list.order_line.present?
+              #       #products = o.order_line.each(&:description)
+              #       order_list.order_line.each do |ord| products << ord.description end
+              #     end
+              #     order_time = (order_list.orderdate + 300.minutes).strftime("%H:%M")
+              #       halfhourlist << {
+              #         :campaign => campaign_name,
+              #         :products => products,
+              #         :order_time => order_time,
+              #         :order_id => order_list.external_order_no
+              #          }
+              #  end
+
             ccvalue = orderlist.where(orderpaymentmode_id: 10000).sum(:total)
             ccorders = orderlist.where(orderpaymentmode_id: 10000).count()
             codorders = orderlist.where(orderpaymentmode_id: 10001).count()
@@ -879,71 +906,97 @@ class SalesReportController < ApplicationController
 
   end
   def hour_sales
+    #/sales_report/hourly?for_date=05%2F09%2F2015
+  #  @hourlist = "Time UTC is your zone #{Time.zone.now} while actual time is #{Time.now}"
     @sno = 1
-    @searchaction = "hour_sales_performance"
-
-     for_date = (330.minutes).from_now.to_date
-     @from_date = (330.minutes).from_now.to_date
-
-     if params.has_key?(:from_date)
-        @from_date =  Date.strptime(params[:from_date], "%Y-%m-%d")
-        @or_for_date = for_date.strftime("%Y-%m-%d")
-     end
-     @to_date = (330.minutes).from_now.to_date
-
-     employeeunorderlist ||= []
-    (@from_date.to_datetime.to_i .. @to_date.to_datetime.to_i).step(30.minutes) do |date|
-
-    halfhourago = Time.at(date - 30.minutes)
-
-     orderlists = OrderMaster.where('ORDER_STATUS_MASTER_ID > 10002').where('ORDER_STATUS_MASTER_ID <> 10006')
-     .where('orderdate >= ? AND orderdate <= ?', halfhourago, Time.at(date))
+    if params[:from_date].present?
+      #@summary ||= []
+      @or_for_date = Date.strptime(params[:from_date], "%Y-%m-%d")
+      @from_date =  Date.strptime(params[:from_date], "%Y-%m-%d")
 
 
-     halfhourlist ||= []
-        orderlists.each do |order_list|
-           campaign_name = order_list.campaign_playlist.playlist_details + " " + order_list.campaign_playlist.starttime if order_list.campaign_playlist
+      #for_date = for_date - 330.minutes
+        @hourlist ||= []
+        employeeunorderlist ||= []
 
-           products = ""
-           #cats.each do |cat| cat.name end
-           if order_list.order_line.present?
-             #products = o.order_line.each(&:description)
-             order_list.order_line.each do |ord| products << ord.description end
-           end
-           order_time = (order_list.orderdate + 300.minutes).strftime("%H:%M")
-             halfhourlist << {
-               :campaign => campaign_name,
-               :products => products,
-               :order_time => order_time,
-               :order_id => order_list.external_order_no
-                }
-        end
+        @from_date = @from_date.beginning_of_day - 300.minutes
+        @to_date = @from_date + 1.days
+        @to_date = @to_date.end_of_day - 400.minutes
+        #media segregation only HBN
+        media_segments
+
+        #start loop
+
+        (@from_date.to_datetime.to_i .. @to_date.to_datetime.to_i).step(30.minutes) do |date|
+
+         halfhourago = Time.at(date - 30.minutes)
 
 
-      total_order_nos = orderlists.count(:id)
-      total_order_value = orderlists.sum(:g_total).round(0)
-      s_no_i = 1
+          orderlists = OrderMaster.where('ORDER_STATUS_MASTER_ID > 10002').where('ORDER_STATUS_MASTER_ID <> 10006')
+          .where('orderdate >= ? AND orderdate <= ?', halfhourago, Time.at(date))
+          #.joins(:medium).where("media.media_group_id = 10000")
 
+          # orderlists = OrderMaster.where('ORDER_STATUS_MASTER_ID > 10002').where('ORDER_STATUS_MASTER_ID <> 10006')
+          # .where('orderdate >= ? AND orderdate <= ?', halfhourago, Time.at(date))
+
+
+          halfhourlist ||= []
+             orderlists.each do |order_list|
+                campaign_name = order_list.campaign_playlist.playlist_details + " " + order_list.campaign_playlist.starttime if order_list.campaign_playlist
+
+                products = ""
+                #cats.each do |cat| cat.name end
+                if order_list.order_line.present?
+                  #products = o.order_line.each(&:description)
+                  order_list.order_line.each do |ord| products << ord.description end
+                end
+                order_time = (order_list.orderdate + 300.minutes).strftime("%H:%M")
+                  halfhourlist << {
+                    :campaign => campaign_name,
+                    :products => products,
+                    :channel => order_list.medium.name,
+                    :agent => order_list.employee.fullname,
+                    :order_time => order_time,
+                    :order_id => order_list.external_order_no
+                     }
+             end
+
+             total_order_nos = orderlists.count(:id)
+             total_order_value = orderlists.sum(:g_total).round(0)
+             s_no_i = 1
+
+          # ccvalue = orderlists.where(orderpaymentmode_id: 10000).sum(:total)
+          # ccorders = orderlists.where(orderpaymentmode_id: 10000).count()
+          # codorders = orderlists.where(orderpaymentmode_id: 10001).count()
+          # codvalue = orderlists.where(orderpaymentmode_id: 10001).sum(:total)
+          # totalorders = orderlists.sum(:total)
+          # noorders = orderlists.count()
 
           employeeunorderlist << {
-            :order_date => Time.at(date).strftime("%Y-%m-%d"),
-            :time_start =>  halfhourago.strftime("%H:%M %p"),
-            :time_end => Time.at(date).strftime("%H:%M %p"),
-            :total_nos => total_order_nos,
-            :total_value => total_order_value,
-            :hourlist => halfhourlist
-          }
+          :order_date =>  @or_for_date,
+          :time_start => (halfhourago).strftime("%H:%M"),
+          :time_end => (Time.at(date)).strftime("%H:%M"),
+          :total_nos => total_order_nos,
+          :total_value => total_order_value,
+          :hourlist => halfhourlist}
+        end
+       @employeeorderlist = employeeunorderlist #.sort_by{|c| c[:total]}.reverse
 
-          @employeeorderlist = employeeunorderlist
-          # respond_to do |format|
-          #   csv_file_name = "Hour_Sales_between_#{@from_date}_ #{@to_date}.csv"
-          #     format.html
-          #     format.csv do
-          #       headers['Content-Disposition'] = "attachment; filename=\"#{csv_file_name}\""
-          #       headers['Content-Type'] ||= 'text/csv'
-          # end
-          # end
-      end
+      #this is for date on the view
+      @from_date = (@from_date + 330.minutes).strftime("%Y-%m-%d")
+      @to_date = (@to_date + 330.minutes).strftime("%Y-%m-%d")
+
+       respond_to do |format|
+        csv_file_name = "hour_sales_#{@from_date}.csv"
+          format.html
+          format.csv do
+            headers['Content-Disposition'] = "attachment; filename=\"#{csv_file_name}\""
+            headers['Content-Type'] ||= 'text/csv'
+          end
+        end
+
+     end
+
   end
 
   def hourly_products

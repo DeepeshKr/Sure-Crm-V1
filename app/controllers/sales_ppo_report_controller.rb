@@ -380,7 +380,7 @@ class SalesPpoReportController < ApplicationController
      @from_date = (330.minutes).from_now.to_date
      for_date = (330.minutes).from_now.to_date
 
-     @product_lists = ProductList.joins(:product_variant).where("product_variants.activeid = 10000").order('product_lists.name')
+    #  @product_lists = ProductList.joins(:product_variant).where("product_variants.activeid = 10000").order('product_lists.name')
 
      @product_variants = ProductVariant.all.order("name").where("activeid = 10000")
 
@@ -388,10 +388,10 @@ class SalesPpoReportController < ApplicationController
       @product_variant_id = params[:product_variant_id]
       @product_variant = ProductVariant.find(@product_variant_id)
      end
-     if params.has_key?(:product_list_id)
-      @product_list_id = params[:product_list_id]
-      @product_list = ProductList.find(@product_list_id)
-     end
+    #  if params.has_key?(:product_list_id)
+    #   @product_list_id = params[:product_list_id]
+    #   @product_list = ProductList.find(@product_list_id)
+    #  end
      if params.has_key?(:from_date)
       @from_date =  Date.strptime(params[:from_date], "%Y-%m-%d")
       @or_for_date = for_date.strftime("%Y-%m-%d")
@@ -403,7 +403,7 @@ class SalesPpoReportController < ApplicationController
     #  if @product_variant_id == nil && @from_date == nil && @to_date == nil
     #    return
     #  end
-     if @product_list_id == nil && @from_date == nil && @to_date == nil
+     if @product_variant_id == nil && @from_date == nil && @to_date == nil
        return
      end
         @total_nos = 0
@@ -538,6 +538,7 @@ class SalesPpoReportController < ApplicationController
           respond_to do |format|
             csv_file_name = "Product_performance_between_#{@from_date}_ #{@to_date}.csv"
               format.html
+              byebug
               format.csv do
                 headers['Content-Disposition'] = "attachment; filename=\"#{csv_file_name}\""
                 headers['Content-Type'] ||= 'text/csv'

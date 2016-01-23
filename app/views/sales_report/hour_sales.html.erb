@@ -1,22 +1,18 @@
 <!-- set page title start -->
-<% title "Hour Performance #{@timenow}" %>
+<% title "Hour Sales #{@timenow}" %>
 <!-- set page title end -->
  <div class="row">
-	 <div class="col-xs-3">
+	 <div class="col-xs-8">
 
 	 <h4>HBN Orders between</h4>
 
 	 </div>
    <%= form_tag  url_for(:controller => 'sales_report', :action => "hour_sales"), method: "get" do  %>
-   <div class="col-xs-4">
 
-
-
-   </div>
-       <div class="col-xs-4">
+       <div class="col-xs-3">
          <div class="input-daterange input-group">
            <%= text_field_tag(:from_date, @from_date, :data => {:provide => "datepicker"}, :id => "datepicker_from", :class => "form-control", :required => "true" )   %>
-           
+
          </div>
        </div>
 
@@ -31,8 +27,7 @@
  <br>
  <% if @employeeorderlist.present? %>
 <% @sno = 0 %>
-   <div class="row fixed-table">
-<div class="table-content">
+
 <table class="table table-hover table-bordered table-striped">
   <thead class="header">
      <tr>
@@ -75,9 +70,10 @@
               <tr>
                 <td><% @camp_sno += 1 %><%= @camp_sno %></td>
                 <td><%= link_to cp[:order_id], custordersearch_path(ordernum: cp[:order_id]), :target => "_blank" if cp[:order_id].present? %> </td>
-                <td><%= cp[:campaign] %></td>
+                <td><%= cp[:campaign] %> <br> <strong>Order at:<%= cp[:order_time] %></strong></td>
+                <td><%= cp[:channel] %> <%= cp[:agent] %></td>
                 <td><%= cp[:products] %></td>
-                <td><%= cp[:order_time] %></td>
+                <td></td>
               </tr>
             <% end %>
           </tbody>
@@ -88,8 +84,7 @@
   </tbody>
 
   </table>
-  </div>
-  </div>
+
   <% else %>
   <div class="well well-sm">
   <h5>Please select a date to generate the report </h5>

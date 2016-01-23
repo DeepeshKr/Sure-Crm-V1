@@ -2,16 +2,22 @@ class ProjectController < ApplicationController
    include FooTime
   #<%= javascript_include_tag 'https://cdn.datatables.net/1.10.10/js/jquery.dataTables.min.js' %>
 
-    #before_action { protect_controllers(20) } 
+    #before_action { protect_controllers(20) }
      skip_before_action :require_login, only: [:home, :help, :contact]
   def home
 
+    # page_trails = PageTrail.where("id < 100")
+    #
+    # page_trails.each do |page_trail|
+    #     page_trail.destroy
+    # end
+
     #check class is working
     @timenow = foo_hello_time
-    
+
 
       # require 'gruff'
-
+      #
       # g = Gruff::Line.new
       # g.title = 'Wow!  Look at this!'
       # g.labels = { 0 => '5/6', 1 => '5/15', 2 => '5/24', 3 => '5/30', 4 => '6/4',
@@ -22,15 +28,17 @@ class ProjectController < ApplicationController
       # g.data :Jane, [95, 95, 95, 90, 85, 80, 88, 100]
       # g.data :Philip, [90, 34, 23, 12, 78, 89, 98, 88]
       # g.data :Arthur, [5, 10, 13, 11, 6, 16, 22, 32]
-
+      #
       # g.marker_count = 1
-      # g.write('exciting.png')
-      #g.write("/home/deepesh/telebrands-projects/sure-crm-1/lib/assets/graphs/exciting.png")
+      # #g.write('new_exciting.png')
+      # g.write("/home/deepesh/telebrands-projects/sure-crm-1/public/assets/images/new_exciting.png")
+      #bar_chart.write(File.join(Rails.root, "public", "system", "graph", "lawfirm_#{@lawyer.id}.png"))
+
   end
 
   def help
   end
-  
+
   def about
     # stuff = ['chod', :mint, "wall", :ball]
     # @list = "NA"
@@ -52,7 +60,7 @@ class ProjectController < ApplicationController
       elsif (@n1 == @n2) || (@n2 == @n3) || (@n1 == @n3)
           @list = "An Isoceles Triangle"
       else
-          @list = "Scalene Triangle"    
+          @list = "Scalene Triangle"
       end
 
       @states = State.all.order("name")
@@ -62,22 +70,22 @@ class ProjectController < ApplicationController
   def contact
      @timenow = (Time.zone.now + 330.minutes).strftime("%d-%b-%Y %H:%M")
   end
-  
+
   def dropdown
   end
-  
+
   def update_text
     @city_text = params[:city_name]
   end
-  
-  
+
+
 
   def luhn
     code = params[:code]
     s1 = s2 = 0
-    code.to_s.reverse.chars.each_slice(2) do |odd, even| 
+    code.to_s.reverse.chars.each_slice(2) do |odd, even|
     s1 += odd.to_i
- 
+
     double = even.to_i * 2
     double -= 9 if double >= 10
     s2 += double
@@ -91,9 +99,9 @@ class ProjectController < ApplicationController
       @color = "red"
        @valid = "is an In-Valid Card No"
     end
- 
+
   end
-  
+
   def longtable
     #https://github.com/laertejjunior/freezeheader
   end
