@@ -403,6 +403,10 @@ class SalesPpoReportController < ApplicationController
     #  if @product_variant_id == nil && @from_date == nil && @to_date == nil
     #    return
     #  end
+    @total_media_cost = Medium.where(media_group_id: 10000).sum(:daily_charges).to_f
+    @hbn_media_cost = Medium.where(media_group_id: 10000, active: true).sum(:daily_charges).to_f
+    @total_fixed_cost = campaign_playlists.sum(:cost).to_f
+
      if @product_variant_id == nil && @from_date == nil && @to_date == nil
        return
      end
@@ -442,6 +446,7 @@ class SalesPpoReportController < ApplicationController
           #  .pluck(:id)
 
            @orderlist = OrderMaster.where('ORDER_STATUS_MASTER_ID > 10002')
+           .where('ORDER_STATUS_MASTER_ID <> 10006')
            .where(campaign_playlist_id: playlist.id).joins(:order_line)
            .where("order_lines.productvariant_id in (?)", @product_variant_id)
            .pluck(:id)
@@ -538,7 +543,7 @@ class SalesPpoReportController < ApplicationController
           respond_to do |format|
             csv_file_name = "Product_performance_between_#{@from_date}_ #{@to_date}.csv"
               format.html
-              #byebug
+
               format.csv do
                 headers['Content-Disposition'] = "attachment; filename=\"#{csv_file_name}\""
                 headers['Content-Type'] ||= 'text/csv'
@@ -557,6 +562,10 @@ class SalesPpoReportController < ApplicationController
     #  @product_lists = ProductList.joins(:product_variant).where("product_variants.activeid = 10000").order('product_lists.name')
 
      @product_variants = ProductVariant.all.order("name").where("activeid = 10000")
+
+     @total_media_cost = Medium.where(media_group_id: 10000).sum(:daily_charges).to_f
+     @hbn_media_cost = Medium.where(media_group_id: 10000, active: true).sum(:daily_charges).to_f
+     #@total_fixed_cost = campaign_playlists.sum(:cost).to_f
 
      if params.has_key?(:product_variant_id)
       @product_variant_id = params[:product_variant_id]
@@ -577,9 +586,7 @@ class SalesPpoReportController < ApplicationController
     #  if @product_variant_id == nil && @from_date == nil && @to_date == nil
     #    return
     #  end
-     if @product_list_id == nil && @from_date == nil && @to_date == nil
-       return
-     end
+
         @total_nos = 0
         @total_pieces = 0
         @total_sales = 0
@@ -595,6 +602,11 @@ class SalesPpoReportController < ApplicationController
         @halfhourlist ||= []
         employeeunorderlist ||= []
 
+        if @product_variant_id == nil || (@from_date == nil && @to_date == nil)
+
+          return
+        end
+
         from_date = for_date.beginning_of_day - 300.minutes
         to_date = for_date.end_of_day - 300.minutes
         #media segregation only HBN
@@ -605,7 +617,7 @@ class SalesPpoReportController < ApplicationController
         total_order_value = 0
         s_no_i = 1
         @serial_no = 1
-           campaign_playlists = CampaignPlaylist.where("for_date >= ? and for_date <= ?", @from_date, @to_date).where(list_status_id: 10000).order("for_date, start_hr, start_min")
+           campaign_playlists = CampaignPlaylist.where("for_date >= ? and for_date <= ?", @from_date, @to_date) .where(productvariantid: @product_variant_id).where(list_status_id: 10000).order("for_date, start_hr, start_min")
            @total_fixed_cost = campaign_playlists.sum(:cost).to_f
 
            campaign_playlists.each do | playlist |
@@ -616,6 +628,7 @@ class SalesPpoReportController < ApplicationController
           #  .pluck(:id)
 
            @orderlist = OrderMaster.where('ORDER_STATUS_MASTER_ID > 10002')
+           .where('ORDER_STATUS_MASTER_ID <> 10006')
            .where(campaign_playlist_id: playlist.id).joins(:order_line)
            .pluck(:id)
            #.limit(10)
