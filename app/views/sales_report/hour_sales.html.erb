@@ -73,10 +73,9 @@
                   <%= link_to cp[:order_no], custordersearch_path(ordernum: cp[:order_no]), :target => "_blank" if cp[:order_no].present? %></strong> <br>
                   Ref no <%= link_to cp[:order_id], detailedordersearch_path(ordernum: cp[:order_id]), :target => "_blank" if cp[:order_id].present? %>
                  </td>
-                <td><%= cp[:campaign] %> <br> <strong>At <%= cp[:order_time] %></strong></td>
-                <td><%= cp[:channel] %> <br><%= cp[:agent] %></td>
+                <td><%= cp[:campaign] || "No Campaign" if cp[:campaign].present? %> %>  <br> <strong>At <%= cp[:order_time] %></strong></td>
+                <td><%= cp[:channel] %> <strong><%= cp[:hbn] %></strong> <br><%= cp[:agent] %></td>
                 <td><%= cp[:products] %></td>
-                <td></td>
               </tr>
             <% end %>
           </tbody>

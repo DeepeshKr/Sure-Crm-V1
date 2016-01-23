@@ -923,7 +923,7 @@ class SalesReportController < ApplicationController
 
         @from_date = @from_date.beginning_of_day - 300.minutes
         @to_date = @from_date + 1.days
-        @to_date = @to_date.end_of_day - 200.minutes
+        @to_date = @to_date.end_of_day - 300.minutes
         #media segregation only HBN
         media_segments
 
@@ -952,11 +952,14 @@ class SalesReportController < ApplicationController
                   #products = o.order_line.each(&:description)
                   order_list.order_line.each do |ord| products << ord.description end
                 end
+                hbn = order_list.medium.media_group.name || nil if order_list.medium.media_group.present?
+                
                 order_time = (order_list.orderdate + 330.minutes).strftime("%H:%M")
                   halfhourlist << {
                     :campaign => campaign_name,
                     :products => products,
                     :channel => order_list.medium.name,
+                    :hbn => hbn,
                     :agent => order_list.employee.fullname,
                     :order_time => order_time,
                     :order_id => order_list.id,
