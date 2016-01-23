@@ -239,7 +239,9 @@ class SalesReportController < ApplicationController
   def channel_consolidated_daily_report
     # @media_manager = Medium.where(:media_commision_id => 10000).where("id <> 11200 and id <> 11700")
      @sno = 1
-
+     if params.has_key?(:source)
+       @source = params[:source]
+     end
       #@order_master.orderpaymentmode_id == 10000 #paid over CC
       #@order_master.orderpaymentmode_id == 10001 #paid over COD
     if params[:from_date].present?
@@ -262,14 +264,10 @@ class SalesReportController < ApplicationController
       order_masters = OrderMaster.where('orderdate >= ? AND orderdate <= ?', @from_date, @to_date)
       .where('ORDER_STATUS_MASTER_ID > 10002').where('ORDER_STATUS_MASTER_ID <> 10006').joins(:medium).distinct.pluck(:media_id)
 
-      if params.has_key?(:source)
-        @source = params[:source]
-
-        if @source == "hbn"
-          order_masters = order_masters.where("media.media_group_id = 10000")
-        elsif @source == "pvt"
-          order_masters = order_masters.where("media.media_group_id != 10000")
-        end
+      if @source == "hbn"
+        order_masters = order_masters.where("media.media_group_id = 10000")
+      elsif @source == "pvt"
+        order_masters = order_masters.where("media.media_group_id != 10000")
       end
       # .limit(10)
       #.select("date(orderdate) as ordered_date, sum(subtotal) as total_value")
@@ -343,7 +341,9 @@ class SalesReportController < ApplicationController
   def channel_sales_summary
     # @media_manager = Medium.where(:media_commision_id => 10000).where("id <> 11200 and id <> 11700")
      @sno = 1
-
+     if params.has_key?(:source)
+       @source = params[:source]
+     end
       #@order_master.orderpaymentmode_id == 10000 #paid over CC
       #@order_master.orderpaymentmode_id == 10001 #paid over COD
     if params[:from_date].present?
@@ -421,7 +421,9 @@ class SalesReportController < ApplicationController
   def channel_summary_report
     #@media_manager = Employee.where(:employee_role_id => 10121).order("first_name")
      @sno = 1
-
+     if params.has_key?(:source)
+       @source = params[:source]
+     end
       #@order_master.orderpaymentmode_id == 10000 #paid over CC
       #@order_master.orderpaymentmode_id == 10001 #paid over COD
     if params[:from_date].present?
@@ -921,7 +923,7 @@ class SalesReportController < ApplicationController
 
         @from_date = @from_date.beginning_of_day - 300.minutes
         @to_date = @from_date + 1.days
-        @to_date = @to_date.end_of_day - 400.minutes
+        @to_date = @to_date.end_of_day - 200.minutes
         #media segregation only HBN
         media_segments
 
@@ -950,14 +952,15 @@ class SalesReportController < ApplicationController
                   #products = o.order_line.each(&:description)
                   order_list.order_line.each do |ord| products << ord.description end
                 end
-                order_time = (order_list.orderdate + 300.minutes).strftime("%H:%M")
+                order_time = (order_list.orderdate + 330.minutes).strftime("%H:%M")
                   halfhourlist << {
                     :campaign => campaign_name,
                     :products => products,
                     :channel => order_list.medium.name,
                     :agent => order_list.employee.fullname,
                     :order_time => order_time,
-                    :order_id => order_list.external_order_no
+                    :order_id => order_list.id,
+                    :order_no => order_list.external_order_no
                      }
              end
 

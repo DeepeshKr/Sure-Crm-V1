@@ -4,7 +4,14 @@
  <div class="row">
 	 <div class="col-xs-6">
 
-	 <h4>Channel Sales Report </h4>
+	 <h4>Channel Sales Report  </h4>
+<% if @source == "hbn" %>
+  <p> HBN Channels </p>
+<% elsif @source == "pvt" %>
+<p> Pvt Channels</p>
+<% else %>
+<p>All Channels</p>
+<% end %>
 
    </div>
 	 <div class="col-xs-5">

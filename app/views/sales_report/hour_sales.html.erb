@@ -61,17 +61,20 @@
                 <th>S No</th>
                 <th>Id</th>
                 <th>Campaign</th>
+                <th>Media</th>
                 <th>Products</th>
-                <th>Time</th>
               </tr>
           </thead>
           <tbody>
             <% c[:hourlist].each do |cp| %>
               <tr>
                 <td><% @camp_sno += 1 %><%= @camp_sno %></td>
-                <td><%= link_to cp[:order_id], custordersearch_path(ordernum: cp[:order_id]), :target => "_blank" if cp[:order_id].present? %> </td>
-                <td><%= cp[:campaign] %> <br> <strong>Order at:<%= cp[:order_time] %></strong></td>
-                <td><%= cp[:channel] %> <%= cp[:agent] %></td>
+                <td> <strong>
+                  <%= link_to cp[:order_no], custordersearch_path(ordernum: cp[:order_no]), :target => "_blank" if cp[:order_no].present? %></strong> <br>
+                  Ref no <%= link_to cp[:order_id], detailedordersearch_path(ordernum: cp[:order_id]), :target => "_blank" if cp[:order_id].present? %>
+                 </td>
+                <td><%= cp[:campaign] %> <br> <strong>At <%= cp[:order_time] %></strong></td>
+                <td><%= cp[:channel] %> <br><%= cp[:agent] %></td>
                 <td><%= cp[:products] %></td>
                 <td></td>
               </tr>
