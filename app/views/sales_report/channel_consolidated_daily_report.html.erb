@@ -40,6 +40,7 @@
      <th>From</th>
      <th>Upto</th>
      <th>Channel</th>
+     <th>Group</th>
      <th>Nos</th>
      <th>Value</th>
      <th> More </th>
@@ -52,6 +53,7 @@
      <td><%= c[:from_date] %></td>
      <td><%= c[:to_date] %></td>
      <td><%= c[:channel] %></td>
+     <td><%= c[:group] %></td>
      <td class="text-right"><%= c[:total_nos] %> </td>
      <td class="text-right"><%= c[:total_value] %> </td>
      <td>
@@ -62,7 +64,7 @@
      <td>
 
      </td>
-     <td colspan="5">
+     <td colspan="7">
        <div class="row">
          <div class="col-xs-4">
            <table class="table table-bordered">
@@ -79,8 +81,50 @@
            </table>
          </div>
          <div class="col-xs-8">
+
            <table class="table table-bordered">
-              <% c[:product_list].each do |pl| %>
+             <tr>
+               <th colspan="2">
+                 Main Products
+               </th>
+             </tr>
+              <% c[:main_products].each do |pl| %>
+             <tr>
+                <td>
+                  <%= pl[0] %>
+                </td>
+                <td>
+                  <%= pl[1] %>
+                </td>
+             </tr>
+             <% end %>
+           </table>
+
+           <table class="table table-bordered">
+             <tr>
+               <th colspan="2">
+                 Basic Upsell Products
+               </th>
+             </tr>
+              <% c[:bas_upsell_products].each do |pl| %>
+             <tr>
+                <td>
+                  <%= pl[0] %>
+                </td>
+                <td>
+                  <%= pl[1] %>
+                </td>
+             </tr>
+             <% end %>
+           </table>
+
+           <table class="table table-bordered">
+             <tr>
+               <th colspan="2">
+                 Common Upsell Products
+               </th>
+             </tr>
+              <% c[:com_upsell_products].each do |pl| %>
              <tr>
                 <td>
                   <%= pl[0] %>
@@ -100,7 +144,17 @@
 </tbody>
 </table>
 
+<div class="well well-sm">
+  <div class="row">
+    <div class="col-xs-8">
+      <h4>Download the entire list</h4>
+    </div>
+    <div class="col-xs-4">
+        <%= link_to 'Download CSV file', channel_consolidated_daily_report_path(from_date: @from_date, to_date: @to_date, source: @source, format: :csv), class: "btn btn-info btn-sm" %>
+    </div>
+  </div>
 
+</div>
   <% end %>
  <br>
 

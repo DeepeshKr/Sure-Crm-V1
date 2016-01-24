@@ -19,7 +19,7 @@ class ProjectController < ApplicationController
       # require 'gruff'
       #
       # g = Gruff::Line.new
-      # g.title = 'Wow!  Look at this!'
+      # g.title = "Wow!  Look at this #{@timenow}! "
       # g.labels = { 0 => '5/6', 1 => '5/15', 2 => '5/24', 3 => '5/30', 4 => '6/4',
       #              5 => '6/12', 6 => '6/21', 7 => '6/28' }
       # g.data :Jimmy, [25, 36, 86, 39, 25, 31, 79, 88]
@@ -30,9 +30,22 @@ class ProjectController < ApplicationController
       # g.data :Arthur, [5, 10, 13, 11, 6, 16, 22, 32]
       #
       # g.marker_count = 1
-      # #g.write('new_exciting.png')
-      # g.write("/home/deepesh/telebrands-projects/sure-crm-1/public/assets/images/new_exciting.png")
+      # g.write(File.join(Rails.root, "app", "assets", "graph_new.png"))
+
+
+      #g.write('new_exciting.png')
+       #g.write("/app/assets/new_exciting.png")
+
       #bar_chart.write(File.join(Rails.root, "public", "system", "graph", "lawfirm_#{@lawyer.id}.png"))
+
+
+      # Your first formulation, image_url('logo.png'), is correct. If the image is found, it will generate the path /assets/logo.png (plus a hash in production). However, if Rails cannot find the image that you named, it will fall back to /images/logo.png.
+      #
+      # The next question is: why isn't Rails finding your image? If you put it in app/assets/images/logo.png, then you should be able to access it by going to http://localhost:3000/assets/logo.png.
+      #
+      # If that works, but your CSS isn't updating, you may need to clear the cache. Delete tmp/cache/assets from your project directory and restart the server (webrick, etc.).
+      #
+      # If that fails, you can also try just using background-image: url(logo.png); That will cause your CSS to look for files with the same relative path (which in this case is /assets).
 
   end
 

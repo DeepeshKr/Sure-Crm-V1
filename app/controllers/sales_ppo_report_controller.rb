@@ -622,57 +622,35 @@ class SalesPpoReportController < ApplicationController
 
            campaign_playlists.each do | playlist |
 
-          #  @orderlist = OrderMaster.where('ORDER_STATUS_MASTER_ID > 10002')
+        #  @orderlist = OrderMaster.where('ORDER_STATUS_MASTER_ID > 10002')
+          #  .where('ORDER_STATUS_MASTER_ID <> 10006')
           #  .where(campaign_playlist_id: playlist.id).joins(:order_line)
-          #  .where("order_lines.product_list_id in (?)", @product_list_id)
           #  .pluck(:id)
 
-           @orderlist = OrderMaster.where('ORDER_STATUS_MASTER_ID > 10002')
-           .where('ORDER_STATUS_MASTER_ID <> 10006')
-           .where(campaign_playlist_id: playlist.id).joins(:order_line)
-           .pluck(:id)
-           #.limit(10)
-             @correction = 0.5
-             @orderlistcount = @orderlist.count
-          if @orderlist.present?
+           orderlist = OrderMaster.where('ORDER_STATUS_MASTER_ID > 10002').where('ORDER_STATUS_MASTER_ID <> 10006')
+           .where(campaign_playlist_id: playlist.id)
+
                 revenue = 0
-                #OrderLine.where(orderid: orderlist)
                 media_var_cost = 0
                 product_cost = 0
+                @fixed_cost = playlist.cost
                 nos = 0.0
                 pieces = 0.0
-                totalorders = 0.0
-                @fixed_cost = playlist.cost
-                OrderMaster.where(id: @orderlist).each { |med_com|
-                  media_var_cost += med_com.media_commission
-                  revenue += med_com.productrevenue
-                }
-
-                order_lines = OrderLine.where(orderid: @orderlist)
-                order_lines.each do |med |
-                #orderlist.each do |med |
-
+                orderlist.each do |med |
                   product_cost += med.productcost
+                  revenue += med.productrevenue
+                  media_var_cost += med.media_commission
+                  nos += 1
                   pieces += med.pieces
-                  totalorders += med.shipping + med.subtotal
+                end
 
-                end # ORDER LIST LOOP END
+                total_shipping = orderlist.sum(:shipping)
+                total_sub_total = orderlist.sum(:subtotal)
+                totalorders = total_shipping + total_sub_total
                 #nos = orderlist.count()
                 #pieces = orderlist.sum(:pieces)
-                nos = @orderlist.count
+
                 nos =  nos * @correction
-
-                if nos == 0
-                  divide_nos = 1
-                else
-                  divide_nos = nos
-                end
-
-                if nos <= 1
-                    @correction = 1
-                    nos = 1
-                end
-
                 pieces = pieces * @correction
                 revenue = revenue * @correction
                 # #product_cost = product_cost * nos
@@ -682,6 +660,13 @@ class SalesPpoReportController < ApplicationController
                 media_var_cost = media_var_cost * @correction
                 refund = totalorders * 0.02
 
+                 if nos == 0
+                   divide_nos = 1
+                 else
+                   divide_nos = nos
+                 end
+                total_cost = (product_cost + @fixed_cost + product_damages + media_var_cost + refund)
+                profitability = ((revenue - total_cost)/ divide_nos).to_i
 
                 total_cost = (product_cost + @fixed_cost + product_damages + media_var_cost + refund)
                 profitability = revenue - total_cost
@@ -717,10 +702,8 @@ class SalesPpoReportController < ApplicationController
                 :product_variant_id => playlist.productvariantid}
 
                @serial_no += 1
-            end #if order list present
-           end
-           @report_results = "Searched for dates #{@from_date} to #{@to_date} and nothing found"
-        @employeeorderlist = employeeunorderlist #.sort_by{|c| c[:total]}.reverse
+              end
+              @employeeorderlist = employeeunorderlist
           respond_to do |format|
             csv_file_name = "Product_performance_between_#{@from_date}_ #{@to_date}.csv"
               format.html
@@ -1033,8 +1016,6 @@ class SalesPpoReportController < ApplicationController
               @revised_media_total_fixed_cost += @revised_per_day_rate || 0 if @revised_per_day_rate > 0
            end
 
-
-
            if @media_id.blank?
              return
            end
@@ -1165,6 +1146,7 @@ class SalesPpoReportController < ApplicationController
 
       @serial_no = 1
      campaign_playlists.each do | playlist |
+
      orderlist = OrderMaster.where('ORDER_STATUS_MASTER_ID > 10002').where('ORDER_STATUS_MASTER_ID <> 10006')
      .where(campaign_playlist_id: playlist.id)
 

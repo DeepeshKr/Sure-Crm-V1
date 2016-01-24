@@ -6,6 +6,8 @@ Rails.application.configure do
   # since you don't have to restart the web server when you make code changes.
   config.cache_classes = false
 
+  # config.serve_static_files = true
+
   # Do not eager load code on boot.
   config.eager_load = false
 
@@ -24,7 +26,7 @@ Rails.application.configure do
   # :password             => "Well@come101",
   # :authentication       => 'plain',
   # :enable_starttls_auto => true  }
-  
+
   config.action_mailer.delivery_method = :smtp
   config.action_mailer.smtp_settings = {
   :address              => "3.0.3.85",
