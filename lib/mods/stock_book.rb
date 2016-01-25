@@ -3,8 +3,19 @@ module StockBook
     def create_stock_book(for_date, barcode)
       @closing_qty = 0
       @closing_value = 0
+      prod ||= []
+      prod_list = ProductList.where(list_barcode: barcode).distinct.pluck(:extproductcode)
+      prod_list.each do |prod_l|
+        prod << prod_l
+      end
+      # pick the external list from B_PRODMASTER
+      prod_masters = PRODMASTER.where(gprod: barcode).distinct.pluck(:prod)
+      prod_masters.each do |prod_master|
+        prod << prod_master
+      end
 
-      prod = ProductList.where(list_barcode: barcode).pluck(:extproductcode)
+      prod = prod.uniq
+
       #check if product listing found for date
         if (ProductStockBook.where("TRUNC(stock_date) = ?", for_date)
           .where(list_barcode: barcode)).present?

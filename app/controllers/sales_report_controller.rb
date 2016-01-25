@@ -291,6 +291,7 @@ class SalesReportController < ApplicationController
       sublist ||= []
 
       order_masters.each do |ord|
+
         @num = 0
         amount = 0
         # orderlist = OrderMaster.where('ORDER_STATUS_MASTER_ID > 10002')
@@ -333,12 +334,14 @@ class SalesReportController < ApplicationController
 
         #.joins(:product_list).select('product_lists.name as name, count(*) as count, sum(order_lines.total) as total').group('product_list_id')
 
+
         #.group_by{|oc| oc.city}
         @order_cities = @order_cities.sort_by{|c| c[1]}.reverse
         @main_products = @main_products.sort_by{|c| c[1]}.reverse
         @bas_upsell_products = @bas_upsell_products.sort_by{|c| c[1]}.reverse
         @com_upsell_products = @com_upsell_products.sort_by{|c| c[1]}.reverse
-
+        @first_order = @from_date
+        @last_order = @to_date
           mainlist << {
             :from_date => (@from_date + 330.minutes).strftime("%Y-%m-%d"),
             :to_date => (@to_date + 330.minutes).strftime("%Y-%m-%d"),
@@ -361,6 +364,7 @@ class SalesReportController < ApplicationController
         @to_date = (@to_date + 330.minutes).strftime("%Y-%m-%d")
         @mainlist = mainlist.sort_by{|c| c[:total_value]}.reverse
 
+
         respond_to do |format|
         csv_file_name = "#{ @source}_channel_consolidated_daily_report_#{@from_date}_#{@to_date}.csv"
           format.html
@@ -369,6 +373,7 @@ class SalesReportController < ApplicationController
             headers['Content-Type'] ||= 'text/csv'
           end
         end
+
   end
 
   def channel_sales_summary
@@ -1017,6 +1022,7 @@ class SalesReportController < ApplicationController
           :time_end => (Time.at(date)).strftime("%H:%M"),
           :total_nos => total_order_nos,
           :total_value => total_order_value,
+          :blank => nil,
           :hourlist => halfhourlist}
         end
        @employeeorderlist = employeeunorderlist #.sort_by{|c| c[:total]}.reverse

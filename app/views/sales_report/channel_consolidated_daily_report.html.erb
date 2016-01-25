@@ -2,19 +2,21 @@
 
 <%= form_tag  url_for(:controller => 'sales_report', :action => 'channel_consolidated_daily_report'), method: "get" do  %>
  <div class="row">
-	 <div class="col-xs-6">
-
+	 <div class="col-xs-4">
 	 <h4>Channel Sales Report  </h4>
-<% if @source == "hbn" %>
-  <p> HBN Channels </p>
-<% elsif @source == "pvt" %>
-<p> Pvt Channels</p>
-<% else %>
-<p>All Channels</p>
-<% end %>
-
+      <% if @source == "hbn" %>
+        <p> HBN Channels </p>
+      <% elsif @source == "pvt" %>
+      <p> Pvt Channels</p>
+      <% else %>
+      <p>All Channels</p>
+      <% end %>
    </div>
-	 <div class="col-xs-5">
+    <div class="col-xs-3">
+      <%= @first_order %> <br>
+      <%= @last_order %>
+    </div>
+	 <div class="col-xs-4">
      <%= hidden_field_tag :source, @source %>
         <div class="input-daterange input-group">
           <%= text_field_tag(:from_date, @from_date, :data => {:provide => "datepicker"}, :id => "datepicker_from", :class => "form-control", :required => "true" )   %>
