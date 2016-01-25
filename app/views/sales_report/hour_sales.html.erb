@@ -99,8 +99,17 @@
 <% @hidelist = true %>
 <% if @hidelist == false %>
 <div style="visibility:hidden">
+  <div class="well well-sm">
+    <div class="row">
+      <div class="col-xs-8">
 
-   <%= link_to 'Download CSV file', hour_performance_path(from_date: @from_date, to_date: @to_date, time_id: @time_id, format: :csv), class: "btn btn-info btn-sm" %>
+      </div>
+      <div class="col-xs-4">
+           <%= link_to 'Download CSV file', hour_sales_path(from_date: @from_date, to_date: @to_date, time_id: @time_id, format: :csv), class: "btn btn-info btn-sm" %>
+      </div>
+    </div>
+</div>
+   <%= link_to 'Download CSV file', hour_sales_path(from_date: @from_date, to_date: @to_date, time_id: @time_id, format: :csv), class: "btn btn-info btn-sm" %>
 
 </div>
 <% end %>
