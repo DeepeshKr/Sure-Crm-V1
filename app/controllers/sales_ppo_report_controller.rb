@@ -405,7 +405,7 @@ class SalesPpoReportController < ApplicationController
     #  end
     @total_media_cost = Medium.where(media_group_id: 10000).sum(:daily_charges).to_f
     @hbn_media_cost = Medium.where(media_group_id: 10000, active: true).sum(:daily_charges).to_f
-    #@total_fixed_cost = campaign_playlists.sum(:cost).to_f
+    #
 
      if @product_variant_id == nil && @from_date == nil && @to_date == nil
        return
