@@ -8,7 +8,7 @@
 
 
 	 </div>
-   <%= form_tag  url_for(:controller => 'sales_ppo_report', :action => "product_performance"), method: "get" do  %>
+   <%= form_tag  url_for(:controller => 'sales_ppo_report', :action => "show_performance"), method: "get" do  %>
 
    <div class="col-xs-3">
           <%= select_tag :product_variant_id, options_from_collection_for_select(@product_variants, :id, :productinfo, :selected => @product_variant_id), {:class => "form-control",  :required => true} %>
