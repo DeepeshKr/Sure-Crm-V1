@@ -1007,6 +1007,8 @@ class SalesReportController < ApplicationController
                     :agent => order_list.employee.fullname,
                     :order_time => order_time,
                     :order_id => order_list.id,
+                    :city => order_list.city,
+                    :state => order_list.customer_address.state,
                     :order_no => order_list.external_order_no
                      }
              end

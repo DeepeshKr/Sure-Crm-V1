@@ -1,5 +1,5 @@
 <% headers = ['Date','Start', 'End',"","","","", 'No of','Value'] %><%= CSV.generate_line headers %><% @employeeorderlist.each do |c| %><%= CSV.generate_line([c[:order_date], c[:time_start], c[:time_end],c[:blank],c[:blank], c[:blank],c[:blank], c[:total_nos], c[:total_value]]).html_safe.strip %>
-<%= CSV.generate_line(['','Order No','Order Id','Campaign','Channel','Group', 'Product']).html_safe.strip %>
-<% c[:hourlist].each do |cp| %><%= CSV.generate_line([c[:blank],cp[:order_no], cp[:order_id], cp[:campaign], cp[:channel],cp[:hbn], cp[:products]]).html_safe.strip %>
+<%= CSV.generate_line(['','Order No','Order Id','Campaign','Channel','Group', 'City','State','Product']).html_safe.strip %>
+<% c[:hourlist].each do |cp| %><%= CSV.generate_line([c[:blank],cp[:order_no], cp[:order_id], cp[:campaign], cp[:channel],cp[:hbn],cp[:city],cp[:state], cp[:products]]).html_safe.strip %>
 <% end %>
 <% end %>

@@ -63,6 +63,7 @@
                 <th>Campaign</th>
                 <th>Channel</th>
                 <th>HBN</th>
+                <th>City / State</th>
                 <th>Products</th>
               </tr>
           </thead>
@@ -77,7 +78,7 @@
                 <td><%= cp[:campaign] || "No Campaign" if cp[:campaign].present? %>  <br> <strong>At <%= cp[:order_time] %></strong></td>
                 <td><%= cp[:channel] %> </td>
                 <td><%= cp[:hbn] %></td>
-
+                <td><%= cp[:city] %><br><%= cp[:state] %></td>
                 <td><%= cp[:products] %> <small>By: <%= cp[:agent] %></small></td>
               </tr>
             <% end %>
