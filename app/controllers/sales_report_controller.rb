@@ -246,12 +246,13 @@ class SalesReportController < ApplicationController
      end
 
       @from_date = Date.current
+      @to_date = @from_date.end_of_day - 330.minutes
       if params[:from_date].present?
-      @or_for_date = params[:from_date]
-      for_date =  Date.strptime(params[:from_date], "%Y-%m-%d")
+        @or_for_date = params[:from_date]
+        for_date =  Date.strptime(params[:from_date], "%Y-%m-%d")
 
-      @from_date = for_date.beginning_of_day - 330.minutes
-      @to_date = for_date.end_of_day - 330.minutes
+        @from_date = for_date.beginning_of_day - 330.minutes
+        @to_date = for_date.end_of_day - 330.minutes
       #@to_date = @from_date + 1.day
       end
 
@@ -428,11 +429,16 @@ class SalesReportController < ApplicationController
         end
 
         amount = amount.round(2)
-        media_name = Medium.find(ord).name
+
+        media = Medium.find(ord)
+        media_name = media.name
+        hbn = media.media_group.name || "Pvt" if media.media_group.present?
+
           employeeunorderlist << {
             :from_date => (@from_date + 330.minutes).strftime("%Y-%m-%d"),
             :to_date => (@to_date + 330.minutes).strftime("%Y-%m-%d"),
             :channel => media_name,
+            :group => hbn,
             :media_id => ord,
             :total_nos => @num,
             :total_value => amount}
