@@ -6,9 +6,9 @@ class FatToFitEmailStatusesController < ApplicationController
   # GET /fat_to_fit_email_statuses.json
   def index
 
-    @fat_to_fit_email_no_email_id = FatToFitEmailStatus.all.paginate(:page => params[:page])
-    @fat_to_fit_emails_sent = FatToFitEmailStatus.all.paginate(:page => params[:page])
-    @fat_to_fit_emails_queue = FatToFitEmailStatus.all.paginate(:page => params[:page])
+    @fat_to_fit_email_no_email_id = FatToFitEmailStatus.where("emailid IS NULL").paginate(:page => params[:page])
+    @fat_to_fit_emails_sent = FatToFitEmailStatus.where(send_status: 3, registration_status_id: 10001).paginate(:page => params[:page])
+    @fat_to_fit_emails_queue = FatToFitEmailStatus.where(send_status: 0, registration_status_id: 10000).paginate(:page => params[:page])
   end
 
   # GET /fat_to_fit_email_statuses/1
