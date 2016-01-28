@@ -1,0 +1,2 @@
+module FatToFitEmailStatusesHelper
+end

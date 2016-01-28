@@ -1,0 +1,19 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @registration_status.name %>
+</p>
+
+<p>
+  <strong>Description:</strong>
+  <%= @registration_status.description %>
+</p>
+
+<p>
+  <strong>Sort order:</strong>
+  <%= @registration_status.sort_order %>
+</p>
+
+<%= link_to 'Edit', edit_registration_status_path(@registration_status) %> |
+<%= link_to 'Back', registration_statuses_path %>

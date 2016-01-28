@@ -1,0 +1,19 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  emailid: MyString
+  full_name: MyString
+  products: MyString
+  order_no: 1
+  order_id: 1
+  send_status: 1
+  last_ran_date: 2016-01-28 11:14:00
+
+two:
+  emailid: MyString
+  full_name: MyString
+  products: MyString
+  order_no: 1
+  order_id: 1
+  send_status: 1
+  last_ran_date: 2016-01-28 11:14:00

@@ -1,0 +1,39 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Emailid:</strong>
+  <%= @fat_to_fit_email_status.emailid %>
+</p>
+
+<p>
+  <strong>Full name:</strong>
+  <%= @fat_to_fit_email_status.full_name %>
+</p>
+
+<p>
+  <strong>Products:</strong>
+  <%= @fat_to_fit_email_status.products %>
+</p>
+
+<p>
+  <strong>Order no:</strong>
+  <%= @fat_to_fit_email_status.order_no %>
+</p>
+
+<p>
+  <strong>Order:</strong>
+  <%= @fat_to_fit_email_status.order_id %>
+</p>
+
+<p>
+  <strong>Send status:</strong>
+  <%= @fat_to_fit_email_status.send_status %>
+</p>
+
+<p>
+  <strong>Last ran date:</strong>
+  <%= @fat_to_fit_email_status.last_ran_date %>
+</p>
+
+<%= link_to 'Edit', edit_fat_to_fit_email_status_path(@fat_to_fit_email_status) %> |
+<%= link_to 'Back', fat_to_fit_email_statuses_path %>

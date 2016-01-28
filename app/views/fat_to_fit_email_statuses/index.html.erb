@@ -1,0 +1,9 @@
+<p id="notice"><%= notice %></p>
+
+<%= render partial: 'list', :locals => {:fat_to_fit_email_statuses => @fat_to_fit_emails_sent, :list_name => "Sent Emails"}  %>
+
+<hr>
+<%= render partial: 'list', :locals => {:fat_to_fit_email_statuses => @fat_to_fit_email_no_email_id, :list_name => "No Email Id"}  %>
+<hr>
+<%= render partial: 'list', :locals => {:fat_to_fit_email_statuses => @fat_to_fit_emails_queue, :list_name => "Email Queue"}  %>
+<hr>

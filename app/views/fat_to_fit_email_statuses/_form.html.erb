@@ -1,0 +1,17 @@
+<%= simple_form_for(@fat_to_fit_email_status) do |f| %>
+  <%= f.error_notification %>
+
+  <div class="form-inputs">
+    <%= f.input :emailid %>
+    <%= f.input :full_name %>
+    <%= f.input :products %>
+    <%= f.input :order_no %>
+    <%= f.input :order_id %>
+    <%= f.input :send_status %>
+    <%= f.input :last_ran_date %>
+  </div>
+
+  <div class="form-actions">
+    <%= f.button :submit %>
+  </div>
+<% end %>

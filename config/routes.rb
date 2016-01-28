@@ -1,5 +1,9 @@
 Rails.application.routes.draw do
 
+  resources :registration_statuses
+
+  resources :fat_to_fit_email_statuses
+
   resources :sales_ppos
   resources :campaign_missed_lists
   resources :distributor_product_lists

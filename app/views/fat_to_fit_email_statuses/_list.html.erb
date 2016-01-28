@@ -1,0 +1,44 @@
+
+<br>
+<div class="row">
+  <div class="col-xs-4">
+      <h3><%= list_name  %></h3>
+  </div>
+  <div class="col-xs-8">
+    <div class="digg_pagination">
+      <%= will_paginate fat_to_fit_email_statuses, :container => false %>
+    </div>
+  </div>
+</div>
+<br>
+
+<table class="table table-striped table-bordered">
+  <thead>
+    <tr>
+      <th>Emailid</th>
+      <th>Full name</th>
+      <th>Products</th>
+      <th>Order no</th>
+      <th>Order</th>
+      <th>Send status</th>
+      <th>Last ran date</th>
+      <th colspan="2"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% fat_to_fit_email_statuses.each do |fat_to_fit_email_status| %>
+      <tr>
+        <td><%= fat_to_fit_email_status.emailid %></td>
+        <td><%= fat_to_fit_email_status.full_name %></td>
+        <td><%= fat_to_fit_email_status.products %></td>
+        <td><%= fat_to_fit_email_status.order_no %></td>
+        <td><%= fat_to_fit_email_status.order_id %></td>
+        <td><%= fat_to_fit_email_status.send_status %></td>
+        <td><%= fat_to_fit_email_status.last_ran_date %></td>
+        <td><%= link_to 'Edit', edit_fat_to_fit_email_status_path(fat_to_fit_email_status) %></td>
+        <td><%= link_to 'Destroy', fat_to_fit_email_status, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
