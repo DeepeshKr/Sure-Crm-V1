@@ -1,0 +1,6 @@
+<% headers = ['Type','Product','Prod', 'CC Orders', 'CC Value', 'COD Orders', 'COD Value', 'Total Orders', 'Total Value'] %><%= CSV.generate_line headers %><% @main_product_list.each do |c| %><%= CSV.generate_line(['Main',c[:product], c[:prod], c[:ccorders],c[:ccvalue], c[:codorders], c[:codvalue], c[:nos], c[:total]]).html_safe.strip  %>
+	<% end %>
+  <%= CSV.generate_line headers %><% @common_product_list_orderlist.each do |c| %><%= CSV.generate_line(['Common',c[:product], c[:prod], c[:ccorders],c[:ccvalue], c[:codorders], c[:codvalue], c[:nos], c[:total]]).html_safe.strip  %>
+  	<% end %>
+    <%= CSV.generate_line headers %><% @basic_product_list_orderlist.each do |c| %><%= CSV.generate_line(['Basic',c[:product], c[:prod], c[:ccorders],c[:ccvalue], c[:codorders], c[:codvalue], c[:nos], c[:total]]).html_safe.strip  %> 
+    	<% end %>

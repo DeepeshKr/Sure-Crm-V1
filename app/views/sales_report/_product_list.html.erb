@@ -1,180 +1,79 @@
- <% if @main_product_list.present? %>
+<br>
+<h4><%= list_name %></h4>
+<hr>
+ <% if main_product_list.present? %>
 <table class="table table-hover table-bordered">
   <thead>
     <tr>
      <th>No</th>
      <th>Product</th>
+     <th>Prod</th>
      <th>CC Orders</th>
        <th>CC Value</th>
       <th>COD Orders</th>
        <th>COD Value</th>
        <th>Total Orders</th>
      <th>Total Value</th>
-    
+
      </tr>
   </thead>
 <tbody>
-   <% @main_product_list.each do |c| %>
+  <% @cc_orders, @cc_value, @cod_orders, @cod_value, @total_orders, @total_value = 0,0,0,0,0,0 %>
+   <% main_product_list.each do |c| %>
    <tr>
    <td><%= @sno %></td>
 
 <td>
  <%= link_to c[:product], orderlist_path(product_list_id: c[:id], for_date: c[:for_date]), :target => "_blank" %>
- 
+
+</td>
+<td>
+   <%= c[:prod] %>
 </td>
 <td class="text-right">
-   <%= c[:ccorders] %> 
+   <%= c[:ccorders] %><% @cc_orders +=  c[:ccorders] %>
 </td>
 <td class="text-right">
-   <%= c[:ccvalue] %> 
+   <%= c[:ccvalue] %><% @cc_value += c[:ccvalue] %>
 </td>
 <td class="text-right">
-   <%= c[:codorders] %> 
+   <%= c[:codorders] %><% @cod_orders +=  c[:codorders] %>
 </td>
 <td class="text-right">
-   <%= c[:codvalue] %> 
+   <%= c[:codvalue] %><% @cod_value +=  c[:codvalue] %>
 </td>
 
 <td class="text-right">
-   <%= c[:nos] %> 
+   <%= c[:nos] %><% @total_orders += c[:nos] %>
 </td>
 <td class="text-right">
-   <%= c[:total] %> 
+   <%= c[:total] %><% @total_value += c[:ccvalue]  %>
 </td>
 
-  </tr> 
-  <% @sno += 1 %> 
+  </tr>
+  <% @sno += 1 %>
  <% end %>
 
- 
+
 
   </tbody>
+<tfoot>
 
+    <tr>
+     <th colspan="3">Total</th>
+     <th class="text-right"><%= @cc_orders %></th>
+       <th class="text-right"><%= @cc_value %></th>
+      <th class="text-right"><%= @cod_orders %></th>
+       <th class="text-right"><%= @cod_value %></th>
+       <th class="text-right"><%= @total_orders %></th>
+     <th class="text-right"><%= @total_value %></th>
+
+     </tr>
+
+</tfoot>
   </table>
   <% else %>
   <div class="well well-sm">
   <h5>Please select a date to generate the report </h5>
-  </div>
-  <% end %>
- <br>
-<h4>Basic upsell Product List </h4>
-
-<% if @basic_product_list_orderlist.present? %>
-<table class="table table-hover table-bordered">
-  <thead>
-    <tr>
-     <th>No</th>
-     <th>Product</th>
-     <th>CC Orders</th>
-       <th>CC Value</th>
-      <th>COD Orders</th>
-       <th>COD Value</th>
-       <th>Total Orders</th>
-     <th>Total Value</th>
-    
-     </tr>
-  </thead>
-<tbody>
-   <% @basic_product_list_orderlist.each do |c| %>
-   <tr>
-   <td><%= @sno %></td>
-
-<td>
- <%= link_to c[:product], orderlist_path(product_list_id: c[:id], for_date: c[:for_date]), :target => "_blank" %>
-
-</td>
-<td class="text-right">
-   <%= c[:ccorders] %> 
-</td>
-<td class="text-right">
-   <%= c[:ccvalue] %> 
-</td>
-<td class="text-right">
-   <%= c[:codorders] %> 
-</td>
-<td class="text-right">
-   <%= c[:codvalue] %> 
-</td>
-
-<td class="text-right">
-   <%= c[:nos] %> 
-</td>
-<td class="text-right">
-   <%= c[:total] %> 
-</td>
-
-  </tr> 
-  <% @sno += 1 %> 
- <% end %>
-
- 
-
-  </tbody>
-
-  </table>
-  <% else %>
-  <div class="well well-sm">
-  <h5>Please select a date to generate the report or No Basic upsells found </h5>
-  </div>
-  <% end %>
-<br>
-<h4>Common upsell Product List </h4>
-
-<% if @common_product_list_orderlist.present? %>
-<table class="table table-hover table-bordered">
-  <thead>
-    <tr>
-     <th>No</th>
-     <th>Product</th>
-     <th>CC Orders</th>
-       <th>CC Value</th>
-      <th>COD Orders</th>
-       <th>COD Value</th>
-       <th>Total Orders</th>
-     <th>Total Value</th>
-    
-     </tr>
-  </thead>
-<tbody>
-   <% @common_product_list_orderlist.each do |c| %>
-   <tr>
-   <td><%= @sno %></td>
-
-<td>
- <%= link_to c[:product], orderlist_path(product_list_id: c[:id], for_date: c[:for_date]), :target => "_blank" %>
-
-</td>
-<td class="text-right">
-   <%= c[:ccorders] %> 
-</td>
-<td class="text-right">
-   <%= c[:ccvalue] %> 
-</td>
-<td class="text-right">
-   <%= c[:codorders] %> 
-</td>
-<td class="text-right">
-   <%= c[:codvalue] %> 
-</td>
-
-<td class="text-right">
-   <%= c[:nos] %> 
-</td>
-<td class="text-right">
-   <%= c[:total] %> 
-</td>
-
-  </tr> 
-  <% @sno += 1 %> 
- <% end %>
-
- 
-
-  </tbody>
-
-  </table>
-  <% else %>
-  <div class="well well-sm">
-  <h5>Please select a date to generate the report or No common upsells found </h5>
   </div>
   <% end %>

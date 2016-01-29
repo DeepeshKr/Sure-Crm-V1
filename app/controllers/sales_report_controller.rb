@@ -1857,6 +1857,7 @@ class SalesReportController < ApplicationController
           noorders = orderlist.count()
           main_product_list_orderlist << {:total => totalorders,
              :id => e, :product => name, :for_date =>  @or_for_date,
+                :prod => o.product_list.extproductcode,
             :nos => noorders, :codorders => codorders, :codvalue => codvalue,
              :ccorders => ccorders, :ccvalue => ccvalue  }
           end
@@ -1877,6 +1878,7 @@ class SalesReportController < ApplicationController
           noorders = orderlist.count()
           common_product_list_orderlist << {:total => totalorders,
              :id => e, :product => name, :for_date =>  @or_for_date,
+                :prod => o.product_list.extproductcode,
             :nos => noorders, :codorders => codorders, :codvalue => codvalue,
              :ccorders => ccorders, :ccvalue => ccvalue  }
           end
@@ -1898,10 +1900,21 @@ class SalesReportController < ApplicationController
           noorders = orderlist.count()
           basic_product_list_orderlist << {:total => totalorders,
              :id => e, :product => name, :for_date =>  @or_for_date,
+             :prod => o.product_list.extproductcode,
             :nos => noorders, :codorders => codorders, :codvalue => codvalue,
              :ccorders => ccorders, :ccvalue => ccvalue  }
           end
           @basic_product_list_orderlist = basic_product_list_orderlist.sort_by{|c| c[:total]}.reverse
+
+          respond_to do |format|
+            csv_file_name = "products_sold_report_#{@or_for_date}.csv"
+              format.html
+              format.csv do
+                headers['Content-Disposition'] = "attachment; filename=\"#{csv_file_name}\""
+                headers['Content-Type'] ||= 'text/csv'
+              end
+          end
+
        end
   end
 
