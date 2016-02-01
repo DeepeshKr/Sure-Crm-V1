@@ -40,7 +40,7 @@ class CampaignsController < ApplicationController
     recent_campaigns
     proddropdown
 
-    all_campaign_playlist = CampaignPlaylist.order("id DESC").limit(10000)
+    all_campaign_playlist = CampaignPlaylist.where("day IS NULL").order("id DESC").limit(1000)
     all_campaign_playlist.each{|e| e.update(day: 0)}
 
 
