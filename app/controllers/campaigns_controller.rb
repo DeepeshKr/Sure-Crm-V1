@@ -47,7 +47,7 @@ class CampaignsController < ApplicationController
       records += 1
     end
 
-    flash[:notice] = "Updated of #{records} please continue till updated records become ZERO!"
+    flash[:notice] = "Updated of #{records} please continue till updated records become ZERO! last updated is #{all_campaign_playlist.last.id}"
 
     @for_date = @campaign.startdate
       @campaign_playlists = CampaignPlaylist.where("campaignid = ?", params[:id]).order(:day, :start_hr, :start_min, :start_sec)
