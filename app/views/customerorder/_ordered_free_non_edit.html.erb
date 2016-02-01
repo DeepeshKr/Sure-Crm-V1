@@ -1,37 +1,7 @@
-<div class="panel panel-primary">
-  <div class="panel-heading">
-   <h3 class="panel-title">Upsell Ordered</h3>
-    
-  </div>
-  
-   
-  <% if @order_lines_common.present? %>
-<table class="table table-striped table-bordered">
-  <thead>
-  <tr>
-      <th colspan="4"> </th>
-      
-     
-      <th colspan="2" class="text-center">COD Charges</th>
-      
-      <th colspan="2" class="text-center">Credit Card</th>
-      <th></th>
-    </tr>
-    <tr>
-      <th>Product Description </th>
-      <th class="text-right">Pieces</th>
-      <th class="text-right">Basic</th>
-      <th class="text-right">Shipping</th>
-      <th class="text-right"><small>COD Charge</small></th>
-      <th class="text-right"><small>Mah Surcharge</small></th>
-      <th class="text-right"><small>Credit Card</small></th>
-      <th class="text-right"><small>Mah Surcharge</small></th>
-      <th></th>
-    </tr>
-  </thead>
+<% if @order_lines_free.present? %>
 
-  <tbody>
-    <% @order_lines_common.each do |order_line| %>
+
+    <% @order_lines_free.each do |order_line| %>
       <tr>
         <td><%= order_line.description %></td>
         <td class="text-right"><%= order_line.pieces %></td>
@@ -42,7 +12,7 @@
      <small><%= order_line.shipping %> </small>   </td>
         
        <td class="text-right">
-        <% if order_line.maharastracodextra != 0 %>
+        <% if order_line.codcharges != 0 %>
 
 <%= (order_line.subtotal || 0) + (order_line.shipping || 0) + (order_line.codcharges || 0)  %> 
 <% else %>
@@ -52,7 +22,7 @@
 <small> <%= order_line.codcharges %></small>
        </td> 
        <td class="text-right">
-        <% if order_line.codcharges != 0 %>
+        <% if order_line.maharastracodextra != 0 %>
         <%= (order_line.subtotal || 0) + (order_line.shipping || 0) + (order_line.codcharges || 0) + (order_line.maharastracodextra || 0) %>
         <% else %>
           0.00
@@ -80,22 +50,15 @@
 <hr>
 <small> <%= order_line.maharastraccextra %></small>
        </td>  
-        <td>
-
-        <%= link_to 'Destroy', deleteupsell_path(:id => order_line.id), data: { confirm: 'Are you sure?' } %>
-
-       
       </tr>
     <% end %>
-  </tbody>
-</table>
-
-
-
+    
 <% else %>
-  <div class="well">
-  <p>No upsell products have been ordered </p>
-  </div>
-<% end %>
-  
+ <tr>
+ <td colspan="8">
+<div class="alert alert-warning" role="alert">
+<h4>There are no upsells in this order, to add upsell click below!</h4>
 </div>
+</td>
+</tr>
+<% end %>

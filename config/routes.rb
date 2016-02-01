@@ -385,6 +385,7 @@ post 'distributor_upload_orders/switch_off'
 
   #post 'campaign_playlists/create_playlist_with_media_tape_head'
   post 'insert_playlist' => 'campaign_playlists#campaign_playlist_insert'
+  post 'campaign_playlists/create_playlist_with_media_tape_head'
   post 'create_playlist' => 'campaign_playlists#create_playlist_with_media_tape_head'
   #post 'update__playlist' => 'campaign_playlists#create_playlist_with_media_tape_head'
   post 'updatecampaigntimings' => 'campaign_playlists#updatecampaigntimings'

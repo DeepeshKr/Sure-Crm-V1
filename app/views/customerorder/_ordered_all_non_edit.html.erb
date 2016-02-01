@@ -58,6 +58,18 @@
       </tr>
   <% end %>
     
+   
+   <% if @order_lines_free.present? %>
+    <tr>
+   <th colspan="8">Free Products </th>
+      
+   </tr>
+    <%= render "ordered_free_non_edit" %>
+   <% else %>
+  <tr>
+<td> No Products Ordered</td>
+  </tr>
+  <% end %>
   
 
 

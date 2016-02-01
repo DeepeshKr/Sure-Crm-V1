@@ -7,8 +7,8 @@
   <div class="col-xs-5">
 <%= bootstrap_form_tag url: dealersearch_path, :method => :GET, :enforce_utf8 => false do |f| %>
 <div class="col-xs-10">
-<%= select_tag(:from_state, 
-    options_from_collection_for_select(@states, :state, :state, selected: @state), 
+<%= select_tag(:from_state,
+    options_from_collection_for_select(@states, :state, :state, selected: @state),
     {:class => "form-control"})  %>
 </div>
 
@@ -18,7 +18,7 @@
 
       <% end %>
   </div>
-  
+
 </div>
 </div>
 
@@ -27,7 +27,7 @@
 <ul class="list-inline">
  <% @cities.each do |citi| %>
   <li>
-<%= link_to citi.add3 || "NA", dealersearch_path(:from_state => @state, :city => citi.add3), class: "btn btn-info btn-xs" %>
+<%= link_to citi.city || "NA", dealersearch_path(:from_state => @state, :city => citi.city), class: "btn btn-info btn-xs" %>
   </li>
   <% end %>
 </ul>
@@ -38,14 +38,13 @@
 <table class="table table-hover">
   <thead>
     <tr>
-      <th>Name</th>
-      <th>Franchise</th>
-       <th>Address</th>
-        <th>State</th>
+
+      <th>Franchise Address</th>
+       <th>City <br> State</th>
       <th>Phone</th>
        <th>Fax</th>
-        <th>Mobile</th>
-     
+        <th>Name <br>Mobile</th>
+
 
     </tr>
   </thead>
@@ -53,15 +52,16 @@
   <tbody>
     <% @address_dealer.each do |dealer| %>
       <tr>
-        <td><%= dealer.contactperson %></td>
-       <td><%= dealer.franchisee %></td>
-       <td><%= dealer.add1 %><br/>
-      <%= dealer.add2 %><br/>
-      <%= dealer.add3 %><br/>
-       <td><%= dealer.state %></td>
-       <td><%= dealer.phone %></td>
+       <td><h4><%= dealer.name %></h4>
+         <%= dealer.address1 %><br/>
+      <%= dealer.address2 %><br/>
+      <%= dealer.address3 %><br/>
+      <td><%= dealer.city %> <br> <%= dealer.state %></td>
+       <td><%= dealer.telephone1 %> <%= dealer.telephone2 %></td>
        <td><%= dealer.fax %></td>
-       <td><%= dealer.mobile %></td>
+       <td><%= dealer.salute1 %> <%= dealer.first_name1 %> <%= dealer.last_name1 %> <br>
+         <%= dealer.designation1 %> <br>
+        <%= dealer.mobile1 %></td>
       </tr>
     <% end %>
   </tbody>
@@ -73,4 +73,4 @@ Please select a State from above
 <% end %>
 
 <!-- bottom menu -->
-  <%= render 'call_menu' %> 
+  <%= render 'call_menu' %>

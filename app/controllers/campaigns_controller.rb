@@ -1,5 +1,5 @@
 class CampaignsController < ApplicationController
-  before_action { protect_controllers(8) } 
+  before_action { protect_controllers(8) }
   before_action :set_campaign, only: [:show,  :edit, :update, :destroy]
   before_action :dropdown, only: [:show, :new, :edit, :create, :update]
   before_action :proddropdown, only: [:show, :new, :edit, :create, :update, :destroy]
@@ -15,9 +15,9 @@ class CampaignsController < ApplicationController
     if params.has_key?(:for_date)
      @for_date =  Date.strptime(params[:for_date], "%Y-%m-%d")
     end
-   
+
    @showing_for_date = "Showing campaigns for date #{@for_date}"
-   
+
    @campaigns =  Campaign.where('startdate = ?', @for_date)
 
     case a = params[:stage]
@@ -32,29 +32,35 @@ class CampaignsController < ApplicationController
       else
         @stagename = "All Current Campaigns"
     end
-    
+
     respond_with(@campaigns)
   end
- 
+
   def show
     recent_campaigns
     proddropdown
-    
-    
+
+    all_campaign_playlist = CampaignPlaylist.order("id DESC").limit(10000)
+    all_campaign_playlist.each{|e| e.update(day: 0)}
+
+
     @for_date = @campaign.startdate
-      @campaign_playlists = CampaignPlaylist.where("campaignid = ?", params[:id]).order(:start_hr, :start_min, :start_sec)
+      @campaign_playlists = CampaignPlaylist.where("campaignid = ?", params[:id]).order(:day, :start_hr, :start_min, :start_sec)
        @campaign_id = params[:id]
-    
+
               @begin_hr = 0
               @begin_min = 0
               @begin_sec = 0
-
+              @begin_frame = 0
+               @day = 0
         if @campaign_playlists.present?
                 @begin_hr = @campaign_playlists.last.end_hr
                 @begin_min = @campaign_playlists.last.end_min
                 @begin_sec = @campaign_playlists.last.end_sec
+                @begin_frame = @campaign_playlists.last.frames
+                 @day = @campaign_playlists.last.day
         end
-         
+
          # #remove after testing
          # @campaign_playlist = CampaignPlaylist.new(campaignid: params[:id],
          # cost: 0, start_hr: @begin_hr,
@@ -62,10 +68,13 @@ class CampaignsController < ApplicationController
 
      #if @campaign.startdate > (330.minutes).from_now.to_date
          @campaign_playlist = CampaignPlaylist.new(campaignid: params[:id],
-         cost: 0, start_hr: @begin_hr,
-         start_min: @begin_min, start_sec: @begin_sec )
+         cost: 0,
+         start_hr: @begin_hr,
+         start_min: @begin_min,
+         start_sec: @begin_sec,
+         start_frame: @begin_frame)
      #end
-     
+
      @campaignid = params[:id]
      #check if media belongs to HBN Group
      media_check = Medium.find(@campaign.mediumid)
@@ -83,13 +92,10 @@ class CampaignsController < ApplicationController
     #  if @campaign.startdate > (330.minutes).from_now.to_date
     #   @allowedit = 1
     # end
-
-   
-
-    respond_with(@campaign, @campaign_playlists,  @campaign_playlist)
+    # respond_with(@campaign, @campaign_playlists,  @campaign_playlist)
   end
- 
-  def new 
+
+  def new
     proddropdown
     @campaign = Campaign.new
     @campaign.cost = 0
@@ -126,7 +132,7 @@ class CampaignsController < ApplicationController
     respond_with(@campaign)
   end
 
-  private 
+  private
     def dropdown
      @medialist = Medium.where('media_commision_id = ?',  10000).where('media_group_id IS NULL or media_group_id <> 10000 or id = 11200').order('name')
      @media_tape_head_list = MediaTapeHead.take(0)
@@ -135,14 +141,14 @@ class CampaignsController < ApplicationController
 
      @media_cost_master = MediaCostMaster.where("media_id <> 11200").order(:total_cost)
      @hbn_media_cost_master = MediaCostMaster.where(media_id: 11200).order(:total_cost)
-     
+
     end
      def proddropdown
       #product_sell_type_id
      @productvariant = ProductVariant.where('activeid = ? and product_sell_type_id <= ?', 10000, 10001).order('name')
-    
+
      #@media_cost_masters
-    end 
+    end
      def activestatus
      @active_status = CampaignPlayListStatus.all.order('id')
     end
@@ -155,7 +161,7 @@ class CampaignsController < ApplicationController
     end
 
     def campaign_params
-      params.require(:campaign).permit(:name, :startdate, :enddate, :mediumid, 
+      params.require(:campaign).permit(:name, :startdate, :enddate, :mediumid,
         :description, :campaignstageid, :stage, :media,:total_cost, :total_revenue)
     end
     def set_media_tape

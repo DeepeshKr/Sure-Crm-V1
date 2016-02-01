@@ -9,19 +9,19 @@
 		 <strong>For date:</strong>
   <%= @campaign.startdate.strftime("%d-%b-%Y") %>
 	</div>
-	
+
 	<div class="col-xs-8">
 		 <strong>Media:</strong>
   <%= @campaign.medium.mediainfo %>
 	</div>
-	
-	
-	
+
+
+
 	<div class="col-xs-2">
 	 <strong>DNIS:</strong>
   <%= @campaign.medium.dnis if @campaign.medium %>
 	</div>
-	
+
 </div>
 
 <p>
@@ -35,20 +35,22 @@
 <hr />
 <%= render partial: "campaign_playlists/campaign_playlist" %>
 
-
-<hr />  
+<div id="data-entry-tabs">
+<hr />
 <h3>Add New Campaign Playlist </h3>
  <div role="tabpanel">
 
   <!-- Nav tabs -->
   <ul class="nav nav-tabs" role="tablist">
     <li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">HBN Playlist </a></li>
-    
+
     <li role="presentation"><a href="#profile" aria-controls="profile" role="tab" data-toggle="tab">HBN Single Playlist</a></li>
     <li role="presentation"><a href="#pvt" aria-controls="profile" role="tab" data-toggle="tab">Private Channel Single Playlist</a></li>
-    
-  </ul> 
- 
+
+  </ul>
+
+
+
   <!-- Tab panes -->
 <div class="tab-content">
   <div role="tabpanel" class="tab-pane fade in active" id="home">
@@ -60,7 +62,7 @@
     <% end %>
 
   </div>
-  
+
   <div role="tabpanel" class="tab-pane fade" id="profile">
   <!-- tab to add hbn single playlist without cost -->
     <% if @hbnchecked == TRUE %>
@@ -79,12 +81,12 @@
         <h3>You can't add private channel Listing when you have selected HBN channels </h3>
       <% end %>
   </div>
-  
+
 </div> <!-- Tab panes end-->
 
 </div>
  <!-- Nav tabs end -->
-
+</div>
 
 
 <script>
@@ -92,7 +94,7 @@
     $('#begin_at').timepicker({ 'scrollDefaultNow': true });
   }
 </script>
- 
+
 <script>
   $(document).ready(function() {
     $('#campaign_playlist_productvariantid').change(function() {

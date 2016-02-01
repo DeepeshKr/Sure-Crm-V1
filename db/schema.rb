@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160128063414) do
+ActiveRecord::Schema.define(version: 20160201103339) do
 
   create_table "address_types", force: :cascade do |t|
     t.string   "name"
@@ -101,6 +101,8 @@ ActiveRecord::Schema.define(version: 20160128063414) do
     t.integer  "playlist_group_id", limit: 16, precision: 38
     t.integer  "start_frame",       limit: 16, precision: 38
     t.integer  "end_frame",         limit: 16, precision: 38
+    t.integer  "frames",            limit: 16, precision: 38
+    t.integer  "day",               limit: 16, precision: 38
   end
 
   add_index "campaign_playlists", ["campaignid"], name: "i_cam_pla_cam"

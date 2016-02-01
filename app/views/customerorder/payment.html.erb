@@ -1,74 +1,102 @@
-
-        <div class="panel panel-info">
-        <div class="panel-heading"><h3 class="panel-title">Pay as Cash on Delivery</h3></div>
-        <div class="panel-body">  
+         <div class="panel panel-primary">
+        <div class="panel-heading">
+        <h3 class="panel-title">Credit / Debit Card Payment through Atom</h3>
+        </div>
+        <div class="panel-body">
 
         <div class="col-xs-12">
-            <div class="col-xs-6"><h4><%= label_tag(:orderpaymentmode_id,  @cod_amount ) %>
-          <small><%= @paidover %> </small>
+        <div class="row">
+            <div class="col-xs-6"><h4><%= label_tag(:orderpaymentmode_id, @cc_amount ) %>
             </h4>
          </div>
-         
+
+             <div class="col-xs-6">
+              <%= form_for @order_master , url: addpayment_path, :method => :POST do |f| %>
+                   <%= hidden_field_tag :orderpaymentmode_id, @atomccpaymentmodeid %>
+                   <%= hidden_field_tag :order_id, @order_master.id %>
+                  <%= f.hidden_field(:id) %>
+                  <div class="col-xs-4 col-xs-offset-6">
+                  <%= submit_tag("CC on Atom", :class => "btn btn-primary") %>
+                  </div>
+                <% end %>
+             </div>
+         </div>
+         </div>
+         <div class="row">
+           <div class="col-xs-6"> <%= link_to 'Credit Card OTP', "/documents/OTP_Bank-process-to-obtain-passcode.pdf", :target => "_blank", class: "btn btn-info btn-sm" %> </div>
+           <div class="col-xs-6"> <%= link_to 'Debit Card OTP', "/documents/DEBIT_CARD-OTP.PDF", :target => "_blank", class: "btn btn-info btn-sm" %> </div>
+         </div>
+        </div>
+
+        <div class="panel-footer">
+        <p>We accept the following <strong>Debit Cards</strong>: Union Bank of India, Punjab National Bank, Axis Bank, Citi Bank, ICICI Bank and Syndicate Bank</p>
+        <p>We accept the following <strong>Credit Cards</strong>: Union Bank of India, Punjab National Bank, Axis Bank, Citi Bank, Syndicate Bank,
+        Andhra Bank, Bank of Baroda, Barclay's Bank, Canara Bank, Indus Bank,
+        Diners Club, HDFC Bank, HSBC, ICICI Bank, Kotak Bank, Standard Chartered Bank, State Bank of India, TATA Cards, Vijaya Bank, RBS Bank</p>
+        <p>Current Status:<%= @paidover %> </p>
+        </div>
+        </div>
+
+
+
+
+
+      <div class="clearfix"></div>
+        <div class="panel panel-success">
+        <div class="panel-heading"><h3 class="panel-title">Pay over Credit Card</h3></div>
+        <div class="panel-body">
+
+        <div class="col-xs-12">
+          <div class="col-xs-6">
+              <h4><%= label_tag(:orderpaymentmode_id, @cc_amount) %>
+                               </h4>
+          </div>
+
+          <div class="col-xs-6 ">
+
+              <div class="col-xs-4 col-xs-offset-4">
+                <button type="button" class="btn btn-success " data-toggle="modal" data-target="#CreditCardModal">Pay by Credit Card</button>
+              </div>
+
+            </div>
+         </div>
+         <div class="clearfix"></div>
+
+        </div>
+         <div class="panel-footer">
+        <p>Current Status:<%= @paidover %> </p>
+        </div>
+      </div>
+        <div class="clearfix"></div>
+           <div class="panel panel-info">
+        <div class="panel-heading"><h3 class="panel-title">Pay as Cash on Delivery</h3></div>
+        <div class="panel-body">
+
+        <div class="col-xs-12">
+            <div class="col-xs-6"><h4><%= label_tag(:orderpaymentmode_id,  @cod_amount ) %>            </h4>
+         </div>
+
              <div class="col-xs-6">
               <%= form_for @order_master , url: addpayment_path, :method => :POST do |f| %>
                    <%= hidden_field_tag :orderpaymentmode_id, @cashondeliveryid %>
                    <%= hidden_field_tag :order_id, @order_master.id %>
                   <%= f.hidden_field(:id) %>
                   <div class="col-xs-4 col-xs-offset-6">
-                  <%= submit_tag("Cash on Delivery", :class => "btn btn-primary") %>  
-                  </div> 
+                  <%= submit_tag("Cash on Delivery", :class => "btn btn-primary") %>
+                  </div>
                 <% end %>
              </div>
          </div>
-         
+
+        </div>
+         <div class="panel-footer">
+        <p>Current Status:<%= @paidover %> </p>
         </div>
         </div>
-
-      
-      <div class="clearfix"></div>
-        <div class="panel panel-success">
-        <div class="panel-heading"><h3 class="panel-title">Pay over Credit Card</h3></div>
-        <div class="panel-body">  
-
-        <div class="col-xs-12">
-          <div class="col-xs-6">
-              <h4><%= label_tag(:orderpaymentmode_id, @cc_amount) %>
-              <small><%= @paidover %> </small>                     </h4>
-          </div>
-
-          <div class="col-xs-6 ">
-            <% if @customer_credit_card_o.present?  %>
-                <div class="col-xs-4 col-xs-offset-6">
-                  <%= form_for @order_master , url: addpayment_path, :method => :POST do |f| %>
-                  <%= hidden_field_tag :orderpaymentmode_id, @creditcardid %>
-                  <%= hidden_field_tag :order_id, @order_master.id %>
-                  <%= f.hidden_field(:id) %>
-
-                <%= submit_tag("Pay by Credit Card", :class => "btn btn-success") %> <% end %>
-              </div>
-      <div class="clearfix"></div> <br>
-              <div class="well well-sm">
-                <p>Use existing card <%= @customer_credit_card_o.mask %> </p>
-                <p>Name on Card <%= @customer_credit_card_o.name_on_card %> </p>
-                <p>Valid upto month <%= @customer_credit_card_o.expiry_mon %> 
-                Year <%= @customer_credit_card_o.expiry_yr_string %> </p>
-              </div>
-            <% else %>
-              <div class="col-xs-4 col-xs-offset-6">
-                <button type="button" class="btn btn-success " data-toggle="modal" data-target="#CreditCardModal">Pay by Credit Card</button>
-              </div>
-            <% end %>     
-        </div>
-         </div>
          <div class="clearfix"></div>
-              
-        </div>
-
-      </div>
-        <div class="clearfix"></div>
         <div class="row">
         <div class="col-xs-4">
-              
+
           <%= link_to " Back to Add Products", neworder_path(:order_id => @order_master.id), class: "btn btn-info btn-sm" %>
           </div>
           <div class="col-xs-4 col-xs-offset-4">
@@ -89,7 +117,7 @@
   <%= render "ordered_all_non_edit" %>
 
 
-    
+
 <div class="panel-footer"><%= render "order_masters/order_footer" %></div>
 </div>
  <!-- Modal -->
@@ -112,15 +140,15 @@
 </div>
 
 <!-- bottom menu -->
-  <%= render 'call_menu' %> 
+  <%= render 'call_menu' %>
 
 <script type="text/javascript">
 $(document).ready(function() {
-   
+
         $('#customer_credit_card_card_no').change(function(){
           val = $(this).val();
           alert("Check if Card if Valid :" + val);
-        $.ajax({url: "<%= creditcardvalid_path %>", 
+        $.ajax({url: "<%= creditcardvalid_path %>",
         data: {code: $(this).val()},
            dataType: "script"   });
         })

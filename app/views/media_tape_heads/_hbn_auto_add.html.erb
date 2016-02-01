@@ -1,9 +1,9 @@
-<%= form_tag("/create_playlist", method: "post") do |f| %>
-
+<%= form_tag  url_for(:controller => 'campaign_playlists', :action => 'create_playlist_with_media_tape_head', :anchor => "data-entry-tabs"), method: "post" do |f| %>
 <%= hidden_field_tag :for_date, @for_date %>
 <%= hidden_field_tag :time_slot, "auto_hbn" %>
 <%= hidden_field_tag :campaignid, @campaignid %>
-<br>	
+<%= hidden_field_tag :day, @day %>
+<br>
 <small>Time Shown below is the last playlist time slot</small>
 <div class="row">
 	<div class="col-xs-1 ">
@@ -19,7 +19,11 @@
 	  <%= select_tag :begin_sec, options_for_select(0..59,  selected: @begin_sec), :class => "form-control"  %>
 	<small>  Sec </small>
  	</div>
- <div class="col-xs-8 col-xs-offset-1">
+	<div class="col-xs-1">
+	 <%= select_tag :begin_frame, options_for_select(0..24,  selected: @begin_sec), :class => "form-control"  %>
+ <small>  Frame </small>
+ </div>
+ <div class="col-xs-8">
 		<%= collection_select(nil, :product_variant_id,  @productvariantlist,  :id, :name, {:prompt   => "Select a Product Variant"}, {:id => 'variants_select', :class => "form-control"}) %>	</div>
 </div>
 <br/>
@@ -29,7 +33,7 @@
 
 	</div>
   <div class="col-xs-4">
- 
+
     <%=  collection_select(nil, :media_cost, @hbn_media_cost_master, :total_cost, :cost_segment, { :prompt => '-- Select Media Cost --'}, {:class => "form-control", :required => true }) %>
   </div>
 </div>
@@ -43,9 +47,9 @@
 
 <% end %>
 
-<br>  
+<br>
 
-   <br>  
+   <br>
   <div class="well">
   <div class="row">
   <div class="col-xs-8">
@@ -55,10 +59,10 @@
     <%= hidden_field_tag :campaignid, @campaignid %>
     <div class="col-xs-3">
       <%= submit_tag "Reset Playlist", name: nil,  class: "btn btn-warning" %>
-    
+
     </div>
     <% end %>
   </div>
   </div>
-    <br> 
-      <br> 
+    <br>
+      <br>

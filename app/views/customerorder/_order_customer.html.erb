@@ -1,13 +1,16 @@
 
 <div class="well">
 <% if  @order_master.present? %>
+<div class="row">
+<div class="col-xs-12">
   <small>Customer Id <%= @order_master.customer_id%></small> &nbsp;<small>Order Id <%= @order_master.id %></small>
   &nbsp;<small> <strong>Date:</strong>   <%= @order_master.orderdate + 330.minutes %> </small>
-&nbsp;  <small><strong>Employee Id:</strong>   <%= @order_master.employee_id %></small>
+&nbsp;  <small><strong>Employee Id:</strong>   <%= @order_master.employee_id %></small>   
 &nbsp; <small><strong>Employee Code:</strong>   <%= @order_master.employeecode %> </small>
 &nbsp; <small><strong>DNIS:</strong>   <%= @order_master.calledno %> </small>
-&nbsp; <small><strong>Campaign Id:</strong>   <%= @order_master.campaign_playlist_id %> </small>
-&nbsp; <small><strong>Promotion Id:</strong>   <%= @order_master.promotion_id %> </small>
+&nbsp; <small><strong>Completed Order No: <%= @order_master.external_order_no ||= "Not Completed" %> </strong></small>
+</div>
+</div>
 <div class="row">
 
 
@@ -18,16 +21,11 @@
   <div class="row">
     <div class="col-xs-6">
       <small> Mobile No <%= @order_master.customer.mobile if @order_master.customer %> </small><br/>
-      <small> Mobile No <%= @order_master.customer.alt_mobile if @order_master.customer %></small>
+      <small> Mobile No <%= @order_master.customer.alt_mobile if @order_master.customer %></small> 
     </div>
     <div class="col-xs-6">
     <small> Email Id  <%= @order_master.customer.emailid if @order_master.customer %> </small><br/>
     <small> Email Id  <%= @order_master.customer.alt_emailid if @order_master.customer %></small>
-    </div>
-  </div>
-  <div class="row">
-    <div class="col-xs-12">
-      Related Order Id: <%= @order_master.original_order_id if @order_master.original_order_id.present? %>
     </div>
   </div>
 </div>
@@ -37,3 +35,5 @@
 
 <% end %>
 </div>
+
+

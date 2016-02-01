@@ -1,8 +1,8 @@
 <div class="panel panel-primary">
   <div class="panel-heading">
-    <h3 class="panel-title">Up Sell Products</h3>
+    <h3 class="panel-title">Select a Promotional Offer</h3>
   </div>
-<%= render "product_lists/upsell" %>
+<%= render "customerorder/promo_list" %>
   </div> 
           
         <div class="row">
@@ -15,14 +15,13 @@
           <%= link_to " Change Address", address_path(:order_id => @order_master.id), class: "btn btn-info btn-sm" %>
           </div>
           <div class="col-xs-4">
-               <%= link_to "Check for Offers Or Make Payment", offers_path(:order_id => @order_master.id), class: "btn btn-success" %>
-         <!-- link_to " Next Make Payment", payment_path(:order_id => @order_master.id), class: "btn btn-success" -->
+              
+          <%= link_to " Next Make Payment", payment_path(:order_id => @order_master.id), class: "btn btn-success" %>
           </div>
           </div>
 
 <br>
-<%= render "upselledit" %>
-<br>
+
 
      <div class="clearfix"></div>
      <div class="panel panel-primary">
@@ -31,7 +30,7 @@
   </div>
   <%= render "order_customer" %>
   <%= render "order_address" %>
-   <%= render "ordered_all_non_edit" %>
+  <%= render "ordered_all_non_edit" %>
 
 
     
@@ -39,4 +38,3 @@
 </div>
 <!-- bottom menu -->
   <%= render 'call_menu' %> 
-

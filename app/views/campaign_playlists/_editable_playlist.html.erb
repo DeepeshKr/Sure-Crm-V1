@@ -10,16 +10,16 @@
       <th>Start time</th>
        <th>Air time</th>
       <th>End time</th>
-      
-     
-    
+
+
+
         <th>Status</th>
       <th colspan="2"></th>
     </tr>
   </thead>
 
   <tbody>
-  	
+
     <% @campaign_playlists.each do |campaign_playlist| %>
       <tr class="<%= category_table_row_class(campaign_playlist.campaign_play_list_status.name) %>">
       <td><%= campaign_playlist.for_date.strftime("%d-%b-%Y") || "No Date" if campaign_playlist.for_date.present? %></td>
@@ -29,18 +29,18 @@
         <td><%= campaign_playlist.starttime %></td>
          <td><%= campaign_playlist.playtime %></td>
         <td><%= campaign_playlist.endtime %></td>
-        
-       
-    
+
+
+
          <td><%= campaign_playlist.campaign_play_list_status.name if campaign_playlist.campaign_play_list_status%></td>
-          
+
           <td><%= link_to 'Edit', edit_campaign_playlist_path(campaign_playlist) %></td>
-          <td><%if campaign_playlist.list_status_id == 10000 %> 
+          <td><%if campaign_playlist.list_status_id == 10000 %>
           <%= link_to 'Destroy Group', campaign_playlist, method: :delete, data: { confirm: 'This will remove the entire group. Are you sure?' }, class: "btn btn-info btn-xs" %>
           <% end %>
           </td>
       </tr>
     <% end %>
-    
+
   </tbody>
 </table>

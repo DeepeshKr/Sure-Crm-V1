@@ -16,7 +16,7 @@ class CampaignPlaylistsController < ApplicationController
     @guid4 = "{#{campaignplaylist.generate_unique_secure_token}}"
     @guid5 = "{#{campaignplaylist.generate_unique_secure_token}}"
     @created_time = DateTime.now
-    
+
     if(params.has_key?(:campaignid))
       @campaign_playlists = CampaignPlaylist.where("campaignid = ?" , params[:campaignid]).order(:start_hr, :start_min, :start_sec)
         respond_to do |format|
@@ -306,8 +306,9 @@ end
             begin_hr = params[:begin_hr]
             begin_min = params[:begin_min]
             begin_sec = params[:begin_sec]
-
-          cost = 0
+            begin_frame = params[:begin_frame]
+            day = params[:day]
+            cost = 0
 
           first_campaign_playlist_id = 0
 
@@ -324,28 +325,43 @@ end
             end
             #ref name is combination of media tape head and media tape name
             ref_name = MediaTapeHead.find(media_tape_head_id).name
-              hour_min_sec(begin_hr, begin_min, begin_sec, m.duration_secs)
 
 
-           new_campaign_playlist = CampaignPlaylist.create(name: m.name,
-              campaignid: campaignid,
-              start_hr: begin_hr,
-              start_min: begin_min,
-              start_sec: begin_sec,
-              ref_name: ref_name,
-              list_status_id: list_status_id,
-              end_hr: @end_hr,
-              end_min: @end_min,
-              end_sec: @end_sec,
-              cost: cost,
-              channeltapeid: m.tape_ext_ref_id,
-              internaltapeid: m.unique_tape_name,
-              productvariantid: m.product_variant_id,
-              filename: m.name,
-              description: m.description,
-              duration_secs: m.duration_secs,
-              tape_id: m.tape_ext_ref_id,
-              for_date: for_date)
+              campaign_time = CampaignTime.new
+
+              campaign_time.start_hour = begin_hr
+              campaign_time.start_min = begin_min
+              campaign_time.start_second = begin_sec
+              campaign_time.start_frames = begin_frame
+              campaign_time.seconds = m.duration_secs
+              campaign_time.frames = m.frames
+
+              campaign_duration = campaign_time.add_sec_fr
+
+              #end_hour, :end_min, :end_second, :end_frames
+              new_campaign_playlist = CampaignPlaylist.create(name: m.name,
+                 campaignid: campaignid,
+                 start_hr: begin_hr,
+                 start_min: begin_min,
+                 start_sec: begin_sec,
+                 start_frame: begin_frame,
+                 ref_name: ref_name,
+                 list_status_id: list_status_id,
+                 end_hr: campaign_time.end_hour,
+                 end_min: campaign_time.end_min,
+                 end_sec: campaign_time.end_second,
+                 end_frame: campaign_time.end_frames,
+                 day: campaign_time.day,
+                 cost: cost,
+                 channeltapeid: m.tape_ext_ref_id,
+                 internaltapeid: m.unique_tape_name,
+                 productvariantid: m.product_variant_id,
+                 filename: m.name,
+                 description: m.description,
+                 duration_secs: m.duration_secs,
+                 frames: campaign_time.frames,
+                 tape_id: m.tape_ext_ref_id,
+                 for_date: for_date.day + campaign_time.day)
 
             if first_campaign_playlist_id == 0
               first_campaign_playlist_id = new_campaign_playlist.id
@@ -355,9 +371,11 @@ end
               new_campaign_playlist.update(playlist_group_id: first_campaign_playlist_id)
             end
 
-            begin_hr = @end_hr
-            begin_min = @end_min
-            begin_sec = @end_sec
+            begin_hr = campaign_time.end_hour
+            begin_min = campaign_time.end_min
+            begin_sec = campaign_time.end_second
+            begin_frame = campaign_time.end_frames
+
           end
 
           flash[:success] = "Campaign Playlists updated with #{media_tapes.count()} tapes"
@@ -440,65 +458,49 @@ end
         :productvariantid, :filename, :description,
         :duration_secs,
         :tape_id, :old_campaign_id, :ref_name,
-        :list_status_id, :for_date, :total_revenue, :playlist_group_id)
+        :list_status_id, :for_date, :total_revenue, :playlist_group_id,
+        :start_frame, :end_frame, :frames, :day)
     end
     def set_media_tape
       @media_tapes = MediaTape.all
     end
 
-    def hour_min_sec(s_hr, s_min, s_sec, duration_seconds)
-         first = (s_hr.to_i * 60 * 60) + (s_min.to_i * 60) + s_sec.to_i
-
-        totalseconds = duration_seconds.to_i + first
-        @end_sec    =  totalseconds % 60
-        totalseconds = (totalseconds - @end_sec) / 60
-        @end_min    =  totalseconds % 60
-        totalseconds = (totalseconds - @end_min) / 60
-        @end_hr      =  totalseconds % 24
-    end
-
-    def hour_min_sec_ff(s_hr, s_min, s_sec, s_ff, duration_seconds, duration_ff)
-
-        total_ff = (s_ff + duration_ff) % 24
-        if (s_ff + duration_ff) / 24 != 23
-          @end_ff = (s_ff + duration_ff) / 24
-        else
-          total_ff += 1
-          @end_ff = 0
-        end
-
-        first = (s_hr.to_i * 60 * 60) + (s_min.to_i * 60) + s_sec.to_i + total_ff.to_i
-
-        totalseconds = duration_seconds.to_i + first
-        @end_sec    =  totalseconds % 60
-        totalseconds = (totalseconds - @end_sec) / 60
-        @end_min    =  totalseconds % 60
-        totalseconds = (totalseconds - @end_min) / 60
-        @end_hr      =  totalseconds % 24
-    end
-    # def recent_campaigns
-    #   @recentplaylist = Campaigns.where("mediumid = ?", @campaign_playlist.campaigns.mediumid).order('id DESC').limit(10)
-    # end
-
     def update_timings(campaign_id)
-      campaigns = CampaignPlaylist.where(campaignid: campaign_id).order(:start_hr, :start_min, :start_sec)
+      campaigns = CampaignPlaylist.where(campaignid: campaign_id).order(:day, :start_hr, :start_min, :start_sec)
 
           n_str_hr = 0
           n_str_min = 0
           n_str_sec = 0
-
+          n_str_frm = 0
           totalnos = 0
       campaigns.each do |c|
           #start with first or previous listing timings
           c.update(start_hr: n_str_hr, start_min: n_str_min, start_sec: n_str_sec)
+
+          campaign_time = CampaignTime.new
+
+          campaign_time.start_hour = c.start_hr
+          campaign_time.start_min = c.start_min
+          campaign_time.start_second = c.start_sec
+          campaign_time.start_frames = c.start_frame
+          campaign_time.seconds = c.duration_secs
+          campaign_time.frames = c.frames
+
+          campaign_duration = campaign_time.add_sec_fr
           #get the ent time with start timing adding duration
-          hour_min_sec(c.start_hr, c.start_min, c.start_sec, c.duration_secs)
+          #hour_min_sec(c.start_hr, c.start_min, c.start_sec, c.duration_secs)
           #update new endn timing
-          c.update(end_hr: @end_hr, end_min: @end_min, end_sec: @end_sec)
+        #  c.update(end_hr: @end_hr, end_min: @end_min, end_sec: @end_sec)
+            c.update(end_hr: campaign_time.end_hour,
+          end_min: campaign_time.end_min,
+          end_sec: campaign_time.end_second,
+          end_frame: campaign_time.end_frames,
+          day: campaign_time.day)
            #use the end timings as start timings for the next show
-           n_str_hr = @end_hr
-           n_str_min = @end_min
-           n_str_sec = @end_sec
+           n_str_hr = campaign_time.end_hour
+           n_str_min = campaign_time.end_min
+           n_str_sec = campaign_time.end_second
+          n_str_frm = campaign_time.end_frames
            totalnos += 1
       end
       flash[:notice] = "Timings of #{totalnos} playlists were reset successfully"
@@ -624,4 +626,37 @@ end
           end
           @order_master.update(notes: updates)
     end
+    def hour_min_sec(s_hr, s_min, s_sec, duration_seconds)
+         first = (s_hr.to_i * 60 * 60) + (s_min.to_i * 60) + s_sec.to_i
+
+        totalseconds = duration_seconds.to_i + first
+        @end_sec    =  totalseconds % 60
+        totalseconds = (totalseconds - @end_sec) / 60
+        @end_min    =  totalseconds % 60
+        totalseconds = (totalseconds - @end_min) / 60
+        @end_hr      =  totalseconds % 24
+    end
+
+    def hour_min_sec_ff(s_hr, s_min, s_sec, s_ff, duration_seconds, duration_ff)
+
+        total_ff = (s_ff + duration_ff) % 24
+        if (s_ff + duration_ff) / 24 != 23
+          @end_ff = (s_ff + duration_ff) / 24
+        else
+          total_ff += 1
+          @end_ff = 0
+        end
+
+        first = (s_hr.to_i * 60 * 60) + (s_min.to_i * 60) + s_sec.to_i + total_ff.to_i
+
+        totalseconds = duration_seconds.to_i + first
+        @end_sec    =  totalseconds % 60
+        totalseconds = (totalseconds - @end_sec) / 60
+        @end_min    =  totalseconds % 60
+        totalseconds = (totalseconds - @end_min) / 60
+        @end_hr      =  totalseconds % 24
+    end
+    # def recent_campaigns
+    #   @recentplaylist = Campaigns.where("mediumid = ?", @campaign_playlist.campaigns.mediumid).order('id DESC').limit(10)
+    # end
 end

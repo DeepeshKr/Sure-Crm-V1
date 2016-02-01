@@ -41,7 +41,7 @@ Customer Order Summary
 &nbsp; <small><strong>DNIS:</strong>   <%= order_master.calledno %> </small>
 &nbsp; <small><strong>Completed Order No: 
 <% if order_master.external_order_no.blank? %>
- <%= link_to "Complete Order", review_path(:order_id => order_master.id), class: "btn btn-warning btn-xs" %> 
+ <%= link_to "Complete Order", review_path(:order_id => order_master.id), class: "btn btn-warning btn-xs" %>  
 <% else %>
 <%= order_master.external_order_no %>
  <% end %>
@@ -55,6 +55,7 @@ Customer Order Summary
    <h3><%= order_master.customer.fullname  if order_master.customer %> </h3>
   </div>
   <div class="col-xs-6">
+  <% if @show_details == 1 %>
   <div class="row">
     <div class="col-xs-6">
       <small> Mobile No <%= order_master.customer.mobile if order_master.customer %> </small><br/>
@@ -65,6 +66,7 @@ Customer Order Summary
     <small> Email Id  <%= order_master.customer.alt_emailid if order_master.customer %></small>
     </div>
   </div>
+  <% end %>
 </div>
 </div>
 
@@ -72,7 +74,7 @@ Customer Order Summary
  <!-- Customer End-->
   <!-- Customer Address-->
  <div class="well well-sm">
-
+<% if @show_details == 1 %>
 <div class="row">
       <div class="col-xs-10"> <%= order_master.customer_address.address1 %> </div>
   <div class="clearfix"></div>
@@ -106,6 +108,7 @@ Customer Order Summary
   
 </div>
 
+<% end %>
 </div>
     
  <!-- Customer Address End-->
@@ -268,6 +271,7 @@ Customer Order Summary
 
 </div>
 </div>
+
 <div class="clearfix"></div>
  <div class="well well-sm">
 <div class="row">
@@ -291,3 +295,4 @@ Customer Order Summary
 <% end %>
 <!-- bottom menu -->
   <%= render 'call_menu' %> 
+

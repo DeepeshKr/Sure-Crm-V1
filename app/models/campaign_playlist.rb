@@ -61,7 +61,7 @@ class CampaignPlaylist < ActiveRecord::Base
  # str = ":"
      #  self.end_hr + ":" + self.end_min + ":" + self.end_sec
      #str.concat(self.start_hr)
-      self.start_hr.to_s.rjust(2, '0') << ":" << self.start_min.to_s.rjust(2, '0')  << ":" << self.start_sec.to_s.rjust(2, '0')
+      self.start_hr.to_s.rjust(2, '0') << ":" << self.start_min.to_s.rjust(2, '0')  << ":" << self.start_sec.to_s.rjust(2, '0') << "-" << self.start_frame.to_s.rjust(2, '0')
     #t = (self.end_hr + ":" + self.end_min + ":" + self.end_sec)  - (self.start_hr + ":" + self.start_min + ":" + self.start_sec)
    # mm, ss = t.divmod(60)
    #  "%d m %d s" % [mm, ss]
@@ -71,7 +71,7 @@ class CampaignPlaylist < ActiveRecord::Base
      #str = ":"
      #  self.end_hr + ":" + self.end_min + ":" + self.end_sec
      #str.concat(self.end_hr)
-      self.end_hr.to_s.rjust(2, '0') << ":" << self.end_min.to_s.rjust(2, '0') << ":" << self.end_sec.to_s.rjust(2, '0')
+      self.end_hr.to_s.rjust(2, '0') << ":" << self.end_min.to_s.rjust(2, '0') << ":" << self.end_sec.to_s.rjust(2, '0') << "-" << self.end_frame.to_s.rjust(2, '0')
      # self.start_hr + ":" + self.start_min + ":" + self.start_sec
     #t = (self.end_hr + ":" + self.end_min + ":" + self.end_sec)  - (self.start_hr + ":" + self.start_min + ":" + self.start_sec)
    # mm, ss = t.divmod(60)

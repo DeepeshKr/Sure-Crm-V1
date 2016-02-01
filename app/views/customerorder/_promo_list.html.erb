@@ -1,0 +1,43 @@
+<% if @all_valid_promos.any? %>
+<% if @allowtoadd == false %>
+<h4>Active Promos <small>You can select the offer before payment</small></h4>
+<% end %>
+<table class="table table-hover table-stripped" >
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Description</th>
+      <th>Start date</th>
+      <th>End date</th>
+      <th>Free product</th>
+     <% if @allowtoadd == false %>
+      <th></th>
+     <% end %>
+     
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @all_valid_promos.each do |promotion| %>
+      <tr>
+        <td><%= promotion.name %></td>
+        <td><%= promotion.description %></td>
+        <td><%= promotion.start_date.strftime('%d-%b-%Y') %></td>
+        <td><%= promotion.end_date.strftime('%d-%b-%Y') %></td>
+        <td><%= promotion.product_list.productinfo || "No Free Products" if promotion.product_list %></td>
+        <% if @allowtoadd == true %>
+        <td>
+        <%= form_tag("/addoffer", method: "POST") do |f| %>
+            <%= hidden_field_tag :order_id, @order_id %>
+            <%= hidden_field_tag :promotion_id, promotion.id %>
+             <%= hidden_field_tag :free_product_list_id, promotion.free_product_list_id %>
+            <%= submit_tag "Select", name: nil, class: "btn btn-success btn-sm" %>
+                   
+            <% end %> 
+            </td>
+        <% end %>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+<% end %>
