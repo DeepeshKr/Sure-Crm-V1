@@ -41,8 +41,13 @@ class CampaignsController < ApplicationController
     proddropdown
 
     all_campaign_playlist = CampaignPlaylist.where("day IS NULL").order("id DESC").limit(1000)
-    all_campaign_playlist.each{|e| e.update(day: 0)}
+    records = 0
+    all_campaign_playlist.each do |e|
+      e.update(day: 0)
+      records += 1
+    end
 
+    flash[:notice] = "Updated of #{records} please continue till updated records become ZERO!"
 
     @for_date = @campaign.startdate
       @campaign_playlists = CampaignPlaylist.where("campaignid = ?", params[:id]).order(:day, :start_hr, :start_min, :start_sec)
