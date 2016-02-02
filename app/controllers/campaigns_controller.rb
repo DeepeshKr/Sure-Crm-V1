@@ -40,14 +40,14 @@ class CampaignsController < ApplicationController
     recent_campaigns
     proddropdown
 
-    all_campaign_playlist = CampaignPlaylist.where("day IS NULL").order("id DESC").limit(10000)
-    records = 0
-    all_campaign_playlist.each do |e|
-      e.update(day: 0)
-      records += 1
-    end
-
-    flash[:notice] = "Updated of #{records} please continue till updated records become ZERO! last updated is #{all_campaign_playlist.last.id}"
+    # all_campaign_playlist = CampaignPlaylist.where("day IS NULL").order("id DESC").limit(10000)
+    # records = 0
+    # all_campaign_playlist.each do |e|
+    #   e.update(day: 0)
+    #   records += 1
+    # end
+    #
+    # flash[:notice] = "Updated of #{records} please continue till updated records become ZERO! last updated is #{all_campaign_playlist.last.id}"
 
     @for_date = @campaign.startdate
       @campaign_playlists = CampaignPlaylist.where("campaignid = ?", params[:id]).order(:day, :start_hr, :start_min, :start_sec)

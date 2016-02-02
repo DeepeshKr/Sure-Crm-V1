@@ -4,7 +4,7 @@ source 'https://rubygems.org'
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '4.2.0'
 # Use postgresql as the database for Active Record
-gem 'pg'
+# gem 'pg'
 #visual view of models
 #gem 'rails-erd'
 gem 'rails-erd', github: 'ready4god2513/rails-erd', branch: 'rails-4.2-support-fix'
@@ -102,7 +102,10 @@ gem 'bcrypt', '~> 3.1.7'
 #gem 'unicorn'
 
 #gems for Oracle
-gem 'ruby-oci8', '~>2.1.5'
+gem 'ruby-oci8', '~>2.2.1'
+
+#gems for Oracle
+#gem 'ruby-oci8', '~>2.1.5'
 #gem 'activerecord-oracle_enhanced-adapter', :git => 'git://github.com/rsim/oracle-enhanced.git'
 gem 'activerecord-oracle_enhanced-adapter', github: 'rsim/oracle-enhanced', branch: 'rails42'
 #gem "activerecord-oracle_enhanced-adapter", "~> 1.5.0"
