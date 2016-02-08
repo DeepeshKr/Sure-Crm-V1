@@ -29,13 +29,6 @@ GIT
       ruby-graphviz (~> 1.0.4)
 
 GIT
-  remote: git://github.com/rsim/oracle-enhanced.git
-  revision: 1056657c0d7aa4220114285baa037d088da9880c
-  branch: rails42
-  specs:
-    activerecord-oracle_enhanced-adapter (1.5.6)
-
-GIT
   remote: git://github.com/zpaulovics/datetimepicker-rails.git
   revision: c5405f3486b57a52416caf93b79fc09d56930a82
   branch: master
@@ -76,6 +69,7 @@ GEM
       activemodel (= 4.2.0)
       activesupport (= 4.2.0)
       arel (~> 6.0)
+    activerecord-oracle_enhanced-adapter (1.6.6)
     activesupport (4.2.0)
       i18n (~> 0.7)
       json (~> 1.7, >= 1.7.7)
@@ -118,6 +112,7 @@ GEM
     formatador (0.2.5)
     globalid (0.3.5)
       activesupport (>= 4.1.0)
+    googlecharts (1.6.12)
     gruff (0.6.0)
       rmagick (>= 2.13.4)
     guard (2.12.5)
@@ -301,7 +296,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  activerecord-oracle_enhanced-adapter!
+  activerecord-oracle_enhanced-adapter (~> 1.6.0)
   bcrypt (~> 3.1.7)
   bootstrap-datepicker-rails
   bootstrap-sass (= 3.2.0.0)
@@ -311,6 +306,7 @@ DEPENDENCIES
   coffee-rails (~> 4.0.0)
   datetimepicker-rails!
   devise!
+  googlecharts
   gruff
   guard-minitest (= 2.3.1)
   jbuilder (~> 2.0)

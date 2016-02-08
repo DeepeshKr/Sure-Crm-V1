@@ -3,7 +3,7 @@ class SalesPpoReportController < ApplicationController
   before_action :media_segments, only: [:daily,  :show, :channel]
   before_action :constants
   before_action :hbn_fixed_costs, only: [:summary , :hourly, :hour_performance, :product_performance, :product_hour_performance, :operator_performance, :show, :ppo_products, :channel]
-
+  before_action :all_cancelled_orders
 
   require 'will_paginate/array'
   def summary
@@ -13,8 +13,8 @@ class SalesPpoReportController < ApplicationController
     employeeunorderlist ||= []
 
     #Medium.where(media_commision_id: 10045)
-    @hbn_media = Medium.where(media_group_id: 10000, active: true, media_commision_id: 10000)
-
+    #@hbn_media = Medium.where(media_group_id: 10000, active: true, media_commision_id: 10000)
+    
     if params.has_key?(:for_date)
           for_date =  Date.strptime(params[:for_date], "%Y-%m-%d")
 
@@ -34,7 +34,8 @@ class SalesPpoReportController < ApplicationController
           @from_date = for_date.beginning_of_day - 330.minutes
           @to_date = for_date.end_of_day - 330.minutes
 
-          orderlist = OrderMaster.where('ORDER_STATUS_MASTER_ID > 10002').where('ORDER_STATUS_MASTER_ID <> 10006')
+          orderlist = OrderMaster.where('ORDER_STATUS_MASTER_ID > 10002')
+          .where.not(ORDER_STATUS_MASTER_ID: @cancelled_status_id)
           .where('orderdate >= ? AND orderdate <= ?', @from_date, @to_date)
            .joins(:medium).where("media.media_group_id = 10000") #.limit(1)
 
@@ -143,7 +144,8 @@ class SalesPpoReportController < ApplicationController
 
          halfhourago = Time.at(date - 30.minutes)
 
-          orderlist = OrderMaster.where('ORDER_STATUS_MASTER_ID > 10002').where('ORDER_STATUS_MASTER_ID <> 10006')
+          orderlist = OrderMaster.where('ORDER_STATUS_MASTER_ID > 10002')
+          .where('ORDER_STATUS_MASTER_ID <> 10006')
           .joins(:medium).where("media.media_group_id = 10000")
           .where('orderdate >= ? AND orderdate <= ?', halfhourago, Time.at(date))
           #add orders of each cable tv operator
@@ -282,7 +284,10 @@ class SalesPpoReportController < ApplicationController
         total_order_value = 0
         s_no_i = 1
         @serial_no = 0
-          orderlist = OrderMaster.where('ORDER_STATUS_MASTER_ID > 10002').where('ORDER_STATUS_MASTER_ID <> 10006') .joins(:medium).where("media.media_group_id = 10000").where('orderdate >= ? AND orderdate <= ?',  @from_date, @to_date)
+          orderlist = OrderMaster.where('ORDER_STATUS_MASTER_ID > 10002')
+          .where.not(ORDER_STATUS_MASTER_ID: @cancelled_status_id)
+          .joins(:medium).where("media.media_group_id = 10000")
+          .where('orderdate >= ? AND orderdate <= ?',  @from_date, @to_date)
 
            campaign_playlists = CampaignPlaylist.where("for_date >= ? and for_date <= ?", @from_date, @to_date)
            .where("(start_hr * 60) + (start_min) >= ? AND ((start_hr * 60) + start_min) <= ?", @start_total_secs, @end_total_secs)
@@ -446,7 +451,7 @@ class SalesPpoReportController < ApplicationController
           #  .pluck(:id)
 
            @orderlist = OrderMaster.where('ORDER_STATUS_MASTER_ID > 10002')
-           .where('ORDER_STATUS_MASTER_ID <> 10006')
+            .where.not(ORDER_STATUS_MASTER_ID: @cancelled_status_id)
            .where(campaign_playlist_id: playlist.id).joins(:order_line)
            .where("order_lines.productvariant_id in (?)", @product_variant_id)
            .pluck(:id)
@@ -562,7 +567,6 @@ class SalesPpoReportController < ApplicationController
     #  @product_lists = ProductList.joins(:product_variant).where("product_variants.activeid = 10000").order('product_lists.name')
 
      @product_variants = ProductVariant.all.order("name").where("activeid = 10000")
-
      @total_media_cost = Medium.where(media_group_id: 10000).sum(:daily_charges).to_f
      @hbn_media_cost = Medium.where(media_group_id: 10000, active: true).sum(:daily_charges).to_f
      #@total_fixed_cost = campaign_playlists.sum(:cost).to_f
@@ -579,6 +583,7 @@ class SalesPpoReportController < ApplicationController
       @from_date =  Date.strptime(params[:from_date], "%Y-%m-%d")
       @or_for_date = for_date.strftime("%Y-%m-%d")
      end
+
      @to_date = (330.minutes).from_now.to_date
      if params.has_key?(:to_date)
       @to_date =  Date.strptime(params[:to_date], "%Y-%m-%d")
@@ -617,7 +622,10 @@ class SalesPpoReportController < ApplicationController
         total_order_value = 0
         s_no_i = 1
         @serial_no = 1
-           campaign_playlists = CampaignPlaylist.where("for_date >= ? and for_date <= ?", @from_date, @to_date) .where(productvariantid: @product_variant_id).where(list_status_id: 10000).order("for_date, start_hr, start_min")
+           campaign_playlists = CampaignPlaylist.where("for_date >= ? and for_date <= ?", @from_date, @to_date)
+           .where(productvariantid: @product_variant_id)
+           .where(list_status_id: 10000)
+           .order("for_date, start_hr, start_min")
            @total_fixed_cost = campaign_playlists.sum(:cost).to_f
 
            campaign_playlists.each do | playlist |
@@ -627,7 +635,8 @@ class SalesPpoReportController < ApplicationController
           #  .where(campaign_playlist_id: playlist.id).joins(:order_line)
           #  .pluck(:id)
 
-           orderlist = OrderMaster.where('ORDER_STATUS_MASTER_ID > 10002').where('ORDER_STATUS_MASTER_ID <> 10006')
+           orderlist = OrderMaster.where('ORDER_STATUS_MASTER_ID > 10002')
+           .where.not(ORDER_STATUS_MASTER_ID: @cancelled_status_id)
            .where(campaign_playlist_id: playlist.id)
 
                 revenue = 0
@@ -772,7 +781,8 @@ class SalesPpoReportController < ApplicationController
         @serial_no = 0
            campaign_playlists = CampaignPlaylist.where("for_date >= ? and for_date <= ?", @from_date, @to_date)
            .where("start_hr >= ? AND start_min >= ? AND start_hr <= ? AND start_min <= ?", @start_hr, @start_min, @end_hr, @end_min)
-           .where(list_status_id: 10000).order("for_date, start_hr, start_min")
+           .where(list_status_id: 10000)
+           .order("for_date, start_hr, start_min")
            #.limit(150)
 
            @total_media_cost = Medium.where(media_group_id: 10000).sum(:daily_charges).to_f
@@ -780,7 +790,8 @@ class SalesPpoReportController < ApplicationController
            @total_fixed_cost = campaign_playlists.sum(:cost).to_f
 
            campaign_playlists.each do | playlist |
-           orderlist = OrderMaster.where('ORDER_STATUS_MASTER_ID > 10002').where('ORDER_STATUS_MASTER_ID <> 10006')
+           orderlist = OrderMaster.where('ORDER_STATUS_MASTER_ID > 10002')
+           .where.not(ORDER_STATUS_MASTER_ID: @cancelled_status_id)
            .where(campaign_playlist_id: playlist.id).joins(:order_line)
            .where("order_lines.productvariant_id = ?", @productvariant_id)
 
@@ -898,7 +909,8 @@ class SalesPpoReportController < ApplicationController
       @from_time = corrected_date_time(day, @start_hr, @start_min)
       @upto_time = corrected_date_time(day, @end_hr, @end_min)
 
-      orderlists = OrderMaster.where('ORDER_STATUS_MASTER_ID > 10002').where('ORDER_STATUS_MASTER_ID <> 10006')
+      orderlists = OrderMaster.where('ORDER_STATUS_MASTER_ID > 10002')
+        .where.not(ORDER_STATUS_MASTER_ID: @cancelled_status_id)
       .joins(:medium).where("media.media_group_id = 10000")
       .where('orderdate >= ? AND orderdate <= ?', @from_time, @upto_time)
 
@@ -1020,7 +1032,8 @@ class SalesPpoReportController < ApplicationController
              return
            end
            campaign_playlists.each do | playlist |
-           orderlist = OrderMaster.where('ORDER_STATUS_MASTER_ID > 10002').where('ORDER_STATUS_MASTER_ID <> 10006')
+           orderlist = OrderMaster.where('ORDER_STATUS_MASTER_ID > 10002')
+          .where.not(ORDER_STATUS_MASTER_ID: @cancelled_status_id)
            .where(campaign_playlist_id: playlist.id).where(media_id: @media_id)
 
                 revenue = 0
@@ -1147,7 +1160,8 @@ class SalesPpoReportController < ApplicationController
       @serial_no = 1
      campaign_playlists.each do | playlist |
 
-     orderlist = OrderMaster.where('ORDER_STATUS_MASTER_ID > 10002').where('ORDER_STATUS_MASTER_ID <> 10006')
+     orderlist = OrderMaster.where('ORDER_STATUS_MASTER_ID > 10002')
+      .where.not(ORDER_STATUS_MASTER_ID: @cancelled_status_id)
      .where(campaign_playlist_id: playlist.id)
 
           revenue = 0
@@ -1249,7 +1263,10 @@ class SalesPpoReportController < ApplicationController
       @total_promo_cost = 0
 
       @campaign_playlist =  CampaignPlaylist.find(params[:campaign_id])
-      @order_masters = OrderMaster.where(campaign_playlist_id: params[:campaign_id]).where('ORDER_STATUS_MASTER_ID > 10002').where('ORDER_STATUS_MASTER_ID <> 10006').order("created_at")
+      @order_masters = OrderMaster.where(campaign_playlist_id: params[:campaign_id])
+      .where('ORDER_STATUS_MASTER_ID > 10002')
+      .where.not(ORDER_STATUS_MASTER_ID: @cancelled_status_id)
+      .order("created_at")
 
       start_hr = @campaign_playlist.start_hr
       start_min = @campaign_playlist.start_min
@@ -1373,7 +1390,10 @@ class SalesPpoReportController < ApplicationController
       basic_product_type_id = 10040
       common_product_type_id = 10001
       @regular_basic,   @regular_shipping,  @regular_total,   @regular_cost,  @regular_revenue = 0,0,0,0,0
-      @order_lines_regular = OrderLine.where(orderid: ordernos).joins(:product_variant).where("product_variants.product_sell_type_id = ?", main_product_type_id).order("order_lines.created_at")
+      @order_lines_regular = OrderLine.where(orderid: ordernos)
+      .joins(:product_variant)
+      .where("product_variants.product_sell_type_id = ?", main_product_type_id)
+      .order("order_lines.created_at")
 
 
           @order_lines_regular.each do |order |
@@ -1386,7 +1406,9 @@ class SalesPpoReportController < ApplicationController
           end
 
       @basic_basic,   @basic_shipping,  @basic_total,   @basic_cost,  @basic_revenue = 0,0,0,0,0
-      @order_lines_basic = OrderLine.where(orderid: ordernos).joins(:product_variant).where("product_variants.product_sell_type_id = ?", basic_product_type_id).order("order_lines.created_at")
+      @order_lines_basic = OrderLine.where(orderid: ordernos).joins(:product_variant)
+      .where("product_variants.product_sell_type_id = ?", basic_product_type_id)
+      .order("order_lines.created_at")
 
          @order_lines_basic.each do |order |
             @basic_basic += order.subtotal
@@ -1398,7 +1420,9 @@ class SalesPpoReportController < ApplicationController
           end
 
       @common_basic,   @common_shipping,  @common_total,   @common_cost,  @common_revenue = 0,0,0,0,0
-      @order_lines_common = OrderLine.where(orderid: ordernos).joins(:product_variant).where("product_variants.product_sell_type_id = ?", common_product_type_id).order("order_lines.created_at")
+      @order_lines_common = OrderLine.where(orderid: ordernos).joins(:product_variant)
+      .where("product_variants.product_sell_type_id = ?", common_product_type_id)
+      order("order_lines.created_at")
 
             @order_lines_common.each do |order |
             @common_basic += order.subtotal
@@ -1472,7 +1496,8 @@ private
 
          halfhourago = Time.at(date - 1.minutes)
 
-          orderlist = OrderMaster.where('ORDER_STATUS_MASTER_ID > 10002').where('ORDER_STATUS_MASTER_ID <> 10006')
+          orderlist = OrderMaster.where('ORDER_STATUS_MASTER_ID > 10002')
+          .where.not(ORDER_STATUS_MASTER_ID: @cancelled_status_id)
            .joins(:medium).where("media.media_group_id = 10000")
           .where('orderdate >= ? AND orderdate <= ?', halfhourago, Time.at(date))
           #add orders of each cable tv operator
@@ -1539,7 +1564,8 @@ private
 
 
 
-        hbn_order_masters = OrderMaster.where('ORDER_STATUS_MASTER_ID > 10002').where('ORDER_STATUS_MASTER_ID <> 10006')
+        hbn_order_masters = OrderMaster.where('ORDER_STATUS_MASTER_ID > 10002')
+        .where.not(ORDER_STATUS_MASTER_ID: @cancelled_status_id)
         .where('orderdate >= ? AND orderdate <= ?', @start_time, @end_time)
          .joins(:medium).where("media.media_group_id = 10000")
          .select(:media_id).distinct
@@ -1552,6 +1578,7 @@ private
             name = (Medium.find(e).name  || "NA" if Medium.find(e).name.present?)
             orderlist = OrderMaster.where('ORDER_STATUS_MASTER_ID > 10002')
             .where('orderdate >= ? AND orderdate <= ?', @start_time, @end_time)
+            .where.not(ORDER_STATUS_MASTER_ID: @cancelled_status_id)
             .where(media_id: e)
 
             orderlist.each {|ol| timetaken += ol.timetaken  }
@@ -1672,20 +1699,28 @@ private
 
 
         order_masters = OrderMaster.where('orderdate >= ? AND orderdate <= ?',
-          @start_time, @end_time).where('ORDER_STATUS_MASTER_ID > 10002').where('ORDER_STATUS_MASTER_ID <> 10006')
+          @start_time, @end_time).where('ORDER_STATUS_MASTER_ID > 10002')
+          .where.not(ORDER_STATUS_MASTER_ID: @cancelled_status_id)
         .where("media.media_group_id = 10000").pluck(:id)
 
 
         total_order_summary(order_masters, @start_time, @end_time )
         regular_product_variant_list = ProductVariant.where(product_sell_type_id: 10000)
-
         common_sell_product_variant_list = ProductVariant.where(product_sell_type_id: 10001)
         basic_sell_product_variant_list =  ProductVariant.where(product_sell_type_id: 10040)
 
        #select the product list based on the product selling category regular basic common upsell
-      reg_order_lines = OrderLine.where(orderid: order_masters).where(productvariant_id: regular_product_variant_list).select(:product_list_id).distinct
-      basic_order_lines = OrderLine.where(orderid: order_masters).where(productvariant_id: basic_sell_product_variant_list).select(:product_list_id).distinct
-      common_order_lines = OrderLine.where(orderid: order_masters).where(productvariant_id: common_sell_product_variant_list).select(:product_list_id).distinct
+      reg_order_lines = OrderLine.where(orderid: order_masters)
+      .where(productvariant_id: regular_product_variant_list)
+      .select(:product_list_id).distinct
+
+      basic_order_lines = OrderLine.where(orderid: order_masters)
+      .where(productvariant_id: basic_sell_product_variant_list)
+      .select(:product_list_id).distinct
+
+      common_order_lines = OrderLine.where(orderid: order_masters)
+      .where(productvariant_id: common_sell_product_variant_list)
+      .select(:product_list_id).distinct
 
       #@orderdate = "Searched for #{for_date} found #{order_masters.count} agents!"
         main_product_list_orderlist ||= []
@@ -1992,5 +2027,12 @@ private
             #  @total_media_cost = Medium.where(media_group_id: 10000).sum(:daily_charges).to_f
             #  @hbn_media_cost = Medium.where(media_group_id: 10000, active: true).sum(:daily_charges).to_f
             #  @total_fixed_cost = campaign_playlists.sum(:cost).to_f
+  end
+  def all_cancelled_orders
+    @cancelled_status_id = [10040, 10006, 10008]
+    #10040 => tranfer order cancelled
+    #10006 => CFO and cancelled orders / unclaimed orders
+    #10008 => Returned Order (post shipping)
+    #session[:cancelled_status_id] = @cancelled_status_id
   end
 end

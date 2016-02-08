@@ -1,5 +1,11 @@
 Rails.application.routes.draw do
 
+  get 'cashsale/index'
+
+  get 'cashsale/search'
+
+  get 'cashsale/details'
+
   resources :registration_statuses
 
   resources :fat_to_fit_email_statuses

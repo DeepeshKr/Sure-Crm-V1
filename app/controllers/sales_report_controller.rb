@@ -2,6 +2,7 @@ class SalesReportController < ApplicationController
   before_action { protect_controllers(7) }
    respond_to :html
    before_action :drop_downs, only: [:city, :update, :destroy, :deleteupsell]
+   before_action :all_cancelled_orders
   # before_filter :authenticate_user!
   def index
     @sales_agents = Employee.all.where(:employee_role_id => 10003).order("first_name")
@@ -37,7 +38,7 @@ class SalesReportController < ApplicationController
           @to_date = for_date.end_of_day + 330.minutes
 
           orderlist = OrderMaster.where('ORDER_STATUS_MASTER_ID > 10002')
-          .where('ORDER_STATUS_MASTER_ID <> 10006')
+          .where.not(ORDER_STATUS_MASTER_ID: @cancelled_status_id)
           .where('orderdate >= ? AND orderdate <= ?', @from_date, @to_date)
            #.where(media_id: @hbnlist)
            @from_date = @from_date.strftime("%Y-%m-%d")
@@ -92,7 +93,9 @@ class SalesReportController < ApplicationController
      @bdm_id = params[:bdm_id]
      #  # Unclaimed order 10006
       order_masters = OrderMaster.where('orderdate >= ? AND orderdate <= ?', @from_date, @to_date)
-      .where('ORDER_STATUS_MASTER_ID > 10002').where('ORDER_STATUS_MASTER_ID <> 10006').joins(:medium).where("media.employee_id = ? ", @bdm_id).distinct.pluck(:media_id)
+      .where('ORDER_STATUS_MASTER_ID > 10002')
+      .where.not(ORDER_STATUS_MASTER_ID: @cancelled_status_id)
+      .joins(:medium).where("media.employee_id = ? ", @bdm_id).distinct.pluck(:media_id)
       #.select("date(orderdate) as ordered_date, sum(subtotal) as total_value")
       name = (Employee.find(@bdm_id))
       amount = 0.0
@@ -107,7 +110,9 @@ class SalesReportController < ApplicationController
         # timetaken = orderlist.sum(:codcharges)
          reverse_vat_rate = TaxRate.find(10001)
          order_master_calculations = OrderMaster.where('orderdate >= ? AND orderdate <= ?', @from_date, @to_date)
-         .where('ORDER_STATUS_MASTER_ID > 10002').where('ORDER_STATUS_MASTER_ID <> 10006').where(:media_id => ord)
+         .where('ORDER_STATUS_MASTER_ID > 10002')
+         .where.not(ORDER_STATUS_MASTER_ID: @cancelled_status_id)
+         .where(:media_id => ord)
          order_master_calculations.each do |orc|
            if reverse_vat_rate.present?
              rate_charge = reverse_vat_rate.reverse_rate ||= 0.8888889
@@ -180,7 +185,9 @@ class SalesReportController < ApplicationController
          reverse_vat_rate = TaxRate.find(10001)
 
       order_masters = OrderMaster.where('orderdate >= ? AND orderdate <= ?', @from_date, @to_date)
-      .where('ORDER_STATUS_MASTER_ID > 10002').where('ORDER_STATUS_MASTER_ID <> 10006').where(media_id: @media_id)
+      .where('ORDER_STATUS_MASTER_ID > 10002')
+      .where.not(ORDER_STATUS_MASTER_ID: @cancelled_status_id)
+      .where(media_id: @media_id)
 
       name = (Employee.find(@bdm_id))
       amount = 0.0
@@ -270,16 +277,22 @@ class SalesReportController < ApplicationController
 
         if @source == "hbn"
           order_masters = OrderMaster.where('orderdate >= ? AND orderdate <= ?', @from_date, @to_date)
-          .where('ORDER_STATUS_MASTER_ID > 10002').where('ORDER_STATUS_MASTER_ID <> 10006').where("media.media_group_id = 10000")
+          .where('ORDER_STATUS_MASTER_ID > 10002')
+          .where.not(ORDER_STATUS_MASTER_ID: @cancelled_status_id)
+          .where("media.media_group_id = 10000")
           .joins(:medium).distinct.pluck(:media_id)
         elsif @source == "pvt"
             order_masters = OrderMaster.where('orderdate >= ? AND orderdate <= ?', @from_date, @to_date)
-          .where('ORDER_STATUS_MASTER_ID > 10002').where('ORDER_STATUS_MASTER_ID <> 10006').joins(:medium).where("media.media_group_id IS NULL")
+          .where('ORDER_STATUS_MASTER_ID > 10002')
+          .where.not(ORDER_STATUS_MASTER_ID: @cancelled_status_id)
+          .joins(:medium).where("media.media_group_id IS NULL")
           .distinct.pluck(:media_id)
           #.limit(2)
         else
           order_masters = OrderMaster.where('orderdate >= ? AND orderdate <= ?', @from_date, @to_date)
-          .where('ORDER_STATUS_MASTER_ID > 10002').where('ORDER_STATUS_MASTER_ID <> 10006').joins(:medium).distinct.pluck(:media_id)
+          .where('ORDER_STATUS_MASTER_ID > 10002')
+          .where.not(ORDER_STATUS_MASTER_ID: @cancelled_status_id)
+          .joins(:medium).distinct.pluck(:media_id)
 
         end
 
@@ -300,7 +313,9 @@ class SalesReportController < ApplicationController
         # timetaken = orderlist.sum(:codcharges)
          reverse_vat_rate = TaxRate.find(10001)
          order_master_calculations = OrderMaster.where('orderdate >= ? AND orderdate <= ?', @from_date, @to_date)
-         .where('ORDER_STATUS_MASTER_ID > 10002').where('ORDER_STATUS_MASTER_ID <> 10006').where(:media_id => ord)
+         .where('ORDER_STATUS_MASTER_ID > 10002')
+         .where.not(ORDER_STATUS_MASTER_ID: @cancelled_status_id)
+         .where(:media_id => ord)
 
          order_master_calculations.each do |orc|
            if reverse_vat_rate.present?
@@ -317,21 +332,43 @@ class SalesReportController < ApplicationController
         hbn = media.media_group.name || nil if media.media_group.present?
 
         @order_cities = OrderMaster.where('orderdate >= ? AND orderdate <= ?', @from_date, @to_date)
-        .where('ORDER_STATUS_MASTER_ID > 10002').where('ORDER_STATUS_MASTER_ID <> 10006').where(media_id: ord).group(:city).count
+        .where('ORDER_STATUS_MASTER_ID > 10002')
+      .where.not(ORDER_STATUS_MASTER_ID: @cancelled_status_id)
+        .where(media_id: ord).group(:city).count
 
 
 
         @main_products = OrderLine.joins(:order_master).where('order_masters.orderdate >= ? AND order_masters.orderdate <= ?', @from_date, @to_date)
-        .where('order_masters.ORDER_STATUS_MASTER_ID > 10002').where('order_masters.ORDER_STATUS_MASTER_ID <> 10006').where("order_masters.media_id = ?", ord).joins(:product_variant).where("product_variants.product_sell_type_id = ?", 10000).joins(:product_list).group("product_lists.extproductcode").sum(:pieces)
+        .where('order_masters.ORDER_STATUS_MASTER_ID > 10002')
+        .where.not(ORDER_STATUS_MASTER_ID: @cancelled_status_id)
+        .where("order_masters.media_id = ?", ord).joins(:product_variant)
+        .where("product_variants.product_sell_type_id = ?", 10000)
+        .joins(:product_list).group("product_lists.extproductcode")
+        .sum(:pieces)
 
-        @bas_upsell_products = OrderLine.joins(:order_master).where('order_masters.orderdate >= ? AND order_masters.orderdate <= ?', @from_date, @to_date)
-        .where('order_masters.ORDER_STATUS_MASTER_ID > 10002').where('order_masters.ORDER_STATUS_MASTER_ID <> 10006').where("order_masters.media_id = ?", ord).joins(:product_variant).where("product_variants.product_sell_type_id = ?", 10040).joins(:product_list).group("product_lists.extproductcode").sum(:pieces)
+        @bas_upsell_products = OrderLine.joins(:order_master)
+        .where('order_masters.orderdate >= ? AND order_masters.orderdate <= ?', @from_date, @to_date)
+        .where('order_masters.ORDER_STATUS_MASTER_ID > 10002')
+        .where.not(ORDER_STATUS_MASTER_ID: @cancelled_status_id)
+        .where("order_masters.media_id = ?", ord).joins(:product_variant)
+        .where("product_variants.product_sell_type_id = ?", 10040)
+        .joins(:product_list)
+        .group("product_lists.extproductcode").sum(:pieces)
 
         @com_upsell_products = OrderLine.joins(:order_master).where('order_masters.orderdate >= ? AND order_masters.orderdate <= ?', @from_date, @to_date)
-        .where('order_masters.ORDER_STATUS_MASTER_ID > 10002').where('order_masters.ORDER_STATUS_MASTER_ID <> 10006').where("order_masters.media_id = ?", ord).joins(:product_variant).where("product_variants.product_sell_type_id = ?", 10001).joins(:product_list).group("product_lists.extproductcode").sum(:pieces)
+        .where('order_masters.ORDER_STATUS_MASTER_ID > 10002')
+        .where.not(ORDER_STATUS_MASTER_ID: @cancelled_status_id)
+        .where("order_masters.media_id = ?", ord).joins(:product_variant)
+        .where("product_variants.product_sell_type_id = ?", 10001)
+        .joins(:product_list).group("product_lists.extproductcode").sum(:pieces)
 
-        @free_products = OrderLine.joins(:order_master).where('order_masters.orderdate >= ? AND order_masters.orderdate <= ?', @from_date, @to_date)
-        .where('order_masters.ORDER_STATUS_MASTER_ID > 10002').where('order_masters.ORDER_STATUS_MASTER_ID <> 10006').where("order_masters.media_id = ?", ord).joins(:product_variant).where("product_variants.product_sell_type_id = ?", 10060).joins(:product_list).group("product_lists.name").sum(:pieces)
+        @free_products = OrderLine.joins(:order_master)
+        .where('order_masters.orderdate >= ? AND order_masters.orderdate <= ?', @from_date, @to_date)
+        .where('order_masters.ORDER_STATUS_MASTER_ID > 10002')
+        .where.not(ORDER_STATUS_MASTER_ID: @cancelled_status_id)
+        .where("order_masters.media_id = ?", ord).joins(:product_variant)
+        .where("product_variants.product_sell_type_id = ?", 10060)
+        .joins(:product_list).group("product_lists.name").sum(:pieces)
 
         #.joins(:product_list).select('product_lists.name as name, count(*) as count, sum(order_lines.total) as total').group('product_list_id')
 
@@ -403,7 +440,9 @@ class SalesReportController < ApplicationController
      @bdm_id = params[:bdm_id]
      #  # Unclaimed order 10006
       order_masters = OrderMaster.where('orderdate >= ? AND orderdate <= ?', @from_date, @to_date)
-      .where('ORDER_STATUS_MASTER_ID > 10002').where('ORDER_STATUS_MASTER_ID <> 10006').joins(:medium).distinct.pluck(:media_id)
+      .where('ORDER_STATUS_MASTER_ID > 10002')
+      .where.not(ORDER_STATUS_MASTER_ID: @cancelled_status_id)
+      .joins(:medium).distinct.pluck(:media_id)
       #.select("date(orderdate) as ordered_date, sum(subtotal) as total_value")
     #  name = (Employee.find(@bdm_id))
       amount = 0.0
@@ -418,7 +457,9 @@ class SalesReportController < ApplicationController
         # timetaken = orderlist.sum(:codcharges)
          reverse_vat_rate = TaxRate.find(10001)
          order_master_calculations = OrderMaster.where('orderdate >= ? AND orderdate <= ?', @from_date, @to_date)
-         .where('ORDER_STATUS_MASTER_ID > 10002').where('ORDER_STATUS_MASTER_ID <> 10006').where(:media_id => ord)
+         .where('ORDER_STATUS_MASTER_ID > 10002')
+         .where.not(ORDER_STATUS_MASTER_ID: @cancelled_status_id)
+         .where(:media_id => ord)
          order_master_calculations.each do |orc|
            if reverse_vat_rate.present?
              rate_charge = reverse_vat_rate.reverse_rate ||= 0.8888889
@@ -498,7 +539,9 @@ class SalesReportController < ApplicationController
          reverse_vat_rate = TaxRate.find(10001)
 
       order_masters = OrderMaster.where('orderdate >= ? AND orderdate <= ?', @from_date, @to_date)
-      .where('ORDER_STATUS_MASTER_ID > 10002').where('ORDER_STATUS_MASTER_ID <> 10006').where(media_id: @media_id)
+      .where('ORDER_STATUS_MASTER_ID > 10002')
+      .where.not(ORDER_STATUS_MASTER_ID: @cancelled_status_id)
+      .where(media_id: @media_id)
 
     #  name = (Employee.find(@bdm_id))
       amount = 0.0
@@ -573,7 +616,9 @@ class SalesReportController < ApplicationController
 
       #@to_date = (@to_date + 330.minutes)
     #
-      interaction_masters = InteractionMaster.where('createdon >= ? AND createdon <= ?', @from_date, @to_date).joins(:interaction_category).where("interaction_categories.sortorder < 100 and interaction_categories.sortorder <> 25 and interaction_categories.sortorder <> 26 and interaction_categories.sortorder <> 27")
+      interaction_masters = InteractionMaster.where('createdon >= ? AND createdon <= ?', @from_date, @to_date)
+      .joins(:interaction_category)
+      .where("interaction_categories.sortorder < 100 and interaction_categories.sortorder <> 25 and interaction_categories.sortorder <> 26 and interaction_categories.sortorder <> 27")
       @orderdate = "Open Orders order between #{@from_date} and #{@to_date} found records!"
 
     # => Customer.find(inm.customer_id).fullname ||= "NA" if inm.customer?
@@ -741,8 +786,10 @@ class SalesReportController < ApplicationController
     @pincode = ""
     if params[:pincode].present?
       @pincode = params[:pincode]
-      order_masters = OrderMaster.where('ORDER_STATUS_MASTER_ID > 10002').where('ORDER_STATUS_MASTER_ID <> 10006')
-      .where('orderdate >= ? AND orderdate <= ?', @from_date, @to_date).where("pincode = ?", @pincode).limit(20)
+      order_masters = OrderMaster.where('ORDER_STATUS_MASTER_ID > 10002')
+      .where.not(ORDER_STATUS_MASTER_ID: @cancelled_status_id)
+      .where('orderdate >= ? AND orderdate <= ?', @from_date, @to_date)
+      .where("pincode = ?", @pincode).limit(20)
     else
         order_masters = OrderMaster.limit(0)
     end
@@ -821,7 +868,8 @@ class SalesReportController < ApplicationController
 
       @to_date.downto(@from_date).each do |day|
 
-        order_masters = OrderMaster.where('ORDER_STATUS_MASTER_ID > 10002').where('ORDER_STATUS_MASTER_ID <> 10006')
+        order_masters = OrderMaster.where('ORDER_STATUS_MASTER_ID > 10002')
+        .where.not(ORDER_STATUS_MASTER_ID: @cancelled_status_id)
         .where('orderdate >= ? AND orderdate <= ?', @from_date, @to_date)
          .joins(:medium).where("media.media_group_id = 10000").select(:employee_id).distinct
 
@@ -832,7 +880,9 @@ class SalesReportController < ApplicationController
           e = o.employee_id
 
           name = (Employee.find(e).first_name  || "NA" if Employee.find(e).first_name.present?)
-          orderlist = OrderMaster.where('ORDER_STATUS_MASTER_ID > 10002').where('ORDER_STATUS_MASTER_ID <> 10006').where('TRUNC(orderdate) = ?',for_date).where(media_id: @hbnlist).where(employee_id: e)
+          orderlist = OrderMaster.where('ORDER_STATUS_MASTER_ID > 10002')
+          .where('ORDER_STATUS_MASTER_ID <> 10006').where('TRUNC(orderdate) = ?',for_date)
+          .where(media_id: @hbnlist).where(employee_id: e)
           timetaken = orderlist.sum(:codcharges)
           ccvalue = orderlist.where(orderpaymentmode_id: 10000).sum(:total)
           ccorders = orderlist.where(orderpaymentmode_id: 10000).count()
@@ -891,7 +941,8 @@ class SalesReportController < ApplicationController
            halfhourago = Time.at(date - 30.minutes)
 
 
-            orderlist = OrderMaster.where('ORDER_STATUS_MASTER_ID > 10002').where('ORDER_STATUS_MASTER_ID <> 10006')
+            orderlist = OrderMaster.where('ORDER_STATUS_MASTER_ID > 10002')
+            .where.not(ORDER_STATUS_MASTER_ID: @cancelled_status_id)
             .where('orderdate >= ? AND orderdate <= ?', halfhourago, Time.at(date))
             #.joins(:medium).where("media.media_group_id = 10000")
 
@@ -978,7 +1029,8 @@ class SalesReportController < ApplicationController
          halfhourago = Time.at(date - 30.minutes)
 
 
-          orderlists = OrderMaster.where('ORDER_STATUS_MASTER_ID > 10002').where('ORDER_STATUS_MASTER_ID <> 10006')
+          orderlists = OrderMaster.where('ORDER_STATUS_MASTER_ID > 10002')
+          .where.not(ORDER_STATUS_MASTER_ID: @cancelled_status_id)
           .where('orderdate >= ? AND orderdate <= ?', halfhourago, Time.at(date))
           #.joins(:medium).where("media.media_group_id = 10000")
 
@@ -1062,7 +1114,11 @@ class SalesReportController < ApplicationController
     if params.has_key?(:to_date)
        @to_date =  DateTime.strptime(params[:to_date], "%Y-%m-%d %H:%M")
     end
-    @order_masters = OrderMaster.where('ORDER_STATUS_MASTER_ID > 10002').where('ORDER_STATUS_MASTER_ID <> 10006').joins(:medium).where("media.media_group_id = 10000").where("orderdate >= ? AND orderdate <= ?",@from_date, @to_date).order("order_masters.created_at")
+    @order_masters = OrderMaster.where('ORDER_STATUS_MASTER_ID > 10002')
+    .where.not(ORDER_STATUS_MASTER_ID: @cancelled_status_id)
+    .joins(:medium).where("media.media_group_id = 10000")
+    .where("orderdate >= ? AND orderdate <= ?",@from_date, @to_date)
+    .order("order_masters.created_at")
 
     ordernos = @order_masters.pluck(:id)
     main_product_type_id = 10000
@@ -1133,25 +1189,35 @@ class SalesReportController < ApplicationController
         @to_date = @to_date.end_of_day - 330.minutes
 
         hbn_order_masters = OrderMaster.where('orderdate >= ? AND orderdate <= ?', @from_date, @to_date)
-        .where('ORDER_STATUS_MASTER_ID > 10002').where('ORDER_STATUS_MASTER_ID <> 10006')
+        .where('ORDER_STATUS_MASTER_ID > 10002')
+        .where.not(ORDER_STATUS_MASTER_ID: @cancelled_status_id)
         .where(media_id: @hbnlist1).select(:media_id, :city).distinct
 
         paid_order_masters = OrderMaster.where('orderdate >= ? AND orderdate <= ?', @from_date, @to_date)
-        .where('ORDER_STATUS_MASTER_ID > 10002').where('ORDER_STATUS_MASTER_ID <> 10006')
+        .where('ORDER_STATUS_MASTER_ID > 10002')
+        .where.not(ORDER_STATUS_MASTER_ID: @cancelled_status_id)
         .where(media_id: @paid).select(:media_id, :city).distinct
 
         other_order_masters = OrderMaster.where('orderdate >= ? AND orderdate <= ?', @from_date, @to_date)
-        .where('ORDER_STATUS_MASTER_ID > 10002').where('ORDER_STATUS_MASTER_ID <> 10006').where(media_id: @others)
+        .where('ORDER_STATUS_MASTER_ID > 10002')
+        .where.not(ORDER_STATUS_MASTER_ID: @cancelled_status_id)
+        .where(media_id: @others)
         .select(:media_id, :city).distinct
 
         total_hbn_order_masters = OrderMaster.where('orderdate >= ? AND orderdate <= ?', @from_date, @to_date)
-        .where('ORDER_STATUS_MASTER_ID > 10002').where('ORDER_STATUS_MASTER_ID <> 10006').where(media_id: @hbnlist1)
+        .where('ORDER_STATUS_MASTER_ID > 10002')
+        .where.not(ORDER_STATUS_MASTER_ID: @cancelled_status_id)
+        .where(media_id: @hbnlist1)
 
         total_paid_order_masters = OrderMaster.where('orderdate >= ? AND orderdate <= ?', @from_date, @to_date)
-        .where('ORDER_STATUS_MASTER_ID > 10002').where('ORDER_STATUS_MASTER_ID <> 10006').where(media_id: @paid)
+        .where('ORDER_STATUS_MASTER_ID > 10002')
+        .where.not(ORDER_STATUS_MASTER_ID: @cancelled_status_id)
+        .where(media_id: @paid)
 
         total_other_order_masters = OrderMaster.where('orderdate >= ? AND orderdate <= ?', @from_date, @to_date)
-        .where('ORDER_STATUS_MASTER_ID > 10002').where(media_id: @others)
+        .where('ORDER_STATUS_MASTER_ID > 10002')
+        .where.not(ORDER_STATUS_MASTER_ID: @cancelled_status_id)
+        .where(media_id: @others)
 
         @orderdate = "Orders for #{@from_date}: HBN Channel #{total_hbn_order_masters.count} for Rs. #{total_hbn_order_masters.sum(:total)}, Paid channels #{total_paid_order_masters.count} for Rs. #{total_paid_order_masters.sum(:total)} and Free Channel #{total_other_order_masters.count} for Rs. #{total_other_order_masters.sum(:total)}!"
 
@@ -1163,7 +1229,8 @@ class SalesReportController < ApplicationController
           c = o.city
           name = (Medium.find(e).name  || "NA" if Medium.find(e).name.present?)
 
-          orderlist = OrderMaster.where('ORDER_STATUS_MASTER_ID > 10002').where('ORDER_STATUS_MASTER_ID <> 10006')
+          orderlist = OrderMaster.where('ORDER_STATUS_MASTER_ID > 10002')
+          .where.not(ORDER_STATUS_MASTER_ID: @cancelled_status_id)
           .where('orderdate >= ? AND orderdate <= ?', @from_date, @to_date)
           .where(media_id: e, city: c)
           timetaken = orderlist.sum(:codcharges)
@@ -1189,7 +1256,8 @@ class SalesReportController < ApplicationController
           e = o.media_id
           c = o.city
           name = (Medium.find(e).name  || "NA" if Medium.find(e).name.present?)
-          orderlist = OrderMaster.where('ORDER_STATUS_MASTER_ID > 10002').where('ORDER_STATUS_MASTER_ID <> 10006')
+          orderlist = OrderMaster.where('ORDER_STATUS_MASTER_ID > 10002')
+          .where.not(ORDER_STATUS_MASTER_ID: @cancelled_status_id)
           .where('orderdate >= ? AND orderdate <= ?', @from_date, @to_date)
           .where(media_id: e, city: c)
           timetaken = orderlist.sum(:codcharges)
@@ -1215,7 +1283,8 @@ class SalesReportController < ApplicationController
           e = o.media_id
           c = o.city
           name = (Medium.find(e).name  || "NA" if Medium.find(e).name.present?)
-          orderlist = OrderMaster.where('ORDER_STATUS_MASTER_ID > 10002').where('ORDER_STATUS_MASTER_ID <> 10006')
+          orderlist = OrderMaster.where('ORDER_STATUS_MASTER_ID > 10002')
+          .where.not(ORDER_STATUS_MASTER_ID: @cancelled_status_id)
           .where('orderdate >= ? AND orderdate <= ?', @from_date, @to_date)
           .where(media_id: e, city: c)
           timetaken = orderlist.sum(:codcharges)
@@ -1275,7 +1344,9 @@ class SalesReportController < ApplicationController
 
 
         order_masters = OrderMaster.where('orderdate >= ? AND orderdate <= ?', @from_date, @to_date)
-        .where('ORDER_STATUS_MASTER_ID > 10002').where('ORDER_STATUS_MASTER_ID <> 10006').select(:employee_id).distinct
+        .where('ORDER_STATUS_MASTER_ID > 10002')
+        .where.not(ORDER_STATUS_MASTER_ID: @cancelled_status_id)
+        .select(:employee_id).distinct
 
         @orderdate = "Searched for #{for_date} found #{order_masters.count} agents!"
         employeeunorderlist ||= []
@@ -1284,7 +1355,8 @@ class SalesReportController < ApplicationController
           e = o.employee_id
 
           name = (Employee.find(e).first_name  || "NA" if Employee.find(e).first_name.present?)
-          orderlist = OrderMaster.where('ORDER_STATUS_MASTER_ID > 10002').where('ORDER_STATUS_MASTER_ID <> 10006')
+          orderlist = OrderMaster.where('ORDER_STATUS_MASTER_ID > 10002')
+          .where.not(ORDER_STATUS_MASTER_ID: @cancelled_status_id)
           .where('orderdate >= ? AND orderdate <= ?', @from_date, @to_date).where(employee_id: e)
           timetaken = orderlist.sum(:codcharges)
           ccvalue = orderlist.where(orderpaymentmode_id: 10000).sum(:total)
@@ -1352,7 +1424,10 @@ class SalesReportController < ApplicationController
             # .where('ORDER_STATUS_MASTER_ID > 10002').where('city IS NOT NULL').uniq.pluck(:city)
 
             order_cities = OrderMaster.where('orderdate >= ? AND orderdate <= ?', from_date, to_date)
-            .where('ORDER_STATUS_MASTER_ID > 10002').where('ORDER_STATUS_MASTER_ID <> 10006').where('city IS NOT NULL').where(media_id: params[:media_id])
+            .where('ORDER_STATUS_MASTER_ID > 10002')
+            .where.not(ORDER_STATUS_MASTER_ID: @cancelled_status_id)
+            .where('city IS NOT NULL')
+            .where(media_id: params[:media_id])
             .uniq.pluck(:city)
 
 
@@ -1383,7 +1458,9 @@ class SalesReportController < ApplicationController
         # .where('ORDER_STATUS_MASTER_ID > 10002').where('city IS NOT NULL')
 
         order_cities = OrderMaster.where('orderdate >= ? AND orderdate <= ?', from_date, to_date)
-        .where('ORDER_STATUS_MASTER_ID > 10002').where('ORDER_STATUS_MASTER_ID <> 10006').where('city IS NOT NULL').uniq.pluck(:city)
+        .where('ORDER_STATUS_MASTER_ID > 10002')
+        .where.not(ORDER_STATUS_MASTER_ID: @cancelled_status_id)
+        .where('city IS NOT NULL').uniq.pluck(:city)
         # order_id_1 = OrderMaster.where('orderdate >= ? AND orderdate <= ?', from_date, to_date)
         # .where('ORDER_STATUS_MASTER_ID > 10002').where('city IS NOT NULL').limit(1000).uniq.pluck(:id)
         #  order_id_2 = OrderMaster.where('orderdate >= ? AND orderdate <= ?', from_date, to_date)
@@ -1407,7 +1484,9 @@ class SalesReportController < ApplicationController
                 #city = CustomerAddress.find(e).city  #  || "NA" if Employee.find(e).first_name.present?)
 
                orderlist = OrderMaster.where('orderdate >= ? AND orderdate <= ?', from_date, to_date)
-              .where('ORDER_STATUS_MASTER_ID > 10002').where('ORDER_STATUS_MASTER_ID <> 10006').where('city IS NOT NULL').where("city = ?", city)
+              .where('ORDER_STATUS_MASTER_ID > 10002')
+              .where.not(ORDER_STATUS_MASTER_ID: @cancelled_status_id)
+              .where('city IS NOT NULL').where("city = ?", city)
 
              if params.has_key?(:media_id)
               orderlist = orderlist.where(media_id: params[:media_id])
@@ -1471,7 +1550,8 @@ class SalesReportController < ApplicationController
           @product_master_id = params[:product_master_id]
           sold_product_list = OrderLine.where('order_lines.orderdate >= ? and order_lines.orderdate <= ?', @from_date, @to_date)
           .where(product_master_id: @product_master_id).joins(:order_master)
-          .where('ORDER_MASTERS.ORDER_STATUS_MASTER_ID > 10002').where('ORDER_MASTERS.ORDER_STATUS_MASTER_ID <> 10006')#.limit(10)
+          .where('ORDER_MASTERS.ORDER_STATUS_MASTER_ID > 10002')
+          .where.not(ORDER_STATUS_MASTER_ID: @cancelled_status_id)#.limit(10)
           #.uniq.pluck(:orderid)
           product_name = ProductMaster.find(@product_master_id).name
 
@@ -1542,7 +1622,8 @@ class SalesReportController < ApplicationController
        .where(list_status_id: 10000) #.limit(10)
 
        campaign_playlists.each do | playlist |
-       orderlist = OrderMaster.where('ORDER_STATUS_MASTER_ID > 10002').where('ORDER_STATUS_MASTER_ID <> 10006')
+       orderlist = OrderMaster.where('ORDER_STATUS_MASTER_ID > 10002')
+      .where.not(ORDER_STATUS_MASTER_ID: @cancelled_status_id)
        .where(campaign_playlist_id: playlist.id)
 
         totalorders = orderlist.sum(:total)
@@ -1603,7 +1684,8 @@ class SalesReportController < ApplicationController
 
       @orderlistabout = "for date #{for_date}"
       @order_masters =  OrderMaster.where('orderdate >= ? AND orderdate <= ?', from_date, to_date)
-      .where('ORDER_STATUS_MASTER_ID > 10002').where('ORDER_STATUS_MASTER_ID <> 10006')
+      .where('ORDER_STATUS_MASTER_ID > 10002')
+      .where.not(ORDER_STATUS_MASTER_ID: @cancelled_status_id)
 
       if params.has_key?(:playlist_id)
        campaign_id =  params[:playlist_id]
@@ -1631,7 +1713,8 @@ class SalesReportController < ApplicationController
            if params[:for_date].present?
             for_date =  Date.strptime(params[:for_date], "%Y-%m-%d")
 
-            @order_masters = OrderMaster.where('ORDER_STATUS_MASTER_ID > 10002').where('ORDER_STATUS_MASTER_ID <> 10006')
+            @order_masters = OrderMaster.where('ORDER_STATUS_MASTER_ID > 10002')
+            .where.not(ORDER_STATUS_MASTER_ID: @cancelled_status_id)
             .where('orderdate >= ? AND orderdate <= ?', from_date, to_date)
             .where(employee_id: @employee_id).order("id")
             @orderdesc = "#{@order_masters.count()} orders of #{employee} for #{for_date}"
@@ -1651,6 +1734,7 @@ class SalesReportController < ApplicationController
 
 
        @order_masters = OrderMaster.where('ORDER_STATUS_MASTER_ID > 10002')
+       .where.not(ORDER_STATUS_MASTER_ID: @cancelled_status_id)
        .where('orderdate >= ? AND orderdate <= ?', start_time, end_time)
        @orderlistabout = "for selected playlist #{for_date} between #{start_time} and #{end_time} "
       end
@@ -1683,7 +1767,10 @@ class SalesReportController < ApplicationController
 
         sold_product_list = OrderLine.where('order_lines.orderdate >= ? and order_lines.orderdate <= ?', @from_date, @to_date)
         .where(product_list_id: product_list_id).joins(:order_master)
-        .where('ORDER_MASTERS.ORDER_STATUS_MASTER_ID > 10002')#.limit(10)
+        .where('ORDER_MASTERS.ORDER_STATUS_MASTER_ID > 10002')
+        .where.not('ORDER_MASTERS.ORDER_STATUS_MASTER_ID IN (10040, 10006, 10008)')
+        #@cancelled_status_id
+        #.limit(10)
           #.uniq.pluck(:orderid)
 
           @order_lines_csv ||= []
@@ -1916,6 +2003,14 @@ class SalesReportController < ApplicationController
           end
 
        end
+  end
+
+  def all_cancelled_orders
+    @cancelled_status_id = [10040, 10006, 10008]
+    #10040 => tranfer order cancelled
+    #10006 => CFO and cancelled orders / unclaimed orders
+    #10008 => Returned Order (post shipping)
+    #session[:cancelled_status_id] = @cancelled_status_id
   end
 
   def drop_downs

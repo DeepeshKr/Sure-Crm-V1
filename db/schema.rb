@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160201103339) do
+ActiveRecord::Schema.define(version: 20160206061502) do
 
   create_table "address_types", force: :cascade do |t|
     t.string   "name"
@@ -1056,6 +1056,7 @@ ActiveRecord::Schema.define(version: 20160201103339) do
     t.datetime "updated_at",                                        null: false
     t.integer  "cost",                    limit: 16, precision: 38
     t.integer  "revenue",                 limit: 16, precision: 38
+    t.integer  "packaging_cost",          limit: 16, precision: 38
   end
 
   create_table "product_inventory_codes", force: :cascade do |t|

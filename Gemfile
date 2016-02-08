@@ -10,6 +10,11 @@ gem 'rails', '4.2.0'
 gem 'rails-erd', github: 'ready4god2513/rails-erd', branch: 'rails-4.2-support-fix'
 #visual view of models dependecy
 gem 'ruby-graphviz'
+#charting tool https://github.com/ankane/chartkick
+# gem "chartkick"
+# charting helper https://github.com/ankane/groupdate
+# gem 'groupdate'
+gem 'googlecharts'
 
 #gem 'thin'
 #gem "rack-timeout"
@@ -107,8 +112,8 @@ gem 'ruby-oci8', '~>2.2.1'
 #gems for Oracle
 #gem 'ruby-oci8', '~>2.1.5'
 #gem 'activerecord-oracle_enhanced-adapter', :git => 'git://github.com/rsim/oracle-enhanced.git'
-gem 'activerecord-oracle_enhanced-adapter', github: 'rsim/oracle-enhanced', branch: 'rails42'
-#gem "activerecord-oracle_enhanced-adapter", "~> 1.5.0"
+#gem 'activerecord-oracle_enhanced-adapter', github: 'rsim/oracle-enhanced', branch: 'rails42'
+gem "activerecord-oracle_enhanced-adapter", "~> 1.6.0"
 
 gem 'upmin-admin'
 # Use Capistrano for deployment

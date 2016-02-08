@@ -1,0 +1,88 @@
+<table class="table table-hover table-bordered">
+  <thead>
+  <th>TITLE</th>
+<th>FNAME</th>
+<th>LNAME</th>
+<th>ADD1</th>
+<th>ADD2</th>
+<th>ADD3</th>
+<th>CITY</th>
+<th>PINCODE</th>
+<th>TEL1</th>
+<th>TEL2</th>
+<th>FAX</th>
+<th>EMAIL</th>
+<th>PROD</th>
+<th>QUANTITY</th>
+<th>DEPT</th>
+<th>PAYMENT</th>
+<th>PAYMENTTYPE</th>
+<th>CARDNUM</th>
+<th>BASIC</th>
+<th>TAXPER</th>
+<th>TAXAMT</th>
+<th>DISCOUNT</th>
+<th>DISCOUNTAMT</th>
+<th>INVOICEAMOUNT</th>
+<th>REFUNDDATE</th>
+<th>REFUNDAMOUNT</th>
+<th>REASON</th>
+<th>INVOICE</th>
+<th>TRANTYPE</th>
+<th>SHDATE</th>
+<th>CFO</th>
+<th>DEO</th>
+<th>CHANNEL</th>
+<th>OPERATOR</th>
+<th>MALLNAME</th>
+<th>REFUNDCHECK</th>
+<th>REFUNDCHECKDATE</th>
+<th>PAIDDATE</th>
+<th>RETURNDATE</th>
+</thead>
+<tbody>
+    <% @cashsale.each do |cs| %>
+  <tr>
+    <td><%= cs.title %></td>
+      <td><%= cs.fname %></td>
+      <td><%= cs.lname %></td>
+      <td><%= cs.add1 %></td>
+      <td><%= cs.add2 %></td>
+      <td><%= cs.add3 %></td>
+      <td><%= cs.city %></td>
+      <td><%= cs.pincode %></td>
+      <td><%= cs.tel1 %></td>
+      <td><%= cs.tel2 %></td>
+      <td><%= cs.fax %></td>
+      <td><%= cs.email %></td>
+      <td><%= cs.prod %></td>
+      <td><%= cs.quantity %></td>
+      <td><%= cs.dept %></td>
+      <td><%= cs.payment %></td>
+      <td><%= cs.paymenttype %></td>
+      <td><%= cs.cardnum %></td>
+      <td><%= cs.basic %></td>
+      <td><%= cs.taxper %></td>
+      <td><%= cs.taxamt %></td>
+      <td><%= cs.discount %></td>
+      <td><%= cs.discountamt %></td>
+      <td><%= cs.invoiceamount %></td>
+      <td><%= cs.refunddate %></td>
+      <td><%= cs.refundamount %></td>
+      <td><%= cs.reason %></td>
+      <td><%= cs.invoice %></td>
+      <td><%= cs.trantype %></td>
+      <td><%= cs.shdate %></td>
+      <td><%= cs.cfo %></td>
+      <td><%= cs.deo %></td>
+      <td><%= cs.channel %></td>
+      <td><%= cs.operator %></td>
+      <td><%= cs.mallname %></td>
+      <td><%= cs.refundcheck %></td>
+      <td><%= cs.refundcheckdate %></td>
+      <td><%= cs.paiddate %></td>
+      <td><%= cs.returndate %></td>
+    </tr>
+  <% end %>
+</tbody>
+</table>
