@@ -603,25 +603,24 @@ class SalesReportController < ApplicationController
     #     #@summary ||= []
         @orderdate =  "Please select a date to generate the report"
         @from_date =  Date.strptime(params[:from_date], "%Y-%m-%d")
-        @from_date = @from_date.beginning_of_day # 330.minutes
+        @from_date = @from_date.beginning_of_day - 330.minutes
         @to_date = @from_date.end_of_day - 330.minutes
 
-      # if params.has_key?(:from_date)
-      #   @from_date =  Date.strptime(params[:from_date], "%Y-%m-%d")
-      # end
-      # #@to_date =
+      if params.has_key?(:to_date)
+        @to_date =  Date.strptime(params[:to_date], "%Y-%m-%d")
+        @to_date = @to_date.end_of_day - 330.minutes
+      end
 
-      @to_date =  Date.strptime(params[:to_date], "%Y-%m-%d") || Date.current if params.has_key?(:to_date)
-
-      @to_date = @to_date.end_of_day - 330.minutes
-      @from_date = @from_date.beginning_of_day - 330.minutes
+      # @to_date = @to_date.end_of_day - 330.minutes
+      # @from_date = @from_date.beginning_of_day - 330.minutes
 
       #@to_date = (@to_date + 330.minutes)
     #
-      interaction_masters = InteractionMaster.where('createdon >= ? AND createdon <= ?', @from_date, @to_date).limit(10)
+      interaction_masters = InteractionMaster.where('createdon >= ? AND createdon <= ?', @from_date, @to_date)
+      #.limit(100)
       # .joins(:interaction_category)
       # .where("interaction_categories.sortorder < 100 and interaction_categories.sortorder <> 25 and interaction_categories.sortorder <> 26 and interaction_categories.sortorder <> 27")
-      @orderdate = "Open Orders order between #{@from_date} and #{@to_date} found records!"
+      @orderdate = "Orders disposition between #{@from_date} and #{@to_date} found records!"
 
     # => Customer.find(inm.customer_id).fullname ||= "NA" if inm.customer?
     # Customer.find(inm.customer_id).fullname ||= "NA" if inm.customer_id.present?
@@ -635,6 +634,7 @@ class SalesReportController < ApplicationController
           customer_name = inm.customer_id
           name = inm.employee_id
           products = ""
+          order_time = "NA"
           #cats.each do |cat| cat.name end
           if inm.orderid.present?
 
@@ -646,12 +646,14 @@ class SalesReportController < ApplicationController
             if order_masters.order_line.present?
               inm.order_master.order_line.each do |ord| products << ord.description end
             end
+          order_time = (order_masters.created_at + 330.minutes).strftime("%Y-%m-%d %H:%M")
           end
           employeeunorderlist << {:total => total,
           :sno => num,
           :employee => name,
           :mobile => inm.mobile,
           :customer => customer_name,
+          :order_time => order_time,
           :on_date =>  (inm.created_at + 330.minutes).strftime("%Y-%m-%d %H:%M"),
           :products => products,
           :city => city,
@@ -664,7 +666,7 @@ class SalesReportController < ApplicationController
 
 
       #  @from_date = (@from_date + 330.minutes).strftime("%Y-%m-%d")
-        @to_date = (@to_date + 330.minutes).strftime("%Y-%m-%d")
+      #  @to_date = (@to_date + 330.minutes).strftime("%Y-%m-%d")
 
        #
        @employeeorderlist = employeeunorderlist
