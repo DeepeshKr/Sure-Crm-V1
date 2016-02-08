@@ -21,17 +21,16 @@ xml.mcrs_playlist do
               xml.group(:type => "video", :width => "1920", :height => "1080",
               :aspect => "16:9", :framerate => "25", :progressive => "n"){
                 xml.track {
-                  xml.clip(:srcref => "0", :start => c.starttime, :stop => c.endtime,
-                  :mstart => c.starttime, :mstop => c.endtime){
+                  xml.clip(:srcref => "0", :start => "0", :stop => c.duration_frames,
+                  :mstart => "0", :mstop => c.duration_frames){
                     xml.quality(:src => c.filename, :id => "0")
                   }
                 }
               }
               xml.group(:type => "audio", :channels => "2"){
                 xml.track {
-                  xml.clip(:srcref => "1", :start => c.starttime,
-                  :stop => c.endtime, :mstart => c.starttime,
-                  :mstop => c.endtime){
+                  xml.clip(:srcref => "1", :start => "0", :stop => c.duration_frames,
+                  :mstart => "0", :mstop => c.duration_frames){
                       xml.quality(:src => c.filename, :id =>"0")
                   }
                 }

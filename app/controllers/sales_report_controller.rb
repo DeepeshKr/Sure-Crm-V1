@@ -602,9 +602,9 @@ class SalesReportController < ApplicationController
     if params[:from_date].present?
     #     #@summary ||= []
         @orderdate =  "Please select a date to generate the report"
-        for_date =  Date.strptime(params[:from_date], "%Y-%m-%d")
-        @from_date = for_date.beginning_of_day - 330.minutes
-        @to_date = for_date.end_of_day - 330.minutes
+        @from_date =  Date.strptime(params[:from_date], "%Y-%m-%d")
+        @from_date = @from_date.beginning_of_day # 330.minutes
+        @to_date = @from_date.end_of_day - 330.minutes
 
       # if params.has_key?(:from_date)
       #   @from_date =  Date.strptime(params[:from_date], "%Y-%m-%d")
@@ -663,7 +663,7 @@ class SalesReportController < ApplicationController
         # CSV.generate_line([c[:sno], c[:mobile], c[:employee], c[:order_date], c[:customer], c[:phone], c[:product], c[:total], c[:address], c[:city], c[:total]]).html_safe.strip
 
 
-        @from_date = (@from_date + 330.minutes).strftime("%Y-%m-%d")
+      #  @from_date = (@from_date + 330.minutes).strftime("%Y-%m-%d")
         @to_date = (@to_date + 330.minutes).strftime("%Y-%m-%d")
 
        #
