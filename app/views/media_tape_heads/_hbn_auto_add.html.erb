@@ -1,4 +1,6 @@
-<%= form_tag  url_for(:controller => 'campaign_playlists', :action => 'create_playlist_with_media_tape_head', :anchor => "data-entry-tabs"), method: "post" do |f| %>
+<%= form_tag  url_for(:controller => 'campaign_playlists',
+:action => 'create_playlist_with_media_tape_head'), method: "post" do |f| %>
+<!-- :anchor => "data-entry-tabs" -->
 <%= hidden_field_tag :for_date, @for_date %>
 <%= hidden_field_tag :time_slot, "auto_hbn" %>
 <%= hidden_field_tag :campaignid, @campaignid %>
