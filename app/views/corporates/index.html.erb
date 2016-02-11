@@ -14,7 +14,8 @@
 <%= render partial: 'list_of_corporates', :locals => {:corporates => @transferordercorporates, :list_name => "Transfer Order Distributors"}  %>
 <br>
 <%= render partial: 'list_of_corporates', :locals => {:corporates => @regularcorporates, :list_name => "Other Distributors"}  %>
-
+<br>
+<%= render partial: 'list_of_corporates', :locals => {:corporates => @corporates, :list_name => "Regular Distributors"}  %>
 <br>
 <%= link_to 'New Corporate', new_corporate_path, class:"btn btn-primary" %>
 <br>

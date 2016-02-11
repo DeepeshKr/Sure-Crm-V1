@@ -6,7 +6,7 @@ class SalesReportController < ApplicationController
   # before_filter :authenticate_user!
   def index
     @sales_agents = Employee.all.where(:employee_role_id => 10003).order("first_name")
-    @product_master = ProductMaster.order('name') #.limit(10)
+    @product_master = ProductMaster.order('extproductcode') #.limit(10)
      @media_manager = Employee.where(:employee_role_id => 10121).order("first_name")
      @from_date = (Date.current + 330.minutes).strftime("%Y-%m-%d") #.strftime("%Y-%m-%d")
   end
@@ -340,7 +340,7 @@ class SalesReportController < ApplicationController
 
         @main_products = OrderLine.joins(:order_master).where('order_masters.orderdate >= ? AND order_masters.orderdate <= ?', @from_date, @to_date)
         .where('order_masters.ORDER_STATUS_MASTER_ID > 10002')
-        .where.not(ORDER_STATUS_MASTER_ID: @cancelled_status_id)
+        .where.not('ORDER_STATUS_MASTER_ID IN (10040, 10006, 10008)')
         .where("order_masters.media_id = ?", ord).joins(:product_variant)
         .where("product_variants.product_sell_type_id = ?", 10000)
         .joins(:product_list).group("product_lists.extproductcode")
@@ -349,15 +349,16 @@ class SalesReportController < ApplicationController
         @bas_upsell_products = OrderLine.joins(:order_master)
         .where('order_masters.orderdate >= ? AND order_masters.orderdate <= ?', @from_date, @to_date)
         .where('order_masters.ORDER_STATUS_MASTER_ID > 10002')
-        .where.not(ORDER_STATUS_MASTER_ID: @cancelled_status_id)
+        .where.not('ORDER_STATUS_MASTER_ID IN (10040, 10006, 10008)')
         .where("order_masters.media_id = ?", ord).joins(:product_variant)
         .where("product_variants.product_sell_type_id = ?", 10040)
         .joins(:product_list)
-        .group("product_lists.extproductcode").sum(:pieces)
+        .group("product_lists.extproductcode")
+        .sum(:pieces)
 
         @com_upsell_products = OrderLine.joins(:order_master).where('order_masters.orderdate >= ? AND order_masters.orderdate <= ?', @from_date, @to_date)
         .where('order_masters.ORDER_STATUS_MASTER_ID > 10002')
-        .where.not(ORDER_STATUS_MASTER_ID: @cancelled_status_id)
+        .where.not('ORDER_STATUS_MASTER_ID IN (10040, 10006, 10008)')
         .where("order_masters.media_id = ?", ord).joins(:product_variant)
         .where("product_variants.product_sell_type_id = ?", 10001)
         .joins(:product_list).group("product_lists.extproductcode").sum(:pieces)
@@ -365,7 +366,7 @@ class SalesReportController < ApplicationController
         @free_products = OrderLine.joins(:order_master)
         .where('order_masters.orderdate >= ? AND order_masters.orderdate <= ?', @from_date, @to_date)
         .where('order_masters.ORDER_STATUS_MASTER_ID > 10002')
-        .where.not(ORDER_STATUS_MASTER_ID: @cancelled_status_id)
+        .where.not('ORDER_STATUS_MASTER_ID IN (10040, 10006, 10008)')
         .where("order_masters.media_id = ?", ord).joins(:product_variant)
         .where("product_variants.product_sell_type_id = ?", 10060)
         .joins(:product_list).group("product_lists.name").sum(:pieces)
@@ -375,9 +376,9 @@ class SalesReportController < ApplicationController
 
         #.group_by{|oc| oc.city}
         @order_cities = @order_cities.sort_by{|c| c[1]}.reverse
-        @main_products = @main_products.sort_by{|c| c[1]}.reverse
-        @bas_upsell_products = @bas_upsell_products.sort_by{|c| c[1]}.reverse
-        @com_upsell_products = @com_upsell_products.sort_by{|c| c[1]}.reverse
+        #@main_products = @main_products.sort_by{|c| c[1]}.reverse
+        #@bas_upsell_products = @bas_upsell_products.sort_by{|c| c[1]}.reverse
+        #@com_upsell_products = @com_upsell_products.sort_by{|c| c[1]}.reverse
         @first_order = @from_date
         @last_order = @to_date
           mainlist << {
@@ -601,25 +602,25 @@ class SalesReportController < ApplicationController
     if params[:from_date].present?
     #     #@summary ||= []
         @orderdate =  "Please select a date to generate the report"
-        for_date =  Date.strptime(params[:from_date], "%Y-%m-%d")
-        @from_date = for_date.beginning_of_day - 330.minutes
-        @to_date = for_date.end_of_day - 330.minutes
-
-      if params.has_key?(:from_date)
         @from_date =  Date.strptime(params[:from_date], "%Y-%m-%d")
-      end
-      #@to_date =
-      @to_date =  Date.strptime(params[:to_date], "%Y-%m-%d") || Date.current if params.has_key?(:to_date)
+        @from_date = @from_date.beginning_of_day - 330.minutes
+        @to_date = @from_date.end_of_day - 330.minutes
 
-      @to_date = @to_date.end_of_day - 330.minutes
-      @from_date = for_date.beginning_of_day - 330.minutes
+      if params.has_key?(:to_date)
+        @to_date =  Date.strptime(params[:to_date], "%Y-%m-%d")
+        @to_date = @to_date.end_of_day - 330.minutes
+      end
+
+      # @to_date = @to_date.end_of_day - 330.minutes
+      # @from_date = @from_date.beginning_of_day - 330.minutes
 
       #@to_date = (@to_date + 330.minutes)
     #
       interaction_masters = InteractionMaster.where('createdon >= ? AND createdon <= ?', @from_date, @to_date)
-      .joins(:interaction_category)
-      .where("interaction_categories.sortorder < 100 and interaction_categories.sortorder <> 25 and interaction_categories.sortorder <> 26 and interaction_categories.sortorder <> 27")
-      @orderdate = "Open Orders order between #{@from_date} and #{@to_date} found records!"
+      #.limit(100)
+      # .joins(:interaction_category)
+      # .where("interaction_categories.sortorder < 100 and interaction_categories.sortorder <> 25 and interaction_categories.sortorder <> 26 and interaction_categories.sortorder <> 27")
+      @orderdate = "Orders disposition between #{@from_date} and #{@to_date} found records!"
 
     # => Customer.find(inm.customer_id).fullname ||= "NA" if inm.customer?
     # Customer.find(inm.customer_id).fullname ||= "NA" if inm.customer_id.present?
@@ -633,6 +634,7 @@ class SalesReportController < ApplicationController
           customer_name = inm.customer_id
           name = inm.employee_id
           products = ""
+          order_time = "NA"
           #cats.each do |cat| cat.name end
           if inm.orderid.present?
 
@@ -644,13 +646,15 @@ class SalesReportController < ApplicationController
             if order_masters.order_line.present?
               inm.order_master.order_line.each do |ord| products << ord.description end
             end
+          order_time = (order_masters.created_at + 330.minutes).strftime("%Y-%m-%d %H:%M")
           end
           employeeunorderlist << {:total => total,
           :sno => num,
           :employee => name,
           :mobile => inm.mobile,
           :customer => customer_name,
-          :on_date =>  (inm.createdon + 330.minutes).strftime("%Y-%m-%d %H:%M"),
+          :order_time => order_time,
+          :on_date =>  (inm.created_at + 330.minutes).strftime("%Y-%m-%d %H:%M"),
           :products => products,
           :city => city,
           :channel => channel,
@@ -661,8 +665,8 @@ class SalesReportController < ApplicationController
         # CSV.generate_line([c[:sno], c[:mobile], c[:employee], c[:order_date], c[:customer], c[:phone], c[:product], c[:total], c[:address], c[:city], c[:total]]).html_safe.strip
 
 
-        @from_date = (@from_date + 330.minutes).strftime("%Y-%m-%d")
-        @to_date = (@to_date + 330.minutes).strftime("%Y-%m-%d")
+      #  @from_date = (@from_date + 330.minutes).strftime("%Y-%m-%d")
+      #  @to_date = (@to_date + 330.minutes).strftime("%Y-%m-%d")
 
        #
        @employeeorderlist = employeeunorderlist
@@ -1551,7 +1555,7 @@ class SalesReportController < ApplicationController
           sold_product_list = OrderLine.where('order_lines.orderdate >= ? and order_lines.orderdate <= ?', @from_date, @to_date)
           .where(product_master_id: @product_master_id).joins(:order_master)
           .where('ORDER_MASTERS.ORDER_STATUS_MASTER_ID > 10002')
-          .where.not(ORDER_STATUS_MASTER_ID: @cancelled_status_id)#.limit(10)
+          .where.not('order_masters.ORDER_STATUS_MASTER_ID IN (10040, 10006, 10008)')#.limit(10)
           #.uniq.pluck(:orderid)
           product_name = ProductMaster.find(@product_master_id).name
 
@@ -2007,6 +2011,7 @@ class SalesReportController < ApplicationController
 
   def all_cancelled_orders
     @cancelled_status_id = [10040, 10006, 10008]
+    @cancelled_status_sql_list = '(10040, 10006, 10008)'
     #10040 => tranfer order cancelled
     #10006 => CFO and cancelled orders / unclaimed orders
     #10008 => Returned Order (post shipping)

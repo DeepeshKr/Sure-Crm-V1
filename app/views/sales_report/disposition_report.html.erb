@@ -4,6 +4,7 @@
 	 <div class="col-xs-2">
 
 	 <h4>Disposition Report </h4>
+   <%=  @from_date %>
 	 </div>
 
    <div class="col-xs-4">
@@ -23,6 +24,7 @@
   <thead>
     <tr>
      <th>S No</th>
+     <th>Order Time</th>
      <th>Date</th>
      <th>Disposition</th>
      <th>Mobile</th>
@@ -39,6 +41,7 @@
    <% @employeeorderlist.each do |c| %>
    <tr>
    <td><%= c[:sno] %></td>
+   <td><%= c[:order_time] %></td>
    <td><%= c[:on_date] %></td>
    <td><%= c[:disposition] %></td>
    <td><%= c[:mobile] %></td>

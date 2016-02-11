@@ -24,8 +24,8 @@
    <td><%= @sno %></td>
 
 <td>
- <%= link_to c[:product], orderlist_path(product_list_id: c[:id], for_date: c[:for_date]), :target => "_blank" %>
-
+ <!-- link_to c[:product], orderlist_path(product_list_id: c[:id], for_date: c[:for_date]), :target => "_blank" -->
+   <%= c[:product] %>
 </td>
 <td>
    <%= c[:prod] %>
