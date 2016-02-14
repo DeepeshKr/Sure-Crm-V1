@@ -181,10 +181,11 @@ def stockbook_details
         @newwlsdet = NEWWLSDET.where(prod: @prod_list).where("TRUNC(shdate) = ? ", @from_date) #.where("CFO != 'Y' OR CFO IS NULL")
 
 
-      #sold_branch
+      #sold_branch at retails counters
       when @route = "sold_branch"
         @route_details = "Sold over Branch"
-        @tempinv_newwlsdet = TEMPINV_NEWWLSDET.where(prod: @prod_list).where("TRUNC(shdate) = ?", @from_date) #.where("CFO != 'Y' OR CFO IS NULL")
+        @tempinv_newwlsdet = CASHSALE.where(prod: @prod_list)
+        .where("TRUNC(paiddate) = ?", @from_date) #.where("CFO != 'Y' OR CFO IS NULL")
 
 
       #returned_retail

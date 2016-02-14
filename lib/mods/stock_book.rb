@@ -431,17 +431,17 @@ module StockBook
       end
 
       #Sold Branch
-      @tempinv_newwlsdet = TEMPINV_NEWWLSDET.where(prod: prod).where("TRUNC(shdate) = ?", for_date).where("CFO != 'Y'")
-      if @tempinv_newwlsdet.present?
+      @cashsale = CASHSALE.where(prod: prod).where("TRUNC(paiddate) = ?", for_date).where("CFO != 'Y'")
+      if @cashsale.present?
         ##Branch Sales
 
-        @product_stock_book.update(sold_branch_qty: @tempinv_newwlsdet.sum(:quantity))
+        @product_stock_book.update(sold_branch_qty: @cashsale.sum(:quantity))
         @product_stock_book.update(sold_branch_rate: 0)
-        @product_stock_book.update(sold_branch_value: @tempinv_newwlsdet.sum(:totamt))
+        @product_stock_book.update(sold_branch_value: @cashsale.sum(:invoiceamount))
 
         #update closing
-        @closing_qty -= @tempinv_newwlsdet.sum(:quantity)
-        @closing_value -= @tempinv_newwlsdet.sum(:totamt)
+        @closing_qty -= @cashsale.sum(:quantity)
+        @closing_value -= @cashsale.sum(:invoiceamount)
       else
         @product_stock_book.update(sold_branch_qty: 0)
         @product_stock_book.update(sold_branch_rate: 0)
