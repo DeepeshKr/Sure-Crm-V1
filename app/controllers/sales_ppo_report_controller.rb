@@ -14,7 +14,7 @@ class SalesPpoReportController < ApplicationController
 
     #Medium.where(media_commision_id: 10045)
     #@hbn_media = Medium.where(media_group_id: 10000, active: true, media_commision_id: 10000)
-    
+
     if params.has_key?(:for_date)
           for_date =  Date.strptime(params[:for_date], "%Y-%m-%d")
 
@@ -1422,7 +1422,7 @@ class SalesPpoReportController < ApplicationController
       @common_basic,   @common_shipping,  @common_total,   @common_cost,  @common_revenue = 0,0,0,0,0
       @order_lines_common = OrderLine.where(orderid: ordernos).joins(:product_variant)
       .where("product_variants.product_sell_type_id = ?", common_product_type_id)
-      order("order_lines.created_at")
+      .order("order_lines.created_at")
 
             @order_lines_common.each do |order |
             @common_basic += order.subtotal
