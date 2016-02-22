@@ -107,7 +107,7 @@ class ProductCostMastersController < ApplicationController
       :basic_cost => 0, :shipping_handling => 0, :postage => 0,
       :tel_cost => 0, :transf_order_basic => 0, :dealer_network_basic => 0,
        :wholesale_variable_cost => 0, :royalty => 0, :cost_of_return => 0,
-        :call_centre_commission => 0)
+        :call_centre_commission => 0, packaging_cost: 0)
   end
 
   # GET /product_cost_masters/1/edit
@@ -191,7 +191,8 @@ class ProductCostMastersController < ApplicationController
         :tel_cost, :transf_order_basic,
         :dealer_network_basic,
         :wholesale_variable_cost,
-        :royalty, :cost_of_return, :call_centre_commission)
+        :royalty, :cost_of_return, :call_centre_commission,
+        :packaging_cost)
     end
     def reset_prices
       product_cost_masters = ProductCostMaster.all

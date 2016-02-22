@@ -1,0 +1,43 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Listing Cable Opertor Comms</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Order no</th>
+      <th>Order date</th>
+      <th>Channel</th>
+      <th>Product</th>
+      <th>Amount</th>
+      <th>Customer name</th>
+      <th>City</th>
+      <th>Comm</th>
+      <th>Description</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @cable_opertor_comms.each do |cable_opertor_comm| %>
+      <tr>
+        <td><%= cable_opertor_comm.order_no %></td>
+        <td><%= cable_opertor_comm.order_date %></td>
+        <td><%= cable_opertor_comm.channel %></td>
+        <td><%= cable_opertor_comm.product %></td>
+        <td><%= cable_opertor_comm.amount %></td>
+        <td><%= cable_opertor_comm.customer_name %></td>
+        <td><%= cable_opertor_comm.city %></td>
+        <td><%= cable_opertor_comm.comm %></td>
+        <td><%= cable_opertor_comm.description %></td>
+        <td><%= link_to 'Show', cable_opertor_comm %></td>
+        <td><%= link_to 'Edit', edit_cable_opertor_comm_path(cable_opertor_comm) %></td>
+        <td><%= link_to 'Destroy', cable_opertor_comm, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Cable opertor comm', new_cable_opertor_comm_path %>

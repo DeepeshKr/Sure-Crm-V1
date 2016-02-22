@@ -297,8 +297,8 @@ end
         media_tapes = MediaTape.where(media_tape_head_id: media_tape_head_id).order("sort_order ASC")
 
        # for_date =  Date.strptime(params[:for_date], "%m/%d/%Y")
-        for_date =  params[:for_date]
-
+        #for_date =  params[:for_date]
+        for_date =  Date.strptime(params[:for_date], "%Y-%m-%d")
         #step 2 add campaign playlist to the for the campaign id
         if media_tapes.present?
           #add media tapes to campaign playlist
@@ -361,7 +361,7 @@ end
                  duration_secs: m.duration_secs,
                  frames: campaign_time.frames,
                  tape_id: m.tape_ext_ref_id,
-                 for_date: for_date.day + campaign_time.day)
+                 for_date: for_date + campaign_time.day.days)
 
             if first_campaign_playlist_id == 0
               first_campaign_playlist_id = new_campaign_playlist.id

@@ -1,5 +1,7 @@
 Rails.application.routes.draw do
 
+  resources :cable_opertor_comms
+
   get 'cashsale/index'
 
   get 'cashsale/search'

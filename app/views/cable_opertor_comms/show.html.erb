@@ -1,0 +1,49 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Order no:</strong>
+  <%= @cable_opertor_comm.order_no %>
+</p>
+
+<p>
+  <strong>Order date:</strong>
+  <%= @cable_opertor_comm.order_date %>
+</p>
+
+<p>
+  <strong>Channel:</strong>
+  <%= @cable_opertor_comm.channel %>
+</p>
+
+<p>
+  <strong>Product:</strong>
+  <%= @cable_opertor_comm.product %>
+</p>
+
+<p>
+  <strong>Amount:</strong>
+  <%= @cable_opertor_comm.amount %>
+</p>
+
+<p>
+  <strong>Customer name:</strong>
+  <%= @cable_opertor_comm.customer_name %>
+</p>
+
+<p>
+  <strong>City:</strong>
+  <%= @cable_opertor_comm.city %>
+</p>
+
+<p>
+  <strong>Comm:</strong>
+  <%= @cable_opertor_comm.comm %>
+</p>
+
+<p>
+  <strong>Description:</strong>
+  <%= @cable_opertor_comm.description %>
+</p>
+
+<%= link_to 'Edit', edit_cable_opertor_comm_path(@cable_opertor_comm) %> |
+<%= link_to 'Back', cable_opertor_comms_path %>

@@ -159,5 +159,45 @@ class ProductList < ActiveRecord::Base
 
     return total
   end
+private
+  def create_product_cost_master
+  #check if the prod has pricing details entered
+  #if not found create new record
+  product_cost = ProductCostMaster.where(prod: self.extproductcode)
+    if product_cost.blank?
+      if ProductVariant.where(id: self.product_variant_id).present?
+        product_variant = ProductVariant.find(self.product_variant_id)
 
+        ProductCostMaster.create(prod: self.extproductcode,
+          product_list_id: self.id, product_id: self.product_master_id,
+          :product_cost => 0,
+          :basic_cost => product_variant.price * 0.8888888,
+          :shipping_handling => product_variant.shipping * 0.88888888,
+          :postage => 0,
+          :tel_cost => 0,
+          :transf_order_basic => (product_variant.price * 0.8888888 + product_variant.shipping * 0.88888888) * 0.86,
+          :dealer_network_basic => (product_variant.price * 0.8888888 + product_variant.shipping * 0.88888888) * 0.70,
+          :wholesale_variable_cost => 0,
+          :royalty => 0,
+          :cost_of_return => 0,
+          :call_centre_commission => 0)
+      end
+    else
+      product_variant = ProductVariant.find(self.product_variant_id)
+
+      product_cost.update(product_list_id: self.id,
+      product_id: self.product_master_id,
+        :product_cost => 0,
+        :basic_cost => product_variant.price * 0.8888888,
+        :shipping_handling => product_variant.shipping * 0.88888888,
+        :postage => 0,
+        :tel_cost => 0,
+        :transf_order_basic => (product_variant.price * 0.8888888 + product_variant.shipping * 0.88888888) * 0.86,
+        :dealer_network_basic => (product_variant.price * 0.8888888 + product_variant.shipping * 0.88888888) * 0.70,
+        :wholesale_variable_cost => 0,
+        :royalty => 0,
+        :cost_of_return => 0,
+        :call_centre_commission => 0)
+    end
+  end
 end
