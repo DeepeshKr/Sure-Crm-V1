@@ -260,7 +260,15 @@ def productcost
     return 0
   end
 end
-
+def product_shipping_cost
+  pcode = self.product_list.product_variant.extproductcode
+  cost_master =  ProductCostMaster.where("prod = ?", pcode).first
+  if cost_master.present?
+    return cost_master.shipping_handling * self.pieces || 0
+  else
+    return 0
+  end
+end
 # def productcost
 #    if self.product_list.present? #&& self.pieces.present?
 #     pcode = self.product_list.extproductcode
