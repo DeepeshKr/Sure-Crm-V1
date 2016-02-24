@@ -26,7 +26,7 @@ def add_sec_fr
     self.end_min    =  totalseconds % 60
     totalseconds = (totalseconds - self.end_min) / 60
     self.end_hour =  totalseconds % 24
-    if (totalseconds % 24) > 0
+    if (totalseconds % 24) >= 24
       self.day = 1
     end
 end
