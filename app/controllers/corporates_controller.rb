@@ -52,7 +52,7 @@ class CorporatesController < ApplicationController
   #   end
   # end
 
-  def dealers
+  def call_centre_dealers
        #@customer = Customer.find(@order_master.customer_id)
        @states = Corporate.where("active is NULL or active  = 10002")
        .where("corporate_type_id = 10000 OR corporate_type_id IS NULL")
@@ -88,7 +88,7 @@ class CorporatesController < ApplicationController
 
       @state_searched = "Search for #{state_c} and found #{nos}"
 
-  
+
       #respond_with(@cities, @address_dealer)
   end
 

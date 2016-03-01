@@ -5,7 +5,7 @@
 <h3><%= @state_searched %>  Dealers</h3>
   </div>
   <div class="col-xs-5">
-<%= bootstrap_form_tag url: dealersearch_path, :method => :GET, :enforce_utf8 => false do |f| %>
+<%= bootstrap_form_tag url: call_centre_dealers_path, :method => :GET, :enforce_utf8 => false do |f| %>
 <div class="col-xs-10">
 <%= select_tag(:from_state,
     options_from_collection_for_select(@states, :state, :state, selected: @state),
@@ -27,7 +27,7 @@
 <ul class="list-inline">
  <% @cities.each do |citi| %>
   <li>
-<%= link_to citi.city || "NA", dealersearch_path(:from_state => @state, :city => citi.city), class: "btn btn-info btn-xs" %>
+<%= link_to citi.city || "NA", call_centre_dealers_path(:from_state => @state, :city => citi.city), class: "btn btn-info btn-xs" %>
   </li>
   <% end %>
 </ul>

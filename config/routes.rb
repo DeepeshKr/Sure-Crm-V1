@@ -407,8 +407,8 @@ post 'distributor_upload_orders/switch_off'
   get 'create' => 'customers#createnew'
   post   'add' => 'customers#add'
 
-  get 'dealers' => 'corporates#dealers'
-  get 'corporates/dealers'
+  get 'call_centre_dealers' => 'corporates#call_centre_dealers'
+  get 'corporates/call_centre_dealers'
   get 'createc' => 'corporates#createnew'
   post   'addc' => 'corporates#add'
 
