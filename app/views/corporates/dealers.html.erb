@@ -1,0 +1,77 @@
+
+<div class="well well-sm">
+<div class="row">
+  <div class="col-xs-7">
+<h3><%= @state_searched %>  Dealers</h3>
+  </div>
+  <div class="col-xs-5">
+<%= bootstrap_form_tag url: dealersearch_path, :method => :GET, :enforce_utf8 => false do |f| %>
+<div class="col-xs-10">
+<%= select_tag(:from_state,
+    options_from_collection_for_select(@states, :state, :state, selected: @state),
+    {:class => "form-control"})  %>
+</div>
+
+<div class="col-xs-2">
+        <%= submit_tag "Ok", name: nil,  class: "btn btn-primary" %>
+      </div>
+
+      <% end %>
+  </div>
+
+</div>
+</div>
+
+<% if @cities.present? %>
+<div class="well well-sm">
+<ul class="list-inline">
+ <% @cities.each do |citi| %>
+  <li>
+<%= link_to citi.city || "NA", dealersearch_path(:from_state => @state, :city => citi.city), class: "btn btn-info btn-xs" %>
+  </li>
+  <% end %>
+</ul>
+</div>
+<% end %>
+
+<% if @address_dealer.present? %>
+<table class="table table-hover">
+  <thead>
+    <tr>
+
+      <th>Franchise Address</th>
+       <th>City <br> State</th>
+      <th>Phone</th>
+       <th>Fax</th>
+        <th>Name <br>Mobile</th>
+
+        <th></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @address_dealer.each do |dealer| %>
+      <tr>
+       <td><h4><%= dealer.name %></h4>
+         <%= dealer.address1 %><br/>
+      <%= dealer.address2 %><br/>
+      <%= dealer.address3 %><br/>
+      <td><%= dealer.city %> <br> <%= dealer.state %></td>
+       <td><%= dealer.telephone1 %> <%= dealer.telephone2 %></td>
+       <td><%= dealer.fax %></td>
+       <td><%= dealer.salute1 %> <%= dealer.first_name1 %> <%= dealer.last_name1 %> <br>
+         <%= dealer.designation1 %> <br>
+        <%= dealer.mobile1 %></td>
+        <td><%= link_to 'Edit', edit_corporate_path(dealer), target: "_blank", class: "btn btn-sm btn-primary" %> </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+<% else %>
+<div class="well well-sm">
+Please select a State from above
+</div>
+<% end %>
+
+<!-- bottom menu -->
+<p>Only Regular Dealers are listed above / Transfer Order and </p>

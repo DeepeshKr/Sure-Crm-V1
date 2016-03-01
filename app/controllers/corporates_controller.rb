@@ -52,6 +52,46 @@ class CorporatesController < ApplicationController
   #   end
   # end
 
+  def dealers
+       #@customer = Customer.find(@order_master.customer_id)
+       @states = Corporate.where("active is NULL or active  = 10002")
+       .where("corporate_type_id = 10000 OR corporate_type_id IS NULL")
+       .select(:state).distinct.order(:state)
+
+      if params[:from_state].present?
+        @state = params[:from_state]
+        state_c = @state.upcase
+        @address_dealer = Corporate.where("active is NULL or active  = 10002")
+        .where("corporate_type_id = 10000 OR corporate_type_id IS NULL")
+        .where("UPPER(address3) like ? OR
+        UPPER(district) like ? OR UPPER(city) like ? or UPPER(state) like ?",
+        "#{state_c}%", "#{state_c}%", "#{state_c}%", "#{state_c}%")
+
+      #ADDRESS_DEALER.where(state: @state)
+      #
+
+        nos = @address_dealer.count
+
+        @cities = @address_dealer.select(:city).distinct
+      elsif params[:city].present?
+          @city = params[:city]
+          @city = @city.upcase
+          @address_dealer = Corporate.where("active is NULL or active  = 10002")
+          .where(corporate_type_id: 10000)
+          .where("UPPER(district) like ? OR UPPER(city) like ? or UPPER(state) like ?", "#{@city}%",
+        "#{@city}%", "#{@city}%")
+        #@address_dealer.where(add3:params[:city])
+          state_c = @city << " in " << @state.capitalize
+          nos = @address_dealer.count
+
+      end
+
+      @state_searched = "Search for #{state_c} and found #{nos}"
+
+  
+      #respond_with(@cities, @address_dealer)
+  end
+
   def show
     #show pincode
     @distributor_pincode_lists = DistributorPincodeList.where(corporate_id: @corporate.id).paginate(:page => params[:page])
