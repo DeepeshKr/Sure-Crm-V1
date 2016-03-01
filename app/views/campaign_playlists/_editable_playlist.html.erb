@@ -14,6 +14,7 @@
 
 
         <th>Status</th>
+        <th>Updated Date</th>
       <th colspan="2"></th>
     </tr>
   </thead>
@@ -33,7 +34,7 @@
 
 
          <td><%= campaign_playlist.campaign_play_list_status.name if campaign_playlist.campaign_play_list_status%></td>
-
+        <td><%= campaign_playlist.updated_at.strftime("%d-%b-%Y %I:%M %p") %></td>
           <td><%= link_to 'Edit', edit_campaign_playlist_path(campaign_playlist) %></td>
           <td><%if campaign_playlist.list_status_id == 10000 %>
           <%= link_to 'Destroy Group', campaign_playlist, method: :delete, data: { confirm: 'This will remove the entire group. Are you sure?' }, class: "btn btn-info btn-xs" %>
