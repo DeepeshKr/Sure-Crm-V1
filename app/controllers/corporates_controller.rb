@@ -81,7 +81,7 @@ class CorporatesController < ApplicationController
           .where("UPPER(district) like ? OR UPPER(city) like ? or UPPER(state) like ?", "#{@city}%",
         "#{@city}%", "#{@city}%")
         #@address_dealer.where(add3:params[:city])
-          state_c = @city << " in " << @state.capitalize
+          state_c = @city 
           nos = @address_dealer.count
 
       end

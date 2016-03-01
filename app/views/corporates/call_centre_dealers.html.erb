@@ -27,7 +27,7 @@
 <ul class="list-inline">
  <% @cities.each do |citi| %>
   <li>
-<%= link_to citi.city || "NA", call_centre_dealers_path(:from_state => @state, :city => citi.city), class: "btn btn-info btn-xs" %>
+<%= link_to citi.city || "NA", call_centre_dealers_path(:city => citi.city), class: "btn btn-info btn-xs" %>
   </li>
   <% end %>
 </ul>
