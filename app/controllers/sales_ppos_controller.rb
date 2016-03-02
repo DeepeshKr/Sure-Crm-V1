@@ -23,6 +23,7 @@ class SalesPposController < ApplicationController
     #   return
     end
     @datelist ||= []
+    employeeunorderlist ||= []
     @to_date.downto(@from_date).each do |day|
       #byebug
            # day = day - 330.minutes
@@ -35,8 +36,8 @@ class SalesPposController < ApplicationController
           @to_date = for_date.end_of_day - 330.minutes
 
           orderlist = SalesPpo.all.limit(100)
-          .where('start_time >= ? AND start_time <= ?', @from_date, @to_date)
-          .where.not("order_masters.ORDER_STATUS_MASTER_ID in (?)" , @cancelled_status_id)
+          .where('TRUNC(start_time) >= ? AND TRUNC(start_time) <= ?', @from_date, @to_date)
+          .where(order_status_id: @cancelled_status_id)
           
            #.joins(:medium).where("media.media_group_id = 10000") #.limit(1)
 
@@ -44,7 +45,7 @@ class SalesPposController < ApplicationController
           revenue = 0
           media_var_cost = 0
           product_cost = 0
-
+          gross_sales = 0
           @list_of_orders ||= []
 
           orderlist.each do |med |
@@ -60,19 +61,19 @@ class SalesPposController < ApplicationController
 
           ## Apply all the corrections here ###
           total_shipping = (orderlist.sum(:shipping_cost))
-          total_sub_total = (orderlist.sum(:subtotal))
-          totalorders = (total_shipping + total_sub_total)
-
+          # total_sub_total = (orderlist.sum(:subtotal))
+          # totalorders = (total_shipping + total_sub_total)
+          gross_sales = orderlist.sum(:gross_sales)
 
            ## Apply all the corrections here ###
-          revenue = revenue * @correction
-          media_var_cost = media_var_cost * @correction
-          product_cost = product_cost * @correction
-          product_damages = (product_cost * 0.10)
-          totalorders = totalorders * @correction
+          revenue = orderlist.sum(:revenue)  
+          media_var_cost = orderlist.sum(:commission_cost) 
+          product_cost = orderlist.sum(:product_cost)
+          product_damages = orderlist.sum(:damages) 
+          totalorders = orderlist.sum(:gross_sales)
           refund = totalorders * 0.02
-          nos = (orderlist.count()) * @correction
-          pieces = orderlist.sum(:pieces) * @correction
+          nos = (orderlist.count()) 
+          pieces = orderlist.sum(:pieces)
           total_cost = (product_cost + @hbn_media_fixed_cost + media_var_cost + refund + product_damages)
           profitability = (revenue - total_cost).to_i
 

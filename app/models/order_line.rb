@@ -8,6 +8,7 @@ class OrderLine < ActiveRecord::Base
 
   belongs_to :product_list, foreign_key: "product_list_id"
   belongs_to :product_master, foreign_key: "product_master_id"
+  has_many :sales_ppo, foreign_key: "order_line_id"
 
   validates :pieces ,  :presence => { :message => "Please select no of pieces!" }
   validates :orderid,  :presence => { :message => "Please add an order first!" }

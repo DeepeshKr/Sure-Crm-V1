@@ -17,6 +17,7 @@ class ProductMaster < ActiveRecord::Base
   has_many :product_list, foreign_key: "product_master_id" 
   has_many :order_line, foreign_key: "product_master_id"  
   has_many :product_cost_master, foreign_key: "product_id" 
+  has_many :sales_ppo, foreign_key: "product_master_id"
   
   belongs_to :product_training_manual, foreign_key: "productid"
   validates_presence_of :name

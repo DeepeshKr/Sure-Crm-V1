@@ -8,6 +8,7 @@ class CampaignPlaylist < ActiveRecord::Base
   belongs_to :campaign_play_list_status, foreign_key: "list_status_id"
 
  has_many :order_master, foreign_key: "campaign_playlist_id"
+ has_many :sales_ppo, foreign_key: "campaign_playlist_id"
 
 
   validates :productvariantid, allow_blank: true,  numericality: { only_integer: true }

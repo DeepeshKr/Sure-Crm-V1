@@ -4,7 +4,8 @@ class ProductList < ActiveRecord::Base
   belongs_to :product_master, foreign_key: "product_master_id"
   belongs_to :product_spec_list, foreign_key: "product_spec_list_id"
   belongs_to :product_active_code, foreign_key: "active_status_id"
-
+  belongs_to :promotion, foreign_key: "free_product_list_id"
+  
   has_many :product_master_add_on, foreign_key: "product_list_id"
   has_many :product_sample_stock, foreign_key: "product_list_id"
   has_many :product_cost_master, foreign_key: "product_list_id"
@@ -12,8 +13,8 @@ class ProductList < ActiveRecord::Base
 
   has_many :distributor_stock_ledger, foreign_key: "product_variant_id"
   has_many :distributor_stock_summary, foreign_key: "product_variant_id"
-
-  belongs_to :promotion, foreign_key: "free_product_list_id"
+  has_many :sales_ppo, foreign_key: "product_list_id"
+  
 
   #has_many :product_master_add_on, :class_name => 'PointOfContact',  foreign_key: "replace_by_product_id"
   #coding not completed for this

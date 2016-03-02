@@ -15,6 +15,7 @@ class OrderMaster < ActiveRecord::Base
   has_many :interaction_master, foreign_key: "orderid"
   has_many :page_trail, foreign_key: "order_id"
   has_many :order_line, foreign_key: "orderid", :dependent => :destroy
+  has_many :sales_ppo, foreign_key: "order_id"
 
   accepts_nested_attributes_for :order_line,  :allow_destroy => true
 

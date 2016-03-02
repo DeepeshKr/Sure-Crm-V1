@@ -13,6 +13,7 @@ class ProductVariant < ActiveRecord::Base
   has_many :media_tape_head, foreign_key: "product_variant_id"
   has_many :distributor_stock_ledger, foreign_key: "product_variant_id"
   has_many :distributor_stock_summary, foreign_key: "product_variant_id"
+  has_many :sales_ppo, foreign_key: "product_variant_id"
   #validates_uniqueness_of :emailid, :allow_blank => true
   #validates_uniqueness_of :employeecode, allow_blank: false
 
