@@ -7,57 +7,58 @@ class SalesPposController < ApplicationController
   # GET /sales_ppos
   # GET /sales_ppos.json
   def index
-    @sales_ppos = SalesPpo.order("created_at DESC").paginate(:page => params[:page])
+    @sno = 1
 
     todaydate = Date.today #Time.zone.now + 330.minutes
     #todaydate = Date.parse(todaydate).strftime('%m/%d/%Y')
     #todaydate =  Date.strptime(todaydate, "%Y-%m-%d")
     @from_date = todaydate - 1.days #30.days
     @to_date = todaydate
-    if params.has_key?(:for_date)
-          for_date =  Date.strptime(params[:for_date], "%Y-%m-%d")
-          @from_date = for_date.to_date - 1.days #30.days
-          @to_date = for_date.to_date
+    if params.has_key?(:from_date)
+          from_date =  Date.strptime(params[:from_date], "%Y-%m-%d")
+          @from_date = from_date.to_date - 2.days #30.days
+          @to_date = from_date.to_date
 
     # else
     #   return
     end
-    @datelist ||= []
+    
+     @or_for_date = @to_date
+    #@datelist ||= []
     employeeunorderlist ||= []
+    
     @to_date.downto(@from_date).each do |day|
       #byebug
-           # day = day - 330.minutes
-          @datelist << day.strftime('%y-%b-%d')
+          #day = Date.strptime(day, "%Y-%m-%d %H:%M:%S") #day.strftime('%Y-%b-%d')
+          #@datelist << day.strftime('%Y-%b-%d')
 
-          for_date = day # Date.
-          @or_for_date = for_date
+         
+          @from_date = day.beginning_of_day - 330.minutes
+          @to_date = day.end_of_day - 330.minutes
 
-          @from_date = for_date.beginning_of_day - 330.minutes
-          @to_date = for_date.end_of_day - 330.minutes
-
-          orderlist = SalesPpo.all.limit(100)
-          .where('TRUNC(start_time) >= ? AND TRUNC(start_time) <= ?', @from_date, @to_date)
-          .where(order_status_id: @cancelled_status_id)
+          orderlist = SalesPpo.where('order_status_id > 10002')
+          .where('start_time >= ? AND start_time <= ?', @from_date, @to_date)
+          .where.not(order_status_id: @cancelled_status_id)
           
-           #.joins(:medium).where("media.media_group_id = 10000") #.limit(1)
-
-          # #split the fixed cost across the hour
-          revenue = 0
-          media_var_cost = 0
-          product_cost = 0
-          gross_sales = 0
-          @list_of_orders ||= []
-
-          orderlist.each do |med |
-            @list_of_orders << {order_no:  med.order_master.external_order_no,
-             time_of_order: med.start_time.strftime('%Y-%b-%d %H:%M:%S')}
-            #error loggin
-
-            revenue += med.revenue  ||= 0
-            media_var_cost += med.commission_cost ||= 0
-            product_cost += med.product_cost ||= 0
-
-          end
+           # #.joins(:medium).where("media.media_group_id = 10000") #.limit(1)
+#
+#           # #split the fixed cost across the hour
+#           revenue = 0
+#           media_var_cost = 0
+#           product_cost = 0
+#           gross_sales = 0
+#           @list_of_orders ||= []
+#
+#           orderlist.each do |med |
+#             @list_of_orders << {order_no:  med.order_master.external_order_no,
+#              time_of_order: med.start_time.strftime('%Y-%b-%d %H:%M:%S')}
+#             #error loggin
+#
+#             revenue += med.revenue  ||= 0
+#             media_var_cost += med.commission_cost ||= 0
+#             product_cost += med.product_cost ||= 0
+#
+#           end
 
           ## Apply all the corrections here ###
           total_shipping = (orderlist.sum(:shipping_cost))
@@ -76,9 +77,9 @@ class SalesPposController < ApplicationController
           pieces = orderlist.sum(:pieces)
           total_cost = (product_cost + @hbn_media_fixed_cost + media_var_cost + refund + product_damages)
           profitability = (revenue - total_cost).to_i
-
+          
           employeeunorderlist << {:total => totalorders.to_i,
-          :for_date =>  for_date.strftime("%Y-%m-%d"),
+          :for_date => @or_for_date,
           :pieces => pieces.to_i ,
           :refund => refund.to_i,
           :nos => nos.to_i,
@@ -91,9 +92,13 @@ class SalesPposController < ApplicationController
           :total_cost => total_cost.to_i,
           :profitability => profitability}
     end
-        @list_of_orders =  @list_of_orders.sort_by{ |c| c[:time_of_order]}
+        
+        #@list_of_orders =  @list_of_orders.sort_by{ |c| c[:time_of_order]}
         @employeeorderlist = employeeunorderlist #.sort_by{|c| c[:total]}.reverse
-
+        
+        @sales_ppos = SalesPpo.where('order_status_id > 10002')
+        .where('start_time >= ? AND start_time <= ?', @from_date, @to_date)
+        .order("order_id DESC").paginate(:page => params[:page])
 
   end
 

@@ -1,6 +1,7 @@
 class SalesPpo < ActiveRecord::Base
   belongs_to :campaign_playlist, foreign_key: "campaign_playlist_id"
   belongs_to :order_status_master, foreign_key: "order_status_id"
+   has_many :campaign, foreign_key: "campaign_id"
   belongs_to :order_master, foreign_key: "order_id"
   belongs_to :order_line, foreign_key: "order_line_id"
   belongs_to :medium, foreign_key: "media_id"

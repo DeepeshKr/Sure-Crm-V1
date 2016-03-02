@@ -2,7 +2,7 @@ class Campaign < ActiveRecord::Base
   belongs_to :medium, foreign_key: "mediumid"
   belongs_to :campaign_stage, foreign_key: "campaignstageid"
   has_many :campaign_playlist, foreign_key: "campaignid"
-  
+   has_many :sales_ppo, foreign_key: "campaign_id"
    
   validates :name, length: { maximum: 500 }
   validates_presence_of :description

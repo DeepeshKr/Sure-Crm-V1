@@ -2,17 +2,17 @@
 
 <p>
   <strong>Campaign playlist:</strong>
-  <%= @sales_ppo.campaign_playlist_id %>
+  <%= @sales_ppo.campaign_playlist.name if @sales_ppo.campaign_playlist %>
 </p>
 
 <p>
   <strong>Campaign:</strong>
-  <%= @sales_ppo.campaign_id %>
+  <%= @sales_ppo.campaign.name if @sales_ppo.campaign %>
 </p>
 
 <p>
   <strong>Product master:</strong>
-  <%= @sales_ppo.product_master_id %>
+  <%= @sales_ppo.product_master.name %>
 </p>
 
 <p>
@@ -85,10 +85,7 @@
   <%= @sales_ppo.promotion_cost %>
 </p>
 
-<p>
-  <strong>Media cost:</strong>
-  <%= @sales_ppo.media_cost %>
-</p>
+
 
 <p>
   <strong>Gross sales:</strong>
@@ -122,13 +119,9 @@
 
 <p>
   <strong>Media:</strong>
-  <%= @sales_ppo.media_id %>
+  <%= @sales_ppo.medium.name if @sales_ppo.medium %>
 </p>
 
-<p>
-  <strong>Media cost total:</strong>
-  <%= @sales_ppo.media_cost_total %>
-</p>
 
 <p>
   <strong>Promo cost total:</strong>

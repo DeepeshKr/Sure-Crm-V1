@@ -10,6 +10,98 @@
 	</div>
  </div>
 
+<% if @employeeorderlist.present? %>
+<table class="table table-hover table-bordered">
+<thead>
+   <tr>
+   <th  rowspan="2">No</th>
+     <th  rowspan="2">Date</th>
+
+      <th colspan="4">Income</th>
+      <th rowspan="2" class="text-right">Total Revenue</th>
+      <th colspan="5">Expense</th>
+      <th rowspan="2" class="text-right">Total Expense</th>
+    <th rowspan="2" class="text-right">Profitability</th>
+     <th rowspan="2">Half Hourly</th>
+    <th rowspan="2">Show wise</th>
+     </tr>
+    <tr>
+
+
+
+       <th class="text-right">Orders</th>
+       <th class="text-right">Pieces</th>
+     <th class="text-right">Sales</th>
+      <th class="text-right">Revenue</th>
+
+      <th class="text-right">Product Cost</th>
+       <th class="text-right">Commision</th>
+     <th class="text-right">Media Cost</th>
+      <th class="text-right">Refund</th>
+      <th class="text-right">Damage</th>
+
+     </tr>
+  </thead>
+
+<tbody>
+   <% @employeeorderlist.each do |c| %>
+   <tr>
+   <td><%= @sno %></td>
+ <td><%= c[:for_date] %></td>
+
+<td class="text-right">
+   <%= c[:nos] %>
+</td>
+<td class="text-right">
+   <%= c[:pieces] %>
+
+</td>
+<td class="text-right">
+   <%= c[:total] %>
+
+</td>
+<td class="text-right">
+   <%= c[:revenue] %>
+
+</td>
+<td class="text-right">
+<strong><%= c[:revenue] %></strong>
+
+</td>
+<td class="text-right">   <%= c[:product_cost] %></td>
+<td class="text-right">   <%= c[:variable_cost] %></td>
+<td class="text-right">   <%= c[:fixed_cost] %></td>
+<td class="text-right">   <%= c[:refund] %></td>
+<td class="text-right">   <%= c[:product_damages] %></td>
+<td class="text-right"> <strong><%= c[:total_cost] %></strong>
+
+</td >
+<td class="text-right">
+ <strong><%= c[:profitability] %></strong>
+
+</td >
+
+<td>
+<%= link_to "View PPO", hourly_ppo_path(for_date: c[:for_date]), :target => "_blank", class: "btn btn-info btn-xs" %>
+</td>
+<td>
+<%= link_to "View PPO", show_ppo_path(for_date: c[:for_date]), :target => "_blank", class: "btn btn-info btn-xs" %>
+</td>
+
+  </tr>
+  <% @sno += 1 %>
+ <% end %>
+  </tbody>
+
+  </table>
+  <% else %>
+  <div class="well well-sm">
+  <h5>Please select a date to generate the report </h5>
+  </div>
+  <% end %>
+ <br>
+<hr>
+
 <%= render :partial => "full_list.html.erb" %>
 
 <div class="well well-sm">
