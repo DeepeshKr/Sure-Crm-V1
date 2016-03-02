@@ -1,7 +1,57 @@
-<p id="notice"><%= notice %></p>
+<% title "PPO Summary #{@from_date} to #{@to_date}" %>
+ <div class="row">
+	 <div class="col-xs-7">
 
-<h3>Sales PPO</h3>
+	 <h4><strong>HBN PPO Summary for past few days</strong></h4>
+     <%= @from_date %> <%= @to_date %>
+	 </div>
+	 <div class="col-xs-5">
+	 	<%= render partial: 'date_search', :locals => {:searchaction => "index"}  %>
+	</div>
+ </div>
 
 <%= render :partial => "full_list.html.erb" %>
 
-<br>
+<div class="well well-sm">
+  <h3>List of HBN Media (Only Active and Airtime Purchased)</h3>
+<table class="table table-striped">
+  <thead>
+     <tr>
+       <th>Name</th>
+       <th>Telephone</th>
+       <th>DNIS </th>
+       <th>State</th>
+       <th>Active</th>
+       <th>Group</th>
+       <th>BDM</th>
+       <th>Commission Type</th>
+       <th>Daily Charges</th>
+     </tr>
+  </thead>
+  <tbody>
+    <% @total_daily_charges = 0 %>
+    <% @hbn_media.each do |medium| %>
+      <tr>
+        <td><%= medium.name %></td>
+        <td><%= medium.telephone %></td>
+        <td><%= medium.dnis %></td>
+        <td><%= medium.state %></td>
+        <td><%= medium.active %></td>
+        <td><%= medium.media_group.name if medium.media_group %></td>
+        <td><%= medium.employee.name || "NO BDM" if medium.employee %></td>
+        <td><%= medium.media_commision.name if medium.media_commision %></td>
+        <td><%= medium.daily_charges  %> <% if medium.daily_charges.present? %>
+           <% @total_daily_charges += medium.daily_charges %> <% end %>
+         </td>
+      </tr>
+    <% end %>
+  </tbody>
+<tfoot>
+  <tr>
+    <td colspan="8">Total</td>
+    <td><%= @total_daily_charges  %></td>
+  </tr>
+</tfoot>
+
+</table>
+</div>
