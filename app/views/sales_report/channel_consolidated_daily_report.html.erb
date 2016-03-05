@@ -89,6 +89,9 @@
                <th colspan="2">
                  Main Products
                </th>
+               <th>
+                  Value
+               </th>>
              </tr>
               <% c[:main_products].each do |pl| %>
              <tr>
@@ -97,6 +100,9 @@
                 </td>
                 <td>
                   <%= pl[1] %>
+                </td>
+                <td>
+                  <%= ProductVariant.find_by_extproductcode(pl[0]).get_product_value * pl[1].to_i rescue nil%>
                 </td>
              </tr>
              <% end %>
@@ -107,6 +113,9 @@
                <th colspan="2">
                  Basic Upsell Products
                </th>
+               <th>
+                  Value
+               </th>>
              </tr>
               <% c[:bas_upsell_products].each do |pl| %>
              <tr>
@@ -115,6 +124,9 @@
                 </td>
                 <td>
                   <%= pl[1] %>
+                </td>
+                <td>
+                  <%= ProductVariant.find_by_extproductcode(pl[0]).get_product_value * pl[1].to_i rescue nil%>
                 </td>
              </tr>
              <% end %>
@@ -125,6 +137,9 @@
                <th colspan="2">
                  Common Upsell Products
                </th>
+               <th>
+                  Value
+               </th>>
              </tr>
               <% c[:com_upsell_products].each do |pl| %>
              <tr>
@@ -133,6 +148,9 @@
                 </td>
                 <td>
                   <%= pl[1] %>
+                </td>
+                <td>
+                  <%= ProductVariant.find_by_extproductcode(pl[0]).get_product_value * pl[1].to_i rescue nil%>
                 </td>
              </tr>
              <% end %>
