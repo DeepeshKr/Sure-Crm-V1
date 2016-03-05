@@ -37,7 +37,10 @@ after_save :updator
    def productdetails
      self.name + " -- Basic: Rs." + (self.price.to_s ||= 'No Price') + " -- Total: Rs."  + (self.total.to_s ||= 'No Price')
    end
-
+   
+  def get_product_value
+    total = (self.price.to_f + self.shipping.to_f)
+  end
 private
   def create_product_cost_master
     #check if the prod has pricing details entered
