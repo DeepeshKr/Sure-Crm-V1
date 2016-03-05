@@ -40,7 +40,7 @@ after_save :updator
    end
    
   def get_product_value
-    total = (self.price.to_f + self.shipping.to_f)
+    total = (self.price.to_f  * 0.888889 + self.shipping.to_f * 0.98125)
   end
 private
   def create_product_cost_master

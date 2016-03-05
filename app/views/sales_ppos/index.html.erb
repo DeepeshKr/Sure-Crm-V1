@@ -22,14 +22,10 @@
       <th colspan="5">Expense</th>
       <th rowspan="2" class="text-right">Total Expense</th>
     <th rowspan="2" class="text-right">Profitability</th>
-     <th rowspan="2">Half Hourly</th>
-    <th rowspan="2">Show wise</th>
+     <th rowspan="2">More</th>
      </tr>
     <tr>
-
-
-
-       <th class="text-right">Orders</th>
+     <th class="text-right">Orders</th>
        <th class="text-right">Pieces</th>
      <th class="text-right">Sales</th>
       <th class="text-right">Revenue</th>
@@ -82,10 +78,9 @@
 </td >
 
 <td>
-<%= link_to "View PPO", hourly_ppo_path(for_date: c[:for_date]), :target => "_blank", class: "btn btn-info btn-xs" %>
-</td>
-<td>
-<%= link_to "View PPO", show_ppo_path(for_date: c[:for_date]), :target => "_blank", class: "btn btn-info btn-xs" %>
+<%= link_to "30 Min PPO", hourly_ppo_path(for_date: c[:for_date]), :target => "_blank", class: "btn btn-info btn-xs" %>
+<br>
+<%= link_to "Show's PPO", show_ppo_path(for_date: c[:for_date]), :target => "_blank", class: "btn btn-info btn-xs" %>
 </td>
 
   </tr>
