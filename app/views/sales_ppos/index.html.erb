@@ -78,9 +78,9 @@
 </td >
 
 <td>
-<%= link_to "30 Min PPO", hourly_ppo_path(for_date: c[:for_date]), :target => "_blank", class: "btn btn-info btn-xs" %>
-<br>
-<%= link_to "Show's PPO", show_ppo_path(for_date: c[:for_date]), :target => "_blank", class: "btn btn-info btn-xs" %>
+<%= link_to "30 Min PPO", { :controller => :sales_ppos, :action => :half_hour }, { class: "btn btn-info btn-xs"} %>
+<br> <br>
+<%= link_to "Shows' PPO", { :controller => :sales_ppos, :action => :half_hour }, { class: "btn btn-info btn-xs"} %>
 </td>
 
   </tr>
@@ -97,7 +97,7 @@
  <br>
 <hr>
 
-<%= render :partial => "full_list.html.erb" %>
+<!-- = render :partial => "full_list.html.erb" -->
 
 <div class="well well-sm">
   <h3>List of HBN Media (Only Active and Airtime Purchased)</h3>

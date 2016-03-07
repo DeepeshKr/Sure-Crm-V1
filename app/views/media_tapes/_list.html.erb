@@ -3,17 +3,18 @@
 <table class="table table-hover">
   <thead>
     <tr>
-    <th>Sort No</th>
-      <th>Tape Name</th>
-       <th>Release Date</th>
-      <th>Duration secs</th>
-      <th>Frames</th>
-      <th>Tape ext ref</th>
-      <th>Unique tape name</th> 
-      <th>Media</th>
-      <th>Product variant</th>
-     
-      <th colspan="3"></th>
+      <th rowspan="2">Sort No</th>
+      <th colspan="3">AVI Tape Name</th>
+	  <th colspan="3">MXF Tape Name</th>
+	  <th rowspan="2">Alt Tape </th>
+      <th rowspan="2"></th>
+    </tr>
+      <th>Name</th>
+	  <th>Secs</th>
+	  <th>Frames</th>
+      <th>Name</th>
+	  <th>Secs</th>
+	  <th>Frames</th>
     </tr>
   </thead>
 
@@ -21,33 +22,33 @@
   <% @totalsecs = 0 %>
     <% @media_tapes.each do |media_tape| %>
       <tr>
-        <td><%= media_tape.sort_order %></td>
-        <td><strong>File Name: </strong><%= media_tape.name %> <br> 
-        <strong>File Name:</strong> <%= media_tape.description %></td>
-        <td><%= media_tape.release_date.strftime("%d/%m/%Y") %></td>
+        <td rowspan="2"><%= media_tape.sort_order %></td>
+        <td><%= media_tape.name %> </td>
         <td><%= media_tape.duration_secs %></td>
         <td><%= media_tape.frames %></td>
-        <td><%= media_tape.tape_ext_ref_id %></td>
-        <td><%= media_tape.unique_tape_name %></td>
-        <td><%= media_tape.medium.name || "No Media Selected"  if media_tape.medium.present? %></td>
-        <td><%= media_tape.product_variant.productinfo || "No Product Selected" if media_tape.product_variant.present? %></td>
-       
-        <td><%= link_to 'Show', media_tape %></td>
-        <td><%= link_to 'Edit', edit_media_tape_path(media_tape) %></td>
-       
-        <td><%= link_to 'Destroy', media_tape, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+		<td><%= media_tape.mxf_tape_home %> </td>
+        <td><%= media_tape.mxf_seconds %></td>
+        <td><%= media_tape.mxf_frame %></td>
+		<td><%= media_tape.tape_choice %></td>
+		<td><%= link_to 'Show', media_tape %> <br> <%= link_to 'Edit', edit_media_tape_path(media_tape) %></td>
       </tr>
+      <tr>
+  	   <td colspan="3">
+		 <em><%= media_tape.product_variant.productinfo || "No Product Selected" if media_tape.product_variant.present? %></em>
+	   </td>
+       <td><em><%= media_tape.release_date.strftime("%d-%b-%Y") %></em></td>
+       <td><em>Ext Ref No: <%= media_tape.tape_ext_ref_id %></em></td>
+       <td><em>Tape No: <%= media_tape.unique_tape_name %></em></td>
+       <td><em><%= media_tape.medium.name || "No Media Selected"  if media_tape.medium.present? %></em></td>
+  	   <td><em><%= link_to 'Destroy', media_tape, method: :delete, data: { confirm: 'Are you sure?' } %></em></td>
+	  </tr>
       <% @totalsecs += media_tape.duration_secs.to_i %>
     <% end %>
   </tbody>
     <thead>
     <tr>
-    <th colspan="3" >Total Secs</th>
-      
-       
-      <th> <%= @totalsecs %></th>
-      <th colspan="7"></th>
-      
+    	<th colspan="8">Total Secs</th>
+      	<th> <%= @totalsecs %></th>  
     </tr>
   </thead>
 

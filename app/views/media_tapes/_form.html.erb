@@ -54,7 +54,7 @@
   </div>
   <div class="row">
    <div class="col-xs-2">
-      <%= f.text_field :release_date,  :label => "Release Date" , :data => {:provide => "datepicker"} , :required => true %>
+      <%= f.text_field :release_date,  :label => "Release Date" , :data => {:provide => "datepicker"}, :id => "datepicker_1", :required => true %>
   </div>
    <div class="col-xs-2">
        <%= f.number_field :duration_secs,  :label => "Duration in Secs" , :required => true %>
@@ -81,7 +81,30 @@
   </div>
   
 
-  
+	<div class="well well-sm">
+  	  <div class="row">
+   	<div class="col-xs-12">
+      <strong>If you want to use MXF or no file, versus the original AVI select from Alternate TAPE Download options (MXF / AVI or blank) Blank ignores the file for download </strong>
+  	</div>
+	</div>
+	 <div class="row">
+	<div class="col-xs-6">
+	 <%= f.text_field :mxf_tape_home,  :label => "MXF Tape Path", :placeholder => "If you have MXF tapes enter the full path"  %>
+ 	</div>
+   	<div class="col-xs-2">
+       <%= f.number_field :mxf_seconds,  :label => "Duration in Secs" , :required => true %>
+        <small>Hr x 60 x 60 + Min x 60 + Sec </small>
+   	</div>
+    <div class="col-xs-2">
+       <%= f.number_field :mxf_frame,  :label => "Frames " , :required => true %>
+        <small>0 to 24</small>
+   	</div>
+	<div class="col-xs-2">
+	     <%= f.select :tape_choice, options_for_select([ nil, "avi", "mcx" ], @media_tape.media_id), {:class => "form-control"} %>
+		  <small>Alternate Tape</small>
+	</div>
+  </div>
+	</div>
   
   
   <div class="field">
@@ -94,3 +117,7 @@
     </div>
   </div>
 <% end %>
+
+<script>
+$('#datepicker_1').datepicker({format: 'yyyy-mm-dd'});
+</script>

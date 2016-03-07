@@ -11,4 +11,15 @@ class SalesPpo < ActiveRecord::Base
   belongs_to :product_list, foreign_key: "product_list_id"
 
   validates :order_line_id,  allow_blank: true, uniqueness: true
+  
+  def corrected_date_time(for_date, for_hour, for_minute)
+    for_hour = for_hour.to_s.rjust(2, '0')
+    for_minute = for_minute.to_s.rjust(2, '0')
+    for_date = for_date.strftime("%Y-%m-%d")
+    #string_date = for_date + " " + for_hour + ":" + for_minute + ":00"
+    base_date = DateTime.strptime("#{for_date} #{for_hour}:#{for_minute}:00 + 5:30", "%Y-%m-%d %H:%M:%S")
+    #return return_date = DateTime.strptime(string_date, "%Y-%m-%d %H:%M:%S")
+    return (base_date - 300.minutes).strftime("%Y-%m-%d %H:%M:%S")
+  end
+  
 end

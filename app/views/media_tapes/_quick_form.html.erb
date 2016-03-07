@@ -35,39 +35,60 @@
     options_from_collection_for_select(@medialist, :id, :mediainfo, selected: @media_tape.media_id), 
     {prompt: "Please select the Media List",  :label => "Select Media"}, :class => "form-control")  %>
     <small> Only media which we pay in advance show up here, this is optional </small>
+  </div>
   
-  </div>
   <div class="row">
-   <div class="col-xs-2">
+   	<div class="col-xs-2">
       <%= f.text_field :release_date,  :label => "Release Date" , :data => {:provide => "datepicker"} , :required => true %>
-  </div>
-   <div class="col-xs-2">
+  	</div>
+   	<div class="col-xs-2">
        <%= f.number_field :duration_secs,  :label => "Duration in Secs" , :required => true %>
         <small>Hr x 60 x 60 + Min x 60 + Sec </small>
-   </div>
+   	</div>
     <div class="col-xs-2">
        <%= f.number_field :frames,  :label => "Frames " , :required => true %>
         <small>0 to 24</small>
-   </div>
+   	</div>
     <div class="col-xs-2">
        <%= f.number_field :tape_ext_ref_id, :label => "External Tape No" , :required => true %>
        <small> No duplicates allowed </small>
-   </div>
+   	</div>
     <div class="col-xs-2">
        <%= f.number_field :sort_order, :label => "Order" , :required => true %>
        <small> Sort the listings </small>
-   </div>
-   <div class="col-xs-2">
+   	</div>
+   	<div class="col-xs-2">
    
     <%= f.text_field :unique_tape_name, :label => "Unique Tape Number"  %>
     <small>System Generated If you leave this blank then the unique numeric tape id would be added after saving </small>
   
+  	</div>
   </div>
+  
+	<div class="well well-sm">
+  	  <div class="row">
+   	<div class="col-xs-12">
+      <strong>If you want to use MXF or no file, versus the original AVI select from Alternate TAPE Download options (MXF / AVI or blank) Blank ignores the file for download </strong>
+  	</div>
+	</div>
+	 <div class="row">
+	<div class="col-xs-6">
+	 <%= f.text_field :mxf_tape_home,  :label => "MXF Tape Path", :placeholder => "If you have MXF tapes enter the full path"  %>
+ 	</div>
+   	<div class="col-xs-2">
+       <%= f.number_field :mxf_seconds,  :label => "Duration in Secs" , :required => true %>
+        <small>Hr x 60 x 60 + Min x 60 + Sec </small>
+   	</div>
+    <div class="col-xs-2">
+       <%= f.number_field :mxf_frame,  :label => "Frames " , :required => true %>
+        <small>0 to 24</small>
+   	</div>
+	<div class="col-xs-2">
+			<label>Download</label> <br>
+	     <%= select_tag "tape_choice", options_for_select([ nil, "avi", "mcx" ], nil), {:class => "form-control"} %>
+	</div>
   </div>
-  
-
-  
-  
+	</div>
   
  
   <div class="row">
