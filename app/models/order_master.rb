@@ -49,6 +49,9 @@ class OrderMaster < ActiveRecord::Base
 #external order
 #order_for_id - Integer update with customer order id
 #external_order_no - string update with customer order id
+#external order
+#order_for_id - Integer update with customer order id
+#external_order_no - string update with customer order id
 def neworder(source, cli, dnis,empcode, empid,request_ip, session_id)
 
   order_master = OrderMaster.create!(calledno: dnis, order_status_master_id: 10000,
@@ -99,7 +102,7 @@ def update_customer_order_list(order_id)
     #order_id = @order_master.id
     pro_order_master = OrderMaster.find(order_id)
 
-    gra_total = pro_order_master.subtotal + pro_order_master.shipping + pro_order_master.codcharges + pro_order_master.servicetax + pro_order_master.maharastracodextra + pro_order_master.creditcardcharges + pro_order_master.maharastraccextra
+    gra_total = pro_order_master.subtotal + pro_order_master.shipping + pro_order_master.codcharges +   pro_order_master.servicetax + pro_order_master.maharastracodextra + pro_order_master.creditcardcharges + pro_order_master.maharastraccextra
 
     pro_order_master.update(g_total: gra_total)
 
@@ -147,64 +150,108 @@ def update_customer_order_list(order_id)
        prod8 = ""
        prod9 = ""
        prod10 = ""
-
-       orderline1 = OrderLine.where("orderid = ?", order_id).order("id")
+       
+       # @order_lines_regular = OrderLine.where(orderid: @order_id)
+  #       .joins(:product_variant)
+  #       .where('PRODUCT_VARIANTS.product_sell_type_id = ?', 10000)
+  #
+  #    @order_lines_basic = OrderLine.where(orderid: @order_id)
+  #    .joins(:product_variant)
+  #    .where('product_variants.product_sell_type_id = ?', 10040)
+  #
+  #    @order_lines_common = OrderLine.where(orderid: @order_id)
+  #    .joins(:product_variant)
+  #    .where('product_variants.product_sell_type_id = ?', 10001)
+  #
+  #    @order_lines_free = OrderLine.where(orderid: @order_id)
+  #    .joins(:product_variant)
+  #    .where('product_variants.product_sell_type_id = ?', 10060)
+     
+       orderline1 = OrderLine.where("orderid = ?", order_id).order("order_lines.id")
+        .joins(:product_variant)
+        .where('PRODUCT_VARIANTS.product_sell_type_id = ?', 10000)
+        
         if orderline1.present?
           qty1 = orderline1.first.pieces.to_i
           prod1 = orderline1.first.product_list.extproductcode[0..9].upcase
           #customer_order_list.update(qty1: qty1, prod1: prod1)
         end
 
-        orderline2 = OrderLine.where("orderid = ?", order_id).order("id").offset(1)
+        orderline2 = OrderLine.where("orderid = ?", order_id).order("order_lines.id")
+        .where.not('PRODUCT_VARIANTS.product_sell_type_id = ?', 10000).offset(1)
         if orderline2.present?
           qty2 = orderline2.first.pieces.to_i
           prod2 = orderline2.first.product_list.extproductcode[0..9].upcase
           #customer_order_list.update(prod2: prod2, qty2: qty2)
         end
-        orderline3 = OrderLine.where("orderid = ?", order_id).order("id").offset(2)
+        orderline3 = OrderLine.where("orderid = ?", order_id).order("id").order("order_lines.id")
+        .where.not('PRODUCT_VARIANTS.product_sell_type_id = ?', 10000).offset(2)
+
         if orderline3.present?
           qty3 = orderline3.first.pieces.to_i
           prod3 = orderline3.first.product_list.extproductcode[0..9].upcase
           #customer_order_list.update(prod3: orderline3.first.product_list.extproductcode.truncate(10).upcase, qty3: orderline3.first.pieces.to_i)
         end
-        orderline4 = OrderLine.where("orderid = ?", order_id).order("id").offset(3)
+        orderline4 = OrderLine.where("orderid = ?", order_id).order("id")
+        .order("order_lines.id")
+        .where.not('PRODUCT_VARIANTS.product_sell_type_id = ?', 10000).offset(3)
+        
         if orderline4.present?
           qty4 = orderline4.first.pieces.to_i
           prod4 = orderline4.first.product_list.extproductcode[0..9].upcase
           #customer_order_list.update(prod4: orderline4.first.product_list.extproductcode.truncate(10).upcase, qty4: orderline4.first.pieces.to_i)
         end
-        orderline5 = OrderLine.where("orderid = ?", order_id).offset(4)
+        
+        orderline5 = OrderLine.where("orderid = ?", order_id)
+        .order("order_lines.id")
+        .where.not('PRODUCT_VARIANTS.product_sell_type_id = ?', 10000).offset(4)
+        
         if orderline5.present?
           qty5 = orderline5.first.pieces.to_i
           prod5 = orderline5.first.product_list.extproductcode[0..9].upcase
           #customer_order_list.update(prod5: orderline5.first.product_list.extproductcode.truncate(10).upcase, qty5: orderline5.first.pieces.to_i)
         end
-        orderline6 = OrderLine.where("orderid = ?", order_id).offset(5)
+        orderline6 = OrderLine.where("orderid = ?", order_id)
+        .order("order_lines.id")
+                .where.not('PRODUCT_VARIANTS.product_sell_type_id = ?', 10000)
+                .offset(5)
+                
         if orderline6.present?
           qty6 = orderline6.first.pieces.to_i
           prod6 = orderline6.first.product_list.extproductcode[0..9].upcase
           #customer_order_list.update(prod6: orderline6.first.product_list.extproductcode.truncate(10).upcase, qty6: orderline6.first.pieces.to_i)
         end
-        orderline7 = OrderLine.where("orderid = ?", order_id).offset(6)
+        orderline7 = OrderLine.where("orderid = ?", order_id)
+        .order("order_lines.id")
+                .where.not('PRODUCT_VARIANTS.product_sell_type_id = ?', 10000).offset(6)
+                
         if orderline7.present?
           qty7 = orderline7.first.pieces.to_i
           prod7 = orderline7.first.product_list.extproductcode[0..9].upcase
           #customer_order_list.update(prod7: orderline7.first.product_list.extproductcode.truncate(10).upcase, qty7: orderline7.first.pieces.to_i)
         end
-        orderline8 = OrderLine.where("orderid = ?", order_id).offset(7)
+        orderline8 = OrderLine.where("orderid = ?", order_id).order("order_lines.id")
+        .where.not('PRODUCT_VARIANTS.product_sell_type_id = ?', 10000).offset(7)
+
         if orderline8.present?
           qty8 = orderline8.first.pieces.to_i
           prod8 = orderline8.first.product_list.extproductcode[0..9].upcase
           #customer_order_list.update(prod8: orderline8.first.product_list.extproductcode.truncate(10).upcase, qty8: orderline8.first.pieces.to_i)
         end
-        orderline9 = OrderLine.where("orderid = ?", order_id).offset(8)
+        orderline9 = OrderLine.where("orderid = ?", order_id)
+        .order("order_lines.id")
+                .where.not('PRODUCT_VARIANTS.product_sell_type_id = ?', 10000).offset(8)
+                
         if orderline9.present?
           qty9 = orderline9.first.pieces.to_i
           prod9 = orderline9.first.product_list.extproductcode[0..9].upcase
           #customer_order_list.update(prod9: orderline9.first.product_list.extproductcode.truncate(10).upcase, qty9: orderline9.first.pieces.to_i)
         end
-        orderline10 = OrderLine.where("orderid = ?", order_id).offset(9)
-        # if orderline10.exists?
+        # orderline10 = OrderLine.where("orderid = ?", order_id)
+#         .order("order_lines.id")
+#                 .where.not('PRODUCT_VARIANTS.product_sell_type_id = ?', 10000).offset(9)
+#
+## if orderline10.exists?
         #   customer_order_list.update(prod10: orderline10.first.product_variant.extproductcode, qty10: orderline10.first.pieces)
         # end
         if pro_order_master.customer_address.st.upcase == "MAH"
@@ -236,86 +283,172 @@ def update_customer_order_list(order_id)
 
         #flash[:notice] = "Order Number is #{order_num}"
              #CustomerOrderList Date.current Date.today.in_time_zone Time.zone.now
-        customer_order_list = CustomerOrderList.create(ordernum: order_num,
-        orderdate: (330.minutes).from_now.to_date,
-        title: pro_order_master.customer.salute[0..4].upcase,
-        fname: pro_order_master.customer.first_name[0..29].upcase,
-        lname: pro_order_master.customer.last_name[0..29].upcase,
-        add1: pro_order_master.customer_address.address1[0..29].upcase,
-        add2: pro_order_master.customer_address.address2[0..29].upcase,
-        add3: (pro_order_master.customer_address.address3[0..29].upcase if pro_order_master.customer_address.address3.present?),
-        landmark: pro_order_master.customer_address.landmark[0..49].upcase,
-        city: pro_order_master.customer_address.city[0..29].upcase,
-        state: pro_order_master.customer_address.st[0..4].upcase,
-        pincode: pro_order_master.customer_address.pincode,
-        mstate: pro_order_master.customer_address.state[0..49].upcase,
-        tel1: pro_order_master.customer.mobile[0..19].upcase,
-        tel2: (pro_order_master.customer_address.telephone2[0..19].upcase if pro_order_master.customer_address.telephone2.present?),
-        fax: (pro_order_master.customer_address.fax[0..19].upcase if pro_order_master.customer_address.fax.present?),
-        email: (pro_order_master.customer.emailid[0..19].upcase if pro_order_master.customer.emailid.present?),
-        ccnumber:  creditcardno,
-        expmonth:  expmonth,
-        expyear:  expyear,
-        cardtype: cardtype,
-        carddisc: creditcardcharges,
-        ipadd: (pro_order_master.userip[0..49] if pro_order_master.userip.present?),
-        dnis: pro_order_master.calledno,
-        channel: pro_order_master.medium.name.strip[0..48].upcase,
-        chqdisc: pro_order_master.creditcardcharges,
-        totalamt: pro_order_master.g_total,
-        trandate: Time.zone.now,
-        username: (pro_order_master.employee.name[0..49].upcase || current_user.name.truncate(50).upcase if pro_order_master.employee.present?),
-        oper_no: pro_order_master.employeecode,
-        dt_hour: nowhour,
-        dt_min: nowminute,
-        uae_status: pro_order_master.customer.gender[0..49].upcase,
-        prod1: prod1, prod2: prod2, prod3: prod3, prod4: prod4, prod5: prod5, prod6: prod6, prod7: prod7, prod8:prod8, prod9: prod9, prod10: prod10,
-        qty1: qty1, qty2: qty2, qty3: qty3, qty4: qty4, qty5: qty5, qty6: qty6, qty7: qty7, qty8: qty8, qty9: qty9, qty10: qty10)
-
+        if CustomerOrderList.find_by_ordernum(order_num).present?
+          customer_order_list = CustomerOrderList.find_by_ordernum(order_num)
+         customer_order_list.update(
+              orderdate: (330.minutes).from_now.to_date,
+              title: pro_order_master.customer.salute[0..4].upcase,
+              fname: pro_order_master.customer.first_name[0..29].upcase,
+              lname: pro_order_master.customer.last_name[0..29].upcase,
+              add1: pro_order_master.customer_address.address1[0..29].upcase,
+              add2: pro_order_master.customer_address.address2[0..29].upcase,
+              add3: (pro_order_master.customer_address.address3[0..29].upcase if pro_order_master.customer_address.address3.present?),
+              landmark: pro_order_master.customer_address.landmark[0..49].upcase,
+              city: pro_order_master.customer_address.city[0..29].upcase,
+              state: pro_order_master.customer_address.st[0..4].upcase,
+              pincode: pro_order_master.customer_address.pincode,
+              mstate: pro_order_master.customer_address.state[0..49].upcase,
+              tel1: pro_order_master.customer.mobile[0..19].upcase,
+              tel2: (pro_order_master.customer_address.telephone2[0..19].upcase if pro_order_master.customer_address.telephone2.present?),
+              fax: (pro_order_master.customer_address.fax[0..19].upcase if pro_order_master.customer_address.fax.present?),
+              email: (pro_order_master.customer.emailid[0..19].upcase if pro_order_master.customer.emailid.present?),
+              ccnumber:  creditcardno,
+              expmonth:  expmonth,
+              expyear:  expyear,
+              cardtype: cardtype,
+              carddisc: creditcardcharges,
+              ipadd: (pro_order_master.userip[0..49] if pro_order_master.userip.present?),
+              dnis: pro_order_master.calledno,
+              channel: pro_order_master.medium.name.strip[0..48].upcase,
+              chqdisc: pro_order_master.creditcardcharges,
+              totalamt: pro_order_master.g_total,
+              trandate: Time.zone.now,
+              username: (pro_order_master.employee.name[0..49].upcase || current_user.name.truncate(50).upcase if pro_order_master.employee.present?),
+              oper_no: pro_order_master.employeecode,
+              dt_hour: nowhour,
+              dt_min: nowminute,
+              uae_status: pro_order_master.customer.gender[0..49].upcase,
+              prod1: prod1, prod2: prod2, prod3: prod3, prod4: prod4, prod5: prod5, prod6: prod6, prod7: prod7, prod8:prod8, prod9: prod9, prod10: prod10,
+              qty1: qty1, qty2: qty2, qty3: qty3, qty4: qty4, qty5: qty5, qty6: qty6, qty7: qty7, qty8: qty8, qty9: qty9, qty10: qty10)
+          
+        else
+              customer_order_list = CustomerOrderList.create(ordernum: order_num,
+              orderdate: (330.minutes).from_now.to_date,
+              title: pro_order_master.customer.salute[0..4].upcase,
+              fname: pro_order_master.customer.first_name[0..29].upcase,
+              lname: pro_order_master.customer.last_name[0..29].upcase,
+              add1: pro_order_master.customer_address.address1[0..29].upcase,
+              add2: pro_order_master.customer_address.address2[0..29].upcase,
+              add3: (pro_order_master.customer_address.address3[0..29].upcase if pro_order_master.customer_address.address3.present?),
+              landmark: pro_order_master.customer_address.landmark[0..49].upcase,
+              city: pro_order_master.customer_address.city[0..29].upcase,
+              state: pro_order_master.customer_address.st[0..4].upcase,
+              pincode: pro_order_master.customer_address.pincode,
+              mstate: pro_order_master.customer_address.state[0..49].upcase,
+              tel1: pro_order_master.customer.mobile[0..19].upcase,
+              tel2: (pro_order_master.customer_address.telephone2[0..19].upcase if pro_order_master.customer_address.telephone2.present?),
+              fax: (pro_order_master.customer_address.fax[0..19].upcase if pro_order_master.customer_address.fax.present?),
+              email: (pro_order_master.customer.emailid[0..19].upcase if pro_order_master.customer.emailid.present?),
+              ccnumber:  creditcardno,
+              expmonth:  expmonth,
+              expyear:  expyear,
+              cardtype: cardtype,
+              carddisc: creditcardcharges,
+              ipadd: (pro_order_master.userip[0..49] if pro_order_master.userip.present?),
+              dnis: pro_order_master.calledno,
+              channel: pro_order_master.medium.name.strip[0..48].upcase,
+              chqdisc: pro_order_master.creditcardcharges,
+              totalamt: pro_order_master.g_total,
+              trandate: Time.zone.now,
+              username: (pro_order_master.employee.name[0..49].upcase || current_user.name.truncate(50).upcase if pro_order_master.employee.present?),
+              oper_no: pro_order_master.employeecode,
+              dt_hour: nowhour,
+              dt_min: nowminute,
+              uae_status: pro_order_master.customer.gender[0..49].upcase,
+              prod1: prod1, prod2: prod2, prod3: prod3, prod4: prod4, prod5: prod5, prod6: prod6, prod7: prod7, prod8:prod8, prod9: prod9, prod10: prod10,
+              qty1: qty1, qty2: qty2, qty3: qty3, qty4: qty4, qty5: qty5, qty6: qty6, qty7: qty7, qty8: qty8, qty9: qty9, qty10: qty10)
+        end
         #CUSTDETAILS
-        customerdetails = CUSTDETAILS.create(ordernum: order_num,
-        transfer_ok: 0,
-        orderdate: (330.minutes).from_now.to_date,
-        title: pro_order_master.customer.salute[0..4].upcase,
-        fname: pro_order_master.customer.first_name[0..29].upcase,
-        lname: pro_order_master.customer.last_name[0..29].upcase,
-        add1: pro_order_master.customer_address.address1[0..29].upcase,
-        add2: pro_order_master.customer_address.address2[0..29].upcase,
-        add3: (pro_order_master.customer_address.address3[0..29].upcase if pro_order_master.customer_address.address3.present?),
-        landmark: pro_order_master.customer_address.landmark[0..49].upcase,
-        city: pro_order_master.customer_address.city[0..29].upcase,
-        state: pro_order_master.customer_address.st[0..4].upcase,
-        pincode: pro_order_master.customer_address.pincode,
-        mstate: pro_order_master.customer_address.state[0..49].upcase,
-        tel1: pro_order_master.customer.mobile[0..19].upcase,
-        tel2: (pro_order_master.customer_address.telephone2[0..17].upcase if pro_order_master.customer_address.telephone2.present?),
-        fax: (pro_order_master.customer_address.fax[0..19].upcase if pro_order_master.customer_address.fax.present?),
-        email: (pro_order_master.customer.emailid[0..19].upcase if pro_order_master.customer.emailid.present?),
-        ccnumber:  creditcardno,
-        expmonth:  expmonth,
-        expyear:  expyear,
-        cardtype: cardtype,
-        carddisc: creditcardcharges,
-        ipadd: (pro_order_master.userip[0..49] if pro_order_master.userip.present?),
-        dnis: pro_order_master.calledno,
-        channel: pro_order_master.medium.name.strip[0..48].upcase,
-        chqdisc: pro_order_master.creditcardcharges,
-        totalamt: pro_order_master.g_total,
-        trandate: Time.zone.now,
-        username: (pro_order_master.employee.name[0..49].upcase || current_user.name.truncate(50).upcase if pro_order_master.employee.present?),
-        oper_no: pro_order_master.employeecode,
-        dt_hour: nowhour,
-        dt_min: nowminute,
-        uae_status: pro_order_master.customer.gender[0..49].upcase,
-        prod1: prod1, prod2: prod2, prod3: prod3, prod4: prod4, prod5: prod5, prod6: prod6, prod7: prod7, prod8:prod8, prod9: prod9, prod10: prod10,
-        qty1: qty1, qty2: qty2, qty3: qty3, qty4: qty4, qty5: qty5, qty6: qty6, qty7: qty7, qty8: qty8, qty9: qty9, qty10: qty10)
-
+        #check if already added, then update else add
+        if CUSTDETAILS.find(order_num).present?
+          cust_detail = CUSTDETAILS.find(order_num)
+          cust_detail.update(transfer_ok: 0,
+          orderdate: (330.minutes).from_now.to_date,
+          title: pro_order_master.customer.salute[0..4].upcase,
+          fname: pro_order_master.customer.first_name[0..29].upcase,
+          lname: pro_order_master.customer.last_name[0..29].upcase,
+          add1: pro_order_master.customer_address.address1[0..29].upcase,
+          add2: pro_order_master.customer_address.address2[0..29].upcase,
+          add3: (pro_order_master.customer_address.address3[0..29].upcase if pro_order_master.customer_address.address3.present?),
+          landmark: pro_order_master.customer_address.landmark[0..49].upcase,
+          city: pro_order_master.customer_address.city[0..29].upcase,
+          state: pro_order_master.customer_address.st[0..4].upcase,
+          pincode: pro_order_master.customer_address.pincode,
+          mstate: pro_order_master.customer_address.state[0..49].upcase,
+          tel1: pro_order_master.customer.mobile[0..19].upcase,
+          tel2: (pro_order_master.customer_address.telephone2[0..17].upcase if pro_order_master.customer_address.telephone2.present?),
+          fax: (pro_order_master.customer_address.fax[0..19].upcase if pro_order_master.customer_address.fax.present?),
+          email: (pro_order_master.customer.emailid[0..19].upcase if pro_order_master.customer.emailid.present?),
+          ccnumber:  creditcardno,
+          expmonth:  expmonth,
+          expyear:  expyear,
+          cardtype: cardtype,
+          carddisc: creditcardcharges,
+          ipadd: (pro_order_master.userip[0..49] if pro_order_master.userip.present?),
+          dnis: pro_order_master.calledno,
+          channel: pro_order_master.medium.name.strip[0..48].upcase,
+          chqdisc: pro_order_master.creditcardcharges,
+          totalamt: pro_order_master.g_total,
+          trandate: Time.zone.now,
+          username: (pro_order_master.employee.name[0..49].upcase || current_user.name.truncate(50).upcase if pro_order_master.employee.present?),
+          oper_no: pro_order_master.employeecode,
+          dt_hour: nowhour,
+          dt_min: nowminute,
+          uae_status: pro_order_master.customer.gender[0..49].upcase,
+          prod1: prod1, prod2: prod2, prod3: prod3, prod4: prod4, prod5: prod5, prod6: prod6, prod7: prod7, prod8:prod8, prod9: prod9, prod10: prod10,
+          qty1: qty1, qty2: qty2, qty3: qty3, qty4: qty4, qty5: qty5, qty6: qty6, qty7: qty7, qty8: qty8, qty9: qty9, qty10: qty10)
+          
+        else
+          
+          customerdetails = CUSTDETAILS.create(ordernum: order_num,
+          transfer_ok: 0,
+          orderdate: (330.minutes).from_now.to_date,
+          title: pro_order_master.customer.salute[0..4].upcase,
+          fname: pro_order_master.customer.first_name[0..29].upcase,
+          lname: pro_order_master.customer.last_name[0..29].upcase,
+          add1: pro_order_master.customer_address.address1[0..29].upcase,
+          add2: pro_order_master.customer_address.address2[0..29].upcase,
+          add3: (pro_order_master.customer_address.address3[0..29].upcase if pro_order_master.customer_address.address3.present?),
+          landmark: pro_order_master.customer_address.landmark[0..49].upcase,
+          city: pro_order_master.customer_address.city[0..29].upcase,
+          state: pro_order_master.customer_address.st[0..4].upcase,
+          pincode: pro_order_master.customer_address.pincode,
+          mstate: pro_order_master.customer_address.state[0..49].upcase,
+          tel1: pro_order_master.customer.mobile[0..19].upcase,
+          tel2: (pro_order_master.customer_address.telephone2[0..17].upcase if pro_order_master.customer_address.telephone2.present?),
+          fax: (pro_order_master.customer_address.fax[0..19].upcase if pro_order_master.customer_address.fax.present?),
+          email: (pro_order_master.customer.emailid[0..19].upcase if pro_order_master.customer.emailid.present?),
+          ccnumber:  creditcardno,
+          expmonth:  expmonth,
+          expyear:  expyear,
+          cardtype: cardtype,
+          carddisc: creditcardcharges,
+          ipadd: (pro_order_master.userip[0..49] if pro_order_master.userip.present?),
+          dnis: pro_order_master.calledno,
+          channel: pro_order_master.medium.name.strip[0..48].upcase,
+          chqdisc: pro_order_master.creditcardcharges,
+          totalamt: pro_order_master.g_total,
+          trandate: Time.zone.now,
+          username: (pro_order_master.employee.name[0..49].upcase || current_user.name.truncate(50).upcase if pro_order_master.employee.present?),
+          oper_no: pro_order_master.employeecode,
+          dt_hour: nowhour,
+          dt_min: nowminute,
+          uae_status: pro_order_master.customer.gender[0..49].upcase,
+          prod1: prod1, prod2: prod2, prod3: prod3, prod4: prod4, prod5: prod5, prod6: prod6, prod7: prod7, prod8:prod8, prod9: prod9, prod10: prod10,
+          qty1: qty1, qty2: qty2, qty3: qty3, qty4: qty4, qty5: qty5, qty6: qty6, qty7: qty7, qty8: qty8, qty9: qty9, qty10: qty10)
+          
+        end
+          
+        
 
         #- Integer update with customer order id
         pro_order_master.update(external_order_no: order_num.to_s, order_status_master_id: 10003)
 
-      return order_num.to_s #customer_order_list.ordernum
+        return order_num.to_s #customer_order_list.ordernum
     end
+
+
+
 
   end
 after_destroy :updateOrder
