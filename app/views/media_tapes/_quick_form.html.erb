@@ -15,7 +15,7 @@
    
     <div class="col-xs-2">
 <label>File Extension</label> <br>
-     <%=   select_tag "file_extension", options_for_select([ ".avi", ".mxf" ], ".avi"), {:class => "form-control"} %>
+     <%=   select_tag "file_extension", options_for_select([ ".avi" ], ".avi"), {:class => "form-control"} %>
     </div>
      <div class="row">
     <div class="col-xs-12">
@@ -80,7 +80,7 @@
         <small>Hr x 60 x 60 + Min x 60 + Sec </small>
    	</div>
     <div class="col-xs-2">
-       <%= f.number_field :mxf_frame,  :label => "Frames " , :required => true %>
+       <%= f.number_field :mxf_frame,  :label => "Frames ", :required => true %>
         <small>0 to 24</small>
    	</div>
 	<div class="col-xs-2">

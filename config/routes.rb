@@ -110,7 +110,12 @@ post 'distributor_upload_orders/switch_off'
   get 'branch_sales' => 'newwlsdet/list'
 
   resources :order_updates
-
+  
+  #new sales ppo
+  get 'sales_ppos/half_hour'
+  get 'sales_ppos_half_hour' => 'sales_ppos#half_hour'
+  
+  #old sales ppo
   get 'sales_ppo_report/summary'
   get 'ppo_report' => 'sales_ppo_report#summary'
   get 'sales_ppo_report/daily'

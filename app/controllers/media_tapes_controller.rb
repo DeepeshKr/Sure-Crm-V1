@@ -57,7 +57,11 @@ class MediaTapesController < ApplicationController
             media_id: media_tape_params[:media_id],
             product_variant_id: media_tape_params[:product_variant_id],
             media_tape_head_id: media_tape_params[:media_tape_head_id],
-            sort_order: media_tape_params[:sort_order])
+            sort_order: media_tape_params[:sort_order],
+            mxf_tape_home: media_tape_params[:mxf_tape_home],
+            mxf_seconds: media_tape_params[:mxf_seconds],
+            mxf_frame: media_tape_params[:mxf_frame],
+            tape_choice: media_tape_params[:tape_choice])
           
         if @media_tape.valid?
           flash[:notice] = "The tape details have been saved, now you can add these in campaigns."
