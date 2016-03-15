@@ -1,5 +1,6 @@
 <p id="notice"><%= notice %></p>
 
+<% if @sales_ppo.present? %>
 <p>
   <strong>Campaign playlist:</strong>
   <%= @sales_ppo.campaign_playlist.name if @sales_ppo.campaign_playlist %>
@@ -150,3 +151,5 @@
 
 <%= link_to 'Edit', edit_sales_ppo_path(@sales_ppo) %> |
 <%= link_to 'Back', sales_ppos_path %>
+
+<% end %>

@@ -50,7 +50,7 @@ private
     if product_cost.blank?
 
         ProductCostMaster.create(prod: self.extproductcode,
-          product_id: self.product_master_id,
+          product_id: self.productmasterid,
           :product_cost => 0,
           :basic_cost => self.price * 0.8888888,
           :shipping_handling => self.shipping * 0.88888888,
@@ -65,7 +65,7 @@ private
 
     else
 
-      product_cost.update(product_id: self.product_master_id,
+      product_cost.update(product_id: self.productmasterid,
         :product_cost => 0,
         :basic_cost => self.price * 0.8888888,
         :shipping_handling => self.shipping * 0.88888888,

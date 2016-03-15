@@ -1,0 +1,62 @@
+<!-- set page title start -->
+<% title @page_heading  %>
+<!-- set page title end -->
+<div class="well">
+<div class="row">
+
+<div class="col-xs-8">
+<h3><%= @campaign_playlist.product_variant.name if @campaign_playlist.product_variant  %>
+<small><%= @campaign_playlist.ref_name %></small>
+</h3>
+
+
+</div>
+<div class="col-xs-4">
+<p class="lead">
+<%= @campaign_playlist.for_date.strftime('%d-%b-%Y') %> =>
+<%= @campaign_playlist.start_hr.to_s.rjust(2, '0') %>:
+<%= @campaign_playlist.start_min.to_s.rjust(2, '0') %>:
+<%= @campaign_playlist.start_sec.to_s.rjust(2, '0') %>
+</p>
+</div>
+</div>
+</div>
+
+<div class="row">
+<div class="col-xs-5"> <!-- details of ppo order -->
+<%= render 'ppo_split' %>
+<hr>
+<%= render 'campaign_playlist' %>
+</div> <!-- details of ppo order end -->
+<div class="col-xs-7">
+	<div class="panel panel-primary">
+	  <div class="panel-heading">
+	   <h3 class="panel-title">Order Summary</h3>
+
+	  </div>
+	  <%= render partial: 'order_lines', :locals => {:order_lines =>  @order_lines_regular, order_description: "Regular Order"}  %>
+
+  </div>
+
+
+</div>
+</div>
+<hr>
+<%= render 'order_masters' %>
+<hr>
+<%= render 'product_sold_list' %>
+
+<div class="well well-sm">
+<ul class="list-inline">
+  <li>
+    revenue => product revenue (you can check for product revenue against each product)
+  </li>
+  <li>total_profit += (total_revenue - (total_product_cost + total_var_cost +  total_refund + total_promo_cost))</li>
+  <li>Cost Per Order = (@total_cost_per_order + @total_fixed_cost) / @total_pieces</li>
+  <li>@total_cost_per_order = (@total_product_cost  + @total_var_cost +  @total_refund + @total_promo_cost)</li>
+  <li>
+  	The total is divided by total pieces
+  </li>
+
+</ul>
+</div>

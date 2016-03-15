@@ -1,0 +1,72 @@
+<% if @order_masters.present? %>
+<table class="table table-hover table-bordered">
+  <thead>
+    <tr>
+    <th>No</th>
+    <th>City / State</th>
+    <th>Order No</th>
+    <th>Channel</th>
+    <th>Time Taken</th>
+    <th>Date Time</th>
+    <th>Pieces</th>
+    <th>Sub Total</th>
+    <th>Shipping</th>
+    <th>Total</th>
+    <th>Promo Cost</th>
+    <th>Product Cost</th>
+    <th>Commission</th>
+    <th>Media Cost</th>
+    <th>Revenue</th>
+   
+      
+     
+    </tr>
+  </thead>
+
+  <tbody>
+  <% @sno = 1 %>
+    <% @order_masters.each do |order_master| %>
+      <tr>
+      <td><%= @sno %></td>
+       <td><%= order_master.customer_address.city  rescue nil %>
+        <%= order_master.customer_address.state  rescue nil %></td>
+      <td><%= order_master.external_order_no %> </td>
+        <td><%= order_master.medium.name %> </td>
+       <td><small><%= (order_master.timetaken) %> Secs</small> </td>
+        <td><%= (order_master.orderdate + 330.minutes).strftime('%d-%b-%Y') %>
+    <small><%= (order_master.orderdate + 330.minutes).strftime('%H:%M %P') %></small> </td>
+          <td class="text-right"><%= order_master.pieces %></td>
+        <td class="text-right"><%= order_master.subtotal.to_i  %></td>
+         <td class="text-right"><%= order_master.shipping.to_i   %> </td>
+         <td class="text-right"><%= order_master.total.to_i  %></td>
+         <td class="text-right"><%= order_master.promotion.promo_cost || 0 if order_master.promotion.present? %></td>
+         <td class="text-right"><%= order_master.productcost.to_i  %>  </td>
+          <td class="text-right"><%= order_master.media_commission.to_i  %> </td>
+            <td class="text-right"><%= order_master.campaign_playlist.cost.to_i  %>  </td>
+        <td class="text-right"><%= order_master.productrevenue.to_i %>   </td>
+     </tr>
+       <% @sno += 1 %>
+    <% end %>
+  </tbody>
+  <tfoot>
+   
+    <tr>
+    <th colspan="6"></th>
+    <th class="text-right"><%= @total_pieces %></th>
+    <th class="text-right"><%= @total_subtotal.to_i  %></th>
+    <th class="text-right"><%= @total_shipping.to_i  %></th>
+    <th class="text-right"><%= @total_sales.to_i  %></th>
+    <th class="text-right"><%= @total_promo_cost.to_i  %>  </th>
+    <th class="text-right"><%= @total_product_cost.to_i  %></th>
+    <th class="text-right"><%= @total_var_cost.to_i   %></th>
+    <th class="text-right"><%= @total_fixed_cost.to_i   %></th>
+    <th class="text-right"><%= @total_revenue.to_i  %></th>
+   
+ 
+    </tr>
+  
+
+  </tfoot>
+</table>
+
+<% end %>

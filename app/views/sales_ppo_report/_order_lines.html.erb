@@ -9,25 +9,21 @@
 <table class="table table-striped table-bordered">
   <thead>
 
-    <tr>
-    <th>SNo</th>
-    <th>Id </th>
-      <th>Product </th>
-      <th>Time</th>
-      <th class="text-right">Basic</th>
-      <th class="text-right">Shipping</th>
-      <th class="text-right">Total</th>
-      <th class="text-right">Cost</th>
-      <th class="text-right">Revenue</th>
-
-    </tr>
+<tr>
+	<th>SNo</th>
+	<th>Id </th>
+	<th>Product </th>
+	<th>Time</th>
+	<th class="text-right">Basic</th>
+	<th class="text-right">Shipping</th>
+	<th class="text-right">Total</th>
+	<th class="text-right">Cost</th>
+	<th class="text-right">Revenue</th>
+</tr>
   </thead>
 
-  <tbody>
-   <tr>
-   <th colspan="9">Main Products </th>
-
-   </tr>
+	<tbody>
+   	 <tr><th colspan="9">Main Products </th></tr>
    <% @sno = 1 %>
     <% if @order_lines_regular.present? %>
 <!-- Regular Products -->

@@ -12,7 +12,7 @@ Rails.application.routes.draw do
 
   resources :fat_to_fit_email_statuses
 
-  resources :sales_ppos
+  #resources :sales_ppos
   resources :campaign_missed_lists
   resources :distributor_product_lists
   resources :distributor_missed_pincodes
@@ -112,8 +112,16 @@ post 'distributor_upload_orders/switch_off'
   resources :order_updates
   
   #new sales ppo
+  get 'sales_ppos/index'
+  get 'sales_ppos' => 'sales_ppos#index'
   get 'sales_ppos/half_hour'
   get 'sales_ppos_half_hour' => 'sales_ppos#half_hour'
+  get 'sales_ppos/show_wise'
+  get 'sales_ppos_show_wise' => 'sales_ppos#show_wise'
+  get 'sales_ppos/product_performance'
+  get 'sales_ppos_product_performance' => 'sales_ppos#sproduct_performance'
+  get 'sales_ppos/details'
+  get 'sales_ppos_details' => 'sales_ppos#details'
   
   #old sales ppo
   get 'sales_ppo_report/summary'
