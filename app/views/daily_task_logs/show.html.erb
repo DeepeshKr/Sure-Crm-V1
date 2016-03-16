@@ -1,0 +1,34 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Daily task:</strong>
+  <%= @daily_task_log.daily_task_id %>
+</p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @daily_task_log.name %>
+</p>
+
+<p>
+  <strong>Syntax error:</strong>
+  <%= @daily_task_log.syntax_error %>
+</p>
+
+<p>
+  <strong>Status:</strong>
+  <%= @daily_task_log.status %>
+</p>
+
+<p>
+  <strong>Checked on:</strong>
+  <%= @daily_task_log.checked_on %>
+</p>
+
+<p>
+  <strong>Checked by:</strong>
+  <%= @daily_task_log.checked_by %>
+</p>
+
+<%= link_to 'Edit', edit_daily_task_log_path(@daily_task_log) %> |
+<%= link_to 'Back', daily_task_logs_path %>

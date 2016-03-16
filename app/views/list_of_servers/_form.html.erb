@@ -1,0 +1,19 @@
+<%= simple_form_for(@list_of_server) do |f| %>
+  <%= f.error_notification %>
+
+  <div class="form-inputs">
+    <%= f.input :name %>
+    <%= f.input :description %>
+    <%= f.input :active_since %>
+    <%= f.input :internal_ip %>
+    <%= f.input :vpn_ip %>
+    <%= f.input :external_ip %>
+	<%= f.select :current_status, options_for_select([ "Active", "In-Active", "For Testing Apps", "New Set up" ],
+	 @list_of_server.current_status), {"class"=>"form-control"} %>
+	
+  </div>
+
+  <div class="form-actions">
+    <%= f.button :submit %>
+  </div>
+<% end %>

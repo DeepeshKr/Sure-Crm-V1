@@ -1,0 +1,26 @@
+<%= simple_form_for(@daily_task_log) do |f| %>
+  <%= f.error_notification %>
+
+  <div class="form-inputs">
+      <div class="row">
+  		<div class="col-xs-12">
+  			<%= f.input :name %>
+  		</div>	
+  	</div>
+	<div class="row">
+		 <div class="col-xs-4"><%= f.input :checked_on %></div> 
+		 <div class="col-xs-4"><%= f.input :status %> </div>
+		 <div class="col-xs-4"><%= f.input :checked_by %> </div>
+	</div>
+    <%= f.input :daily_task_id %>
+    <div class="row">
+		<div class="col-xs-12">
+			<%= f.input :syntax_error %>
+		</div>	
+	</div>
+  </div>
+
+  <div class="form-actions">
+    <%= f.button :submit %>
+  </div>
+<% end %>

@@ -1,0 +1,17 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  daily_task_id: 1
+  name: MyString
+  syntax_error: MyText
+  status: 1
+  checked_on: 2016-03-15 16:17:18
+  checked_by: MyString
+
+two:
+  daily_task_id: 1
+  name: MyString
+  syntax_error: MyText
+  status: 1
+  checked_on: 2016-03-15 16:17:18
+  checked_by: MyString

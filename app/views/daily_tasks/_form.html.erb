@@ -1,0 +1,20 @@
+<%= simple_form_for(@daily_task) do |f| %>
+  <%= f.error_notification %>
+
+  <div class="form-inputs">
+    <%= f.input :sort_order %>
+    <%= f.input :name %>
+	<%= f.select :frequency, options_for_select([ "Instant - within 300 secs", "Every 30 min", "Once Daily", "On Demand", "On Trial" ], @daily_task.frequency) %>
+    <%= f.input :description %>
+    <%= f.input :syntax %>
+    <%= f.input :parameters %>
+	<%= f.select :status, options_for_select([ "Active", "In-Active", "On Demand", "New Testing" ], @daily_task.status) %>
+		
+    <%= f.input :department %>
+    <%= f.input :manager %>
+  </div>
+
+  <div class="form-actions">
+    <%= f.button :submit %>
+  </div>
+<% end %>

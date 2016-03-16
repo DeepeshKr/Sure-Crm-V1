@@ -109,20 +109,6 @@ class SalesPposController < ApplicationController
       start_hr = @campaign_playlist.start_hr
       start_min = @campaign_playlist.start_min
      
-        # @order_masters.each do |order |
- #            @total_nos += 1
- #            @total_pieces += order.pieces
- #            @total_subtotal += order.subtotal
- #            @total_shipping += order.shipping
- #            @total_sales += order.total
- #            @total_revenue += order.productrevenue
- #
- #            @total_product_cost += order.productcost
- #            @total_var_cost += order.media_commission
- #            if order.promotion.present?
- #              @total_promo_cost += order.promotion.promo_cost
- #            end
- #        end
  
         @total_fixed_cost = @campaign_playlist.cost
         
@@ -130,9 +116,9 @@ class SalesPposController < ApplicationController
         @total_refund = @total_sales * 0.02
         @total_product_dam_cost  = @total_product_cost * 0.10
         @total_cost_per_order = (@total_product_cost  + @total_var_cost +  @total_refund + @total_promo_cost + @total_product_dam_cost + @total_fixed_cost)
-        @cost_per_order = 200
+        @cost_per_order = (@total_cost_per_order) / @total_nos
         @total_profit = @total_revenue - @total_cost_per_order
-        @profit_per_order  = 200 # @total_profit / @total_nos
+        @profit_per_order  =  @total_profit / @total_nos
 
         # 60%
          @total_nos_60 = @total_nos * 0.6
@@ -152,9 +138,9 @@ class SalesPposController < ApplicationController
          @total_cost_per_order_60 = (@total_product_cost_60  + @total_var_cost_60 +  @total_refund_60 + @total_promo_cost_60 + @total_product_dam_cost_60 + @total_fixed_cost_60)
 
         # @total_cost_per_order_60 =  @total_cost_per_order * 0.6
-         @cost_per_order_60 = 200 #(@total_cost_per_order_60) / @total_nos_60
+         @cost_per_order_60 = (@total_cost_per_order_60) / @total_nos_60
          @total_profit_60 = @total_revenue_60 - @total_cost_per_order_60
-         @profit_per_order_60  = 200 # @total_profit_60 / @total_nos_60
+         @profit_per_order_60 = @total_profit_60 / @total_nos_60
 
          # all details at 50%
          @total_nos_50 = @total_nos * 0.5
@@ -174,9 +160,9 @@ class SalesPposController < ApplicationController
 
          @total_cost_per_order_50 = (@total_product_cost_50  + @total_var_cost_50 +  @total_refund_50 + @total_promo_cost_50 + @total_product_dam_cost_50 + @total_fixed_cost_50)
 
-         @cost_per_order_50  = 200 #(@total_cost_per_order_50) / @total_nos_50
+         @cost_per_order_50  = (@total_cost_per_order_50) / @total_nos_50
          @total_profit_50 = @total_revenue_50 - @total_cost_per_order_50
-         @profit_per_order_50  = 200 # @total_profit_50 / @total_nos_50
+         @profit_per_order_50  = @total_profit_50 / @total_nos_50
 
          # all details at 40%
          @total_nos_40 = @total_nos * 0.4
@@ -194,9 +180,9 @@ class SalesPposController < ApplicationController
 
          @total_cost_per_order_40 = (@total_product_cost_40  + @total_var_cost_40 +  @total_refund_40 + @total_promo_cost_40 + @total_product_dam_cost_40 + @total_fixed_cost_40)
 
-         @cost_per_order_40  = 200 # (@total_cost_per_order_40) / @total_nos_40
+         @cost_per_order_40  =  (@total_cost_per_order_40) / @total_nos_40
          @total_profit_40 = @total_revenue_40 - @total_cost_per_order_40
-         @profit_per_order_40  = 200 # @total_profit_40 / @total_nos_40
+         @profit_per_order_40  = @total_profit_40 / @total_nos_40
 
 
       ordernos = @sales_ppos.pluck(:order_id)
@@ -671,6 +657,12 @@ class SalesPposController < ApplicationController
       @cost_per_order = 0
       @profit_per_order = 0
       @total_promo_cost = 0
+      
+      @subtotal = 0
+      @shipping = 0
+      @total = 0
+      @cost = 0
+      @revenue = 0
     end
     
   end

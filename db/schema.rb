@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160302043132) do
+ActiveRecord::Schema.define(version: 20160315151004) do
 
   create_table "address_types", force: :cascade do |t|
     t.string   "name"
@@ -380,6 +380,31 @@ ActiveRecord::Schema.define(version: 20160302043132) do
     t.string   "state"
   end
 
+  create_table "daily_task_logs", force: :cascade do |t|
+    t.integer  "daily_task_id", precision: 38
+    t.string   "name"
+    t.text     "syntax_error"
+    t.string   "status"
+    t.datetime "checked_on"
+    t.string   "checked_by"
+    t.datetime "created_at",                   null: false
+    t.datetime "updated_at",                   null: false
+  end
+
+  create_table "daily_tasks", force: :cascade do |t|
+    t.integer  "sort_order",  precision: 38
+    t.string   "name"
+    t.string   "frequency"
+    t.text     "description"
+    t.text     "syntax"
+    t.text     "parameters"
+    t.string   "status"
+    t.string   "department"
+    t.string   "manager"
+    t.datetime "created_at",                 null: false
+    t.datetime "updated_at",                 null: false
+  end
+
   create_table "devises", force: :cascade do |t|
     t.string   "email",                                 default: "", null: false
     t.string   "encrypted_password",                    default: "", null: false
@@ -565,6 +590,14 @@ ActiveRecord::Schema.define(version: 20160302043132) do
     t.datetime "updated_at"
   end
 
+  create_table "external_users", force: :cascade do |t|
+    t.string   "username"
+    t.string   "email"
+    t.string   "encrypted_password"
+    t.datetime "created_at",         null: false
+    t.datetime "updated_at",         null: false
+  end
+
   create_table "fat_to_fit_email_statuses", force: :cascade do |t|
     t.string   "emailid"
     t.string   "full_name"
@@ -739,6 +772,18 @@ ActiveRecord::Schema.define(version: 20160302043132) do
     t.string   "name"
     t.datetime "created_at"
     t.datetime "updated_at"
+  end
+
+  create_table "list_of_servers", force: :cascade do |t|
+    t.string   "name"
+    t.text     "description"
+    t.datetime "active_since"
+    t.string   "internal_ip"
+    t.string   "vpn_ip"
+    t.string   "external_ip"
+    t.string   "current_status"
+    t.datetime "created_at",     null: false
+    t.datetime "updated_at",     null: false
   end
 
   create_table "logins", force: :cascade do |t|
@@ -1046,6 +1091,18 @@ ActiveRecord::Schema.define(version: 20160302043132) do
     t.integer  "duration_secs", precision: 38
     t.datetime "created_at",                   null: false
     t.datetime "updated_at",                   null: false
+  end
+
+  create_table "payumoney_details", force: :cascade do |t|
+    t.integer  "paymentId",             precision: 38
+    t.string   "merchantTransactionId"
+    t.decimal  "amount"
+    t.string   "customerMobileNumber"
+    t.string   "status"
+    t.integer  "orderid",               precision: 38
+    t.datetime "created_at",                           null: false
+    t.datetime "updated_at",                           null: false
+    t.text     "final_order_id"
   end
 
   create_table "pincode_service_levels", force: :cascade do |t|

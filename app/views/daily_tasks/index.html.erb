@@ -1,0 +1,26 @@
+<p id="notice"><%= notice %></p>
+
+<div class="row">
+	<div class="col-xs-4"> <h4>All Tasks </h4></div>
+	<div class="col-xs-8">All tasks with the frequency, process owners are mentioned here, you can view the respective status by clicking on the link inside!</div>
+</div>
+<div class="row">
+	<div class="col-xs-12">
+<table class="table table-hover table-stripped">
+
+<%= render partial: 'daily_tasks/quick_list', :locals => {:daily_tasks =>  @daily_tasks_instant, daily_task_frequency: "Every Five Minutes - Instant"}  %>
+
+<%= render partial: 'daily_tasks/quick_list', :locals => {:daily_tasks =>  @daily_tasks_once, daily_task_frequency: "Once a Day"}  %>
+
+<%= render partial: 'daily_tasks/quick_list', :locals => {:daily_tasks =>  @daily_tasks_demand, daily_task_frequency: "On Demand"}  %>
+
+<%= render partial: 'daily_tasks/quick_list', :locals => {:daily_tasks =>  @daily_tasks_30, daily_task_frequency: "Every 30 mins"}  %>
+
+<%= render partial: 'daily_tasks/quick_list', :locals => {:daily_tasks =>  @daily_tasks_trial, daily_task_frequency: "On Trial"}  %>
+</table>
+	</div>	
+
+</div>
+<br>
+
+<%= link_to 'New Daily task', new_daily_task_path, class:"btn btn-primary btn-sm" %>

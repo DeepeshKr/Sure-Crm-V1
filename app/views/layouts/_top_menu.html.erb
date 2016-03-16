@@ -24,6 +24,12 @@
               <li class="divider"></li>
                 <li><%= link_to "Distributor Product List", "/distributor_product_lists" %></li>
               <li><%= link_to "Tax Rates", "/tax_rates"  %></li>
+			   <li class="divider"></li>
+              <li><%= link_to "Existing Dealers Old", "/dealers" %></li>
+              <li><%= link_to "Existing Dealers New", "/dealers" %></li>
+              <li><%= link_to "List of Dealer Enquiries", "/dealer_enquiry?category=10020&status=10000" %></li>
+                <li class="divider"></li>
+			  
             </ul>
          </li>
         <% end %>
@@ -71,13 +77,6 @@
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
             	Operations <b class="caret"></b> </a>
             <ul class="dropdown-menu">
-              <li><%= link_to "Existing Dealers Old", "/dealers" %></li>
-              <li><%= link_to "Existing Dealers New", "/dealers" %></li>
-              <li><%= link_to "List of Dealer Enquiries", "/dealer_enquiry?category=10020&status=10000" %></li>
-                <li class="divider"></li>
-                 <li><%= link_to "SMS on Order", "/message_on_orders" %></li>
-              <li class="divider"></li>
-
              <li><%= link_to "Customer Orders (Search)", "/custordersearch"  %></li>
             <li><%= link_to "Customer Orders (Details Search)", "/detailedordersearch"  %></li>
 
@@ -90,6 +89,8 @@
             <li><%= link_to "Salutes", "/salutes" %></li>
               <li><%= link_to "States", "/states" %></li>
               <li><%= link_to "Interaction Categories", "/interaction_categories" %></li>
+                  <li><%= link_to "SMS on Order", "/message_on_orders" %></li>
+             
             <li class="divider"></li>
             <% if (current_user.employee_role.sortorder < 8) %>
 
@@ -97,6 +98,8 @@
                 <li><%= link_to "Employee List", "/employees" %></li>
 
             <% end %>
+        	 
+             
             </ul>
          </li>
          <% end %>
@@ -189,6 +192,38 @@
             </ul>
          </li>
          <% end %>
+         <% if (current_user.employee_role.sortorder < 10) %>
+          <li class="dropdown">
+           <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+            General<b class="caret"></b>
+           </a>
+
+              <ul class="dropdown-menu">
+              	<li><%= link_to "Employment Type", "/employment_types" %></li>
+            	<li><%= link_to "Employee Roles", "/employee_roles" %></li>
+             <li class="divider"></li>
+          	 	<li><%= link_to "Address Type", "/address_types" %></li>
+          	 	<li><%= link_to "Address Validity", "/address_valids" %></li>
+             <li class="divider"></li>
+            <li><%= link_to "Message Type", "/message_types" %></li>
+            <li><%= link_to "Message Status", "/message_statuses" %></li>
+             	 <li class="divider"></li>
+             	 	<li><%= link_to "Interaction Categories", "/interaction_categories" %></li>
+             	 	<li><%= link_to "Interaction Priorities", "/interaction_priorities" %></li>
+             	 	<li><%= link_to "Interaction Status", "/interaction_statuses" %></li>
+             	 	<li><%= link_to "Interaction Users", "/interaction_users" %></li>
+	          	 <li class="divider"></li>
+	               	<li><%= link_to "Dispatch Statuses", "/order_line_dispatch_statuses" %></li>
+	               	<li><%= link_to "Order Status", "/order_status_masters" %></li>
+	               <li><%= link_to "Courier List", "/courier_lists" %></li>
+	               	<li><%= link_to "Order Source", "/order_sources" %></li>
+	               	<li><%= link_to "Bill Number", "/bills" %></li>
+	           	 <li><%= link_to "Order For", "/order_fors" %></li>
+                   
+           </ul>
+         </li>
+         <% end %>
+		 
           <% if (current_user.employee_role.sortorder < 2) %>
            <li class="dropdown">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
@@ -196,27 +231,8 @@
             </a>
 
                <ul class="dropdown-menu">
-               	<li><%= link_to "Employment Type", "/employment_types" %></li>
-             	<li><%= link_to "Employee Roles", "/employee_roles" %></li>
-             	 <li class="divider"></li>
-	              	<li><%= link_to "Dispatch Statuses", "/order_line_dispatch_statuses" %></li>
-	              	<li><%= link_to "Order Status", "/order_status_masters" %></li>
-                  <li><%= link_to "Courier List", "/courier_lists" %></li>
-	              	<li><%= link_to "Order Source", "/order_sources" %></li>
-	              	<li><%= link_to "Bill Number", "/bills" %></li>
-              	 <li><%= link_to "Order For", "/order_fors" %></li>
-	             <li class="divider"></li>
-              	 	<li><%= link_to "Address Type", "/address_types" %></li>
-              	 	<li><%= link_to "Address Validity", "/address_valids" %></li>
-                   <li class="divider"></li>
-                  <li><%= link_to "Message Type", "/message_types" %></li>
-                  <li><%= link_to "Message Status", "/message_statuses" %></li>
-
-              	 <li class="divider"></li>
-              	 	<li><%= link_to "Interaction Categories", "/interaction_categories" %></li>
-              	 	<li><%= link_to "Interaction Priorities", "/interaction_priorities" %></li>
-              	 	<li><%= link_to "Interaction Status", "/interaction_statuses" %></li>
-              	 	<li><%= link_to "Interaction Users", "/interaction_users" %></li>
+                  	 	<li><%= link_to "Daily Tasks", "/daily_tasks" %></li>
+						<li><%= link_to "Server Lists", "/list_of_servers" %></li>
                   <li class="divider"></li>
               	 	<li><%= link_to "Change Log Type", "/change_log_types" %></li>
             </ul>

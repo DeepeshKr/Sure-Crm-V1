@@ -34,17 +34,25 @@
 	   <h3 class="panel-title">Order Summary</h3>
 
 	  </div>
-	  <%= render partial: 'order_lines', :locals => {:order_lines =>  @order_lines_regular, order_description: "Regular Order"}  %>
-
+	  	<%= render partial: 'order_lines', :locals => {:order_lines =>  @order_lines_regular, 
+			order_description: "Regular Products"}  %>
+	  
+	    <%= render partial: 'order_lines', :locals => {:order_lines =>  @order_lines_basic, 
+			order_description: "Basic Upsell"}  %>
+		
+		<%= render partial: 'order_lines', :locals => {:order_lines =>  @order_lines_common, 
+			order_description: "Common Upsell"}  %>
   </div>
 
 
 </div>
 </div>
 <hr>
+<%= render 'sales_ppo_mini_list' %>
+<hr>
 <%= render 'order_masters' %>
 <hr>
-<%= render 'product_sold_list' %>
+
 
 <div class="well well-sm">
 <ul class="list-inline">

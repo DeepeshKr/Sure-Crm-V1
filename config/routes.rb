@@ -1,5 +1,8 @@
 Rails.application.routes.draw do
 
+  resources :list_of_servers
+  resources :daily_task_logs
+  resources :daily_tasks
   resources :cable_opertor_comms
 
   get 'cashsale/index'

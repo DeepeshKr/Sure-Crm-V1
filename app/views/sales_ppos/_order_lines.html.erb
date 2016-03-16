@@ -15,7 +15,12 @@
 	</thead>
 	<tbody>
    	 <tr><th colspan="9"><%= order_description %> </th></tr>
-	 <% @sno = 1 %>
+	 <% @sno= 1 %>
+	 <% @subtotal = 0
+      @shipping = 0
+      @total = 0
+      @cost = 0
+      @revenue = 0 %>
       <% order_lines.each do |order_line| %>
        <tr>
         <td><%= @sno %></td>
@@ -26,21 +31,26 @@
         </td>
         <td><%= order_line.description %></td>
         <td><small><%= (order_line.order_master.orderdate + 330.minutes).strftime('%d-%b %H:%M %P') %></small></td>
-        <td class="text-right"><%= order_line.subtotal %></td>
-        <td class="text-right"><%= order_line.shipping %></td>
-        <td class="text-right"><%= order_line.total %></td>
-        <td class="text-right"><%= order_line.productcost %></td>
-        <td class="text-right"><%= order_line.productrevenue.to_i %></td>
+        <td class="text-right"><%= order_line.subtotal %>
+			<% @subtotal += order_line.subtotal %> </td>
+        <td class="text-right"><%= order_line.shipping %>
+			<% @shipping += order_line.shipping %></td>
+        <td class="text-right"><%= order_line.total %>
+			<% @total += order_line.total %></td>
+        <td class="text-right"><%= order_line.productcost %>
+			<% @cost += order_line.productcost if order_line.productcost.present? %></td>
+        <td class="text-right"><%= order_line.productrevenue.to_i %>
+			<% @revenue += order_line.productrevenue %></td>
        </tr>
        <% @sno += 1 %>
      <% end %>
       <tr>
 	     <th colspan="4">Total</th>
-	     <th class="text-right"><%= @regular_basic.to_i %></th>
-	     <th class="text-right"><%= @regular_shipping.to_i %></th>
-	     <th class="text-right"><%= @regular_total.to_i %></th>
-	     <th class="text-right"><%= @regular_cost.to_i %></th>
-	     <th class="text-right"><%= @regular_revenue.to_i %></th>
+	     <th class="text-right"><%= @subtotal.to_i %></th>
+	     <th class="text-right"><%= @shipping.to_i %></th>
+	     <th class="text-right"><%= @total.to_i %></th>
+	     <th class="text-right"><%= @cost.to_i %></th>
+	     <th class="text-right"><%= @revenue.to_i %></th>
      </tr>
 	</tbody>
 </table>

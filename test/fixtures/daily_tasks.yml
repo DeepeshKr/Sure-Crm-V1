@@ -1,0 +1,23 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  sort_order: 1
+  name: MyString
+  frequency: MyString
+  description: MyText
+  syntax: MyText
+  parameters: MyText
+  status: 1
+  department: MyString
+  manager: MyString
+
+two:
+  sort_order: 1
+  name: MyString
+  frequency: MyString
+  description: MyText
+  syntax: MyText
+  parameters: MyText
+  status: 1
+  department: MyString
+  manager: MyString

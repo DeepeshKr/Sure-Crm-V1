@@ -1,0 +1,42 @@
+  <thead>
+    <tr>
+      <th colspan="10"> <h4> <%= daily_task_frequency %> </h4></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% daily_tasks.each do |daily_task| %>
+
+	<tr>
+		<td>
+		<div class="row">
+			<div class="col-xs-8"><h6><strong>Name</strong>
+				<strong><%= daily_task.name %></strong> </h6> </div>
+		      
+				<div class="col-xs-1"><%= link_to 'More', daily_task, class:"btn btn-primary btn-xs" %></div>
+				<div class="col-xs-1"><%= link_to 'Edit', edit_daily_task_path(daily_task), class:"btn btn-primary btn-xs" %></div>
+				<div class="col-xs-2"><%= link_to 'Delete', daily_task, method: :delete, data: { confirm: 'Are you sure?' } , class:"btn btn-danger btn-xs" %></div>
+		</div>
+		<div class="row">
+			<div class="col-xs-1"><small><%= daily_task.sort_order %></small> </div>
+			<div class="col-xs-3">Frequency: <%= daily_task.frequency %> </div>
+			<div class="col-xs-3"><%= daily_task.department %> </div>
+			<div class="col-xs-3">Status: <%= daily_task.status %> </div>
+		</div>	
+		<div class="row">
+			<div class="col-xs-8">Param: <%= daily_task.parameters %> </div>
+			<div class="col-xs-4"><%= daily_task.manager %> </div>
+			
+		</div>
+		<div class="row">
+			<div class="col-xs-1"><strong>Syntax</strong> </div>
+			<div class="col-xs-11"><%= daily_task.syntax %> </div>
+		</div>
+		<div class="row">
+			<div class="col-xs-1"><strong>Description</strong> </div>
+			<div class="col-xs-11"><%= daily_task.description %></div>
+		</div>
+	</td>
+	</tr>	
+      
+    <% end %>
+  </tbody>

@@ -47,7 +47,7 @@ gem 'devise', github: 'plataformatec/devise'
 #gem 'sass-rails', '~> 4.0.3'
 # Use boostrap for styling
 gem 'bootstrap-sass',       '3.2.0.0'
-
+gem 'bootstrap-datepicker-rails'
 #Rails Bootstrap Forms for styling all bootstrap forms
 gem 'bootstrap_form'
 
@@ -64,7 +64,7 @@ gem 'byebug'
 #date picker
 #gem 'jquery-ui-rails'
 #https://github.com/joliss/jquery-ui-rails
-gem 'bootstrap-datepicker-rails'
+
 #http://www.eyecon.ro/bootstrap-datepicker/
 gem 'simple-form-datepicker'
 

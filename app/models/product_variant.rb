@@ -46,8 +46,8 @@ private
   def create_product_cost_master
     #check if the prod has pricing details entered
     #if not found create new record
-  product_cost = ProductCostMaster.where(prod: self.extproductcode)
-    if product_cost.blank?
+    product_costs = ProductCostMaster.where(prod: self.extproductcode)
+    if product_costs.blank?
 
         ProductCostMaster.create(prod: self.extproductcode,
           product_id: self.productmasterid,
@@ -62,21 +62,21 @@ private
           :royalty => 0,
           :cost_of_return => 0,
           :call_centre_commission => 0)
-
     else
-
-      product_cost.update(product_id: self.productmasterid,
-        :product_cost => 0,
-        :basic_cost => self.price * 0.8888888,
-        :shipping_handling => self.shipping * 0.88888888,
-        :postage => 0,
-        :tel_cost => 0,
-        :transf_order_basic => (self.price * 0.8888888 + self.shipping * 0.88888888) * 0.86,
-        :dealer_network_basic => (self.price * 0.8888888 + self.shipping * 0.88888888) * 0.70,
-        :wholesale_variable_cost => 0,
-        :royalty => 0,
-        :cost_of_return => 0,
-        :call_centre_commission => 0)
+      product_costs.each do |product_cost|
+        product_cost.update(product_id: self.productmasterid,
+          :product_cost => 0,
+          :basic_cost => self.price * 0.8888888,
+          :shipping_handling => self.shipping * 0.88888888,
+          :postage => 0,
+          :tel_cost => 0,
+          :transf_order_basic => (self.price * 0.8888888 + self.shipping * 0.88888888) * 0.86,
+          :dealer_network_basic => (self.price * 0.8888888 + self.shipping * 0.88888888) * 0.70,
+          :wholesale_variable_cost => 0,
+          :royalty => 0,
+          :cost_of_return => 0,
+          :call_centre_commission => 0)
+      end
     end
   end
   def creator

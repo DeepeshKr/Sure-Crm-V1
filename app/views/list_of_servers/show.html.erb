@@ -1,0 +1,39 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @list_of_server.name %>
+</p>
+
+<p>
+  <strong>Description:</strong>
+  <%= @list_of_server.description %>
+</p>
+
+<p>
+  <strong>Active since:</strong>
+  <%= @list_of_server.active_since %>
+</p>
+
+<p>
+  <strong>Internal ip:</strong>
+  <%= @list_of_server.internal_ip %>
+</p>
+
+<p>
+  <strong>Vpn ip:</strong>
+  <%= @list_of_server.vpn_ip %>
+</p>
+
+<p>
+  <strong>External ip:</strong>
+  <%= @list_of_server.external_ip %>
+</p>
+
+<p>
+  <strong>Current status:</strong>
+  <%= @list_of_server.current_status %>
+</p>
+
+<%= link_to 'Edit', edit_list_of_server_path(@list_of_server) %> |
+<%= link_to 'Back', list_of_servers_path %>

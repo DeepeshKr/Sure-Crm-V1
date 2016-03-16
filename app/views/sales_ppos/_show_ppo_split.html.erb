@@ -1,0 +1,130 @@
+<div class="panel panel-primary">
+  <div class="panel-heading">
+   <h3 class="panel-title">PPO <%= ppo_name %></h3>
+
+  </div>
+	<table class="table table-striped table-bordered">
+		<tr>
+		<th>Description</th>
+		<th>100% paid</th>
+		<th>60% paid</th>
+		<th>50% paid</th>
+		<th>40% paid</th>
+		</tr>
+		<tr>
+		<td>Gross Revenue (Sales)</td>
+		<td class="text-right"><%= @total_sales.to_i %></td>
+		<td class="text-right"><%= @total_sales_60.to_i %></td>
+		<td class="text-right"><%= @total_sales_50.to_i %></td>
+		<td class="text-right"><%= @total_sales_40.to_i %></td>
+		</tr>
+
+		<tr>
+		<td>Net Revenue (Revenue from products)</td>
+		<td class="text-right"><%= @total_revenue.to_i %></td>
+		<td class="text-right"><%= @total_revenue_60.to_i %></td>
+		<td class="text-right"><%= @total_revenue_50.to_i %></td>
+		<td class="text-right"><%= @total_revenue_40.to_i %></td>
+		</tr>
+
+		<tr>
+		<td>Total Orders</td>
+		<td class="text-right"><%= @total_nos.round(2) %></td>
+		<td class="text-right"><%= @total_nos_60.round(2) %></td>
+		<td class="text-right"><%= @total_nos_50.round(2) %></td>
+		<td class="text-right"><%= @total_nos_40.round(2) %></td>
+		</tr>
+
+		<tr>
+	<td>Total Pieces (All Products in order)</td>
+		<td class="text-right"><%= @total_pieces.round(2) %></td>
+		<td class="text-right"><%= @total_pieces_60.round(2) %></td>
+		<td class="text-right"><%= @total_pieces_50.round(2) %></td>
+		<td class="text-right"><%= @total_pieces_50.round(2) %></td>
+		</tr>
+    <tr>
+    <td><strong>Total Product Revenue </td>
+		<td class="text-right"><strong><%= @total_revenue.to_i %></strong></td>
+		<td class="text-right"><strong><%= @total_revenue_60.to_i %></strong></td>
+		<td class="text-right"><strong><%= @total_revenue_50.to_i %></strong></td>
+		<td class="text-right"><strong><%= @total_revenue_40.to_i %></strong></td>
+		</tr>
+		<tr>
+      <td>Product Cost </td>
+  		<td class="text-right"><%= @total_product_cost.to_i %></td>
+  		<td class="text-right"><%= @total_product_cost_60.to_i %></td>
+  		<td class="text-right"><%= @total_product_cost_50.to_i %></td>
+  		<td class="text-right"><%= @total_product_cost_40.to_i %></td>
+  	</tr>
+		<tr>
+		<td>Product Damages 10% of product cost  </td>
+		<td class="text-right"><%= @total_product_dam_cost.to_i %></td>
+		<td class="text-right"><%= @total_product_dam_cost_60.to_i %></td>
+		<td class="text-right"><%= @total_product_dam_cost_50.to_i %></td>
+		<td class="text-right"><%= @total_product_dam_cost_40.to_i %></td>
+		</tr>
+
+		<tr>
+		<td>Refunds 2% of total sales</td>
+		<td class="text-right"><%= @total_refund.to_i %></td>
+		<td class="text-right"><%= @total_refund_60.to_i %></td>
+		<td class="text-right"><%= @total_refund_50.to_i %></td>
+		<td class="text-right"><%= @total_refund_40.to_i %></td>
+		</tr>
+
+		<tr>
+		<td>Promo Cost</td>
+		<td class="text-right"><%= @total_promo_cost.to_i %></td>
+		<td class="text-right"><%= @total_promo_cost_60.to_i %></td>
+		<td class="text-right"><%= @total_promo_cost_50.to_i %></td>
+		<td class="text-right"><%= @total_promo_cost_40.to_i %></td>
+		</tr>
+
+		<tr>
+		<td>Commission</td>
+		<td class="text-right"><%= @total_var_cost.to_i %></td>
+		<td class="text-right"><%= @total_var_cost_60.to_i %></td>
+		<td class="text-right"><%= @total_var_cost_50.to_i %></td>
+		<td class="text-right"><%= @total_var_cost_40.to_i %></td>
+		</tr>
+
+		<tr>
+		<td>Media Cost</td>
+		<td class="text-right"><%= @total_fixed_cost.to_i %></td>
+		<td class="text-right"><%= @total_fixed_cost_60.to_i %></td>
+		<td class="text-right"><%= @total_fixed_cost_50.to_i %></td>
+		<td class="text-right"><%= @total_fixed_cost_40.to_i %></td>
+		</tr>
+    <tr>
+    <td><strong>Total Costs </td>
+		<td class="text-right"><strong><%= @total_cost_per_order.to_i %></strong></td>
+		<td class="text-right"><strong><%= @total_cost_per_order_60.to_i %></strong></td>
+		<td class="text-right"><strong><%= @total_cost_per_order_50.to_i %></strong></td>
+		<td class="text-right"><strong><%= @total_cost_per_order_40.to_i %></strong></td>
+		</tr>
+		<tr>
+		<td>Cost Per Order</td>
+		<td class="text-right"><%= @cost_per_order.to_i %></td>
+		<td class="text-right"><%= @cost_per_order_60.to_i %></td>
+		<td class="text-right"><%= @cost_per_order_50.to_i %></td>
+		<td class="text-right"><%= @cost_per_order_40.to_i %></td>
+		</tr>
+    <tr>
+		<td>Total Profit</td>
+		<td class="text-right"><%= @total_profit.to_i %></td>
+		<td class="text-right"><%= @total_profit_60.to_i %></td>
+		<td class="text-right"><%= @total_profit_50.to_i %></td>
+		<td class="text-right"><%= @total_profit_40.to_i %></td>
+		</tr>
+		<tr>
+		<td><strong>Profit Per Order</strong></td>
+		<td class="text-right"><strong><%= @profit_per_order.to_i %></strong></td>
+		<td class="text-right"><strong><%= @profit_per_order_60.to_i %></strong></td>
+		<td class="text-right"><strong><%= @profit_per_order_50.to_i %></strong></td>
+		<td class="text-right"><strong><%= @profit_per_order_40.to_i %></strong></td>
+		</tr>
+
+	</table>
+
+
+</div>
