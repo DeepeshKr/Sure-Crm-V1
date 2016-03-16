@@ -100,15 +100,15 @@ class SalesPposController < ApplicationController
        @total_product_cost = @sales_ppos.sum(:product_cost)
        @total_var_cost = @sales_ppos.sum(:commission_cost)
        
+       @total_nos = @sales_ppos.distinct()
+       
        @sales_ppos.each do |order|
          @total_nos =+ 1
          @total_promo_cost += order.promotion_cost if order.promotion_cost.present?
        end
     
-    
       start_hr = @campaign_playlist.start_hr
       start_min = @campaign_playlist.start_min
-     
  
         @total_fixed_cost = @campaign_playlist.cost
         
@@ -635,6 +635,7 @@ class SalesPposController < ApplicationController
       #10008 => Returned Order (post shipping)
       #session[:cancelled_status_id] = @cancelled_status_id
     end
+    
     def view_memory
       @total_nos = 0
       @total_pieces = 0
