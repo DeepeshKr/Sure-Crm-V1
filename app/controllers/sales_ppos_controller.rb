@@ -15,7 +15,7 @@ class SalesPposController < ApplicationController
     @to_date = todaydate
     if params.has_key?(:from_date)
         from_date =  Date.strptime(params[:from_date], "%Y-%m-%d")
-        @from_date = from_date.to_date - 2.days #30.days
+        @from_date = from_date.to_date - 15.days #30.days
         @to_date = from_date.to_date
     end
     
@@ -42,7 +42,9 @@ class SalesPposController < ApplicationController
       product_damages = orderlist.sum(:damages) 
       totalorders = orderlist.sum(:gross_sales)
       refund = totalorders * 0.02
-      nos = (orderlist.count()) 
+      #nos = (orderlist.count()) 
+      
+      nos = orderlist.distinct.count('order_id') #.count('order_id', :distinct => true)
       pieces = orderlist.sum(:pieces)
       total_cost = (product_cost + @hbn_media_fixed_cost + media_var_cost + refund + product_damages)
       profitability = (revenue - total_cost).to_i
@@ -77,8 +79,8 @@ class SalesPposController < ApplicationController
       campaign_playlist_id = params[:campaign_id]
       @campaign_playlist =  CampaignPlaylist.find(campaign_playlist_id)
       
-      @page_heading = "PPO Details #{@campaign_playlist.product_variant.name if @campaign_playlist.product_variant} for #{@campaign_playlist.for_date.strftime('%d-%b-%Y')} #{@campaign_playlist.start_hr.to_s.rjust(2,'0')}: #{@campaign_playlist.start_min.to_s.rjust(2,'0')}:
-#{@campaign_playlist.start_sec.to_s.rjust(2, '0')}"
+      @page_heading = "PPO Details #{@campaign_playlist.product_variant.name if @campaign_playlist.product_variant} 
+      for #{@campaign_playlist.for_date.strftime('%d-%b-%Y')} #{@campaign_playlist.start_hr.to_s.rjust(2,'0')}:#{@campaign_playlist.start_min.to_s.rjust(2,'0')}:#{@campaign_playlist.start_sec.to_s.rjust(2, '0')}"
       
       @order_masters = OrderMaster.where(campaign_playlist_id: params[:campaign_id])
          .where('ORDER_STATUS_MASTER_ID > 10002')
@@ -86,105 +88,25 @@ class SalesPposController < ApplicationController
          .order("created_at")
       
       @sales_ppos = SalesPpo.where('order_status_id > 10002')
-      .where.not(order_status_id: @cancelled_status_id)
       .where(campaign_playlist_id: campaign_playlist_id)
       .order("start_time")
+      # .where.not(order_status_id: @cancelled_status_id)
       
-       #@total_nos = @sales_ppos.count(:id) || 0 if @sales_ppos.present?
-       @total_pieces = @sales_ppos.sum(:pieces)
-       @total_subtotal = @sales_ppos.sum(:net_sale)
-       @total_shipping = @sales_ppos.sum(:shipping_cost)
-       @total_sales = @sales_ppos.sum(:gross_sales)
-       @total_revenue = @sales_ppos.sum(:revenue)
-
-       @total_product_cost = @sales_ppos.sum(:product_cost)
-       @total_var_cost = @sales_ppos.sum(:commission_cost)
-       
-       @total_nos = @sales_ppos.distinct()
-       
-       @sales_ppos.each do |order|
-         @total_nos =+ 1
-         @total_promo_cost += order.promotion_cost if order.promotion_cost.present?
-       end
+          
+       ppo_sales = SalesPpo.new 
     
+       @retail_sales_all = ppo_sales.ppo_details(campaign_playlist_id, true, false)
+       @retail_sales_default = ppo_sales.ppo_details(campaign_playlist_id, false, false)
+       @retail_sales_3_mo = ppo_sales.ppo_details(campaign_playlist_id, false, false)
+      
+       @to_sales_all = ppo_sales.ppo_details(campaign_playlist_id, true, true)
+       @to_sales_default = ppo_sales.ppo_details(campaign_playlist_id, false, true)
+       @to_sales_3_mo = ppo_sales.ppo_details(campaign_playlist_id, false, true)
+       
       start_hr = @campaign_playlist.start_hr
       start_min = @campaign_playlist.start_min
  
-        @total_fixed_cost = @campaign_playlist.cost
-        
-        # All Costs
-        @total_refund = @total_sales * 0.02
-        @total_product_dam_cost  = @total_product_cost * 0.10
-        @total_cost_per_order = (@total_product_cost  + @total_var_cost +  @total_refund + @total_promo_cost + @total_product_dam_cost + @total_fixed_cost)
-        @cost_per_order = (@total_cost_per_order) / @total_nos
-        @total_profit = @total_revenue - @total_cost_per_order
-        @profit_per_order  =  @total_profit / @total_nos
-
-        # 60%
-         @total_nos_60 = @total_nos * 0.6
-         @total_pieces_60 = @total_pieces * 0.6
-         @total_subtotal_60 = @total_subtotal * 0.6
-         @total_shipping_60 = @total_shipping * 0.6
-         @total_sales_60 = @total_sales * 0.6
-         @total_revenue_60 = @total_revenue * 0.6
-         # 60 costs
-         @total_product_cost_60 = @total_product_cost * 0.6
-         @total_product_dam_cost_60 = @total_product_dam_cost * 0.6
-         @total_promo_cost_60 = @total_promo_cost * 0.6
-         @total_var_cost_60 = @total_var_cost * 0.6
-         @total_fixed_cost_60 = @total_fixed_cost
-         @total_refund_60 = @total_refund * 0.6
-
-         @total_cost_per_order_60 = (@total_product_cost_60  + @total_var_cost_60 +  @total_refund_60 + @total_promo_cost_60 + @total_product_dam_cost_60 + @total_fixed_cost_60)
-
-        # @total_cost_per_order_60 =  @total_cost_per_order * 0.6
-         @cost_per_order_60 = (@total_cost_per_order_60) / @total_nos_60
-         @total_profit_60 = @total_revenue_60 - @total_cost_per_order_60
-         @profit_per_order_60 = @total_profit_60 / @total_nos_60
-
-         # all details at 50%
-         @total_nos_50 = @total_nos * 0.5
-         @total_pieces_50 = @total_pieces * 0.5
-         @total_subtotal_50 = @total_subtotal * 0.5
-         @total_shipping_50 = @total_shipping * 0.5
-         @total_sales_50 = @total_sales * 0.5
-         @total_revenue_50 = @total_revenue * 0.5
-
-         @total_product_cost_50 = @total_product_cost * 0.5
-         @total_product_dam_cost_50 = @total_product_dam_cost * 0.5
-         @total_promo_cost_50 = @total_promo_cost * 0.5
-         @total_var_cost_50 = @total_var_cost * 0.5
-         @total_fixed_cost_50 = @total_fixed_cost
-         @total_refund_50 = @total_refund * 0.5
-         @total_profit_50 = (@total_profit * 0.5)
-
-         @total_cost_per_order_50 = (@total_product_cost_50  + @total_var_cost_50 +  @total_refund_50 + @total_promo_cost_50 + @total_product_dam_cost_50 + @total_fixed_cost_50)
-
-         @cost_per_order_50  = (@total_cost_per_order_50) / @total_nos_50
-         @total_profit_50 = @total_revenue_50 - @total_cost_per_order_50
-         @profit_per_order_50  = @total_profit_50 / @total_nos_50
-
-         # all details at 40%
-         @total_nos_40 = @total_nos * 0.4
-         @total_pieces_40 = @total_pieces * 0.4
-         @total_subtotal_40 = @total_subtotal * 0.4
-         @total_shipping_40 = @total_shipping * 0.4
-         @total_sales_40 = @total_sales * 0.4
-         @total_revenue_40 = @total_revenue * 0.4
-         @total_product_cost_40 = @total_product_cost * 0.4
-         @total_product_dam_cost_40 = @total_product_dam_cost * 0.4
-         @total_promo_cost_40 = @total_promo_cost * 0.4
-         @total_var_cost_40 = @total_var_cost * 0.4
-         @total_fixed_cost_40 = @total_fixed_cost
-         @total_refund_40 = @total_refund * 0.4
-
-         @total_cost_per_order_40 = (@total_product_cost_40  + @total_var_cost_40 +  @total_refund_40 + @total_promo_cost_40 + @total_product_dam_cost_40 + @total_fixed_cost_40)
-
-         @cost_per_order_40  =  (@total_cost_per_order_40) / @total_nos_40
-         @total_profit_40 = @total_revenue_40 - @total_cost_per_order_40
-         @profit_per_order_40  = @total_profit_40 / @total_nos_40
-
-
+   
       ordernos = @sales_ppos.pluck(:order_id)
       main_product_type_id = 10000
       basic_product_type_id = 10040
@@ -341,18 +263,18 @@ class SalesPposController < ApplicationController
      .where("campaigns.startdate = ?", for_date)
      .order(:start_hr, :start_min, :start_sec)
      .where(list_status_id: 10000) #.limit(5)
-
+     
+     campaign_playlists = CampaignPlaylist.where("for_date >= ? and for_date <= ?", @from_date, @to_date).where(list_status_id: 10000).order("for_date, start_hr, start_min")
      @total_fixed_cost = campaign_playlists.sum(:cost).to_f
-     secs_in_a_day = (24*60*60)
-     media_cost = @total_fixed_cost / secs_in_a_day
-
+     
+  
      @serial_no = 1
      campaign_playlists.each do | playlist |
 
            orderlist = SalesPpo.where('order_status_id > 10002')
            .where.not(order_status_id: @cancelled_status_id)
            .where(campaign_playlist_id: playlist.id)
-  
+            @fixed_cost = playlist.cost
            nos = 0
            # new process
            media_var_cost = orderlist.sum(:commission_cost) || 0  if orderlist.present?
@@ -364,7 +286,7 @@ class SalesPposController < ApplicationController
            refund = (totalorders * 0.02)|| 0  if orderlist.present?
            nos = orderlist.count().round(2)|| 0  if orderlist.present?
            pieces = orderlist.sum(:pieces) || 0  if orderlist.present?
-           total_cost = ((product_cost || 0) + (@total_fixed_cost || 0) + (media_var_cost || 0) + (refund || 0) + (product_damages || 0))
+           total_cost = ((product_cost || 0) + (@fixed_cost || 0) + (media_var_cost || 0) + (refund || 0) + (product_damages || 0))
            profitability = ((revenue || 0) - (total_cost || 0)).to_i
         
           ### check if product cost is found in product master
@@ -631,8 +553,8 @@ class SalesPposController < ApplicationController
     def all_cancelled_orders
       @cancelled_status_id = [10040, 10006, 10008]
       #10040 => tranfer order cancelled
-      #10006 => CFO and cancelled orders / unclaimed orders
-      #10008 => Returned Order (post shipping)
+      #10006 => CFO cancelled at origin orders 
+      #10008 => Returned Order (post shipping) / unclaimed orders
       #session[:cancelled_status_id] = @cancelled_status_id
     end
     

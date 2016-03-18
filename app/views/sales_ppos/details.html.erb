@@ -3,31 +3,41 @@
 <!-- set page title end -->
 <div class="well">
 <div class="row">
-
-<div class="col-xs-8">
-<h3><%= @campaign_playlist.product_variant.name if @campaign_playlist.product_variant  %>
-<small><%= @campaign_playlist.ref_name %></small>
-</h3>
-
-
-</div>
-<div class="col-xs-4">
-<p class="lead">
-<%= @campaign_playlist.for_date.strftime('%d-%b-%Y') %> =>
-<%= @campaign_playlist.start_hr.to_s.rjust(2, '0') %>:
-<%= @campaign_playlist.start_min.to_s.rjust(2, '0') %>:
-<%= @campaign_playlist.start_sec.to_s.rjust(2, '0') %>
-</p>
-</div>
+	<div class="col-xs-8">
+		<h3><%= @campaign_playlist.product_variant.name if @campaign_playlist.product_variant  %>
+		<small><%= @campaign_playlist.ref_name %></small>
+		</h3>
+	</div>
+	<div class="col-xs-4">
+		<p class="lead">
+		<%= @campaign_playlist.for_date.strftime('%d-%b-%Y') %> =>
+		<%= @campaign_playlist.start_hr.to_s.rjust(2, '0') %>:
+		<%= @campaign_playlist.start_min.to_s.rjust(2, '0') %>:
+		<%= @campaign_playlist.start_sec.to_s.rjust(2, '0') %>
+		</p>
+	</div>
 </div>
 </div>
 
 <div class="row">
-<div class="col-xs-5"> <!-- details of ppo order -->
-<%= render 'ppo_split' %>
-<hr>
-<%= render 'campaign_playlist' %>
-</div> <!-- details of ppo order end -->
+	<div class="col-xs-5"> <!-- details of ppo order -->
+		
+	 	<%= render partial: 'ppo_split', :locals => {:ppo_name => "Retail PPO", 
+		:all => @retail_sales_all, :all_per => "100%", 
+		:default => @retail_sales_default, :default_per => "50%", 
+		:three_mo => @retail_sales_3_mo,
+	:three_mo_per => "65%" 	} %>
+		
+		 	<%= render partial: 'ppo_split', :locals => {:ppo_name => "Transfer Order PPO", 
+			:all => @to_sales_all, :all_per => "100%", 
+			:default => @to_sales_default, :default_per => "65%", 
+			:three_mo => @to_sales_3_mo, :three_mo_per => "65%" 	} %>
+		 
+			
+
+	</div>
+<!-- details of ppo order end -->
+
 <div class="col-xs-7">
 	<div class="panel panel-primary">
 	  <div class="panel-heading">
@@ -47,6 +57,7 @@
 
 </div>
 </div>
+<h4>Appendix</h4>
 <hr>
 <%= render 'sales_ppo_mini_list' %>
 <hr>

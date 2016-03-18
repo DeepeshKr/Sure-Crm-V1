@@ -1,4 +1,4 @@
-<% if @all_campaign_playlists.present? then %>
+<% if @campaign_playlist.present? then %>
  <table class="table table-stripped table-hover">
   <thead>
     <tr>
@@ -12,7 +12,7 @@
 
   <tbody>
     
-    <% @all_campaign_playlists.each do |campaign_playlist| %>
+    <% @campaign_playlist.each do |campaign_playlist| %>
       <tr>
       <td><%= campaign_playlist.for_date.strftime("%d-%b-%Y") || "No Date" if campaign_playlist.for_date.present? %></td>
        

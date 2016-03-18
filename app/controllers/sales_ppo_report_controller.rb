@@ -440,7 +440,9 @@ class SalesPpoReportController < ApplicationController
         total_order_value = 0
         s_no_i = 1
         @serial_no = 1
-           campaign_playlists = CampaignPlaylist.where("for_date >= ? and for_date <= ?", @from_date, @to_date).where(list_status_id: 10000).order("for_date, start_hr, start_min")
+           campaign_playlists = CampaignPlaylist.where("for_date >= ? and for_date <= ?", 
+           @from_date, @to_date).where(list_status_id: 10000)
+           .order("for_date, start_hr, start_min")
            @total_fixed_cost = campaign_playlists.sum(:cost).to_f
 
            campaign_playlists.each do | playlist |

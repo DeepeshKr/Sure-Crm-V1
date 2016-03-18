@@ -111,8 +111,8 @@
 <% @total_profit += c[:profitability] %>
 </td>
 <td >
-<%= link_to "Old Details", ppo_products_path(campaign_id: c[:campaign_id]), :target => "_blank" %>
-<%= link_to "New Details", {:controller => :sales_ppos, :action => :details, campaign_id: c[:campaign_id]}, :target => "_blank" %>
+<%= link_to "Old", ppo_products_path(campaign_id: c[:campaign_id]), :target => "_blank", class: "btn btn-primary btn-xs"  %>
+<%= link_to "New", {:controller => :sales_ppos, :action => :details, campaign_id: c[:campaign_id]}, :target => "_blank", class: "btn btn-info btn-xs" %>
 </td>
   </tr>
   <% @sno += 1 %>

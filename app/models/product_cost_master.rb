@@ -11,7 +11,7 @@ end
 
 	after_create :updateprice # :creator
 
-  #	after_save :updateprice # :updator
+  #after_save :updateprice # :updator
 
   after_update :updateprice
   	# product_cost_master.prod, product_cost_master.basic_cost,
