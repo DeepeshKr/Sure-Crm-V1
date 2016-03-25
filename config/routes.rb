@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
 
+  resources :return_rates
   resources :list_of_servers
   resources :daily_task_logs
   resources :daily_tasks

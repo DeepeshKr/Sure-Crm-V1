@@ -19,26 +19,28 @@
 </div>
 </div>
 
+
 <div class="row">
 	<div class="col-xs-5"> <!-- details of ppo order -->
 		
-	 	<%= render partial: 'ppo_split', :locals => {:ppo_name => "Retail PPO", 
-		:all => @retail_sales_all, :all_per => "100%", 
-		:default => @retail_sales_default, :default_per => "50%", 
-		:three_mo => @retail_sales_3_mo,
-	:three_mo_per => "65%" 	} %>
+ 	<%= render partial: 'ppo_split', :locals => {:ppo_name => "Retail PPO", 
+	:all => @retail_sales_all, :all_per => number_to_percentage(@retail_sales_all.correction, precision: 0), 
+	:shipped => @retail_sales_shipped, :shipped_per => number_to_percentage(@retail_sales_shipped.correction, precision: 0), 
+	:default => @retail_sales_default, :default_per => number_to_percentage(@retail_sales_default.correction, precision: 0), 
+	:all_per_name => "All", :shipped_per_name => "Shipped", :default_per_name => "Default", :three_mo_per_name => "Actual",
+	:three_mo => @retail_sales_3_mo, :three_mo_per => number_to_percentage(@retail_sales_3_mo.correction, precision: 0)} %>
 		
-		 	<%= render partial: 'ppo_split', :locals => {:ppo_name => "Transfer Order PPO", 
-			:all => @to_sales_all, :all_per => "100%", 
-			:default => @to_sales_default, :default_per => "65%", 
-			:three_mo => @to_sales_3_mo, :three_mo_per => "65%" 	} %>
-		 
-			
-
+ 	<%= render partial: 'ppo_split', :locals => {:ppo_name => "Transfer Order PPO", 
+	:all => @to_sales_all, :all_per => number_to_percentage(@to_sales_all.correction, precision: 0), 
+	:shipped => @to_sales_shipped, :shipped_per => number_to_percentage(@to_sales_shipped.correction, precision: 0), 
+	:default => @to_sales_default, :default_per => number_to_percentage(@to_sales_default.correction, precision: 0), 
+	:all_per_name => "All", :shipped_per_name => "Shipped", :default_per_name => "Default", :three_mo_per_name => "Actual",
+	:three_mo => @to_sales_3_mo, :three_mo_per => number_to_percentage(@to_sales_3_mo.correction, precision: 0)} %>
+	
 	</div>
 <!-- details of ppo order end -->
 
-<div class="col-xs-7">
+	<div class="col-xs-7">
 	<div class="panel panel-primary">
 	  <div class="panel-heading">
 	   <h3 class="panel-title">Order Summary</h3>
@@ -64,9 +66,15 @@
 <%= render 'order_masters' %>
 <hr>
 
+<%= render :partial => "return_rates/quick_list" %>
 
 <div class="well well-sm">
 <ul class="list-inline">
+	<li>Product Variant => Transfer Order Product Revenue = Rs 2599 + 495 => 0.764444444445 
+		=> where dealer price is => Price + Shipping * 0.88888888889</li>
+	<li>
+	    Product Variant => Retail Product Revenue = subtotal * 0.888889 + shipping * 0.98125
+	</li>
   <li>
     revenue => product revenue (you can check for product revenue against each product)
   </li>

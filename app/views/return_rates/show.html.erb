@@ -1,0 +1,54 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @return_rate.name %>
+</p>
+
+<p>
+  <strong>Sort order:</strong>
+  <%= @return_rate.sort_order %>
+</p>
+
+<p>
+  <strong>Total:</strong>
+  <%= @return_rate.total %>
+</p>
+
+<p>
+  <strong>Cancelled:</strong>
+  <%= @return_rate.cancelled %>
+</p>
+
+<p>
+  <strong>Returned:</strong>
+  <%= @return_rate.returned %>
+</p>
+
+<p>
+  <strong>Paid:</strong>
+  <%= @return_rate.paid %>
+</p>
+
+<p>
+  <strong>Transfer total:</strong>
+  <%= @return_rate.transfer_total %>
+</p>
+
+<p>
+  <strong>Transfer paid:</strong>
+  <%= @return_rate.transfer_paid %>
+</p>
+
+<p>
+  <strong>Transfer cancelled:</strong>
+  <%= @return_rate.transfer_cancelled %>
+</p>
+
+<p>
+  <strong>No of days:</strong>
+  <%= @return_rate.no_of_days %>
+</p>
+
+<%= link_to 'Edit', edit_return_rate_path(@return_rate) %> |
+<%= link_to 'Back', return_rates_path %>

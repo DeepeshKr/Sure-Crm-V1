@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160315151004) do
+ActiveRecord::Schema.define(version: 20160322033240) do
 
   create_table "address_types", force: :cascade do |t|
     t.string   "name"
@@ -1436,39 +1436,60 @@ ActiveRecord::Schema.define(version: 20160315151004) do
     t.datetime "updated_at",                 null: false
   end
 
+  create_table "return_rates", force: :cascade do |t|
+    t.string   "name"
+    t.integer  "sort_order",         precision: 38
+    t.integer  "total",              precision: 38
+    t.integer  "cancelled",          precision: 38
+    t.integer  "returned",           precision: 38
+    t.integer  "paid",               precision: 38
+    t.integer  "transfer_total",     precision: 38
+    t.integer  "transfer_paid",      precision: 38
+    t.integer  "transfer_cancelled", precision: 38
+    t.integer  "no_of_days",         precision: 38
+    t.datetime "created_at",                        null: false
+    t.datetime "updated_at",                        null: false
+    t.integer  "shipped",            precision: 38
+  end
+
+  add_index "return_rates", ["name"], name: "index_return_rates_on_name"
+  add_index "return_rates", ["no_of_days"], name: "i_return_rates_no_of_days"
+
   create_table "sales_ppos", force: :cascade do |t|
-    t.integer  "campaign_playlist_id", precision: 38
-    t.integer  "campaign_id",          precision: 38
-    t.integer  "product_master_id",    precision: 38
-    t.integer  "product_variant_id",   precision: 38
-    t.integer  "product_list_id",      precision: 38
+    t.integer  "campaign_playlist_id",        precision: 38
+    t.integer  "campaign_id",                 precision: 38
+    t.integer  "product_master_id",           precision: 38
+    t.integer  "product_variant_id",          precision: 38
+    t.integer  "product_list_id",             precision: 38
     t.string   "prod"
     t.string   "name"
     t.datetime "start_time"
-    t.integer  "order_id",             precision: 38
-    t.integer  "order_line_id",        precision: 38
-    t.integer  "product_cost",         precision: 38
-    t.integer  "pieces",               precision: 38
-    t.integer  "revenue",              precision: 38
-    t.integer  "damages",              precision: 38
-    t.integer  "returns",              precision: 38
-    t.integer  "commission_cost",      precision: 38
-    t.integer  "promotion_cost",       precision: 38
-    t.integer  "gross_sales",          precision: 38
-    t.integer  "net_sale",             precision: 38
-    t.integer  "external_order_no",    precision: 38
-    t.integer  "order_status_id",      precision: 38
-    t.integer  "order_last_mile_id",   precision: 38
+    t.integer  "order_id",                    precision: 38
+    t.integer  "order_line_id",               precision: 38
+    t.integer  "product_cost",                precision: 38
+    t.integer  "pieces",                      precision: 38
+    t.integer  "revenue",                     precision: 38
+    t.integer  "damages",                     precision: 38
+    t.integer  "returns",                     precision: 38
+    t.integer  "commission_cost",             precision: 38
+    t.integer  "promotion_cost",              precision: 38
+    t.integer  "gross_sales",                 precision: 38
+    t.integer  "net_sale",                    precision: 38
+    t.integer  "external_order_no",           precision: 38
+    t.integer  "order_status_id",             precision: 38
+    t.integer  "order_last_mile_id",          precision: 38
     t.string   "order_pincode"
-    t.integer  "media_id",             precision: 38
-    t.integer  "promo_cost_total",     precision: 38
+    t.integer  "media_id",                    precision: 38
+    t.integer  "promo_cost_total",            precision: 38
     t.string   "dnis"
     t.string   "city"
     t.string   "state"
     t.string   "mobile_no"
-    t.datetime "created_at",                          null: false
-    t.datetime "updated_at",                          null: false
-    t.integer  "shipping_cost",        precision: 38
+    t.datetime "created_at",                                 null: false
+    t.datetime "updated_at",                                 null: false
+    t.integer  "shipping_cost",               precision: 38
+    t.integer  "transfer_order_revenue",      precision: 38
+    t.integer  "transfer_order_dealer_price", precision: 38
   end
 
   add_index "sales_ppos", ["campaign_id"], name: "i_sales_ppos_campaign_id"

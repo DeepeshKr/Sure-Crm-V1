@@ -6,100 +6,131 @@
 	<table class="table table-striped table-bordered">
 	<tr>
 		<th>Description</th>
-		<th class="text-right"><%= all_per %> </th>
-		<th class="text-right"><%= default_per %> </th>
-		<th class="text-right"><%= three_mo_per %> </th>
+		<th class="text-right"><%= all_per %> <%= all_per_name %> </th>
+		<th class="text-right"><%= shipped_per %> <%= shipped_per_name %> </th>
+		<th class="text-right"><%= default_per %> <%= default_per_name %> </th>
+		<th class="text-right"><%= three_mo_per %> <%= three_mo_per_name %> </th>
 	</tr>
 	<tr>
 		<td>Gross Revenue (Sales)</td>
 		<td class="text-right"> <%= all.total_sales %> </td>
+		<td class="text-right"> <%= shipped.total_sales if shipped %> </td>
 		<td class="text-right"> <%= default.total_sales if default %> </td>
 		<td class="text-right"> <%= three_mo.total_sales if three_mo %></td>
 	</tr>
 	<tr>
 		<td>Net Revenue (Revenue from products)</td>
 		<td class="text-right"> <%= all.total_revenue if all %> </td>
+		<td class="text-right"> <%= shipped.total_revenue if shipped %> </td>
 		<td class="text-right"> <%= default.total_revenue if default %> </td>
 		<td class="text-right"> <%= three_mo.total_revenue if three_mo %> </td>
 	</tr>
 	<tr>
 		<td>Total Orders</td>
 		<td class="text-right"> <%= all.total_nos if all %> </td>
+		<td class="text-right"> <%= shipped.total_nos if shipped %> </td>
 		<td class="text-right"> <%= default.total_nos if default %> </td>
 		<td class="text-right"> <%= three_mo.total_nos if three_mo %> </td>
 	</tr>
 	<tr>
 		<td>Total Pieces (All Products in order)</td>
 		<td class="text-right"> <%= all.total_pieces if all %> </td>
+		<td class="text-right"> <%= shipped.total_pieces if shipped %> </td>
 		<td class="text-right"> <%= default.total_pieces if default %> </td>
 		<td class="text-right"> <%= three_mo.total_pieces if three_mo %> </td>
 	</tr>
     <tr>
     	<td><strong>Total Product Revenue </td>
 		<td class="text-right"> <strong> <%= all.total_revenue if all %> </strong> </td>
+		<td class="text-right"> <strong> <%= shipped.total_revenue if shipped %> </strong> </td>
 		<td class="text-right"> <strong> <%= default.total_revenue if default %> </strong> </td>
 		<td class="text-right"> <strong> <%= three_mo.total_revenue if three_mo %> </strong> </td>
 	</tr>
 	<tr>
       	<td>Product Cost </td>
   		<td class="text-right"> <%= all.total_product_cost if all %> </td>
+		<td class="text-right"> <%= shipped.total_product_cost if shipped %> </td>
   		<td class="text-right"> <%= default.total_product_cost if default %> </td>
   		<td class="text-right"> <%= three_mo.total_product_cost if three_mo %> </td>
   	</tr>
 	<tr>
 		<td>Product Damages 10% of product cost  </td>
 		<td class="text-right"> <%= all.total_product_dam_cost if all %> </td>
+		<td class="text-right"> <%= shipped.total_product_dam_cost if shipped %> </td>
 		<td class="text-right"> <%= default.total_product_dam_cost if default %> </td>
 		<td class="text-right"> <%= three_mo.total_product_dam_cost if three_mo %> </td>
 	</tr>
 	<tr>
 		<td>Refunds 2% of total sales</td>
 		<td class="text-right"> <%= all.total_refund if all %> </td>
+		<td class="text-right"> <%= shipped.total_refund if shipped %> </td>
 		<td class="text-right"> <%= default.total_refund if default %> </td>
 		<td class="text-right"> <%= three_mo.total_refund if three_mo %> </td>
 	</tr>
 	<tr>
 		<td>Promo Cost</td>
 		<td class="text-right"> <%= all.total_promo_cost if all %> </td>
+		<td class="text-right"> <%= shipped.total_promo_cost if shipped %> </td>
 		<td class="text-right"> <%= default.total_promo_cost if default %> </td>
 		<td class="text-right"> <%= three_mo.total_promo_cost if three_mo %> </td>
 	</tr>
 	<tr>
 		<td>Commission</td>
 		<td class="text-right"> <%= all.total_var_cost if all %> </td>
+		<td class="text-right"> <%= shipped.total_var_cost if shipped %> </td>
 		<td class="text-right"> <%= default.total_var_cost if default %> </td>
 		<td class="text-right"> <%= three_mo.total_var_cost if three_mo %> </td>
 	</tr>
 	<tr>
-		<td>Media Cost</td>
+		<td>Media Cost (<%= all.combined_fixed_cost if all %> split between Retail and Transfer) </td>
 		<td class="text-right"> <%= all.total_fixed_cost if all %> </td>
+		<td class="text-right"> <%= shipped.total_fixed_cost if shipped %> </td>
 		<td class="text-right"> <%= default.total_fixed_cost if default %> </td>
 		<td class="text-right"> <%= three_mo.total_fixed_cost if three_mo %> </td>
+	</tr>
+	<tr>
+		<td>Postage <%= all.postage_name %></td>
+		<td class="text-right"> <%= all.shipping_cost if all %> </td>
+		<td class="text-right"> <%= shipped.shipping_cost if shipped %> </td>
+		<td class="text-right"> <%= default.shipping_cost if default %> </td>
+		<td class="text-right"> <%= three_mo.shipping_cost if three_mo %> </td>
 	</tr>
     <tr>
     	<td><strong>Total Costs </td>
 		<td class="text-right"> <strong> <%= all.total_cost_per_order if all %> </strong> </td>
+		<td class="text-right"> <strong> <%= shipped.total_cost_per_order if shipped %> </strong> </td>
 		<td class="text-right"> <strong> <%= default.total_cost_per_order if default.present? %> </strong> </td>
 		<td class="text-right"> <strong> <%= three_mo.total_cost_per_order if three_mo %> </strong> </td>
 	</tr>
 	<tr>
 		<td>Cost Per Order</td>
 		<td class="text-right"> <%= all.cost_per_order if all %> </td>
+		<td class="text-right"> <%= shipped.cost_per_order if shipped %> </td>
 		<td class="text-right"> <%= default.cost_per_order if default %> </td>
 		<td class="text-right"> <%= three_mo.cost_per_order if three_mo %> </td>
 	</tr>
     <tr>
 		<td>Total Profit</td>
 		<td class="text-right"> <%= all.total_profit if all %> </td>
+		<td class="text-right"> <%= shipped.total_profit if shipped %> </td>
 		<td class="text-right"> <%= default.total_profit if default %> </td>
 		<td class="text-right"> <%= three_mo.total_profit if three_mo %> </td>
 	</tr>
 	<tr>
 		<td><strong>Profit Per Order</strong></td>
 		<td class="text-right"> <strong> <%= all.profit_per_order if all %> </strong> </td>
+		<td class="text-right"> <strong> <%= shipped.profit_per_order if shipped %> </strong> </td>
 		<td class="text-right"> <strong> <%= default.profit_per_order if default %> </strong> </td>
 		<td class="text-right"> <strong> <%= three_mo.profit_per_order if three_mo %> </strong> </td>
 	</tr>
+	<% if three_mo.total_nos < 1 %>
+	<tr>
+		<td colspan="4">
+		<small>If nos of pieces (<%= three_mo.total_nos%>) is less than 1 we use <%= three_mo.cor_total_nos %> as total nos.
+		</small>
+		</td>
+	</tr>
+	<% end %>
 	</table>
 
 

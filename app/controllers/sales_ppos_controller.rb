@@ -9,13 +9,14 @@ class SalesPposController < ApplicationController
   # GET /sales_ppos.json
   def index
     @sno = 1
-
+     @return_rates = ReturnRate.all
+     
     todaydate = Date.today #Time.zone.now + 330.minutes
-    @from_date = todaydate - 1.days #30.days
+    @from_date = todaydate - 30.days #30.days
     @to_date = todaydate
     if params.has_key?(:from_date)
         from_date =  Date.strptime(params[:from_date], "%Y-%m-%d")
-        @from_date = from_date.to_date - 15.days #30.days
+        @from_date = from_date.to_date - 30.days #30.days
         @to_date = from_date.to_date
     end
     
@@ -74,6 +75,7 @@ class SalesPposController < ApplicationController
   end
   
   def details
+      @return_rates = ReturnRate.all
     if params.has_key?(:campaign_id)
       
       campaign_playlist_id = params[:campaign_id]
@@ -92,16 +94,20 @@ class SalesPposController < ApplicationController
       .order("start_time")
       # .where.not(order_status_id: @cancelled_status_id)
       
+      @return_rate = ReturnRate.find_by_no_of_days(90)
+      
           
        ppo_sales = SalesPpo.new 
     
-       @retail_sales_all = ppo_sales.ppo_details(campaign_playlist_id, true, false)
-       @retail_sales_default = ppo_sales.ppo_details(campaign_playlist_id, false, false)
-       @retail_sales_3_mo = ppo_sales.ppo_details(campaign_playlist_id, false, false)
+       @retail_sales_all = ppo_sales.ppo_details(campaign_playlist_id, true, false, @return_rate.show_all)
+       @retail_sales_shipped  = ppo_sales.ppo_details(campaign_playlist_id, false, false, @return_rate.shipped_percent)
+       @retail_sales_default = ppo_sales.ppo_details(campaign_playlist_id, false, false, @return_rate.retail_default_rate)
+       @retail_sales_3_mo = ppo_sales.ppo_details(campaign_playlist_id, false, false, @return_rate.paid_percent)
       
-       @to_sales_all = ppo_sales.ppo_details(campaign_playlist_id, true, true)
-       @to_sales_default = ppo_sales.ppo_details(campaign_playlist_id, false, true)
-       @to_sales_3_mo = ppo_sales.ppo_details(campaign_playlist_id, false, true)
+       @to_sales_all = ppo_sales.ppo_details(campaign_playlist_id, true, true, @return_rate.show_all)
+       @to_sales_shipped  = ppo_sales.ppo_details(campaign_playlist_id, false, true, @return_rate.shipped_percent)
+       @to_sales_default = ppo_sales.ppo_details(campaign_playlist_id, false, true, @return_rate.transfer_order_default_rate)
+       @to_sales_3_mo = ppo_sales.ppo_details(campaign_playlist_id, false, true, @return_rate.transfer_total_paid_percent)
        
       start_hr = @campaign_playlist.start_hr
       start_min = @campaign_playlist.start_min
@@ -246,13 +252,19 @@ class SalesPposController < ApplicationController
   def show_wise
 
     @searchaction = "show_wise"
+    @from_date = (330.minutes).from_now.to_date
     for_date = (330.minutes).from_now.to_date
     to_date = for_date + 1.day
     if params.has_key?(:from_date)
      for_date =  Date.strptime(params[:from_date], "%Y-%m-%d")
      @from_date = for_date.beginning_of_day - 330.minutes
-     @to_date = for_date.end_of_day - 330.minutes
-     @or_for_date = for_date.strftime("%Y-%m-%d")
+    
+    end
+    @to_date = for_date.end_of_day - 330.minutes
+    @or_for_date = for_date.strftime("%Y-%m-%d")
+   
+    if params.has_key?(:to_date)
+     @to_date =  Date.strptime(params[:to_date], "%Y-%m-%d")
     end
     @sno = 1
     @hourlist ||= []
@@ -537,7 +549,8 @@ class SalesPposController < ApplicationController
       :revenue, :damages, :returns, :commission_cost, :promotion_cost,
       :gross_sales, :net_sale, :external_order_no, :order_status_id,
       :order_last_mile_id, :order_pincode, :media_id, :promo_cost_total,
-      :dnis, :city, :state, :mobile_no)
+      :dnis, :city, :state, :mobile_no, :transfer_order_revenue,
+      :transfer_order_dealer_price)
     end
 
     def hbn_fixed_costs

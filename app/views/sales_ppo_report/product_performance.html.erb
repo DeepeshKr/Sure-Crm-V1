@@ -132,6 +132,7 @@
 </td>
 <td >
 <%= link_to "Details", ppo_products_path(campaign_id: c[:campaign_id]), :target => "_blank" %>
+<%= link_to "New Details", {:controller => :sales_ppos, :action => :details, campaign_id: c[:campaign_id]}, :target => "_blank", class: "btn btn-info btn-xs" %>
 </td>
   </tr>
   <% @sno += 1 %>

@@ -261,6 +261,7 @@ def productcost
     return 0
   end
 end
+
 def product_shipping_cost
   pcode = self.product_list.product_variant.extproductcode
   cost_master =  ProductCostMaster.where("prod = ?", pcode).first
@@ -270,6 +271,19 @@ def product_shipping_cost
     return 0
   end
 end
+
+def product_postage
+  pcode = self.product_list.product_variant.extproductcode if self.product_list
+
+  return 0 if pcode.blank?
+  cost_master = ProductCostMaster.where("prod = ?", pcode).where("postage is not null")
+
+  if cost_master.present?
+    return cost_master.first.postage * self.pieces || 0
+  end
+  return 0
+end
+
 # def productcost
 #    if self.product_list.present? #&& self.pieces.present?
 #     pcode = self.product_list.extproductcode
@@ -286,16 +300,30 @@ end
 
 def productrevenue
   totalrevenue = 0
-    totalrevenue += (self.subtotal * (self.pieces ||= 1) * 0.888889) || 0
-    totalrevenue += (self.shipping * (self.pieces ||= 1) * 0.98125) || 0
-     return totalrevenue
+  totalrevenue += (self.subtotal * (self.pieces ||= 1) * 0.888889) || 0
+  totalrevenue += (self.shipping * (self.pieces ||= 1) * 0.98125) || 0
+  return totalrevenue
+end
+
+def transfer_order_revenue
+  total = 0
+  total += (self.subtotal * (self.pieces ||= 1)) || 0
+  total += (self.shipping * (self.pieces ||= 1)) || 0
+  return total * 0.764444444445
+end
+
+def transfer_order_dealer_price
+  total = 0
+  total += (self.subtotal * (self.pieces ||= 1)) || 0
+  total += (self.shipping * (self.pieces ||= 1)) || 0
+  return total * 0.88888888889
 end
 
 def gross_sales
   totalrevenue = 0
-    totalrevenue += (self.subtotal * (self.pieces ||= 1)) || 0
-    totalrevenue += (self.shipping * (self.pieces ||= 1)) || 0
-     return totalrevenue
+  totalrevenue += (self.subtotal * (self.pieces ||= 1)) || 0
+  totalrevenue += (self.shipping * (self.pieces ||= 1)) || 0
+  return totalrevenue
 end
 
 def net_sales

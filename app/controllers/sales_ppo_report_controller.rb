@@ -475,6 +475,7 @@ class SalesPpoReportController < ApplicationController
                 }
 
                 order_lines = OrderLine.where(orderid: @orderlist)
+                .where("productvariant_id in (?)", @product_variant_id)
                 order_lines.each do |med |
                 #orderlist.each do |med |
 
@@ -525,7 +526,7 @@ class SalesPpoReportController < ApplicationController
                 :for_date => playlist.for_date,
                 :campaign_id => playlist.id,
                 :product_cost_master => product_cost_master,
-                :pieces => pieces.to_i,
+                :pieces => pieces.round(2),
                 :prod => playlist.product_variant.extproductcode,
                 :nos => nos.round(2),
                 :at_time => playlist.starttime,

@@ -118,6 +118,9 @@
 </table>
 </div>
 
+
+<%= render :partial => "return_rates/quick_list" %>
+<br>
 <h4>Check PPO performance</h4>
 <hr>
 <div class="well well-sm">
@@ -126,16 +129,16 @@
       <%= link_to "Half Hour Performance", { :controller => :sales_ppos, :action => :half_hour, :from_date => @from_date }, class: "btn btn-info btn-sm" %>
     </div>
     <div class="col-xs-2">
-      <%= link_to "Show Performance", { :controller => :sales_ppos, :action => :half_hour }, class: "btn btn-info btn-sm" %>
+      <%= link_to "Show Performance", { :controller => :sales_ppos, :action => :show_wise, :from_date => @from_date }, class: "btn btn-info btn-sm" %>
     </div>
     <div class="col-xs-2">
-      <%= link_to "Product Performance", { :controller => :sales_ppos, :action => :half_hour }, class: "btn btn-info btn-sm" %>
+      <%= link_to "Product Performance", { :controller => :sales_ppos, :action => :product_performance, :from_date => @from_date }, class: "btn btn-info btn-sm" %>
     </div>
     <div class="col-xs-2">
-      <%= link_to "Half hour Sales", { :controller => :sales_ppos, :action => :half_hour }, class: "btn btn-info btn-sm" %>
+      <%= link_to "Half hour Sales", { :controller => :sales_ppos, :action => :half_hour, :from_date => @from_date }, class: "btn btn-info btn-sm" %>
     </div>
     <div class="col-xs-2">
-      <%= link_to "Operator Performance", { :controller => :sales_ppos, :action => :half_hour }, class: "btn btn-info btn-sm" %>
+      <%= link_to "Operator Performance", { :controller => :sales_ppos, :action => :half_hour, :from_date => @from_date }, class: "btn btn-info btn-sm" %>
     </div>
   </div>
 

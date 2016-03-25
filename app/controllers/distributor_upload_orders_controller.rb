@@ -32,7 +32,7 @@ class DistributorUploadOrdersController < ApplicationController
 
   def switch_off
     switch
-    @distributor_upload_order = DistributorUploadOrder.new
+    @distributor_upload_order = DistributorUploadOrder.first
     @distributor_upload_order.update(online_order_id: 0, online_description: @message, online_last_ran_on: t)
 
     flash[:notice] = "Switched off #{@message}"

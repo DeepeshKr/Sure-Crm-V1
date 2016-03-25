@@ -9,7 +9,7 @@
 			<th class="text-right">Basic</th>
 			<th class="text-right">Shipping</th>
 			<th class="text-right">Total</th>
-			<th class="text-right">Cost</th>
+			<th class="text-right">Cost / Postage</th>
 			<th class="text-right">Revenue</th>
 		</tr>
 	</thead>
@@ -20,7 +20,8 @@
       @shipping = 0
       @total = 0
       @cost = 0
-      @revenue = 0 %>
+      @revenue = 0
+	  @product_postage = 0 %>
       <% order_lines.each do |order_line| %>
        <tr>
         <td><%= @sno %></td>
@@ -38,7 +39,9 @@
         <td class="text-right"><%= order_line.total %>
 			<% @total += order_line.total %></td>
         <td class="text-right"><%= order_line.productcost %>
-			<% @cost += order_line.productcost if order_line.productcost.present? %></td>
+			<% @cost += order_line.productcost if order_line.productcost.present? %> <br>
+			<small><%= order_line.product_postage %>
+				<% @product_postage += order_line.product_postage if order_line.product_postage.present? %> </small> </td>
         <td class="text-right"><%= order_line.productrevenue.to_i %>
 			<% @revenue += order_line.productrevenue %></td>
        </tr>
@@ -49,7 +52,7 @@
 	     <th class="text-right"><%= @subtotal.to_i %></th>
 	     <th class="text-right"><%= @shipping.to_i %></th>
 	     <th class="text-right"><%= @total.to_i %></th>
-	     <th class="text-right"><%= @cost.to_i %></th>
+	     <th class="text-right"><%= @cost.to_i %> <br><small> <%= @product_postage.to_i %> </small></th>
 	     <th class="text-right"><%= @revenue.to_i %></th>
      </tr>
 	</tbody>
