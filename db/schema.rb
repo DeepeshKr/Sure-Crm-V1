@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160322033240) do
+ActiveRecord::Schema.define(version: 20160326055524) do
 
   create_table "address_types", force: :cascade do |t|
     t.string   "name"
@@ -1450,10 +1450,22 @@ ActiveRecord::Schema.define(version: 20160322033240) do
     t.datetime "created_at",                        null: false
     t.datetime "updated_at",                        null: false
     t.integer  "shipped",            precision: 38
+    t.integer  "offset",             precision: 38
+    t.integer  "media_id",           precision: 38
+    t.integer  "product_master_id",  precision: 38
+    t.integer  "product_variant_id", precision: 38
+    t.integer  "product_list_id",    precision: 38
+    t.string   "ext_prod_code"
   end
 
+  add_index "return_rates", ["ext_prod_code"], name: "i_return_rates_ext_prod_code"
+  add_index "return_rates", ["media_id"], name: "index_return_rates_on_media_id"
   add_index "return_rates", ["name"], name: "index_return_rates_on_name"
   add_index "return_rates", ["no_of_days"], name: "i_return_rates_no_of_days"
+  add_index "return_rates", ["offset"], name: "index_return_rates_on_offset"
+  add_index "return_rates", ["product_list_id"], name: "i_return_rates_product_list_id"
+  add_index "return_rates", ["product_master_id"], name: "i_ret_rat_pro_mas_id"
+  add_index "return_rates", ["product_variant_id"], name: "i_ret_rat_pro_var_id"
 
   create_table "sales_ppos", force: :cascade do |t|
     t.integer  "campaign_playlist_id",        precision: 38

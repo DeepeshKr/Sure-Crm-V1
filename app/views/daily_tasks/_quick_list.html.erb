@@ -1,8 +1,10 @@
-  <thead>
-    <tr>
-      <th colspan="10"> <h4> <%= daily_task_frequency %> </h4></th>
-    </tr>
-  </thead>
+ <thead>
+   <tr>
+     <th colspan="10"> <h4> <%= daily_task_frequency %> </h4></th>
+   </tr>
+ </thead>
+ <% if daily_tasks.present? %>
+
   <tbody>
     <% daily_tasks.each do |daily_task| %>
 
@@ -37,3 +39,10 @@
       
     <% end %>
   </tbody>
+  <% else %>
+  <tbody>
+    <tr>
+      <td colspan="10"> <h4> Nothing here </h4></td>
+    </tr>
+  </tbody>
+  <% end %>

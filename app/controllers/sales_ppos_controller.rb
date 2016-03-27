@@ -9,7 +9,7 @@ class SalesPposController < ApplicationController
   # GET /sales_ppos.json
   def index
     @sno = 1
-     @return_rates = ReturnRate.all
+     @return_rates = ReturnRate.order(:id).limit(10)
      
     todaydate = Date.today #Time.zone.now + 330.minutes
     @from_date = todaydate - 30.days #30.days
@@ -19,6 +19,8 @@ class SalesPposController < ApplicationController
         @from_date = from_date.to_date - 30.days #30.days
         @to_date = from_date.to_date
     end
+    
+    @deal_tran = DEALTRAN.where("custref = ?", 3271554)
     
     @or_for_date = @to_date
     employeeunorderlist ||= []
@@ -75,7 +77,7 @@ class SalesPposController < ApplicationController
   end
   
   def details
-      @return_rates = ReturnRate.all
+      @return_rates = ReturnRate.order(:id).limit(10)
     if params.has_key?(:campaign_id)
       
       campaign_playlist_id = params[:campaign_id]

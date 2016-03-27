@@ -2,25 +2,79 @@
 
 <div class="row">
 	<div class="col-xs-4"> <h4>All Tasks </h4></div>
-	<div class="col-xs-8">All tasks with the frequency, process owners are mentioned here, you can view the respective status by clicking on the link inside!</div>
+	<div class="col-xs-4"></div>
+	<div class="col-xs-4">
+		
+		<%= render partial: "search" %>
+	</div>
+	
 </div>
+<% if @search.present? %>
+	<div class="row">
+		<div class="col-xs-12">
+			<div class="well well-sm">
+			
+						<table class="table table-hover table-stripped">
+				<%= render partial: 'daily_tasks/quick_list', :locals => {:daily_tasks =>  @daily_tasks_search, daily_task_frequency: "Search Result"}  %>
+						</table>
+			
+			</div>	
+		</div>
+	</div>
+<% end %>	
 <div class="row">
 	<div class="col-xs-12">
-<table class="table table-hover table-stripped">
+			
+	  <ul class="nav nav-tabs">
+	    <li class="active"><a data-toggle="tab" href="#instant">Instant</a></li>
+	    <li><a data-toggle="tab" href="#min">30 Min</a></li>
+	    <li><a data-toggle="tab" href="#day">Once a day</a></li>
+	    <li><a data-toggle="tab" href="#demand">On Demand</a></li>
+		 <li><a data-toggle="tab" href="#trial">On Trial</a></li>
+	  </ul>
+	  
+	  <div class="tab-content">
+	      <div id="instant" class="tab-pane fade in active">
+	       
+			<table class="table table-hover table-stripped">
+			<%= render partial: 'daily_tasks/quick_list', :locals => {:daily_tasks =>  @daily_tasks_instant, daily_task_frequency: "Every Five Minutes - Instant"}  %>
+			</table>
+	      </div>
+	      <div id="min" class="tab-pane fade">
+	       
+			<table class="table table-hover table-stripped">
+			<%= render partial: 'daily_tasks/quick_list', :locals => {:daily_tasks =>  @daily_tasks_30, daily_task_frequency: "Every 30 mins"}  %>
+			</table>
+	      </div>
+	      <div id="day" class="tab-pane fade">
+	        
+			<table class="table table-hover table-stripped">
+			<%= render partial: 'daily_tasks/quick_list', :locals => {:daily_tasks =>  @daily_tasks_once, daily_task_frequency: "Once a Day"}  %>
+			</table>
+	      </div>
+	      <div id="demand" class="tab-pane fade">
+	        
+			<table class="table table-hover table-stripped">
+		<%= render partial: 'daily_tasks/quick_list', :locals => {:daily_tasks =>  @daily_tasks_demand, daily_task_frequency: "On Demand"}  %>
+			</table>
+	      </div>
+		  
+  	      <div id="trial" class="tab-pane fade">
+  	        
+  			<table class="table table-hover table-stripped">
+  	<%= render partial: 'daily_tasks/quick_list', :locals => {:daily_tasks =>  @daily_tasks_trial, daily_task_frequency: "On Trial"}  %>
+  			</table>
+  	      </div>
+	    	
 
-<%= render partial: 'daily_tasks/quick_list', :locals => {:daily_tasks =>  @daily_tasks_instant, daily_task_frequency: "Every Five Minutes - Instant"}  %>
+				  
+		</div>
+	  </div>
 
-<%= render partial: 'daily_tasks/quick_list', :locals => {:daily_tasks =>  @daily_tasks_once, daily_task_frequency: "Once a Day"}  %>
+</div>	
 
-<%= render partial: 'daily_tasks/quick_list', :locals => {:daily_tasks =>  @daily_tasks_demand, daily_task_frequency: "On Demand"}  %>
 
-<%= render partial: 'daily_tasks/quick_list', :locals => {:daily_tasks =>  @daily_tasks_30, daily_task_frequency: "Every 30 mins"}  %>
 
-<%= render partial: 'daily_tasks/quick_list', :locals => {:daily_tasks =>  @daily_tasks_trial, daily_task_frequency: "On Trial"}  %>
-</table>
-	</div>	
-
-</div>
 <br>
 
 <%= link_to 'New Daily task', new_daily_task_path, class:"btn btn-primary btn-sm" %>

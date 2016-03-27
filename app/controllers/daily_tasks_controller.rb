@@ -5,11 +5,19 @@ class DailyTasksController < ApplicationController
   # GET /daily_tasks.json
   def index
     #@daily_tasks = DailyTask.all
-    @daily_tasks_instant = DailyTask.where(frequency: "Instant - within 300 secs").order(:sort_order)
-    @daily_tasks_once = DailyTask.where(frequency: "Once Daily").order(:sort_order)
-    @daily_tasks_demand = DailyTask.where(frequency: "On Demand").order(:sort_order)
-    @daily_tasks_30 = DailyTask.where(frequency: "Every 30 min").order(:sort_order)
-    @daily_tasks_trial = DailyTask.where(frequency: "On Trial").order(:sort_order)
+    
+   
+    
+     if params[:search].present? 
+         @search = params[:search]
+        @daily_tasks_search = DailyTask.where(sort_order: @search)
+       end
+        @daily_tasks_instant = DailyTask.where(frequency: "Instant - within 300 secs").order(:sort_order)
+        @daily_tasks_once = DailyTask.where(frequency: "Once Daily").order(:sort_order)
+        @daily_tasks_demand = DailyTask.where(frequency: "On Demand").order(:sort_order)
+        @daily_tasks_30 = DailyTask.where(frequency: "Every 30 min").order(:sort_order)
+        @daily_tasks_trial = DailyTask.where(frequency: "On Trial").order(:sort_order)
+    
   end
 
   # GET /daily_tasks/1
@@ -19,7 +27,8 @@ class DailyTasksController < ApplicationController
 
   # GET /daily_tasks/new
   def new
-    @daily_task = DailyTask.new
+    last_sort_order = DailyTask.order("sort_order DESC").first.sort_order 
+    @daily_task = DailyTask.new(sort_order: last_sort_order + 1)
   end
 
   # GET /daily_tasks/1/edit
@@ -29,8 +38,9 @@ class DailyTasksController < ApplicationController
   # POST /daily_tasks
   # POST /daily_tasks.json
   def create
+   
     @daily_task = DailyTask.new(daily_task_params)
-
+   
     respond_to do |format|
       if @daily_task.save
         format.html { redirect_to @daily_task, notice: 'Daily task was successfully created.' }
