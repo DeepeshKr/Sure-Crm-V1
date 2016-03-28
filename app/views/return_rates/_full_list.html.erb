@@ -1,0 +1,62 @@
+<h3>Return Rates <%= return_rate_offset %></h3>
+<table class="table table-hover table-stripped table-bordered">
+  <thead>
+      <tr>
+  	 <th rowspan="2">Before / Days </th>
+        <th rowspan="2">Description</th>
+        <th colspan="5">All Orders</th>
+        <th colspan="3">Transfer Order</th>
+      </tr>
+    <tr>
+	  <th>Total</th>
+	  <th>Shipped</th>
+      <th>Returned</th>
+      <th>Refunded</th>
+      <th>Paid</th>
+      <th>Total</th>
+	  <th>Cancelled</th>  
+      <th>Paid</th>
+    </tr>
+  </thead>
+
+  <tbody>
+	  <% if return_rates.present? %>
+    <% return_rates.each do |return_rate| %>
+      <tr>
+		<td rowspan="3">Before:<%= return_rate.offset %></br>
+			Days:<%= return_rate.no_of_days %></td>
+        <td rowspan="3"><%= return_rate.name %></td>
+        <td title="Total"><%= return_rate.total %></td>
+		<td title="Shipped"><%= return_rate.shipped %></td>
+        <td title="Cancelled"><%= return_rate.cancelled %></td>
+        <td title="Returned"><%= return_rate.returned %></td>
+        <td title="Paid"><strong><%= return_rate.paid %></strong></td>
+        <td title="TO Total"><%= return_rate.transfer_total %></td>
+        <td title="TO Cancelled"><%= return_rate.transfer_cancelled %></td>
+        <td title="TO Paid"><strong><%= return_rate.transfer_paid %></strong></td>
+      </tr>
+      <tr>
+	  <td>Percentage </td>
+	  <td rowspan="2" title="Shipped"><strong><%= number_to_percentage(return_rate.shipped_percent) %></strong></td>
+	  <td title="Cancelled"><%= number_to_percentage(return_rate.cancelled_percent) %></td>
+	  <td title="Returned"><%= number_to_percentage(return_rate.returned_percent) %></td>
+	  <td title="Paid"><strong><%= number_to_percentage(return_rate.paid_percent) %></strong></td>
+	  <td title="TO Total"><%= number_to_percentage(return_rate.transfer_total_percent) %></td>
+	  <td title="TO Cancelled"><%= number_to_percentage(return_rate.transfer_total_cancelled_percent) %></td>
+	  <td title="TO Paid"><strong><%= number_to_percentage(return_rate.transfer_total_paid_percent) %></strong></td>
+      </tr>
+      <tr>
+	  <td>Shipped Percentage </td>
+	  <td title="All Cancelled"><%= number_to_percentage(return_rate.shipped_cancelled_percent) %></td>
+	  <td title="All Returned"><%= number_to_percentage(return_rate.shipped_returned_percent) %></td>
+	  <td title="All Paid"><strong><%= number_to_percentage(return_rate.shipped_paid_percent) %></strong></td>
+	  <td title="TO Total"><%= number_to_percentage(return_rate.shipped_transfer_total_percent) %></td>
+	  <td title="TO Cancelled"><%= number_to_percentage(return_rate.shipped_transfer_total_cancelled_percent) %></td>
+	  <td title="TO Shipped"><strong><%= number_to_percentage(return_rate.shipped_transfer_total_paid_percent) %></strong></td>
+      </tr>
+    <% end %>
+	<% else %>
+	<tr><td colspan="12"><h3>Nothing here</h3> </td></tr>
+	<% end %>
+  </tbody>
+</table>
