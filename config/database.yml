@@ -13,7 +13,7 @@
 #
 # Configure Using Gemfile
 # gem 'pg'
-# host: 49.248.13.34
+# host: 49.248.13.34 125.99.123.150
 # host: 3.0.3.5
 # developmentserver: 49.248.13.34
 # host: 192.168.1.10:10
@@ -22,7 +22,7 @@
 default: &default
   adapter: oracle_enhanced
   database: TLBRNDDB
-  host: 49.248.13.34
+  host: 3.0.3.5
   username: testora
   password: testora
   port: 1521

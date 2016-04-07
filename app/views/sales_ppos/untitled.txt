@@ -1,0 +1,13 @@
+	:all => @retail_sales_all, :all_per => number_to_percentage(100, precision: 0), 
+	:shipped => @retail_sales_shipped, :shipped_per => number_to_percentage(@return_rates.shipped_percent, precision: 0), 
+	:default => @retail_sales_default, :default_per => number_to_percentage(@return_rates.retail_default_rate, precision: 0), 
+	:all_per_name => "All", :shipped_per_name => "Shipped", :default_per_name => "Default", :three_mo_per_name => "Actual",
+	:three_mo => @retail_sales_3_mo, :three_mo_per => number_to_percentage(@retail_sales_3_mo.correction, precision: 0)} %>
+		
+ 	<%= render partial: 'ppo_split', :locals => {:ppo_name => "Transfer Order PPO", 
+	:all => @to_sales_all, :all_per => number_to_percentage(@to_sales_all.correction, precision: 0), 
+	:shipped => @to_sales_shipped, :shipped_per => number_to_percentage(@return_rates.transfer_total_percent, precision: 0), 
+	:default => @to_sales_default, :default_per => number_to_percentage(@return_rates.transfer_order_default_rate, precision: 0), 
+	:all_per_name => "All", :shipped_per_name => "Shipped", :default_per_name => "Default", :three_mo_per_name => "Actual",
+	:three_mo => @to_sales_3_mo, :three_mo_per => number_to_percentage(@to_sales_3_mo.correction, precision: 0)} %>
+	

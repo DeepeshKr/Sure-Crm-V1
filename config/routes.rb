@@ -126,6 +126,8 @@ post 'distributor_upload_orders/switch_off'
   get 'sales_ppos_product_performance' => 'sales_ppos#sproduct_performance'
   get 'sales_ppos/details'
   get 'sales_ppos_details' => 'sales_ppos#details'
+  get 'sales_ppos/demo'
+  get 'sales_ppos_details' => 'sales_ppos#demo'
   
   #old sales ppo
   get 'sales_ppo_report/summary'

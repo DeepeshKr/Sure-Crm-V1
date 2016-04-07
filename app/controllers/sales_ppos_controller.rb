@@ -9,8 +9,7 @@ class SalesPposController < ApplicationController
   # GET /sales_ppos.json
   def index
     @sno = 1
-     @return_rates = ReturnRate.order(:id).limit(10)
-     
+    all_return_rates
     todaydate = Date.today #Time.zone.now + 330.minutes
     @from_date = todaydate - 30.days #30.days
     @to_date = todaydate
@@ -76,12 +75,23 @@ class SalesPposController < ApplicationController
 
   end
   
+  def demo
+    end_date = Date.today #Time.zone.now + 330.minutes
+    from_date = end_date - 30.days
+    
+     ppo_sales = SalesPpo.new 
+     
+    @sales_ppos = ppo_sales.sales_ppos_for_date from_date, end_date
+ 
+  end
+  
   def details
-      @return_rates = ReturnRate.order(:id).limit(10)
+
     if params.has_key?(:campaign_id)
-      
+          
       campaign_playlist_id = params[:campaign_id]
       @campaign_playlist =  CampaignPlaylist.find(campaign_playlist_id)
+      @campaign = Campaign.find(@campaign_playlist.campaignid)
       
       @page_heading = "PPO Details #{@campaign_playlist.product_variant.name if @campaign_playlist.product_variant} 
       for #{@campaign_playlist.for_date.strftime('%d-%b-%Y')} #{@campaign_playlist.start_hr.to_s.rjust(2,'0')}:#{@campaign_playlist.start_min.to_s.rjust(2,'0')}:#{@campaign_playlist.start_sec.to_s.rjust(2, '0')}"
@@ -96,24 +106,30 @@ class SalesPposController < ApplicationController
       .order("start_time")
       # .where.not(order_status_id: @cancelled_status_id)
       
-      @return_rate = ReturnRate.find_by_no_of_days(90)
       
           
        ppo_sales = SalesPpo.new 
-    
-       @retail_sales_all = ppo_sales.ppo_details(campaign_playlist_id, true, false, @return_rate.show_all)
-       @retail_sales_shipped  = ppo_sales.ppo_details(campaign_playlist_id, false, false, @return_rate.shipped_percent)
-       @retail_sales_default = ppo_sales.ppo_details(campaign_playlist_id, false, false, @return_rate.retail_default_rate)
-       @retail_sales_3_mo = ppo_sales.ppo_details(campaign_playlist_id, false, false, @return_rate.paid_percent)
-      
-       @to_sales_all = ppo_sales.ppo_details(campaign_playlist_id, true, true, @return_rate.show_all)
-       @to_sales_shipped  = ppo_sales.ppo_details(campaign_playlist_id, false, true, @return_rate.shipped_percent)
-       @to_sales_default = ppo_sales.ppo_details(campaign_playlist_id, false, true, @return_rate.transfer_order_default_rate)
-       @to_sales_3_mo = ppo_sales.ppo_details(campaign_playlist_id, false, true, @return_rate.transfer_total_paid_percent)
+       #campaign_playlist_id, show_all, show_shipped, transfer_order, ret_correct, to_correct, results
+       @return_rates = ReturnRate.new
+        return_rate = ReturnRate.new
+        @to_return_rate = return_rate.transfer_order_default_rate
+        @final_return_rate = return_rate.retail_best_shipped_paid_percent(@campaign_playlist.productvariantid, @campaign.mediumid)
+        @to_final_return_rate = return_rate.transfer_best_shipped_paid_percent(@campaign_playlist.productvariantid, @campaign.mediumid)
        
+       @retail_sales_all = ppo_sales.ppo_details(campaign_playlist_id, true, false, false, 100.0, 100.0, "retail")
+       @retail_sales_shipped = ppo_sales.ppo_details(campaign_playlist_id, false, true, false, return_rate.shipped_percent, 100.0, "retail")
+       @retail_sales_default = ppo_sales.ppo_details(campaign_playlist_id, false, true, false, @return_rates.retail_default_rate, 100.0, "retail")
+       @retail_sales_3_mo = ppo_sales.ppo_details(campaign_playlist_id, false, true, false, @final_return_rate.rate_2, 100.0, "retail")
+        
+       @to_correction = @to_sales_3_mo.correction || 100.0 if @to_sales_3_mo.present?
+        
+       @to_sales_all = ppo_sales.ppo_details(campaign_playlist_id, true, false, true, 100.0, 100.0, "to")
+       @to_sales_shipped = ppo_sales.ppo_details(campaign_playlist_id, false, true, true, 100.0, 80.0, "to")
+       @to_sales_default = ppo_sales.ppo_details(campaign_playlist_id, false, true, true, 100.0, return_rate.transfer_order_default_rate, "to")
+       @to_sales_3_mo = ppo_sales.ppo_details(campaign_playlist_id, false, false, true, 100.0, @to_final_return_rate.rate_2, "to")
+  
       start_hr = @campaign_playlist.start_hr
       start_min = @campaign_playlist.start_min
- 
    
       ordernos = @sales_ppos.pluck(:order_id)
       main_product_type_id = 10000
@@ -124,11 +140,10 @@ class SalesPposController < ApplicationController
       @basic_basic,   @basic_shipping,  @basic_total,   @basic_cost,  @basic_revenue = 0,0,0,0,0
       @common_basic,   @common_shipping,  @common_total,   @common_cost,  @common_revenue = 0,0,0,0,0
    
-      @order_lines_regular = OrderLine.where(orderid: ordernos)
-      .joins(:product_variant)
-      .where("product_variants.product_sell_type_id = ?", main_product_type_id)
-      .order("order_lines.created_at")
-
+          @order_lines_regular = OrderLine.where(orderid: ordernos)
+          .joins(:product_variant)
+          .where("product_variants.product_sell_type_id = ?", main_product_type_id)
+          .order("order_lines.created_at")
 
           @order_lines_regular.each do |order |
             @regular_basic += order.subtotal
@@ -139,22 +154,21 @@ class SalesPposController < ApplicationController
           end
 
        
-      @order_lines_basic = OrderLine.where(orderid: ordernos).joins(:product_variant)
-      .where("product_variants.product_sell_type_id = ?", basic_product_type_id)
-      .order("order_lines.created_at")
+          @order_lines_basic = OrderLine.where(orderid: ordernos).joins(:product_variant)
+          .where("product_variants.product_sell_type_id = ?", basic_product_type_id)
+          .order("order_lines.created_at")
 
-         @order_lines_basic.each do |order |
+          @order_lines_basic.each do |order |
             @basic_basic += order.subtotal
             @basic_shipping += order.shipping
             @basic_total += order.total
             @basic_cost += order.productcost
             @basic_revenue += order.productrevenue
-
           end
 
-      @order_lines_common = OrderLine.where(orderid: ordernos).joins(:product_variant)
-      .where("product_variants.product_sell_type_id = ?", common_product_type_id)
-      .order("order_lines.created_at")
+          @order_lines_common = OrderLine.where(orderid: ordernos).joins(:product_variant)
+          .where("product_variants.product_sell_type_id = ?", common_product_type_id)
+          .order("order_lines.created_at")
 
             @order_lines_common.each do |order |
             @common_basic += order.subtotal
@@ -163,7 +177,9 @@ class SalesPposController < ApplicationController
             @common_cost += order.productcost
             @common_revenue += order.productrevenue
           end
-        end
+          
+          
+      end
   end
   
   def half_hour
@@ -252,7 +268,7 @@ class SalesPposController < ApplicationController
   end
   
   def show_wise
-
+    all_return_rates
     @searchaction = "show_wise"
     @from_date = (330.minutes).from_now.to_date
     for_date = (330.minutes).from_now.to_date
@@ -261,77 +277,18 @@ class SalesPposController < ApplicationController
      for_date =  Date.strptime(params[:from_date], "%Y-%m-%d")
      @from_date = for_date.beginning_of_day - 330.minutes
     
-    end
     @to_date = for_date.end_of_day - 330.minutes
     @or_for_date = for_date.strftime("%Y-%m-%d")
+    
+    @page_heading = "PPO Details for #{for_date}"
    
-    if params.has_key?(:to_date)
-     @to_date =  Date.strptime(params[:to_date], "%Y-%m-%d")
-    end
-    @sno = 1
-    @hourlist ||= []
-    employeeunorderlist ||= []
-
-    #@for_date = @campaign.startdate
-     campaign_playlists =  CampaignPlaylist.joins(:campaign)
-     .where("campaigns.startdate = ?", for_date)
-     .order(:start_hr, :start_min, :start_sec)
-     .where(list_status_id: 10000) #.limit(5)
-     
-     campaign_playlists = CampaignPlaylist.where("for_date >= ? and for_date <= ?", @from_date, @to_date).where(list_status_id: 10000).order("for_date, start_hr, start_min")
-     @total_fixed_cost = campaign_playlists.sum(:cost).to_f
-     
+    ppo_sales = SalesPpo.new 
+    @employeeorderlist = ppo_sales.sales_ppos_for_date for_date
+    # employeeunorderlist ||= []
+    # employeeunorderlist <<
   
-     @serial_no = 1
-     campaign_playlists.each do | playlist |
-
-           orderlist = SalesPpo.where('order_status_id > 10002')
-           .where.not(order_status_id: @cancelled_status_id)
-           .where(campaign_playlist_id: playlist.id)
-            @fixed_cost = playlist.cost
-           nos = 0
-           # new process
-           media_var_cost = orderlist.sum(:commission_cost) || 0  if orderlist.present?
-         
-           revenue = orderlist.sum(:revenue) || 0 if orderlist.present?
-           product_cost = orderlist.sum(:product_cost) || 0  if orderlist.present?
-           product_damages = orderlist.sum(:damages) || 0  if orderlist.present? 
-           totalorders = orderlist.sum(:gross_sales) || 0  if orderlist.present?
-           refund = (totalorders * 0.02)|| 0  if orderlist.present?
-           nos = orderlist.count().round(2)|| 0  if orderlist.present?
-           pieces = orderlist.sum(:pieces) || 0  if orderlist.present?
-           total_cost = ((product_cost || 0) + (@fixed_cost || 0) + (media_var_cost || 0) + (refund || 0) + (product_damages || 0))
-           profitability = ((revenue || 0) - (total_cost || 0)).to_i
-        
-          ### check if product cost is found in product master
-          product_cost_master = 0
-          if ProductCostMaster.where(prod: playlist.product_variant.extproductcode).present?
-            product_cost_master = ProductCostMaster.where(prod: playlist.product_variant.extproductcode).first.cost
-          end
-
-          employeeunorderlist << {:serial_no => @serial_no,
-            :show =>  playlist.product_variant.name,
-          :campaign_id => playlist.id,
-          :product_cost_master => product_cost_master,
-          :pieces => pieces.to_i,
-          :prod => playlist.product_variant.extproductcode,
-          :nos => nos,
-          :at_time => playlist.starttime,
-          :product_damages => product_damages.to_i,
-          :start_time => @from_date, end_time: @to_date,
-          :total => totalorders.to_i,
-          :refund => refund.to_i,
-          :revenue => revenue.to_i,
-          :total_cost => total_cost.to_i,
-          :product_cost => product_cost.to_i,
-          :variable_cost => media_var_cost.to_i,
-          :fixed_cost => @fixed_cost.to_i,
-          :profitability => profitability,
-          :product_variant_id => playlist.productvariantid}
-
-         @serial_no += 1
-      end
-      @employeeorderlist = employeeunorderlist
+     #final_ppo_sales
+   end
       #@employeeorderlist = @employeeorderlist.paginate(:page => params[:page])
       respond_to do |format|
         csv_file_name = "sales_show_ppo_#{for_date}.csv"
@@ -603,4 +560,10 @@ class SalesPposController < ApplicationController
       @revenue = 0
     end
     
-  end
+    def all_return_rates
+      @return_rates_0 = ReturnRate.where("media_id is null and product_list_id is null").where(offset: 0).order(:no_of_days)
+      @return_rates_30 = ReturnRate.where("media_id is null and product_list_id is null").where(offset: 30).order(:no_of_days)
+      @return_rates_60 = ReturnRate.where("media_id is null and product_list_id is null").where(offset: 60).order(:no_of_days)
+  
+    end
+  end  

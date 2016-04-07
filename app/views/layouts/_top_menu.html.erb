@@ -43,6 +43,8 @@
               <li><%= link_to "EOD Sales Report Pvt", "/channel_consolidated_daily_report?source=pvt" , data: { confirm: 'This is new Pvt EOD report!' } %></li>
               <% if (current_user.employee_role.sortorder < 5) %>
                <li><%= link_to "PPO Report", "/ppo_report" , data: { confirm: 'This Report Will take some time to show, please dont refresh!'} %></li>
+			     <li><%= link_to "New PPO Report", "/sales_ppos" , data: { confirm: 'This is the NEW Report Will be slightly different, please dont refresh!'} %></li>
+			   <li><%= link_to "Return Rates", "/return_rates" %></li>
                <li><%= link_to "PPO Report (Test Products)", "/product_test_ppos" %></li>
             <% end %>
 

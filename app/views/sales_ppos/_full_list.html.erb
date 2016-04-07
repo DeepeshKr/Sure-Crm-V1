@@ -1,6 +1,6 @@
 <br>
 <div class="digg_pagination">
-  <%= will_paginate @sales_ppos, :container => false %>
+   <!-- % = will_paginate @sales_ppos, :container => false % -->
 </div>
 <br>
 <table class="table table-hover table-stripped"> 
@@ -40,6 +40,7 @@
   </thead>
 
   <tbody>
+	  <% if @sales_ppos.present? %>
     <% @sales_ppos.each do |sales_ppo| %>
       <tr>
         <td><%= sales_ppo.campaign_playlist_id %></td>
@@ -71,14 +72,14 @@
         <td><%= sales_ppo.city %></td>
         <td><%= sales_ppo.state %></td>
         <td><%= sales_ppo.mobile_no %></td>
-        <td><%= link_to 'Show', sales_ppo %></td>
-
+        <td></td>
+<% end %>
       </tr>
     <% end %>
   </tbody>
 </table>
 <br>
 <div class="digg_pagination">
-  <%= will_paginate @sales_ppos, :container => false %>
+  <!-- % = will_paginate @sales_ppos, :container => false % -->
 </div>
 <br>

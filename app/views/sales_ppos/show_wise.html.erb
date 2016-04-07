@@ -1,6 +1,6 @@
- <!-- set page title start -->
- <% title "Show PPO #{@or_for_date}" %>
- <!-- set page title end -->
+<!-- set page title start -->
+<% title @page_heading  %>
+<!-- set page title end -->
  <div class="row">
 	 <div class="col-xs-6">
 
@@ -9,138 +9,92 @@
 	 <div class="col-xs-6">
 	 	<%= render partial: 'date_search', :locals => {:searchaction => "show"}  %>
 	</div>
+</div>
 
  <br>
  <% if @employeeorderlist.present? %>
- <div class="row">
-   <div class="col-xs-4">
 
-   </div>
-   <div class="col-xs-4">
-
-   </div>
-   <div class="col-xs-4">
-
-   </div>
- </div>
- <table class="table table-hover table-bordered table-striped scroll">
-
- </table>
-   <div class="row fixed-table">
-      <div class="table-content">
-<table class="table table-hover table-bordered table-striped">
-  <thead class="header">
+<div class="row fixed-table">
+  <div class="table-content">
+	  <table class="table table-hover table-bordered table-striped">
+  		<thead class="header">
      <tr>
-     <th  rowspan="2">No</th>
-     <th  rowspan="2" style="width:">Show</th>
-       <th rowspan="2">Start Time</th>
-
+     	<th rowspan="2">No</th>
+     	<th rowspan="2" style="width:">Show</th>
+	   	<th rowspan="2">Name</th>
         <th colspan="3">Income</th>
-         <th rowspan="2" class="text-right">Revenue</th>
+        <th rowspan="2" class="text-right">Revenue</th>
         <th colspan="5">Expense</th>
-
-       <th rowspan="2">PPO </th>
-      <th>More </th>
-       </tr>
-      <tr>
-
+       	<th rowspan="2">PPO </th>
+      	<th>More </th>
+     </tr>
+     <tr>	
         <th class="text-right">Orders</th>
-         <th class="text-right">Pieces*</th>
-       <th class="text-right">Sales</th>
-
-
+        <th class="text-right">Pieces*</th>
+       	<th class="text-right">Sales</th>
         <th class="text-right">Product Cost</th>
-         <th class="text-right">Commision</th>
-       <th class="text-right">Media Cost</th>
-         <th class="text-right">Refund</th>
-            <th class="text-right">Damages</th>
+        <th class="text-right">Commision</th>
+       	<th class="text-right">Media Cost</th>
+        <th class="text-right">Refund</th>
+        <th class="text-right">Damages</th>
        </tr>
     </thead>
 <tbody>
+	<% @sno = 1 %>
    <% @employeeorderlist.each do |c| %>
    <tr>
-   <td><%= c[:serial_no] %></td>
+	   <td rowspan="2"><%= @sno %></td>
 
- <td><%= c[:show] %>
- <%= c[:more] %> Id: <%= c[:campaign_id] %><br>
-<% if c[:product_cost_master] == 0 %>
-<span style="color:red">No Product Cost Found</span>
-<% else %>
-<span style="color:green"> Cost Rs: <%= c[:product_cost_master] %></span>
-<% end %>
-<small><%= link_to "Cost Details", productcost_path(search: c[:prod]), :target => "_blank", class: "btn btn-primary btn-xs" %> </small>
- </td>
-<td title="Start Time"><%= c[:at_time] %></td>
-<td class="text-right" title="Orders">
-   <%= c[:nos] %>
-   <% @total_nos += c[:nos] %>
-</td>
-<td class="text-right" title="Pieces">
-   <%= c[:pieces] %>
-   <% @total_pieces += c[:pieces] %>
-</td>
-<td class="text-right" title="Sales">
-   <%= c[:total] %>
-   <% @total_sales += c[:total] %>
-</td>
-<td class="text-right" title="Revenue">
-   <%= c[:revenue] %>
-   <% @total_revenue += c[:revenue] %>
-</td>
-<td class="text-right" title="Product Cost">
-   <%= c[:product_cost] %>
-   <% @total_product_cost += c[:product_cost] %>
-</td>
-<td class="text-right" title="Variable Cost">
-   <%= c[:variable_cost] %>
-   <% @total_var_cost += c[:variable_cost] %>
-</td>
-<td class="text-right" title="Fixed Media Cost"> <!--Media Cost-->
-   <%= c[:fixed_cost] %>
-   <% @total_fixed_cost += c[:fixed_cost] %>
-</td>
-<td class="text-right" title="Refunds">
-<%= c[:refund] %>
-<% @total_refund += c[:refund] %>
-</td>
-<td class="text-right" title="Damages">
-<%= c[:product_damages] %>
-<% @total_damages += c[:product_damages] %>
-</td>
-<td class="text-right" title="Profitability">   <%= c[:profitability] %>
-<% @total_profit += c[:profitability] %>
-</td>
-<td >
-<%= link_to "Old", ppo_products_path(campaign_id: c[:campaign_id]), :target => "_blank", class: "btn btn-primary btn-xs"  %>
-<%= link_to "New", {:controller => :sales_ppos, :action => :details, campaign_id: c[:campaign_id]}, :target => "_blank", class: "btn btn-info btn-xs" %>
-</td>
-  </tr>
+	 	<td rowspan="2"><%= c.show %> <small> Id: <%= c.campaign_playlist_id %> </small><br>
+		 <% if c.product_cost == 0 %>
+		<span style="color:red">No Product Cost Found</span>
+		<% else %>
+		<span style="color:green"> Cost Rs: <%= c.product_cost %></span>
+		<% end %>
+		<small><%= link_to "Cost Details", productcost_path(search: c.prod), :target => "_blank", class: "btn btn-primary btn-xs" %> </small> 
+		<br>
+		Time: <%= c.show_time %>
+		<small>Desc: <%= c.description %> </small>
+		</td>
+		<td title="Name"><small><%= c.total_name_1 %> </small> </td>
+		<td class="text-right" title="Orders"> <%= c.total_nos_1 %> </td>
+		<td class="text-right" title="Pieces"> <%= c.total_pieces_1 %>  </td>
+		<td class="text-right" title="Sales">   <%= c.total_sales_1 %>   </td>
+		<td class="text-right" title="Revenue">   <%= c.total_revenue_1 %>  </td>
+		<td class="text-right" title="Product Cost">   <%= c.total_product_cost_1 %>   </td>
+		<td class="text-right" title="Variable Cost">   <%= c.total_var_cost_1 %>  </td>
+		<td class="text-right" title="Fixed Media Cost"> <%= c.total_fixed_cost_1 %>   </td>
+		<td class="text-right" title="Refunds"> <%= c.total_refund_1 %>   </td>
+		<td class="text-right" title="Damages"> <%= c.total_product_dam_cost_1 %>   </td>
+		<td class="text-right" title="Profitability">   <%= c.profit_per_order_1 %>  </td>
+		<td rowspan="2">
+			<%= link_to "Old", ppo_products_path(campaign_id: c.campaign_playlist_id), :target => "_blank", class: "btn btn-primary btn-xs"  %>
+			<hr>
+			<%= link_to "New", {:controller => :sales_ppos, :action => :details, campaign_id: c.campaign_playlist_id}, :target => "_blank", class: "btn btn-info btn-xs" %>
+		</td>
+	</tr>
+
+<!-- second -->
+	<tr>
+		<td title="Name"><small><%= c.total_name_2 %></small></td>
+		<td class="text-right" title="Orders"> <%= c.total_nos_2 %>  </td>
+		<td class="text-right" title="Pieces"> <%= c.total_pieces_2 %>   </td>
+		<td class="text-right" title="Sales">   <%= c.total_sales_2 %>    </td>
+		<td class="text-right" title="Revenue">   <%= c.total_revenue_2 %>    </td>
+		<td class="text-right" title="Product Cost">   <%= c.total_product_cost_2 %>    </td>
+		<td class="text-right" title="Variable Cost">   <%= c.total_var_cost_2 %>   </td>
+		<td class="text-right" title="Fixed Media Cost"> <%= c.total_fixed_cost_2 %>     </td>
+		<td class="text-right" title="Refunds"> <%= c.total_refund_2 %>   </td>
+		<td class="text-right" title="Damages"> <%= c.total_product_dam_cost_2 %>   </td>
+		<td class="text-right" title="Profitability">   <%= c.profit_per_order_2 %>  </td>
+
+	</tr>
   <% @sno += 1 %>
  <% end %>
   </tbody>
-<tfoot>
-    <tr>
-    <th colspan="3" >Total</th>
-    <th class="text-right"><%= @total_nos.to_i %></th>
-    <th class="text-right"><%= @total_pieces.to_i %></th>
-    <th class="text-right"><%= @total_sales.to_i %></th>
-    <th class="text-right"><%= @total_revenue.to_i %></th>
-    <th class="text-right"><%= @total_product_cost.to_i %></th>
-    <th class="text-right"><%= @total_var_cost.to_i %></th>
-    <th class="text-right"><%= @total_fixed_cost.to_i %></th>
-    <th class="text-right"><%= @total_refund.to_i %></th>
-    <th class="text-right"><%= @total_damages.to_i %></th>
-    <th class="text-right"><%= @total_profit.to_i %> <br>
-
-    </th>
-    <th></th>
-     </tr>
-
-
-  </tfoot>
-  </table>
+ </table>
   </div>
-  </div>
+ </div>
   <% else %>
   <div class="well well-sm">
   <h5>Please select a date to generate the report </h5>
@@ -152,6 +106,7 @@
 <div style="visibility:hidden">
 
 <%= link_to "Old Details", ppo_details_path(start_time: @from_date, end_time: @to_date, product_variant: c[:product_variant_id]), :target => "_blank" %>
+<hr>
 <%= link_to "New Details", {:controller => :sales_ppos, :action => :details, start_time: @from_date, end_time: @to_date, product_variant: c[:product_variant_id]},{ class: "btn btn-info btn-xs"}, :target => "_blank" %>
 
 <% @order_sno = 1 %>

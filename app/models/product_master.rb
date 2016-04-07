@@ -27,7 +27,11 @@ class ProductMaster < ActiveRecord::Base
   validates_associated :product_variant
   
   def productname
-   self.extproductcode + " - " + self.name  + " Basic " + self.price.to_s + " Shipping " + self.shipping.to_s 
+    if self.extproductcode.present?
+        (self.extproductcode + " - " || "" if self.extproductcode.present?)  + (self.name || "" if self.name.present?) +  (" Basic " + self.price.to_s || "" if self.price.present?)  + ( " Shipping " + self.shipping.to_s || "" if self.shipping.present?)
+      else
+        self.id.to_s + " " + (self.name || " no products details")
+    end
   end
 
   def productlistname
@@ -35,7 +39,11 @@ class ProductMaster < ActiveRecord::Base
   end
 
   def fullproductname
-   self.barcode  + " - " +  self.extproductcode + " - " + self.name  + " Basic " + self.price.to_s + " Shipping " + self.shipping.to_s 
+   if self.extproductcode.present?
+       self.barcode  + " - " +  self.extproductcode || "0" if self.price.present + " - " + self.name  + " Basic " + (self.price.to_s || "0" if self.price.present?) + " Shipping " + (self.shipping.to_s || "0" if self.price.present? )
+     else
+        self.id.to_s + " " + (self.name || " no products details")
+   end
   end
 
   def productrevenue

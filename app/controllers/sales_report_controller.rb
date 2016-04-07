@@ -576,6 +576,7 @@ class SalesReportController < ApplicationController
             :sno => @num,
             :orderdate =>  (o.orderdate + 330.minutes).strftime("%Y-%m-%d"),
             :city => o.city,
+            :state => o.customer_address.state,
             :channel => o.medium.name,
             :products => products}
             @num += 1
