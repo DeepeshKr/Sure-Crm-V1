@@ -1,9 +1,15 @@
 <div class="row">
-  <%= form_tag("/stockbook", method: "get") do  %>
+   <%= form_tag  url_for(:controller => 'product_stock_books', :action => searchaction), method: "get" do  %>
+   
       <div class="col-xs-6">
+		  <% if @productlist.present? %>
         <%= select_tag(:barcode,
                        options_from_collection_for_select(@productlist, :list_barcode, :productinfo, selected: @barcode), {:class => "form-control"} )  %>
+					   <% else %>
+					   Showing all products
+					   <% end %>
       </div> 
+	  
       <div class="col-xs-4">
         <div class="input-daterange input-group">
           <%= text_field_tag(:from_date, @or_from_date, :data => {:provide => "datepicker"}, :id => "datepicker1", :class => "form-control", :required => "true" )   %>

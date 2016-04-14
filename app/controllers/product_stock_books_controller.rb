@@ -5,35 +5,12 @@ class ProductStockBooksController < ApplicationController
    before_action :set_product_stock_book, only: [:show, :edit, :update, :destroy]
    before_action :get_variables, only: [:index, :show, :edit, :update, :destroy]
    before_action :dropdowns, only: [:index, :edit, :update]
+   before_action :all_totals
   # GET /product_stock_books
   # GET /product_stock_books.json
   def index
+    
     @show
-    @retail_sales_qty = 0
-    @retail_sales_val = 0
-    @retail_returns_qty = 0
-    @retail_returns_val = 0
-    @wholesale_sale_qty = 0
-    @wholesale_sale_val = 0
-    @wholesale_returns_qty = 0
-    @wholesale_returns_val = 0
-    @other_returns_val = 0
-    @other_returns_qty = 0
-    @branch_sales_qty = 0
-    @branch_sales_val = 0
-    @branch_returns_qty = 0
-    @branch_returns_val = 0
-    @opening_val = 0
-    @opening_qty = 0
-    @purchased_val = 0
-    @purchased_qty = 0
-    @corrections_qty = 0
-    @corrections_val = 0
-    @closing_qty = 0
-    @closing_val = 0
-
-
-
      @prev_datelist = Date.today.in_time_zone
      @or_from_date = Date.today #.in_time_zone - 30.days
      @or_to_date =  Date.today #.in_time_zone
@@ -76,6 +53,22 @@ class ProductStockBooksController < ApplicationController
     end
    # @product_stock_books = ProductStockBook.all.limit(100)
 
+  end
+  
+  def summary
+    @or_from_date = Date.today.in_time_zone - 365.days
+    @or_to_date =  Date.today.in_time_zone
+    
+    if params[:from_date].present? && params[:to_date].present?
+      @or_from_date = params[:from_date]
+      @or_to_date = params[:to_date]
+    end
+    
+    @from_date_text = @or_from_date.strftime('%d-%b-%y')
+    @to_date_text = @or_to_date.strftime('%d-%b-%y')
+    product_stock_book = ProductStockBook.new 
+    @product_stock_books = product_stock_book.stock_book_summary @or_from_date, @or_to_date
+    
   end
 
   # GET /product_stock_books/1
@@ -271,7 +264,31 @@ end
       @to_date = params[:to_date]
     end
 
-
+    def all_totals
+      @retail_sales_qty = 0
+      @retail_sales_val = 0
+      @retail_returns_qty = 0
+      @retail_returns_val = 0
+      @wholesale_sale_qty = 0
+      @wholesale_sale_val = 0
+      @wholesale_returns_qty = 0
+      @wholesale_returns_val = 0
+      @other_returns_val = 0
+      @other_returns_qty = 0
+      @branch_sales_qty = 0
+      @branch_sales_val = 0
+      @branch_returns_qty = 0
+      @branch_returns_val = 0
+      @opening_val = 0
+      @opening_qty = 0
+      @purchased_val = 0
+      @purchased_qty = 0
+      @corrections_qty = 0
+      @corrections_val = 0
+      @closing_qty = 0
+      @closing_val = 0
+      
+    end
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def product_stock_book_params

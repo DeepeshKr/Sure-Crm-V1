@@ -3,8 +3,6 @@
 <!-- set page title end -->
 <p id="notice"><%= notice %></p>
 
-
-
 <div class="row">
 	<div class="col-xs-12">
 			
@@ -17,7 +15,7 @@
 	  
 	  <div class="tab-content">
 	      <div id="instant" class="tab-pane fade in active">
-	       
+	      
 			<table class="table table-hover table-stripped">
 			<%= render partial: 'full_list', :locals => {:return_rates =>  @return_rates_0, return_rate_offset: "Realtime"}  %>
 			</table>
@@ -33,6 +31,7 @@
 			<table class="table table-hover table-stripped">
 			<%= render partial: 'full_list', :locals => {:return_rates =>  @return_rates_60, return_rate_offset: "Ending 60 days"}  %>
 			</table>
+			
 	      </div>
 	      
 	    	
@@ -46,3 +45,4 @@
 
 <!-- td rowspan="2">< % = link_to 'Destroy', return_rate, method: :delete, data: { confirm: 'Are you sure?' } % ></td -->
 <br>
+

@@ -104,11 +104,16 @@ class SalesPposController < ApplicationController
       @sales_ppos = SalesPpo.where('order_status_id > 10002')
       .where(campaign_playlist_id: campaign_playlist_id)
       .order("start_time")
+      
+       
+      
       # .where.not(order_status_id: @cancelled_status_id)
       
       
           
        ppo_sales = SalesPpo.new 
+       
+       @open_orders = ppo_sales.show_open_orders campaign_playlist_id
        #campaign_playlist_id, show_all, show_shipped, transfer_order, ret_correct, to_correct, results
        @return_rates = ReturnRate.new
         return_rate = ReturnRate.new
@@ -116,17 +121,23 @@ class SalesPposController < ApplicationController
         @final_return_rate = return_rate.retail_best_shipped_paid_percent(@campaign_playlist.productvariantid, @campaign.mediumid)
         @to_final_return_rate = return_rate.transfer_best_shipped_paid_percent(@campaign_playlist.productvariantid, @campaign.mediumid)
        
-       @retail_sales_all = ppo_sales.ppo_details(campaign_playlist_id, true, false, false, 100.0, 100.0, "retail")
-       @retail_sales_shipped = ppo_sales.ppo_details(campaign_playlist_id, false, true, false, return_rate.shipped_percent, 100.0, "retail")
-       @retail_sales_default = ppo_sales.ppo_details(campaign_playlist_id, false, true, false, @return_rates.retail_default_rate, 100.0, "retail")
-       @retail_sales_3_mo = ppo_sales.ppo_details(campaign_playlist_id, false, true, false, @final_return_rate.rate_2, 100.0, "retail")
+       @retail_sales_all = ppo_sales.ppo_details(campaign_playlist_id, true, false, 100.0, 100.0, "retail")
+       @retail_sales_shipped = ppo_sales.ppo_details(campaign_playlist_id, true, false, return_rate.shipped_percent, 0.0, "retail")
+       @retail_sales_default = ppo_sales.ppo_details(campaign_playlist_id, true, false, @return_rates.retail_default_rate, 0.0, "retail")
+       @retail_sales_3_mo = ppo_sales.ppo_details(campaign_playlist_id, true, false, @final_return_rate.rate_2, 0.0, "retail")
         
        @to_correction = @to_sales_3_mo.correction || 100.0 if @to_sales_3_mo.present?
-        
-       @to_sales_all = ppo_sales.ppo_details(campaign_playlist_id, true, false, true, 100.0, 100.0, "to")
-       @to_sales_shipped = ppo_sales.ppo_details(campaign_playlist_id, false, true, true, 100.0, 80.0, "to")
-       @to_sales_default = ppo_sales.ppo_details(campaign_playlist_id, false, true, true, 100.0, return_rate.transfer_order_default_rate, "to")
-       @to_sales_3_mo = ppo_sales.ppo_details(campaign_playlist_id, false, false, true, 100.0, @to_final_return_rate.rate_2, "to")
+       # campaign_playlist_id, show_all, show_shipped, ret_correct, to_correct, results
+       
+       @to_sales_all = ppo_sales.ppo_details(campaign_playlist_id, true, false, 0.0, 100.0, "to")
+       @to_sales_shipped = ppo_sales.ppo_details(campaign_playlist_id, true, false, 0.0, 80.0, "to")
+       @to_sales_default = ppo_sales.ppo_details(campaign_playlist_id, true, false, 0.0, @return_rates.transfer_order_default_rate, "to")
+       @to_sales_3_mo = ppo_sales.ppo_details(campaign_playlist_id, false, false, 0.0, @to_final_return_rate.rate_2, "to")
+       
+       @sales_all = ppo_sales.ppo_details(campaign_playlist_id, true, false, 100.0, 100.0, "all")
+       @sales_shipped = ppo_sales.ppo_details(campaign_playlist_id, true, false, return_rate.shipped_percent, 80.0, "all")
+       @sales_default = ppo_sales.ppo_details(campaign_playlist_id, true, false, @return_rates.retail_default_rate, @return_rates.transfer_order_default_rate, "all")
+       @sales_3_mo = ppo_sales.ppo_details(campaign_playlist_id, true, false, @final_return_rate.rate_2, @to_final_return_rate.rate_2, "all")
   
       start_hr = @campaign_playlist.start_hr
       start_min = @campaign_playlist.start_min

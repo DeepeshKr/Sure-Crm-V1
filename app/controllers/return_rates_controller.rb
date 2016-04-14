@@ -5,9 +5,11 @@ class ReturnRatesController < ApplicationController
   # GET /return_rates
   # GET /return_rates.json
   def index
-    @return_rates_0 = ReturnRate.where("media_id is null and product_list_id is null").where(offset: 0).order(:no_of_days)
-    @return_rates_30 = ReturnRate.where("media_id is null and product_list_id is null").where(offset: 30).order(:no_of_days)
-    @return_rates_60 = ReturnRate.where("media_id is null and product_list_id is null").where(offset: 60).order(:no_of_days)
+    @product_variants = ProductVariant.all
+    return_rates = ReturnRate.new
+    @return_rates_0 = return_rates.all_percents 0
+    @return_rates_30 = return_rates.all_percents 30
+    @return_rates_60 = return_rates.all_percents 60
   end
 
   # GET /return_rates/1
@@ -15,8 +17,9 @@ class ReturnRatesController < ApplicationController
   def show
   end
 
-  
-
+  def demo
+    @product_variants = ProductVariant.all
+  end
  
   # DELETE /return_rates/1
   # DELETE /return_rates/1.json

@@ -6,10 +6,9 @@ Rails.application.routes.draw do
   resources :daily_tasks
   resources :cable_opertor_comms
 
+  get "select_two" => 'return_rates#demo'
   get 'cashsale/index'
-
   get 'cashsale/search'
-
   get 'cashsale/details'
 
   resources :registration_statuses
@@ -274,7 +273,8 @@ post 'distributor_upload_orders/switch_off'
   get 'dnismaster/search'
   get 'dnismaster/details'
 
-  get 'stockbook' => 'product_stock_books#index'
+  get 'stockbook' => 'product_stock_books#summary'
+  get 'product_stock_books/summary'
   get 'stockbook_details' => 'product_stock_books#stockbook_details'
 
 

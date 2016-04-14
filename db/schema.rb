@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160326055524) do
+ActiveRecord::Schema.define(version: 20160414053730) do
 
   create_table "address_types", force: :cascade do |t|
     t.string   "name"
@@ -826,6 +826,15 @@ ActiveRecord::Schema.define(version: 20160326055524) do
     t.integer  "employee_id",                    precision: 38
   end
 
+  add_index "media", ["daily_charges"], name: "index_media_on_daily_charges"
+  add_index "media", ["dnis"], name: "index_media_on_dnis"
+  add_index "media", ["id", "media_group_id"], name: "media_idx01"
+  add_index "media", ["media_commision_id"], name: "i_media_media_commision_id"
+  add_index "media", ["media_group_id"], name: "index_media_on_media_group_id"
+  add_index "media", ["name"], name: "index_media_on_name"
+  add_index "media", ["ref_name"], name: "index_media_on_ref_name"
+  add_index "media", ["telephone"], name: "index_media_on_telephone"
+
   create_table "media_commisions", force: :cascade do |t|
     t.string   "name"
     t.text     "description"
@@ -962,9 +971,11 @@ ActiveRecord::Schema.define(version: 20160326055524) do
   end
 
   add_index "order_lines", ["orderdate"], name: "index_order_lines_on_orderdate"
+  add_index "order_lines", ["orderid", "productvariant_id"], name: "i_ord_lin_ord_pro_id"
   add_index "order_lines", ["orderid"], name: "index_order_lines_on_orderid"
   add_index "order_lines", ["product_list_id"], name: "i_order_lines_product_list_id"
   add_index "order_lines", ["product_master_id"], name: "i_ord_lin_pro_mas_id"
+  add_index "order_lines", ["productvariant_id", "orderid"], name: "order_lines_idx01"
   add_index "order_lines", ["productvariant_id"], name: "i_ord_lin_pro_id"
 
   create_table "order_list_miles", force: :cascade do |t|
@@ -1013,15 +1024,20 @@ ActiveRecord::Schema.define(version: 20160326055524) do
     t.integer  "weight_kg",              precision: 38
   end
 
+  add_index "order_masters", ["TRUNC(\"CREATED_AT\")", "order_status_master_id", "media_id", "id"], name: "order_masters_idx01"
+  add_index "order_masters", ["calledno"], name: "i_order_masters_calledno"
   add_index "order_masters", ["campaign_playlist_id"], name: "i_ord_mas_cam_pla_id"
   add_index "order_masters", ["city"], name: "index_order_masters_on_city"
+  add_index "order_masters", ["created_at"], name: "i_order_masters_created_at"
   add_index "order_masters", ["customer_id"], name: "i_order_masters_customer_id"
   add_index "order_masters", ["employee_id"], name: "i_order_masters_employee_id"
   add_index "order_masters", ["external_order_no"], name: "i_ord_mas_ext_ord_no"
   add_index "order_masters", ["media_id"], name: "i_order_masters_media_id"
+  add_index "order_masters", ["mobile"], name: "index_order_masters_on_mobile"
   add_index "order_masters", ["order_source_id"], name: "i_ord_mas_ord_sou_id"
   add_index "order_masters", ["order_status_master_id"], name: "i_ord_mas_ord_sta_mas_id"
   add_index "order_masters", ["orderdate"], name: "i_order_masters_orderdate"
+  add_index "order_masters", ["orderpaymentmode_id"], name: "i_ord_mas_ord_id"
   add_index "order_masters", ["pincode"], name: "index_order_masters_on_pincode"
 
   create_table "order_payments", force: :cascade do |t|
@@ -1178,6 +1194,13 @@ ActiveRecord::Schema.define(version: 20160326055524) do
     t.integer  "product_master_id",    precision: 38
   end
 
+  add_index "product_lists", ["extproductcode"], name: "i_product_lists_extproductcode"
+  add_index "product_lists", ["list_barcode"], name: "i_product_lists_list_barcode"
+  add_index "product_lists", ["name"], name: "index_product_lists_on_name"
+  add_index "product_lists", ["product_master_id"], name: "i_pro_lis_pro_mas_id"
+  add_index "product_lists", ["product_spec_list_id"], name: "i_pro_lis_pro_spe_lis_id"
+  add_index "product_lists", ["product_variant_id"], name: "i_pro_lis_pro_var_id"
+
   create_table "product_master_add_ons", force: :cascade do |t|
     t.integer  "product_master_id",     precision: 38
     t.integer  "product_list_id",       precision: 38
@@ -1319,6 +1342,12 @@ ActiveRecord::Schema.define(version: 20160326055524) do
     t.string   "list_barcode"
   end
 
+  add_index "product_stock_books", ["ext_prod_code"], name: "i_pro_sto_boo_ext_pro_cod"
+  add_index "product_stock_books", ["list_barcode"], name: "i_pro_sto_boo_lis_bar"
+  add_index "product_stock_books", ["product_list_id"], name: "i_pro_sto_boo_pro_lis_id"
+  add_index "product_stock_books", ["product_master_id"], name: "i_pro_sto_boo_pro_mas_id"
+  add_index "product_stock_books", ["stock_date"], name: "i_pro_sto_boo_sto_dat"
+
   create_table "product_stocks", force: :cascade do |t|
     t.integer  "product_master_id", precision: 38
     t.integer  "product_list_id",   precision: 38
@@ -1387,6 +1416,12 @@ ActiveRecord::Schema.define(version: 20160326055524) do
     t.datetime "updated_at"
     t.integer  "product_sell_type_id", precision: 38
   end
+
+  add_index "product_variants", ["activeid"], name: "i_product_variants_activeid"
+  add_index "product_variants", ["extproductcode"], name: "i_pro_var_ext"
+  add_index "product_variants", ["product_sell_type_id"], name: "i_pro_var_pro_sel_typ_id"
+  add_index "product_variants", ["productmasterid"], name: "i_pro_var_pro"
+  add_index "product_variants", ["variantbarcode"], name: "i_pro_var_var"
 
   create_table "product_warehouses", force: :cascade do |t|
     t.string   "location_name"

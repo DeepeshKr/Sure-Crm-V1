@@ -1,0 +1,141 @@
+<div class="row">
+  <div class="col-xs-2">
+    <h3>Stock Book</h3>
+
+  </div>
+  <div class="col-xs-10">
+    <div class="row">
+      <div class="col-xs-12"><small>Show the entire product range sale between dates</small></div>
+      <div class="col-xs-12"><%= render partial: 'search', :locals => {:searchaction => "summary"} %> </div>
+    </div>
+
+  </div>
+</div>
+<br>
+
+<br>
+<% if @product_stock_books.present? %>
+
+
+<table class="table table-hover table-bordered table-stripped">
+  <thead>
+  <tr>
+    <th rowspan="3" colspan="1">Date</th>
+    <th rowspan="2" colspan="2">Purchased</th>
+    <th colspan="6">Returned </th>
+    <th colspan="6">Sold </th>
+    <th rowspan="2" colspan="2">Corrections</th>
+     <th rowspan="1" colspan="2">Show</th>
+  </tr>
+  <tr>
+    <th colspan="2">Retail </th>
+    <th colspan="2">wholesale</th>
+    <th colspan="2">Branch</th>
+    <th colspan="2">Retail</th>
+    <th colspan="2">Wholesale</th>
+    <th colspan="2">Branch</th>
+  </tr>
+  <tr>
+    <th>Qty</th>
+
+    <th>Qty</th>
+    <th>Value</th>
+    <th>Qty</th>
+    <th>Value</th>
+    <th>Qty</th>
+    <th>Value</th>
+    <th>Qty</th>
+    <th>Value</th>
+    <th>Qty</th>
+    <th>Value</th>
+    <th>Qty</th>
+    <th>Value</th>
+    <th>Qty</th>
+    <th>Value</th>
+    <th>Qty</th>
+    <th>Value</th>
+    <th>Qty</th>
+
+  </tr>
+  </thead>
+
+  <tbody>
+    <% @product_stock_books.each do |product_stock_book| %>
+      <tr>
+        <td><%= product_stock_book.productinfo %>         </td>
+        <td class="text-right"><%= product_stock_book.total_purchased_qty  %>
+        <% @purchased_qty += product_stock_book.total_purchased_qty %></td>
+        <td class="text-right"><%= product_stock_book.total_purchased_value %>
+        <% @purchased_val += product_stock_book.total_purchased_value %></td>
+        <td class="text-right"><%= product_stock_book.total_returned_retail_qty %>
+        <% @retail_returns_qty += product_stock_book.total_returned_retail_qty %> </td>
+        <td class="text-right"><%= product_stock_book.total_returned_retail_value %>
+        <% @retail_returns_val += product_stock_book.total_returned_retail_value %> </td>
+        <td class="text-right"><%= product_stock_book.total_returned_wholesale_qty %>
+        <% @wholesale_returns_qty += product_stock_book.total_returned_wholesale_qty %> </td>
+        <td class="text-right"><%= product_stock_book.total_returned_wholesale_value %>
+        <% @wholesale_returns_val += product_stock_book.total_returned_wholesale_value %>   </td>
+        <td class="text-right"><%= product_stock_book.total_returned_others_qty %>
+        <% @other_returns_qty += product_stock_book.total_returned_others_qty %> </td>
+        <td class="text-right"><%= product_stock_book.total_returned_others_value %>
+        <% @other_returns_val += product_stock_book.total_returned_others_value %></td>
+        <td class="text-right"><%= product_stock_book.total_sold_retail_qty %>
+        <% @retail_sales_qty += product_stock_book.total_sold_retail_qty %></td>
+        <td class="text-right"><%= product_stock_book.total_sold_retail_value %>
+        <% @retail_sales_val += product_stock_book.total_sold_retail_value %> </td>
+        <td class="text-right"><%= product_stock_book.total_sold_wholesale %>
+        <% @wholesale_sale_qty += product_stock_book.total_sold_wholesale %> </td>
+        <td class="text-right"><%= product_stock_book.total_sold_wholesale_value %>
+        <% @wholesale_sale_val += product_stock_book.total_sold_wholesale_value %> </td>
+        <td class="text-right"><%= product_stock_book.total_sold_branch_qty %>
+        <% @branch_sales_qty += product_stock_book.total_sold_branch_qty %> </td>
+        <td class="text-right"><%= product_stock_book.total_sold_branch_qty %>
+        <% @branch_sales_val += product_stock_book.total_sold_branch_value %> </td>
+        <td class="text-right"><%= product_stock_book.total_corrections_qty %>
+          <% @corrections_qty += product_stock_book.total_corrections_qty %> </td>
+        <td class="text-right"><%= product_stock_book.total_corrections_value %>
+        <% @corrections_val += product_stock_book.total_corrections_value %> </td>
+        <td>
+			<%= link_to "Show", {:controller => :product_stock_books, :action => :index, :from_date => c.from_date, :to_date => c.from_date, :barcode => c.list_barcode}, :target => "_blank", class: "btn btn-info btn-xs" %></td>
+      </tr>
+    <% end %>
+  </tbody>
+  <tfoot>
+    <tr>
+      <th colspan="2"> Total</th>
+      <th>  <%= @purchased_qty %> </th>
+      <th>  <%= @purchased_val %> </th>
+      <th>  <%= @retail_returns_qty %> </th>
+      <th>  <%= @retail_returns_val %> </th>
+      <th>  <%= @wholesale_returns_qty %> </th>
+      <th>  <%= @wholesale_returns_val %> </th>
+      <th>  <%= @branch_returns_qty %> </th>
+      <th>  <%= @branch_returns_val %> </th>
+      <th>  <%= @retail_sales_qty %> </th>
+      <th>  <%= @retail_sales_val %> </th>
+      <th>  <%= @wholesale_sale_qty %> </th>
+      <th>  <%= @wholesale_sale_val %> </th>
+      <th>  <%= @branch_sales_qty %> </th>
+      <th>  <%= @branch_sales_val %> </th>
+      <th>  <%= @corrections_qty %> </th>
+      <th>  <%= @corrections_val %> </th>
+      <th>  </th>
+      <th> </th>
+  </tr>
+  </tfoot>
+</table>
+<% end %>
+<br>
+<% if @show_add_update == 1 %>
+<%= link_to 'Download CSV Stock Book', product_stock_books_path(barcode: @barcode, from_date: @or_from_date, to_date: @or_to_date , format: :csv), class: "btn btn-info btn-sm" %>
+<br>
+<br>
+<!-- % = render('create_list') % -->
+
+
+<br>
+
+
+<!-- Today's Date <%= @prev_datelist %> -->
+<% end %>
+<br>

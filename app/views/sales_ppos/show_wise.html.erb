@@ -23,17 +23,17 @@
      	<th rowspan="2" style="width:">Show</th>
 	   	<th rowspan="2">Name</th>
         <th colspan="3">Income</th>
-        <th rowspan="2" class="text-right">Revenue</th>
+        <th rowspan="2" class="text-right"><small>Revenue </small></th>
         <th colspan="5">Expense</th>
        	<th rowspan="2">PPO </th>
       	<th>More </th>
      </tr>
      <tr>	
-        <th class="text-right">Orders</th>
-        <th class="text-right">Pieces*</th>
-       	<th class="text-right">Sales</th>
-        <th class="text-right">Product Cost</th>
-        <th class="text-right">Commision</th>
+        <th class="text-right"><small>Orders </small></th>
+        <th class="text-right"><small>Nos </small> *</th>
+       	<th class="text-right"><small>Sales </small></th>
+        <th class="text-right"><small>Product Cost </small></th>
+        <th class="text-right"><small>Comm -ision </small></th>
        	<th class="text-right">Media Cost</th>
         <th class="text-right">Refund</th>
         <th class="text-right">Damages</th>
@@ -43,9 +43,9 @@
 	<% @sno = 1 %>
    <% @employeeorderlist.each do |c| %>
    <tr>
-	   <td rowspan="2"><%= @sno %></td>
+	   <td rowspan="3"><%= @sno %></td>
 
-	 	<td rowspan="2"><%= c.show %> <small> Id: <%= c.campaign_playlist_id %> </small><br>
+	 	<td rowspan="3"><%= c.show %> <small> Id: <%= c.campaign_playlist_id %> </small><br>
 		 <% if c.product_cost == 0 %>
 		<span style="color:red">No Product Cost Found</span>
 		<% else %>
@@ -53,7 +53,7 @@
 		<% end %>
 		<small><%= link_to "Cost Details", productcost_path(search: c.prod), :target => "_blank", class: "btn btn-primary btn-xs" %> </small> 
 		<br>
-		Time: <%= c.show_time %>
+		Time: <%= c.show_time %> <br>
 		<small>Desc: <%= c.description %> </small>
 		</td>
 		<td title="Name"><small><%= c.total_name_1 %> </small> </td>
@@ -67,7 +67,7 @@
 		<td class="text-right" title="Refunds"> <%= c.total_refund_1 %>   </td>
 		<td class="text-right" title="Damages"> <%= c.total_product_dam_cost_1 %>   </td>
 		<td class="text-right" title="Profitability">   <%= c.profit_per_order_1 %>  </td>
-		<td rowspan="2">
+		<td rowspan="3">
 			<%= link_to "Old", ppo_products_path(campaign_id: c.campaign_playlist_id), :target => "_blank", class: "btn btn-primary btn-xs"  %>
 			<hr>
 			<%= link_to "New", {:controller => :sales_ppos, :action => :details, campaign_id: c.campaign_playlist_id}, :target => "_blank", class: "btn btn-info btn-xs" %>
@@ -89,6 +89,22 @@
 		<td class="text-right" title="Profitability">   <%= c.profit_per_order_2 %>  </td>
 
 	</tr>
+	
+	<!-- second -->
+		<tr>
+			<td title="Name"><small><%= c.total_name_3 %></small></td>
+			<td class="text-right" title="Orders"> <%= c.total_nos_3 %>  </td>
+			<td class="text-right" title="Pieces"> <%= c.total_pieces_3 %>   </td>
+			<td class="text-right" title="Sales">   <%= c.total_sales_3 %>    </td>
+			<td class="text-right" title="Revenue">   <%= c.total_revenue_3 %>    </td>
+			<td class="text-right" title="Product Cost">   <%= c.total_product_cost_3 %>    </td>
+			<td class="text-right" title="Variable Cost">   <%= c.total_var_cost_3 %>   </td>
+			<td class="text-right" title="Fixed Media Cost"> <%= c.total_fixed_cost_3 %>     </td>
+			<td class="text-right" title="Refunds"> <%= c.total_refund_3 %>   </td>
+			<td class="text-right" title="Damages"> <%= c.total_product_dam_cost_3 %>   </td>
+			<td class="text-right" title="Profitability">   <%= c.profit_per_order_3 %>  </td>
+
+		</tr>
   <% @sno += 1 %>
  <% end %>
   </tbody>

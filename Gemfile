@@ -65,6 +65,8 @@ gem 'byebug'
 #gem 'jquery-ui-rails'
 #https://github.com/joliss/jquery-ui-rails
 
+gem "select2-rails"
+
 #http://www.eyecon.ro/bootstrap-datepicker/
 gem 'simple-form-datepicker'
 

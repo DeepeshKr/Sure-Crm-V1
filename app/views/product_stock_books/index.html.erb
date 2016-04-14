@@ -10,7 +10,7 @@
       <div class="col-xs-12"><small>These are Products On Sale
        <%= link_to "click here to view", product_lists_path, :target => "_blank" %>
        . The barcode is shown in bracket is relevant stock unit e.g (00013) </small></div>
-      <div class="col-xs-12"><%= render('search') %> </div>
+      <div class="col-xs-12"><%= render partial: 'search', :locals => {:searchaction => "index"} %> </div>
     </div>
 
   </div>
@@ -71,7 +71,7 @@
         <td><%= product_stock_book.stock_date.strftime('%d-%b-%Y') %>         </td>
         <td class="text-right"><%= product_stock_book.opening_qty %> </td>
         <td class="text-right"><%= product_stock_book.purchased_qty  %>
-        <% @purchased_qty += product_stock_book.opening_qty %></td>
+        <% @purchased_qty += product_stock_book.purchased_qty %></td>
         <td class="text-right"><%= product_stock_book.purchased_value %>
         <% @purchased_val += product_stock_book.purchased_value %></td>
         <td class="text-right"><%= product_stock_book.returned_retail_qty %>
@@ -119,7 +119,7 @@
       <th>  <%= @wholesale_returns_val %> </th>
       <th>  <%= @branch_returns_qty %> </th>
       <th>  <%= @branch_returns_val %> </th>
-      <th> <%= @retail_sales_qty %> </th>
+      <th>  <%= @retail_sales_qty %> </th>
       <th>  <%= @retail_sales_val %> </th>
       <th>  <%= @wholesale_sale_qty %> </th>
       <th>  <%= @wholesale_sale_val %> </th>
@@ -138,7 +138,7 @@
 <%= link_to 'Download CSV Stock Book', product_stock_books_path(barcode: @barcode, from_date: @or_from_date, to_date: @or_to_date , format: :csv), class: "btn btn-info btn-sm" %>
 <br>
 <br>
-<%= render('create_list') %>
+<!-- % = render('create_list') % -->
 
 
 <br>
@@ -148,4 +148,4 @@
 <% end %>
 <br>
 <br>
-<small>List of Dates: <%= @datelist %></small>
+<!-- small>List of Dates: < % = @datelist % ></small -->

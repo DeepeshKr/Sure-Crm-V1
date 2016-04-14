@@ -1,0 +1,13 @@
+<% if @open_orders.present? %>
+<table class="table table-bordered"> 
+  <thead>
+    <tr>
+		<th>Total Orders: <%= @open_orders.all_orders %></th>
+		<th>Retail Orders: <%= @open_orders.retail_orders %> </th>
+		<th>Transfer Orders: <%= @open_orders.transfer_orders %> </th>
+		<th>Shipped Orders: <%= @open_orders.shipped_orders %> </th>
+		<th>Open Orders: <%= @open_orders.open_orders %> </th>
+	</tr>
+</thead>
+</table>
+<% end %>

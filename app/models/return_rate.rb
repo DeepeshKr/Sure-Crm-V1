@@ -1,6 +1,8 @@
 class ReturnRate < ActiveRecord::Base
   attr_accessor :show_all, :retail_default_rate, :transfer_order_default_rate
   attr_accessor :rate_0, :note_0, :rate, :note, :rate_1, :note_1, :rate_2, :note_2
+  attr_accessor :shipped_percent, :cancelled_percent, :returned_percent, :paid_percent, :transfer_total_percent,
+  :transfer_total_paid_percent, :transfer_total_cancelled_percent, :shipped_cancelled_percent, :shipped_returned_percent, :shipped_paid_percent, :shipped_transfer_total_percent, :shipped_transfer_total_paid_percent, :shipped_transfer_total_cancelled_percent
   #
   # def initialize(rate, note)
   #     # Instance variables
@@ -20,84 +22,57 @@ class ReturnRate < ActiveRecord::Base
    return 65
   end
   
-  def shipped_percent
-    return_rate = ReturnRate.where("media_id is null and product_list_id is null").where(offset: 60, no_of_days:60).first
-    (return_rate.shipped.to_f / return_rate.total.to_f) * 100
-  end
-  
-  def cancelled_percent
-    return_rate = ReturnRate.where("media_id is null and product_list_id is null").where(offset: 60, no_of_days:60).first
-    (return_rate.cancelled.to_f / return_rate.total.to_f) * 100
-  end
-  
-  def returned_percent
-    return_rate = ReturnRate.where("media_id is null and product_list_id is null").where(offset: 60, no_of_days:60).first
-    (return_rate.returned.to_f / return_rate.total.to_f) * 100
-  end
-  
-  def paid_percent
-    return_rate = ReturnRate.where("media_id is null and product_list_id is null").where(offset: 60, no_of_days:60).first
-    (return_rate.paid.to_f / return_rate.total.to_f) * 100
-  end
-  
-  def transfer_total_percent
-    return_rate = ReturnRate.where("media_id is null and product_list_id is null").where(offset: 60, no_of_days:60).first
-    (return_rate.transfer_total.to_f / return_rate.total.to_f) * 100
-  end
-  
-  def transfer_total_paid_percent
-    return_rate = ReturnRate.where("media_id is null and product_list_id is null").where(offset: 60, no_of_days:60).first
-    (return_rate.transfer_paid.to_f / return_rate.transfer_total.to_f) * 100
-  end
-  
-  def transfer_total_cancelled_percent
-    return_rate = ReturnRate.where("media_id is null and product_list_id is null").where(offset: 60, no_of_days:60).first
-    (return_rate.transfer_cancelled.to_f / return_rate.transfer_total.to_f) * 100
+  def all_percents offset, days=0
+    return_rates = ReturnRate.where("media_id is null and product_list_id is null").where(offset: offset).order(:no_of_days)
+    if days > 0
+     return_rates = return_rates.where(no_of_days: days)
+    end
+    #return_rate = return_rates .first
+    
+    re_return_rates = []
+    return_rates.each do |return_rate|
+      re_return = ReturnRate.new
+  	  re_return.offset = offset
+  		re_return.no_of_days = return_rate.no_of_days
+      re_return.name = return_rate.name
+      re_return.total = return_rate.total
+  		re_return.shipped = return_rate.shipped
+      re_return.cancelled = return_rate.cancelled
+      re_return.returned = return_rate.returned
+      re_return.paid = return_rate.paid
+      re_return.transfer_total = return_rate.transfer_total
+      re_return.transfer_cancelled = return_rate.transfer_cancelled
+      re_return.transfer_paid = return_rate.transfer_paid
+      re_return.shipped_percent = (return_rate.shipped.to_f / return_rate.total.to_f) * 100
+      re_return.cancelled_percent = (return_rate.cancelled.to_f / return_rate.total.to_f) * 100
+      re_return.returned_percent = (return_rate.returned.to_f / return_rate.total.to_f) * 100
+      re_return.paid_percent = (return_rate.paid.to_f / return_rate.total.to_f) * 100
+      re_return.transfer_total_percent = (return_rate.transfer_total.to_f / return_rate.total.to_f) * 100
+      re_return.transfer_total_paid_percent = (return_rate.transfer_paid.to_f / return_rate.transfer_total.to_f) * 100
+      re_return.transfer_total_cancelled_percent = (return_rate.transfer_cancelled.to_f / return_rate.transfer_total.to_f) * 100 
+      re_return.shipped_cancelled_percent = (return_rate.cancelled.to_f / return_rate.shipped.to_f) * 100
+      re_return.shipped_returned_percent = (return_rate.returned.to_f / return_rate.shipped.to_f) * 100
+      re_return.shipped_paid_percent = (return_rate.paid.to_f / return_rate.shipped.to_f) * 100
+      re_return.shipped_transfer_total_percent = (return_rate.transfer_total.to_f / return_rate.shipped.to_f) * 100
+      re_return.shipped_transfer_total_paid_percent = (return_rate.transfer_paid.to_f / return_rate.transfer_total.to_f) * 100
+      re_return.shipped_transfer_total_cancelled_percent = (return_rate.transfer_cancelled.to_f / return_rate.transfer_total.to_f) * 100
+    
+      re_return_rates << re_return
+    end
+    return re_return_rates
   end
   
   ### optional
-  def paid_decimal
-    return_rate = ReturnRate.where("media_id is null and product_list_id is null").where(offset: 60, no_of_days:60).first
+  def paid_decimal offset, days
+    return_rate = ReturnRate.where("media_id is null and product_list_id is null").where(offset: offset, no_of_days: days).first
     (return_rate.paid.to_f / return_rate.total.to_f)
   end
   
-  def transfer_total_paid_decimal
-    return_rate = ReturnRate.where("media_id is null and product_list_id is null").where(offset: 60, no_of_days:60).first
+  def transfer_total_paid_decimal offset, days
+    return_rate = ReturnRate.where("media_id is null and product_list_id is null").where(offset: offset, no_of_days: days).first
     (return_rate.transfer_paid.to_f / return_rate.transfer_total.to_f) 
   end
-  ######
-  # shipped percent
-  #########
-  
-  def shipped_cancelled_percent
-    return_rate = ReturnRate.where("media_id is null and product_list_id is null").where(offset: 60, no_of_days:60).first
-    (return_rate.cancelled.to_f / return_rate.shipped.to_f) * 100
-  end
 
-  def shipped_returned_percent
-    return_rate = ReturnRate.where("media_id is null and product_list_id is null").where(offset: 60, no_of_days:60).first
-    (return_rate.returned.to_f / return_rate.shipped.to_f) * 100
-  end
-
-  def shipped_paid_percent
-    return_rate = ReturnRate.where("media_id is null and product_list_id is null").where(offset: 60, no_of_days:60).first
-    (return_rate.paid.to_f / return_rate.shipped.to_f) * 100
-  end
-
-  def shipped_transfer_total_percent
-    return_rate = ReturnRate.where("media_id is null and product_list_id is null").where(offset: 60, no_of_days:60).first
-    (return_rate.transfer_total.to_f / return_rate.shipped.to_f) * 100
-  end
-
-  def shipped_transfer_total_paid_percent
-    return_rate = ReturnRate.where("media_id is null and product_list_id is null").where(offset: 60, no_of_days:60).first
-    (return_rate.transfer_paid.to_f / return_rate.transfer_total.to_f) * 100
-  end
-
-  def shipped_transfer_total_cancelled_percent
-    return_rate = ReturnRate.where("media_id is null and product_list_id is null").where(offset: 60, no_of_days:60).first
-    (return_rate.transfer_cancelled.to_f / return_rate.transfer_total.to_f) * 100
-  end
   
   ######
   # shipped percent for media, product variant for days skipped days
@@ -119,7 +94,7 @@ class ReturnRate < ActiveRecord::Base
     return_rate.note_0 = "#{product_variant.extproductcode} default value"
     return_rate.rate = 50.0
     return_rate.note = "#{product_variant.extproductcode} default value"
-    return_rate.rate_1 = 50.0
+    return_rate.rate_1 = 0.0
     return_rate.note_1 = "Nothing for #{product_variant.extproductcode}, for 60 - 30 days for media #{media_id}"
     return_rate.rate_2 = 0.0
     return_rate.note_2 = "Nothing for #{product_variant.extproductcode}, for 60 - 60 days for media #{media_id}"
