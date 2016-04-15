@@ -1,3 +1,7 @@
+<!-- set page title start -->
+<% title @page_heading  %>
+<!-- set page title end -->
+
 <div class="row">
   <div class="col-xs-2">
     <h3>Stock Book</h3>
@@ -20,103 +24,93 @@
 <table class="table table-hover table-bordered table-stripped">
   <thead>
   <tr>
-    <th rowspan="3" colspan="1">Date</th>
+    <th rowspan="3" colspan="1">Product</th>
     <th rowspan="2" colspan="2">Purchased</th>
     <th colspan="6">Returned </th>
     <th colspan="6">Sold </th>
     <th rowspan="2" colspan="2">Corrections</th>
-     <th rowspan="1" colspan="2">Show</th>
+     <th rowspan="3" colspan="1">Show</th>
   </tr>
   <tr>
     <th colspan="2">Retail </th>
     <th colspan="2">wholesale</th>
     <th colspan="2">Branch</th>
+	
     <th colspan="2">Retail</th>
     <th colspan="2">Wholesale</th>
     <th colspan="2">Branch</th>
   </tr>
   <tr>
     <th>Qty</th>
-
+	<th>Value</th>
+	
     <th>Qty</th>
     <th>Value</th>
     <th>Qty</th>
     <th>Value</th>
     <th>Qty</th>
     <th>Value</th>
+	
     <th>Qty</th>
     <th>Value</th>
     <th>Qty</th>
     <th>Value</th>
     <th>Qty</th>
     <th>Value</th>
+	
     <th>Qty</th>
     <th>Value</th>
-    <th>Qty</th>
-    <th>Value</th>
-    <th>Qty</th>
-
   </tr>
   </thead>
 
   <tbody>
     <% @product_stock_books.each do |product_stock_book| %>
       <tr>
-        <td><%= product_stock_book.productinfo %>         </td>
-        <td class="text-right"><%= product_stock_book.total_purchased_qty  %>
-        <% @purchased_qty += product_stock_book.total_purchased_qty %></td>
-        <td class="text-right"><%= product_stock_book.total_purchased_value %>
-        <% @purchased_val += product_stock_book.total_purchased_value %></td>
-        <td class="text-right"><%= product_stock_book.total_returned_retail_qty %>
-        <% @retail_returns_qty += product_stock_book.total_returned_retail_qty %> </td>
-        <td class="text-right"><%= product_stock_book.total_returned_retail_value %>
-        <% @retail_returns_val += product_stock_book.total_returned_retail_value %> </td>
-        <td class="text-right"><%= product_stock_book.total_returned_wholesale_qty %>
-        <% @wholesale_returns_qty += product_stock_book.total_returned_wholesale_qty %> </td>
-        <td class="text-right"><%= product_stock_book.total_returned_wholesale_value %>
-        <% @wholesale_returns_val += product_stock_book.total_returned_wholesale_value %>   </td>
-        <td class="text-right"><%= product_stock_book.total_returned_others_qty %>
-        <% @other_returns_qty += product_stock_book.total_returned_others_qty %> </td>
-        <td class="text-right"><%= product_stock_book.total_returned_others_value %>
-        <% @other_returns_val += product_stock_book.total_returned_others_value %></td>
-        <td class="text-right"><%= product_stock_book.total_sold_retail_qty %>
-        <% @retail_sales_qty += product_stock_book.total_sold_retail_qty %></td>
-        <td class="text-right"><%= product_stock_book.total_sold_retail_value %>
-        <% @retail_sales_val += product_stock_book.total_sold_retail_value %> </td>
-        <td class="text-right"><%= product_stock_book.total_sold_wholesale %>
-        <% @wholesale_sale_qty += product_stock_book.total_sold_wholesale %> </td>
-        <td class="text-right"><%= product_stock_book.total_sold_wholesale_value %>
-        <% @wholesale_sale_val += product_stock_book.total_sold_wholesale_value %> </td>
-        <td class="text-right"><%= product_stock_book.total_sold_branch_qty %>
-        <% @branch_sales_qty += product_stock_book.total_sold_branch_qty %> </td>
-        <td class="text-right"><%= product_stock_book.total_sold_branch_qty %>
-        <% @branch_sales_val += product_stock_book.total_sold_branch_value %> </td>
-        <td class="text-right"><%= product_stock_book.total_corrections_qty %>
-          <% @corrections_qty += product_stock_book.total_corrections_qty %> </td>
-        <td class="text-right"><%= product_stock_book.total_corrections_value %>
-        <% @corrections_val += product_stock_book.total_corrections_value %> </td>
+        <td><%= product_stock_book.productinfo %></td>
+        <td class="text-right"><%= product_stock_book.total_purchased_qty  %><% @purchased_qty += product_stock_book.total_purchased_qty %></td>
+        <td class="text-right"><%= product_stock_book.total_purchased_value %><% @purchased_val += product_stock_book.total_purchased_value %></td>
+		<!--returned 6 cols-->
+        <td class="text-right"><%= product_stock_book.total_returned_retail_qty %> <% @retail_returns_qty += product_stock_book.total_returned_retail_qty %> </td>
+        <td class="text-right"><%= product_stock_book.total_returned_retail_value %> <% @retail_returns_val += product_stock_book.total_returned_retail_value %> </td>
+        <td class="text-right"><%= product_stock_book.total_returned_wholesale_qty %> <% @wholesale_returns_qty += product_stock_book.total_returned_wholesale_qty %> </td>
+        <td class="text-right"><%= product_stock_book.total_returned_wholesale_value %> <% @wholesale_returns_val += product_stock_book.total_returned_wholesale_value %>   </td>
+        <td class="text-right"><%= product_stock_book.total_returned_others_qty %> <% @other_returns_qty += product_stock_book.total_returned_others_qty %> </td>
+        <td class="text-right"><%= product_stock_book.total_returned_others_value %> <% @other_returns_val += product_stock_book.total_returned_others_value %></td>
+		<!--sold 6 cols -->
+        <td class="text-right"><%= product_stock_book.total_sold_retail_qty %> <% @retail_sales_qty += product_stock_book.total_sold_retail_qty %></td>
+        <td class="text-right"><%= product_stock_book.total_sold_retail_value %> <% @retail_sales_val += product_stock_book.total_sold_retail_value %> </td>
+        <td class="text-right"><%= product_stock_book.total_sold_wholesale %> <% @wholesale_sale_qty += product_stock_book.total_sold_wholesale %> </td>
+        <td class="text-right"><%= product_stock_book.total_sold_wholesale_value %> <% @wholesale_sale_val += product_stock_book.total_sold_wholesale_value %> </td>
+        <td class="text-right"><%= product_stock_book.total_sold_branch_qty %> <% @branch_sales_qty += product_stock_book.total_sold_branch_qty %> </td>
+        <td class="text-right"><%= product_stock_book.total_sold_branch_qty %> <% @branch_sales_val += product_stock_book.total_sold_branch_value %> </td>
+        <td class="text-right"><%= product_stock_book.total_corrections_qty %> <% @corrections_qty += product_stock_book.total_corrections_qty %> </td>
+        <td class="text-right"><%= product_stock_book.total_corrections_value %> <% @corrections_val += product_stock_book.total_corrections_value %> </td>
         <td>
-			<%= link_to "Show", {:controller => :product_stock_books, :action => :index, :from_date => c.from_date, :to_date => c.from_date, :barcode => c.list_barcode}, :target => "_blank", class: "btn btn-info btn-xs" %></td>
+		<%= link_to "Show", {:controller => :product_stock_books, :action => :index, :from_date => @from_date_text, :to_date => @to_date_text, :barcode => product_stock_book.list_barcode}, :target => "_blank", class: "btn btn-info btn-xs" %>
+	  </td>
       </tr>
     <% end %>
   </tbody>
   <tfoot>
     <tr>
-      <th colspan="2"> Total</th>
+      <th> Total</th>
       <th>  <%= @purchased_qty %> </th>
       <th>  <%= @purchased_val %> </th>
+	  
       <th>  <%= @retail_returns_qty %> </th>
       <th>  <%= @retail_returns_val %> </th>
       <th>  <%= @wholesale_returns_qty %> </th>
       <th>  <%= @wholesale_returns_val %> </th>
-      <th>  <%= @branch_returns_qty %> </th>
-      <th>  <%= @branch_returns_val %> </th>
+      <th>  <%= @other_returns_qty %> </th>
+      <th>  <%= @other_returns_val %> </th>
+	  
       <th>  <%= @retail_sales_qty %> </th>
       <th>  <%= @retail_sales_val %> </th>
       <th>  <%= @wholesale_sale_qty %> </th>
       <th>  <%= @wholesale_sale_val %> </th>
       <th>  <%= @branch_sales_qty %> </th>
       <th>  <%= @branch_sales_val %> </th>
+	  
       <th>  <%= @corrections_qty %> </th>
       <th>  <%= @corrections_val %> </th>
       <th>  </th>

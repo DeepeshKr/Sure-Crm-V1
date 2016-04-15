@@ -34,8 +34,9 @@ class ProductStockBooksController < ApplicationController
        if ProductList.where(extproductcode: @prod).present?
           @product_name = ProductList.where(extproductcode: @prod).first.productinfo
         end
-        @from_date_text = from_date.strftime('%d-%b-%y')
-        @to_date_text = to_date.strftime('%d-%b-%y')
+       
+        @from_date_text = from_date.strftime('%Y-%m-%d')
+        @to_date_text = to_date.strftime('%Y-%m-%d')
           @product_stock_books = ProductStockBook.where(list_barcode: @barcode)
           .where("TRUNC(stock_date) >= ? AND TRUNC(stock_date) <= ?", from_date, to_date)
           .order("stock_date")
@@ -47,16 +48,16 @@ class ProductStockBooksController < ApplicationController
               headers['Content-Type'] ||= 'text/csv'
             end
           end
-
+        
     else
       @show_add_update = 0
     end
    # @product_stock_books = ProductStockBook.all.limit(100)
-
+    @page_heading = " summary between #{@or_from_date} and #{@or_to_date}"
   end
   
   def summary
-    @or_from_date = Date.today.in_time_zone - 365.days
+    @or_from_date = Date.today.in_time_zone - 30.days
     @or_to_date =  Date.today.in_time_zone
     
     if params[:from_date].present? && params[:to_date].present?
@@ -64,11 +65,11 @@ class ProductStockBooksController < ApplicationController
       @or_to_date = params[:to_date]
     end
     
-    @from_date_text = @or_from_date.strftime('%d-%b-%y')
-    @to_date_text = @or_to_date.strftime('%d-%b-%y')
+    @from_date_text = @or_from_date.strftime('%Y-%m-%d')
+    @to_date_text = @or_to_date.strftime('%Y-%m-%d')
     product_stock_book = ProductStockBook.new 
     @product_stock_books = product_stock_book.stock_book_summary @or_from_date, @or_to_date
-    
+    @page_heading = "Stock between #{@or_from_date} and #{@or_to_date}"
   end
 
   # GET /product_stock_books/1
