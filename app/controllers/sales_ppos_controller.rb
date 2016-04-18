@@ -11,67 +11,72 @@ class SalesPposController < ApplicationController
     @sno = 1
     all_return_rates
     todaydate = Date.today #Time.zone.now + 330.minutes
-    @from_date = todaydate - 30.days #30.days
+    @from_date = todaydate - 10.days #30.days
     @to_date = todaydate
-    if params.has_key?(:from_date)
-        from_date =  Date.strptime(params[:from_date], "%Y-%m-%d")
-        @from_date = from_date.to_date - 30.days #30.days
-        @to_date = from_date.to_date
-    end
+    # if params.has_key?(:from_date)
+#         from_date =  Date.strptime(params[:from_date], "%Y-%m-%d")
+#         @from_date = from_date.to_date - 30.days #30.days
+#         @to_date = from_date.to_date
+#     end
 
-    @deal_tran = DEALTRAN.where("custref = ?", 3271554)
+    ppo_sales = SalesPpo.new
+    @employeeorderlist = ppo_sales.sales_ppos_between_dates @from_date, @to_date
 
     @or_for_date = @to_date
-    employeeunorderlist ||= []
-    @to_date.downto(@from_date).each do |day|
-      #byebug
-      @from_date = day.beginning_of_day - 330.minutes
-      @to_date = day.end_of_day - 330.minutes
+    # # out_sales_ppos = []
+ # #    employeeunorderlist ||= []
+ #    @to_date.downto(@from_date).each do |day|
+ #      #byebug
+ #      @from_date = day.beginning_of_day - 330.minutes
+ #      @to_date = day.end_of_day - 330.minutes
+      # sales_ppo = SalesPpo.new
+ #      @sales_ppo_1 = sales_ppo.sales_ppos_for_date @from_date
+ # 
+      
+      #@sales_ppo_1 = ppo_sales.sales_ppos_for_date @from_date
+      # orderlist = SalesPpo.where('order_status_id > 10002')
+#       .where('start_time >= ? AND start_time <= ?', @from_date, @to_date)
+#       .where.not(order_status_id: @cancelled_status_id)
+#       ## Apply all the corrections here ###
+#       total_shipping = (orderlist.sum(:shipping_cost))
+#       # total_sub_total = (orderlist.sum(:subtotal))
+#       # totalorders = (total_shipping + total_sub_total)
+#       gross_sales = orderlist.sum(:gross_sales)
+#
+#        ## Apply all the corrections here ###
+#       revenue = orderlist.sum(:revenue)
+#       media_var_cost = orderlist.sum(:commission_cost)
+#       product_cost = orderlist.sum(:product_cost)
+#       product_damages = orderlist.sum(:damages)
+#       totalorders = orderlist.sum(:gross_sales)
+#       refund = totalorders * 0.02
+#       #nos = (orderlist.count())
+#
+#       nos = orderlist.distinct.count('order_id') #.count('order_id', :distinct => true)
+#       pieces = orderlist.sum(:pieces)
+#       total_cost = (product_cost + @hbn_media_fixed_cost + media_var_cost + refund + product_damages)
+#       profitability = (revenue - total_cost).to_i
+#
+          # employeeunorderlist << {:total => sales_ppo_1.total_nos.to_i,
+  #         :for_date => day,
+  #         :pieces => sales_ppo_1.total_pieces.to_i ,
+  #         :refund => sales_ppo_1.total_refund.to_i,
+  #         :nos => sales_ppo_1.total_nos.to_i,
+  #         :total_nos => sales_ppo_1.total_nos.to_i,
+  #         :revenue => sales_ppo_1.total_revenue.to_i,
+  #         :product_cost => sales_ppo_1.total_product_cost.to_i,
+  #         :product_damages => 0,
+  #         :variable_cost => sales_ppo_1.total_var_cost.to_i,
+  #         :fixed_cost => 100.to_i,
+  #         :total_cost => 100.to_i,
+  #         :profitability => 100}
 
-      orderlist = SalesPpo.where('order_status_id > 10002')
-      .where('start_time >= ? AND start_time <= ?', @from_date, @to_date)
-      .where.not(order_status_id: @cancelled_status_id)
-      ## Apply all the corrections here ###
-      total_shipping = (orderlist.sum(:shipping_cost))
-      # total_sub_total = (orderlist.sum(:subtotal))
-      # totalorders = (total_shipping + total_sub_total)
-      gross_sales = orderlist.sum(:gross_sales)
-
-       ## Apply all the corrections here ###
-      revenue = orderlist.sum(:revenue)
-      media_var_cost = orderlist.sum(:commission_cost)
-      product_cost = orderlist.sum(:product_cost)
-      product_damages = orderlist.sum(:damages)
-      totalorders = orderlist.sum(:gross_sales)
-      refund = totalorders * 0.02
-      #nos = (orderlist.count())
-
-      nos = orderlist.distinct.count('order_id') #.count('order_id', :distinct => true)
-      pieces = orderlist.sum(:pieces)
-      total_cost = (product_cost + @hbn_media_fixed_cost + media_var_cost + refund + product_damages)
-      profitability = (revenue - total_cost).to_i
-
-      employeeunorderlist << {:total => totalorders.to_i,
-      :for_date => day,
-      :pieces => pieces.to_i ,
-      :refund => refund.to_i,
-      :nos => nos.to_i,
-      :total_nos => nos.to_i,
-      :revenue => revenue.to_i,
-      :product_cost => product_cost.to_i,
-      :product_damages => product_damages.to_i,
-      :variable_cost => media_var_cost.to_i,
-      :fixed_cost => @hbn_media_fixed_cost.to_i,
-      :total_cost => total_cost.to_i,
-      :profitability => profitability}
-    end
+    # end
 
     #@list_of_orders =  @list_of_orders.sort_by{ |c| c[:time_of_order]}
-    @employeeorderlist = employeeunorderlist #.sort_by{|c| c[:total]}.reverse
+    #@employeeorderlist = employeeunorderlist #.sort_by{|c| c[:total]}.reverse
 
-    @sales_ppos = SalesPpo.where('order_status_id > 10002')
-    .where('start_time >= ? AND start_time <= ?', @from_date, @to_date)
-    .order("order_id DESC").paginate(:page => params[:page])
+
 
   end
 

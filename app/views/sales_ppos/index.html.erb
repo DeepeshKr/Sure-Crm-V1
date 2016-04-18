@@ -9,8 +9,82 @@
 	 	<%= render partial: 'date_search', :locals => {:searchaction => "index"}  %>
 	</div>
  </div>
+ <br>
+ <br>
+ <% if @employeeorderlist.present? %>
 
-<% if @employeeorderlist.present? %>
+<div class="row fixed-table">
+  <div class="table-content">
+	  <table class="table table-hover table-bordered table-striped">
+  		<thead class="header">
+     <tr>
+     	<th rowspan="2">No</th>
+     	<th  rowspan="2">Date</th>
+	   	<th rowspan="2">Name</th>
+        <th colspan="3">Income</th>
+        <th rowspan="2" class="text-right"><small>Revenue </small></th>
+        <th colspan="5">Expense</th>
+       	<th rowspan="2">PPO </th>
+      	<th>More </th>
+     </tr>
+     <tr>
+        <th class="text-right"><small>Orders </small></th>
+        <th class="text-right"><small>Nos </small> *</th>
+       	<th class="text-right"><small>Sales </small></th>
+        <th class="text-right"><small>Product Cost </small></th>
+        <th class="text-right"><small>Comm -ision </small></th>
+       	<th class="text-right">Media Cost</th>
+        <th class="text-right">Refund</th>
+        <th class="text-right">Damages</th>
+       </tr>
+    </thead>
+<tbody>
+	<% @sno = 1 %>
+   <% @employeeorderlist.each do |c| %>
+   <tr>
+	   <td><%= @sno %></td>
+
+	 	<td> 
+		<%= c.for_date.strftime("%Y-%m-%d") %> <br>
+		<small>Desc: <%= c.description %> </small>
+		</td>
+		<td title="Name"><small><%= c.total_name_1 %> </small> </td>
+		<td class="text-right" title="Orders"> <%= c.total_nos_1 %> </td>
+		<td class="text-right" title="Pieces"> <%= c.total_pieces_1 %>  </td>
+		<td class="text-right" title="Sales">   <%= c.total_sales_1 %>   </td>
+		<td class="text-right" title="Revenue">   <%= c.total_revenue_1 %>  </td>
+		<td class="text-right" title="Product Cost">   <%= c.total_product_cost_1 %>   </td>
+		<td class="text-right" title="Variable Cost">   <%= c.total_var_cost_1 %>  </td>
+		<td class="text-right" title="Fixed Media Cost"> <%= c.total_fixed_cost_1 %>   </td>
+		<td class="text-right" title="Refunds"> <%= c.total_refund_1 %>   </td>
+		<td class="text-right" title="Damages"> <%= c.total_product_dam_cost_1 %>   </td>
+		<td class="text-right" title="Profitability">   <%= c.profit_per_order_1 %>  </td>
+		<td>
+			<%= link_to "30 Min PPO", { :controller => :sales_ppos, :action => :half_hour, :from_date => c.for_date.strftime("%Y-%m-%d")}, { class: "btn btn-info btn-xs"} %>
+			<hr>
+				<%= link_to "Shows' PPO", { :controller => :sales_ppos, :action => :show_wise, :from_date => c.for_date.strftime("%Y-%m-%d")}, { class: "btn btn-info btn-xs"} %>
+		</td>
+	</tr>
+
+
+
+
+  <% @sno += 1 %>
+ <% end %>
+  </tbody>
+ </table>
+  </div>
+ </div>
+  <% else %>
+  <div class="well well-sm">
+  <h5>Please select a date to generate the report </h5>
+  </div>
+  <% end %>
+ <br>
+ <br>
+
+ <br>
+<% if @employeeorderlist_2.present? %>
 <table class="table table-hover table-bordered">
 <thead>
    <tr>
@@ -70,8 +144,7 @@
   <div class="well well-sm"><h5>Please select a date to generate the report </h5></div>
   <% end %>
  <br>
-<hr>
-<%= render :partial => "deal_tran/list" %>
+
 <hr>
 <!-- = render :partial => "full_list.html.erb" -->
 
