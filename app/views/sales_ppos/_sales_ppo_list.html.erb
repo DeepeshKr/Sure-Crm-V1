@@ -2,17 +2,14 @@
 <table class="table table-hover table-stripped table-bordered"> 
   <thead>
     <tr>
-	  <th> SNo </th>
+	  <th>SNo </th>
       <th>Prod</th>
       <th>Time</th>
-	  <th>Order no | Ref No</th>
-      <th class="text-right">Product cost</th>
+	  <th>Variant</th>
+	  <th>Channel</th>
+	  <th>Order no</th>
+	  <th>Ref No</th>
       <th class="text-right">Pieces</th>
-      <th class="text-right">Revenue</th>
-      <th class="text-right">Damages</th>
-      <th class="text-right">Returns</th>
-      <th class="text-right">Comm ission</th>
-      <th class="text-right">Promo tion</th>
       <th class="text-right">Gross</th>
       <th class="text-right">Net</th>
       
@@ -26,14 +23,11 @@
 		  <td> <%= @sno %> </td>
         <td><%= sales_ppo.prod %></td>
 		<td><small><%= (sales_ppo.start_time + 330.minutes).strftime('%d-%b %H:%M %P') %></small> </td>
-		<td><%= sales_ppo.external_order_no %><br><%= sales_ppo.order_id %></td>
-        <td class="text-right"><%= sales_ppo.product_cost %></td>
+		<td><%= sales_ppo.product_variant.productdetails %> </td>
+		<td><%= sales_ppo.medium.name %> </td>
+		<td><%= sales_ppo.external_order_no %></td>
+		<td><%= sales_ppo.order_id %></td>
         <td class="text-right"><%= sales_ppo.pieces %></td>
-        <td class="text-right"><%= sales_ppo.revenue %></td>
-        <td class="text-right"><%= sales_ppo.damages %></td>
-        <td class="text-right"><%= sales_ppo.returns %></td>
-        <td class="text-right"><%= sales_ppo.commission_cost %></td>
-        <td class="text-right"><%= sales_ppo.promotion_cost %></td>
         <td class="text-right"><%= sales_ppo.gross_sales %></td>
         <td class="text-right"><%= sales_ppo.net_sale %></td>
        

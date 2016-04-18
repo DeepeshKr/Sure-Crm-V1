@@ -82,11 +82,11 @@
 		<td class="text-right"> <%= three_mo.total_var_cost if three_mo %> </td>
 	</tr>
 	<tr>
-		<td>Media Cost (<%= all.total_fixed_cost if all %> total) </td>
-		<td class="text-right"> <%= all.cor_fixed_cost if all %> </td>
-		<td class="text-right"> <%= shipped.cor_fixed_cost if shipped %> </td>
-		<td class="text-right"> <%= default.cor_fixed_cost if default %> </td>
-		<td class="text-right"> <%= three_mo.cor_fixed_cost if three_mo %> </td>
+		<td>Media Cost (<%= all.total_fixed_cost.round(2) if all %> total) </td>
+		<td class="text-right"> <%= all.cor_fixed_cost.round(2) if all %> </td>
+		<td class="text-right"> <%= shipped.cor_fixed_cost.round(2) if shipped %> </td>
+		<td class="text-right"> <%= default.cor_fixed_cost.round(2) if default %> </td>
+		<td class="text-right"> <%= three_mo.cor_fixed_cost.round(2) if three_mo %> </td>
 	</tr>
 	<tr>
 		<td>Postage <%= all.postage_name %></td>

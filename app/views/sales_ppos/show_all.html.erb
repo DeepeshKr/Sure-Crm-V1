@@ -1,0 +1,53 @@
+<!-- set page title start -->
+<% title @page_heading  %>
+<!-- set page title end -->
+
+<div class="row">
+      <div class="col-xs-4">
+		  <%= form_tag  url_for(:controller => 'sales_ppos', :action => "show_all"), method: "get" do  %>
+		  <div class="row">
+			  <div class="col-xs-8">
+				  
+		          <!-- % = text_field_tag(:order_id, @order_id,
+		          {:class => "form-control", :placeholder => "Search Order Ref Id"}, :required => "true")  % -->
+				    <%= text_field_tag(:order_id, @order_id, :class => "form-control", :required => "true",:placeholder => "Search Order Ref Id" ) %>
+			  </div>
+		      <div class="col-xs-4">
+		        <%= submit_tag "Show", name: nil, class: "btn btn-primary" %>
+		      </div>
+		  </div>
+		 <% end %>
+      </div>  
+      <div class="col-xs-4">
+		  <%= form_tag  url_for(:controller => 'sales_ppos', :action => "show_all"), method: "get" do  %>
+		  <div class="row">
+			  <div class="col-xs-8">
+				  <%= text_field_tag(:order_no, @order_no, :class => "form-control", :required => "true",:placeholder => "Search Order Number" )   %>
+		          <!-- % = text_field_tag(:order_no, @order_no,
+		          {:class => "form-control", :placeholder => "Search Order Number"}, :required => "true")  % -->
+			  </div>
+		      <div class="col-xs-4">
+		        <%= submit_tag "Show", name: nil, class: "btn btn-primary" %>
+		      </div>
+		  </div>
+		 <% end %>
+      </div>
+      <div class="col-xs-4">
+		  <%= form_tag  url_for(:controller => 'sales_ppos', :action => "show_all"), method: "get" do  %>
+		  <div class="row">
+			  <div class="col-xs-8">
+				  <%= text_field_tag(:campaign_playlist_id, @campaign_playlist_id, :class => "form-control", :required => "true",:placeholder => "Search Campaign Playlist Id" )   %>
+		          <!-- % = text_field_tag(:order_no, @order_no,
+		          {:class => "form-control", :placeholder => "Search Order Number"}, :required => "true")  % -->
+			  </div>
+		      <div class="col-xs-4">
+		        <%= submit_tag "Show", name: nil, class: "btn btn-primary" %>
+		      </div>
+		  </div>
+		 <% end %>
+      </div>
+</div>
+
+<hr>
+
+<%= render 'sales_ppo_mini_list' %>

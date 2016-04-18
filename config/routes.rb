@@ -122,9 +122,18 @@ post 'distributor_upload_orders/switch_off'
   get 'sales_ppos/show_wise'
   get 'sales_ppos_show_wise' => 'sales_ppos#show_wise'
   get 'sales_ppos/product_performance'
-  get 'sales_ppos_product_performance' => 'sales_ppos#sproduct_performance'
+  get 'sales_ppos_product_performance' => 'sales_ppos#product_performance'
+  get 'sales_ppos/show_performance'
+  get 'sales_ppos_show_performance' => 'sales_ppos#show_performance'
+  get 'sales_ppos/hour_sales_performance'
+  get 'sales_ppos_hour_sales_performance' => 'sales_ppos#hour_sales_performance'
+  get 'sales_ppos/operator_sales_performance'
+  get 'sales_ppos_operator_sales_performance' => 'sales_ppos#operator_sales_performance'
   get 'sales_ppos/details'
   get 'sales_ppos_details' => 'sales_ppos#details'
+  
+  get 'sales_ppos/show_all'
+  get 'sales_ppos_show_all' => 'sales_ppos#show_all'
   get 'sales_ppos/demo'
   get 'sales_ppos_details' => 'sales_ppos#demo'
   
@@ -200,11 +209,16 @@ post 'distributor_upload_orders/switch_off'
   get 'channel_summary_report' => 'sales_report#channel_summary_report'
   get 'sales_report/channel_sales_summary'
   get 'channel_sales_summary' => 'sales_report#channel_sales_summary'
-
+  
+  # final report
   get 'sales_report/cdm_report'
   get 'cdm_report' => 'sales_report#cdm_report'
+  # source 1 (order sales)
   get 'cdm_sales_summary' => 'sales_report#cdm_sales_summary'
   get 'sales_report/cdm_sales_summary'
+  # source 2 (media pre paid info)
+  get 'cdm_operator_list_summary' => 'sales_report#cdm_operator_list_summary'
+  get 'sales_report/cdm_operator_list_summary'
 
   get 'channel_consolidated_daily_report' => 'sales_report#channel_consolidated_daily_report'
   get 'sales_report/channel_consolidated_daily_report'

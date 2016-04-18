@@ -1,0 +1,81 @@
+<!-- set page title start -->
+<% title "HBN Product Orders various Time #{@timenow}" %>
+<!-- set page title end -->
+ <div class="row">
+	 <div class="col-xs-4">
+
+	 <h4>HBN Product Orders various Time</h4>
+
+
+	 </div>
+   <%= form_tag  url_for(:controller => 'sales_ppos', :action => "product_performance"), method: "get" do  %>
+
+   <div class="col-xs-3">
+          <%= select_tag :product_variant_id, options_from_collection_for_select(@product_variants, :id, :productinfo, :selected => @product_variant_id), {:class => "form-control",  :required => true} %>
+
+         <!--%= select_tag :product_list_id, options_from_collection_for_select(@product_lists, :id, :productinfo, :selected => @product_list_id), {:class => "form-control",  :required => true} % -->
+
+
+   </div>
+       <div class="col-xs-3">
+         <div class="input-daterange input-group">
+           <%= text_field_tag(:from_date, @from_date, :data => {:provide => "datepicker"}, :id => "datepicker_from", :class => "form-control", :required => "true" )   %>
+           <span class="input-group-addon">to</span>
+
+            <%= text_field_tag(:to_date, @to_date, :data => {:provide => "datepicker"}, :id => "datepicker_to", :class => "form-control", :required => "true" )   %>
+
+         </div>
+       </div>
+
+       <div class="col-xs-1">
+         <%= submit_tag "Report", name: nil, class: "btn btn-primary" %>
+       </div>
+   <% end %>
+
+ </div>
+ <br>
+ <br>
+ <%= render partial: 'row_of_ppo' %>
+ <br>
+ <br>
+
+
+
+<div class="well well-sm">
+<ul class="list-inline">
+  <li>* The pieces are including upsell</li>
+  <li>ppo = (revenue - (product_cost + fixed_cost + product_damages + media_var_cost + refund))</li>
+</ul>
+</div>
+
+<div class="well well-sm">
+<div class="row">
+  <div class="col-xs-2">
+  Total Media Cost - Including Active and Inactive <%= @total_media_cost.round(0) if @total_media_cost.present? %>
+  </div>
+  <div class="col-xs-2">
+  HBN Media Cost -We use only Active <%= @hbn_media_cost.round(0) if @hbn_media_cost.present? %>
+  </div>
+  <div class="col-xs-4">
+
+      <strong>Total Sales <%= @total_sales.round(0) if @total_sales.present? %></strong><br>
+      <strong>Total Revenue <%= @total_revenue.round(0) if @total_revenue.present? %></strong>
+
+  </div>
+  <div class="col-xs-2">
+  Download CSV file
+  </div>
+  <div class="col-xs-2">
+   <%= link_to 'Download CSV file', product_performance_path(from_date: @from_date, to_date: @to_date, product_variant_id: @product_variant_id, format: :csv), class: "btn btn-info btn-sm" %>
+  </div>
+</div>
+</div>
+
+ <br>
+
+<hr>
+
+<script>
+$('#datepicker_to').datepicker({format: 'yyyy-mm-dd'});
+$('#datepicker_from').datepicker({format: 'yyyy-mm-dd'});
+</script>

@@ -15,12 +15,14 @@
 
   </div>
 </div>
-<br>
 
 <br>
 <% if @product_stock_books.present? %>
-
-
+<br>
+<div class="digg_pagination"> 
+    <%= will_paginate @product_stock_books, :container => false %>
+</div>
+<br>
 <table class="table table-hover table-bordered table-stripped">
   <thead>
   <tr>
@@ -118,6 +120,12 @@
   </tr>
   </tfoot>
 </table>
+<br>
+<div class="digg_pagination"> 
+    <%= will_paginate @product_stock_books, :container => false %>
+</div>
+<br>
+
 <% end %>
 <br>
 <% if @show_add_update == 1 %>

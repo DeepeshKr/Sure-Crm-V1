@@ -1,3 +1,6 @@
+<!-- set page title start -->
+<% title @page_heading  %>
+<!-- set page title end -->
 <p id="notice"><%= notice %></p>
 
 <div class="row">
@@ -28,6 +31,7 @@
 <strong>Cost:</strong> product_cost + tel_cost + royalty + Shipping handling + cost_of_return + call_centre_commission <br>
 <strong>Revenue:</strong> basic_cost + shipping_handling
 </div>
+
 <%= render 'list' %>
 
 <br>
@@ -59,7 +63,10 @@
   <br>
 <div class="row">
 <div class="col-xs-5">
+<% if @nos_with_out_price.present? %>
 <h4>No Product Costs Available for <%= @nos_with_out_price %> Products</h4>
+<% end %>
+
 </div>
 <div class="col-xs-7 pull-right">
   <div class="digg_pagination">

@@ -1,0 +1,81 @@
+<% title "Channel Sales Summary #{@from_date} to #{@to_date}" %>
+
+<%= form_tag  url_for(:controller => 'sales_report', :action => 'cdm_operator_list_summary'), method: "get" do  %>
+ <div class="row">
+	 <div class="col-xs-2">
+
+	 <h4>CDM Channel List</h4>
+	 </div>
+
+   <div class="col-xs-4">
+
+               <%= select_tag :bdm_id,  options_from_collection_for_select(@media_manager,
+             :id, :name, selected: @bdm_id ),
+                   {:class => "form-control", label: "Select the Product if required ", required: true } %>
+   </div>
+	 <div class="col-xs-5">
+        <div class="input-daterange input-group">
+          <%= text_field_tag(:from_date, @from_date, :data => {:provide => "datepicker"}, :id => "datepicker_from", :class => "form-control", :required => "true" )   %>
+          <span class="input-group-addon">to</span>
+
+           <%= text_field_tag(:to_date, @to_date, :data => {:provide => "datepicker"}, :id => "datepicker_to", :class => "form-control", :required => "true" )   %>
+
+        </div>
+    </div>
+    <div class="col-xs-1">
+              <%= submit_tag "Show", name: nil, class: "btn btn-primary" %>
+    </div>
+
+ </div>
+<% end %>
+
+<% if @employeeorderlist.present? %>
+<% total_value, total_piece = 0, 0 %>
+<table class="table table-hover table-bordered">
+  <thead>
+    <tr>
+     <th>S No</th>
+     <th>From</th>
+     <th>Upto</th>
+     <th>Channel</th>
+     <th>Days</th>
+     <th>Charges</th>
+     <th> More </th>
+     </tr>
+  </thead>
+<tbody>
+   <% @employeeorderlist.each do |c| %>
+   <tr>
+     <td><%= @sno %></td>
+     <td><%= c[:from_date] %></td>
+     <td><%= c[:to_date] %></td>
+     <td><%= c[:channel] %></td>
+     <td class="text-right"><%= c[:total_nos] %> <% total_piece += c[:total_nos] %></td>
+     <td class="text-right"><%= c[:total_value] %> <% total_value += c[:total_value] %> </td>
+     <td>
+         <%= link_to 'More', cdm_report_path(from_date: @from_date, to_date: @to_date , bdm_id: @bdm_id, media_id: c[:media_id]), :target => "_blank", class: "btn btn-info btn-xs" %>
+     </td>
+   </tr>
+  <% @sno += 1 %>
+ <% end %>
+</tbody>
+<tfoot>
+  <tr>
+   <th colspan="4">Total</th>
+   <th class="text-right"><%= total_piece %></th>
+   <th class="text-right"><%= total_value %></th>
+   <th> </th>
+   </tr>
+</tfoot>
+</table>
+  <div class="well well-sm">
+    <%= link_to 'Download CSV file', cdm_sales_summary_path(from_date: @or_for_date, to_date: @to_date , bdm_id: @bdm_id, format: :csv), class: "btn btn-info btn-sm" %>
+  </div>
+
+  <% end %>
+ <br>
+
+<script>
+$('#datepicker_to').datepicker({format: 'yyyy-mm-dd'});
+$('#datepicker_from').datepicker({format: 'yyyy-mm-dd'});
+</script>

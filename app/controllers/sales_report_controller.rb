@@ -68,7 +68,69 @@ class SalesReportController < ApplicationController
         end
 
   end
+  
+  def cdm_operator_list_summary
+    @media_manager = Employee.where(:employee_role_id => 10121).order("first_name")
+     @sno = 1
 
+      #@order_master.orderpaymentmode_id == 10000 #paid over CC
+      #@order_master.orderpaymentmode_id == 10001 #paid over COD
+    if params[:from_date].present?
+      #@summary ||= []
+       @num = 1
+      @or_for_date = params[:from_date]
+      for_date =  Date.strptime(params[:from_date], "%Y-%m-%d")
+
+      @from_date = for_date.beginning_of_day - 330.minutes
+      @to_date = for_date.end_of_day - 330.minutes
+      #@to_date = @from_date + 1.day
+
+      if params.has_key?(:to_date)
+        @to_date =  Date.strptime(params[:to_date], "%Y-%m-%d")
+        @num = (@to_date.to_date - @from_date.to_date).to_i
+      end
+      @to_date = @to_date.end_of_day - 330.minutes
+      @bdm_id = params[:bdm_id]
+      #  # Unclaimed order 10006
+       
+      media_list = Medium.where(employee_id: @bdm_id).pluck(:id)
+      name = (Employee.find(@bdm_id))
+      amount = 0.0
+
+      employeeunorderlist ||= []
+      
+      media_list.each do |ord| 
+        media_name = Medium.find(ord).name
+        amount = Medium.find(ord).daily_charges.to_f * @num
+
+        amount = amount.round(2)
+      
+          employeeunorderlist << {
+            :from_date => (@from_date + 330.minutes).strftime("%Y-%m-%d"),
+            :to_date => (@to_date + 330.minutes).strftime("%Y-%m-%d"),
+            :channel => media_name,
+            :media_id => ord,
+            :total_nos => @num,
+            :total_value => amount}
+          end
+      #this is for date on the view
+        @from_date = (@from_date + 330.minutes).strftime("%Y-%m-%d")
+        @to_date = (@to_date + 330.minutes).strftime("%Y-%m-%d")
+        @employeeorderlist = employeeunorderlist.sort_by{|c| c[:total]}.reverse
+
+        respond_to do |format|
+        csv_file_name = "#{name}_operator_list_#{@from_date}_#{@to_date}.csv"
+          format.html
+          format.csv do
+            headers['Content-Disposition'] = "attachment; filename=\"#{csv_file_name}\""
+            headers['Content-Type'] ||= 'text/csv'
+          end
+        end
+
+    end
+  end
+  
+  
   def cdm_sales_summary
     @media_manager = Employee.where(:employee_role_id => 10121).order("first_name")
      @sno = 1
@@ -124,6 +186,7 @@ class SalesReportController < ApplicationController
 
         amount = amount.round(2)
         media_name = Medium.find(ord).name
+        
           employeeunorderlist << {
             :from_date => (@from_date + 330.minutes).strftime("%Y-%m-%d"),
             :to_date => (@to_date + 330.minutes).strftime("%Y-%m-%d"),

@@ -8,39 +8,27 @@
  <div class="container">
 <div class="row">
 	<div class="col-xs-4">
-			<div class="panel panel-primary">
-        			<div class="panel-heading">
-        			 <h3 class="panel-title">BDM Channel Sales</h3>
-        			</div>
-        			  <div class="panel-body">
-        			   Get Sales report for each BDM Listed below for Channel Sales managed by them
-        			  </div>
-        			  <div class="panel-footer">
-
-        					 <%= bootstrap_form_tag url: url_for(:controller => 'sales_report', :action => 'cdm_sales_summary'), :method => :GET, :enforce_utf8 => false do |f| %>
-        					 <div class="row">
-        <div class="col-xs-12">
-         <%= select_tag :bdm_id,  options_from_collection_for_select(@media_manager,
+		<div class="panel panel-primary">
+        	<div class="panel-heading"><h3 class="panel-title">BDM Channel Sales</h3></div>
+				<div class="panel-body">Get Sales report for each BDM Listed below for Channel Sales managed by them</div>
+        			 <div class="panel-footer">
+        		<%= bootstrap_form_tag url: url_for(:controller => 'sales_report', :action => 'cdm_sales_summary'), :method => :GET, :enforce_utf8 => false do |f| %>
+        	<div class="row">
+				<div class="col-xs-12">
+         		  <%= select_tag :bdm_id,  options_from_collection_for_select(@media_manager,
                :id, :name, selected: @bdm_id ),
                      {:class => "form-control", label: "Select the Product if required ", required: true } %>
-        </div>
-                     </div>
-                      <div class="row">
-        					<div class="col-xs-8">
-        					 <%= text_field_tag(:from_date, @from_date, :data => {:provide => "datepicker"}, :id => "datepicker1", :class => "form-control", :required => "true" )   %>
-
-        					</div>
-
-        					<div class="col-xs-4">
-        						<%= submit_tag "Report", name: nil, class: "btn btn-success ", data: { confirm: 'Are you sure?'}  %>
-        					</div>
-        					</div>
-
-        					<% end %>
-
-        					</div>
-
-			  </div>
+        		 </div>
+            </div>
+           <div class="row">
+        		<div class="col-xs-8">
+        	<%= text_field_tag(:from_date, @from_date, :data => {:provide => "datepicker"}, :id => "datepicker1", :class => "form-control", :required => "true" )   %>
+				</div>
+				<div class="col-xs-4"><%= submit_tag "Report", name: nil, class: "btn btn-success ", data: { confirm: 'Are you sure?'}  %></div>
+        		</div>
+				<% end %>
+        	</div>
+		</div>
 	</div>
 	<div class="col-xs-4">
 			<div class="panel panel-primary">
@@ -89,6 +77,7 @@
 			</div>
 	</div>
 </div>
+<!-- row 2 -->
 
 <div class="row">
 	<div class="col-xs-4">
@@ -165,6 +154,7 @@
 	</div>
  </div>
 
+<!-- row 3 -->
 <div class="row">
 	<div class="col-xs-4">
 			<div class="panel panel-primary">
@@ -239,6 +229,8 @@
 		</div>
 	</div>
 </div>
+
+<!-- row 4 -->
 
 <div class="row">
 	<div class="col-xs-4">
@@ -315,6 +307,8 @@
 	</div>
  </div>
 
+<!-- row 5 -->
+
  <div class="row">
  	<div class="col-xs-4">
 			<div class="panel panel-primary">
@@ -383,6 +377,8 @@
 		</div>
 	</div>
  </div>
+
+<!-- row 6 -->
 
  <div class="row">
    <div class="col-xs-4">
@@ -474,6 +470,8 @@
   </div>
  </div>
 
+<!-- row 7 -->
+
  <div class="row">
    <div class="col-xs-4">
      <div class="panel panel-primary">
@@ -506,7 +504,27 @@
        </div>
    </div>
     <div class="col-xs-4">
-
+		<div class="panel panel-primary">
+        	<div class="panel-heading"><h3 class="panel-title">BDM Channel List</h3></div>
+				<div class="panel-body">Channels managed by BDM</div>
+        			 <div class="panel-footer">
+        		<%= bootstrap_form_tag url: url_for(:controller => 'sales_report', :action => 'cdm_operator_list_summary'), :method => :GET, :enforce_utf8 => false do |f| %>
+        	<div class="row">
+				<div class="col-xs-12">
+         		  <%= select_tag :bdm_id,  options_from_collection_for_select(@media_manager,
+               :id, :name, selected: @bdm_id ),
+                     {:class => "form-control", label: "Select the BDM Manager ", required: true } %>
+        		 </div>
+            </div>
+           <div class="row">
+        		<div class="col-xs-8">
+        	<%= text_field_tag(:from_date, @from_date, :data => {:provide => "datepicker"}, :id => "datepicker1", :class => "form-control", :required => "true" )   %>
+				</div>
+				<div class="col-xs-4"><%= submit_tag "Report", name: nil, class: "btn btn-success ", data: { confirm: 'Are you sure?'}  %></div>
+        		</div>
+				<% end %>
+        	</div>
+		</div>
     </div>
     <div class="col-xs-4">
     </div>

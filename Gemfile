@@ -60,7 +60,7 @@ gem 'kaminari'
 #what you see if what you get form
 gem 'bootsy'
 
-gem 'byebug'
+
 #date picker
 #gem 'jquery-ui-rails'
 #https://github.com/joliss/jquery-ui-rails
@@ -135,7 +135,10 @@ gem 'rmagick', '~> 2.15.1'
 gem 'gruff'
 #to group https://github.com/ankane/groupdate
 #gem 'groupdate'
-
+group :development do
+ gem 'byebug'
+ gem 'webrick'
+end
 # Use debugger
 # gem 'debugger', group: [:development, :test]
 #gem 'request-log-analyzer'

@@ -23,7 +23,12 @@
 </div>
 
 <!--Start show details of dispatch open orders etc -->
-<%= render 'open_orders' %>
+<div class="row">
+	<div class="col-xs-8"><%= render 'open_orders' %> </div>
+	<div class="col-xs-3 col-xs-offset-1"><%= render 'all_orders' %> 
+	</div>
+</div>
+
 <!--show details of dispatch open orders etc end -->
 <div class="row">
 	<div class="col-xs-5"> <!-- details of ppo order -->
@@ -76,21 +81,8 @@
 <hr>
 <%= render 'order_masters' %>
 <hr>
+<%= render 'return_rates/quick_list_rate' %>
 
-<div class="well well-sm">
-	<div class="row">
-		<div class="col-xs-2">Retail: </div>
-		<div class="col-xs-5"><%= @final_return_rate.note_1 %></div>
-		<div class="col-xs-5"><%= @final_return_rate.note_2 %></div>
-	</div>
-</div>	
-<div class="well well-sm">
-	<div class="row">
-		<div class="col-xs-2">TO: </div>
-		<div class="col-xs-5"><%= @to_final_return_rate.note_1 %></div>
-		<div class="col-xs-5"><%= @to_final_return_rate.note_2 %></div>
-	</div>
-</div>
 <div class="well well-sm">
 <ul class="list-inline">
 

@@ -15,7 +15,7 @@ class ReturnRate < ActiveRecord::Base
   end
   
   def retail_default_rate
-   return 50
+   return 40
   end
   
   def transfer_order_default_rate
@@ -126,6 +126,116 @@ class ReturnRate < ActiveRecord::Base
     end
      
     return return_rate
+  end
+  
+  def retail_best_of_three product_variant_id, media_id
+    base_return = ReturnRate.where( product_variant_id: product_variant_id, media_id: media_id)
+    product_variant = ProductVariant.find(product_variant_id)
+    media = Medium.find(media_id).name
+    all_values = []
+    # media_id: media_id,
+    
+    skip_days = [30,60,90]
+    no_of_days = 60
+    
+    skip_days.each do |day|
+    return_rate = ReturnRate.new
+    return_rate.product_variant_id =  product_variant_id
+    return_rate.media_id = media_id
+    return_rate.no_of_days = no_of_days
+    return_rate.offset = day
+    return_check = base_return.where(offset: day, no_of_days: no_of_days)
+    return_rate.note = "#{product_variant.extproductcode} in #{media} ends on day:#{day} past #{no_of_days} days"
+      if  return_check.present?
+        
+        return_rate.total = return_check.first.total.to_f || 0.0
+    		return_rate.shipped = return_check.first.shipped.to_f || 0.0
+        return_rate.cancelled = return_check.first.cancelled.to_f || 0.0
+        return_rate.returned = return_check.first.returned.to_f || 0.0
+        return_rate.paid = return_check.first.paid.to_f || 0.0
+        return_rate.transfer_total = return_check.first.transfer_total.to_f || 0.0
+        return_rate.transfer_cancelled = return_check.first.transfer_cancelled.to_f || 0.0
+        return_rate.transfer_paid = return_check.first.transfer_paid.to_f || 0.0
+        
+      if  return_check.first.total > 0
+        return_rate.shipped_percent = (return_check.first.shipped.to_f/ (return_check.first.total.to_f || 1.0)) * 100
+        return_rate.cancelled_percent = (return_check.first.cancelled.to_f / return_check.first.total.to_f) * 100
+        return_rate.returned_percent = (return_check.first.returned.to_f / return_check.first.total.to_f) * 100
+        return_rate.paid_percent = (return_check.first.paid.to_f / return_check.first.total.to_f) * 100
+        return_rate.transfer_total_percent = (return_check.first.transfer_total.to_f / return_check.first.total.to_f) * 100
+      else
+        return_rate.shipped_percent = 0.0
+        return_rate.cancelled_percent = 0.0
+        return_rate.returned_percent = 0.0
+        return_rate.paid_percent = 0.0
+        return_rate.transfer_total_percent = 0.0
+      end
+      
+      if return_check.first.transfer_total > 0
+        return_rate.transfer_total_paid_percent = (return_check.first.transfer_paid.to_f / return_check.first.transfer_total.to_f) * 100
+        return_rate.transfer_total_cancelled_percent = (return_check.first.transfer_cancelled.to_f / return_check.first.transfer_total.to_f) * 100 
+        return_rate.shipped_transfer_total_paid_percent = (return_check.first.transfer_paid.to_f / return_check.first.transfer_total.to_f) * 100
+        return_rate.shipped_transfer_total_cancelled_percent = (return_check.first.transfer_cancelled.to_f / return_check.first.transfer_total.to_f) * 100
+      else
+        return_rate.transfer_total_paid_percent = 0
+        return_rate.transfer_total_cancelled_percent = 0
+        return_rate.shipped_transfer_total_paid_percent = 0
+        return_rate.shipped_transfer_total_cancelled_percent = 0
+      end
+      
+      if return_check.first.shipped > 0
+        return_rate.shipped_cancelled_percent = (return_check.first.cancelled.to_f / return_check.first.shipped.to_f) * 100
+        return_rate.shipped_returned_percent = (return_check.first.returned.to_f / return_check.first.shipped.to_f) * 100
+        return_rate.shipped_paid_percent = (return_check.first.paid.to_f / return_check.first.shipped.to_f) * 100
+        return_rate.shipped_transfer_total_percent = (return_check.first.transfer_total.to_f / return_check.first.shipped.to_f) * 100
+      else
+        return_rate.shipped_cancelled_percent = 0
+        return_rate.shipped_returned_percent = 0
+        return_rate.shipped_paid_percent = 0
+        return_rate.shipped_transfer_total_percent = 0
+      end
+      
+        
+        if return_check.first.shipped > 0
+          # byebug
+          return_rate.rate = (return_check.first.paid.to_f / return_check.first.shipped ) * 100
+        else
+           return_rate.rate = 0.0
+        end
+            
+       
+        
+      else
+        return_rate.total = 0.0
+    		return_rate.shipped = 0.0
+        return_rate.cancelled = 0.0
+        return_rate.returned = 0.0
+        return_rate.paid = 0.0
+        return_rate.transfer_total = 0.0
+        return_rate.transfer_cancelled = 0.0
+        return_rate.transfer_paid = 0.0
+        return_rate.shipped_percent = 0.0
+        return_rate.cancelled_percent = 0.0
+        return_rate.returned_percent = 0.0
+        return_rate.paid_percent = 0.0
+        return_rate.transfer_total_percent = 0.0
+        return_rate.transfer_total_paid_percent = 0.0
+        return_rate.transfer_total_cancelled_percent = 0.0 
+        return_rate.shipped_cancelled_percent = 0.0
+        return_rate.shipped_returned_percent = 0.0
+        return_rate.shipped_paid_percent = 0.0
+        return_rate.shipped_transfer_total_percent = 0.0
+        return_rate.shipped_transfer_total_paid_percent = 0.0
+        return_rate.shipped_transfer_total_cancelled_percent = 0.0
+        return_rate.rate = 0.0
+      end
+      all_values << return_rate
+      
+     
+    end
+    #all_values.sort {|x,y| y[:rate * 100 ]<=> x[:rate * 100]}
+    all_values = all_values.sort_by{|c| c.rate}.reverse
+    return all_values
   end
   
   def transfer_best_shipped_paid_percent product_variant_id, media_id

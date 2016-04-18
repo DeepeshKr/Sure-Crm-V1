@@ -1,5 +1,5 @@
 class ProductStockBooksController < ApplicationController
-
+  require 'will_paginate/array'
    include StockBook
    before_action { protect_controllers_specific(4) }
    before_action :set_product_stock_book, only: [:show, :edit, :update, :destroy]
@@ -48,12 +48,13 @@ class ProductStockBooksController < ApplicationController
               headers['Content-Type'] ||= 'text/csv'
             end
           end
-        
+         @page_heading = "#{@product_name} summary between #{@or_from_date} and #{@or_to_date}"
     else
       @show_add_update = 0
+      @page_heading = "Please select a product with date range"
     end
    # @product_stock_books = ProductStockBook.all.limit(100)
-    @page_heading = " summary between #{@or_from_date} and #{@or_to_date}"
+   
   end
   
   def summary
@@ -61,14 +62,16 @@ class ProductStockBooksController < ApplicationController
     @or_to_date =  Date.today.in_time_zone
     
     if params[:from_date].present? && params[:to_date].present?
-      @or_from_date = params[:from_date]
-      @or_to_date = params[:to_date]
+      @or_from_date =  Date.strptime(params[:from_date], "%Y-%m-%d") if params[:from_date].present?
+      @or_to_date =  Date.strptime(params[:to_date], "%Y-%m-%d") if params[:to_date].present?
     end
     
     @from_date_text = @or_from_date.strftime('%Y-%m-%d')
     @to_date_text = @or_to_date.strftime('%Y-%m-%d')
     product_stock_book = ProductStockBook.new 
-    @product_stock_books = product_stock_book.stock_book_summary @or_from_date, @or_to_date
+    @product_stock_books = product_stock_book.stock_book_summary( @or_from_date, @or_to_date)
+    @product_stock_books = @product_stock_books.paginate(:page => params[:page]) 
+    # .paginate(params[:current_page], params[:per_page])
     @page_heading = "Stock between #{@or_from_date} and #{@or_to_date}"
   end
 

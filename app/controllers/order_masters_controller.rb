@@ -191,6 +191,9 @@ class OrderMastersController < ApplicationController
             @order_lines = OrderLine.where(orderid: @order_master.id).order("id")
           #end
         end
+        
+        @sales_ppos = SalesPpo.where(:external_order_no => @ordernum)
+        .order("start_time")
         #custref related to
        # if VPP.where(custref: @ordernum).present?
           @vpp = VPP.where(custref: @ordernum)

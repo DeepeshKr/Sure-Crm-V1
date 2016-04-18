@@ -20,6 +20,7 @@ class ProductCostMastersController < ApplicationController
   end
 
   def product_costs
+    @page_heading = "Product cost search"
     @showall = true
     #reset_prices
     @all_product_cost_masters = ProductCostMaster.where("product_list_id IS NOT NULL").pluck(:product_list_id)
@@ -49,7 +50,7 @@ class ProductCostMastersController < ApplicationController
       @inactive_product_variants = ProductVariant.where('extproductcode NOT IN (?)', @all_product_cost_masters_prod).where("UPPER(name) like ? OR UPPER(extproductcode) like ?", "#{@searchvalue}%", "#{@searchvalue}%")
 
       @found = @product_cost_masters.count
-
+       @page_heading = "Product cost search #{@searchvalue}"
       else
         @search = "Product Sell List"
         @searchvalue = nil
@@ -64,7 +65,8 @@ class ProductCostMastersController < ApplicationController
         @found = nil
 
         @inactive_product_variants = ProductVariant.where('extproductcode NOT IN (?)', @all_product_cost_masters_prod) #.limit(10)
-
+        
+         @page_heading = "Product cost search => showing all"
     end
         # format.csv do
         #     headers['Content-Disposition'] = "attachment; filename=\"product-costs\""

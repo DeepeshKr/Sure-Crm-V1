@@ -1,25 +1,23 @@
 <% if @product_cost_masters.present? %>
 <h4>Product Costs for <%= @nos_with_price %> Products</h4>
 <div class="well well-sm">
-<div class="row">
-<div class="col-xs-12 pull-right">
-  <div class="digg_pagination">
-    <%= will_paginate @product_cost_masters, :container => false %>
-  </div>
+	<div class="row">
+		<div class="col-xs-12 pull-right">
+		  <div class="digg_pagination">
+		    <%= will_paginate @product_cost_masters, :container => false %>
+		  </div>
+		</div>
+	</div>
 </div>
-</div>
-</div>
+
 <table class="table table-hover table-bordered">
   <thead>
   <tr>
     <th rowspan="2">Name</th>
-
-
-      <th colspan="2">Revenue</th>
-
-      <th colspan="6">cost</th>
-     <th colspan="3">Others</th>
-     <th> </th>
+    <th colspan="2">Revenue</th>
+	<th colspan="6">Cost</th>
+	<th rowspan="2">Total Cost</th>
+	<th colspan="3">Others</th>
   </tr>
     <tr>
       <th>Basic cost</th>
@@ -33,7 +31,6 @@
       <th>Transfer order basic</th>
       <th>Dealer network basic</th>
       <th>Wholesale variable cost</th>
-      <th> </th>
     </tr>
   </thead>
 
@@ -41,7 +38,9 @@
     <% @product_cost_masters.each do |product_cost_master| %>
       <tr>
         <td><%= product_cost_master.product_list.name if product_cost_master.product_list %>
-        <br>  <%= product_cost_master.prod %><%= product_cost_master.barcode %></td>
+        <br>  <%= product_cost_master.prod %><%= product_cost_master.barcode %> <br>
+	<%= link_to 'Edit', edit_product_cost_master_path(product_cost_master),
+	        class:"btn btn-primary btn-xs" %> </td>
         <td><%= product_cost_master.basic_cost %></td>
         <td><%= product_cost_master.shipping_handling %></td>
         <td><%= product_cost_master.product_cost %></td>
@@ -50,11 +49,11 @@
         <td><%= product_cost_master.royalty %></td>
         <td><%= product_cost_master.cost_of_return %></td>
         <td><%= product_cost_master.call_centre_commission %></td>
+		<td><strong><%= product_cost_master.cost %> </strong></td>
         <td><%= product_cost_master.transf_order_basic %></td>
         <td><%= product_cost_master.dealer_network_basic %></td>
         <td><%= product_cost_master.wholesale_variable_cost %></td>
-        <td><%= link_to 'Edit This', edit_product_cost_master_path(product_cost_master),
-        class:"btn btn-primary btn-xs" %></td>
+
       </tr>
     <% end %>
   </tbody>
