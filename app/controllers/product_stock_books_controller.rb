@@ -69,8 +69,8 @@ class ProductStockBooksController < ApplicationController
     @from_date_text = @or_from_date.strftime('%Y-%m-%d')
     @to_date_text = @or_to_date.strftime('%Y-%m-%d')
     product_stock_book = ProductStockBook.new 
-    @product_stock_books = product_stock_book.stock_book_summary( @or_from_date, @or_to_date)
-    @product_stock_books = @product_stock_books.paginate(:page => params[:page]) 
+    @product_stock_books = product_stock_book.stock_book_summary(@or_from_date, @or_to_date).paginate(:page => params[:page]) 
+    # @product_stock_books = @product_stock_books
     # .paginate(params[:current_page], params[:per_page])
     @page_heading = "Stock between #{@or_from_date} and #{@or_to_date}"
   end

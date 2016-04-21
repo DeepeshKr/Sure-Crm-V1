@@ -1,0 +1,116 @@
+<!-- set page title start -->
+<% title "Hour Sales #{@timenow}" %>
+<!-- set page title end -->
+ <div class="row">
+	 <div class="col-xs-8">
+
+	 <h4>HBN Sales Orders between Time</h4>
+
+	 </div>
+   <%= form_tag  url_for(:controller => 'sales_report', :action => "hour_sales"), method: "get" do  %>
+
+       <div class="col-xs-3">
+         <div class="input-daterange input-group">
+           <%= text_field_tag(:from_date, @from_date, :data => {:provide => "datepicker"}, :id => "datepicker_from", :class => "form-control", :required => "true" )   %>
+
+         </div>
+       </div>
+
+       <div class="col-xs-1">
+         <%= submit_tag "Report", name: nil, class: "btn btn-primary" %>
+       </div>
+   <% end %>
+
+ </div>
+ <br>
+
+ <br>
+ <% if @employeeorderlist.present? %>
+<% @sno = 0 %>
+
+<table class="table table-hover table-bordered table-striped">
+  <thead class="header">
+     <tr>
+       <th>S No </th>
+       <th>Date</th>
+       <th>Start</th>
+       <th>End</th>
+       <th>No of</th>
+       <th>Value</th>
+     </tr>
+    </thead>
+<tbody>
+   <% @employeeorderlist.each do |c| %>
+   <tr>
+   <td><% @sno += 1 %><%= @sno %></td>
+   <td><%= c[:order_date] %></td>
+   <td><%= c[:time_start] %></td>
+   <td><%= c[:time_end] %></td>
+   <td><%= c[:total_nos] %></td>
+   <td><%= c[:total_value] %></td>
+  </tr>
+  <tr>
+    <td>
+
+    </td>
+    <td colspan="5">
+      <% @camp_sno = 0 %>
+      <table class="table table-hover table-bordered table-striped">
+          <thead>
+              <tr>
+                <th>S No</th>
+                <th>Order</th>
+                <th>Campaign</th>
+                <th>Channel</th>
+                <th>HBN</th>
+                <th>City / State</th>
+                <th>Products</th>
+              </tr>
+          </thead>
+          <tbody>
+            <% c[:hourlist].each do |cp| %>
+              <tr>
+                <td><% @camp_sno += 1 %><%= @camp_sno %></td>
+                <td> <strong>
+                  <%= link_to cp[:order_no], custordersearch_path(ordernum: cp[:order_no]), :target => "_blank" if cp[:order_no].present? %></strong> <br>
+                  Ref no <%= link_to cp[:order_id], detailedordersearch_path(ordernum: cp[:order_id]), :target => "_blank" if cp[:order_id].present? %>
+                 </td>
+                <td><%= cp[:campaign] || "No Campaign" if cp[:campaign].present? %>  <br> <strong>At <%= cp[:order_time] %></strong></td>
+                <td><%= cp[:channel] %> </td>
+                <td><%= cp[:hbn] %></td>
+                <td><%= cp[:city] %><br><%= cp[:state] %></td>
+                <td><%= cp[:products] %> <small>By: <%= cp[:agent] %></small></td>
+              </tr>
+            <% end %>
+          </tbody>
+      </table>
+    </td>
+  </tr>
+ <% end %>
+  </tbody>
+
+  </table>
+
+  <% else %>
+  <div class="well well-sm">
+  <h5>Please select a date to generate the report </h5>
+  </div>
+  <% end %>
+ <br>
+
+<div class="well well-sm">
+    <div class="row">
+      <div class="col-xs-8">
+
+      </div>
+      <div class="col-xs-4">
+           <%= link_to 'Download CSV file', sales_ppos_half_hour_performance_path(from_date: @from_date, to_date: @to_date, time_id: @time_id, format: :csv), class: "btn btn-info btn-sm" %>
+      </div>
+    </div>
+</div>
+
+
+<script>
+$('#datepicker_to').datepicker({format: 'yyyy-mm-dd'});
+$('#datepicker_from').datepicker({format: 'yyyy-mm-dd'});
+</script>

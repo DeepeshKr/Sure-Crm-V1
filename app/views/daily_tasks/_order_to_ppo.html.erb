@@ -1,0 +1,24 @@
+<% if @employeeunorderlist.present? %>
+<table class="table table-bordered"> 
+	 <thead>
+	    <tr>
+			<th>Date</th>
+			<th>All</th>
+			<th>HBN</th>
+			<th>PPO</th>
+			<th>Missed</th>
+		</tr>
+	 </thead>
+	 <tbody>
+	     <% @employeeunorderlist.each do |c| %>
+	    <tr>
+			<td><%= c[:for_date] %></td>
+			<td><%= c[:total_orders] %></td>
+			<td><%= c[:hbn_orders] %></td>
+			<td><%= c[:total_ppo] %></td>
+			<td><%= c[:difference] %></td>
+		</tr>
+		<% end %>
+	</tbody>	 
+</table>
+<% end %>

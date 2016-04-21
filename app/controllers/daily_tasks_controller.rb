@@ -17,7 +17,33 @@ class DailyTasksController < ApplicationController
         @daily_tasks_demand = DailyTask.where(frequency: "On Demand").order(:sort_order)
         @daily_tasks_30 = DailyTask.where(frequency: "Every 30 min").order(:sort_order)
         @daily_tasks_trial = DailyTask.where(frequency: "On Trial").order(:sort_order)
-    
+        
+        todaydate = Date.today #Time.zone.now + 330.minutes
+        @from_date = todaydate - 7.days #30.days
+        @to_date = todaydate
+        @employeeunorderlist = []
+         
+        #upto
+        (@to_date).downto(@from_date).each do |day|
+         #for_date =  Date.strptime(day, "%Y-%m-%d")
+          
+        totalorders = OrderMaster.where("TRUNC(orderdate) = ?", day)
+        .where('ORDER_STATUS_MASTER_ID > 10002').count
+        
+        hbnorders = OrderMaster.where("TRUNC(orderdate) = ?", day)
+        .where('ORDER_STATUS_MASTER_ID > 10002').joins(:medium).where("media.media_group_id = 10000").count
+
+         total_ppo_orders = SalesPpo.where('order_status_id > 10002')
+         .where("TRUNC(start_time) = ? ", day).distinct.count('order_id')
+       
+          @employeeunorderlist << {:total_orders => totalorders.to_i,
+            :hbn_orders => hbnorders.to_i,
+          :for_date =>  day.strftime("%d-%b-%Y"),
+          :total_ppo => total_ppo_orders.to_i,
+          :difference => (hbnorders - total_ppo_orders).to_i}
+        end
+        
+         @employeeunorderlist
   end
 
   # GET /daily_tasks/1

@@ -15,7 +15,7 @@
 
 <div class="row fixed-table">
   <div class="table-content">
-	  <table class="table table-hover table-bordered table-striped">
+	<table class="table table-hover table-bordered table-striped">
   		<thead class="header">
      <tr>
      	<th rowspan="2">No</th>
@@ -60,7 +60,7 @@
 		<td class="text-right" title="Damages"> <%= c.total_product_dam_cost_1 %>   </td>
 		<td class="text-right" title="Profitability">   <%= c.profit_per_order_1 %>  </td>
 		<td>
-			<%= link_to "30 Min PPO", { :controller => :sales_ppos, :action => :half_hour, :from_date => c.for_date.strftime("%Y-%m-%d")}, { class: "btn btn-info btn-xs"} %>
+			<!-- % = link_to "30 Min PPO", { :controller => :sales_ppos, :action => :half_hourly, :from_date => c.for_date.strftime("%Y-%m-%d")}, { class: "btn btn-info btn-xs"} % -->
 			<hr>
 				<%= link_to "Shows' PPO", { :controller => :sales_ppos, :action => :show_wise, :from_date => c.for_date.strftime("%Y-%m-%d")}, { class: "btn btn-info btn-xs"} %>
 		</td>
@@ -83,67 +83,6 @@
  <br>
  <br>
 
- <br>
-<% if @employeeorderlist_2.present? %>
-<table class="table table-hover table-bordered">
-<thead>
-   <tr>
-   <th  rowspan="2">No</th>
-     <th  rowspan="2">Date</th>
-
-      <th colspan="4">Income</th>
-      <th rowspan="2" class="text-right">Total Revenue</th>
-      <th colspan="5">Expense</th>
-      <th rowspan="2" class="text-right">Total Expense</th>
-    <th rowspan="2" class="text-right">Profitability</th>
-     <th rowspan="2">More</th>
-     </tr>
-    <tr>
-     <th class="text-right">Orders</th>
-       <th class="text-right">Pieces</th>
-     <th class="text-right">Sales</th>
-      <th class="text-right">Revenue</th>
-
-      <th class="text-right">Product Cost</th>
-       <th class="text-right">Commision</th>
-     <th class="text-right">Media Cost</th>
-      <th class="text-right">Refund</th>
-      <th class="text-right">Damage</th>
-
-     </tr>
-</thead>
-
-<tbody>
- <% @employeeorderlist.each do |c| %>
-   <tr>
-   	<td><%= @sno %></td>
- 	<td><%= c[:for_date] %></td>
-	<td class="text-right"><%= c[:nos] %></td>
-	<td class="text-right"><%= c[:pieces] %></td>
-	<td class="text-right"><%= c[:total] %></td>
-	<td class="text-right"><%= c[:revenue] %></td>
-	<td class="text-right"><strong><%= c[:revenue] %></strong></td>
-	<td class="text-right">   <%= c[:product_cost] %></td>
-	<td class="text-right">   <%= c[:variable_cost] %></td>
-	<td class="text-right">   <%= c[:fixed_cost] %></td>
-	<td class="text-right">   <%= c[:refund] %></td>
-	<td class="text-right">   <%= c[:product_damages] %></td>
-	<td class="text-right"> <strong><%= c[:total_cost] %></strong></td>
-	<td class="text-right"><strong><%= c[:profitability] %></strong></td>
-	<td>
-		<%= link_to "30 Min PPO", { :controller => :sales_ppos, :action => :half_hour, :from_date => c[:for_date]}, { class: "btn btn-info btn-xs"} %>
- 	   	<br>
-		<%= link_to "Shows' PPO", { :controller => :sales_ppos, :action => :show_wise, :from_date => c[:for_date]}, { class: "btn btn-info btn-xs"} %>
-	</td>
-  </tr>
-  <% @sno += 1 %>
- <% end %>
-</tbody>
-</table>
-  <% else %>
-  <div class="well well-sm"><h5>Please select a date to generate the report </h5></div>
-  <% end %>
- <br>
 
 <hr>
 <!-- = render :partial => "full_list.html.erb" -->
@@ -200,7 +139,7 @@
 <div class="well well-sm">
   <div class="row">
     <div class="col-xs-2">
-      <%= link_to "Half Hour Performance", { :controller => :sales_ppos, :action => :hour_sales_performance, :from_date => @from_date }, class: "btn btn-info btn-sm" %>
+      <%= link_to "Half Hour Sales", { :controller => :sales_ppos, :action => :half_hour_sales, :from_date => @from_date }, class: "btn btn-info btn-sm" %>
     </div>
     <div class="col-xs-2">
       <%= link_to "Show Performance", { :controller => :sales_ppos, :action => :show_performance, :from_date => @from_date }, class: "btn btn-info btn-sm" %>
@@ -209,7 +148,7 @@
       <%= link_to "Product Performance", { :controller => :sales_ppos, :action => :product_performance, :from_date => @from_date }, class: "btn btn-info btn-sm" %>
     </div>
     <div class="col-xs-2">
-      <%= link_to "Half hour Sales", { :controller => :sales_ppos, :action => :half_hour, :from_date => @from_date }, class: "btn btn-info btn-sm" %>
+      <%= link_to "Half hour Performance", { :controller => :sales_ppos, :action => :half_hour_performance, :from_date => @from_date }, class: "btn btn-info btn-sm" %>
     </div>
     <div class="col-xs-2">
       <%= link_to "Operator Performance", { :controller => :sales_ppos, :action => :operator_sales_performance, :from_date => @from_date }, class: "btn btn-info btn-sm" %>

@@ -1725,16 +1725,35 @@ class SalesReportController < ApplicationController
             return
           end
           @employee_name = Employee.find(@employee_id).fullname
-          @this_month = Date.today.strftime("%Y-%m")
-          @last_month = (Date.today - 1.month).strftime("%Y-%m")
-          @earlier_month = (Date.today - 2.month).strftime("%Y-%m")
+          @month_1 = Date.today.strftime("%Y-%m")
+          @month_2 = (Date.today - 1.month).strftime("%Y-%m")
+          @month_3 = (Date.today - 2.month).strftime("%Y-%m")
+          @month_4 = (Date.today - 3.month).strftime("%Y-%m")
+          @month_5 = (Date.today - 4.month).strftime("%Y-%m")
+          @month_6 = (Date.today - 5.month).strftime("%Y-%m")
+          @month_7 = (Date.today - 6.month).strftime("%Y-%m")
+          @month_8 = (Date.today - 7.month).strftime("%Y-%m")
+          @month_9 = (Date.today - 8.month).strftime("%Y-%m")
+          @month_10 = (Date.today - 9.month).strftime("%Y-%m")
+          @month_11 = (Date.today - 10.month).strftime("%Y-%m")
+          @month_12 = (Date.today - 11.month).strftime("%Y-%m")
 
           employee_sale = EmployeeSales.new
-          @employee_sales_1 = employee_sale.sales_data @this_month, @employee_id
-          @employee_sales_2 = employee_sale.sales_data @last_month, @employee_id
-          @employee_sales_3 = employee_sale.sales_data @earlier_month, @employee
-
-            @show_results = "true"
+          @employee_sales_1 = employee_sale.sales_data @month_1, @employee_id
+          @employee_sales_2 = employee_sale.sales_data @month_2, @employee_id
+          @employee_sales_3 = employee_sale.sales_data @month_3, @employee_id
+          @employee_sales_4 = employee_sale.sales_data @month_4, @employee_id
+          @employee_sales_5 = employee_sale.sales_data @month_5, @employee_id
+          @employee_sales_6 = employee_sale.sales_data @month_6, @employee_id
+          @employee_sales_7 = employee_sale.sales_data @month_7, @employee_id
+          @employee_sales_8 = employee_sale.sales_data @month_8, @employee_id
+          @employee_sales_9 = employee_sale.sales_data @month_9, @employee_id
+          @employee_sales_10 = employee_sale.sales_data @month_10, @employee_id
+          @employee_sales_11 = employee_sale.sales_data @month_11, @employee_id
+          @employee_sales_12 = employee_sale.sales_data @month_12, @employee_id
+          
+          @show_results = "true"
+  
   end
 
   def orderlisting

@@ -249,8 +249,15 @@ class SalesPpoReportController < ApplicationController
        @start_min = @time_slot.str_min
        @start_total_secs = (@start_hr * 60) + (@start_min)
        @end_hr = @time_slot.end_hr
-       @end_min = @time_slot.end_min
-       @end_total_secs = (@end_hr * 60) + (@end_min)
+      
+       if @end_hr == 0 && @time_slot.end_min == 0
+         @end_hr = 23
+         @end_min = 59
+         @end_total_secs = (@end_hr * 60) + (@end_min)
+       else
+         @end_min = @time_slot.end_min
+         @end_total_secs = (@end_hr * 60) + (@end_min)
+       end 
      end
      if params.has_key?(:from_date)
         @from_date =  Date.strptime(params[:from_date], "%Y-%m-%d")
@@ -376,98 +383,7 @@ class SalesPpoReportController < ApplicationController
           end
         end
   end
-  
-  def hour_sales_performance
-    @hbn_media_cost_master = MediaCostMaster.where(media_id: 11200).order("str_hr, str_min")
-    @sno = 1
-    @searchaction = "hour_sales_performance"
 
-     for_date = (330.minutes).from_now.to_date
-     @from_date = (330.minutes).from_now.to_date
-     if params.has_key?(:time_id)
-       @time_id = params[:time_id]
-     end
-     if params.has_key?(:from_date)
-        @from_date =  Date.strptime(params[:from_date], "%Y-%m-%d")
-        @or_for_date = for_date.strftime("%Y-%m-%d")
-     end
-     @to_date = (330.minutes).from_now.to_date
-     if params.has_key?(:to_date)
-        @to_date =  Date.strptime(params[:to_date], "%Y-%m-%d")
-     end
-     if @time_id == nil || @from_date == nil || @to_date == nil
-       return
-     end
-
-     #get all the time slot details
-     @time_slot = MediaCostMaster.find(@time_id)
-     @start_hr = @time_slot.str_hr
-     @start_min = @time_slot.str_min
-     @end_hr = @time_slot.end_hr
-     @end_min = @time_slot.end_min
-
-     employeeunorderlist ||= []
-     @to_date.downto(@from_date).each do |day|
-
-      @from_time = corrected_date_time(day, @start_hr, @start_min)
-      @upto_time = corrected_date_time(day, @end_hr, @end_min)
-
-      orderlists = OrderMaster.where('ORDER_STATUS_MASTER_ID > 10002')
-        .where.not(ORDER_STATUS_MASTER_ID: @cancelled_status_id)
-      .joins(:medium).where("media.media_group_id = 10000")
-      .where('orderdate >= ? AND orderdate <= ?', @from_time, @upto_time)
-
-      halfhourlist ||= []
-        orderlists.each do |order_list|
-          campaign_name = order_list.campaign_playlist.playlist_details + " " + order_list.campaign_playlist.starttime if order_list.campaign_playlist
-
-          products = ""
-          #cats.each do |cat| cat.name end
-          if order_list.order_line.present?
-            #products = o.order_line.each(&:description)
-            order_list.order_line.each do |ord| products << ord.description end
-          end
-          order_time = (order_list.orderdate + 300.minutes).strftime("%H:%M")
-          halfhourlist << {
-            :campaign => campaign_name,
-            :products => products,
-            :order_time => order_time,
-            :order_id => order_list.external_order_no
-          }
-        end
-      total_order_nos = orderlists.count(:id)
-      total_order_value = orderlists.sum(:g_total).round(0)
-      s_no_i = 1
-
-      #campaign_playlists.each do | playlist |
-
-            #  campaign_playlists = CampaignPlaylist.where("for_date >= ? and for_date <= ?", @from_date, @to_date)
-            #  .where("start_hr >= ? AND start_min >= ? AND start_hr <= ? AND start_min <= ?", @start_hr, @start_min, @end_hr, @end_min)
-            #  .where(list_status_id: 10000).order("for_date, start_hr, start_min")
-             #.limit(150)
-
-
-          employeeunorderlist << {
-            :order_date => (DateTime.strptime(@from_time, "%Y-%m-%d %H:%M:%S") + 300.minutes).strftime("%Y-%m-%d"),
-            :time_start => (DateTime.strptime(@from_time, "%Y-%m-%d %H:%M:%S") + 300.minutes).strftime("%H:%M"),
-            :time_end => (DateTime.strptime(@upto_time, "%Y-%m-%d %H:%M:%S") + 300.minutes).strftime("%H:%M"),
-            :total_nos => total_order_nos,
-            :total_value => total_order_value,
-            :hourlist => halfhourlist
-          }
-
-          @employeeorderlist = employeeunorderlist
-          # respond_to do |format|
-          #   csv_file_name = "Hour_Sales_between_#{@from_date}_ #{@to_date}.csv"
-          #     format.html
-          #     format.csv do
-          #       headers['Content-Disposition'] = "attachment; filename=\"#{csv_file_name}\""
-          #       headers['Content-Type'] ||= 'text/csv'
-          # end
-          # end
-      end
-  end
-  
   def product_performance
     @report_results = "Please select date range to show report"
     @hourlist = "Time UTC is your zone #{Time.zone.now} while actual time is #{Time.now}"
@@ -968,7 +884,102 @@ class SalesPpoReportController < ApplicationController
         end
   end
 
- 
+  def hour_sales_performance
+    @hbn_media_cost_master = MediaCostMaster.where(media_id: 11200).order("str_hr, str_min")
+    @sno = 1
+    @searchaction = "hour_sales_performance"
+
+     for_date = (330.minutes).from_now.to_date
+     @from_date = (330.minutes).from_now.to_date
+     if params.has_key?(:time_id)
+       @time_id = params[:time_id]
+     end
+     if params.has_key?(:from_date)
+        @from_date =  Date.strptime(params[:from_date], "%Y-%m-%d")
+        @or_for_date = for_date.strftime("%Y-%m-%d")
+     end
+     @to_date = (330.minutes).from_now.to_date
+     if params.has_key?(:to_date)
+        @to_date =  Date.strptime(params[:to_date], "%Y-%m-%d")
+     end
+     if @time_id == nil || @from_date == nil || @to_date == nil
+       return
+     end
+
+     #get all the time slot details
+     @time_slot = MediaCostMaster.find(@time_id)
+     @start_hr = @time_slot.str_hr
+     @start_min = @time_slot.str_min
+     @end_hr = @time_slot.end_hr
+     @end_min = @time_slot.end_min
+
+     employeeunorderlist ||= []
+     @to_date.downto(@from_date).each do |day|
+
+      @from_time = corrected_date_time(day, @start_hr, @start_min)
+      # @upto_time = corrected_date_time(day, @end_hr, @end_min)
+      if @end_hr == 0 && @end_min == 0
+         @upto_time = sales_ppo_info.corrected_date_time(day + 1.day, @end_hr, @end_min)
+      else
+         @upto_time = sales_ppo_info.corrected_date_time(day, @end_hr, @end_min)
+      end
+
+      orderlists = OrderMaster.where('ORDER_STATUS_MASTER_ID > 10002')
+        .where.not(ORDER_STATUS_MASTER_ID: @cancelled_status_id)
+      .joins(:medium).where("media.media_group_id = 10000")
+      .where('orderdate >= ? AND orderdate <= ?', @from_time, @upto_time)
+
+      halfhourlist ||= []
+        orderlists.each do |order_list|
+          campaign_name = order_list.campaign_playlist.playlist_details + " " + order_list.campaign_playlist.starttime if order_list.campaign_playlist
+
+          products = ""
+          #cats.each do |cat| cat.name end
+          if order_list.order_line.present?
+            #products = o.order_line.each(&:description)
+            order_list.order_line.each do |ord| products << ord.description end
+          end
+          order_time = (order_list.orderdate + 300.minutes).strftime("%H:%M")
+          halfhourlist << {
+            :campaign => campaign_name,
+            :products => products,
+            :order_time => order_time,
+            :order_id => order_list.external_order_no
+          }
+        end
+      total_order_nos = orderlists.count(:id)
+      total_order_value = orderlists.sum(:g_total).round(0)
+      s_no_i = 1
+
+      #campaign_playlists.each do | playlist |
+
+            #  campaign_playlists = CampaignPlaylist.where("for_date >= ? and for_date <= ?", @from_date, @to_date)
+            #  .where("start_hr >= ? AND start_min >= ? AND start_hr <= ? AND start_min <= ?", @start_hr, @start_min, @end_hr, @end_min)
+            #  .where(list_status_id: 10000).order("for_date, start_hr, start_min")
+             #.limit(150)
+
+
+          employeeunorderlist << {
+            :order_date => (DateTime.strptime(@from_time, "%Y-%m-%d %H:%M:%S") + 300.minutes).strftime("%Y-%m-%d"),
+            :time_start => (DateTime.strptime(@from_time, "%Y-%m-%d %H:%M:%S") + 300.minutes).strftime("%H:%M"),
+            :time_end => (DateTime.strptime(@upto_time, "%Y-%m-%d %H:%M:%S") + 300.minutes).strftime("%H:%M"),
+            :total_nos => total_order_nos,
+            :total_value => total_order_value,
+            :hourlist => halfhourlist
+          }
+
+          @employeeorderlist = employeeunorderlist
+          # respond_to do |format|
+          #   csv_file_name = "Hour_Sales_between_#{@from_date}_ #{@to_date}.csv"
+          #     format.html
+          #     format.csv do
+          #       headers['Content-Disposition'] = "attachment; filename=\"#{csv_file_name}\""
+          #       headers['Content-Type'] ||= 'text/csv'
+          # end
+          # end
+      end
+  end
+
   def operator_performance
     @revised_per_day_rate = 0
     @medias = Medium.where(media_group_id: 10000, active: true,media_commision_id: 10000).where("id <> 11200")

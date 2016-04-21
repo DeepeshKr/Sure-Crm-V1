@@ -1,0 +1,156 @@
+<!-- set page title start -->
+<% title "Operator performance #{@from_date} to #{@to_date}" %>
+<!-- set page title end -->
+<div class="row">
+  <div class="col-xs-12">
+    <h4>DTH operator performance</h4>
+  </div>
+</div>
+ <div class="row">
+   <%= form_tag  url_for(:controller => 'sales_ppos', :action => "operator_sales_performance"), method: "get" do  %>
+    <div class="col-xs-4">
+           <%= select_tag :media_id, options_from_collection_for_select(@medias, :id, :name, :selected => @media_id), {:class => "form-control",  :required => true} %>
+    </div>
+    <div class="col-xs-4">
+      <div class="input-daterange input-group">
+           <%= text_field_tag(:from_date, @from_date, :data => {:provide => "datepicker"}, :id => "datepicker_from", :class => "form-control", :required => "true" )   %>
+           <span class="input-group-addon">to</span>
+
+            <%= text_field_tag(:to_date, @to_date, :data => {:provide => "datepicker"}, :id => "datepicker_to", :class => "form-control", :required => "true" )   %>
+
+      </div>
+    </div>
+    <div class="col-xs-2">
+        <%= text_field_tag(:revised_per_day_rate, @revised_per_day_rate, :class => "form-control", :placeholder => "Revised day rate" )   %>
+    </div>
+    <div class="col-xs-2">
+         <%= submit_tag "Report", name: nil, class: "btn btn-primary" %>
+    </div>
+   <% end %>
+
+ </div>
+ <br>
+<br>
+<%= render partial: 'row_of_ppo' %>
+
+<br>
+ <br>
+
+<div class="well well-sm">
+<div class="row">
+  <div class="col-xs-10">
+	<ul class="list-inline">
+	  <li>* The pieces are including upsell</li>
+	  <li>ppo = (revenue - (product_cost + fixed_cost + product_damages + media_var_cost + refund))</li>
+	</ul>
+  </div>
+  <div class="col-xs-1">
+   	<%= link_to "Download CSV file", { :controller => :sales_ppos, :action => :operator_sales_performance, :from_date => @or_for_date, media_id: @media_id, format: :csv }, class: "btn btn-info btn-sm" %>
+  </div>
+</div>
+</div>
+
+<div class="well well-sm">
+	<h4> R1 Values </h4>
+<div class="row">
+  <div class="col-xs-3">
+    <h4>Income</h4>
+      <strong>Total Sales <%= @total_sales_1.round(0) if @total_sales_1 %></strong><br>
+      <strong>Total Revenue <%= @total_revenue_1.round(0) if @total_revenue_1 %></strong><br>
+      <hr>
+      <strong>Original Media Cost <%= @media_total_fixed_cost.round(0) if @media_total_fixed_cost%></strong> <br>
+      <%= @daily_charge %> x <%= @days %>
+      <hr>
+      <% if @revised_media_total_fixed_cost.present? %>
+      <strong>Revised Media Cost <%= @revised_media_total_fixed_cost.round(0)  %></strong>
+      <%= @revised_per_day_rate %> x <%= @days %>
+      <% end %>
+  </div>
+  <div class="col-xs-3">
+    <h4>Expense</h4>
+      <strong>Total Product Cost <%= @total_product_cost_1.round(0) if @total_product_cost_1 %></strong><br>
+      <strong>Total variable Cost <%= @total_var_cost_1.round(0) if @total_var_cost_1 %></strong><br>
+      <strong>Total Refund <%= @total_refund_1.round(0) if @total_refund_1 %></strong><br>
+      <strong>Total Damages <%= @total_product_dam_cost_1.round(0) if @total_product_dam_cost_1 %></strong>
+      <% @total_expenses_1 = (@total_product_cost_1 ||= 0 ) + (@total_var_cost_1 ||=0 ) + (@total_refund_1 ||= 0) + (@total_product_dam_cost_1 ||= 0) %>
+  </div>
+   <div class="col-xs-3">
+      <% if @total_nos_1 > 0 %>
+
+      <h4>Original PPO</h4>
+      Profitability :<%=@total_revenue_1.round(0) - (@total_expenses_1.round(0) + @media_total_fixed_cost.round(0)) %><br>
+      Total Orders  :<%= @total_nos_1.round(0) %> <br>
+      PPO           :<%= (@total_revenue_1 - (@total_expenses_1 + @media_total_fixed_cost)).round(0) %>
+   </div>
+   <div class="col-xs-3">
+      <h4>Revised PPO</h4>
+      <% if @revised_media_total_fixed_cost.present? %>
+      Profitability :<%= @total_revenue_1.round(0) - (@total_expenses_1.round(0) + @revised_media_total_fixed_cost.round(0)) %><br>
+      Total Orders  :<%= @total_nos_1.round(0) %> <br>
+      PPO           :<%= ((@total_revenue_1 - (@total_expenses_1 + @revised_media_total_fixed_cost)) / @total_nos_1).round(0) %>
+      <% end %>
+ 
+
+      <small>PPO formula = (Total Revenue - Total Cost) / Total Orders </small>
+
+      <% end %>
+   </div>
+</div>
+</div>
+
+<div class="well well-sm">
+	<h4> Default value R: 40% | T: 65% </h4>
+<div class="row">
+  <div class="col-xs-3">
+    <h4>Income</h4>
+      <strong>Total Sales <%= @total_sales_2.round(0) if @total_sales_2 %></strong><br>
+      <strong>Total Revenue <%= @total_revenue_2.round(0) if @total_revenue_2 %></strong><br>
+      <hr>
+      <strong>Original Media Cost <%= @media_total_fixed_cost.round(0) if @media_total_fixed_cost%></strong> <br>
+      <%= @daily_charge %> x <%= @days %>
+      <hr>
+      <% if @revised_media_total_fixed_cost.present? %>
+      <strong>Revised Media Cost <%= @revised_media_total_fixed_cost.round(0)  %></strong>
+      <%= @revised_per_day_rate %> x <%= @days %>
+      <% end %>
+  </div>
+  <div class="col-xs-3">
+    <h4>Expense</h4>
+      <strong>Total Product Cost <%= @total_product_cost_2.round(0) if @total_product_cost_2 %></strong><br>
+      <strong>Total variable Cost <%= @total_var_cost_2.round(0) if @total_var_cost_2 %></strong><br>
+      <strong>Total Refund <%= @total_refund_2.round(0) if @total_refund_2 %></strong><br>
+      <strong>Total Damages <%= @total_product_dam_cost_2.round(0) if @total_product_dam_cost_2 %></strong>
+      <% @total_expenses_2 = (@total_product_cost_2 ||= 0) + (@total_var_cost_2 ||= 0) + (@total_refund_2 ||= 0) + (@total_product_dam_cost_2 ||= 0).round(0) %>
+  </div>
+   <div class="col-xs-3">
+      <% if @total_nos_2 > 0 %>
+   
+      <h4>Original PPO</h4>
+      Profitability :<%= ((@total_revenue_2 || 0) - ((@total_expenses_2 || 0) + (@media_total_fixed_cost || 0))).round(0) %><br>
+      Total Orders  :<%= @total_nos_2.round(0) %> <br>
+      PPO           :<%= (((@total_revenue_2 || 0) - ((@total_expenses_2 || 0) + (@media_total_fixed_cost || 0))) / (@total_nos_2 || 1)).round(0) %>
+   </div>
+   <div class="col-xs-3">
+      <h4>Revised PPO</h4>
+      <% if @revised_media_total_fixed_cost.present? %>
+      Profitability :<%= @total_revenue_2.round(0) - (@total_expenses_2.round(0) + @revised_media_total_fixed_cost.round(0)) %><br>
+      Total Orders  :<%= @total_nos_2.round(0) %> <br>
+      PPO           :<%= ((@total_revenue_2 - (@total_expenses_2 + @revised_media_total_fixed_cost)) / @total_nos_2).round(0) %>
+      <% end %>
+ 
+
+      <small>PPO formula = (Total Revenue - Total Cost) / Total Orders </small>
+
+      <% end %>
+   </div>
+</div>
+</div>
+
+ <br>
+
+<hr>
+
+<script>
+$('#datepicker_to').datepicker({format: 'yyyy-mm-dd'});
+$('#datepicker_from').datepicker({format: 'yyyy-mm-dd'});
+</script>

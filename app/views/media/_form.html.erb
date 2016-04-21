@@ -81,7 +81,7 @@
 <div class="field">
  <%= f.select(:employee_id,
     options_from_collection_for_select(@employees, :id, :name, selected: @medium.employee_id),
-        {:prompt => '-Select Managed by-'} ,
+        {:prompt => '-Select Managed by-', include_blank: '-Not managed by anyone-'} ,
     {label: " Managed By"})  %>
  </div>
   <div class="field">

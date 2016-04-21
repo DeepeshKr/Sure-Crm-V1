@@ -43,15 +43,15 @@
 		<small>Desc: <%= c.description %> </small>
 		</td>
 		<td title="Name"><small><%= c.total_name_1 %> </small> </td>
-		<td class="text-right" title="Orders"> <%= c.total_nos_1 %> </td>
-		<td class="text-right" title="Pieces"> <%= c.total_pieces_1 %>  </td>
-		<td class="text-right" title="Sales">   <%= c.total_sales_1 %>   </td>
-		<td class="text-right" title="Revenue">   <%= c.total_revenue_1 %>  </td>
-		<td class="text-right" title="Product Cost">   <%= c.total_product_cost_1 %>   </td>
-		<td class="text-right" title="Variable Cost">   <%= c.total_var_cost_1 %>  </td>
-		<td class="text-right" title="Fixed Media Cost"> <%= c.total_fixed_cost_1 %>   </td>
-		<td class="text-right" title="Refunds"> <%= c.total_refund_1 %>   </td>
-		<td class="text-right" title="Damages"> <%= c.total_product_dam_cost_1 %>   </td>
+		<td class="text-right" title="Orders"> <%= c.total_nos_1 %> <% @total_nos_1 += c.total_nos_1 %></td>
+		<td class="text-right" title="Pieces"> <%= c.total_pieces_1 %> <% @total_pieces_1 += c.total_pieces_1 %> </td>
+		<td class="text-right" title="Sales">   <%= c.total_sales_1 %> <% @total_sales_1 += c.total_sales_1 %>  </td>
+		<td class="text-right" title="Revenue">   <%= c.total_revenue_1 %> <% @total_revenue_1 += c.total_revenue_1 %> </td>
+		<td class="text-right" title="Product Cost">   <%= c.total_product_cost_1 %> <% @total_product_cost_1 += c.total_product_cost_1 %>  </td>
+		<td class="text-right" title="Variable Cost">   <%= c.total_var_cost_1 %> <% @total_var_cost_1 += c.total_var_cost_1 %> </td>
+		<td class="text-right" title="Fixed Media Cost"> <%= c.total_fixed_cost_1 %>  </td>
+		<td class="text-right" title="Refunds"> <%= c.total_refund_1 %>  <% @total_refund_1 += c.total_refund_1 %> </td>
+		<td class="text-right" title="Damages"> <%= c.total_product_dam_cost_1 %> <% @total_product_dam_cost_1 += c.total_product_dam_cost_1 %>  </td>
 		<td class="text-right" title="Profitability">   <%= c.profit_per_order_1 %>  </td>
 		<td rowspan="2">
 			<%= link_to "Old", ppo_products_path(campaign_id: c.campaign_playlist_id), :target => "_blank", class: "btn btn-primary btn-xs"  %>
@@ -63,15 +63,15 @@
 <!-- second -->
 	<tr>
 		<td title="Name"><small><%= c.total_name_2 %></small></td>
-		<td class="text-right" title="Orders"> <%= c.total_nos_2 %>  </td>
-		<td class="text-right" title="Pieces"> <%= c.total_pieces_2 %>   </td>
-		<td class="text-right" title="Sales">   <%= c.total_sales_2 %>    </td>
-		<td class="text-right" title="Revenue">   <%= c.total_revenue_2 %>    </td>
-		<td class="text-right" title="Product Cost">   <%= c.total_product_cost_2 %>    </td>
-		<td class="text-right" title="Variable Cost">   <%= c.total_var_cost_2 %>   </td>
-		<td class="text-right" title="Fixed Media Cost"> <%= c.total_fixed_cost_2 %>     </td>
-		<td class="text-right" title="Refunds"> <%= c.total_refund_2 %>   </td>
-		<td class="text-right" title="Damages"> <%= c.total_product_dam_cost_2 %>   </td>
+		<td class="text-right" title="Orders"> <%= c.total_nos_2 %>  <% @total_nos_2 += c.total_nos_2 %> </td>
+		<td class="text-right" title="Pieces"> <%= c.total_pieces_2 %>  <% @total_pieces_2 += c.total_pieces_2 %> </td>
+		<td class="text-right" title="Sales">   <%= c.total_sales_2 %> <% @total_sales_2 += c.total_sales_2 %>   </td>
+		<td class="text-right" title="Revenue">   <%= c.total_revenue_2 %>  <% @total_revenue_2 += c.total_revenue_2 %>  </td>
+		<td class="text-right" title="Product Cost">   <%= c.total_product_cost_2 %>  <% @total_product_cost_2 += c.total_product_cost_2 %>  </td>
+		<td class="text-right" title="Variable Cost">   <%= c.total_var_cost_2 %> <% @total_var_cost_2 += c.total_var_cost_2 %>  </td>
+		<td class="text-right" title="Fixed Media Cost"> <%= c.total_fixed_cost_2 %>    </td>
+		<td class="text-right" title="Refunds"> <%= c.total_refund_2 %>  <% @total_refund_2 += c.total_refund_2 %> </td>
+		<td class="text-right" title="Damages"> <%= c.total_product_dam_cost_2 %> <% @total_product_dam_cost_2 += c.total_product_dam_cost_2 %>  </td>
 		<td class="text-right" title="Profitability">   <%= c.profit_per_order_2 %>  </td>
 
 	</tr>

@@ -117,18 +117,24 @@ post 'distributor_upload_orders/switch_off'
   #new sales ppo
   get 'sales_ppos/index'
   get 'sales_ppos' => 'sales_ppos#index'
-  get 'sales_ppos/half_hour'
-  get 'sales_ppos_half_hour' => 'sales_ppos#half_hour'
+ 
   get 'sales_ppos/show_wise'
   get 'sales_ppos_show_wise' => 'sales_ppos#show_wise'
+
+  get 'sales_ppos/half_hourly'
+  get 'sales_ppos_half_hourly' => 'sales_ppos#half_hourly'
+  get 'sales_ppos/half_hour_sales'
+  get 'sales_ppos_half_hour_sales' => 'sales_ppos#half_hour_sales'
+  get 'sales_ppos/half_hour_performance'
+  get 'sales_ppos_half_hour_performance' => 'sales_ppos#half_hour_performance'
+  
+  get 'sales_ppos/operator_sales_performance'
+  get 'sales_ppos_operator_sales_performance' => 'sales_ppos#operator_sales_performance'
   get 'sales_ppos/product_performance'
   get 'sales_ppos_product_performance' => 'sales_ppos#product_performance'
   get 'sales_ppos/show_performance'
   get 'sales_ppos_show_performance' => 'sales_ppos#show_performance'
-  get 'sales_ppos/hour_sales_performance'
-  get 'sales_ppos_hour_sales_performance' => 'sales_ppos#hour_sales_performance'
-  get 'sales_ppos/operator_sales_performance'
-  get 'sales_ppos_operator_sales_performance' => 'sales_ppos#operator_sales_performance'
+  
   get 'sales_ppos/details'
   get 'sales_ppos_details' => 'sales_ppos#details'
   
@@ -148,16 +154,22 @@ post 'distributor_upload_orders/switch_off'
   get 'show_ppo' => 'sales_ppo_report#show'
   get 'sales_ppo_report/channel'
   get 'channel_ppo' => 'sales_ppo_report#channel'
-  get 'sales_ppo_report/hour_performance'
-  get 'hour_performance' => 'sales_ppo_report#hour_performance'
+  
+
+  
   get 'sales_ppo_report/product_performance'
   get 'product_performance' => 'sales_ppo_report#product_performance'
   get 'sales_ppo_report/show_performance'
   get 'show_performance' => 'sales_ppo_report#show_performance'
   get 'sales_ppo_report/product_hour_performance'
   get 'product_hour_performance' => 'sales_ppo_report#product_hour_performance'
+  
+  get 'sales_ppo_report/hour_performance'
+  get 'hour_performance' => 'sales_ppo_report#hour_performance'
+  
   get 'sales_ppo_report/hour_sales_performance'
   get 'hour_sales_performance' => 'sales_ppo_report#hour_sales_performance'
+  
   get 'sales_ppo_report/operator_performance'
   get 'operator_performance' => 'sales_ppo_report#operator_performance'
   get 'sales_ppo_report/ppo_details'
