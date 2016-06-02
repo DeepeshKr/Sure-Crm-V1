@@ -1,0 +1,40 @@
+<% form_for :states, :url => {:action => 'update_all'} do -%>  
+
+    <% @states.each do |state| %>
+      <% fields_for "state[]", state do |state_fields| %>
+		    <%= state_fields.text_field :name %>
+		    <%= state_fields.text_field :short_code %>
+      <% end %>
+    <% end %> 
+	
+ <%= submit_tag 'Update', class: 'btn btn-primary'  %>
+
+<% end %>
+
+ <h1>Edit All States</h1>
+
+ <%= form_for :states, :url => states_update_all_path, :html => { :method => :post } do %>
+ <!-- add this before do -->
+   <table class="table table-bordered table-stripped">
+     <tr>
+       <th>Name</th>
+       <th>Short Code</th>
+     </tr>
+     <% @states.each do |state| %>
+       <%= fields_for "state[]", state do |state_fields| %>
+     <tr>
+       <td><%= state_fields.text_field :name, class:'form-control', :readonly => "true" %></td>
+       <td><%= state_fields.text_field :short_code, class:'form-control' %></td>
+     </tr>
+       <% end %>
+     <% end %>
+   </table>
+
+   <div class="row">
+	   <div class="col-xs-2 col-xs-offset-9">
+		   <%= submit_tag 'Update', class: 'btn btn-primary'%>
+	 	</div>
+   </div>
+ <% end %>
+
+ <%= link_to 'Back', users_path %>

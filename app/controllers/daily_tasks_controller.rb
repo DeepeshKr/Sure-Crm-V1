@@ -19,7 +19,7 @@ class DailyTasksController < ApplicationController
         @daily_tasks_trial = DailyTask.where(frequency: "On Trial").order(:sort_order)
         
         todaydate = Date.today #Time.zone.now + 330.minutes
-        @from_date = todaydate - 7.days #30.days
+        @from_date = todaydate - 30.days #30.days
         @to_date = todaydate
         @employeeunorderlist = []
          
@@ -32,7 +32,9 @@ class DailyTasksController < ApplicationController
         
         hbnorders = OrderMaster.where("TRUNC(orderdate) = ?", day)
         .where('ORDER_STATUS_MASTER_ID > 10002').joins(:medium).where("media.media_group_id = 10000").count
-
+        
+       
+        
          total_ppo_orders = SalesPpo.where('order_status_id > 10002')
          .where("TRUNC(start_time) = ? ", day).distinct.count('order_id')
        

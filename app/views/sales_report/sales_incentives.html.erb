@@ -1,70 +1,135 @@
-<% title "Sales Incentives #{@employee_name}" %>
+<% title "Sales Incentives #{@employee_name} including Supervisor and Manager" %>
 
-<%= form_tag  url_for(:controller => 'sales_report', :action => 'sales_incentives'), method: "get" do  %>
-<div class="row">
-<div class="col-xs-4">
+ <div class="panel panel-primary">
+  <div class="panel-heading">Showing Sales between date <%= @from_date %> and <%= @to_date %></div>
+   <div class="panel-body">
+    <div class="row">
+   	 <div class="col-xs-6">
+		 <h3><%= @employee_name %> Incentives</h3>
+   	 </div>
+   	 <div class="col-xs-6">
+		 
+		 <div class="row">
+		   <%= form_tag  url_for(:controller => 'sales_report', :action => "sales_incentives"), method: "get" do  %>
+    	   		<%= hidden_field_tag :show_for, @show_for %>
+				<%= hidden_field_tag :employee_id, @employee_id %>
+			
+		       <div class="col-xs-8">
+		         <div class="input-daterange input-group">
+		           <%= text_field_tag(:from_date, @from_date, :data => {:provide => "datepicker"}, :id => "datepicker_from", :class => "form-control", :required => "true" )   %>
+		           <span class="input-group-addon">to</span>
 
-<h3>Sales Incentives</h3>
-</div>
+		            <%= text_field_tag(:to_date, @to_date, :data => {:provide => "datepicker"}, :id => "datepicker_to", :class => "form-control", :required => "true" )   %>
 
-<div class="col-xs-6">
+		         </div>
+		       </div>
 
-  <%= select_tag :employee_id,  options_from_collection_for_select(@sales_agents,
- :id, :employee_name, selected: @employee_id ),
-      {:class => "form-control", label: "Select the Product if required ", required: true }  %>
+		       <div class="col-xs-4">
+				 <% if @show_for.blank? || @show_for == "Employee" %>
+		         <%= submit_tag "Show Report", name: nil, class: "btn btn-primary"  %>
+				 <% else %>
+				  <%= submit_tag "Show Report", name: nil, class: "btn btn-primary", data: { confirm: "The Manager / Supervisor Report is getting generated and usually takes about 5 min or so, please be patient" }  %>
+				 <% end %>
+		       </div>
+		   <% end %>
+		 </div>
 
-</div>
+   	 </div>
+    </div>
+   </div>
+     <div class="panel panel-info">
+		<div class="panel-body">
+			<div class="row">
+			<div class="col-xs-6">
+				<p class="lead">Employee Incentives from <%= @from_date %> to <%= @to_date %></p>
+			</div>
+   	   <%= form_tag  url_for(:controller => 'sales_report', :action => 'sales_incentives'), method: "get" do  %>
+	
+   			<%= hidden_field_tag :from_date, @from_date %>
+   			<%= hidden_field_tag :to_date, @to_date %>
+   			<%= hidden_field_tag :show_for, "Employee" %>
+	
+			<div class="col-xs-4">
+			  <%= select_tag :employee_id,  options_from_collection_for_select(@sales_agents,
+			 :id, :employee_name, selected: @employee_id ),
+			      {:class => "form-control", label: "Select the Product if required ", required: true }  %>
+			</div>
+			<div class="col-xs-2"><%= submit_tag "Show", name: nil, class: "btn btn-primary" %></div>			
+   		<% end %>
+		  </div>
+		 </div>
+	 </div>
+	 
+ 	<% if @show_results == "true" %>
+ 	<!-- New Report -->
+ 	<div class="row">
+ 	  <div class="col-xs-12">
+ 	    <%= render partial: 'one_new_report', :locals => {:employeesales => @employee_sales}  %>
+ 	  </div>
+ 	</div>
+ 	<% end %>
+	
+     <div class="panel panel-info">
+		<div class="panel-body">
+			<div class="row">
+			<div class="col-xs-8">
+				<p class="lead">Floor Managers Incentives from <%= @from_date %> to <%= @to_date %></p>
+			</div>
+   	   			
+   				<div class="col-xs-4">
+   				 <%= link_to 'View Floor Manager Report', sales_report_sales_incentives_path(show_for: "Supervisor", from_date: @from_date, to_date: @to_date), type:"button", class: "btn btn-primary btn-sm", data: { confirm: "The Sales Supervisor Report is getting generated from #{@from_date} to #{@to_date} and usually takes about 5 min or so, please be patient" } %> 
+   				</div>
+   				
+		  </div>
+		  </div>
+	 </div>	  
+	<% if @show_supervisor == "true" %>
+	<!-- New Report -->
+	<div class="row">
+	  <div class="col-xs-12">
+	    <%= render partial: 'one_new_report', :locals => {:employeesales => @employee_sales_1}  %>
+	  </div>
+	</div>
+	<% end %>
+	
+     <div class="panel panel-info">
+  		<div class="panel-body">
+  			<div class="row">
+  			<div class="col-xs-8">
+  			<p class="lead">Ops Managers Incentives from <%= @from_date %> to <%= @to_date %> </p>
+  			</div>
+   	   			
+     				<div class="col-xs-4">
+			         	<%= link_to 'View Ops Manager Report', sales_report_sales_incentives_path(show_for: "Manager", from_date: @from_date, to_date: @to_date), type:"button", class: "btn btn-primary btn-sm", data: { confirm: "The Ops Manager Report is getting generated from #{@from_date} to #{@to_date} and usually takes about 5 min or so, please be patient" } %> 
+     				</div>
+   				
+  		  </div>
+  		  </div>
+  	  </div>
+	  
+  	<% if @show_manager == "true" %>
+  	<!-- New Report -->
+  	<div class="row">
+  	  <div class="col-xs-12">
+  	    <%= render partial: 'one_new_report', :locals => {:employeesales => @employee_sales_2}  %>
+  	  </div>
+  	</div>
 
- <div class="col-xs-1">
-           <%= submit_tag "Show", name: nil, class: "btn btn-primary" %>
+  	<% end %>
+  	  
  </div>
+	
 
-</div>
-<% end %>
+	  	 	
+	<!-- exec end-->
+	<!-- super start-->
+	  		
 
-<% if @show_results == "true" %>
-<div class="row">
-  <div class="col-xs-4">
-    <%= render partial: 'one_report', :locals => {:employeesales => @employee_sales_3}  %>
-  </div>
-  <div class="col-xs-4">
-    <%= render partial: 'one_report', :locals => {:employeesales => @employee_sales_2}  %>
-  </div>
-  <div class="col-xs-4">
-    <%= render partial: 'one_report', :locals => {:employeesales => @employee_sales_1}  %>
-  </div>
-</div>
-<div class="row">
-  <div class="col-xs-4">
-    <%= render partial: 'one_report', :locals => {:employeesales => @employee_sales_6}  %>
-  </div>
-  <div class="col-xs-4">
-    <%= render partial: 'one_report', :locals => {:employeesales => @employee_sales_5}  %>
-  </div>
-  <div class="col-xs-4">
-    <%= render partial: 'one_report', :locals => {:employeesales => @employee_sales_4}  %>
-  </div>
-</div>
-<div class="row">
-  <div class="col-xs-4">
-    <%= render partial: 'one_report', :locals => {:employeesales => @employee_sales_9}  %>
-  </div>
-  <div class="col-xs-4">
-    <%= render partial: 'one_report', :locals => {:employeesales => @employee_sales_8}  %>
-  </div>
-  <div class="col-xs-4">
-    <%= render partial: 'one_report', :locals => {:employeesales => @employee_sales_7}  %>
-  </div>
-</div>
-<div class="row">
-  <div class="col-xs-4">
-    <%= render partial: 'one_report', :locals => {:employeesales => @employee_sales_12}  %>
-  </div>
-  <div class="col-xs-4">
-    <%= render partial: 'one_report', :locals => {:employeesales => @employee_sales_11}  %>
-  </div>
-  <div class="col-xs-4">
-    <%= render partial: 'one_report', :locals => {:employeesales => @employee_sales_10}  %>
-  </div>
-</div>
-<% end %>
+	  	 	
+			
+
+	  	 	
+<script>
+$('#datepicker_to').datepicker({format: 'yyyy-mm-dd'});
+$('#datepicker_from').datepicker({format: 'yyyy-mm-dd'});
+</script>

@@ -1,3 +1,29 @@
-<% provide(:title, 'Sign up') %>
-<h1>Product#help</h1>
-<p>Find me in app/views/product/help.html.erb</p>
+<% provide(:title, 'Log Check') %>
+<h1>Product#help (oldhelp path)</h1>
+<div class="well">
+	<%= link_to "log file", log_path(lines: 100) %>
+</div>
+
+<div class="row">
+	<div class="col-xs-12">
+  	  <ul class="nav nav-tabs">
+  	    <li class="active"><a data-toggle="tab" href="#dev">Development</a></li>
+  	    <li><a data-toggle="tab" href="#error">Production Error</a></li>
+  	    <li><a data-toggle="tab" href="#info">Production Log</a></li>
+  	  </ul>
+	  <div class="tab-content">
+		  <!-- dev start-->
+		<div id="dev" class="tab-pane fade in active">
+  	  		<pre><%= @development_logs %></pre>
+		</div> <!-- dev end-->
+  		<!-- error start-->
+  	    <div id="error" class="tab-pane fade">
+			<pre><%= @stdout_logs %></pre>
+		</div> <!-- error end-->
+		<!-- info start-->
+  	    <div id="info" class="tab-pane fade">
+			<pre><%= @stderr_logs %></pre>
+		</div> <!-- info end-->
+	</div>
+	</div>
+</div>

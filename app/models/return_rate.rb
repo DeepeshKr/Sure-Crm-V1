@@ -15,11 +15,15 @@ class ReturnRate < ActiveRecord::Base
   end
   
   def retail_default_rate
-   return 40
+    #check default return rate
+   return return_rate = SalesPpoDefault.find_by_name("Retail").value
+   #return 49
   end
   
   def transfer_order_default_rate
-   return 65
+    #check default return rate
+   return return_rate = SalesPpoDefault.find_by_name("Transfer Order").value
+   #return 65
   end
   
   def all_percents offset, days=0

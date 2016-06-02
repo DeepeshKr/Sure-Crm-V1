@@ -1,0 +1,18 @@
+<div class="row">
+  <%= form_tag  url_for(:controller => 'sales_report_team', :action => searchaction), method: "get" do  %>
+    
+      <div class="col-xs-4 col-offset-xs-5">
+        <div class="input-daterange input-group">
+          <%= text_field_tag(:from_date, @from_date, :data => {:provide => "datepicker"}, :id => "datepicker", :class => "form-control", :required => "true" )   %>
+          
+        </div>
+      </div>
+
+      <div class="col-xs-3">
+        <%= submit_tag "Show Report", name: nil, class: "btn btn-primary" %>
+      </div>
+  <% end %>
+</div>
+<script>
+$('#datepicker').datepicker({format: 'yyyy-mm-dd'});
+</script>

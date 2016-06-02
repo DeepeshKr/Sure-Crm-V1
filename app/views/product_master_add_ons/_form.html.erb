@@ -36,7 +36,7 @@
 <div class="field">
      <%= f.select :replace_by_product_id,  options_from_collection_for_select(@productreplaceaddonlist,
        :id, :productlistdetails, :selected => @product_master_add_on.replace_by_product_id),
-             { label: "Select these product which would be replaced on Specific Add Ons", prompt: "Please select if you need to replace the product"} %>
+             { label: "Select these Main product which would be replaced on Specific Add On Selected Above (Hint the above product would be priced more than the current one)", prompt: "Please select if you need to replace the product"} %>
  
   </div>
 

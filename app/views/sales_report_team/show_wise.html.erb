@@ -1,0 +1,83 @@
+<!-- set page title start -->
+<% title "HBN Daily Show Report #{@timenow}" %>
+<!-- set page title end -->
+
+ <div class="row">
+   <div class="col-xs-6">
+
+   <h4>HBN Daily Show Report <%= @orderdate %> </h4>
+   </div>
+   <div class="col-xs-6">
+   <%=render partial: 'date_search', :locals => {:searchaction => "show_wise"} %>
+
+  </div>
+ </div>
+
+
+ <br>
+ <% if @employeeorderlist.present? %>
+<table class="table table-hover table-bordered">
+<thead>
+   <tr>
+   <th  rowspan="2">No</th>
+   <th  rowspan="2">Show</th>
+     <th rowspan="2">Start Time</th>
+
+      <th colspan="3">Order Details</th>
+
+
+
+
+     </tr>
+    <tr>
+
+      <th class="text-right">Orders</th>
+       <th class="text-right">Pieces</th>
+     <th class="text-right">Sales</th>
+
+
+     </tr>
+  </thead>
+
+<tbody>
+   <% @employeeorderlist.each do |c| %>
+   <tr>
+   <td><%= @sno %></td>
+
+ <td><%= c[:show] %></td>
+<td><%= c[:at_time] %></td>
+<td class="text-right">
+   <%= c[:nos] %>
+   <% @total_nos += c[:nos] %>
+</td>
+<td class="text-right">
+   <%= c[:pieces] %>
+   <% @total_pieces += c[:pieces] %>
+</td>
+<td class="text-right">
+   <%= c[:total] %>
+   <% @total_sales += c[:total] %>
+</td>
+<td class="text-right">
+
+  <% @sno += 1 %>
+ <% end %>
+  </tbody>
+<tfoot>
+    <tr>
+     <th colspan="3" >Total</th>
+
+      <th class="text-right"><%= @total_nos %></th>
+       <th class="text-right"><%= @total_pieces %></th>
+     <th class="text-right"><%= @total_sales %></th>
+
+    <th></th>
+     </tr>
+  </tfoot>
+  </table>
+  <% else %>
+  <div class="well well-sm">
+  <h5>Please select a date to generate the report </h5>
+  </div>
+  <% end %>
+ <br>

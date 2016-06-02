@@ -41,7 +41,7 @@ class CampaignPlaylistsController < ApplicationController
     @campaign_playlists = CampaignPlaylist.limit(10)
   end
 
-    def newreport
+  def newreport
 
     if(params.has_key?(:campaignid))
       @campaign_playlists = CampaignPlaylist.where("campaignid = ?" , params[:campaignid]).order(:start_hr, :start_min, :start_sec)
@@ -110,11 +110,128 @@ end
 
   def show
       set_media_tape
-    # @campaignlist =  Campaign.joins(:medium).where('media.telephone = ?', @order_master.calledno)
-      @orderlines = OrderLine.joins(:order_master)
+      @campaign_playlist_id = params[:id]
+      main_product_type_id = 10000
+      basic_product_type_id = 10040
+      common_product_type_id = 10001
+      
+      @regular_basic,   @regular_shipping,  @regular_total,   @regular_cost,  @regular_revenue = 0,0,0,0,0
+      @basic_basic,   @basic_shipping,  @basic_total,   @basic_cost,  @basic_revenue = 0,0,0,0,0
+      @common_basic,   @common_shipping,  @common_total,   @common_cost,  @common_revenue = 0,0,0,0,0
+      
+      @order_lines_regular = OrderLine.joins(:order_master)
       .where("order_masters.campaign_playlist_id = ?", params[:id])
+      .joins(:product_variant)
+      .where("product_variants.product_sell_type_id = ?", main_product_type_id)
+      .order("order_lines.created_at")
+      
+      @order_lines_regular.each do |order |
+        @regular_basic += order.subtotal
+        @regular_shipping += order.shipping
+        @regular_total += order.total
+        @regular_cost += order.productcost
+        @regular_revenue += order.productrevenue
+      end
+      
+      @order_lines_basic = OrderLine.joins(:order_master)
+      .where("order_masters.campaign_playlist_id = ?", params[:id])
+      .joins(:product_variant)
+      .where("product_variants.product_sell_type_id = ?", basic_product_type_id)
+      .order("order_lines.created_at")
+      
+      @order_lines_basic.each do |order |
+        @basic_basic += order.subtotal
+        @basic_shipping += order.shipping
+        @basic_total += order.total
+        @basic_cost += order.productcost
+        @basic_revenue += order.productrevenue
+      end
+      
+      @order_lines_common = OrderLine.joins(:order_master)
+      .where("order_masters.campaign_playlist_id = ?", params[:id])
+      .joins(:product_variant)
+      .where("product_variants.product_sell_type_id = ?", common_product_type_id)
+      .order("order_lines.created_at")
+      
+      @order_lines_common.each do |order |
+        @common_basic += order.subtotal
+        @common_shipping += order.shipping
+        @common_total += order.total
+        @common_cost += order.productcost
+        @common_revenue += order.productrevenue
+      end
+      @sales_ppos = SalesPpo.where('order_status_id > 10002')
+      .where(campaign_playlist_id: params[:id])
+      .order("start_time")
+      
   # Parent.joins(:children).where(children:{favorite:true})
-      respond_with(@campaign_playlist, @orderlines)
+      #respond_with(@campaign_playlist, @orderlines)
+  end
+  
+  def search
+      set_media_tape
+      @campaign_playlist_id = params[:id]
+      return if @campaign_playlist_id.blank?
+      main_product_type_id = 10000
+      basic_product_type_id = 10040
+      common_product_type_id = 10001
+      
+      @campaign_playlist = CampaignPlaylist.find(@campaign_playlist_id)
+      @campaign_playlist_to_products = CampaignPlaylistToProduct.where(campaign_playlist_id: @campaign_playlist_id)
+      @campaign_playlist_to_product = CampaignPlaylistToProduct.new(campaign_playlist_id: @campaign_playlist_id)
+      @product_variants = ProductVariant.where('activeid = 10000').order("name")
+     
+      @regular_basic,   @regular_shipping,  @regular_total,   @regular_cost,  @regular_revenue = 0,0,0,0,0
+      @basic_basic,   @basic_shipping,  @basic_total,   @basic_cost,  @basic_revenue = 0,0,0,0,0
+      @common_basic,   @common_shipping,  @common_total,   @common_cost,  @common_revenue = 0,0,0,0,0
+      
+      @order_lines_regular = OrderLine.joins(:order_master)
+      .where("order_masters.campaign_playlist_id = ?", params[:id])
+      .joins(:product_variant)
+      .where("product_variants.product_sell_type_id = ?", main_product_type_id)
+      .order("order_lines.created_at")
+      
+      @order_lines_regular.each do |order |
+        @regular_basic += order.subtotal
+        @regular_shipping += order.shipping
+        @regular_total += order.total
+        @regular_cost += order.productcost
+        @regular_revenue += order.productrevenue
+      end
+      
+      @order_lines_basic = OrderLine.joins(:order_master)
+      .where("order_masters.campaign_playlist_id = ?", params[:id])
+      .joins(:product_variant)
+      .where("product_variants.product_sell_type_id = ?", basic_product_type_id)
+      .order("order_lines.created_at")
+      
+      @order_lines_basic.each do |order |
+        @basic_basic += order.subtotal
+        @basic_shipping += order.shipping
+        @basic_total += order.total
+        @basic_cost += order.productcost
+        @basic_revenue += order.productrevenue
+      end
+      
+      @order_lines_common = OrderLine.joins(:order_master)
+      .where("order_masters.campaign_playlist_id = ?", params[:id])
+      .joins(:product_variant)
+      .where("product_variants.product_sell_type_id = ?", common_product_type_id)
+      .order("order_lines.created_at")
+      
+      @order_lines_common.each do |order |
+        @common_basic += order.subtotal
+        @common_shipping += order.shipping
+        @common_total += order.total
+        @common_cost += order.productcost
+        @common_revenue += order.productrevenue
+      end
+      @sales_ppos = SalesPpo.where('order_status_id > 10002')
+      .where(campaign_playlist_id: params[:id])
+      .order("start_time")
+      
+  # Parent.joins(:children).where(children:{favorite:true})
+      #respond_with(@campaign_playlist, @orderlines)
   end
 
   def new

@@ -8,7 +8,7 @@ class UsersController < ApplicationController
     @empcode = current_user.employee_code
     employee_id = Employee.where(employeecode: @empcode).first.id
     chkuser = User.where(employee_code: @empcode)
-    @userpas = chkuser.first
+    @user = chkuser.first
     @userstatus = "This employee #{chkuser.first.name} has already got a Login Id: #{chkuser.first.employee_code} and password, you may change the password here"
    
     @user = User.find(params[:id])
@@ -39,7 +39,12 @@ class UsersController < ApplicationController
   end
   def update   
     if current_user.employee_role.sortorder < 8
-      @user.update(user_params)   
+      
+      @user.update(user_params) 
+        # Parameters: {"utf8"=>"✓", "authenticity_token"=>"kuaEO5B6ZH/+HSrPD7OVpwelc/XRaLzUC/Dk7eknOOhPlMIdAUI2Qzd3DYSjK/OuaB/jR6MfbAnCqlSXU0+0Jw==", "user"=>{"id"=>"10591", "password"=>"[FILTERED]", "password_confirmation"=>"[FILTERED]"}, "employee_code"=>"426", "name"=>"biplap_sm  ", "role"=>"10003", "email"=>"", "commit"=>"Change Password", "id"=>"10591"}
+        #
+      @user.update(employee_code: params[:employee_code],
+      name: params[:name], email: params[:email], role: params[:role])   
       # if @user.update(user_params)
        flash[:success] = 'You have sucessfully changed the user details!'
     else

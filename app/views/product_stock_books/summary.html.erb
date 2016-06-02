@@ -18,26 +18,21 @@
 
 <br>
 <% if @product_stock_books.present? %>
-<br>
-<div class="digg_pagination"> 
-    <%= will_paginate @product_stock_books, :container => false %>
-</div>
-<br>
+
 <table class="table table-hover table-bordered table-stripped">
   <thead>
   <tr>
-    <th rowspan="3" colspan="1">Product</th>
+    <th rowspan="3">Product</th>
     <th rowspan="2" colspan="2">Purchased</th>
     <th colspan="6">Returned </th>
     <th colspan="6">Sold </th>
     <th rowspan="2" colspan="2">Corrections</th>
-     <th rowspan="3" colspan="1">Show</th>
+     <th rowspan="3">Show</th>
   </tr>
   <tr>
     <th colspan="2">Retail </th>
     <th colspan="2">wholesale</th>
     <th colspan="2">Branch</th>
-	
     <th colspan="2">Retail</th>
     <th colspan="2">Wholesale</th>
     <th colspan="2">Branch</th>
@@ -48,16 +43,20 @@
 	
     <th>Qty</th>
     <th>Value</th>
+	
     <th>Qty</th>
     <th>Value</th>
-    <th>Qty</th>
+    
+	<th>Qty</th>
     <th>Value</th>
 	
     <th>Qty</th>
     <th>Value</th>
-    <th>Qty</th>
+    
+	<th>Qty</th>
     <th>Value</th>
-    <th>Qty</th>
+    
+	<th>Qty</th>
     <th>Value</th>
 	
     <th>Qty</th>
@@ -96,48 +95,34 @@
   <tfoot>
     <tr>
       <th> Total</th>
-      <th>  <%= @purchased_qty %> </th>
-      <th>  <%= @purchased_val %> </th>
+      <th class="text-right">  <%= @purchased_qty %> </th>
+      <th class="text-right">  <%= @purchased_val %> </th>
 	  
-      <th>  <%= @retail_returns_qty %> </th>
-      <th>  <%= @retail_returns_val %> </th>
-      <th>  <%= @wholesale_returns_qty %> </th>
-      <th>  <%= @wholesale_returns_val %> </th>
-      <th>  <%= @other_returns_qty %> </th>
-      <th>  <%= @other_returns_val %> </th>
+      <th class="text-right">  <%= @retail_returns_qty %> </th>
+      <th class="text-right">  <%= @retail_returns_val %> </th>
+      <th class="text-right">  <%= @wholesale_returns_qty %> </th>
+      <th class="text-right">  <%= @wholesale_returns_val %> </th>
+      <th class="text-right">  <%= @other_returns_qty %> </th>
+      <th class="text-right">  <%= @other_returns_val %> </th>
 	  
-      <th>  <%= @retail_sales_qty %> </th>
-      <th>  <%= @retail_sales_val %> </th>
-      <th>  <%= @wholesale_sale_qty %> </th>
-      <th>  <%= @wholesale_sale_val %> </th>
-      <th>  <%= @branch_sales_qty %> </th>
-      <th>  <%= @branch_sales_val %> </th>
+      <th class="text-right">  <%= @retail_sales_qty %> </th>
+      <th class="text-right">  <%= @retail_sales_val %> </th>
+      <th class="text-right">  <%= @wholesale_sale_qty %> </th>
+      <th class="text-right">  <%= @wholesale_sale_val %> </th>
+      <th class="text-right">  <%= @branch_sales_qty %> </th>
+      <th class="text-right">  <%= @branch_sales_val %> </th>
 	  
-      <th>  <%= @corrections_qty %> </th>
-      <th>  <%= @corrections_val %> </th>
+      <th class="text-right">  <%= @corrections_qty %> </th>
+      <th class="text-right">  <%= @corrections_val %> </th>
       <th>  </th>
-      <th> </th>
   </tr>
   </tfoot>
 </table>
 <br>
-<div class="digg_pagination"> 
-    <%= will_paginate @product_stock_books, :container => false %>
-</div>
 <br>
-
+	<%= link_to 'Download CSV Stock Book', stockbook_path(from_date: @from_date_text, to_date: @to_date_text , format: :csv), class: "btn btn-info btn-sm" %>
+<br>
+<br>
 <% end %>
-<br>
-<% if @show_add_update == 1 %>
-<%= link_to 'Download CSV Stock Book', product_stock_books_path(barcode: @barcode, from_date: @or_from_date, to_date: @or_to_date , format: :csv), class: "btn btn-info btn-sm" %>
-<br>
-<br>
-<!-- % = render('create_list') % -->
-
-
-<br>
-
-
 <!-- Today's Date <%= @prev_datelist %> -->
-<% end %>
 <br>

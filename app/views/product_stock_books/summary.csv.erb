@@ -1,0 +1,4 @@
+<% headers = ['Product', 'Purchased Qty', 'Purchased Value', 'Returned Retail Qty', 'Returned Retail Value', 'Returned wholesale Qty', 'Returned wholesale Value', 'Returned Branch Qty', 'Returned Branch Value', 'Sold Retail Qty', 'Sold Retail Value', 'Sold Wholesale Qty', 'Sold Wholesale Value', 'Sold Branch Qty', 'Sold Branch Value', 'Corrections Qty', 'Corrections Value'] %>
+<%= CSV.generate_line headers %>
+	<% @product_stock_books.each do |c| %><%= CSV.generate_line([c.productinfo, c.total_purchased_qty, c.total_purchased_value, c.total_returned_retail_qty, c.total_returned_retail_value, c.total_returned_wholesale_qty, c.total_returned_wholesale_value, c.total_returned_others_qty, c.total_returned_others_value, c.total_sold_retail_qty, c.total_sold_retail_value, c.total_sold_wholesale, c.total_sold_wholesale_value, c.total_sold_branch_qty, c.total_sold_branch_value, c.total_corrections_qty, c.total_corrections_value]).html_safe.strip  %>
+	<% end %>

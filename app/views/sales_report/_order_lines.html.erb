@@ -12,7 +12,9 @@
     <tr>
     <th>SNo</th>
     <th>Id </th>
-      <th>Product </th>
+    <th>Product </th>
+	<th>Media </th>
+	<th>Campaign </th>
       <th>Time</th>
       <th class="text-right">Basic</th>
       <th class="text-right">Shipping</th>
@@ -25,7 +27,7 @@
 
   <tbody>
    <tr>
-   <th colspan="9">Main Products </th>
+   <th colspan="11">Main Products </th>
 
    </tr>
    <% @sno = 1 %>
@@ -39,6 +41,8 @@
          <small></small>
        </td>
         <td><%= order_line.description %></td>
+		<td><%= order_line.order_master.medium.name if order_line.order_master.media_id.present? %></td>
+		<td><%= order_line.order_master.campaign_playlist.product_variant.name || "NA" if order_line.order_master.campaign_playlist_id.present? %></td>
        <td><small>
        <%= (order_line.order_master.orderdate + 330.minutes).strftime('%d-%b %H:%M %P') %>
        </small></td>
@@ -48,6 +52,7 @@
        <td class="text-right">
         <%= order_line.total %>
        </td>
+	   
        <td class="text-right">
           <%= order_line.order_master.employee_name %>
        </td>
@@ -59,7 +64,7 @@
       <% @sno += 1 %>
     <% end %>
      <tr>
-    <th colspan="4">Total</th>
+    <th colspan="6">Total</th>
     <th class="text-right"><%= @regular_basic.to_i %></th>
     <th class="text-right"><%= @regular_shipping.to_i %></th>
     <th class="text-right"><%= @regular_total.to_i %></th>
@@ -69,7 +74,7 @@
 
     <% end %>
     <tr>
-   <th colspan="9">Basic Upsell Products </th>
+   <th colspan="11">Basic Upsell Products </th>
 
    </tr>
     <% if @order_lines_basic.present? %>
@@ -81,6 +86,8 @@
         <td><%= order_line.order_master.external_order_no %><br>
           <small><%= order_line.order_master.id %></small></td>
         <td><%= order_line.description %></td>
+		<td><%= order_line.order_master.medium.name if order_line.order_master.media_id.present? %></td>
+		<td><%= order_line.order_master.campaign_playlist.product_variant.name || "NA" if order_line.order_master.campaign_playlist_id.present? %></td>
        <td><small>
        <%= (order_line.order_master.orderdate + 330.minutes).strftime('%d-%b %H:%M %P') %>
        </small></td>
@@ -93,7 +100,7 @@
        <% @sno += 1 %>
     <% end %>
      <tr>
-    <th colspan="4">Total</th>
+    <th colspan="6">Total</th>
     <th class="text-right"> <%= @basic_basic.to_i %></th>
     <th class="text-right"><%= @basic_shipping.to_i %></th>
     <th class="text-right"><%= @basic_total.to_i %></th>
@@ -102,7 +109,7 @@
     </tr>
      <% end %>
     <tr>
-   <th colspan="9">Common Upsell Products </th>
+   <th colspan="11">Common Upsell Products </th>
 
    </tr>
     <% @sno = 1 %>
@@ -115,6 +122,8 @@
         <td><%= order_line.order_master.external_order_no %><br>
           <small><%= order_line.order_master.id %></small></td>
         <td><%= order_line.description %></td>
+		<td><%= order_line.order_master.medium.name if order_line.order_master.media_id.present? %></td>
+		<td><%= order_line.order_master.campaign_playlist.product_variant.name || "NA" if order_line.order_master.campaign_playlist_id.present? %></td>
        <td><small>
        <%= (order_line.order_master.orderdate + 330.minutes).strftime('%d-%b %H:%M %P') %>
        </small></td>
@@ -138,7 +147,7 @@
        <% @sno += 1 %>
     <% end %>
      <tr>
-    <th colspan="4">Total</th>
+    <th colspan="6">Total</th>
     <th class="text-right"> <%= @common_basic.to_i %></th>
     <th class="text-right"><%= @common_shipping.to_i %></th>
     <th class="text-right"><%= @common_total.to_i %></th>

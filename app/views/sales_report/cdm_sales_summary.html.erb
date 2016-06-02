@@ -38,6 +38,7 @@
      <th>From</th>
      <th>Upto</th>
      <th>Channel</th>
+	 <th>Type</th>
      <th>Nos</th>
      <th>Value</th>
      <th> More </th>
@@ -50,6 +51,7 @@
      <td><%= c[:from_date] %></td>
      <td><%= c[:to_date] %></td>
      <td><%= c[:channel] %></td>
+	 <td><%= c[:channel_type] %></td>
      <td class="text-right"><%= c[:total_nos] %> <% total_piece += c[:total_nos] %></td>
      <td class="text-right"><%= c[:total_value] %> <% total_value += c[:total_value] %> </td>
      <td>
@@ -61,7 +63,7 @@
 </tbody>
 <tfoot>
   <tr>
-   <th colspan="4">Total</th>
+   <th colspan="5">Total</th>
    <th class="text-right"><%= total_piece %></th>
    <th class="text-right"><%= total_value %></th>
    <th> </th>

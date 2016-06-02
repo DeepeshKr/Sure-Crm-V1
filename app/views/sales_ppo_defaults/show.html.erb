@@ -1,0 +1,19 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @sales_ppo_default.name %>
+</p>
+
+<p>
+  <strong>Value:</strong>
+  <%= @sales_ppo_default.value %>
+</p>
+
+<p>
+  <strong>Description:</strong>
+  <%= @sales_ppo_default.description %>
+</p>
+
+<%= link_to 'Edit', edit_sales_ppo_default_path(@sales_ppo_default) %> |
+<%= link_to 'Back', sales_ppo_defaults_path %>

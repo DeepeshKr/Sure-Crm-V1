@@ -115,7 +115,7 @@
 			    All the upsell products sold by an agents on a selected day
 			  </div>
 			  <div class="panel-footer">
-			  	<%= bootstrap_form_tag url: url_for(:controller => 'sales_report', :action => 'employee'), :method => :GET, :enforce_utf8 => false do |f| %>
+			  	<%= bootstrap_form_tag url: url_for(:controller => 'sales_report', :action => 'not_completed'), :method => :GET, :enforce_utf8 => false do |f| %>
 					 <div class="row">
 					<div class="col-xs-8">
 					 <%= text_field_tag(:from_date, @from_date, :data => {:provide => "datepicker"}, :id => "datepicker5", :class => "form-control", :required => "true" )   %>
@@ -137,7 +137,7 @@
 			    All the upsell products sold by an agents on a selected day
 			  </div>
 			  <div class="panel-footer">
-			  	<%= bootstrap_form_tag url: url_for(:controller => 'sales_report', :action => 'employee'), :method => :GET, :enforce_utf8 => false do |f| %>
+			  	<%= bootstrap_form_tag url: url_for(:controller => 'sales_report', :action => 'not_completed'), :method => :GET, :enforce_utf8 => false do |f| %>
 					 <div class="row">
 					<div class="col-xs-8">
 					 <%= text_field_tag(:from_date, @from_date, :data => {:provide => "datepicker"}, :id => "datepicker6", :class => "form-control", :required => "true" )   %>
@@ -467,7 +467,7 @@
       <% end %>
       </div>
     </div>
-  </div>
+   </div>
  </div>
 
 <!-- row 7 -->
@@ -518,7 +518,7 @@
             </div>
            <div class="row">
         		<div class="col-xs-8">
-        	<%= text_field_tag(:from_date, @from_date, :data => {:provide => "datepicker"}, :id => "datepicker1", :class => "form-control", :required => "true" )   %>
+        	<%= text_field_tag(:from_date, @from_date, :data => {:provide => "datepicker"}, :id => "datepicker21", :class => "form-control", :required => "true" )   %>
 				</div>
 				<div class="col-xs-4"><%= submit_tag "Report", name: nil, class: "btn btn-success ", data: { confirm: 'Are you sure?'}  %></div>
         		</div>
@@ -527,9 +527,33 @@
 		</div>
     </div>
     <div class="col-xs-4">
+		<div class="panel panel-primary">
+        	<div class="panel-heading"><h3 class="panel-title">Pay U Orders</h3></div>
+				<div class="panel-body">List of all orders between date range on pay u money</div>
+        			 <div class="panel-footer">
+        		<%= bootstrap_form_tag url: url_for(:controller => 'sales_report', :action => 'pay_u_orders'), :method => :GET, :enforce_utf8 => false do |f| %>
+        	
+           <div class="row">
+        		<div class="col-xs-8">
+        	<%= text_field_tag(:from_date, @from_date, :data => {:provide => "datepicker"}, :id => "datepicker22", :class => "form-control", :required => "true" )   %>
+				</div>
+				<div class="col-xs-4"><%= submit_tag "Report", name: nil, class: "btn btn-success ", data: { confirm: 'Are you sure?'}  %></div>
+        		</div>
+				<% end %>
+        	</div>
+		</div>
+		
     </div>
  </div>
+ 
+<!-- row 8 -->
+<div class="row">
+ <div class="col-xs-4"></div>
+ <div class="col-xs-4"></div>
+ <div class="col-xs-4"></div>
+</div>
 
+<!-- last row with product sold report  -->
 <div class="panel panel-primary">
   <div class="panel-heading"><h3 class="panel-title">Product Sold Report</h3></div>
   <div class="panel-body">
@@ -574,4 +598,6 @@ $('#datepicker17').datepicker({format: 'yyyy-mm-dd'});
 $('#datepicker18').datepicker({format: 'yyyy-mm-dd'});
 $('#datepicker19').datepicker({format: 'yyyy-mm-dd'});
 $('#datepicker20').datepicker({format: 'yyyy-mm-dd'});
+$('#datepicker21').datepicker({format: 'yyyy-mm-dd'});
+$('#datepicker22').datepicker({format: 'yyyy-mm-dd'});
 </script>

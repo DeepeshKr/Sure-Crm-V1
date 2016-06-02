@@ -19,12 +19,26 @@ class StatesController < ApplicationController
   end
 
   def edit
+   
   end
-
+  def edit_all
+    @states = State.all
+  end
   def create
     @state = State.new(state_params)
     @state.save
     respond_with(@state)
+  end
+
+  def update_all
+    updates = " "
+    params['state'].keys.each do |id|
+          @state = State.find(id.to_i)
+        updates += @state.short_code
+         @state.update_attributes(params['state'][id])
+        end
+          flash[:success] = "Updated : #{updates}"
+    redirect_to(states_url)
   end
 
   def update
@@ -43,6 +57,6 @@ class StatesController < ApplicationController
     end
 
     def state_params
-      params.require(:state).permit(:name)
+      params.require(:state).permit(:name, :short_code)
     end
 end

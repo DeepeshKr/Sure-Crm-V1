@@ -1,0 +1,32 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Listing Campaign Playlist To Products</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Campaign playlist</th>
+      <th>Product variant</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @campaign_playlist_to_products.each do |campaign_playlist_to_product| %>
+      <tr>
+        <td><%= campaign_playlist_to_product.name %></td>
+        <td><%= campaign_playlist_to_product.campaign_playlist_id %></td>
+        <td><%= campaign_playlist_to_product.product_variant_id %></td>
+        <td><%= link_to 'Show', campaign_playlist_to_product %></td>
+        <td><%= link_to 'Edit', edit_campaign_playlist_to_product_path(campaign_playlist_to_product) %></td>
+        <td><%= link_to 'Destroy', campaign_playlist_to_product, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+<%= link_to 'Back', url_for(:back), class: "btn btn-info btn-xs" %>
+
+<!-- <%= link_to 'New Campaign playlist to product', new_campaign_playlist_to_product_path %> -->

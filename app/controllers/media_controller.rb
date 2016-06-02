@@ -158,6 +158,6 @@ class MediaController < ApplicationController
       params.require(:medium).permit(:name, :telephone, :alttelephone, :state,
        :active, :corporateid, :description, :ref_name, :media_commision_id,
         :value, :media_group_id, :dnis, :channel, :slot, :daily_charges,
-         :paid_correction, :employee_id)
+         :paid_correction, :employee_id, :dept, :agent_comm)
     end
 end

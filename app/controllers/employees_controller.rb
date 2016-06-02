@@ -34,6 +34,39 @@ class EmployeesController < ApplicationController
     # @employees = Employee.order("updated_at DESC").limit(10)
     # respond_with(@employees)
   end
+  
+  def sales_team
+    valid_employement_types = [10005,10006,10007,10000,10001,10002,10010] # trainee, probation etc
+    valid_sales_roles = [10002,10021,10020,10161,10003,10081] # amanger team capatain etc
+    @employees = Employee.where(employment_type_id: valid_employement_types, employee_role_id:valid_sales_roles)
+    #show all sales team
+    # 10002
+    @managers = @employees.where(employee_role_id: 10002)
+    @manager_list_name = "Managers"
+    @no_of_managers = @managers.count
+    # 10021
+    @supervisors = @employees.where(employee_role_id: 10021)
+    @supervisors_list_name = "Supervisor and Team coaches"
+    @no_of_supervisors = @supervisors.count
+    # 10020
+    @captains = @employees.where(employee_role_id: 10020)
+    @captains_list_name = "Sr Team Captains"
+    @no_of_captains = @captains.count
+    # 10161
+    @sales_trainers = @employees.where(employee_role_id: 10161)
+    @sales_trainers_list_name = "Sales Trainers"
+    @no_of_sales_trainers = @sales_trainers.count
+    # 10003
+    @sales_executives = @employees.where(employee_role_id: 10003)
+    @sales_executives_list_name = "Sales Executives"
+    @no_of_sales_executives = @sales_executives.count
+    # 10081
+    @sales_trainees = @employees.where(employee_role_id: 10081)
+    @sales_trainees_list_name = "Sales Trainees"
+    @no_of_sales_trainees = @sales_trainees.count
+
+    
+  end
 
   def show
     chkuser = User.where(employee_code: @employee.employeecode)
@@ -41,8 +74,18 @@ class EmployeesController < ApplicationController
     if chkuser.present?
       @addnewlogin = true
       @userpas = chkuser.first
-      @userstatus = "This employee #{chkuser.first.name} has already got a Login Id: #{chkuser.first.employee_code} and password, you may change the password here"
-      respond_with(@employee, @userpas)
+      if @employee.name != chkuser.first.name
+         @userstatus = "Resolve the conflict of employee #{chkuser.first.name} and #{@employee.name} and Login Id: #{chkuser.first.employee_code} and #{@employee.employeecode} when you update the password, click on changed password below to update the details, new details would be Name: #{@employee.name} and Employee Code: #{@employee.employeecode}"
+      else
+         @userstatus = "This employee #{chkuser.first.name} has already got a Login Id: #{chkuser.first.employee_code} and password, you may change the password here"
+      end
+     
+    	 @employee_code = @employee.employeecode
+    	 @employee_name = @employee.name
+    	 @employee_role_id = @employee.employee_role_id
+    	 @employee_emailid = @employee.emailid
+        
+      respond_with(@employee, @user)
    else
      @addnewlogin = false
      @user = User.new(name: @employee.name, employee_code: @employee.employeecode, 

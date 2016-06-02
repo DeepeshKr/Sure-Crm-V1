@@ -78,8 +78,14 @@
 
 </div>	
 
-
-
+<div class="well well-sm">
+	<ol>
+		<li>Start Job# RAILS_ENV=production bin/delayed_job start</li>
+		<li>End Job# RAILS_ENV=production bin/delayed_job stop</li>
+		<li>to delete all jobs in the queue# rake jobs:clear</li>
+		<li>RAILS_ENV=production bin/delayed_job -n 2 start</li>
+	</ol>
+</div>
 <br>
 
 <%= link_to 'New Daily task', new_daily_task_path, class:"btn btn-primary btn-sm" %>

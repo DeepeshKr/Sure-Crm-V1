@@ -1,6 +1,9 @@
 <div class="row">
-  <div class="col-md-6 col-md-offset-1">
+
+	 
 <%= form_for(@state) do |f| %>
+ <div class="row">
+	  <div class="col-xs-12">
   <% if @state.errors.any? %>
     <div id="error_explanation">
       <h2><%= pluralize(@state.errors.count, "error") %> prohibited this state from being saved:</h2>
@@ -11,14 +14,23 @@
       <% end %>
       </ul>
     </div>
+	
   <% end %>
- 
-  <div class="field">
-    <%= f.label :name %><br>
-    <%= f.text_field :name, class:'form-control' %>
+</div>
+</div>
+  <div class="row">
+ <div class="col-xs-6">
+     <%= f.label :name %><br>
+     <%= f.text_field :name, class:'form-control' %>
+ </div>
+ <div class="col-xs-2">
+ <%= f.label :short_code %><br>
+ <%= f.text_field :short_code, class:'form-control' %>
+   
   </div>
-  <div class="actions">
-    <%= f.submit class: 'btn btn-primary col-md-2' %>
+  <div class="col-xs-2">
+	  <br>
+    <%= f.submit class: 'btn btn-primary' %>
   </div>
   
 <% end %>

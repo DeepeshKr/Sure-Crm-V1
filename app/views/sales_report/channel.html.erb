@@ -1,13 +1,19 @@
- <div class="row">
-	 <div class="col-xs-6">
-
-	 <h4>Channel Sales Report </h4>
-	 </div>
-	 <div class="col-xs-6">
- <%= render partial: 'date_range_search', :locals => {:searchaction => "channel"}  %>
-	 	
-	</div>
- </div>
+  <% title "Channel Report #{@from_date} to #{@to_date}" %>
+  
+  <div class="row">
+ 	 <div class="col-xs-6">
+ 	 <h4>Channel Sales Report <%=  @orderdate %> </h4>
+      <div class="btn-group" role="group" aria-label="...">
+      	<%= link_to 'All', product_report_path(show: "all", from_date: @from_date, to_date: @to_date), type:"button", class: @btn1 %>
+      	<%= link_to 'HBN', product_report_path(show: "hbn", from_date: @from_date, to_date: @to_date), type:"button", class: @btn2 %>
+      	<%= link_to 'Pvt', product_report_path(show: "pvt", from_date: @from_date, to_date: @to_date), type:"button", class: @btn3 %> 
+  	</div>
+ 	 </div>
+ 	 <div class="col-xs-6">
+  <%= render partial: 'date_range_search', :locals => {:searchaction => "channel"}  %>
+ 	</div>
+  </div>
+  
  <div class="well well-sm">
 <h4><%=  @orderdate %> </h4>
 </div>

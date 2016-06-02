@@ -28,7 +28,7 @@ class ProductMaster < ActiveRecord::Base
   
   def productname
     if self.extproductcode.present?
-        (self.extproductcode + " - " || "" if self.extproductcode.present?)  + (self.name || "" if self.name.present?) +  (" Basic " + self.price.to_s || "" if self.price.present?)  + ( " Shipping " + self.shipping.to_s || "" if self.shipping.present?)
+        (self.extproductcode + " - " || "" if self.extproductcode.present?)  + (self.name || "" if self.name.present?) +  (" Basic " + self.price.to_s || "" if self.price.present?)  + ( " Shipping " + self.shipping.to_s || "" if self.shipping.present?) + " :(#{self.id})"
       else
         self.id.to_s + " " + (self.name || " no products details")
     end
@@ -40,7 +40,7 @@ class ProductMaster < ActiveRecord::Base
 
   def fullproductname
    if self.extproductcode.present?
-       self.barcode  + " - " +  self.extproductcode || "0" if self.price.present + " - " + self.name  + " Basic " + (self.price.to_s || "0" if self.price.present?) + " Shipping " + (self.shipping.to_s || "0" if self.price.present? )
+       self.barcode  + " - " +  (self.extproductcode || "0" if self.extproductcode.present?) + " - " + self.name  + " Basic " + (self.price.to_s || "0" if self.price.present?) + " Shipping " + (self.shipping.to_s || "0" if self.price.present? ) + " :(#{self.id})"
      else
         self.id.to_s + " " + (self.name || " no products details")
    end

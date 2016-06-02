@@ -14,6 +14,7 @@ class Medium < ActiveRecord::Base
     has_many :sales_ppo, foreign_key: "media_id"
   # validates_numericality_of :employee_id, allow_nil: true , numericality: { only_integer: true }
    validates_numericality_of :value, allow_nil: true , numericality: { only_integer: true }, :less_than_or_equal_to => 1
+   validates_numericality_of :value, allow_nil: true , numericality: { only_integer: true }, :less_than_or_equal_to => 1
    validates_numericality_of :daily_charges, numericality: { only_integer: true }, allow_nil: true
    validates_numericality_of :paid_correction, allow_nil: true , numericality: { only_integer: true }, :less_than_or_equal_to => 1
 

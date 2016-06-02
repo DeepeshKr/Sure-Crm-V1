@@ -1,0 +1,40 @@
+
+<% if @message_on_orders.present? %>
+<div class="panel panel-primary">
+  <div class="panel-heading">
+    <h3 class="panel-title">SMS on Order</h3>
+  </div>
+	<table class="table table-hover">
+	  <thead>
+	    <tr>
+	      <th>Created</th>
+	      <th>Customer</th>
+	      <th>Type</th>
+	      <th>Status</th>
+	      <th>Message <br> Response</th>
+	      <th>Mobile <br>Alt mobile</th>
+	      <th>Updated</th>
+	    </tr>
+	  </thead>
+
+	  <tbody>
+	    <% @message_on_orders.each do |message_on_order| %>
+	      <tr>
+	      <td><%= (message_on_order.created_at + 330.minutes).strftime("%d-%b-%y %H:%M") %></td>
+	        <td><%= message_on_order.customer.fullname if message_on_order.customer %></td>
+	        <td><%= message_on_order.message_type.name if message_on_order.message_type %></td>
+	        <td><%= message_on_order.message_status.name if message_on_order.message_status %></td>
+	        <td><%= message_on_order.message %><br>
+	        <small><%= message_on_order.response %></small></td>
+	        <td><%= message_on_order.mobile_no %><br> <%= message_on_order.alt_mobile_no %></td>
+	        <td><%= (message_on_order.updated_at + 330.minutes).strftime("%d-%b-%y %H:%M") %></td>
+	        <td>
+	      </tr>
+	    <% end %>
+	  </tbody>
+	</table>
+</div>
+<hr>
+<% else %>
+<h3>No sms found</h3>
+<% end %>

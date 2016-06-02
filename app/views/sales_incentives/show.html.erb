@@ -1,0 +1,34 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @sales_incentive.name %>
+</p>
+
+<p>
+  <strong>Min value:</strong>
+  <%= @sales_incentive.min_value %>
+</p>
+
+<p>
+  <strong>Max value:</strong>
+  <%= @sales_incentive.max_value %>
+</p>
+
+<p>
+  <strong>Commission:</strong>
+  <%= @sales_incentive.commission %>
+</p>
+
+<p>
+  <strong>No of:</strong>
+  <%= @sales_incentive.no_of %>
+</p>
+
+<p>
+  <strong>Description:</strong>
+  <%= @sales_incentive.description %>
+</p>
+
+<%= link_to 'Edit', edit_sales_incentive_path(@sales_incentive) %> |
+<%= link_to 'Back', sales_incentives_path %>

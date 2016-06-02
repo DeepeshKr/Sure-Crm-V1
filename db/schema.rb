@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160414053730) do
+ActiveRecord::Schema.define(version: 20160529120712) do
 
   create_table "address_types", force: :cascade do |t|
     t.string   "name"
@@ -64,20 +64,6 @@ ActiveRecord::Schema.define(version: 20160414053730) do
     t.integer  "media_id",      precision: 38
   end
 
-  create_table "cable_opertor_comms", force: :cascade do |t|
-    t.integer  "order_no",      precision: 38
-    t.datetime "order_date"
-    t.string   "channel"
-    t.string   "product"
-    t.integer  "amount",        precision: 38
-    t.string   "customer_name"
-    t.string   "city"
-    t.integer  "comm",          precision: 38
-    t.text     "description"
-    t.datetime "created_at",                   null: false
-    t.datetime "updated_at",                   null: false
-  end
-
   create_table "campaign_missed_lists", force: :cascade do |t|
     t.integer  "product_list_id",      precision: 38
     t.integer  "product_variant_id",   precision: 38
@@ -104,6 +90,17 @@ ActiveRecord::Schema.define(version: 20160414053730) do
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
   end
+
+  create_table "campaign_playlist_to_products", force: :cascade do |t|
+    t.string   "name"
+    t.integer  "campaign_playlist_id", precision: 38
+    t.integer  "product_variant_id",   precision: 38
+    t.datetime "created_at",                          null: false
+    t.datetime "updated_at",                          null: false
+  end
+
+  add_index "campaign_playlist_to_products", ["campaign_playlist_id"], name: "i_cam_pla_to_pro_cam_pla_id"
+  add_index "campaign_playlist_to_products", ["product_variant_id"], name: "i_cam_pla_to_pro_pro_var_id"
 
   create_table "campaign_playlists", force: :cascade do |t|
     t.string   "name"
@@ -404,6 +401,22 @@ ActiveRecord::Schema.define(version: 20160414053730) do
     t.datetime "created_at",                 null: false
     t.datetime "updated_at",                 null: false
   end
+
+  create_table "delayed_jobs", force: :cascade do |t|
+    t.integer  "priority",   precision: 38, default: 0, null: false
+    t.integer  "attempts",   precision: 38, default: 0, null: false
+    t.text     "handler",                               null: false
+    t.text     "last_error"
+    t.datetime "run_at"
+    t.datetime "locked_at"
+    t.datetime "failed_at"
+    t.string   "locked_by"
+    t.string   "queue"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "delayed_jobs", ["priority", "run_at"], name: "delayed_jobs_priority"
 
   create_table "devises", force: :cascade do |t|
     t.string   "email",                                 default: "", null: false
@@ -824,9 +837,12 @@ ActiveRecord::Schema.define(version: 20160414053730) do
     t.integer  "daily_charges",                  precision: 38
     t.decimal  "paid_correction",                precision: 6,  scale: 5
     t.integer  "employee_id",                    precision: 38
+    t.string   "dept"
+    t.decimal  "agent_comm",                     precision: 8,  scale: 4
   end
 
   add_index "media", ["daily_charges"], name: "index_media_on_daily_charges"
+  add_index "media", ["dept"], name: "index_media_on_dept"
   add_index "media", ["dnis"], name: "index_media_on_dnis"
   add_index "media", ["id", "media_group_id"], name: "media_idx01"
   add_index "media", ["media_commision_id"], name: "i_media_media_commision_id"
@@ -895,16 +911,24 @@ ActiveRecord::Schema.define(version: 20160414053730) do
   end
 
   create_table "message_on_orders", force: :cascade do |t|
-    t.integer  "customer_id",       precision: 38
-    t.integer  "message_type_id",   precision: 38
-    t.integer  "message_status_id", precision: 38
-    t.string   "message"
+    t.integer  "customer_id",                   precision: 38
+    t.integer  "message_type_id",               precision: 38
+    t.integer  "message_status_id",             precision: 38
+    t.string   "message",           limit: 500
     t.string   "response"
     t.string   "mobile_no"
     t.string   "alt_mobile_no"
-    t.datetime "created_at",                       null: false
-    t.datetime "updated_at",                       null: false
+    t.datetime "created_at",                                   null: false
+    t.datetime "updated_at",                                   null: false
+    t.integer  "order_id",                      precision: 38
+    t.text     "long_url"
   end
+
+  add_index "message_on_orders", ["customer_id"], name: "i_mes_on_ord_cus_id"
+  add_index "message_on_orders", ["message_status_id"], name: "i_mes_on_ord_mes_sta_id"
+  add_index "message_on_orders", ["message_type_id"], name: "i_mes_on_ord_mes_typ_id"
+  add_index "message_on_orders", ["mobile_no"], name: "i_message_on_orders_mobile_no"
+  add_index "message_on_orders", ["order_id"], name: "i_message_on_orders_order_id"
 
   create_table "message_statuses", force: :cascade do |t|
     t.string   "name"
@@ -1022,23 +1046,37 @@ ActiveRecord::Schema.define(version: 20160414053730) do
     t.integer  "order_final_status_id",  precision: 38
     t.decimal  "g_total",                precision: 12, scale: 2
     t.integer  "weight_kg",              precision: 38
+    t.integer  "interaction_master_id",  precision: 38
+    t.datetime "process_date"
+    t.datetime "ship_date"
+    t.datetime "cancelled_date"
+    t.datetime "paid_date"
+    t.datetime "refund_date"
+    t.datetime "returned_date"
   end
 
   add_index "order_masters", ["TRUNC(\"CREATED_AT\")", "order_status_master_id", "media_id", "id"], name: "order_masters_idx01"
   add_index "order_masters", ["calledno"], name: "i_order_masters_calledno"
   add_index "order_masters", ["campaign_playlist_id"], name: "i_ord_mas_cam_pla_id"
+  add_index "order_masters", ["cancelled_date"], name: "i_order_masters_cancelled_date"
   add_index "order_masters", ["city"], name: "index_order_masters_on_city"
   add_index "order_masters", ["created_at"], name: "i_order_masters_created_at"
   add_index "order_masters", ["customer_id"], name: "i_order_masters_customer_id"
   add_index "order_masters", ["employee_id"], name: "i_order_masters_employee_id"
   add_index "order_masters", ["external_order_no"], name: "i_ord_mas_ext_ord_no"
+  add_index "order_masters", ["interaction_master_id"], name: "i_ord_mas_int_mas_id"
   add_index "order_masters", ["media_id"], name: "i_order_masters_media_id"
   add_index "order_masters", ["mobile"], name: "index_order_masters_on_mobile"
   add_index "order_masters", ["order_source_id"], name: "i_ord_mas_ord_sou_id"
   add_index "order_masters", ["order_status_master_id"], name: "i_ord_mas_ord_sta_mas_id"
   add_index "order_masters", ["orderdate"], name: "i_order_masters_orderdate"
   add_index "order_masters", ["orderpaymentmode_id"], name: "i_ord_mas_ord_id"
+  add_index "order_masters", ["paid_date"], name: "i_order_masters_paid_date"
   add_index "order_masters", ["pincode"], name: "index_order_masters_on_pincode"
+  add_index "order_masters", ["process_date"], name: "i_order_masters_process_date"
+  add_index "order_masters", ["refund_date"], name: "i_order_masters_refund_date"
+  add_index "order_masters", ["returned_date"], name: "i_order_masters_returned_date"
+  add_index "order_masters", ["ship_date"], name: "i_order_masters_ship_date"
 
   create_table "order_payments", force: :cascade do |t|
     t.integer  "order_master_id",     precision: 38
@@ -1118,8 +1156,15 @@ ActiveRecord::Schema.define(version: 20160414053730) do
     t.integer  "orderid",               precision: 38
     t.datetime "created_at",                           null: false
     t.datetime "updated_at",                           null: false
-    t.text     "final_order_id"
+    t.string   "final_order_id"
+    t.text     "full_response"
   end
+
+  add_index "payumoney_details", ["customermobilenumber"], name: "i_pay_det_cus"
+  add_index "payumoney_details", ["final_order_id"], name: "i_pay_det_fin_ord_id"
+  add_index "payumoney_details", ["merchanttransactionid"], name: "i_pay_det_mer"
+  add_index "payumoney_details", ["orderid"], name: "i_payumoney_details_orderid"
+  add_index "payumoney_details", ["paymentid"], name: "i_payumoney_details_paymentid"
 
   create_table "pincode_service_levels", force: :cascade do |t|
     t.string   "pincode"
@@ -1502,6 +1547,25 @@ ActiveRecord::Schema.define(version: 20160414053730) do
   add_index "return_rates", ["product_master_id"], name: "i_ret_rat_pro_mas_id"
   add_index "return_rates", ["product_variant_id"], name: "i_ret_rat_pro_var_id"
 
+  create_table "sales_incentives", force: :cascade do |t|
+    t.string   "name"
+    t.decimal  "min_value",   precision: 6,  scale: 4
+    t.decimal  "max_value",   precision: 6,  scale: 4
+    t.decimal  "commission",  precision: 6,  scale: 4
+    t.integer  "no_of",       precision: 38
+    t.text     "description"
+    t.datetime "created_at",                           null: false
+    t.datetime "updated_at",                           null: false
+  end
+
+  create_table "sales_ppo_defaults", force: :cascade do |t|
+    t.string   "name"
+    t.decimal  "value",       precision: 5, scale: 2
+    t.text     "description"
+    t.datetime "created_at",                          null: false
+    t.datetime "updated_at",                          null: false
+  end
+
   create_table "sales_ppos", force: :cascade do |t|
     t.integer  "campaign_playlist_id",        precision: 38
     t.integer  "campaign_id",                 precision: 38
@@ -1580,7 +1644,10 @@ ActiveRecord::Schema.define(version: 20160414053730) do
     t.string   "name"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "short_code"
   end
+
+  add_index "states", ["short_code"], name: "index_states_on_short_code"
 
   create_table "tax_rates", force: :cascade do |t|
     t.string   "name"

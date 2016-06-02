@@ -1,26 +1,28 @@
-<h3>List of all employees</h3>
- <% if @employees.present? %>
-<table class="table table-hover">
+<div class="panel panel-primary">
+  <div class="panel-heading">
+	  <div class="row">
+		 <div class="col-xs-8"><h3 class="panel-title"><%= emp_name %></h3> </div>
+		 <div class="col-xs-4"><h3 class="panel-title"> <% if emp_nos.present? %> Nos: <%= emp_nos %> <% end %> </h3></div>
+  	  </div>	 
+  </div>
+
+ <% if employees.present? %>
+	<table class="table table-hover">
   <thead>
     <tr>
-    <th>Employeecode</th>
+    <th>Employee code</th>
       <th> Name</th>
-        
-     
       <th>Mobile  emailid</th>
-     
       <th>Employment type</th>
       <th>Employee role</th>
-    
       <th>Login</th>
-   
     </tr>
   </thead>
 
   <tbody>
-    <% @employees.each do |employee| %>
+    <% employees.each do |employee| %>
       <tr>
-        <td><%= employee.employeecode %></td>
+        <td><%= employee.employeecode %> <%= link_to 'Edit', edit_employee_path(employee) %></td>
         <td><%= employee.fullname %> <br>
         <small>  <%= employee.designation %> <br>
         Reporting to: <%= employee.manager.fullname if employee.manager %>
@@ -39,10 +41,9 @@
     <% end %>
   </tbody>
 </table>
-<% else %>
-<div class="well well-sm">
-<h4>No Employee for this role </h4>
+ <% else %>
+	<div class="well well-sm">
+		<h4>No Employee for this role </h4>
+	</div>
+ <% end %>
 </div>
-<% end %>
-<br>
-

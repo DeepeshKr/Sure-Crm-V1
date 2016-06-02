@@ -1,0 +1,2 @@
+module PayumoneyDetailsHelper
+end

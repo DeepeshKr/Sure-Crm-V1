@@ -33,6 +33,11 @@
    <% end %>
 
  </div>
+<!-- filters here -->
+ <%= render partial: 'simulate_ppo'  %>
+ <!-- :locals => {:order_lines =>  @order_lines_common, 
+ 	order_description: "Common Upsell"}-->
+<!-- filters here -->
  <br>
  <br>
  <%= render partial: 'row_of_ppo' %>
@@ -47,32 +52,34 @@
   <li>ppo = (revenue - (product_cost + fixed_cost + product_damages + media_var_cost + refund))</li>
 </ul>
 </div>
-
-<div class="well well-sm">
-<div class="row">
-  <div class="col-xs-2">
-  Total Media Cost - Including Active and Inactive <%= @total_media_cost.round(0) if @total_media_cost.present? %>
-  </div>
-  <div class="col-xs-2">
-  HBN Media Cost -We use only Active <%= @hbn_media_cost.round(0) if @hbn_media_cost.present? %>
-  </div>
-  <div class="col-xs-4">
-
-      <strong>Total Sales <%= @total_sales.round(0) if @total_sales.present? %></strong><br>
-      <strong>Total Revenue <%= @total_revenue.round(0) if @total_revenue.present? %></strong>
-
-  </div>
-  <div class="col-xs-2">
-  Download CSV file
-  </div>
-  <div class="col-xs-2">
-   <%= link_to 'Download CSV file', product_performance_path(from_date: @from_date, to_date: @to_date, product_variant_id: @product_variant_id, format: :csv), class: "btn btn-info btn-sm" %>
-  </div>
+<div class="panel panel-primary">
+  <div class="panel-body">
+	<div class="row">
+	  <div class="col-xs-2">
+	  	Total Media Cost - Including Active and Inactive <%= @total_media_cost_1.round(0) if @total_media_cost_1.present? %>
+	  </div>
+	  <div class="col-xs-2">
+	  	HBN Media Cost -We use only Active <%= @hbn_media_cost.round(0) if @hbn_media_cost.present? %>
+	  </div>
+	  <div class="col-xs-3">
+	    <strong>Total Sales (R1) <%= @total_sales_1.round(0) if @total_sales_1.present? %></strong><br>
+	    <strong>Total Revenue (R1) <%= @total_revenue_1.round(0) if @total_revenue_1.present? %></strong>
+	  </div>
+	  <div class="col-xs-3">
+	    <strong>Total Sales (R2) <%= @total_sales_2.round(0) if @total_sales_2.present? %></strong><br>
+	    <strong>Total Revenue (R2) <%= @total_revenue_2.round(0) if @total_revenue_2.present? %></strong>
+	  </div>
+	  <div class="col-xs-2">
+	   <%= link_to 'Download CSV file', product_performance_path(from_date: @from_date, to_date: @to_date, product_variant_id: @product_variant_id, format: :csv), class: "btn btn-info btn-sm" %>
+	  </div>
+	</div>
+ </div>
 </div>
-</div>
-
  <br>
-
+ 
+<%= render partial: 'recreate_ppo'  %>
+<!-- :locals => {:order_lines =>  @order_lines_common, 
+	order_description: "Common Upsell"}-->	
 <hr>
 
 <script>

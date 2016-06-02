@@ -75,18 +75,22 @@ class ProductMasterAddOnsController < ApplicationController
   def dropdownlist
       @productactivecode = ProductActiveCode.all.order("id")
       @productselltype = ProductSellType.all.order("id")
-      @productspecificaddonlist = ProductList.joins(:product_variant).where("product_variants.product_sell_type_id = ? ", 10040)
+      
+      @productspecificaddonlist = ProductList.joins(:product_variant)
+      .where("product_variants.product_sell_type_id = ? ", 10040)
+      # replace add on list has to be main product else the order wont process product_variants.product_sell_type_id = 10000
       @productreplaceaddonlist = ProductList.joins(:product_variant)
       .where("product_variants.product_sell_type_id = ? ", 10000)
       .order("product_variants.name")
-    end 
-    def set_product_master_add_on
+  end 
+  
+  def set_product_master_add_on
       @product_master_add_on = ProductMasterAddOn.find(params[:id])
-    end
+  end
 
-    def product_master_add_on_params
+  def product_master_add_on_params
       params.require(:product_master_add_on).permit(:product_master_id, 
         :product_list_id, :activeid, :change_price,
         :sort_order, :replace_by_product_id) 
-    end
+   end
 end

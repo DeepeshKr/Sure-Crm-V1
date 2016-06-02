@@ -50,6 +50,12 @@ class ProjectController < ApplicationController
   end
 
   def help
+    lines = params[:lines]
+    
+      @stderr_logs = `tail -n #{lines} shared/log/puma.stderr.log`
+      @stdout_logs = `tail -n #{lines} shared/log/puma.stdout.log`
+      @development_logs = `tail -n #{lines} log/development.log`
+   
   end
 
   def about

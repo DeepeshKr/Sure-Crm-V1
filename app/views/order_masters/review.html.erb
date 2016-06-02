@@ -1,0 +1,99 @@
+<!-- set page title start -->
+<% title "Review #{@order_id} #{@mobile} #{@emailid} #{@calledno}" %>
+<!-- set page title end -->
+<p id="notice"><%= notice %></p>
+<h3>Customer Order Details (Internal Ref No)</h3>
+<br>
+<div class="row">
+  <div class="col-xs-3">
+  <div class="well well-sm">
+  <div class="row">
+    <%= bootstrap_form_tag url: detailedordersearch_path, :method => :GET, :enforce_utf8 => false do |f| %>
+      <div class="col-xs-8">
+          <%= text_field_tag(:mobile, @mobile,
+          {:class => "form-control", :placeholder => "Search Mobile Number"})  %>
+      </div>
+      <div class="col-xs-4">
+          <%= submit_tag "Ok", name: nil,  class: "btn btn-primary" %>
+      </div>
+    <% end %>
+  </div>
+  </div>
+  </div>
+
+
+  <div class="col-xs-4">
+  <div class="well well-sm">
+     <div class="row">
+    <%= bootstrap_form_tag url: detailedordersearch_path, :method => :GET, :enforce_utf8 => false do |f| %>
+      <div class="col-xs-10">
+          <%= text_field_tag(:emailid, @emailid,
+          {:class => "form-control", :type => "email", :placeholder => "Search Email Id"})  %>
+      </div>
+      <div class="col-xs-2">
+          <%= submit_tag "Ok", name: nil,  class: "btn btn-primary" %>
+      </div>
+    <% end %>
+  </div>
+
+    </div>
+  </div>
+    <div class="col-xs-3">
+  <div class="well well-sm">
+       <div class="row">
+    <%= bootstrap_form_tag url: detailedordersearch_path, :method => :GET, :enforce_utf8 => false do |f| %>
+      <div class="col-xs-8">
+          <%= text_field_tag(:order_id, @order_id,
+          {:class => "form-control", :placeholder => "Search Order Id"})  %>
+      </div>
+      <div class="col-xs-4">
+          <%= submit_tag "Ok", name: nil,  class: "btn btn-primary" %>
+      </div>
+    <% end %>
+  </div>
+
+    </div>
+  </div>
+    <div class="col-xs-2">
+  <div class="well well-sm">
+       <div class="row">
+    <%= bootstrap_form_tag url: detailedordersearch_path, :method => :GET, :enforce_utf8 => false do |f| %>
+      <div class="col-xs-8">
+          <%= text_field_tag(:calledno, @calledno,
+          {:class => "form-control", :placeholder => "DNIS"})  %>
+      </div>
+      <div class="col-xs-4">
+          <%= submit_tag "Ok", name: nil,  class: "btn btn-primary" %>
+      </div>
+    <% end %>
+  </div>
+
+    </div>
+  </div>
+</div>
+
+<br>
+ <div class="panel panel-primary">
+  <div class="panel-heading">
+    <h3 class="panel-title">Customer Order Summary</h3>
+  </div>
+  	<%= render "order_masters/order_customer" %>
+  	<%= render "order_masters/order_address" %>
+ 	<%= render "order_masters/ordered_all_non_edit" %>
+  
+  <div class="panel-footer">
+	<%= render "order_masters/order_footer" %>
+  </div>
+</div>
+
+<%= render "message_on_orders/sms" %>
+<%= render "message_on_orders/pay_u" %>
+<%= render "payumoney_details/list" %>
+
+ <div class="panel panel-primary">
+  <div class="panel-heading">
+    <h3 class="panel-title">Order in PPO Table</h3>
+  </div>
+  <%= render 'sales_ppos/sales_ppo_list' %>
+</div>
+

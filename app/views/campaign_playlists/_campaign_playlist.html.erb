@@ -1,10 +1,12 @@
 <% if @campaign_playlists.present? then %>
 
-
-	 <%= render 'campaign_playlists/editable_playlist' %>
-
+	<% if @add_more == true %>
+		<%= render 'campaign_playlists/editable_playlist' %>
+	<% else %>
+		 <%= render 'campaign_playlists/non_editable_playlist' %>
+	<% end %>
 <br>
-
+<% if @add_more == true %>
 <div class="row">
 	<div class="col-xs-3">
 		<%= link_to 'Download CSV list', campaign_playlists_path(campaignid: @campaign_id , format: :csv), class: "btn btn-info btn-sm" %>
@@ -13,7 +15,7 @@
 		<%= link_to 'Download XML Playout list', campaign_playlists_path(campaignid: @campaign_id , format: :xml), class: "btn btn-primary btn-sm" %>
 	</div>
 </div>
-s
+<% end %>
 <% elsif %>
     <div class="well well-sm">
     <h4>Please create a campaign playlist</h4>

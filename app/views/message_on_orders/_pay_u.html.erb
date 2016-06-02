@@ -1,0 +1,36 @@
+<% if @message_on_pay_u_orders.present? %>
+ <div class="panel panel-primary">
+  <div class="panel-heading">
+    <h3 class="panel-title">Message on Pay u Orders - SMS</h3>
+  </div>
+
+
+<table class="table table-hover">
+  <thead>
+    <tr>
+      <th>Created</th>
+      <th>Customer</th>
+      <th>Order Ref No</th>
+      <th>Status</th>
+      <th>Response</th>
+      <th>Mobile</th>
+      <th>Updated</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @message_on_pay_u_orders.each do |message_on_order| %>
+      <tr>
+      <td><%= (message_on_order.created_at + 330.minutes).strftime("%d-%b-%y %H:%M") %></td>
+        <td><%= message_on_order.customer.fullname if message_on_order.customer %></td>
+        <td><%= message_on_order.order_id %></td>
+        <td><%= message_on_order.message_status.name if message_on_order.message_status %></td>
+        <td><%= message_on_order.response %></td>
+        <td><%= message_on_order.mobile_no %></td>
+        <td><%= (message_on_order.updated_at + 330.minutes).strftime("%d-%b-%y %H:%M") %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+</div>
+<% end %>

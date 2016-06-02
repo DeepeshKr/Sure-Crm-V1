@@ -1,0 +1,94 @@
+<!-- set page title start -->
+<% title @page_heading  %>
+<!-- set page title end -->
+<p id="notice"><%= notice %></p>
+<div class="row">
+	<div class="col-xs-6"><h3><%= @message_details %></h3>
+	    <div class="btn-group" role="group" aria-label="...">
+	    <%= link_to 'Queue', message_on_orders_payumoney_path(status: 10000, from_date: @from_date, to_date: @to_date), type:"button", class: @btn1 %>
+	    <%= link_to 'Not Dlvrd', message_on_orders_payumoney_path(status: 10002, from_date: @from_date, to_date: @to_date), type:"button", class: @btn2 %>
+	    <%= link_to 'Dlvrd', message_on_orders_payumoney_path(status: 10004, from_date: @from_date, to_date: @to_date), type:"button", class: @btn3 %>
+		</div>
+	</div>
+	<div class="col-xs-6">
+		<div class="row">
+		  <%= form_tag  url_for(:controller => 'message_on_orders', :action => 'payumoney'), method: "get" do  %>
+
+		      <div class="col-xs-8">
+		        <div class="input-daterange input-group">
+		          <%= text_field_tag(:from_date, @from_date, :data => {:provide => "datepicker"}, :id => "datepicker_from", :class => "form-control", :required => "true" )   %>
+		          <span class="input-group-addon">to</span>
+
+		           <%= text_field_tag(:to_date, @to_date, :data => {:provide => "datepicker"}, :id => "datepicker_to", :class => "form-control", :required => "true" )   %>
+
+		        </div>
+		      </div>
+
+		      <div class="col-xs-4">
+		        <%= submit_tag "Show Report", name: nil, class: "btn btn-primary" %>
+		      </div>
+		  <% end %>
+		</div>
+		
+	</div>
+</div>
+
+
+<div class="row">
+	<div class="col-xs-4">
+
+	</div>
+	<div class="col-xs-8">
+	<br>
+	<div class="digg_pagination">
+
+	    <%= will_paginate @message_on_orders, :container => false %>
+	  </div>
+
+	  <br>
+	</div>
+</div>
+
+
+<hr>
+<% if @message_on_orders.present? %>
+<table class="table table-hover">
+  <thead>
+    <tr>
+      <th>Created</th>
+      <th>Customer</th>
+      <th>Order Ref No</th>
+      <th>Status</th>
+      <th>Response</th>
+      <th>Mobile</th>
+      <th>Updated</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @message_on_orders.each do |message_on_order| %>
+      <tr>
+      <td><%= (message_on_order.created_at + 330.minutes).strftime("%d-%b-%y %H:%M") %></td>
+        <td><%= message_on_order.customer.fullname if message_on_order.customer %></td>
+        <td><%= message_on_order.order_id %></td>
+        <td><%= message_on_order.message_status.name if message_on_order.message_status %></td>
+        <td><%= message_on_order.response %></td>
+        <td><%= message_on_order.mobile_no %></td>
+        <td><%= (message_on_order.updated_at + 330.minutes).strftime("%d-%b-%y %H:%M") %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+<hr>
+<br>
+<div class="digg_pagination">
+
+    <%= will_paginate @message_on_orders, :container => false %>
+  </div>
+<% else %>
+<h3>Nothing here</h3>
+<% end %>
+<script>
+$('#datepicker_to').datepicker({format: 'yyyy-mm-dd'});
+$('#datepicker_from').datepicker({format: 'yyyy-mm-dd'});
+</script>

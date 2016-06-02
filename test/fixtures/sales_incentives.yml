@@ -1,0 +1,17 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  name: MyString
+  min_value: 9.99
+  max_value: 9.99
+  commission: 9.99
+  no_of: 1
+  description: MyText
+
+two:
+  name: MyString
+  min_value: 9.99
+  max_value: 9.99
+  commission: 9.99
+  no_of: 1
+  description: MyText

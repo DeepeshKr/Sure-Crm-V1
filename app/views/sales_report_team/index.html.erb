@@ -1,0 +1,183 @@
+<% title "All Team Sales Reports" %>
+<div class="jumbotron">
+ <div class="container">
+  <h1>Sales Report - For Team members</h1>
+  <p>List of all sales reports for team members can be found here.</p>
+ </div>
+</div>
+
+	 
+<div class="row">
+	<div class="col-xs-4">
+		<div class="panel panel-primary">
+        	<div class="panel-heading"><h3 class="panel-title">Pay U Orders</h3></div>
+				<div class="panel-body">List of all orders between date range on pay u money</div>
+        			 <div class="panel-footer">
+        		<%= bootstrap_form_tag url: url_for(:controller => 'sales_report_team', :action => 'pay_u_orders'), :method => :GET, :enforce_utf8 => false do |f| %>
+        	
+           <div class="row">
+        		<div class="col-xs-8">
+        	<%= text_field_tag(:from_date, @from_date, :data => {:provide => "datepicker"}, :id => "datepicker1", :class => "form-control", :required => "true" )   %>
+				</div>
+				<div class="col-xs-4"><%= submit_tag "Report", name: nil, class: "btn btn-success ", data: { confirm: 'Are you sure?'}  %></div>
+        		</div>
+				<% end %>
+        	</div>
+		</div>
+	</div>
+	<div class="col-xs-4">
+		<div class="panel panel-primary">
+			<div class="panel-heading"><h3 class="panel-title">HBN Showwise Report</h3></div>
+			  <div class="panel-body">
+			    See how each show is performing and sales against each show, warning sometimes some show may get no results at all.
+			  </div>
+			  <div class="panel-footer">
+			    <%= bootstrap_form_tag url: url_for(:controller => 'sales_report_team', :action => 'show_wise'), :method => :GET, :enforce_utf8 => false do |f| %>
+					 <div class="row">
+					<div class="col-xs-8">
+					 <%= text_field_tag(:from_date, @from_date, :data => {:provide => "datepicker"}, :id => "datepicker2", :class => "form-control", :required => "true" )   %>
+
+					</div>
+
+					<div class="col-xs-4">
+						<%= submit_tag "Report", name: nil, class: "btn btn-success ", data: { confirm: 'Are you sure?'}  %>
+					</div>
+					</div>
+
+					<% end %>
+			  </div>
+			</div>
+	</div>
+	<div class="col-xs-4">
+		<div class="panel panel-primary">
+			<div class="panel-heading"><h3 class="panel-title">HBN half hour</h3></div>
+			  <div class="panel-body">
+			    See how each half hour is performing and sales against each 30 minute interval, get to see the days performance across time zones.
+			  </div>
+			  <div class="panel-footer">
+			  	 <%= bootstrap_form_tag url: url_for(:controller => 'sales_report', :action => 'hourly'), :method => :GET, :enforce_utf8 => false do |f| %>
+					 <div class="row">
+					<div class="col-xs-8">
+					 <%= text_field_tag(:from_date, @from_date, :data => {:provide => "datepicker"}, :id => "datepicker3", :class => "form-control", :required => "true" )   %>
+
+					</div>
+
+					<div class="col-xs-4">
+						<%= submit_tag "Report", name: nil, class: "btn btn-success ", data: { confirm: 'Are you sure?'}  %>
+					</div>
+					</div>
+
+					<% end %>
+			  </div>
+			</div>
+	</div>
+</div>
+<!-- row 2 -->
+
+<div class="row">
+	<div class="col-xs-4">
+			<div class="panel panel-primary">
+			<div class="panel-heading">
+			 <h3 class="panel-title">Agent Order Report</h3>
+			</div>
+			  <div class="panel-body">
+			   Sales by individual agents for each day
+			  </div>
+			  <div class="panel-footer">
+
+					 <%= bootstrap_form_tag url: url_for(:controller => 'sales_report_team', :action => 'agent_order'), :method => :GET, :enforce_utf8 => false do |f| %>
+					 <div class="row">
+					<div class="col-xs-8">
+					 <%= text_field_tag(:from_date, @from_date, :data => {:provide => "datepicker"}, :id => "datepicker4", :class => "form-control", :required => "true" )   %>
+
+					</div>
+
+					<div class="col-xs-4">
+						<%= submit_tag "Report", name: nil, class: "btn btn-success ", data: { confirm: 'Are you sure?'}  %>
+					</div>
+					</div>
+
+					<% end %>
+
+					</div>
+
+								  </div>
+	</div>
+	<div class="col-xs-4">
+			<div class="panel panel-primary">
+			<div class="panel-heading"><h3 class="panel-title">Agentwise upsale (common) Report</h3></div>
+			  <div class="panel-body">
+			    All the upsell products sold by an agents on a selected day
+			  </div>
+			  <div class="panel-footer">
+			  	<%= bootstrap_form_tag url: url_for(:controller => 'sales_report_team', :action => 'agent_common_upsell_order'), :method => :GET, :enforce_utf8 => false do |f| %>
+					 <div class="row">
+					<div class="col-xs-8">
+					 <%= text_field_tag(:from_date, @from_date, :data => {:provide => "datepicker"}, :id => "datepicker5", :class => "form-control", :required => "true" )   %>
+
+					</div>
+
+					<div class="col-xs-4">
+						<%= submit_tag "Report", name: nil, class: "btn btn-success ", data: { confirm: 'Are you sure?'}  %>
+			  </div>
+			</div>
+			<% end %>
+		</div>
+		</div>
+	</div>
+	<div class="col-xs-4">
+			<div class="panel panel-primary">
+			<div class="panel-heading"><h3 class="panel-title">Agentwise upsale (basic) Report</h3></div>
+			  <div class="panel-body">
+			    All the upsell products sold by an agents on a selected day
+			  </div>
+			  <div class="panel-footer">
+			  	<%= bootstrap_form_tag url: url_for(:controller => 'sales_report_team', :action => 'agent_basic_upsell_order'), :method => :GET, :enforce_utf8 => false do |f| %>
+					 <div class="row">
+					<div class="col-xs-8">
+					 <%= text_field_tag(:from_date, @from_date, :data => {:provide => "datepicker"}, :id => "datepicker6", :class => "form-control", :required => "true" )   %>
+
+					</div>
+
+					<div class="col-xs-4">
+						<%= submit_tag "Report", name: nil, class: "btn btn-success ", data: { confirm: 'Are you sure?'}  %>
+			  </div>
+			</div>
+			<% end %>
+		</div>
+		</div>
+	</div>
+</div>
+
+<!-- row 3 nothing here -->
+<div class="row">
+ <div class="col-xs-4"></div>
+ <div class="col-xs-4"></div>
+ <div class="col-xs-4"></div>
+</div>
+
+
+ <script>
+$('#datepicker1').datepicker({format: 'yyyy-mm-dd'});
+$('#datepicker2').datepicker({format: 'yyyy-mm-dd'});
+$('#datepicker3').datepicker({format: 'yyyy-mm-dd'});
+$('#datepicker4').datepicker({format: 'yyyy-mm-dd'});
+$('#datepicker5').datepicker({format: 'yyyy-mm-dd'});
+$('#datepicker6').datepicker({format: 'yyyy-mm-dd'});
+$('#datepicker7').datepicker({format: 'yyyy-mm-dd'});
+$('#datepicker8').datepicker({format: 'yyyy-mm-dd'});
+$('#datepicker9').datepicker({format: 'yyyy-mm-dd'});
+$('#datepicker10').datepicker({format: 'yyyy-mm-dd'});
+$('#datepicker11').datepicker({format: 'yyyy-mm-dd'});
+$('#datepicker12').datepicker({format: 'yyyy-mm-dd'});
+$('#datepicker13').datepicker({format: 'yyyy-mm-dd'});
+$('#datepicker14').datepicker({format: 'yyyy-mm-dd'});
+$('#datepicker15').datepicker({format: 'yyyy-mm-dd'});
+$('#datepicker16').datepicker({format: 'yyyy-mm-dd'});
+$('#datepicker17').datepicker({format: 'yyyy-mm-dd'});
+$('#datepicker18').datepicker({format: 'yyyy-mm-dd'});
+$('#datepicker19').datepicker({format: 'yyyy-mm-dd'});
+$('#datepicker20').datepicker({format: 'yyyy-mm-dd'});
+$('#datepicker21').datepicker({format: 'yyyy-mm-dd'});
+$('#datepicker22').datepicker({format: 'yyyy-mm-dd'});
+</script>

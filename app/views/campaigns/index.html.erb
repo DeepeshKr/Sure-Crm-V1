@@ -15,7 +15,7 @@
       <th>For date</th>
       
       <th>Media</th>
-      <th colspan="1"></th>
+      <th colspan="2"></th>
     </tr>
   </thead>
 
@@ -26,7 +26,8 @@
         <td><%= campaign.startdate.strftime("%d-%b-%Y") %></td>
        
         <td><%= campaign.medium.mediainfo if campaign.medium %></td>
-        <td><%= link_to 'Show', campaign %></td>
+         <td><%= link_to 'View Active', campaign_path(:id => campaign.id, :only_active => "true"), class: "btn btn-primary btn-xs" %></td>
+		<td><%= link_to 'Add / Edit', campaign, class: "btn btn-primary btn-sm" %></td>
        <!--  <td><%= link_to 'Edit', edit_campaign_path(campaign) %></td>
         <td><%= link_to 'Destroy', campaign, method: :delete, data: { confirm: 'Are you sure?' } %></td> -->
       </tr>

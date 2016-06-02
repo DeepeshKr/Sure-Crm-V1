@@ -1,0 +1,16 @@
+<div class"row">
+	<%= simple_form_for(@campaign_playlist_to_product) do |f| %>
+		<%= f.error_notification %>
+		<%= f.hidden_field :campaign_playlist_id %>
+		<div class="col-xs-8">
+		<!-- = f.input :product_variant_id -->
+			<%= f.input :product_variant_id,:collection => @product_variants,:label_method => :productinfo,:value_method => :id,:label => false ,:include_blank => false %>
+		</div>
+		<div class="col-xs-4">
+			<%= f.button :submit, "Add Product", :class => "btn btn-info btn-sm"%>
+		</div>
+	<% end %>
+	
+</div>
+
+

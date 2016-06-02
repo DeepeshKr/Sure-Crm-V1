@@ -47,31 +47,28 @@ respond_to :html, :xml, :json
     
   end
 
-   def listofproducts
+  def listofproducts
     
       @product_masters = ProductMaster.all.where('productactivecodeid = 10000')
       @inactive_product_masters = ProductMaster.where('productactivecodeid <> 10000').limit(10)
       
      
-   end
+  end
 
   def show
   #  respond_with(@product_master)
      @product_variants = ProductVariant.where("productmasterid = ?" ,  @product_master.id)
      @product_variant = ProductVariant.new(productmasterid:  @product_master.id,
       name: @product_master.name, 
-      price: @product_master.price, 
       activeid: true,
-      taxes: @product_master.taxes || 0, shipping: @product_master.shipping,
-     total: @product_master.total, variantbarcode: 
-     @product_master.barcode, description: @product_master.description,
-     extproductcode: @product_master.extproductcode)
-
+      taxes: @product_master.taxes || 0,  variantbarcode: 
+     @product_master.barcode, description: @product_master.description)
+     #,extproductcode: @product_master.extproductcode  price: @product_master.price, shipping: @product_master.shipping, total: @product_master.total,
      
-        @product_training_manuals = ProductTrainingManual.where("productid = ?",  @product_master.id)
+      @product_training_manuals = ProductTrainingManual.where("productid = ?",  @product_master.id)
       @product_training_manual = ProductTrainingManual.new
       @product_training_manual.productid =  @product_master.id
-       @product_training_headings = ProductTrainingHeading.all
+      @product_training_headings = ProductTrainingHeading.all
       #productmasters = ProductMaster.where('product_sell_type_id = 1').pluck(:id)
      # product_add_on_l = ProductVariantAddOn.where(productid: productmasters).pluck(:productvariantid)
       
@@ -170,6 +167,7 @@ respond_to :html, :xml, :json
       @productactivecode = ProductActiveCode.all.order("id")
       @productselltype = ProductSellType.all.order("id")
       @productspecificaddonlist = ProductList.joins(:product_variant).where("product_variants.product_sell_type_id = ? ", 10040)
+        # replace add on list has to be main product else the order wont process product_variants.product_sell_type_id = 10000
       @productreplaceaddonlist = ProductList.joins(:product_variant)
       .where("product_variants.product_sell_type_id = ? ", 10000)
       .order("product_variants.name")

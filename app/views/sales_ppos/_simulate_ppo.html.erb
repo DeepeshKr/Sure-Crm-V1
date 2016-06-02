@@ -1,0 +1,25 @@
+  <% if @employeeorderlist.present? %>
+<div class="panel panel-success">
+  <div class="panel-heading"><h3 class="panel-title">You can simulate the ppo with estimated values - this wont change the values stored </h3></div>
+  
+  	<div class="panel-body"> <!-- start panel body -->
+		  <!-- filters here -->
+	  	<%= form_tag  url_for(:controller => 'sales_ppos', :action => "product_performance"), method: "get" do  %>
+		  <%= hidden_field_tag :product_variant_id, @product_variant_id %>
+		  <%= hidden_field_tag :from_date, @from_date %>
+		  <%= hidden_field_tag :to_date, @to_date %>
+	
+	  	<div class="row">
+		<div class="col-xs-1">Product Price</div>
+		<div class="col-xs-2"><%= text_field_tag :product_price, @product_price, :class => "form-control", :placeholder => "Product Price", :required => true,  :readonly => "true" %></div>
+		<div class="col-xs-1">Retail Default</div>
+		<div class="col-xs-2"><%= text_field_tag :retail_default, @retail_default, :class => "form-control", :placeholder => "Retail Default", :required => true %></div>
+		<div class="col-xs-1">Transfer Default</div>
+		<div class="col-xs-2"><%= text_field_tag :transfer_default, @transfer_default, :class => "form-control", :placeholder => "Transfer Default", :required => true %></div>
+	
+	    <div class="col-xs-1"><%= submit_tag "Show", name: nil, class: "btn btn-info btn-sm" %></div>
+	  	</div>
+	   <% end %>
+	</div> <!-- end panel body -->
+</div>
+  <% end %>

@@ -1,0 +1,72 @@
+<!-- set page title start -->
+<% title "Campaign Playlist #{@campaign_playlist_id} Orders" %>
+<!-- set page title end -->
+<p id="notice"><%= notice %></p>
+<div class="row">
+  <%= form_tag  url_for(:controller => 'campaign_playlists', :action => "search"), method: "get" do  %>
+      <div class="col-xs-4">
+        <div class="input-daterange input-group">
+          <%= text_field_tag(:id, @campaign_playlist_id, :class => "form-control", :required => "true" )   %>
+        </div>
+      </div>
+      <div class="col-xs-2">
+        <%= submit_tag "Search", name: nil, class: "btn btn-primary" %>
+      </div>
+  <% end %>
+</div>
+
+<% if @campaign_playlist_id.present? %>
+<div class="row">
+	<div class="col-xs-6">
+		<p><strong>Campaign: <%= @campaign_playlist.campaign.name if @campaign_playlist.campaign %></strong></p>
+		<h3> <%= @campaign_playlist.product_variant.name %></h3>
+	</div>
+<div class="col-xs-6">
+<strong>Start time:</strong> <%= @campaign_playlist.starttime %> &nbsp;
+ <strong>End time:</strong> <%= @campaign_playlist.endtime %>
+ <p>
+  <strong>Product Advertised:</strong>
+  <%= @campaign_playlist.product_variant.name if @campaign_playlist.product_variant %>
+</p>
+
+</div>
+</div>
+
+<%= link_to 'Back', url_for(:back), class: "btn btn-info btn-xs" %>
+<!-- = link_to 'Back', @campaign_playlist.campaign, class: "btn btn-info btn-xs" -->
+
+<%= render partial: 'campaign_playlist_to_products/quick_add'  %>
+<!-- list of products is included in the above partial -->
+<hr>
+
+	
+
+
+	<div class="panel panel-primary">
+	  <div class="panel-heading">
+	   <h3 class="panel-title">Order Summary</h3>
+
+	  </div>
+	  	<%= render partial: 'sales_ppos/order_lines', :locals => {:order_lines =>  @order_lines_regular, 
+			order_description: "Regular Products"}  %>
+	  
+	    <%= render partial: 'sales_ppos/order_lines', :locals => {:order_lines =>  @order_lines_basic, 
+			order_description: "Basic Upsell"}  %>
+		
+		<%= render partial: 'sales_ppos/order_lines', :locals => {:order_lines =>  @order_lines_common, 
+			order_description: "Common Upsell"}  %>
+  </div>
+  
+  
+  <div class="panel panel-primary">
+    <div class="panel-heading"><h3 class="panel-title">Sales PPO Master Data</h3> 
+    </div>
+  	<%= render 'sales_ppos/sales_ppo_mini_list' %>
+  </div>
+  <hr>
+ <% else %>
+ <div class="well well-sm">
+ <h3>Search for a campaign playlist </h3>	 
+ </div>	  
+  
+<% end %>

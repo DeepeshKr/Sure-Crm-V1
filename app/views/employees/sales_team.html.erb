@@ -1,0 +1,11 @@
+<h1>List of Sales Team in various Roles</h1>	  	
+		
+<%= render partial: 'employees/list', :locals => {:employees => @managers, :emp_name => @manager_list_name, :emp_nos => @no_of_managers}  %>
+
+<%= render partial: 'employees/list', :locals => {:employees => @supervisors, :emp_name => @supervisors_list_name , :emp_nos => @no_of_supervisors}  %>
+
+<%= render partial: 'employees/list', :locals => {:employees => @captains, :emp_name =>  @captains_list_name, :emp_nos => @no_of_captains}  %>
+
+<%= render partial: 'employees/list', :locals => {:employees => @sales_trainers, :emp_name =>  @sales_trainers_list_name, :emp_nos => @no_of_sales_trainers}  %>
+
+<%= render partial: 'employees/list', :locals => {:employees => @sales_executives, :emp_name =>  @sales_executives_list_name, :emp_nos => @no_of_sales_executives}  %>

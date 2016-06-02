@@ -1,0 +1,36 @@
+<% if @payumoney_details.present? %>
+ <div class="panel panel-primary">
+  <div class="panel-heading">
+    <h3 class="panel-title">Pay u Money Details</h3>
+  </div>
+	<table class="table table-hover">
+	  <thead>
+	    <tr>
+	      <th>Created</th>
+		  <th>Payment Id / Merchant Transaction Id</th>
+		  <th>Order ref no</th>
+	      <th>Amount</th>
+	      <th>Mobile Number</th>
+	      <th>Status</th>
+	      <th>Full Response</th>
+	      <th>Last Updated</th>
+
+	    </tr>
+	  </thead>
+	  <tbody>
+	    <% @payumoney_details.each do |payumoney_detail| %>
+	      <tr>
+	      <td><%= (payumoney_detail.created_at + 330.minutes).strftime("%d-%b-%y %H:%M") %></td>
+	        <td><%= payumoney_detail.paymentId %> <br> <%= payumoney_detail.merchantTransactionId %> </td>
+	        <td><%=  payumoney_detail.orderid  %></td>
+	        <td><%= payumoney_detail.amount.round(2) %></td>
+	        <td><%= payumoney_detail.customerMobileNumber %></td>
+			<td><%= payumoney_detail.status %></td>
+	        <td><small><%= payumoney_detail.full_response %></small></td>
+	        <td><%= (payumoney_detail.updated_at + 330.minutes).strftime("%d-%b-%y %H:%M") %></td>
+	      </tr>
+	    <% end %>
+	  </tbody>
+	</table>
+</div>
+<% end %>

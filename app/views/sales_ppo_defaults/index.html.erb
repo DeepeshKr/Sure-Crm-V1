@@ -1,0 +1,31 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Listing Sales Ppo Defaults</h1>
+
+<table class="table table-hover table-stripped">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Value</th>
+      <th>Description</th>
+      <th colspan="2"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @sales_ppo_defaults.each do |sales_ppo_default| %>
+      <tr>
+        <td><%= sales_ppo_default.name %></td>
+        <td><%= sales_ppo_default.value %></td>
+        <td><%= sales_ppo_default.description %></td>
+        <td><%= link_to 'Show', sales_ppo_default %></td>
+        <td><%= link_to 'Edit', edit_sales_ppo_default_path(sales_ppo_default) %></td>
+
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+

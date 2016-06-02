@@ -10,7 +10,8 @@
   <%= @employee_role.sortorder %>
 </p>
 <br>
-<%= render('employees/list') %>
+	  	<%= render partial: 'employees/list', :locals => {:employees => @employees, :emp_name => "List of all employees"}  %>
+
 <br>
 <%= link_to 'Edit', edit_employee_role_path(@employee_role) %> |
 <%= link_to 'Back', employee_roles_path %>

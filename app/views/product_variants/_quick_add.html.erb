@@ -22,12 +22,15 @@
 		        %>
   </div>
   <% elsif%>
-   <%= f.hidden_field :productmasterid %>
+   	<%= f.hidden_field :productmasterid %>
     <%= f.hidden_field :activeid %>
-     <%= f.hidden_field :extproductcode %>
-     
-      <%= f.hidden_field :variantbarcode %>
+    <%= f.hidden_field :variantbarcode %>
   <% end %>
+  <div class="field">   
+    <%= f.text_field :extproductcode, label: "Product Code", required: true, help: "Use a unique product code like ALU, 5AK" ,:placeholder => "Required, like ALU, 5AK etc" %> 
+    
+    </div>
+	
   <div class="field">   
     <%= f.text_field :name, label: "Product Name", required: true, help: "Use the Product Name with Free Product to be used for Media like AB KING PRO - (FREE PUB & ALU)" ,:placeholder => "Required, it would look like this AB KING PRO - (FREE PUB & ALU) or Just the Name " %> 
     

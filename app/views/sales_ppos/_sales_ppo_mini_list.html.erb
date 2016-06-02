@@ -4,7 +4,7 @@
     <tr>
 	  <th> SNo </th>
       <th>Prod</th>
-      <th>Time</th>
+      <th>Order Date | Time</th>
 	  <th>Order no | Ref No</th>
       <th class="text-right">Product cost</th>
       <th class="text-right">Pieces</th>
@@ -15,7 +15,7 @@
       <th class="text-right">Promo tion</th>
       <th class="text-right">Gross</th>
       <th class="text-right">Net</th>
-      
+      <th> Updated at </th>
       <th>Status</th>
     </tr>
   </thead>
@@ -36,7 +36,7 @@
         <td class="text-right"><%= sales_ppo.promotion_cost %></td>
         <td class="text-right"><%= sales_ppo.gross_sales %></td>
         <td class="text-right"><%= sales_ppo.net_sale %></td>
-       
+       <td><small><%= (sales_ppo.updated_at + 330.minutes).strftime('%d-%b %H:%M %P') %></small> </td>
         <td><%= sales_ppo.order_status_master.name if sales_ppo.order_status_master.present? %></td>
       </tr>
 	   <% @sno += 1 %>

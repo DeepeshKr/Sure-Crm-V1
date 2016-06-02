@@ -1,0 +1,72 @@
+<!-- set page title start -->
+<% title @page_heading  %>
+<!-- set page title end -->
+<div class="row">
+	<div class="col-xs-6"><h3>Payumoney Orders</h3> 
+	<%= link_to "Pay u Money SMS Status", "/message_on_orders_payumoney", class:"btn btn-info btn-xs" %> </div>
+	<div class="col-xs-6">
+		<div class="row">
+		  <%= form_tag  url_for(:controller => 'payumoney_details', :action => 'index'), method: "get" do  %>
+
+		      <div class="col-xs-8">
+		        <div class="input-daterange input-group">
+		          <%= text_field_tag(:from_date, @from_date, :data => {:provide => "datepicker"}, :id => "datepicker_from", :class => "form-control", :required => "true" )   %>
+		          <span class="input-group-addon">to</span>
+
+		           <%= text_field_tag(:to_date, @to_date, :data => {:provide => "datepicker"}, :id => "datepicker_to", :class => "form-control", :required => "true" )   %>
+
+		        </div>
+		      </div>
+
+		      <div class="col-xs-4">
+		        <%= submit_tag "Show Report", name: nil, class: "btn btn-primary" %>
+		      </div>
+		  <% end %>
+		</div>
+		
+	</div>
+</div>
+
+<hr>
+<% if @payumoney_details.present? %>
+<table class="table table-hover">
+  <thead>
+    <tr>
+      <th>Created</th>
+	  <th>Payment Id / Merchant Transaction Id</th>
+	  <th>Order ref no</th>
+      <th>Amount</th>
+      <th>Mobile Number</th>
+      <th>Status</th>
+      <th>Full Response</th>
+      <th>Last Updated</th>
+
+    </tr>
+  </thead>
+  <tbody>
+    <% @payumoney_details.each do |payumoney_detail| %>
+      <tr>
+      <td><%= (payumoney_detail.created_at + 330.minutes).strftime("%d-%b-%y %H:%M") %></td>
+        <td><%= payumoney_detail.paymentId %> <br> <%= payumoney_detail.merchantTransactionId %> </td>
+        <td> <%= link_to payumoney_detail.orderid, detailedordersearch_path(order_id: payumoney_detail.orderid), 
+			 	:target => "_blank" if payumoney_detail.orderid.present? %>  </td>
+        <td><%= payumoney_detail.amount.round(2) %></td>
+        <td><%= payumoney_detail.customerMobileNumber %></td>
+		<td><%= payumoney_detail.status %></td>
+        <td><small><%= payumoney_detail.full_response %></small></td>
+        <td><%= (payumoney_detail.updated_at + 330.minutes).strftime("%d-%b-%y %H:%M") %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+<hr>
+<% else %>
+<h3>Nothing here</h3>
+<% end %>
+<br>
+<div class="digg_pagination"><%= will_paginate @payumoney_details, :container => false %></div>
+<br>
+<script>
+$('#datepicker_to').datepicker({format: 'yyyy-mm-dd'});
+$('#datepicker_from').datepicker({format: 'yyyy-mm-dd'});
+</script>

@@ -1,0 +1,35 @@
+<% if @campaign_playlist_to_products.present? %>
+<table class="table table-hover table-stripped">
+  <thead>
+    <tr>
+      <th>Product variant</th>
+	  <th>Products </th>
+      <th></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @campaign_playlist_to_products.each do |campaign_playlist_to_product| %>
+      <tr>
+
+        <td><%= campaign_playlist_to_product.product_variant.name if campaign_playlist_to_product.product_variant_id.present? %></td>
+        <td> 
+			<% if campaign_playlist_to_product.product_variant.product_list.present? %>
+			<ol>
+			<% campaign_playlist_to_product.product_variant.product_list.each do |list| %>
+			<li><%= list.productname %></li>
+			<% end %>
+			</ol>
+			<% end %>
+		</td>	
+        <td><%= link_to 'Destroy', campaign_playlist_to_product, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+<% else %>
+
+<h4>No Additional products added</h4>
+
+<% end %>
+

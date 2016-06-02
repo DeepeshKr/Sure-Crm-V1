@@ -1,0 +1,37 @@
+<p id="notice"><%= notice %></p>
+
+<h1>List of all Sales Incentives</h1>
+
+<table class="table table-hover table-bordered">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Min value</th>
+      <th>Max value</th>
+      <th>Commission</th>
+      <th>No of</th>
+      <th>Description</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @sales_incentives.each do |sales_incentive| %>
+      <tr>
+        <td><%= sales_incentive.name %></td>
+        <td><%= sales_incentive.min_value %></td>
+        <td><%= sales_incentive.max_value %></td>
+        <td><%= sales_incentive.commission %></td>
+        <td><%= sales_incentive.no_of %></td>
+        <td><%= sales_incentive.description %></td>
+        <td><%= link_to 'Show', sales_incentive %></td>
+        <td><%= link_to 'Edit', edit_sales_incentive_path(sales_incentive) %></td>
+        <td><%= link_to 'Destroy', sales_incentive, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Sales incentive', new_sales_incentive_path, class:"btn btn-primary" %>

@@ -1,0 +1,84 @@
+<% title "Pay U Orders Report #{@from_date} to #{@to_date}" %>
+ <div class="row">
+	 <div class="col-xs-6">
+	 <h4>Pay U Orders <%=  @message_details %> </h4>
+     <div class="btn-group" role="group" aria-label="...">
+     	<%= link_to 'All Pay U', pay_u_orders_sales_report_team_path(show: "all", from_date: @from_date, to_date: @to_date), type:"button", class: @btn1 %>
+     	<%= link_to 'Pending', pay_u_orders_sales_report_team_path(show: "pending", from_date: @from_date, to_date: @to_date), type:"button", class: @btn2 %> 
+		<%= link_to 'Pay U Paid', pay_u_orders_sales_report_team_path(show: "pay_u_paid", from_date: @from_date, to_date: @to_date), type:"button", class: @btn3 %>
+     	<%= link_to 'COD', pay_u_orders_sales_report_team_path(show: "pay_u_cod", from_date: @from_date, to_date: @to_date), type:"button", class: @btn4 %> 
+ 	</div>
+	 </div>
+	 <div class="col-xs-6">
+ <%= render partial: 'date_range_search', :locals => {:searchaction => "pay_u_orders"}  %>
+	</div>
+ </div>
+
+<div class="well well-sm">
+<h5><%= @orderdate %> </h5>
+</div>
+<% if @employeeorderlist.present? %>
+<% total_value, total_piece = 0, 0 %>
+<table class="table table-hover table-bordered">
+  <thead>
+    <tr>
+     <th>No</th>
+	 <th>Ref Id / Order No</th>
+	 <th>Agent</th>
+	 <th>Date Time </th>
+     <th>Customer </th>
+	 <th>Paid </th>
+	 <th>Status</th>
+     <th>Media</th>
+     <th>City </th>
+	 <th>Main Products</th>
+     <th>Upsell Products</th>
+     <th>Pieces</th>
+     <th>Value</th>
+     </tr>
+  </thead>
+<tbody>
+   <% @employeeorderlist.each do |c| %>
+   <tr>
+   	<td><%= c[:sno] %></td>
+   	<td><%= c[:order_id] %> <br><small> <%= c[:order_no] %></small></td>
+	<td><%= c[:employee] %></td>
+	<td><%= c[:orderdate] %> <br> <%= c[:ordertime]%> </td>
+   	<td><%= c[:customer] %> <br> <small>Mob: <%= c[:mobile] %> </small></td>
+	<td><%= c[:status] %></td>
+	<td><%= c[:order_status] %></td>
+	<td><%= c[:channel] %></td>
+	<td><%= c[:city] %></td>
+	<td><%= c[:main_products]%></td>
+	<td><%= c[:upsell_products]%></td>
+	<td class="text-right"><%= c[:pieces] %> <% total_piece += c[:pieces] %></td>
+	<td class="text-right"><%= c[:total] %> <% total_value += c[:total] %></td>
+  </tr>
+  <% @sno += 1 %>
+ <% end %>
+  </tbody>
+<tfoot>
+  <tr>
+  <th colspan="8"><strong>Total</strong></th>
+  <th colspan="2">Order Nos: <%= @sno - 1 %> </th>
+  <th><strong> <%= total_piece %></strong></th>
+  <th><strong><%= total_value %></strong></th>
+  </tr>
+
+</tfoot>
+  </table>
+  <div class="well well-sm">
+	  <%= link_to "Download CSV file", { :controller => :sales_report, :action => :pay_u_orders, 
+	  	:from_date => @from_date, :to_date => @to_date, :show => @show, format: :csv }, class: "btn btn-info btn-sm" %>
+  </div>
+  <% else %>
+  <div class="well well-sm">
+  <h5>Please select a date to generate the report </h5>
+  </div>
+  <% end %>
+ <br>
+
+<script>
+$('#datepicker_to').datepicker({format: 'yyyy-mm-dd'});
+$('#datepicker_from').datepicker({format: 'yyyy-mm-dd'});
+</script>

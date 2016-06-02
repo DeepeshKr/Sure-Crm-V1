@@ -888,7 +888,10 @@ class SalesPpoReportController < ApplicationController
     @hbn_media_cost_master = MediaCostMaster.where(media_id: 11200).order("str_hr, str_min")
     @sno = 1
     @searchaction = "hour_sales_performance"
-
+    #check default return rate
+    retail_default_rate = SalesPpoDefault.find_by_name("Retail").value
+    transfer_default_rate = SalesPpoDefault.find_by_name("Transfer Order").value
+   
      for_date = (330.minutes).from_now.to_date
      @from_date = (330.minutes).from_now.to_date
      if params.has_key?(:time_id)

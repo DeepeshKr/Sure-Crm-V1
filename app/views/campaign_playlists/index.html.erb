@@ -1,4 +1,20 @@
-<h1>Listing of campaign playlists</h1>
+<div class="row">
+  <%= form_tag  url_for(:controller => 'campaign_playlists', :action => "search"), method: "get" do  %>
+
+      <div class="col-xs-4 col-offset-xs-6">
+        <div class="input-daterange input-group">
+          <%= text_field_tag(:id, @campaign_playlist_id, :class => "form-control", :required => "true" )   %>
+
+        </div>
+      </div>
+
+      <div class="col-xs-2">
+        <%= submit_tag "Show", name: nil, class: "btn btn-primary" %>
+      </div>
+  <% end %>
+</div>
+
+<h3>Listing of campaign playlists</h3>
 
 <table class="table table-hover">
   <thead>

@@ -59,7 +59,12 @@ def gender
 end
 
 def fullname
-  return (self.salute ||= nil) + " " + (self.first_name ||= nil) + " " + (self.last_name ||= nil)
+  #if self.first_name.present? || self.salute.present? || self.last_name.present?
+    return "#{self.salute} #{self.first_name}  #{self.last_name}"
+    #(self.salute ||= nil) + " " + (self.first_name ||= nil) + " " + (self.last_name ||= nil)
+    #else
+    #return "NA"
+    #end
 end
 
 def name

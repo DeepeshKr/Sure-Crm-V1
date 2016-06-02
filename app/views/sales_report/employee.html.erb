@@ -1,3 +1,6 @@
+<!-- set page title start -->
+<% title "Employee Report #{@from_date} to #{@to_date}" %>
+<!-- set page title end -->
  <div class="row">
 	 <div class="col-xs-6">
 
@@ -13,45 +16,50 @@
 <table class="table table-hover table-bordered">
   <thead>
     <tr>
-     <th>No</th>
-     <th>Employee</th>
-     <th>CC Orders</th>
-       <th>CC Value</th>
-      <th>COD Orders</th>
-       <th>COD Value</th>
-       <th>Total Orders</th>
-     <th>Total Value</th>
-    
+	     <th>No</th>
+	     <th>Employee</th>
+	     <th>Pay U Orders</th>
+	     <th>Pay U Value</th>
+	     <th>CC Orders</th>
+	     <th>CC Value</th>
+	     <th>COD Orders</th>
+	     <th>COD Value</th>
+	     <th>Total Orders</th>
+	     <th>Total Value</th>
      </tr>
   </thead>
 <tbody>
    <% @employeeorderlist.each do |c| %>
    <tr>
-   <td><%= @sno %></td>
+		<td><%= @sno %></td>
+		<td>
+		 <%= link_to c[:employee], orderlist_path(employee_id: c[:id], for_date: c[:for_date], completed: 'yes'), :target => "_blank" %>
 
-<td>
- <%= link_to c[:employee], orderlist_path(employee_id: c[:id], for_date: c[:for_date], completed: 'yes'), :target => "_blank" %>
-
-</td>
-<td class="text-right">
-   <%= c[:ccorders] %> 
-</td>
-<td class="text-right">
-   <%= c[:ccvalue] %> 
-</td>
-<td class="text-right">
-   <%= c[:codorders] %> 
-</td>
-<td class="text-right">
-   <%= c[:codvalue] %> 
-</td>
-
-<td class="text-right">
-   <%= c[:nos] %> 
-</td>
-<td class="text-right">
-   <%= c[:total] %> 
-</td>
+		</td>
+		<td class="text-right">
+		   <%= c[:pay_u_orders] %> 
+		</td>
+		<td class="text-right">
+		   <%= c[:pay_u_value] %> 
+		</td>
+		<td class="text-right">
+		   <%= c[:ccorders] %> 
+		</td>
+		<td class="text-right">
+		   <%= c[:ccvalue] %> 
+		</td>
+		<td class="text-right">
+		   <%= c[:codorders] %> 
+		</td>
+		<td class="text-right">
+		   <%= c[:codvalue] %> 
+		</td>
+		<td class="text-right">
+		   <%= c[:nos] %> 
+		</td>
+		<td class="text-right">
+		   <%= c[:total] %> 
+		</td>
 
   </tr> 
   <% @sno += 1 %> 

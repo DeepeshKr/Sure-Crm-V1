@@ -39,7 +39,7 @@
 		<% end %>
 		<small><%= link_to "Cost Details", productcost_path(search: c.prod), :target => "_blank", class: "btn btn-primary btn-xs" %> </small>
 		<br>
-		Time: <%= c.show_time %> <br>
+		<%= c.for_date.strftime('%d-%b') if c.for_date.present? %> At: <%= c.show_time %> <br>
 		<small>Desc: <%= c.description %> </small>
 		</td>
 		<td title="Name"><small><%= c.total_name_1 %> </small> </td>
@@ -55,8 +55,13 @@
 		<td class="text-right" title="Profitability">   <%= c.profit_per_order_1 %>  </td>
 		<td rowspan="2">
 			<%= link_to "Old", ppo_products_path(campaign_id: c.campaign_playlist_id), :target => "_blank", class: "btn btn-primary btn-xs"  %>
+			<% if c.product_variant_id.present? %>
 			<hr>
-			<%= link_to "New", {:controller => :sales_ppos, :action => :details, campaign_id: c.campaign_playlist_id}, :target => "_blank", class: "btn btn-info btn-xs" %>
+			<%= link_to "Product Details", {:controller => :sales_ppos, :action => :details, campaign_id: c.campaign_playlist_id, product_variant_id: c.product_variant_id}, :target => "_blank", class: "btn btn-info btn-xs" %>
+			<% end %>
+			<hr>
+				<%= link_to "Show Details", {:controller => :sales_ppos, :action => :details, campaign_id: c.campaign_playlist_id}, :target => "_blank", class: "btn btn-info btn-xs" %>
+			
 		</td>
 	</tr>
 

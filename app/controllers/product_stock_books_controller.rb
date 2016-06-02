@@ -6,6 +6,10 @@ class ProductStockBooksController < ApplicationController
    before_action :get_variables, only: [:index, :show, :edit, :update, :destroy]
    before_action :dropdowns, only: [:index, :edit, :update]
    before_action :all_totals
+  # get 'stockbook' => 'product_stock_books#summary'
+  # get 'product_stock_books/summary'
+  # get 'stockbook_details' => 'product_stock_books#stockbook_details'
+
   # GET /product_stock_books
   # GET /product_stock_books.json
   def index
@@ -31,24 +35,24 @@ class ProductStockBooksController < ApplicationController
         @datelist <<  day.strftime('%d-%b-%y')
       end
 
-       if ProductList.where(extproductcode: @prod).present?
-          @product_name = ProductList.where(extproductcode: @prod).first.productinfo
-        end
+      if ProductList.where(extproductcode: @prod).present?
+        @product_name = ProductList.where(extproductcode: @prod).first.productinfo
+      end
        
-        @from_date_text = from_date.strftime('%Y-%m-%d')
-        @to_date_text = to_date.strftime('%Y-%m-%d')
-          @product_stock_books = ProductStockBook.where(list_barcode: @barcode)
-          .where("TRUNC(stock_date) >= ? AND TRUNC(stock_date) <= ?", from_date, to_date)
-          .order("stock_date")
-          file_name = "stock_book_#{@from_date_text}_#{@to_date_text}.csv"
-          respond_to do |format|
-            format.html
-            format.csv do
-              headers['Content-Disposition'] = "attachment; filename=\"#{file_name}\""
-              headers['Content-Type'] ||= 'text/csv'
-            end
+      @from_date_text = from_date.strftime('%Y-%m-%d')
+      @to_date_text = to_date.strftime('%Y-%m-%d')
+        @product_stock_books = ProductStockBook.where(list_barcode: @barcode)
+        .where("TRUNC(stock_date) >= ? AND TRUNC(stock_date) <= ?", from_date, to_date)
+        .order("stock_date")
+        file_name = "stock_book_#{@from_date_text}_#{@to_date_text}.csv"
+        respond_to do |format|
+          format.html
+          format.csv do
+            headers['Content-Disposition'] = "attachment; filename=\"#{file_name}\""
+            headers['Content-Type'] ||= 'text/csv'
           end
-         @page_heading = "#{@product_name} summary between #{@or_from_date} and #{@or_to_date}"
+        end
+       @page_heading = "#{@product_name} summary between #{@or_from_date} and #{@or_to_date}"
     else
       @show_add_update = 0
       @page_heading = "Please select a product with date range"
@@ -62,17 +66,27 @@ class ProductStockBooksController < ApplicationController
     @or_to_date =  Date.today.in_time_zone
     
     if params[:from_date].present? && params[:to_date].present?
-      @or_from_date =  Date.strptime(params[:from_date], "%Y-%m-%d") if params[:from_date].present?
-      @or_to_date =  Date.strptime(params[:to_date], "%Y-%m-%d") if params[:to_date].present?
+      @or_from_date = Date.strptime(params[:from_date], "%Y-%m-%d") if params[:from_date].present?
+      @or_to_date = Date.strptime(params[:to_date], "%Y-%m-%d") if params[:to_date].present?
     end
     
     @from_date_text = @or_from_date.strftime('%Y-%m-%d')
     @to_date_text = @or_to_date.strftime('%Y-%m-%d')
     product_stock_book = ProductStockBook.new 
-    @product_stock_books = product_stock_book.stock_book_summary(@or_from_date, @or_to_date).paginate(:page => params[:page]) 
+    @product_stock_books = product_stock_book.stock_book_summary(@or_from_date, @or_to_date)
+    #.paginate(:page => params[:page]) 
     # @product_stock_books = @product_stock_books
     # .paginate(params[:current_page], params[:per_page])
     @page_heading = "Stock between #{@or_from_date} and #{@or_to_date}"
+    
+    respond_to do |format|
+      csv_file_name = "Product_stock_summary_between_#{@from_date_text}_and_#{@to_date_text}.csv"
+        format.html
+        format.csv do
+          headers['Content-Disposition'] = "attachment; filename=\"#{csv_file_name}\""
+          headers['Content-Type'] ||= 'text/csv'
+        end
+    end
   end
 
   # GET /product_stock_books/1
@@ -93,7 +107,7 @@ class ProductStockBooksController < ApplicationController
          @prev_date = @old_product_stock.stock_date
         else
            @prev_closing_stock = 0
-            @prev_date = "Not Applicable"
+          @prev_date = "Not Applicable"
        end
 
       end

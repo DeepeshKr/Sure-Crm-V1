@@ -1,7 +1,10 @@
+<!-- set page title start -->
+<% title "All Products Sold Report #{@from_date} to #{@to_date}" %>
+<!-- set page title end -->
 <div class="row">
  <div class="col-xs-3">
 
-	 <h3>Fitness Product  </h3>
+	 <h3>All Products Report  </h3>
 	 </div>
   <%= form_tag  url_for(:controller => 'sales_report', :action => "fitness_products_sold"), method: "get" do  %>
 
@@ -22,12 +25,9 @@
 
 <% end %>
 </div>
-<p>
-  <small><% @fitness_prods.each do |fit| %> <%= fit %> <% end %></small>
-</p>
-<hr>
 
- <%= render('order_line_wo_address') %>
+<hr>
+ <%= render('order_master_with_products') %>
 
 
 

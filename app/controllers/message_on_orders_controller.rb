@@ -8,11 +8,27 @@ class MessageOnOrdersController < ApplicationController
    @btn1 = "btn btn-default"
    @btn2 = "btn btn-default"
    @btn3 = "btn btn-default"
+   todaydate = (Date.current + 330.minutes)# Date.today
+   #30.days
+   from_date = todaydate
+   @to_date = todaydate.strftime("%Y-%m-%d")   #30.days
+   from_date = todaydate - 2.days
+   @from_date = (from_date).strftime("%Y-%m-%d")  
+   if params.has_key?(:from_date)
+       from_date =  Date.strptime(params[:from_date], "%Y-%m-%d")
+       @from_date = from_date.beginning_of_day - 330.minutes
+       @to_date = from_date.end_of_day - 330.minutes
+   end
+   if params.has_key?(:to_date)
+      to_date =  Date.strptime(params[:to_date], "%Y-%m-%d")
+      @to_date = to_date.end_of_day - 330.minutes
+   end
+   
     if params.has_key?(:status)
      status = params[:status]
      status = status.to_i
-
-      @message_on_orders = MessageOnOrder.where(message_status_id: status).order("updated_at DESC").limit(10000).paginate(:page => params[:page], :per_page => 100)
+     
+      @message_on_orders = MessageOnOrder.where("created_at >= ? and created_at <= ?", @from_date,@to_date).where(message_status_id: status, message_type_id: 10000).order("updated_at DESC").paginate(:page => params[:page], :per_page => 100)
       case status # a_variable is the variable we want to compare
         when 10000    #compare to 1
           @btn1 = "btn btn-info"
@@ -29,10 +45,66 @@ class MessageOnOrdersController < ApplicationController
 
     else
       #.limit(10000)
-    @message_on_orders = MessageOnOrder.all.order("updated_at DESC").limit(10000).paginate(:page => params[:page], :per_page => 100)
-    end
-  end
+    @message_on_orders = MessageOnOrder.where("created_at >= ? and created_at <= ?", @from_date,@to_date).where(message_type_id: 10000).order("updated_at DESC").paginate(:page => params[:page], :per_page => 100)
+     @message_details = "Order Messages"
 
+     @from_date = (from_date + 330.minutes).strftime("%Y-%m-%d") if from_date.present?
+     @to_date = (from_date + 330.minutes).strftime("%Y-%m-%d") if from_date.present?
+   
+    end
+    
+        @page_heading = "Messages between #{@from_date} and #{@to_date}"
+  end
+  
+  # GET /message_on_orders
+  # GET /message_on_orders.json
+  def payumoney
+   message_details = "Pay U Money Orders"
+   @btn1 = "btn btn-default"
+   @btn2 = "btn btn-default"
+   @btn3 = "btn btn-default"
+   todaydate = (Date.current + 330.minutes)# Date.today
+   #30.days
+   @to_date = todaydate.strftime("%Y-%m-%d")   #30.days
+   @from_date = (todaydate - 2.days).strftime("%Y-%m-%d")  
+   if params.has_key?(:from_date)
+       from_date =  Date.strptime(params[:from_date], "%Y-%m-%d")
+       @from_date = from_date #.to_date - 7.days #30.days
+       @to_date = from_date.to_date
+   end
+   if params.has_key?(:to_date)
+      @to_date =  Date.strptime(params[:to_date], "%Y-%m-%d")
+   end
+   
+    if params.has_key?(:status)
+     status = params[:status]
+     status = status.to_i
+     
+     
+     
+      @message_on_orders = MessageOnOrder.where("TRUNC(created_at) >= ? and TRUNC(created_at) <= ?", @from_date,@to_date).where(message_status_id: status, message_type_id: 10020).order("updated_at DESC").paginate(:page => params[:page], :per_page => 100)
+      case status # a_variable is the variable we want to compare
+        when 10000    #compare to 1
+          @btn1 = "btn btn-info"
+          @message_details = "#{message_details}: In Queue"
+        when 10002    #compare to 2
+          @btn2 = "btn btn-danger"
+           @message_details = "#{message_details}: Not delivered"
+        when 10004
+         @btn3 = "btn btn-success"
+          @message_details = "#{message_details}: Delivered"
+        else
+          @message_details = "#{message_details}: Wrong Selection made"
+      end
+
+    else
+      #.limit(10000)
+    @message_on_orders = MessageOnOrder.where(message_type_id: 10020).order("updated_at DESC").limit(10000).paginate(:page => params[:page], :per_page => 100)
+    end
+    @message_details = "Pay U Money Messages"
+    @page_heading = "Pay U Money Messages between #{@from_date} and #{@to_date}"
+  end
+  
   # GET /message_on_orders/1
   # GET /message_on_orders/1.json
   def show

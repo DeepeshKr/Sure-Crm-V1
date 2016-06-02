@@ -87,6 +87,10 @@ class ProductCostMastersController < ApplicationController
       end
     end
   end
+  
+  def product_cost_call_centre_commission
+    
+  end
   # GET /product_cost_masters/1
   # GET /product_cost_masters/1.json
   def show

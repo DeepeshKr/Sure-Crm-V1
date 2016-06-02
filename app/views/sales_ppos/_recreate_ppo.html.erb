@@ -1,0 +1,28 @@
+<!--  if @go_live == true % -->
+<div class="panel panel-danger">
+  <div class="panel-body">
+    <div class="row">
+   	 <div class="col-xs-10">
+   	 	<h4><%= @regenerate_ppo %></h3>
+   	 </div>
+      <%= form_tag  url_for(:controller => 'sales_ppos', :action => "re_create_ppo"), method: "post" do  %>
+
+	  <%= hidden_field_tag :product_variant_id, @product_variant_id %>
+	  <%= hidden_field_tag :campaign_playlist_id, @campaign_playlist_id %>
+	  <%= hidden_field_tag :from_date, @from_date %>
+	  <%= hidden_field_tag :to_date, @to_date %>
+	  <%= hidden_field_tag :return_url, @return_url %>
+
+          <div class="col-xs-2">
+            <%= submit_tag "Re Generate", name: nil, class: "btn btn-danger" %>
+          </div>
+      <% end %>
+
+    </div>
+  </div>
+   <div class="panel-footer">Warning this take time and regenerates database overwrites old data, please use this caution. After you click on Re-Generate, do check after a while to the results to show up by refreshing the page.
+   
+   <!-- = link_to ' page', @return_url, class: "btn btn-info btn-xs" -->
+   </div>
+</div>
+<!-- % end % -->

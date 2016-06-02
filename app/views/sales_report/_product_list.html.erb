@@ -8,6 +8,8 @@
      <th>No</th>
      <th>Product</th>
      <th>Prod</th>
+     <th>Pay U Orders</th>
+       <th>Pay U Value</th>
      <th>CC Orders</th>
        <th>CC Value</th>
       <th>COD Orders</th>
@@ -18,7 +20,7 @@
      </tr>
   </thead>
 <tbody>
-  <% @cc_orders, @cc_value, @cod_orders, @cod_value, @total_orders, @total_value = 0,0,0,0,0,0 %>
+  <% @pay_u_orders, @pay_u_value, @cc_orders, @cc_value, @cod_orders, @cod_value, @total_orders, @total_value = 0,0,0,0,0,0,0,0 %>
    <% main_product_list.each do |c| %>
    <tr>
    <td><%= @sno %></td>
@@ -29,6 +31,12 @@
 </td>
 <td>
    <%= c[:prod] %>
+</td>
+<td class="text-right">
+   <%= c[:payuorders] %><% @pay_u_orders +=  c[:payuorders] if c[:payuorders].present? %>
+</td>
+<td class="text-right">
+   <%= c[:payuvalue] %><% @pay_u_value += c[:payuvalue]  if c[:payuvalue].present?  %>
 </td>
 <td class="text-right">
    <%= c[:ccorders] %><% @cc_orders +=  c[:ccorders] %>
@@ -61,6 +69,8 @@
 
     <tr>
      <th colspan="3">Total</th>
+     <th class="text-right"><%= @pay_u_orders %></th>
+       <th class="text-right"><%= @pay_u_value %></th>
      <th class="text-right"><%= @cc_orders %></th>
        <th class="text-right"><%= @cc_value %></th>
       <th class="text-right"><%= @cod_orders %></th>

@@ -9,35 +9,83 @@ class ProductStockBook < ActiveRecord::Base
   def stock_book_summary from_date, to_date
     
     total_all_products = []  
-    all_products = ProductStockBook.where("TRUNC(stock_date) >= ? AND TRUNC(stock_date) <= ?", from_date, to_date) #.distinct(:list_barcode) # .where( @barcode)
+    product_stock = ProductStockBook.where("TRUNC(stock_date) >= ? AND TRUNC(stock_date) <= ?", from_date, to_date).distinct.pluck(:list_barcode) #.order(:productinfo) # # .where( @barcode)
+  all_products = ProductStockBook.where("TRUNC(stock_date) >= ? AND TRUNC(stock_date) <= ?", from_date, to_date)
   
-    all_products.each do |product|
+    product_stock.each do |product|
       product_stock_book = ProductStockBook.new 
-      product_stock_book.name = product.productinfo
-      product_stock_book.ext_prod_code = product.ext_prod_code
-      product_stock_book.list_barcode = product.list_barcode
+      product_stock_book.name = ProductStockBook.find_by_list_barcode(product).productinfo  #product.productinfo
+      product_stock_book.ext_prod_code = ProductStockBook.find_by_list_barcode(product).ext_prod_code
+      product_stock_book.list_barcode = product
       product_stock_book.from_date = from_date
       product_stock_book.to_date = to_date
-      product_stock_book.total_purchased_qty = all_products.where(list_barcode: product.list_barcode).sum(:purchased_qty) || 0.0
-      product_stock_book.total_purchased_value = all_products.where(list_barcode: product.list_barcode).sum(:purchased_value) || 0.0
-      product_stock_book.total_returned_retail_qty = all_products.where(list_barcode: product.list_barcode).sum(:returned_retail_qty) || 0.0
-      product_stock_book.total_returned_retail_value = all_products.where(list_barcode: product.list_barcode).sum(:returned_retail_value) || 0.0
-      product_stock_book.total_returned_wholesale_qty = all_products.where(list_barcode: product.list_barcode).sum(:returned_wholesale_qty) || 0.0
-      product_stock_book.total_returned_wholesale_value = all_products.where(list_barcode: product.list_barcode).sum(:returned_wholesale_value) || 0.0
-      product_stock_book.total_returned_others_qty = all_products.where(list_barcode: product.list_barcode).sum(:returned_others_qty) || 0.0
-      product_stock_book.total_returned_others_value = all_products.where(list_barcode: product.list_barcode).sum(:returned_others_value) || 0.0
-      product_stock_book.total_sold_retail_qty = all_products.where(list_barcode: product.list_barcode).sum(:sold_retail_qty) || 0.0
-      product_stock_book.total_sold_retail_value = all_products.where(list_barcode: product.list_barcode).sum(:sold_retail_value) || 0.0
-      product_stock_book.total_sold_wholesale = all_products.where(list_barcode: product.list_barcode).sum(:sold_wholesale) || 0.0
-      product_stock_book.total_sold_wholesale_value = all_products.where(list_barcode: product.list_barcode).sum(:sold_wholesale_value) || 0.0
-      product_stock_book.total_sold_branch_qty = all_products.where(list_barcode: product.list_barcode).sum(:sold_branch_qty) || 0.0
-      product_stock_book.total_sold_branch_value = all_products.where(list_barcode: product.list_barcode).sum(:sold_branch_value) || 0.0
-      product_stock_book.total_corrections_qty = all_products.where(list_barcode: product.list_barcode).sum(:corrections_qty) || 0.0
-      product_stock_book.total_corrections_value = all_products.where(list_barcode: product.list_barcode).sum(:corrections_value) || 0.0
+      product_stock_book.total_purchased_qty = 0
+      product_stock_book.total_purchased_value = 0
+      product_stock_book.total_returned_retail_qty = 0
+      product_stock_book.total_returned_retail_value = 0
+      product_stock_book.total_returned_wholesale_qty = 0
+      product_stock_book.total_returned_wholesale_value = 0
+      product_stock_book.total_returned_others_qty = 0
+      product_stock_book.total_returned_others_value = 0
+      product_stock_book.total_sold_retail_qty = 0
+      product_stock_book.total_sold_retail_value = 0
+      product_stock_book.total_sold_wholesale = 0
+      product_stock_book.total_sold_wholesale_value = 0
+      product_stock_book.total_sold_branch_qty = 0
+      product_stock_book.total_sold_branch_value = 0
+      product_stock_book.total_corrections_qty = 0
+      product_stock_book.total_corrections_value = 0
+ #
+ 
+      product_stock_book.total_purchased_qty = all_products.where(list_barcode: product).sum(:purchased_qty) || 0.0
+      product_stock_book.total_purchased_value = all_products.where(list_barcode: product).sum(:purchased_value) || 0.0
+      product_stock_book.total_returned_retail_qty = all_products.where(list_barcode: product).sum(:returned_retail_qty) || 0.0
+      product_stock_book.total_returned_retail_value = all_products.where(list_barcode: product).sum(:returned_retail_value) || 0.0
+      product_stock_book.total_returned_wholesale_qty = all_products.where(list_barcode: product).sum(:returned_wholesale_qty) || 0.0
+      product_stock_book.total_returned_wholesale_value = all_products.where(list_barcode: product).sum(:returned_wholesale_value) || 0.0
+      product_stock_book.total_returned_others_qty = all_products.where(list_barcode: product).sum(:returned_others_qty) || 0.0
+      product_stock_book.total_returned_others_value = all_products.where(list_barcode: product).sum(:returned_others_value) || 0.0
+      product_stock_book.total_sold_retail_qty = all_products.where(list_barcode: product).sum(:sold_retail_qty) || 0.0
+      product_stock_book.total_sold_retail_value = all_products.where(list_barcode: product).sum(:sold_retail_value) || 0.0
+      product_stock_book.total_sold_wholesale = all_products.where(list_barcode: product).sum(:sold_wholesale) || 0.0
+      product_stock_book.total_sold_wholesale_value = all_products.where(list_barcode: product).sum(:sold_wholesale_value) || 0.0
+      product_stock_book.total_sold_branch_qty = all_products.where(list_barcode: product).sum(:sold_branch_qty) || 0.0
+      product_stock_book.total_sold_branch_value = all_products.where(list_barcode: product).sum(:sold_branch_value) || 0.0
+      product_stock_book.total_corrections_qty = all_products.where(list_barcode: product).sum(:corrections_qty) || 0.0
+      product_stock_book.total_corrections_value = all_products.where(list_barcode: product).sum(:corrections_value) || 0.0
+
     
-      total_all_products << product_stock_book
+      if (product_stock_book.total_purchased_qty == 0 
+        && product_stock_book.total_purchased_value == 0 
+        && product_stock_book.total_returned_retail_qty == 0 
+        && product_stock_book.total_returned_retail_value == 0 
+        && product_stock_book.total_returned_wholesale_qty == 0 
+        && product_stock_book.total_returned_wholesale_value == 0 
+        && product_stock_book.total_returned_others_qty == 0 
+        && product_stock_book.total_returned_others_value == 0 
+        && product_stock_book.total_sold_retail_qty == 0 
+        && product_stock_book.total_sold_retail_value == 0 
+        && product_stock_book.total_sold_wholesale == 0 
+        && product_stock_book.total_sold_wholesale_value == 0 
+        && product_stock_book.total_sold_branch_qty == 0 
+        && product_stock_book.total_sold_branch_value == 0 
+        && product_stock_book.total_corrections_qty == 0 
+        && product_stock_book.total_corrections_value  == 0) 
+         
+         next
+           
+       else
+         
+         total_all_products << product_stock_book
+       
+         
+       end
+      
+      
     end  
-  
+    
+    total_all_products= total_all_products.sort_by{|c| c[:name]}
+    
     return total_all_products
   end
   
@@ -47,10 +95,10 @@ class ProductStockBook < ActiveRecord::Base
 	  	if product.present?
 	  		product.first.name + " (" + self.list_barcode + ")"
 	  	else
-	  		"<span style=color:violet;font-weight: normal; font-size:11px;>No barcode found in Product (Sell) List </span>"
+	  		"No barcode found in Product (Sell) List: #{self.list_barcode}"
 	  	end
   	else
-  		"<span style=color:violet;font-weight: normal; font-size:11px;>No barcode found in Product stock </span>"
+  		"No barcode found"
   	end
   	
      

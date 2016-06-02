@@ -1,0 +1,63 @@
+<div class="panel panel-warning">
+  <div class="panel-heading">
+    <h3 class="panel-title">Missed Orders for date: <%= @missed_for_date %></h3>
+  </div>
+
+<% if @missed_orders.present? %>
+<table class="table table-hover table-bordered">
+  <thead>
+  <tr>
+	<th>S No</th>
+    <th>Ref No</th>
+    <th>Order date</th>
+	<th>Channel</th>
+    <th>City</th>
+    <th>State</th>
+    <th>Product</th>
+    <th>Total</th>
+  </tr>
+  </thead>
+
+  <tbody>
+  <% @sno = 1 %> <% totalnos = 0 %> <% totalvalue = 0 %>
+    <% @missed_orders.each do |ord| %>
+    <tr>
+	<td><%= @sno %></td>
+    <td><%= ord.external_order_no %> (<small>Ref No: <%= ord.id %></small>) </td>
+    <td> <%= (ord.orderdate + 330.minutes).strftime('%d-%b-%Y') %> </td>
+	<td> <%= ord.medium.name  if ord.medium %></td>
+    <td>
+      <%= ord.customer_address.city  if ord.customer_address %>
+      <%= ord.customer_address.pincode  if ord.customer_address %>
+    </td>
+    <td>
+      <%= ord.customer_address.state  if ord.customer_address %>
+    </td>
+    <td>
+		<ol>
+		<% ord.order_line.each do |orl| %>
+		<li><%= orl.product_variant.name  if orl.product_variant %></li>
+		<% end %>
+		<ol>
+	</td>
+     <td class="text-right"> <%= ord.subtotal %> <% totalvalue += ord.subtotal %></td>
+
+
+      </tr>
+       <% @sno += 1 %>
+
+    <% end %>
+	
+  </tbody>
+  <thead>
+  <tr>
+	<th colspan="2">No of orders</th>
+	<th class="text-right"><%= @sno - 1 %> </th>
+    <th colspan="4">Total</th>
+	<th class="text-right"><%= totalvalue %> </th>
+  </tr>
+  </thead>
+</table>
+
+<% end %>
+</div>

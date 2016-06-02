@@ -1,3 +1,7 @@
+<!-- set page title start -->
+<% title "Campaign #{@campaign.id} Orders" %>
+<!-- set page title end -->
+
 <p id="notice"><%= notice %></p>
 
 <h1>
@@ -14,9 +18,6 @@
 		 <strong>Media:</strong>
   <%= @campaign.medium.mediainfo %>
 	</div>
-
-
-
 	<div class="col-xs-2">
 	 <strong>DNIS:</strong>
   <%= @campaign.medium.dnis if @campaign.medium %>
@@ -34,7 +35,8 @@
 
 <hr />
 <%= render partial: "campaign_playlists/campaign_playlist" %>
-
+<hr>
+<% if @add_more == true %>
 <div id="data-entry-tabs">
 <hr />
 <h3>Add New Campaign Playlist </h3>
@@ -87,6 +89,7 @@
 </div>
  <!-- Nav tabs end -->
 </div>
+<% end %>
 
 
 <script>

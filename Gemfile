@@ -46,7 +46,7 @@ gem 'devise', github: 'plataformatec/devise'
 # Use SCSS for stylesheets
 #gem 'sass-rails', '~> 4.0.3'
 # Use boostrap for styling
-gem 'bootstrap-sass',       '3.2.0.0'
+gem 'bootstrap-sass', '3.2.0.0'
 gem 'bootstrap-datepicker-rails'
 #Rails Bootstrap Forms for styling all bootstrap forms
 gem 'bootstrap_form'
@@ -60,7 +60,18 @@ gem 'kaminari'
 #what you see if what you get form
 gem 'bootsy'
 
+# background worker process
+gem 'delayed_job_active_record'
+# background worker web interface see routes
+gem "delayed_job_web"
+gem 'delayed-web'
 
+gem 'resque'
+gem 'resque-web', require: 'resque_web'
+# gem install resque-cleaner
+gem 'resque-cleaner'
+
+gem "daemons"
 #date picker
 #gem 'jquery-ui-rails'
 #https://github.com/joliss/jquery-ui-rails

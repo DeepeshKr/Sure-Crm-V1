@@ -7,7 +7,7 @@
 		<h3><%= @campaign_playlist.product_variant.name if @campaign_playlist.product_variant  %> 
 		<small><%= @campaign_playlist.ref_name %> </small>
 		<small>PV: <%= @campaign_playlist.productvariantid %> </small>
-				<small>Med: <%= @campaign_playlist.campaign.mediumid %> </small>
+		<small>Med: <%= @campaign_playlist.campaign.mediumid %> </small>
 		</h3>
 	</div>
 	<div class="col-xs-4">
@@ -18,6 +18,11 @@
 		<%= @campaign_playlist.start_sec.to_s.rjust(2, '0') %>
 		</p>
 	</div>
+<div class="row">
+	<div class="col-xs-10 col-xs-offset-2">
+		<p> <%= @showing_results_for %> </p>
+	</div>	
+</div>		
 </div>
 
 </div>
@@ -75,9 +80,17 @@
 
 </div>
 </div>
-<h4>Appendix</h4>
+
+<div class="panel panel-primary">
+  <div class="panel-heading"><h3 class="panel-title">Sales PPO Master Data</h3></div>
+	<%= render 'sales_ppo_mini_list' %>
+</div>
+
+<%= render partial: 'recreate_ppo'  %>
+<!-- :locals => {:order_lines =>  @order_lines_common, 
+	order_description: "Common Upsell"}-->	
 <hr>
-<%= render 'sales_ppo_mini_list' %>
+<h4>Appendix</h4>
 <hr>
 <%= render 'order_masters' %>
 <hr>

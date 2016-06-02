@@ -234,7 +234,43 @@ class OrderMastersController < ApplicationController
 
     end
   end
+  
+  def review
+    if params.has_key?(:order_id)
+     @order_id = params[:order_id]
+     @order_master = OrderMaster.find(@order_id)
+     
+     @order_lines_regular = OrderLine.where(orderid: @order_id)
+      .joins(:product_variant)
+      .where('PRODUCT_VARIANTS.product_sell_type_id = ?', 10000)
 
+   @order_lines_basic = OrderLine.where(orderid: @order_id)
+   .joins(:product_variant)
+   .where('product_variants.product_sell_type_id = ?', 10040)
+
+   @order_lines_common = OrderLine.where(orderid: @order_id)
+   .joins(:product_variant)
+   .where('product_variants.product_sell_type_id = ?', 10001)
+
+   @order_lines_free = OrderLine.where(orderid: @order_id)
+   .joins(:product_variant)
+   .where('product_variants.product_sell_type_id = ?', 10060)
+   
+     #sms
+     @message_on_orders = MessageOnOrder.where(message_type_id: 10000, order_id: @order_id).order("id DESC")
+    
+     #payumoney
+     @message_on_pay_u_orders = MessageOnOrder.where(message_type_id: 10020, order_id: @order_id)
+     @payumoney_details = PayumoneyDetail.where(orderid: @order_id)
+     #ppo
+     @sales_ppos = SalesPpo.where(:order_id => @order_id).order("start_time")
+     
+   else
+     return detailedordersearch_path
+   end
+     
+  end
+  
   def new
     @order_master = OrderMaster.new
     respond_with(@order_master)

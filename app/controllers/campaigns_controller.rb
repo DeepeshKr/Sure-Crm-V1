@@ -50,7 +50,25 @@ class CampaignsController < ApplicationController
     # flash[:notice] = "Updated of #{records} please continue till updated records become ZERO! last updated is #{all_campaign_playlist.last.id}"
 
     @for_date = @campaign.startdate
+    @add_more = true
       @campaign_playlists = CampaignPlaylist.where("campaignid = ?", params[:id]).order(:day, :start_hr, :start_min, :start_sec)
+      
+      if params.has_key?(:only_active)
+        if params[:only_active] == "true"
+          @campaign_playlists = @campaign_playlists.where(list_status_id: 10000)
+          @add_more = false
+           @missed_for_date =  @campaign_playlists.first.for_date.strftime("%Y-%m-%d")
+           #(330.minutes).from_now.for_date.strftime("%Y-%m-%d")
+           # campaign_playlists/order_master_with_products
+          @missed_orders = OrderMaster.where("TRUNC(orderdate) = ?", @missed_for_date)
+          .where('ORDER_STATUS_MASTER_ID > 10002')
+          .where("campaign_playlist_id IS NULL")
+          .joins(:medium).where("media.media_group_id = 10000")
+          
+          
+        end
+      end
+      
        @campaign_id = params[:id]
 
               @begin_hr = 0
@@ -136,7 +154,44 @@ class CampaignsController < ApplicationController
     @campaign.destroy
     respond_with(@campaign)
   end
+  
+  def hbn_show_all_active
+    recent_campaigns
+    proddropdown
 
+    
+    @for_date = @campaign.startdate
+      @campaign_playlists = CampaignPlaylist.where("campaignid = ?", params[:id], list_status_id: 1000).order(:day, :start_hr, :start_min, :start_sec)
+       @campaign_id = params[:id]
+
+              @begin_hr = 0
+              @begin_min = 0
+              @begin_sec = 0
+              @begin_frame = 0
+               @day = 0
+        if @campaign_playlists.present?
+                @begin_hr = @campaign_playlists.last.end_hr
+                @begin_min = @campaign_playlists.last.end_min
+                @begin_sec = @campaign_playlists.last.end_sec
+                @begin_frame = @campaign_playlists.last.frames
+                 @day = @campaign_playlists.last.day
+        end
+     
+     @campaignid = params[:id]
+     #check if media belongs to HBN Group
+     media_check = Medium.find(@campaign.mediumid)
+     if media_check.media_group_id == 10000
+        @hbnchecked = true
+        @pvtchannelchecked = false
+        @media_name = "HBN"
+     else
+        @hbnchecked = false
+        @pvtchannelchecked = true
+        @media_name = "Pvt Channel"
+     end
+    
+  end
+  
   private
     def dropdown
      @medialist = Medium.where('media_commision_id = ?',  10000).where('media_group_id IS NULL or media_group_id <> 10000 or id = 11200').order('name')

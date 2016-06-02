@@ -11,74 +11,112 @@
       </div>
   </div>
 
-    <table class="table table-striped table-hover">
-      <thead>
-        <tr>
-          <th>Category</th>
-          <th class="text-right">Nos</th>
-          <th class="text-right">Value</th>
-          <th class="text-right">Earnings</th>
-        </tr>
-      </thead>
-      <tr>
-        <td><strong>Processed</strong></td>
-        <td class="text-right">
-          <%= number_with_delimiter(employeesales.all_processed_nos, :delimiter => ',') %>
-        </td>
-        <td class="text-right">
-          <%= number_with_delimiter(employeesales.all_processed_value, :delimiter => ',') %>
-        </td>
-        <td class="text-right">
-          <%= number_with_delimiter(employeesales.all_processed_earnings, :delimiter => ',') %>
-        </td>
-      </tr>
-      <tr>
-        <td><strong>Shipped</strong></td>
-        <td class="text-right">
-          <%= number_with_delimiter(employeesales.all_shipped_nos, :delimiter => ',') %>
-        </td>
-        <td class="text-right">
-          <%= number_with_delimiter(employeesales.all_shipped_value, :delimiter => ',') %>
-        </td>
-        <td class="text-right">
-          <%= number_with_delimiter(employeesales.all_shipped_earnings, :delimiter => ',') %>
-        </td>
-      </tr>
-      <tr>
-        <td><strong>Cancelled</strong></td>
-        <td class="text-right">
-          <%= number_with_delimiter(employeesales.all_cancelled_nos, :delimiter => ',') %>
-        </td>
-        <td class="text-right">
-          <%= number_with_delimiter(employeesales.all_cancelled_value, :delimiter => ',') %>
-        </td>
-        <td class="text-right">
-          <%= number_with_delimiter(employeesales.all_cancelled_earnings, :delimiter => ',') %>
-        </td>
-      </tr>
-      <tr>
-        <td><strong>Returned</strong></td>
-        <td class="text-right">
-          <%= number_with_delimiter(employeesales.all_returned_nos, :delimiter => ',') %>
-        </td>
-        <td class="text-right">
-          <%= number_with_delimiter(employeesales.all_returned_value, :delimiter => ',') %>
-        </td>
-        <td class="text-right">
-          <%= number_with_delimiter(employeesales.all_returned_earnings, :delimiter => ',') %>
-        </td>
-      </tr>
-      <tr>
-        <td><strong>Paid</strong></td>
-        <td class="text-right">
-          <%= number_with_delimiter(employeesales.all_paid_nos, :delimiter => ',') %>
-        </td>
-        <td class="text-right">
-          <%= number_with_delimiter(employeesales.all_paid_value, :delimiter => ',') %>
-        </td>
-        <td class="text-right">
-          <%= number_with_delimiter(employeesales.all_paid_earnings, :delimiter => ',') %>
-        </td>
-      </tr>
-    </table>
+<table class="table table-striped table-hover table-bordered">
+  <thead>
+     <tr>
+        <th rowspan="2">Desc</th>
+        <th colspan="3" class="text-center">All</th>
+		<th colspan="3" class="text-center">Basic</th>
+		<th colspan="3" class="text-center">Upsell</th>
+    </tr>
+    <tr>
+      <th class="text-right">Nos</th>
+      <th class="text-right">Value</th>
+      <th class="text-right">Earnings</th>
+	  
+      <th class="text-right">Nos</th>
+      <th class="text-right">Value</th>
+      <th class="text-right">Earnings</th>
+      
+	  <th class="text-right">Nos</th>
+      <th class="text-right">Value</th>
+      <th class="text-right">Earnings</th>
+    </tr>
+  </thead>
+  <tr>
+    <td><strong>Total</strong></td>
+    <td class="text-right"><%= number_with_delimiter(employeesales.all_processed_nos, :delimiter => ',') %></td>
+    <td class="text-right"><%= number_with_delimiter(employeesales.all_processed_value, :delimiter => ',') %></td>
+    <td class="text-right"><%= number_with_delimiter(employeesales.all_processed_earnings, :delimiter => ',') %></td>
+	
+    <td class="text-right"><%= number_with_delimiter(employeesales.basic_processed_nos, :delimiter => ',') %></td>
+    <td class="text-right"><%= number_with_delimiter(employeesales.basic_processed_value, :delimiter => ',') %></td>
+    <td class="text-right"><%= number_with_delimiter(employeesales.basic_processed_earnings, :delimiter => ',') %></td>
+	
+    <td class="text-right"><%= number_with_delimiter(employeesales.upsell_processed_nos, :delimiter => ',') %></td>
+    <td class="text-right"><%= number_with_delimiter(employeesales.upsell_processed_value, :delimiter => ',') %></td>
+    <td class="text-right"><%= number_with_delimiter(employeesales.upsell_processed_earnings, :delimiter => ',') %></td>
+  </tr>
+  <tr>
+    <td><strong>Shipped</strong></td>
+    <td class="text-right"><%= number_with_delimiter(employeesales.all_shipped_nos, :delimiter => ',') %></td>
+    <td class="text-right"><%= number_with_delimiter(employeesales.all_shipped_value, :delimiter => ',') %></td>
+    <td class="text-right"><%= number_with_delimiter(employeesales.all_shipped_earnings, :delimiter => ',') %></td>
+	
+    <td class="text-right"><%= number_with_delimiter(employeesales.basic_shipped_nos, :delimiter => ',') %></td>
+    <td class="text-right"><%= number_with_delimiter(employeesales.basic_shipped_value, :delimiter => ',') %></td>
+    <td class="text-right"><%= number_with_delimiter(employeesales.basic_shipped_earnings, :delimiter => ',') %></td>
+	
+    <td class="text-right"><%= number_with_delimiter(employeesales.upsell_shipped_nos, :delimiter => ',') %></td>
+    <td class="text-right"><%= number_with_delimiter(employeesales.upsell_shipped_value, :delimiter => ',') %></td>
+    <td class="text-right"><%= number_with_delimiter(employeesales.upsell_shipped_earnings, :delimiter => ',') %></td>
+	
+  </tr>
+  <tr>
+    <td><strong>Cancelled</strong></td>
+    <td class="text-right"><%= number_with_delimiter(employeesales.all_cancelled_nos, :delimiter => ',') %></td>
+    <td class="text-right"><%= number_with_delimiter(employeesales.all_cancelled_value, :delimiter => ',') %></td>
+    <td class="text-right"><%= number_with_delimiter(employeesales.all_cancelled_earnings, :delimiter => ',') %></td>
+	
+    <td class="text-right"><%= number_with_delimiter(employeesales.basic_cancelled_nos, :delimiter => ',') %></td>
+    <td class="text-right"><%= number_with_delimiter(employeesales.basic_cancelled_value, :delimiter => ',') %></td>
+    <td class="text-right"><%= number_with_delimiter(employeesales.basic_cancelled_earnings, :delimiter => ',') %></td>
+	
+    <td class="text-right"><%= number_with_delimiter(employeesales.upsell_cancelled_nos, :delimiter => ',') %></td>
+    <td class="text-right"><%= number_with_delimiter(employeesales.upsell_cancelled_value, :delimiter => ',') %></td>
+    <td class="text-right"><%= number_with_delimiter(employeesales.upsell_cancelled_earnings, :delimiter => ',') %></td>
+  </tr>
+  <tr>
+    <td><strong>Returned</strong></td>
+    <td class="text-right"><%= number_with_delimiter(employeesales.all_returned_nos, :delimiter => ',') %></td>
+    <td class="text-right"><%= number_with_delimiter(employeesales.all_returned_value, :delimiter => ',') %></td>
+    <td class="text-right"><%= number_with_delimiter(employeesales.all_returned_earnings, :delimiter => ',') %></td>
+	
+    <td class="text-right"><%= number_with_delimiter(employeesales.basic_returned_nos, :delimiter => ',') %></td>
+    <td class="text-right"><%= number_with_delimiter(employeesales.basic_returned_value, :delimiter => ',') %></td>
+    <td class="text-right"><%= number_with_delimiter(employeesales.basic_returned_earnings, :delimiter => ',') %></td>
+	
+    <td class="text-right"><%= number_with_delimiter(employeesales.upsell_returned_nos, :delimiter => ',') %></td>
+    <td class="text-right"><%= number_with_delimiter(employeesales.upsell_returned_value, :delimiter => ',') %></td>
+    <td class="text-right"><%= number_with_delimiter(employeesales.upsell_returned_earnings, :delimiter => ',') %></td>
+  </tr>
+  <tr>
+    <td><strong>Paid</strong></td>
+    <td class="text-right"><%= number_with_delimiter(employeesales.all_paid_nos, :delimiter => ',') %></td>
+    <td class="text-right"><%= number_with_delimiter(employeesales.all_paid_value, :delimiter => ',') %></td>
+    <td class="text-right"><%= number_with_delimiter(employeesales.all_paid_earnings, :delimiter => ',') %></td>
+	
+    <td class="text-right"><%= number_with_delimiter(employeesales.basic_paid_nos, :delimiter => ',') %></td>
+    <td class="text-right"><%= number_with_delimiter(employeesales.basic_paid_value, :delimiter => ',') %></td>
+    <td class="text-right"><%= number_with_delimiter(employeesales.basic_paid_earnings, :delimiter => ',') %></td>
+	
+    <td class="text-right"><%= number_with_delimiter(employeesales.upsell_paid_nos, :delimiter => ',') %></td>
+    <td class="text-right"><%= number_with_delimiter(employeesales.upsell_paid_value, :delimiter => ',') %></td>
+    <td class="text-right"><%= number_with_delimiter(employeesales.upsell_paid_earnings, :delimiter => ',') %></td>
+  </tr>
+  <tr>
+    <td><strong>Actual</strong></td>
+    <td class="text-right"><%= number_with_delimiter(employeesales.all_actual_nos, :delimiter => ',') %></td>
+    <td class="text-right"><%= number_with_delimiter(employeesales.all_actual_value, :delimiter => ',') %></td>
+    <td class="text-right"><%= number_with_delimiter(employeesales.all_actual_earnings, :delimiter => ',') %></td>
+	
+    <td class="text-right"><%= number_with_delimiter(employeesales.basic_actual_nos, :delimiter => ',') %></td>
+    <td class="text-right"><%= number_with_delimiter(employeesales.basic_actual_value, :delimiter => ',') %></td>
+    <td class="text-right"><%= number_with_delimiter(employeesales.basic_actual_earnings, :delimiter => ',') %></td>
+	
+    <td class="text-right"><%= number_with_delimiter(employeesales.upsell_actual_nos, :delimiter => ',') %></td>
+    <td class="text-right"><%= number_with_delimiter(employeesales.upsell_actual_value, :delimiter => ',') %></td>
+    <td class="text-right"><%= number_with_delimiter(employeesales.upsell_actual_earnings, :delimiter => ',') %></td>
+  </tr>
+</table>
 </div>

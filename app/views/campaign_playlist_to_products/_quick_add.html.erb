@@ -1,0 +1,34 @@
+<div class="panel panel-primary">
+ <div class="panel-heading">  
+	 <div class="row">
+		<div class="col-xs-8"></div>
+		<div class="col-xs-4">	 
+	 	   	<button class="btn btn-info btn-sm" type="button" data-toggle="collapse" 				data-target="#campaign_to_product" aria-expanded="false" aria-controls="campaign_to_product">
+ 			   	Add More Products
+			</button></div>
+	</div>
+</div>
+
+<div class="panel-body">
+	<div class="collapse" id="campaign_to_product">
+<div class"row">
+	<%= simple_form_for(@campaign_playlist_to_product) do |f| %>
+		<%= f.error_notification %>
+		<%= f.hidden_field :campaign_playlist_id %>
+		<div class="col-xs-8">
+		<!-- = f.input :product_variant_id -->
+			<%= f.input :product_variant_id,:collection => @product_variants,:label_method => :productinfo,:value_method => :id,:label => false ,:include_blank => false %>
+		</div>
+		<div class="col-xs-4">
+			<%= f.button :submit, "Add Product", :class => "btn btn-info btn-sm"%>
+		</div>
+	<% end %>
+</div>
+</div>
+<div class"row">
+	<div class="col-xs-12">
+ <%= render partial: 'campaign_playlist_to_products/quick_list'  %>
+	</div>
+</div>
+</div>
+</div>

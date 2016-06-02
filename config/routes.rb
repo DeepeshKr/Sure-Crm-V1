@@ -1,16 +1,48 @@
 Rails.application.routes.draw do
+  
+ 
+  resources :campaign_playlist_to_products
+  resources :sales_ppo_defaults
+  get 'sales_reports_team' => 'sales_report_team#index'
+  get 'sales_report_team/show_wise'
+  get 'sales_report_team/agent_order'
+  get 'pay_u_orders_sales_report_team' => 'sales_report_team#pay_u_orders'
+  get 'sales_report_team/pay_u_orders'
+  get 'agent_common_upsell_order_sales_report_team' => 'sales_report_team#agent_common_upsell_order'
+  get 'sales_report_team/agent_common_upsell_order'
+  get 'agent_basic_upsell_order_sales_report_team' => 'sales_report_team#agent_basic_upsell_order'
+  get 'sales_report_team/agent_basic_upsell_order'
 
+ # require 'resque/server'
+  require 'resque/server'
+  require "resque_web"
+  # Of course, you need to substitute your application name here, a block
+  # like this probably already exists.
+  
+  mount Resque::Server.new, at: "/resque"
+  
+  
+  mount ResqueWeb::Engine => "/resque_web"
+
+  
+ # mount Delayed::Web::Engine, at: '/jobs'
   resources :return_rates
   resources :list_of_servers
   resources :daily_task_logs
   resources :daily_tasks
   resources :cable_opertor_comms
+  
+  match "/delayed_job" => DelayedJobWeb, :anchor => false, via: [:get, :post]
 
   get "select_two" => 'return_rates#demo'
   get 'cashsale/index'
   get 'cashsale/search'
   get 'cashsale/details'
-
+  
+  get 'states/edit_all'
+  post 'states_update_all' => 'states#update_all'
+  post 'states/update_all'
+  
   resources :registration_statuses
 
   resources :fat_to_fit_email_statuses
@@ -23,29 +55,22 @@ Rails.application.routes.draw do
   resources :courier_lists
   resources :distributor_upload_orders
 
-get "cinergy_xml" => "campaign_playlists#cinergy_xml"
-get "recent_missed_orders" => 'distributor_missed_orders#recent'
-get "hbn_channels" => "media#all_hbn"
-post "send_demo_message" => 'message_on_orders#send_demo_message'
-post 'distributor_upload_orders/switch_on'
-post 'distributor_upload_orders/switch_off'
+  get "cinergy_xml" => "campaign_playlists#cinergy_xml"
+  get "recent_missed_orders" => 'distributor_missed_orders#recent'
+  get "hbn_channels" => "media#all_hbn"
+  post "send_demo_message" => 'message_on_orders#send_demo_message'
+  post 'distributor_upload_orders/switch_on'
+  post 'distributor_upload_orders/switch_off'
 
   get 'new_dept/list'
-
   get 'new_dept/search'
-
   get 'new_dept/details'
 
   resources :distributor_missed_orders
-
   resources :distributor_missed_order_types
-
   resources :order_final_statuses
-
   resources :order_list_miles
-
   resources :vpp_deal_trans
-
   resources :distributor_stock_ledger_types
 
   get 'deal_tran/list'
@@ -80,7 +105,9 @@ post 'distributor_upload_orders/switch_off'
   resources :message_types
 
   resources :message_statuses
-
+  
+  get 'message_on_orders/payumoney'
+  get 'message_on_orders_payumoney' => 'message_on_orders#payumoney'
   resources :message_on_orders
 
   resources :product_cost_masters
@@ -115,6 +142,8 @@ post 'distributor_upload_orders/switch_off'
   resources :order_updates
   
   #new sales ppo
+  post 'sales_ppos/re_create_ppo'
+    
   get 'sales_ppos/index'
   get 'sales_ppos' => 'sales_ppos#index'
  
@@ -193,8 +222,13 @@ post 'distributor_upload_orders/switch_off'
 
   devise_for :logins
 #sales report
+get 'sales_report_team_not_completed' => 'sales_report_team#not_completed'
+get 'sales_report_team/not_completed'
+
   get 'sales_reports' => 'sales_report#index'
   get 'sales_report/index'
+  get 'not_completed' => 'sales_report#not_completed'
+  get 'sales_report/not_completed'
   get 'sales_report' => 'sales_report#summary'
   get 'sales_report/summary'
   get 'sales_report/hourly'
@@ -205,6 +239,9 @@ post 'distributor_upload_orders/switch_off'
   get 'pincode_orders' => 'sales_report#pincode_orders'
   get 'sales_report/daily'
   get 'daily_report' => 'sales_report#daily'
+  
+  get 'sales_report/pay_u_orders'
+  get 'pay_u_orders_sales_report' => 'sales_report#pay_u_orders'
 
   ################3
   # redundant reports
@@ -237,7 +274,7 @@ post 'distributor_upload_orders/switch_off'
 
 
   get 'sales_report/sales_incentives'
-  get 'sales_incentives' => 'sales_report#sales_incentives'
+  get 'sales_report_sales_incentives' => 'sales_report#sales_incentives'
   get 'sales_report/disposition_report'
   get 'disposition_report' => 'sales_report#disposition_report'
 
@@ -279,6 +316,8 @@ post 'distributor_upload_orders/switch_off'
   # get 'custordersearch' => 'custdetails#search'
   get 'custordersearch' => 'order_masters#search'
   get 'detailedordersearch' => 'order_masters#detailed_search'
+  get 'order_masters_review' => 'order_masters#review'
+  get 'order_masters/review'
   get 'custdetails/details'
   get 'newwlsdet/list'
   get 'newwlsdet/search'
@@ -302,8 +341,20 @@ post 'distributor_upload_orders/switch_off'
   get 'stockbook' => 'product_stock_books#summary'
   get 'product_stock_books/summary'
   get 'stockbook_details' => 'product_stock_books#stockbook_details'
+  # sales team
+  get 'employees/sales_team'
+  get 'sales_team' => 'employees#sales_team'
+  # campaign playlist search
+  get 'campaign_playlists/search'
+  get 'campaign_playlists_search' => 'campaign_playlists#search'
+  # pay u money details search
+  get 'payumoney_details/index'
+  get 'payumoney_details' => 'payumoney_details#index'
+  get 'payumoney_details/search'
+  get 'payumoney_details_search' => 'payumoney_details#search'
+  
 
-
+  
    resources :india_city_lists
   resources :india_pincode_lists
 
@@ -529,9 +580,9 @@ post 'distributor_upload_orders/switch_off'
     delete 'deleteproductstock' => 'product_stocks#destroy'
     # get 'deleteproductstock' => 'product_stocks#deletestock'
     delete 'deleteproductstockadjust' => 'product_stock_adjusts#delete'
+    
 
-
-
+     resources :sales_incentives
     resources :user_roles
     resources :customer_order_lists
 
@@ -554,7 +605,8 @@ mount Upmin::Engine => '/admin'
 
   #root             'product#home'
   root 'project#home'
-  get 'oldhelp'    => 'product#help'
+  get 'oldhelp'    => 'project#help'
+  get 'log'    => 'project#help'
   get 'oldabout'   => 'product#about'
   get 'oldcontact' => 'product#contact'
    get 'project/longtable'

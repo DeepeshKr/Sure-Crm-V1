@@ -1,0 +1,19 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @campaign_playlist_to_product.name %>
+</p>
+
+<p>
+  <strong>Campaign playlist:</strong>
+  <%= @campaign_playlist_to_product.campaign_playlist_id %>
+</p>
+
+<p>
+  <strong>Product variant:</strong>
+  <%= @campaign_playlist_to_product.product_variant_id %>
+</p>
+
+<%= link_to 'Edit', edit_campaign_playlist_to_product_path(@campaign_playlist_to_product) %> |
+<%= link_to 'Back', campaign_playlist_to_products_path %>
