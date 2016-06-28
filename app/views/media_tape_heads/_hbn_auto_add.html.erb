@@ -26,21 +26,21 @@
  <small>  Frame </small>
  </div>
  <div class="col-xs-8">
-		<%= collection_select(nil, :product_variant_id,  @productvariantlist,  :id, :name, {:prompt   => "Select a Product Variant"}, {:id => 'variants_select', :class => "form-control"}) %>	</div>
+		<%= collection_select(nil, :product_variant_id,  @productvariantlist,  :id, :name, {:prompt   => "Select a Product Variant"}, {:id => 'variants_select_auto', :class => "form-control"}) %>	</div>
 </div>
 <br/>
 <div class="row">
 	<div class="col-xs-8">
-		<%= collection_select(nil, :media_tape_head_id, @media_tape_head_list, :id, :name, {:prompt   => "Select a Media Tape Head"}, {:id => 'tapes_select', :class => "form-control"}) %>
+		<%= collection_select(nil, :media_tape_head_id, @media_tape_head_list, :id, :name, {:prompt   => "Select a Media Tape Head"}, {:id => 'tapes_select_auto', :class => "form-control"}) %>
 
 	</div>
   <div class="col-xs-4">
-
-    <%=  collection_select(nil, :media_cost, @hbn_media_cost_master, :total_cost, :cost_segment, { :prompt => '-- Select Media Cost --'}, {:class => "form-control", :required => true }) %>
+		<%= label_tag "Auto Pricing (Test)" %>
+    <!-- % =  collection_select(nil, :media_cost, @hbn_media_cost_master, :total_cost, :cost_segment, { :prompt => '-- Select Media Cost --'}, {:class => "form-control", :required => true }) % -->
   </div>
 </div>
 <hr>
-<div id='tape_list'>
+<div id='tape_list_auto'>
 
 
 </div>

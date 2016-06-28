@@ -1,0 +1,83 @@
+<!-- set page title start -->
+<% title "Campaign Playlist #{@campaign_playlist_id} Orders" %>
+<!-- set page title end -->
+<p id="notice"><%= notice %></p>
+
+
+<% if @campaign_playlist_id.present? %>
+<div class="row">
+	<div class="col-xs-6">
+		<p><strong>Campaign: <%= @campaign_playlist.campaign.name if @campaign_playlist.campaign %></strong></p>
+		<h3> <%= @campaign_playlist.product_variant.name %></h3>
+	</div>
+<div class="col-xs-6">
+<strong>Start time:</strong> <%= @campaign_playlist.starttime %> &nbsp;
+ <strong>End time:</strong> <%= @campaign_playlist.endtime %>
+ <p>
+  <strong>Product Advertised:</strong>
+  <%= @campaign_playlist.product_variant.name if @campaign_playlist.product_variant %>
+</p>
+<p class="lead">Duration: <%= @campaign_playlist.duration_secs if @campaign_playlist.duration_secs.present? %> </p>
+</div>
+</div>
+<div class="row">
+  <div class="col-xs-4">
+    <%= link_to 'Back', url_for(:back), class: "btn btn-info btn-xs" %>
+  </div>
+</div>
+
+<div class="panel panel-info">
+ <div class="panel-heading">
+    <h3 class="panel-title">Update Media Cost <%= @campaign_playlist.cost %> and total group cost <%= @campaign_playlist.group_total_cost if @campaign_playlist.group_total_cost.present? %> </h3>  </div>
+     <div class="panel-body">
+    <%= render partial: 'campaign_playlists/update_media_cost'  %>
+  </div>
+<!-- list of products is included in the above partial -->
+ <div class="panel-footer">
+   <p>This cost shown is based on auto calcuated info from the app. The original cost as is currently in the playlist is <%= @campaign_playlist.cost.round(2) %> and new revised cost suggested is <%= @auto_calculated_price.round(2) %>. You can modify the master by visiting the media cost master page. </p>
+
+ </div>
+</div>
+
+<!-- = link_to 'Back', @campaign_playlist.campaign, class: "btn btn-info btn-xs" -->
+<div class="panel panel-primary">
+ <div class="panel-heading">
+    <h3 class="panel-title">Related Products</h3>  </div>
+     <div class="panel-body">
+       <%= render partial: 'campaign_playlist_to_products/quick_list'  %>
+  </div>
+<!-- list of products is included in the above partial -->
+</div>
+
+
+
+
+
+	<div class="panel panel-primary">
+	  <div class="panel-heading">
+	   <h3 class="panel-title">Order Summary</h3>
+
+	  </div>
+	  	<%= render partial: 'sales_ppos/order_lines', :locals => {:order_lines =>  @order_lines_regular,
+			order_description: "Regular Products"}  %>
+
+	    <%= render partial: 'sales_ppos/order_lines', :locals => {:order_lines =>  @order_lines_basic,
+			order_description: "Basic Upsell"}  %>
+
+		<%= render partial: 'sales_ppos/order_lines', :locals => {:order_lines =>  @order_lines_common,
+			order_description: "Common Upsell"}  %>
+  </div>
+
+
+  <div class="panel panel-primary">
+    <div class="panel-heading"><h3 class="panel-title">Sales PPO Master Data</h3>
+    </div>
+  	<%= render 'sales_ppos/sales_ppo_mini_list' %>
+  </div>
+  <hr>
+ <% else %>
+ <div class="well well-sm">
+ <h3>No Campaign Product playlist Found</h3>
+ </div>
+
+<% end %>

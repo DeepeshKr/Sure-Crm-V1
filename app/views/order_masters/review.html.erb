@@ -72,6 +72,7 @@
   </div>
 </div>
 
+<%= link_to 'Back', url_for(:back), class: "btn btn-info btn-xs" %>
 <br>
  <div class="panel panel-primary">
   <div class="panel-heading">
@@ -80,7 +81,7 @@
   	<%= render "order_masters/order_customer" %>
   	<%= render "order_masters/order_address" %>
  	<%= render "order_masters/ordered_all_non_edit" %>
-  
+
   <div class="panel-footer">
 	<%= render "order_masters/order_footer" %>
   </div>
@@ -96,4 +97,3 @@
   </div>
   <%= render 'sales_ppos/sales_ppo_list' %>
 </div>
-

@@ -13,7 +13,7 @@ class ProductStockBooksController < ApplicationController
   # GET /product_stock_books
   # GET /product_stock_books.json
   def index
-    
+
     @show
      @prev_datelist = Date.today.in_time_zone
      @or_from_date = Date.today #.in_time_zone - 30.days
@@ -38,7 +38,7 @@ class ProductStockBooksController < ApplicationController
       if ProductList.where(extproductcode: @prod).present?
         @product_name = ProductList.where(extproductcode: @prod).first.productinfo
       end
-       
+
       @from_date_text = from_date.strftime('%Y-%m-%d')
       @to_date_text = to_date.strftime('%Y-%m-%d')
         @product_stock_books = ProductStockBook.where(list_barcode: @barcode)
@@ -58,27 +58,32 @@ class ProductStockBooksController < ApplicationController
       @page_heading = "Please select a product with date range"
     end
    # @product_stock_books = ProductStockBook.all.limit(100)
-   
+
   end
-  
+
   def summary
+    @show_all = false
+    @show_all_tag = "yes_show"
     @or_from_date = Date.today.in_time_zone - 30.days
     @or_to_date =  Date.today.in_time_zone
-    
+
     if params[:from_date].present? && params[:to_date].present?
       @or_from_date = Date.strptime(params[:from_date], "%Y-%m-%d") if params[:from_date].present?
       @or_to_date = Date.strptime(params[:to_date], "%Y-%m-%d") if params[:to_date].present?
     end
-    
+
     @from_date_text = @or_from_date.strftime('%Y-%m-%d')
     @to_date_text = @or_to_date.strftime('%Y-%m-%d')
-    product_stock_book = ProductStockBook.new 
-    @product_stock_books = product_stock_book.stock_book_summary(@or_from_date, @or_to_date)
-    #.paginate(:page => params[:page]) 
+    if params[:show_all].present?
+      @show_all = params[:show_all]
+    end
+    product_stock_book = ProductStockBook.new
+    @product_stock_books = product_stock_book.stock_book_summary(@or_from_date, @or_to_date, @show_all)
+    #.paginate(:page => params[:page])
     # @product_stock_books = @product_stock_books
     # .paginate(params[:current_page], params[:per_page])
     @page_heading = "Stock between #{@or_from_date} and #{@or_to_date}"
-    
+
     respond_to do |format|
       csv_file_name = "Product_stock_summary_between_#{@from_date_text}_and_#{@to_date_text}.csv"
         format.html
@@ -305,7 +310,7 @@ end
       @corrections_val = 0
       @closing_qty = 0
       @closing_val = 0
-      
+
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.

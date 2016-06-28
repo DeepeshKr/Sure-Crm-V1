@@ -1,0 +1,34 @@
+<!-- set page title start -->
+<% title "App Velocities" %>
+<!-- set page title end -->
+<p id="notice"><%= notice %></p>
+
+<h1>App Velocities</h1>
+
+<table class="table table-hover table-stripped">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Priority no</th>
+      <th>Description</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @app_velocities.each do |app_velocity| %>
+      <tr>
+        <td><%= app_velocity.name %></td>
+        <td><%= app_velocity.priority_no %></td>
+        <td><%= app_velocity.description %></td>
+        <td><%= link_to 'Show', app_velocity %></td>
+        <td><%= link_to 'Edit', edit_app_velocity_path(app_velocity) %></td>
+        <td><%= link_to 'Destroy', app_velocity, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New App velocity', new_app_velocity_path %>

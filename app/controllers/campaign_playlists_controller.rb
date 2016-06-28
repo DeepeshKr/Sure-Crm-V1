@@ -1,6 +1,6 @@
 class CampaignPlaylistsController < ApplicationController
  before_action { protect_controllers(8) }
- before_action :set_campaign_playlist, only: [:show, :duplicate, :edit, :update, :groupdestroy, :destroy] #before_action :dropdown, only: [:show, :new,  :edit, :update]
+ before_action :set_campaign_playlist, only: [:show, :duplicate, :edit, :update, :groupdestroy, :destroy, :new_media_cost] #before_action :dropdown, only: [:show, :new,  :edit, :update]
  before_action :proddropdown, only: [:show, :new, :create, :update,  :edit, :update, :showproductvariant]
  before_action :set_media_tape, only: [:show, :new, :create, :update,  :edit, :update]
  before_action :activestatus, only: [:show, :new, :create, :edit, :update]
@@ -89,148 +89,37 @@ class CampaignPlaylistsController < ApplicationController
       respond_with(@campaign_playlists)
   end
 
-def showproductvariant
- @campaign_playlist = CampaignPlaylist.find(params[:id])
-  @productvariant = ProductVariant.where('activeid = ? and product_sell_type_id <= ?', 10000, 10001).order('name')
-  respond_with(@campaign_playlist)
+  def showproductvariant
+    @campaign_playlist = CampaignPlaylist.find(params[:id])
+    @productvariant = ProductVariant.where('activeid = ? and product_sell_type_id <= ?', 10000, 10001).order('name')
+    respond_with(@campaign_playlist)
+  end
 
-end
+  def updateproductvariant
+     @campaign_playlist = CampaignPlaylist.find(params[:id])
+    if campaign_playlist_params[:productvariantid].present?
 
-def updateproductvariant
-   @campaign_playlist = CampaignPlaylist.find(params[:id])
-if campaign_playlist_params[:productvariantid].present?
-
-   @campaign_playlist.update(productvariantid: campaign_playlist_params[:productvariantid])
-end
-
- redirect_to dailyschedule_path(:for_date => @campaign_playlist.for_date)
-end
-
-
+       @campaign_playlist.update(productvariantid: campaign_playlist_params[:productvariantid])
+    end
+   redirect_to dailyschedule_path(:for_date => @campaign_playlist.for_date)
+  end
 
   def show
       set_media_tape
       @campaign_playlist_id = params[:id]
-      main_product_type_id = 10000
-      basic_product_type_id = 10040
-      common_product_type_id = 10001
-      
-      @regular_basic,   @regular_shipping,  @regular_total,   @regular_cost,  @regular_revenue = 0,0,0,0,0
-      @basic_basic,   @basic_shipping,  @basic_total,   @basic_cost,  @basic_revenue = 0,0,0,0,0
-      @common_basic,   @common_shipping,  @common_total,   @common_cost,  @common_revenue = 0,0,0,0,0
-      
-      @order_lines_regular = OrderLine.joins(:order_master)
-      .where("order_masters.campaign_playlist_id = ?", params[:id])
-      .joins(:product_variant)
-      .where("product_variants.product_sell_type_id = ?", main_product_type_id)
-      .order("order_lines.created_at")
-      
-      @order_lines_regular.each do |order |
-        @regular_basic += order.subtotal
-        @regular_shipping += order.shipping
-        @regular_total += order.total
-        @regular_cost += order.productcost
-        @regular_revenue += order.productrevenue
-      end
-      
-      @order_lines_basic = OrderLine.joins(:order_master)
-      .where("order_masters.campaign_playlist_id = ?", params[:id])
-      .joins(:product_variant)
-      .where("product_variants.product_sell_type_id = ?", basic_product_type_id)
-      .order("order_lines.created_at")
-      
-      @order_lines_basic.each do |order |
-        @basic_basic += order.subtotal
-        @basic_shipping += order.shipping
-        @basic_total += order.total
-        @basic_cost += order.productcost
-        @basic_revenue += order.productrevenue
-      end
-      
-      @order_lines_common = OrderLine.joins(:order_master)
-      .where("order_masters.campaign_playlist_id = ?", params[:id])
-      .joins(:product_variant)
-      .where("product_variants.product_sell_type_id = ?", common_product_type_id)
-      .order("order_lines.created_at")
-      
-      @order_lines_common.each do |order |
-        @common_basic += order.subtotal
-        @common_shipping += order.shipping
-        @common_total += order.total
-        @common_cost += order.productcost
-        @common_revenue += order.productrevenue
-      end
-      @sales_ppos = SalesPpo.where('order_status_id > 10002')
-      .where(campaign_playlist_id: params[:id])
-      .order("start_time")
-      
-  # Parent.joins(:children).where(children:{favorite:true})
+      show_campaign_details
+
+      # Parent.joins(:children).where(children:{favorite:true})
       #respond_with(@campaign_playlist, @orderlines)
   end
-  
+
   def search
       set_media_tape
       @campaign_playlist_id = params[:id]
       return if @campaign_playlist_id.blank?
-      main_product_type_id = 10000
-      basic_product_type_id = 10040
-      common_product_type_id = 10001
-      
-      @campaign_playlist = CampaignPlaylist.find(@campaign_playlist_id)
-      @campaign_playlist_to_products = CampaignPlaylistToProduct.where(campaign_playlist_id: @campaign_playlist_id)
-      @campaign_playlist_to_product = CampaignPlaylistToProduct.new(campaign_playlist_id: @campaign_playlist_id)
-      @product_variants = ProductVariant.where('activeid = 10000').order("name")
-     
-      @regular_basic,   @regular_shipping,  @regular_total,   @regular_cost,  @regular_revenue = 0,0,0,0,0
-      @basic_basic,   @basic_shipping,  @basic_total,   @basic_cost,  @basic_revenue = 0,0,0,0,0
-      @common_basic,   @common_shipping,  @common_total,   @common_cost,  @common_revenue = 0,0,0,0,0
-      
-      @order_lines_regular = OrderLine.joins(:order_master)
-      .where("order_masters.campaign_playlist_id = ?", params[:id])
-      .joins(:product_variant)
-      .where("product_variants.product_sell_type_id = ?", main_product_type_id)
-      .order("order_lines.created_at")
-      
-      @order_lines_regular.each do |order |
-        @regular_basic += order.subtotal
-        @regular_shipping += order.shipping
-        @regular_total += order.total
-        @regular_cost += order.productcost
-        @regular_revenue += order.productrevenue
-      end
-      
-      @order_lines_basic = OrderLine.joins(:order_master)
-      .where("order_masters.campaign_playlist_id = ?", params[:id])
-      .joins(:product_variant)
-      .where("product_variants.product_sell_type_id = ?", basic_product_type_id)
-      .order("order_lines.created_at")
-      
-      @order_lines_basic.each do |order |
-        @basic_basic += order.subtotal
-        @basic_shipping += order.shipping
-        @basic_total += order.total
-        @basic_cost += order.productcost
-        @basic_revenue += order.productrevenue
-      end
-      
-      @order_lines_common = OrderLine.joins(:order_master)
-      .where("order_masters.campaign_playlist_id = ?", params[:id])
-      .joins(:product_variant)
-      .where("product_variants.product_sell_type_id = ?", common_product_type_id)
-      .order("order_lines.created_at")
-      
-      @order_lines_common.each do |order |
-        @common_basic += order.subtotal
-        @common_shipping += order.shipping
-        @common_total += order.total
-        @common_cost += order.productcost
-        @common_revenue += order.productrevenue
-      end
-      @sales_ppos = SalesPpo.where('order_status_id > 10002')
-      .where(campaign_playlist_id: params[:id])
-      .order("start_time")
-      
-  # Parent.joins(:children).where(children:{favorite:true})
+
+      show_campaign_details
+      # Parent.joins(:children).where(children:{favorite:true})
       #respond_with(@campaign_playlist, @orderlines)
   end
 
@@ -275,6 +164,32 @@ end
 
   end
 
+  def new_media_cost
+    @campaign_playlist_id = params[:id]
+    @redirect_to = params[:redirect_to]
+    show_campaign_details
+    begin_hr = @campaign_playlist.start_hr
+    begin_min = @campaign_playlist.start_min
+    begin_sec = @campaign_playlist.start_sec
+    duration_secs = @campaign_playlist.duration_secs || 0 if @campaign_playlist.duration_secs.present?
+    #group_total_cost = @campaign_playlist.group_total_cost
+
+    @auto_calculated_price = MediaCostMaster.cost_of_playlist begin_hr.to_i, begin_min.to_i, begin_sec.to_i, duration_secs.to_i
+    #@redirect_to = request.original_url
+
+  end
+
+  def update_media_cost
+
+      @updated_media_cost = params["/campaign_playlists/update_media_cost"][:updated_media_cost]
+      @redirect_to = params["/campaign_playlists/update_media_cost"][:redirect_to_url]
+      @campaign_playlist_id = params["/campaign_playlists/update_media_cost"][:campaign_playlist_id]
+      @campaign_playlist = CampaignPlaylist.find(@campaign_playlist_id)
+      @campaign_playlist.update(cost: @updated_media_cost)
+        flash[:success] = "Campaign Playlists updated with cost #{@updated_media_cost}"
+    redirect_to @redirect_to
+  end
+
   def update
     set_media_tape
     if campaign_playlist_params[:cost].to_f != @campaign_playlist.cost
@@ -291,7 +206,7 @@ end
   end
 
   def edit_individual
-  @campaign_playlists = CampaignPlaylist.find(params[:campaign_playlist_ids])
+    @campaign_playlists = CampaignPlaylist.find(params[:campaign_playlist_ids])
   end
 
   def update_individual
@@ -321,9 +236,15 @@ end
            #media tape cost head
 
           list_status_id = 10001
-          cost = 0
-          if params[:media_cost].present?
-              cost = params[:media_cost]
+          cost,per_sec_cost = 0,0
+          if params.has_key?(:media_cost)
+            per_sec_cost.to_f = params[:media_cost].to_f
+          end
+
+          if per_sec_cost > 0
+              cost = per_sec_cost * media_tapes.duration_secs
+            else
+              cost = MediaCostMaster.cost_of_playlist begin_hr, begin_min, begin_sec, media_tapes.duration_secs
           end
 
             hour_min_sec(begin_hr, begin_min, begin_sec, media_tapes.duration_secs)
@@ -352,7 +273,7 @@ end
             for_date: for_date)
 
            @campaign_playlist.update(playlist_group_id: @campaign_playlist.id)
- #respond_with(@media_cost_master)
+           #respond_with(@media_cost_master)
       if @campaign_playlist.valid?
           update_timings(campaignid)
           flash[:success] = "Playlist Inserted successfully added "
@@ -407,8 +328,8 @@ end
       #:duration_secs, :tape_ext_ref_id, :unique_tape_name, :media_id,
       # :product_variant_id, :description, :file_parts,
     # :file_extenstion, :media_tape_head_id, :sort_order)
-  media_tape_head_id = params[:media_tape_head_id]
-   campaignid = params[:campaignid]
+    media_tape_head_id = params[:media_tape_head_id]
+    campaignid = params[:campaignid]
      if media_tape_head_id.present?
         #step 1 get all the media tapes with media tape id in the same sort order
         media_tapes = MediaTape.where(media_tape_head_id: media_tape_head_id).order("sort_order ASC")
@@ -425,21 +346,25 @@ end
             begin_sec = params[:begin_sec]
             begin_frame = params[:begin_frame]
             day = params[:day]
-            cost = 0
-
+            cost,per_sec_cost = 0.0,0.0
+            if params.has_key?(:media_cost)
+              per_sec_cost = params[:media_cost].to_f
+            end
           first_campaign_playlist_id = 0
 
           media_tapes.each do |m|
 
             list_status_id = 10001
             if m.sort_order == 1
-              list_status_id = 10000
-               if params[:media_cost].present?
-                  cost = params[:media_cost]
-                end
-              else
-            cost = 0
+               list_status_id = 10000
             end
+
+            if per_sec_cost.to_f > 0
+              cost = per_sec_cost.to_f * m.duration_secs
+            else
+              cost = MediaCostMaster.cost_of_playlist begin_hr.to_i, begin_min.to_i, begin_sec.to_i, m.duration_secs.to_i
+            end
+
             #ref name is combination of media tape head and media tape name
             ref_name = MediaTapeHead.find(media_tape_head_id).name
 
@@ -510,7 +435,7 @@ end
         flash[:error] = "You cannot add anything unless you select any valid media tape list!"
         redirect_to campaigns_path(:id => campaignid)
     end
- end
+  end
 
  def updatecampaigntimings
    if params.has_key?(:campaignid)
@@ -576,14 +501,14 @@ end
         :duration_secs,
         :tape_id, :old_campaign_id, :ref_name,
         :list_status_id, :for_date, :total_revenue, :playlist_group_id,
-        :start_frame, :end_frame, :frames, :day)
+        :start_frame, :end_frame, :frames, :day, :group_total_cost)
     end
     def set_media_tape
       @media_tapes = MediaTape.all
     end
 
     def update_timings(campaign_id)
-      campaigns = CampaignPlaylist.where(campaignid: campaign_id).order(:day, :start_hr, :start_min, :start_sec)
+      campaigns = CampaignPlaylist.where(campaignid: campaign_id).order(:day, :start_hr, :start_min, :start_sec, :playlist_group_id)
 
           n_str_hr = 0
           n_str_min = 0
@@ -608,16 +533,16 @@ end
           #hour_min_sec(c.start_hr, c.start_min, c.start_sec, c.duration_secs)
           #update new endn timing
         #  c.update(end_hr: @end_hr, end_min: @end_min, end_sec: @end_sec)
-            c.update(end_hr: campaign_time.end_hour,
-          end_min: campaign_time.end_min,
-          end_sec: campaign_time.end_second,
-          end_frame: campaign_time.end_frames,
-          day: campaign_time.day)
+          c.update(end_hr: campaign_time.end_hour,
+            end_min: campaign_time.end_min,
+            end_sec: campaign_time.end_second,
+            end_frame: campaign_time.end_frames,
+            day: campaign_time.day)
            #use the end timings as start timings for the next show
-           n_str_hr = campaign_time.end_hour
-           n_str_min = campaign_time.end_min
-           n_str_sec = campaign_time.end_second
-          n_str_frm = campaign_time.end_frames
+            n_str_hr = campaign_time.end_hour
+            n_str_min = campaign_time.end_min
+            n_str_sec = campaign_time.end_second
+            n_str_frm = campaign_time.end_frames
            totalnos += 1
       end
       flash[:notice] = "Timings of #{totalnos} playlists were reset successfully"
@@ -743,6 +668,7 @@ end
           end
           @order_master.update(notes: updates)
     end
+
     def hour_min_sec(s_hr, s_min, s_sec, duration_seconds)
          first = (s_hr.to_i * 60 * 60) + (s_min.to_i * 60) + s_sec.to_i
 
@@ -776,4 +702,64 @@ end
     # def recent_campaigns
     #   @recentplaylist = Campaigns.where("mediumid = ?", @campaign_playlist.campaigns.mediumid).order('id DESC').limit(10)
     # end
+
+    def show_campaign_details
+      main_product_type_id = 10000
+      basic_product_type_id = 10040
+      common_product_type_id = 10001
+
+      @campaign_playlist = CampaignPlaylist.find(@campaign_playlist_id)
+      @campaign_playlist_to_products = CampaignPlaylistToProduct.where(campaign_playlist_id: @campaign_playlist_id)
+      @campaign_playlist_to_product = CampaignPlaylistToProduct.new(campaign_playlist_id: @campaign_playlist_id)
+      @product_variants = ProductVariant.where('activeid = 10000').order("name")
+
+      @regular_basic,   @regular_shipping,  @regular_total,   @regular_cost,  @regular_revenue = 0,0,0,0,0
+      @basic_basic,   @basic_shipping,  @basic_total,   @basic_cost,  @basic_revenue = 0,0,0,0,0
+      @common_basic,   @common_shipping,  @common_total,   @common_cost,  @common_revenue = 0,0,0,0,0
+
+      @order_lines_regular = OrderLine.joins(:order_master)
+      .where("order_masters.campaign_playlist_id = ?", params[:id])
+      .joins(:product_variant)
+      .where("product_variants.product_sell_type_id = ?", main_product_type_id)
+      .order("order_lines.created_at")
+
+      @order_lines_regular.each do |order |
+        @regular_basic += order.subtotal
+        @regular_shipping += order.shipping
+        @regular_total += order.total
+        @regular_cost += order.productcost
+        @regular_revenue += order.productrevenue
+      end
+
+      @order_lines_basic = OrderLine.joins(:order_master)
+      .where("order_masters.campaign_playlist_id = ?", params[:id])
+      .joins(:product_variant)
+      .where("product_variants.product_sell_type_id = ?", basic_product_type_id)
+      .order("order_lines.created_at")
+
+      @order_lines_basic.each do |order |
+        @basic_basic += order.subtotal
+        @basic_shipping += order.shipping
+        @basic_total += order.total
+        @basic_cost += order.productcost
+        @basic_revenue += order.productrevenue
+      end
+
+      @order_lines_common = OrderLine.joins(:order_master)
+      .where("order_masters.campaign_playlist_id = ?", params[:id])
+      .joins(:product_variant)
+      .where("product_variants.product_sell_type_id = ?", common_product_type_id)
+      .order("order_lines.created_at")
+
+      @order_lines_common.each do |order |
+        @common_basic += order.subtotal
+        @common_shipping += order.shipping
+        @common_total += order.total
+        @common_cost += order.productcost
+        @common_revenue += order.productrevenue
+      end
+      @sales_ppos = SalesPpo.where('order_status_id > 10002')
+      .where(campaign_playlist_id: params[:id])
+      .order("start_time")
+    end
 end

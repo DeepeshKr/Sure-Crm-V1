@@ -1,0 +1,38 @@
+<!-- set page title start -->
+<% title "App Feature Comments" %>
+<!-- set page title end -->
+<p id="notice"><%= notice %></p>
+
+<h1>App Feature Comments</h1>
+
+<table class="table table-hover table-stripped">
+  <thead>
+    <tr>
+      <th>Details</th>
+      <th>App feature request</th>
+      <th>Comments by</th>
+      <th>Comment type</th>
+      <th>Display level</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @app_feature_comments.each do |app_feature_comment| %>
+      <tr>
+        <td><%= app_feature_comment.details %></td>
+        <td><%= app_feature_comment.app_feature_request_id %></td>
+        <td><%= app_feature_comment.comments_by_id %></td>
+        <td><%= app_feature_comment.comment_type_id %></td>
+        <td><%= app_feature_comment.display_level_id %></td>
+        <td><%= link_to 'Show', app_feature_comment %></td>
+        <td><%= link_to 'Edit', edit_app_feature_comment_path(app_feature_comment) %></td>
+        <td><%= link_to 'Destroy', app_feature_comment, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New App feature comment', new_app_feature_comment_path %>

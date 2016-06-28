@@ -1,0 +1,124 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @app_feature_request.name %>
+</p>
+
+<p>
+  <strong>App:</strong>
+  <%= @app_feature_request.app_id %>
+</p>
+
+<p>
+  <strong>App feature type:</strong>
+  <%= @app_feature_request.app_feature_type_id %>
+</p>
+
+<p>
+  <strong>Problem this solves:</strong>
+  <%= @app_feature_request.problem_this_solves %>
+</p>
+
+<p>
+  <strong>Mandatory requirements:</strong>
+  <%= @app_feature_request.mandatory_requirements %>
+</p>
+
+<p>
+  <strong>Technical notes:</strong>
+  <%= @app_feature_request.technical_notes %>
+</p>
+
+<p>
+  <strong>Request by:</strong>
+  <%= @app_feature_request.request_by %>
+</p>
+
+<p>
+  <strong>Require by date:</strong>
+  <%= @app_feature_request.require_by_date %>
+</p>
+
+<p>
+  <strong>Estimated completion date:</strong>
+  <%= @app_feature_request.estimated_completion_date %>
+</p>
+
+<p>
+  <strong>Actual completion date:</strong>
+  <%= @app_feature_request.actual_completion_date %>
+</p>
+
+<p>
+  <strong>User approved date:</strong>
+  <%= @app_feature_request.user_approved_date %>
+</p>
+
+<p>
+  <strong>User satisfaction level:</strong>
+  <%= @app_feature_request.user_satisfaction_level_id %>
+</p>
+
+<p>
+  <strong>Velocity:</strong>
+  <%= @app_feature_request.velocity_id %>
+</p>
+
+<p>
+  <strong>Current status:</strong>
+  <%= @app_feature_request.current_status_id %>
+</p>
+
+<p>
+  <strong>Priority:</strong>
+  <%= @app_feature_request.priority_id %>
+</p>
+
+<p>
+  <strong>Assigned to:</strong>
+  <%= @app_feature_request.assigned_to %>
+</p>
+
+<p>
+  <strong>Extra notes:</strong>
+  <%= @app_feature_request.extra_notes %>
+</p>
+
+<p>
+  <strong>Tables used:</strong>
+  <%= @app_feature_request.tables_used %>
+</p>
+
+<p>
+  <strong>Estimated hours:</strong>
+  <%= @app_feature_request.estimated_hours %>
+</p>
+
+<p>
+  <strong>Actual hours:</strong>
+  <%= @app_feature_request.actual_hours %>
+</p>
+
+<p>
+  <strong>Bug count:</strong>
+  <%= @app_feature_request.bug_count %>
+</p>
+
+<p>
+  <strong>Linked app feature:</strong>
+  <%= @app_feature_request.linked_app_feature_id %>
+</p>
+
+<p>
+  <strong>Queue no:</strong>
+  <%= @app_feature_request.queue_no %>
+</p>
+
+<p>
+  <strong>Comment count:</strong>
+  <%= @app_feature_request.comment_count %>
+</p>
+
+<%= link_to 'Edit', edit_app_feature_request_path(@app_feature_request) %> |
+<%= link_to 'Back', app_feature_requests_path %>

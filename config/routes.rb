@@ -1,6 +1,17 @@
 Rails.application.routes.draw do
-  
- 
+
+
+  resources :payumoney_statuses
+  resources :app_comment_display_levels
+  resources :app_comment_types
+  resources :app_feature_comments
+  resources :app_priorities
+  resources :app_statuses
+  resources :app_velocities
+  resources :app_user_satisfaction_levels
+  resources :app_feature_types
+  resources :app_lists
+  resources :app_feature_requests
   resources :campaign_playlist_to_products
   resources :sales_ppo_defaults
   get 'sales_reports_team' => 'sales_report_team#index'
@@ -18,31 +29,31 @@ Rails.application.routes.draw do
   require "resque_web"
   # Of course, you need to substitute your application name here, a block
   # like this probably already exists.
-  
+
   mount Resque::Server.new, at: "/resque"
-  
-  
+
+
   mount ResqueWeb::Engine => "/resque_web"
 
-  
+
  # mount Delayed::Web::Engine, at: '/jobs'
   resources :return_rates
   resources :list_of_servers
   resources :daily_task_logs
   resources :daily_tasks
   resources :cable_opertor_comms
-  
+
   match "/delayed_job" => DelayedJobWeb, :anchor => false, via: [:get, :post]
 
   get "select_two" => 'return_rates#demo'
   get 'cashsale/index'
   get 'cashsale/search'
   get 'cashsale/details'
-  
+
   get 'states/edit_all'
   post 'states_update_all' => 'states#update_all'
   post 'states/update_all'
-  
+
   resources :registration_statuses
 
   resources :fat_to_fit_email_statuses
@@ -105,7 +116,7 @@ Rails.application.routes.draw do
   resources :message_types
 
   resources :message_statuses
-  
+
   get 'message_on_orders/payumoney'
   get 'message_on_orders_payumoney' => 'message_on_orders#payumoney'
   resources :message_on_orders
@@ -140,13 +151,15 @@ Rails.application.routes.draw do
   get 'branch_sales' => 'newwlsdet/list'
 
   resources :order_updates
-  
+
+  get 'media_cost_masters/get_costs'
+  get 'media_cost_masters_get_costs' => 'media_cost_masters#get_costs'
   #new sales ppo
   post 'sales_ppos/re_create_ppo'
-    
+
   get 'sales_ppos/index'
   get 'sales_ppos' => 'sales_ppos#index'
- 
+
   get 'sales_ppos/show_wise'
   get 'sales_ppos_show_wise' => 'sales_ppos#show_wise'
 
@@ -156,22 +169,22 @@ Rails.application.routes.draw do
   get 'sales_ppos_half_hour_sales' => 'sales_ppos#half_hour_sales'
   get 'sales_ppos/half_hour_performance'
   get 'sales_ppos_half_hour_performance' => 'sales_ppos#half_hour_performance'
-  
+
   get 'sales_ppos/operator_sales_performance'
   get 'sales_ppos_operator_sales_performance' => 'sales_ppos#operator_sales_performance'
   get 'sales_ppos/product_performance'
   get 'sales_ppos_product_performance' => 'sales_ppos#product_performance'
   get 'sales_ppos/show_performance'
   get 'sales_ppos_show_performance' => 'sales_ppos#show_performance'
-  
+
   get 'sales_ppos/details'
   get 'sales_ppos_details' => 'sales_ppos#details'
-  
+
   get 'sales_ppos/show_all'
   get 'sales_ppos_show_all' => 'sales_ppos#show_all'
   get 'sales_ppos/demo'
   get 'sales_ppos_details' => 'sales_ppos#demo'
-  
+
   #old sales ppo
   get 'sales_ppo_report/summary'
   get 'ppo_report' => 'sales_ppo_report#summary'
@@ -183,22 +196,22 @@ Rails.application.routes.draw do
   get 'show_ppo' => 'sales_ppo_report#show'
   get 'sales_ppo_report/channel'
   get 'channel_ppo' => 'sales_ppo_report#channel'
-  
 
-  
+
+
   get 'sales_ppo_report/product_performance'
   get 'product_performance' => 'sales_ppo_report#product_performance'
   get 'sales_ppo_report/show_performance'
   get 'show_performance' => 'sales_ppo_report#show_performance'
   get 'sales_ppo_report/product_hour_performance'
   get 'product_hour_performance' => 'sales_ppo_report#product_hour_performance'
-  
+
   get 'sales_ppo_report/hour_performance'
   get 'hour_performance' => 'sales_ppo_report#hour_performance'
-  
+
   get 'sales_ppo_report/hour_sales_performance'
   get 'hour_sales_performance' => 'sales_ppo_report#hour_sales_performance'
-  
+
   get 'sales_ppo_report/operator_performance'
   get 'operator_performance' => 'sales_ppo_report#operator_performance'
   get 'sales_ppo_report/ppo_details'
@@ -239,7 +252,7 @@ get 'sales_report_team/not_completed'
   get 'pincode_orders' => 'sales_report#pincode_orders'
   get 'sales_report/daily'
   get 'daily_report' => 'sales_report#daily'
-  
+
   get 'sales_report/pay_u_orders'
   get 'pay_u_orders_sales_report' => 'sales_report#pay_u_orders'
 
@@ -258,7 +271,7 @@ get 'sales_report_team/not_completed'
   get 'channel_summary_report' => 'sales_report#channel_summary_report'
   get 'sales_report/channel_sales_summary'
   get 'channel_sales_summary' => 'sales_report#channel_sales_summary'
-  
+
   # final report
   get 'sales_report/cdm_report'
   get 'cdm_report' => 'sales_report#cdm_report'
@@ -345,16 +358,19 @@ get 'sales_report_team/not_completed'
   get 'employees/sales_team'
   get 'sales_team' => 'employees#sales_team'
   # campaign playlist search
-  get 'campaign_playlists/search'
-  get 'campaign_playlists_search' => 'campaign_playlists#search'
+
   # pay u money details search
   get 'payumoney_details/index'
   get 'payumoney_details' => 'payumoney_details#index'
   get 'payumoney_details/search'
   get 'payumoney_details_search' => 'payumoney_details#search'
-  
+  get 'payumoney_details/open_orders'
+  get 'payumoney_details_open_orders' => 'payumoney_details#open_orders'
+  get 'payumoney_details/details'
+  get 'payumoney_details_detail' => 'payumoney_details#details'
 
-  
+
+
    resources :india_city_lists
   resources :india_pincode_lists
 
@@ -484,8 +500,20 @@ get 'sales_report_team/not_completed'
 
   post 'updatedescription' => 'order_line#update_description'
 
-  get 'update_tapes' => 'media_tape_heads#update_tapes'
-  get 'tape_list' => 'media_tape_heads#tape_list'
+  get 'update_tapes_preset' => 'media_tape_heads#update_tapes_preset'
+  get 'update_tapes_auto' => 'media_tape_heads#update_tapes_auto'
+  get 'update_tapes_manual' => 'media_tape_heads#update_tapes_manual'
+
+  get 'tape_list_preset' => 'media_tape_heads#tape_list_preset'
+  get 'tape_list_auto' => 'media_tape_heads#tape_list_auto'
+  get 'tape_list_manual' => 'media_tape_heads#tape_list_manual'
+
+  get 'campaign_playlists/search'
+  get 'campaign_playlists_search' => 'campaign_playlists#search'
+  get 'campaign_playlists/new_media_cost'
+  get 'campaign_playlists_new_media_cost' => 'campaign_playlists#new_media_cost'
+  post 'campaign_playlists/update_media_cost'
+  post 'campaign_playlists_update_media_cost' => 'campaign_playlists#update_media_cost'
 
   #post 'campaign_playlists/create_playlist_with_media_tape_head'
   post 'insert_playlist' => 'campaign_playlists#campaign_playlist_insert'
@@ -580,7 +608,7 @@ get 'sales_report_team/not_completed'
     delete 'deleteproductstock' => 'product_stocks#destroy'
     # get 'deleteproductstock' => 'product_stocks#deletestock'
     delete 'deleteproductstockadjust' => 'product_stock_adjusts#delete'
-    
+
 
      resources :sales_incentives
     resources :user_roles

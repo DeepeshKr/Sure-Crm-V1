@@ -1,0 +1,43 @@
+<p id="notice"><%= notice %></p>
+<!-- set page title start -->
+<% title @page_heading  %>
+<!-- set page title end -->
+<% if @payumoney_detail.present? %>
+<div class="panel panel-primary">
+ <div class="panel-heading">
+    <h3 class="panel-title">Pay U Money Link Updated At: <%= (@payumoney_detail.updated_at + 330.minutes).strftime("%d-%b-%y %H:%M") %> </h3>  </div>
+     <div class="panel-body">
+       <table class="table table-stripped table-hover">
+       <tr>
+         <td>Created </td><td><%= (@payumoney_detail.created_at + 330.minutes).strftime("%d-%b-%y %H:%M") %></td>
+         <td>Payment Id</td><td><%= @payumoney_detail.paymentId %> </td>
+         <td>Transaction Id</td><td> <%= @payumoney_detail.merchantTransactionId %> </td>
+      </tr>
+      <tr>
+        <td>Order Ref</td><td><%= link_to @payumoney_detail.orderid, detailedordersearch_path(order_id: @payumoney_detail.orderid),
+        :target => "_blank", class: "btn btn-info btn-xs" if @payumoney_detail.orderid.present? %>
+      </td>
+      <td>Transaction Ref</td><td><%= @payumoney_detail.transaction_ref %>   </td>
+        <td>Amount</td><td><%= @payumoney_detail.amount.round(2) %></td>
+      </tr>
+      <tr>
+        <td>Customer Mobile</td><td><%= @payumoney_detail.customerMobileNumber %></td>
+        <td>Pay U Status</td><td><%= @payumoney_detail.status %></td>
+        <td>Internal Status</td><td><%= @payumoney_detail.payumoney_status.name if @payumoney_detail.payumoney_status %></td>
+      </tr>
+    </table>
+    <div class="panel panel-info">
+      <div class="panel-heading"><h3 class="panel-title"><strong>History:</strong></h3></div>
+        <div class="panel-body">
+        <%= simple_format h(@payumoney_detail.transaction_history) %>
+        </div>
+      <div class="panel-footer"><%= @payumoney_detail.full_response %></div>
+    </div>
+
+
+</div>
+<div class="panel-footer">
+<%= link_to 'Back to Earlier List', url_for(:back), class: "btn btn-success btn-xs" %>
+</div>
+</div>
+<% end %>

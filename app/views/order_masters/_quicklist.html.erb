@@ -11,11 +11,11 @@
       <th>Customer / Mobile</th>
       <th>City / State</th>
       <th colspan="8">Products</th>
-     
-    
+
+
        <th>Time Taken</th>
-      
-     
+
+
     </tr>
   </thead>
 
@@ -30,11 +30,11 @@
         <td><%= (order_master.orderdate).strftime('%d-%b-%Y') %>
     <small><%= Time.at(order_master.orderdate).strftime('%H:%M %P %Z') %></small>
 <br>
-<%= order_master.employee.name if order_master.employee %> 
+<%= order_master.employee.name if order_master.employee %>
         <small><strong><%= order_master.employeecode %> </strong></small>
  <small><%= order_master.employee_id %> </small>
         </td>
-       
+
         <td><%= order_master.customer.first_name rescue nil %> <%= order_master.customer.last_name rescue nil %> <br>
           <%= order_master.mobile %>
         </td>
@@ -45,15 +45,15 @@
           <tr>
           <td><strong>
           <% if order_master.external_order_no.present? %>
-          <%= link_to order_master.external_order_no, custordersearch_path(ordernum: order_master.external_order_no), :target => "_blank" %>
+          <%= link_to order_master.external_order_no, custordersearch_path(ordernum: order_master.external_order_no), class:"btn btn-info btn-xs" %>
           <% else %>
           Un processed order
           <% end %>
-          </strong> 
+          </strong>
           </td>
-          <td>Ref No: 
-          <%= link_to order_master.id, order_masters_review_path(order_id: order_master.id), :target => "_blank" %>
-           
+          <td>Ref No:
+          <%= link_to order_master.id, order_masters_review_path(order_id: order_master.id), class:"btn btn-info btn-xs" %>
+
           </td>
           </tr>
             <% order_master.order_line.each do |line| %>
@@ -75,32 +75,32 @@
           </table>
 
         </td>
-          
-        
-        
-        
+
+
+
+
          <td><small><%= (order_master.timetaken) %> Secs</small>  <br>
-         
-           
+
+
          </td>
-       
-       
+
+
       </tr>
        <% @sno += 1 %>
-       <% totalnos += order_master.pieces %> 
+       <% totalnos += order_master.pieces %>
        <% totalvalue += order_master.total %>
     <% end %>
   </tbody>
   <tfoot>
-   
+
     <tr>
-    <th colspan="7">Total</th>  
-      <th colspan="2">Pieces: <%= totalnos %> </th>   
+    <th colspan="7">Total</th>
+      <th colspan="2">Pieces: <%= totalnos %> </th>
        <th colspan="2"> Value: <%= totalvalue %></th>
-      
+
 
     </tr>
-  
+
 
   </tfoot>
 </table>

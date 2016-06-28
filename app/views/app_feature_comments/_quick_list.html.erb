@@ -1,0 +1,28 @@
+<div class="panel panel-info">
+<div class="panel-heading"><h3 class="panel-title"><%= list_name %></h3></div>
+<% if app_feature_comments.present? %>
+<table class="table table-hover table-stripped">
+  <thead>
+    <tr>
+      <th>Type</th>
+      <th>Details</th>
+      <th>Comments by</th>
+      <th>On</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% app_feature_comments.each do |app_feature_comment| %>
+      <tr>
+        <td><%= app_feature_comment.app_comment_type.name %></td>
+        <td><%= app_feature_comment.details %></td>
+        <td><%= app_feature_comment.employee.fullname %></td>
+        <td><%= app_feature_comment.created_at.strftime('%d-%b-%y') %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+<% else %>
+<p>Nothing here</p>
+<% end %>
+</div>

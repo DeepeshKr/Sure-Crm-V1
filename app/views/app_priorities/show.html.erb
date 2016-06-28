@@ -1,0 +1,19 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @app_priority.name %>
+</p>
+
+<p>
+  <strong>Priority no:</strong>
+  <%= @app_priority.priority_no %>
+</p>
+
+<p>
+  <strong>Description:</strong>
+  <%= @app_priority.description %>
+</p>
+
+<%= link_to 'Edit', edit_app_priority_path(@app_priority) %> |
+<%= link_to 'Back', app_priorities_path %>

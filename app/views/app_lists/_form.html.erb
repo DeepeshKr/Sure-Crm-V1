@@ -1,0 +1,16 @@
+<%= simple_form_for(@app_list) do |f| %>
+  <%= f.error_notification %>
+
+  <div class="form-inputs">
+    <%= f.input :name %>
+    <%= f.input :priority_no %>
+    <%= f.input :primary_goal_of_app %>
+    <%= f.input :description %>
+    <%= f.input :version %>
+    <%= f.input :location %>
+  </div>
+
+  <div class="form-actions">
+    <%= f.button :submit %>
+  </div>
+<% end %>

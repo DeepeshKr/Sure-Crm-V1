@@ -52,7 +52,7 @@ class CampaignsController < ApplicationController
     @for_date = @campaign.startdate
     @add_more = true
       @campaign_playlists = CampaignPlaylist.where("campaignid = ?", params[:id]).order(:day, :start_hr, :start_min, :start_sec)
-      
+
       if params.has_key?(:only_active)
         if params[:only_active] == "true"
           @campaign_playlists = @campaign_playlists.where(list_status_id: 10000)
@@ -64,11 +64,11 @@ class CampaignsController < ApplicationController
           .where('ORDER_STATUS_MASTER_ID > 10002')
           .where("campaign_playlist_id IS NULL")
           .joins(:medium).where("media.media_group_id = 10000")
-          
-          
+
+
         end
       end
-      
+
        @campaign_id = params[:id]
 
               @begin_hr = 0
@@ -154,12 +154,12 @@ class CampaignsController < ApplicationController
     @campaign.destroy
     respond_with(@campaign)
   end
-  
+
   def hbn_show_all_active
     recent_campaigns
     proddropdown
 
-    
+
     @for_date = @campaign.startdate
       @campaign_playlists = CampaignPlaylist.where("campaignid = ?", params[:id], list_status_id: 1000).order(:day, :start_hr, :start_min, :start_sec)
        @campaign_id = params[:id]
@@ -176,7 +176,7 @@ class CampaignsController < ApplicationController
                 @begin_frame = @campaign_playlists.last.frames
                  @day = @campaign_playlists.last.day
         end
-     
+
      @campaignid = params[:id]
      #check if media belongs to HBN Group
      media_check = Medium.find(@campaign.mediumid)
@@ -189,9 +189,9 @@ class CampaignsController < ApplicationController
         @pvtchannelchecked = true
         @media_name = "Pvt Channel"
      end
-    
+
   end
-  
+   
   private
     def dropdown
      @medialist = Medium.where('media_commision_id = ?',  10000).where('media_group_id IS NULL or media_group_id <> 10000 or id = 11200').order('name')

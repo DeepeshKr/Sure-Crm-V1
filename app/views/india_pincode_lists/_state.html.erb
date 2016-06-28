@@ -1,0 +1,40 @@
+<div class="panel panel-success">
+  <div class="panel-heading"><h3 class="panel-title">Update State</h3></div>
+    <div class="panel-body">
+
+<%= simple_form_for(@india_pincode_list) do |f| %>
+  <%= f.error_notification %>
+
+  <div class="form-inputs">
+    <div class="row">
+      <div class="col-xs-3"><%= f.input :officename,:label => "Post Office Name", :input_html => { :readonly => true } %> </div>
+      <div class="col-xs-2"><%= f.input :pincode,:label => "Pincode", :input_html => { :readonly => true } %> </div>
+      <div class="col-xs-3"><%= f.input :divisionname, :input_html => { :readonly => true } %> </div>
+      <div class="col-xs-3"><%= f.label :statename %>
+      <%= @india_pincode_list.statename %> </div>
+    </div>
+    <div class="row">
+      <div class="col-xs-3"><%= f.input :regionname, :input_html => { :readonly => true } %> </div>
+      <div class="col-xs-3"><%= f.input :circlename, :input_html => { :readonly => true } %> </div>
+      <div class="col-xs-3"><%= f.input :taluk, :input_html => { :readonly => true } %> </div>
+      <div class="col-xs-3"><%= f.input :districtname, :input_html => { :readonly => true } %> </div>
+    </div>
+
+    <div class="row">
+      <div class="col-xs-6"><p class="lead"><%= @india_pincode_list.statename %> </p></div>
+      <div class="col-xs-6">  <%= f.select(:statename,
+        options_from_collection_for_select(State.all, :name, :name, :selected => @india_pincode_list.statename),
+        {}, :class => "form-control", label: "State")  %>
+      </div>
+    </div>
+  <div class="row">
+    <div class="col-xs-3 col-xs-offset-9">
+      <div class="form-actions">
+        <%= f.button :submit, "Update State" %>
+      </div>
+    </div>
+  </div>
+</div>
+<% end %>
+</div>
+</div>

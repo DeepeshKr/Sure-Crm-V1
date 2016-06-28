@@ -1,0 +1,169 @@
+<p id="notice"><%= notice %></p>
+
+<!-- def title(page_title) -->
+<% title "Feature #{@app_feature_request.name}" %>
+<!-- end of the title-->
+<div class="panel panel-info">
+  <div class="panel-heading"><h3 class="panel-title"><%= @app_feature_request.name %></h3></div>
+    <div class="panel-body">
+<table class="table table-stripped table-hover">
+<tr>
+  <td>Type:</td><td><%= @app_feature_request.app_feature_type.name %></td>
+  <td>Request by:</td><td><%= @app_feature_request.employee.name %></td>
+  <td>App: </td><td><%= @app_feature_request.app_list.name %></td>
+  <td>Assigned to:</td><td><%= @app_feature_request.assigned_to %> </td>
+<tr>
+<tr>
+  <td>Require by:</td><td><%= @app_feature_request.require_by_date.strftime('%d-%b-%y') %>
+  <br><small><small>  <%= @app_feature_request.schedule %>
+                <%= distance_of_time_in_words((@app_feature_request.require_by_date + 330.minutes), @current_time) || "NA" if @app_feature_request.require_by_date.present? %></td>
+              </small></small>
+</td>
+  <td>Estimated:</td><td><%= @app_feature_request.estimated_completion_date.strftime('%d-%b-%y') if @app_feature_request.estimated_completion_date %> </td>
+  <td>Completed On:</td><td> <%= @app_feature_request.actual_completion_date.strftime('%d-%b-%y') if @app_feature_request.actual_completion_date %> </td>
+  <td>Approved:</td><td>
+  <%= @app_feature_request.user_approved_date.strftime('%d-%b-%y') if @app_feature_request.user_approved_date %> </td>
+<tr>
+  <tr>
+    <td>Pace:</td><td><%= @app_feature_request.app_velocity.name  if @app_feature_request.app_velocity %> </td>
+    <td>Status:</td><td><%= @app_feature_request.app_status.name if @app_feature_request.app_status %> </td>
+    <td>Priority:</td><td><%= @app_feature_request.app_priority.name if @app_feature_request.app_priority %> </td>
+    <td>Queue no:</td><td><%= @app_feature_request.queue_no %> </td>
+  <tr>
+  <tr>
+    <td>Estimated:</td><td> <%= @app_feature_request.estimated_hours %> </td>
+    <td>Actual:</td><td><%= @app_feature_request.actual_hours %> </td>
+    <td>Bugs:</td><td> <%= @app_feature_request.bug_count %> </td>
+    <td>Comments:</td><td>  <%= @app_feature_request.comment_count %> </td>
+  <tr>
+</table>
+</div>
+<div class="panel-footer"><p>Relevant buttons show up here </p></div>
+</div>
+
+<% if @show_all_details == 1 %>
+<div class="panel panel-info">
+  <div class="panel-heading"><h3 class="panel-title"><strong>Problem this solves:</strong></h3></div>
+    <div class="panel-body">
+      <%= simple_format h(@app_feature_request.problem_this_solves) %>
+    </div>
+  <div class="panel-footer"><p>More and relevant information here improves the relevance of the solution</p></div>
+</div>
+<div class="panel panel-info">
+  <div class="panel-heading"><h3 class="panel-title"><strong>Mandatory requirements:</strong></h3></div>
+    <div class="panel-body">
+      <%= simple_format h(@app_feature_request.mandatory_requirements) %>
+    </div>
+  <div class="panel-footer"><p>This is like a checklist of things we should NOT be missing</p></div>
+</div>
+<% end %>
+<!--- start here -->
+<% if current_user.role == 10022 %>
+<div class="row">
+  <div class="col-xs-8">
+  <h4>View Technical Details </h4>
+  </div>
+  <div class="col-xs-4">
+    <button class="btn btn-info btn-sm" type="button" data-toggle="collapse" data-target="#collapseAddOn" aria-expanded="false" aria-controls="collapseAddOn">
+      Show all
+  </button>
+  </div>
+</div>
+<br>
+<div class="collapse" id="collapseAddOn">
+  <div class="panel panel-info">
+    <div class="panel-heading"><h3 class="panel-title"><strong>Technical notes:</strong></h3></div>
+      <div class="panel-body">
+        <%= simple_format h(@app_feature_request.technical_notes) %>
+      </div>
+    <div class="panel-footer"><p>This is like a technical checklist of things to help in solving the problem</p></div>
+  </div>
+  <div class="panel panel-info">
+    <div class="panel-heading"><h3 class="panel-title"><strong>Tables used:</strong></h3></div>
+      <div class="panel-body">
+        <%= simple_format h(@app_feature_request.tables_used) %>
+      </div>
+    <div class="panel-footer"><p>Use this technical section to update the details of tables used</p></div>
+  </div>
+</div>
+<% end %>
+
+<% if current_user.role == 10022 || current_user.role == 10162 %>
+    <div class="row">
+    <div class="col-xs-8">
+    <h4>View Files to be Uploaded Information </h4>
+    </div>
+    <div class="col-xs-4">
+    <button class="btn btn-info btn-sm" type="button" data-toggle="collapse" data-target="#collapseUpload" aria-expanded="false" aria-controls="collapseUpload">
+      Show Details
+    </button>
+    </div>
+    </div>
+    <br>
+    <div class="collapse" id="collapseUpload">
+    <div class="panel panel-info">
+      <div class="panel-heading"><h3 class="panel-title"><strong>Upload notes:</strong></h3></div>
+        <div class="panel-body">
+          <%= simple_format h(@app_feature_request.extra_notes) %>
+        </div>
+      <div class="panel-footer">
+        <h3>Delayed Job has be on after restart</h3>
+            <br />
+            <p>Start Job# RAILS_ENV=production bin/delayed_job start</p>
+            <br />
+            <p>End Job# RAILS_ENV=production bin/delayed_job stop</p>
+      </div>
+    </div>
+    </div>
+<% end %>
+
+<table class="table table-stripped">
+  <tr>
+    <td>User satisfaction level:</td><td><%= @app_feature_request.user_satisfaction_level_id %> </td>
+    <td>Linked app feature:</td><td>
+    <%= @app_feature_request.linked_app_feature_id %> </td>
+  </tr>
+</table>
+<div class="panel panel-info">
+<div class="panel-body">
+  <div class="row">
+    <div class="col-xs-4">
+    <% if @allow_edit == 1 %>
+    <%= link_to 'Edit Feature', edit_app_feature_request_path(@app_feature_request), class: "btn btn-info btn-sm" %>
+    <% end %>
+    </div>
+    <div class="col-xs-4"><%= link_to 'Back to Earlier', url_for(:back), class: "btn btn-primary btn-sm" %> </div>
+    <div class="col-xs-4"> </div>
+  </div>
+</div>
+</div>
+<% if @show_all_details == 1 %>
+<ul class="nav nav-tabs">
+  <li class="active"><a data-toggle="tab" href="#all">All Comments</a></li>
+  <li><a data-toggle="tab" href="#private">Your Private Comments</a></li>
+</ul>
+<div class="tab-content">
+    <div id="all" class="tab-pane fade in active">
+      <%= render partial: 'app_feature_comments/quick_list', :locals => {:list_name =>  "All Comments", :app_feature_comments => @feature_comments} %>
+    </div>
+    <div id="private" class="tab-pane fade">
+      <%= render partial: 'app_feature_comments/quick_list', :locals => {:list_name =>  "Your Private Comments", :app_feature_comments => @private_feature_comments} %>
+    </div>
+</div>
+<% end %>
+Allow Comments:<%= @allow_comments %>
+<% if @closed_no_edit == 0 %>
+  <!-- % = link_to 'Back', app_feature_requests_path %  -->
+  <% if @allow_comments == 1 %>
+    <%= render partial: 'app_feature_comments/quick_add', :locals => {:list_name =>  "Your Private Comments", :app_feature_comment => @app_feature_comment} %>
+  <% end %>
+
+  <%= render partial: 'app_feature_comments/update_stage_desc', :locals => {:current_stage_id =>  @current_stage_id,
+    :app_feature_comment => @app_stage_feature_comment, :new_stage_id => 10012} %>
+  <% else %>
+  <div class="panel panel-warning">
+    <div class="panel-body">
+      <h5>This is <%= @app_feature_request.app_status.name if @app_feature_request.app_status %> cant change anything now, create a new Request </h5>
+    </div>
+  </div>
+<% end %>

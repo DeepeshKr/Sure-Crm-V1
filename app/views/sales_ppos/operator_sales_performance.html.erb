@@ -57,10 +57,10 @@
     <h4>Income</h4>
       <strong>Total Sales <%= @total_sales_1.round(0) if @total_sales_1 %></strong><br>
       <strong>Total Revenue <%= @total_revenue_1.round(0) if @total_revenue_1 %></strong><br>
-     
+
       <strong>Media Cost <%= @media_total_fixed_cost.round(0) if @media_total_fixed_cost%></strong> <br>
       <%= @daily_charge %> x <%= @days %><br>
-     
+
       <% if @revised_media_total_fixed_cost.present? %>
       <strong>Revised Cost <%= @revised_media_total_fixed_cost.round(0)  %></strong><br>
       <%= @revised_per_day_rate %> x <%= @days %>
@@ -90,7 +90,7 @@
       PPO           :<%= ((@total_revenue_1 - (@total_expenses_1 + @revised_media_total_fixed_cost)) / @total_nos_1).round(0) %>
 
       <% end %>
- 
+
 
       <small>PPO formula = (Total Revenue - Total Cost) / Total Orders </small>
 
@@ -100,16 +100,16 @@
 </div>
 
 <div class="well well-sm">
-	<h4>Row 2 Default values R: 40% | T: 65% </h4>
+	<h4>Row 2 Default values R:<%= @sales_ppo_retail_default %>% | T:<%= @sales_ppo_transfer_default %>% </h4>
 <div class="row">
   <div class="col-xs-4">
     <h4>Income</h4>
       <strong>Total Sales <%= @total_sales_2.round(0) if @total_sales_2 %></strong><br>
       <strong>Total Revenue <%= @total_revenue_2.round(0) if @total_revenue_2 %></strong><br>
-     
+
       <strong>Original Media Cost <%= @media_total_fixed_cost.round(0) if @media_total_fixed_cost%></strong> <br>
       <%= @daily_charge %> x <%= @days %> <br>
-     
+
       <% if @revised_media_total_fixed_cost.present? %>
       <strong>Revised Media Cost <%= @revised_media_total_fixed_cost.round(0)  %></strong><br>
       <%= @revised_per_day_rate %> x <%= @days %>
@@ -125,7 +125,7 @@
   </div>
    <div class="col-xs-2">
       <% if @total_nos_2 > 0 %>
-   
+
       <h4>Original PPO</h4>
       Profitability :<%= ((@total_revenue_2 || 0) - ((@total_expenses_2 || 0) + (@media_total_fixed_cost || 0))).round(0) %><br>
       Total Orders  :<%= @total_nos_2.round(0) %> <br>
@@ -138,7 +138,7 @@
       Total Orders  :<%= @total_nos_2.round(0) %> <br>
       PPO           :<%= ((@total_revenue_2 - (@total_expenses_2 + @revised_media_total_fixed_cost)) / @total_nos_2).round(0) %>
       <% end %>
- 
+
 
       <small>PPO formula = (Total Revenue - Total Cost) / Total Orders </small>
 

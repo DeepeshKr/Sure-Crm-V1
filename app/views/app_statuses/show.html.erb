@@ -1,0 +1,19 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @app_status.name %>
+</p>
+
+<p>
+  <strong>Priority no:</strong>
+  <%= @app_status.priority_no %>
+</p>
+
+<p>
+  <strong>Description:</strong>
+  <%= @app_status.description %>
+</p>
+
+<%= link_to 'Edit', edit_app_status_path(@app_status) %> |
+<%= link_to 'Back', app_statuses_path %>

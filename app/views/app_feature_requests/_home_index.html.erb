@@ -1,0 +1,36 @@
+<div class="panel panel-info">
+  <div class="panel-heading"><h3 class="panel-title"><%= name_of_status_list %></h3></div>
+    <div class="panel-body">
+      <% if app_feature_requests.present? %>
+      <table class="table table-hover table-stripped">
+        <thead>
+          <th>Name</th>
+          <th>Require by</th>
+          <th>Problem this Solves</th>
+          <th>Mandatory Requirements</th>
+          <th>Request From</th>
+          <th>Created At</th>
+          <th></th>
+        </thead>
+        <tbody>
+          <% app_feature_requests.each do |app_feature_request| %>
+            <tr>
+              <td><%= app_feature_request.name %></td>
+              <td><%= app_feature_request.require_by_date.strftime('%d-%b-%y') if app_feature_request.require_by_date %></td>
+              <td><%= app_feature_request.problem_this_solves %></td>
+              <td><%= app_feature_request.mandatory_requirements %></td>
+              <td><%= app_feature_request.employee.fullname %></td>
+              <td><%= app_feature_request.created_at.strftime('%d-%b-%y') %></td>
+              <td><%= link_to 'Show', app_feature_request %> </br> <%= link_to 'Edit', edit_app_feature_request_path(app_feature_request) %></td>
+            </tr>
+            <% end %>
+        </tbody>
+      </table>
+      <% else %>
+      <h3>Nothing here</h3>
+      <% end %>
+    </div>
+    <div class="panel-footer">
+      <p><%= about_the_list %></p>
+    </div>
+</div>

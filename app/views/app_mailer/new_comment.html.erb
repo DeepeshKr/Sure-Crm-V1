@@ -1,0 +1,155 @@
+<!-- BEGIN TEMPLATE // -->
+<table border="0" cellpadding="0" cellspacing="0" id="templateContainer">
+    <tr>
+        <td align="center" valign="top">
+            <!-- BEGIN PREHEADER // -->
+              <table border="0" cellpadding="0" cellspacing="0" width="100%" id="templatePreheader">
+                  <tr>
+                      <td valign="top" class="preheaderContent" style="padding-top:10px; padding-right:20px; padding-bottom:10px; padding-left:20px;" mc:edit="preheader_content00">
+                          New Comment for your Ticket
+                      </td>
+                      <!-- *|IFNOT:ARCHIVE_PAGE|* -->
+                      <td valign="top" width="180" class="preheaderContent" style="padding-top:10px; padding-right:20px; padding-bottom:10px; padding-left:0;" mc:edit="preheader_content01">
+                          Email not displaying correctly?<br /><a href=<%= @url %> target="_blank">View it in your browser</a>.
+                      </td>
+                      <!-- *|END:IF|* -->
+                  </tr>
+              </table>
+              <!-- // END PREHEADER -->
+          </td>
+      </tr>
+    <tr>
+        <td align="center" valign="top">
+            <!-- BEGIN HEADER // -->
+              <table border="0" cellpadding="0" cellspacing="0" width="100%" id="templateHeader">
+                  <tr>
+                      <td valign="top" class="headerContent">
+                        <img src="https://www.hbnindia.com/img/HBN_logo_new.png" style="max-height:75px;max-width:600px;" id="headerImage" mc:label="header_image" mc:edit="header_image" mc:allowdesigner mc:allowtext />
+                      </td>
+                  </tr>
+              </table>
+              <!-- // END HEADER -->
+          </td>
+      </tr>
+    <tr>
+        <td align="center" valign="top">
+            <!-- BEGIN BODY // -->
+              <table border="0" cellpadding="0" cellspacing="0" width="100%" id="templateBody">
+                  <tr>
+                      <td valign="top" class="bodyContent" mc:edit="body_content">
+                          <h1>Ticket no: <%= @app_feature_comment.app_feature_request.id %></h1>
+                          <h3>App: <%= @app_feature_comment.app_feature_request.app_list.name %></h3>
+                          Status of <%= @app_feature_comment.app_feature_request.app_feature_type.name %> with tracking id <%= @app_feature_comment.app_feature_request.id %> is <%= @app_feature_comment.app_feature_request.app_status.name %>
+                          <br />
+                          <br />
+                          <h2>New Comment for <%= @app_feature_comment.app_feature_request.name %></h2>
+                          <h4>Dear <%= @app_feature_comment.app_feature_request.employee.fullname %></h4>
+
+                          The "<em><%= @app_feature_comment.app_feature_request.app_feature_type.name %></em>"
+                          request has seen a new comment. The status
+                          is <%= @app_feature_comment.app_feature_request.app_status.name %>
+                          and follows <%= @app_feature_comment.app_feature_request.app_priority.name %>
+                          pace of work and estimated to be completed
+                          by <%= @app_feature_comment.app_feature_request.estimated_completion_date.strftime('%d-%b-%y') %>.
+                          You can view the request <a href="<%= @url %>" target="_blank">click here</a>
+                      </td>
+                  </tr>
+                  <tr>
+                      <td valign="top" class="bodyContent" mc:edit="body_content">
+                        <h3>New Comments</h3>
+                        <%= @app_feature_comment.details %>
+                        <br>
+                        <br>
+                        Comments by: <%= @app_feature_comment.employee.fullname %>
+                      </td>
+                  </tr>
+              </table>
+              <!-- // END BODY -->
+          </td>
+      </tr>
+    <tr>
+        <td align="center" valign="top">
+            <!-- BEGIN COLUMNS // -->
+              <table border="0" cellpadding="0" cellspacing="0" width="100%" id="templateColumns">
+                <tr mc:repeatable>
+                    <td align="center" valign="top" class="templateColumnContainer" style="padding-top:20px;">
+                        <table border="0" cellpadding="20" cellspacing="0" width="100%">
+
+                              <tr>
+                                <td valign="top" class="leftColumnContent" mc:edit="left_column_content">
+                                      <h3>Problem this solves</h3>
+                                      <br />
+                                      <%= @app_feature_comment.app_feature_request.problem_this_solves %>
+                                      <br />
+                                  </td>
+                              </tr>
+                          </table>
+                      </td>
+                    <td align="center" valign="top" class="templateColumnContainer" style="padding-top:20px;">
+                        <table border="0" cellpadding="20" cellspacing="0" width="100%">
+                              <tr>
+                                <td valign="top" class="rightColumnContent" mc:edit="right_column_content">
+                                      <h3>Mandatory requirements</h3>
+                                      <br />
+                                      <%= @app_feature_comment.app_feature_request.mandatory_requirements %>
+                                      <br />
+                                  </td>
+                              </tr>
+                          </table>
+                      </td>
+                  </tr>
+              </table>
+              <!-- // END COLUMNS -->
+          </td>
+      </tr>
+      <td align="center" valign="top">
+          <!-- BEGIN BODY // -->
+          <table border="0" cellpadding="0" cellspacing="0" width="100%" id="templateBody">
+              <tr>
+                  <td valign="top" class="bodyContent" mc:edit="body_content">
+                    Desired Completion date </td><td> <%= @app_feature_comment.app_feature_request.require_by_date.strftime('%d-%b-%y') %>
+                  </td>
+                  <td valign="top" class="bodyContent" mc:edit="body_content">
+                    Expected Completion date</td><td> <%= @app_feature_comment.app_feature_request.estimated_completion_date.strftime('%d-%b-%y') %>
+                  </td>
+                  <td valign="top" class="bodyContent" mc:edit="body_content">
+                    Current Status </td><td> <%= @app_feature_comment.app_feature_request.app_status.name %>
+                  </td>
+
+              </tr>
+              <tr>
+                  <td valign="top" class="bodyContent" mc:edit="body_content">
+                    Pace of Work: </td><td> <%= @app_feature_comment.app_feature_request.app_velocity.name if @app_feature_comment.app_feature_request.app_velocity %>
+                  </td>
+                  <td valign="top" class="bodyContent" mc:edit="body_content">
+                    Estimated Hours:</td><td> <%= @app_feature_comment.app_feature_request.estimated_hours %>
+                  </td>
+                  <td valign="top" class="bodyContent" mc:edit="body_content">
+                  Priority</td><td>  <%= @app_feature_comment.app_feature_request.app_priority.name %>
+                  </td>
+              </tr>
+          </table>
+            <!-- // END BODY -->
+        </td>
+    <tr>
+        <td align="center" valign="top">
+            <!-- BEGIN FOOTER // -->
+              <table border="0" cellpadding="0" cellspacing="0" width="100%" id="templateFooter">
+                  <tr>
+                      <td valign="top" class="footerContent" mc:edit="footer_content00">
+                        <br>
+                        <br>
+                        <br>
+                       Remain updated on this request by <a href=<%= @url %>clicking here</a>
+                       <br>
+                       <br>
+                       <br>
+                      </td>
+                  </tr>
+
+              </table>
+              <!-- // END FOOTER -->
+          </td>
+      </tr>
+  </table>
+  <!-- // END TEMPLATE -->

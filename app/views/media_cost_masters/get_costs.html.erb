@@ -1,0 +1,68 @@
+
+<!-- :anchor => "data-entry-tabs" -->
+<br>
+<div class="row">
+  <%= form_tag  url_for(:controller => 'media_cost_masters',
+  :action => 'get_costs'), method: "get" do |f| %>
+	<div class="col-xs-2 ">
+	  <%= select_tag :begin_hr, options_for_select(0..23,  selected: @begin_hr), :class => "form-control"  %>
+	<small>  Hr </small>
+	</div>
+	<div class="col-xs-2">
+	  <%= select_tag :begin_min, options_for_select(0..59,  selected: @begin_min), :class => "form-control"  %>
+	<small>  Min </small>
+	</div>
+
+	 <div class="col-xs-2">
+	  <%= select_tag :begin_sec, options_for_select(0..59,  selected: @begin_sec), :class => "form-control"  %>
+	<small>  Sec </small>
+ 	</div>
+  <div class="col-xs-2">
+         <%= text_field_tag :total_secs, @total_secs, :class =>"form-control", :required => true,
+         :placeholder => "Total Seconds", :label => "Total Seconds" %>
+  </div>
+  <div class="col-xs-3">
+    <%= submit_tag "Show Costs", name: nil,  class: "btn btn-warning" %>
+  </div>
+  <% end %>
+
+</div>
+<h3>Cost Details for Approx Total Mins <%= @total_secs.to_i / 60 if @total_secs.present? %></h3>
+
+<table class="table table-hover table-stripped">
+  <thead>
+    <tr>
+      <th>Loop</th>
+      <th>Cost Details</th>
+      <th>Cost Cal Per Sec</th>
+      <th>Secs Used </th>
+      <th>Approx Min</th>
+      <th>Cost</th>
+  	</tr>
+   </thead>
+	<tbody>
+<% if @media_cost.present? %>
+  <% total_secs, total_mins, total_costs = 0,0,0 %>
+	 <% @media_cost.each do |m_cost| %>
+	    <tr>
+  	    <td><%= m_cost.loops %></td>
+  			<td><%= m_cost.cost_details %></td>
+        <td><%= m_cost.cost_cal_per_sec %></td>
+        <td><%= m_cost.secs_used %> <% total_secs += m_cost.secs_used %></td>
+        <td><%= m_cost.secs_used / 60 %> <% total_mins += (m_cost.secs_used / 60) %></td>
+        <td><%= m_cost.loop_cost.round(2) %> <% total_costs += m_cost.loop_cost %></td>
+	  	</tr>
+	<% end %>
+      <tr>
+        <th colspan="3">Total</th>
+        <th><%= total_secs %></th>
+        <th><%= total_mins %></th>
+        <th><%= total_costs.round(2) %></th>
+      </tr>
+  <% else %>
+  <tr>
+    <td colspan="6">Nothing here</td>
+  </tr>
+  <% end %>
+  	</tbody>
+</table>

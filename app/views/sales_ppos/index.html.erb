@@ -44,7 +44,7 @@
    <tr>
 	   <td><%= @sno %></td>
 
-	 	<td> 
+	 	<td>
 		<%= c.for_date.strftime("%Y-%m-%d") %> <br>
 		<small>Desc: <%= c.description %> </small>
 		</td>
@@ -156,3 +156,5 @@
   </div>
 
 </div>
+
+<%= render partial: 'recreate_ppo'  %>

@@ -17,23 +17,25 @@ Rails.application.configure do
 
   #config.action_mailer.default_url_options = { host: 'localhost', port: 3000 }
 
-  #config.action_mailer.delivery_method = :smtp
-  # config.action_mailer.smtp_settings = {
-  # :address              => "smtp.gmail.com",
-  # :port                 => 587,
-  # :domain               => "gmail.com",
-  # :user_name            => "telebrandsindia@tec2grow.in",
-  # :password             => "Well@come101",
-  # :authentication       => 'plain',
-  # :enable_starttls_auto => true  }
-
   config.action_mailer.delivery_method = :smtp
   config.action_mailer.smtp_settings = {
-  :address              => "3.0.3.85",
-  :port                 => 25,
-  :user_name            => "noreply@telebrandsindia.com",
-  :password             => "noreply",
-  :authentication       => 'plain'}
+  :address              => "smtp.gmail.com",
+  :port                 => 587,
+  :domain               => "gmail.com",
+  :user_name            => "sure.crm.app@gmail.com",
+  :password             => "Sure@1234",
+  :authentication       => 'plain',
+  :enable_starttls_auto => true  }
+
+  ##these options are only needed if you choose smtp delivery
+  # config.action_mailer.smtp_settings = {
+  # :address        => '3.0.3.85',
+  # :port           => 25,
+  # :domain         => 'www.hbnindia.com',
+  # :authentication => :login,
+  # :user_name      => 'noreply@hbnindia.com',
+  # :password       => 'noreply@321'}
+
   config.action_mailer.perform_deliveries = true
 
   # Don't care if the mailer can't send.

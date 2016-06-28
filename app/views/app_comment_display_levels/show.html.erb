@@ -1,0 +1,19 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @app_comment_display_level.name %>
+</p>
+
+<p>
+  <strong>Priority no:</strong>
+  <%= @app_comment_display_level.priority_no %>
+</p>
+
+<p>
+  <strong>Description:</strong>
+  <%= @app_comment_display_level.description %>
+</p>
+
+<%= link_to 'Edit', edit_app_comment_display_level_path(@app_comment_display_level) %> |
+<%= link_to 'Back', app_comment_display_levels_path %>

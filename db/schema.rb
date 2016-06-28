@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160529120712) do
+ActiveRecord::Schema.define(version: 20160621165940) do
 
   create_table "address_types", force: :cascade do |t|
     t.string   "name"
@@ -23,6 +23,123 @@ ActiveRecord::Schema.define(version: 20160529120712) do
     t.string   "name"
     t.datetime "created_at"
     t.datetime "updated_at"
+  end
+
+  create_table "app_comment_display_levels", force: :cascade do |t|
+    t.string   "name"
+    t.integer  "priority_no", precision: 38
+    t.text     "description"
+    t.datetime "created_at",                 null: false
+    t.datetime "updated_at",                 null: false
+  end
+
+  create_table "app_comment_types", force: :cascade do |t|
+    t.string   "name"
+    t.integer  "priority_no", precision: 38
+    t.text     "description"
+    t.datetime "created_at",                 null: false
+    t.datetime "updated_at",                 null: false
+  end
+
+  create_table "app_feature_comments", force: :cascade do |t|
+    t.text     "details"
+    t.integer  "app_feature_request_id", precision: 38
+    t.integer  "comments_by_id",         precision: 38
+    t.integer  "comment_type_id",        precision: 38
+    t.integer  "display_level_id",       precision: 38
+    t.datetime "created_at",                            null: false
+    t.datetime "updated_at",                            null: false
+  end
+
+  create_table "app_feature_requests", force: :cascade do |t|
+    t.string   "name"
+    t.integer  "app_id",                     precision: 38
+    t.integer  "app_feature_type_id",        precision: 38
+    t.text     "problem_this_solves"
+    t.text     "mandatory_requirements"
+    t.text     "technical_notes"
+    t.integer  "request_by",                 precision: 38
+    t.datetime "require_by_date"
+    t.datetime "estimated_completion_date"
+    t.datetime "actual_completion_date"
+    t.datetime "user_approved_date"
+    t.integer  "user_satisfaction_level_id", precision: 38
+    t.integer  "velocity_id",                precision: 38
+    t.integer  "current_status_id",          precision: 38
+    t.integer  "priority_id",                precision: 38
+    t.integer  "assigned_to",                precision: 38
+    t.text     "extra_notes"
+    t.text     "tables_used"
+    t.integer  "estimated_hours",            precision: 38
+    t.integer  "actual_hours",               precision: 38
+    t.integer  "bug_count",                  precision: 38
+    t.integer  "linked_app_feature_id",      precision: 38
+    t.integer  "queue_no",                   precision: 38
+    t.integer  "comment_count",              precision: 38
+    t.datetime "created_at",                                null: false
+    t.datetime "updated_at",                                null: false
+  end
+
+  add_index "app_feature_requests", ["actual_completion_date"], name: "i_app_fea_req_act_com_dat"
+  add_index "app_feature_requests", ["app_feature_type_id"], name: "i_app_fea_req_app_fea_typ_id"
+  add_index "app_feature_requests", ["current_status_id"], name: "i_app_fea_req_cur_sta_id"
+  add_index "app_feature_requests", ["estimated_completion_date"], name: "i_app_fea_req_est_com_dat"
+  add_index "app_feature_requests", ["priority_id"], name: "i_app_fea_req_pri_id"
+  add_index "app_feature_requests", ["request_by"], name: "i_app_fea_req_req_by"
+  add_index "app_feature_requests", ["require_by_date"], name: "i_app_fea_req_req_by_dat"
+  add_index "app_feature_requests", ["user_approved_date"], name: "i_app_fea_req_use_app_dat"
+  add_index "app_feature_requests", ["user_satisfaction_level_id"], name: "i_app_fea_req_use_sat_lev_id"
+  add_index "app_feature_requests", ["velocity_id"], name: "i_app_fea_req_vel_id"
+
+  create_table "app_feature_types", force: :cascade do |t|
+    t.string   "name"
+    t.integer  "priority_no", precision: 38
+    t.text     "description"
+    t.datetime "created_at",                 null: false
+    t.datetime "updated_at",                 null: false
+  end
+
+  create_table "app_lists", force: :cascade do |t|
+    t.string   "name"
+    t.integer  "priority_no",         precision: 38
+    t.text     "primary_goal_of_app"
+    t.text     "description"
+    t.string   "version"
+    t.string   "location"
+    t.datetime "created_at",                         null: false
+    t.datetime "updated_at",                         null: false
+  end
+
+  create_table "app_priorities", force: :cascade do |t|
+    t.string   "name"
+    t.integer  "priority_no", precision: 38
+    t.text     "description"
+    t.datetime "created_at",                 null: false
+    t.datetime "updated_at",                 null: false
+  end
+
+  create_table "app_statuses", force: :cascade do |t|
+    t.string   "name"
+    t.integer  "priority_no", precision: 38
+    t.text     "description"
+    t.datetime "created_at",                 null: false
+    t.datetime "updated_at",                 null: false
+  end
+
+  create_table "app_user_satisfaction_levels", force: :cascade do |t|
+    t.string   "name"
+    t.integer  "priority_no", precision: 38
+    t.text     "description"
+    t.datetime "created_at",                 null: false
+    t.datetime "updated_at",                 null: false
+  end
+
+  create_table "app_velocities", force: :cascade do |t|
+    t.string   "name"
+    t.integer  "priority_no", precision: 38
+    t.text     "description"
+    t.datetime "created_at",                 null: false
+    t.datetime "updated_at",                 null: false
   end
 
   create_table "bills", force: :cascade do |t|
@@ -130,6 +247,7 @@ ActiveRecord::Schema.define(version: 20160529120712) do
     t.integer  "end_frame",         precision: 38
     t.integer  "frames",            precision: 38
     t.integer  "day",               precision: 38
+    t.decimal  "group_total_cost",  precision: 12, scale: 4
   end
 
   add_index "campaign_playlists", ["campaignid"], name: "i_cam_pla_cam"
@@ -873,7 +991,13 @@ ActiveRecord::Schema.define(version: 20160529120712) do
     t.datetime "created_at",                             null: false
     t.datetime "updated_at",                             null: false
     t.decimal  "slot_percent",  precision: 5,  scale: 4
+    t.decimal  "cost_per_sec",  precision: 10, scale: 4
+    t.integer  "starting_sec",  precision: 38
+    t.integer  "ending_sec",    precision: 38
   end
+
+  add_index "media_cost_masters", ["ending_sec"], name: "i_med_cos_mas_end_sec"
+  add_index "media_cost_masters", ["starting_sec"], name: "i_med_cos_mas_sta_sec"
 
   create_table "media_groups", force: :cascade do |t|
     t.string   "name"
@@ -1158,6 +1282,11 @@ ActiveRecord::Schema.define(version: 20160529120712) do
     t.datetime "updated_at",                           null: false
     t.string   "final_order_id"
     t.text     "full_response"
+    t.datetime "last_check_at"
+    t.text     "message_url"
+    t.string   "transaction_ref"
+    t.integer  "payumoney_status_id",   precision: 38
+    t.text     "transaction_history"
   end
 
   add_index "payumoney_details", ["customermobilenumber"], name: "i_pay_det_cus"
@@ -1165,6 +1294,18 @@ ActiveRecord::Schema.define(version: 20160529120712) do
   add_index "payumoney_details", ["merchanttransactionid"], name: "i_pay_det_mer"
   add_index "payumoney_details", ["orderid"], name: "i_payumoney_details_orderid"
   add_index "payumoney_details", ["paymentid"], name: "i_payumoney_details_paymentid"
+  add_index "payumoney_details", ["payumoney_status_id"], name: "i_pay_det_pay_sta_id"
+  add_index "payumoney_details", ["transaction_ref"], name: "i_pay_det_tra_ref"
+
+  create_table "payumoney_statuses", force: :cascade do |t|
+    t.string   "name"
+    t.integer  "priority_no",          precision: 38
+    t.string   "external_description"
+    t.string   "valid_payment"
+    t.text     "description"
+    t.datetime "created_at",                          null: false
+    t.datetime "updated_at",                          null: false
+  end
 
   create_table "pincode_service_levels", force: :cascade do |t|
     t.string   "pincode"
@@ -1835,8 +1976,83 @@ ActiveRecord::Schema.define(version: 20160529120712) do
     t.datetime "updated_at",                                                 null: false
   end
 
+  create_table "vpp_tables", force: :cascade do |t|
+  end
+
   create_table "vpp_test", id: false, force: :cascade do |t|
     t.integer "asd", limit: 5, precision: 5
+  end
+
+  create_table "vpps", force: :cascade do |t|
+    t.datetime "orderdate"
+    t.datetime "entrydate"
+    t.string   "ordersource"
+    t.string   "despatch"
+    t.string   "prod"
+    t.string   "trantype"
+    t.string   "title"
+    t.string   "lname"
+    t.string   "fname"
+    t.string   "add1"
+    t.string   "add2"
+    t.string   "add3"
+    t.string   "city"
+    t.integer  "pincode",         precision: 38
+    t.string   "tel1"
+    t.string   "tel2"
+    t.string   "fax"
+    t.string   "email"
+    t.string   "dept"
+    t.integer  "basic",           precision: 38
+    t.integer  "postage",         precision: 38
+    t.decimal  "taxper",          precision: 5,  scale: 2
+    t.integer  "taxamt",          precision: 38
+    t.string   "manifest"
+    t.string   "invoice"
+    t.datetime "shdate"
+    t.integer  "invoiceamount",   precision: 38
+    t.datetime "paiddate"
+    t.datetime "returndate"
+    t.datetime "refunddate"
+    t.string   "refundchek"
+    t.datetime "refundcheckdate"
+    t.string   "cfo"
+    t.integer  "operator",        precision: 38
+    t.integer  "shipped",         precision: 38
+    t.integer  "paidamt",         precision: 38
+    t.integer  "refundamt",       precision: 38
+    t.string   "dist"
+    t.string   "state"
+    t.integer  "letter",          precision: 38
+    t.string   "deo"
+    t.string   "modby"
+    t.datetime "moddt"
+    t.string   "cou"
+    t.datetime "probag"
+    t.integer  "notice",          precision: 38
+    t.string   "transfer"
+    t.string   "reason"
+    t.string   "orderno"
+    t.datetime "claimdate"
+    t.datetime "delvdate"
+    t.integer  "channel",         precision: 38
+    t.string   "fsize"
+    t.integer  "custref",         precision: 38
+    t.integer  "sanction",        precision: 38
+    t.string   "emi"
+    t.datetime "trandate"
+    t.string   "status"
+    t.datetime "statusdate"
+    t.string   "landmark"
+    t.string   "barcode"
+    t.string   "barcode2"
+    t.string   "barcode3"
+    t.string   "order_number"
+    t.integer  "codamt",          precision: 38
+    t.decimal  "weight",          precision: 10, scale: 2
+    t.string   "dt_hour"
+    t.string   "dt_min"
+    t.integer  "convcharges",     precision: 38
   end
 
 end

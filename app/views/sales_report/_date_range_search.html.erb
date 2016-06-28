@@ -1,6 +1,8 @@
 <div class="row">
   <%= form_tag  url_for(:controller => 'sales_report', :action => searchaction), method: "get" do  %>
-    
+  <% if @media_id.present? %>
+    <%= hidden_field_tag :media_id, @media_id %>
+  <% end %>
       <div class="col-xs-8">
         <div class="input-daterange input-group">
           <%= text_field_tag(:from_date, @from_date, :data => {:provide => "datepicker"}, :id => "datepicker_from", :class => "form-control", :required => "true" )   %>

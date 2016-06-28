@@ -2,6 +2,7 @@
 <blockquote>
   <p class="lead"> <strong><%= @order_message %> </strong>
   </p>
+<% if @ordernos.present? %>
 <ul class="list-inline">
  <% @ordernos.each do |o| %>
   <li>
@@ -9,7 +10,7 @@
   </li>
   <% end %>
 </ul>
-
+<% end %>
    <footer><%= @order_processed_next_steps %>   </footer>
 </blockquote>
 
@@ -24,7 +25,7 @@
 Customer Order Summary
 </div>
 <div class="col-xs-4 text-right">
-<%= order_master.external_order_no %> 
+<%= order_master.external_order_no %>
 </div>
 </div>
 </h3>
@@ -36,12 +37,12 @@ Customer Order Summary
 <div class="col-xs-12">
   <small>Customer Id <%= order_master.customer_id%></small> &nbsp;<small>Order Id <%= order_master.id %></small>
   &nbsp;<small> <strong>Date:</strong>   <%= order_master.orderdate + 330.minutes %> </small>
-&nbsp;  <small><strong>Employee Id:</strong>   <%= order_master.employee_id %></small>   
+&nbsp;  <small><strong>Employee Id:</strong>   <%= order_master.employee_id %></small>
 &nbsp; <small><strong>Employee Code:</strong>   <%= order_master.employeecode %> </small>
 &nbsp; <small><strong>DNIS:</strong>   <%= order_master.calledno %> </small>
-&nbsp; <small><strong>Completed Order No: 
+&nbsp; <small><strong>Completed Order No:
 <% if order_master.external_order_no.blank? %>
- <%= link_to "Complete Order", review_path(:order_id => order_master.id), class: "btn btn-warning btn-xs" %>  
+ <%= link_to "Complete Order", review_path(:order_id => order_master.id), class: "btn btn-warning btn-xs" %>
 <% else %>
 <%= order_master.external_order_no %>
  <% end %>
@@ -59,7 +60,7 @@ Customer Order Summary
   <div class="row">
     <div class="col-xs-6">
       <small> Mobile No <%= order_master.customer.mobile if order_master.customer %> </small><br/>
-      <small> Mobile No <%= order_master.customer.alt_mobile if order_master.customer %></small> 
+      <small> Mobile No <%= order_master.customer.alt_mobile if order_master.customer %></small>
     </div>
     <div class="col-xs-6">
     <small> Email Id  <%= order_master.customer.emailid if order_master.customer %> </small><br/>
@@ -93,24 +94,24 @@ Customer Order Summary
   <div class="col-xs-4">   <%= order_master.customer_address.country %>  </div>
 <div class="clearfix"></div>
        <div class="col-xs-4">      <%= order_master.customer_address.telephone1 %>
-     
+
     </div>
-    
+
     <div class="col-xs-4">
       <%= order_master.customer_address.telephone2 if order_master.customer_address.telephone2 %>
-   
+
     </div>
-    
+
     <div class="col-xs-4">
       <%= order_master.customer_address.fax if order_master.customer_address.fax %>
-   
+
     </div>
-  
+
 </div>
 
 <% end %>
 </div>
-    
+
  <!-- Customer Address End-->
 
 <!-- orderlines-->
@@ -118,12 +119,12 @@ Customer Order Summary
   <thead>
   <tr>
       <th colspan="4"> </th>
-      
-     
+
+
       <th colspan="2" class="text-center">COD Charges</th>
-      
+
       <th colspan="2" class="text-center">Credit Card</th>
-      
+
     </tr>
     <tr>
       <th>Product Description </th>
@@ -147,17 +148,17 @@ Customer Order Summary
 <%= order_line.subtotal.to_i + order_line.shipping.to_i %>
 <hr>
      <small><%= order_line.shipping.to_i %> </small>   </td>
-        
+
        <td class="text-right">
         <% if order_line.codcharges != 0 %>
 
-<%= (order_line.subtotal.to_i || 0) + (order_line.shipping.to_i || 0) + (order_line.codcharges.to_i || 0)  %> 
+<%= (order_line.subtotal.to_i || 0) + (order_line.shipping.to_i || 0) + (order_line.codcharges.to_i || 0)  %>
 <% else %>
           0.00
         <% end %>
 <hr>
 <small> <%= order_line.codcharges %></small>
-       </td> 
+       </td>
        <td class="text-right">
         <% if order_line.maharastracodextra != 0 %>
         <%= (order_line.subtotal.to_i || 0) + (order_line.shipping.to_i || 0) + (order_line.codcharges.to_i || 0) + (order_line.maharastracodextra.to_i || 0) %>
@@ -167,10 +168,10 @@ Customer Order Summary
  <hr>
       <small> <%= order_line.maharastracodextra.to_i %></small>
        </td>
-        
+
         <td class="text-right">
 <% if order_line.creditcardcharges != 0 %>
-        <%= (order_line.subtotal.to_i || 0) + (order_line.shipping.to_i || 0)  + (order_line.creditcardcharges.to_i || 0) %> 
+        <%= (order_line.subtotal.to_i || 0) + (order_line.shipping.to_i || 0)  + (order_line.creditcardcharges.to_i || 0) %>
         <% else %>
           0.00
         <% end %>
@@ -180,20 +181,20 @@ Customer Order Summary
         <td class="text-right">
         <% if order_line.maharastraccextra != 0 %>
 
-<%= (order_line.subtotal.to_i || 0) + (order_line.shipping.to_i || 0) + (order_line.creditcardcharges.to_i || 0)  + (order_line.maharastraccextra.to_i || 0)  %> 
+<%= (order_line.subtotal.to_i || 0) + (order_line.shipping.to_i || 0) + (order_line.creditcardcharges.to_i || 0)  + (order_line.maharastraccextra.to_i || 0)  %>
 <% else %>
           0.00
         <% end %>
 <hr>
 <small> <%= order_line.maharastraccextra.to_i %></small>
-       </td>  
+       </td>
       </tr>
     <% end %>
-  
 
-    
-    
-  
+
+
+
+
 
 
   </tbody>
@@ -202,28 +203,28 @@ Customer Order Summary
 <!-- orderlines End-->
 
 
-<!-- order footer-->    
+<!-- order footer-->
 <div class="panel-footer">
 
 <div class="row">
-  
+
 
   <div class="col-xs-6">
   <div class="panel panel-default">
   <!-- Default panel contents -->
-  
-        
+
+
         <!-- List group -->
         <ul class="list-group">
           <li class="list-group-item"><strong>Pieces:</strong> <%= order_master.pieces %></li>
           <li class="list-group-item"><strong>Order Status:</strong> <%= order_master.order_status_master.name  if order_master.order_status_master %></li>
           <li class="list-group-item"><strong>Payment mode:</strong> <%= order_master.orderpaymentmode.name if order_master.orderpaymentmode %> </li>
           <li class="list-group-item"><strong>State:</strong> <%= order_master.customer_address.state if order_master.customer_address %> </li>
-         
+
         </ul>
     </div>
-   
-   
+
+
   </div>
 
 <div class="col-xs-6">
@@ -231,42 +232,42 @@ Customer Order Summary
       <!-- Default panel contents -->
       <!-- Table -->
           <table class="table table-hover">
-        <tr><td> <strong>Basic Price:</strong>   </td>  
+        <tr><td> <strong>Basic Price:</strong>   </td>
         <td class="text-right"> <%= order_master.subtotal.to_i %></td>  </tr>
         <tr><td><strong>Shipping:</strong>  </td>
         <td class="text-right">
-        <small>(<%= order_master.shipping.to_i %>)</small> 
+        <small>(<%= order_master.shipping.to_i %>)</small>
         <%= order_master.subtotal.to_i + order_master.shipping.to_i  %>
-        </td> 
+        </td>
         </tr>
-        <tr><td> <strong>Cod charges:</strong></td><td class="text-right"> 
+        <tr><td> <strong>Cod charges:</strong></td><td class="text-right">
         <small>(<%= order_master.codcharges.to_i %>)</small>
         <% if order_master.codcharges != 0 %>
          <%= order_master.subtotal.to_i + order_master.shipping.to_i + order_master.codcharges.to_i  %>
         <% end %>
         </td> </tr>
         <tr>
-        <td> <strong>Maharashtra COD Surcharge:</strong></td><td class="text-right"> 
-      <small>(<%= order_master.maharastracodextra.to_i %>)</small>  
+        <td> <strong>Maharashtra COD Surcharge:</strong></td><td class="text-right">
+      <small>(<%= order_master.maharastracodextra.to_i %>)</small>
       <% if order_master.maharastracodextra != 0 %>
       <%= order_master.subtotal.to_i + order_master.shipping.to_i + order_master.maharastracodextra.to_i + order_master.codcharges.to_i %>
         <% end %>
       </td> </tr>
-        <tr><td> <strong>Credit Card Savings:</strong></td><td class="text-right"> 
+        <tr><td> <strong>Credit Card Savings:</strong></td><td class="text-right">
         <small>(<%= order_master.creditcardcharges.to_i %>)</small>
         <% if order_master.creditcardcharges != 0 %>
          <%= order_master.subtotal.to_i + order_master.shipping.to_i + order_master.creditcardcharges.to_i %>
           <% end %>
         </td> </tr>
-        
+
         <tr>
-        <td> <strong>Maharashtra CC Surcharge:</strong></td><td class="text-right"> 
-      <small>(<%= order_master.maharastraccextra.to_i %>)</small> 
+        <td> <strong>Maharashtra CC Surcharge:</strong></td><td class="text-right">
+      <small>(<%= order_master.maharastraccextra.to_i %>)</small>
       <% if order_master.maharastraccextra != 0 %>
       <%= order_master.subtotal.to_i + order_master.shipping.to_i + order_master.creditcardcharges.to_i + order_master.maharastraccextra.to_i %>
         <% end %>
       </td> </tr>
-        </table>  
+        </table>
     </div>
 
 </div>
@@ -279,12 +280,12 @@ Customer Order Summary
 <strong>Notes:</strong>
 </div>
     <div class="col-xs-10">
-     
+
       <%= order_master.notes %>
     </div>
 
 </div>
-</div> 
+</div>
 <div class="clearfix"></div>
 
 
@@ -294,5 +295,4 @@ Customer Order Summary
 <br>
 <% end %>
 <!-- bottom menu -->
-  <%= render 'call_menu' %> 
-
+  <%= render 'call_menu' %>

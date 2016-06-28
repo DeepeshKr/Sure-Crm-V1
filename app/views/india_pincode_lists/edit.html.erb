@@ -1,6 +1,27 @@
-<h1>Editing India Pincode List</h1>
+<h1>Edit India Pincode List Select the relevant section</h1>
 
-<%= render 'form' %>
+<ul class="nav nav-tabs">
+	<li class="active"><a data-toggle="tab" href="#taluk">Taluk (for most address changes)</a></li>
+	<li><a data-toggle="tab" href="#state">State Only</a></li>
+	<li><a data-toggle="tab" href="#full">Full Edit</a></li>
+</ul>
+
+<div class="tab-content">
+    <div id="taluk" class="tab-pane fade in active">
+      <%= render 'taluk' %>
+    </div>
+    <div id="state" class="tab-pane fade">
+      <%= render 'state' %>
+    </div>
+    <div id="full" class="tab-pane fade">
+      <%= render 'form' %>
+    </div>
+</div>
+
+
+
+
+
 
 <%= link_to 'Show', @india_pincode_list %> |
 <%= link_to 'Back', india_pincode_lists_path %>

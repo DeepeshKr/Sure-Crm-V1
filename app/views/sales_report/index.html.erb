@@ -5,12 +5,13 @@
   <p>List of all sales reports with detailed description can be found here.</p>
  </div>
 </div>
- <div class="container">
+
+<div class="container">
 <div class="row">
 	<div class="col-xs-4">
 		<div class="panel panel-primary">
-        	<div class="panel-heading"><h3 class="panel-title">BDM Channel Sales</h3></div>
-				<div class="panel-body">Get Sales report for each BDM Listed below for Channel Sales managed by them</div>
+        	<div class="panel-heading"><h3 class="panel-title">CDM Channel Sales</h3></div>
+				<div class="panel-body">Get Sales report for each CDM Listed below for Channel Sales managed by them</div>
         			 <div class="panel-footer">
         		<%= bootstrap_form_tag url: url_for(:controller => 'sales_report', :action => 'cdm_sales_summary'), :method => :GET, :enforce_utf8 => false do |f| %>
         	<div class="row">
@@ -31,13 +32,13 @@
 		</div>
 	</div>
 	<div class="col-xs-4">
-			<div class="panel panel-primary">
+			<div class="panel panel-info">
 			<div class="panel-heading"><h3 class="panel-title">HBN Showwise Report</h3></div>
 			  <div class="panel-body">
 			    See how each show is performing and sales against each show, warning sometimes some show may get no results at all.
 			  </div>
 			  <div class="panel-footer">
-			    <%= bootstrap_form_tag url: url_for(:controller => 'sales_report', :action => 'show'), :method => :GET, :enforce_utf8 => false do |f| %>
+			    <%= bootstrap_form_tag url: url_for(:controller => 'sales_report_team', :action => 'show_wise'), :method => :GET, :enforce_utf8 => false do |f| %>
 					 <div class="row">
 					<div class="col-xs-8">
 					 <%= text_field_tag(:from_date, @from_date, :data => {:provide => "datepicker"}, :id => "datepicker2", :class => "form-control", :required => "true" )   %>
@@ -77,11 +78,12 @@
 			</div>
 	</div>
 </div>
+
 <!-- row 2 -->
 
 <div class="row">
 	<div class="col-xs-4">
-			<div class="panel panel-primary">
+			<div class="panel panel-info">
 			<div class="panel-heading">
 			 <h3 class="panel-title">Agent Order Report</h3>
 			</div>
@@ -109,7 +111,7 @@
 								  </div>
 	</div>
 	<div class="col-xs-4">
-			<div class="panel panel-primary">
+			<div class="panel panel-info">
 			<div class="panel-heading"><h3 class="panel-title">Agentwise upsale (common) Report</h3></div>
 			  <div class="panel-body">
 			    All the upsell products sold by an agents on a selected day
@@ -131,7 +133,7 @@
 		</div>
 	</div>
 	<div class="col-xs-4">
-			<div class="panel panel-primary">
+			<div class="panel panel-info">
 			<div class="panel-heading"><h3 class="panel-title">Agentwise upsale (basic) Report</h3></div>
 			  <div class="panel-body">
 			    All the upsell products sold by an agents on a selected day
@@ -155,6 +157,7 @@
  </div>
 
 <!-- row 3 -->
+
 <div class="row">
 	<div class="col-xs-4">
 			<div class="panel panel-primary">
@@ -243,7 +246,7 @@
 			  </div>
 			  <div class="panel-footer">
 
-					 <%= bootstrap_form_tag url: url_for(:controller => 'sales_report', :action => 'summary'), :method => :GET, :enforce_utf8 => false do |f| %>
+					 <%= bootstrap_form_tag url: url_for(:controller => 'sales_report', :action => 'not_completed'), :method => :GET, :enforce_utf8 => false do |f| %>
 					 <div class="row">
 					<div class="col-xs-8">
 					 <%= text_field_tag(:from_date, @from_date, :data => {:provide => "datepicker"}, :id => "datepicker10", :class => "form-control", :required => "true" )   %>
@@ -305,11 +308,11 @@
 		</div>
 		</div>
 	</div>
- </div>
+</div>
 
 <!-- row 5 -->
 
- <div class="row">
+<div class="row">
  	<div class="col-xs-4">
 			<div class="panel panel-primary">
 			<div class="panel-heading"><h3 class="panel-title">All Product Sold</h3></div>
@@ -332,7 +335,7 @@
 		</div>
 		</div>
 	</div>
-  <div class="col-xs-4">
+  	<div class="col-xs-4">
 			<div class="panel panel-primary">
 			<div class="panel-heading"><h3 class="panel-title">Open Orders</h3></div>
 			  <div class="panel-body">
@@ -354,7 +357,7 @@
 		</div>
 		</div>
 	</div>
-  <div class="col-xs-4">
+  	<div class="col-xs-4">
 			<div class="panel panel-primary">
 			<div class="panel-heading"><h3 class="panel-title">Pincode Orders</h3></div>
 			  <div class="panel-body">
@@ -376,12 +379,12 @@
 		</div>
 		</div>
 	</div>
- </div>
+</div>
 
 <!-- row 6 -->
 
- <div class="row">
-   <div class="col-xs-4">
+<div class="row">
+   	<div class="col-xs-4">
      <div class="panel panel-primary">
              <div class="panel-heading">
               <h3 class="panel-title">Sales Incentives</h3>
@@ -413,7 +416,7 @@
 
        </div>
    </div>
-   <div class="col-xs-4">
+   	<div class="col-xs-4">
       <div class="panel panel-primary">
              <div class="panel-heading">
               <h3 class="panel-title">Fitness Product </h3>
@@ -443,7 +446,7 @@
 
        </div>
    </div>
-   <div class="col-xs-4">
+   	<div class="col-xs-4">
     <div class="panel panel-primary">
             <div class="panel-heading">
              <h3 class="panel-title">Channel Performance Product </h3>
@@ -468,12 +471,12 @@
       </div>
     </div>
    </div>
- </div>
+</div>
 
 <!-- row 7 -->
 
  <div class="row">
-   <div class="col-xs-4">
+   	<div class="col-xs-4">
      <div class="panel panel-primary">
              <div class="panel-heading">
               <h3 class="panel-title">Hourly Detailed Sales</h3>
@@ -505,15 +508,15 @@
    </div>
     <div class="col-xs-4">
 		<div class="panel panel-primary">
-        	<div class="panel-heading"><h3 class="panel-title">BDM Channel List</h3></div>
-				<div class="panel-body">Channels managed by BDM</div>
+        	<div class="panel-heading"><h3 class="panel-title">CDM Channel List</h3></div>
+				<div class="panel-body">Channels managed by CDM</div>
         			 <div class="panel-footer">
         		<%= bootstrap_form_tag url: url_for(:controller => 'sales_report', :action => 'cdm_operator_list_summary'), :method => :GET, :enforce_utf8 => false do |f| %>
         	<div class="row">
 				<div class="col-xs-12">
          		  <%= select_tag :bdm_id,  options_from_collection_for_select(@media_manager,
                :id, :name, selected: @bdm_id ),
-                     {:class => "form-control", label: "Select the BDM Manager ", required: true } %>
+                     {:class => "form-control", label: "Select the CDM Manager ", required: true } %>
         		 </div>
             </div>
            <div class="row">
@@ -527,12 +530,12 @@
 		</div>
     </div>
     <div class="col-xs-4">
-		<div class="panel panel-primary">
+		<div class="panel panel-info">
         	<div class="panel-heading"><h3 class="panel-title">Pay U Orders</h3></div>
 				<div class="panel-body">List of all orders between date range on pay u money</div>
         			 <div class="panel-footer">
         		<%= bootstrap_form_tag url: url_for(:controller => 'sales_report', :action => 'pay_u_orders'), :method => :GET, :enforce_utf8 => false do |f| %>
-        	
+
            <div class="row">
         		<div class="col-xs-8">
         	<%= text_field_tag(:from_date, @from_date, :data => {:provide => "datepicker"}, :id => "datepicker22", :class => "form-control", :required => "true" )   %>
@@ -542,21 +545,21 @@
 				<% end %>
         	</div>
 		</div>
-		
+
     </div>
  </div>
- 
+
 <!-- row 8 -->
 <div class="row">
- <div class="col-xs-4"></div>
- <div class="col-xs-4"></div>
- <div class="col-xs-4"></div>
+ 	<div class="col-xs-4"></div>
+ 	<div class="col-xs-4"></div>
+ 	<div class="col-xs-4"></div>
 </div>
 
 <!-- last row with product sold report  -->
 <div class="panel panel-primary">
   <div class="panel-heading"><h3 class="panel-title">Product Sold Report</h3></div>
-  <div class="panel-body">
+  	<div class="panel-body">
     <div class="row">
       <div class="col-xs-3"><h3>Search Product</h3></div>
       <%= form_tag  url_for(:controller => 'sales_report', :action => "product_sold"), method: "get" do  %>

@@ -1,0 +1,2 @@
+module AppVelocitiesHelper
+end

@@ -1,0 +1,63 @@
+<!-- set page title start -->
+<% title @page_heading  %>
+<!-- set page title end -->
+<div class="row">
+	<div class="col-xs-4">
+    <h3>Payumoney Open: <%= @total_open_orders %> </h3>
+
+  </div>
+  <div class="col-xs-2">
+	<%= link_to "Pay u Money SMS Status", "/payumoney_details", class:"btn btn-info btn-xs" %>
+ 	<!-- = link_to 'Back to Earlier List', url_for(:back), class: "btn btn-success btn-xs"  --->
+	</div>
+	<div class="col-xs-6">
+	<!-- %= render partial: 'search_order' % -->
+
+	</div>
+</div>
+
+<hr>
+<% if @payumoney_details.present? %>
+<br>
+<div class="digg_pagination"><!-- %= will_paginate @payumoney_details, :container => false % --></div>
+<br>
+<table class="table table-hover">
+  <thead>
+    <tr>
+      <th>Created</th>
+	  <th>Payment Id / Merchant Transaction Id</th>
+	  <th>Order ref no / Transaction</th>
+      <th>Amount</th>
+      <th>Mobile Number</th>
+      <th>Pay U Status </th>
+			<th>Internal Status</th>
+      <th>Last Updated</th>
+			<th>Details</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @payumoney_details.each do |payumoney_detail| %>
+      <tr>
+      <td><%= (payumoney_detail.created_at + 330.minutes).strftime("%d-%b-%y %H:%M") %></td>
+        <td><%= payumoney_detail.paymentId %> <br> <%= payumoney_detail.merchantTransactionId %> </td>
+        <td> <%= link_to payumoney_detail.orderid, detailedordersearch_path(order_id: payumoney_detail.orderid),
+			 	:target => "_blank", class: "btn btn-info btn-xs" if payumoney_detail.orderid.present? %> <br>
+			<small><%= payumoney_detail.transaction_ref %></small>   </td>
+        <td><%= payumoney_detail.amount.round(2) %></td>
+        <td><%= payumoney_detail.customerMobileNumber %></td>
+				<td><%= payumoney_detail.status %> </td>
+				<td><%= payumoney_detail.payumoney_status.name if payumoney_detail.payumoney_status %></td>
+        <td><%= (payumoney_detail.updated_at + 330.minutes).strftime("%d-%b-%y %H:%M") %></td>
+				<td> <%= link_to "Details", payumoney_details_detail_path(id: payumoney_detail.id),
+				 class: "btn btn-info btn-xs" %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+<div class="digg_pagination"><!-- %= will_paginate @payumoney_details, :container => false % --></div>
+<br>
+<% else %>
+<h3>Nothing here</h3>
+<% end %>

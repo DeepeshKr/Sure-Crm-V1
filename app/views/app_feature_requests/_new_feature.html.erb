@@ -1,0 +1,79 @@
+<div class="panel panel-info">
+ <div class="panel-heading">
+    <h3 class="panel-title">Create New Feature App / Bug Request </h3>  </div>
+     <div class="panel-body">
+<%= simple_form_for @app_feature_request, html: { novalidate: false }  do |f| %>
+  <%= f.error_notification %>
+	<%= f.hidden_field :request_by %>
+  <%= f.hidden_field :current_status_id %>
+  <%= f.hidden_field :velocity_id %>
+  <div class="form-inputs">
+    <div class="row">
+      <div class="col-xs-12">
+        <%= f.input :name,:label => "Please give a name about this request" ,:required => true %>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-xs-12">
+        <%= f.input :problem_this_solves,:label => "What problem would this solve? Or where did you face the error!", :placeholder => "Provide as much details as including links etc to solve the problem", :required => true %>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-xs-12">
+        <%= f.input :mandatory_requirements,:label => "Do have any mandatory requirements this should cover or link of the error page, this is optional" %>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-xs-3">
+        <%= f.input :app_feature_type_id, :collection => @app_feature_type, :label_method => :name,
+        :value_method => :id,:label => "This is:", :include_blank => false %>
+      </div>
+      <div class="col-xs-3">
+        <%= f.input :app_id,:collection => @app_list,:label_method => :name,:value_method => :id,
+        :required => true, :label => "Select App", :include_blank => false %>
+      </div>
+      <div class="col-xs-3">
+        <%= f.input :require_by_date,:as => :date_picker, :required => true,
+        :placeholder => "Required By Date", :label => "Required By Date" %>
+      </div>
+      <div class="col-xs-3">
+        <%= f.input :priority_id, :collection => @app_priorities,:label_method => :name,
+        :value_method => :id,:label => "Priority" ,:include_blank => false %>
+      </div>
+    </div>
+    <% if @allow_edit == 1 %>
+    <div class="row">
+      <div class="col-xs-3 col-xs-offset-9">
+        <div class="form-actions">
+
+          <%= f.button :submit, class: "btn btn-primary"  %>
+        </div>
+      </div>
+    </div>
+    <% end %>
+  </div>
+<% end %>
+</div>
+  <div class="panel-footer"><p>You can track all the features or bugs reported by you</p></div>
+</div>
+
+<script>
+//:data => {:provide => "datepicker"} , :id => 'datepicker1'
+$(function() {
+  $("input.datepicker").each(function(input) {
+  $(this).datepicker({
+    dateFormat: "mm/dd/yyyy",
+    altField: $(this).next()
+  })
+  //06/18/2016
+  //$('#datepicker1').datepicker({format: 'yyyy-mm-dd'});
+
+  // If you use i18n-js you can set the locale like that
+  //$(this).datepicker("option", $.datepicker.regional[I18n.currentLocale()]);
+})
+});
+
+</script>
+<!-- = text_field_tag(:for_date, @for_date, :data => {:provide => "datepicker"},
+:class => "form-control", :required => "true",
+:placeholder => "Search Campaign Date", :id => 'datepicker1')   -->

@@ -44,10 +44,11 @@
 
   <!-- Nav tabs -->
   <ul class="nav nav-tabs" role="tablist">
-    <li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">HBN Playlist </a></li>
-
+    <li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">HBN Preset costs </a></li>
+      <li role="presentation"><a href="#add_auto_cost" aria-controls="add_cost" role="tab" data-toggle="tab">HBN  Auto Costs</a></li>
+    <li role="presentation"><a href="#add_cost" aria-controls="add_cost" role="tab" data-toggle="tab">HBN Manual Costs</a></li>
     <li role="presentation"><a href="#profile" aria-controls="profile" role="tab" data-toggle="tab">HBN Single Playlist</a></li>
-    <li role="presentation"><a href="#pvt" aria-controls="profile" role="tab" data-toggle="tab">Private Channel Single Playlist</a></li>
+    <li role="presentation"><a href="#pvt" aria-controls="profile" role="tab" data-toggle="tab">Private Single Playlist</a></li>
 
   </ul>
 
@@ -58,13 +59,30 @@
   <div role="tabpanel" class="tab-pane fade in active" id="home">
   <!-- tab to add hbn master playlist with cost -->
     <% if @hbnchecked == TRUE %>
+      <%= render partial: "media_tape_heads/hbn_preset_cost" %>
+    <% else %>
+      <h3>You can't add HBN channels Listing when you have selected private channel </h3>
+    <% end %>
+
+  </div>
+  <div role="tabpanel" class="tab-pane fade" id="add_auto_cost">
+  <!-- tab to add hbn master playlist with cost -->
+    <% if @hbnchecked == TRUE %>
       <%= render partial: "media_tape_heads/hbn_auto_add" %>
     <% else %>
       <h3>You can't add HBN channels Listing when you have selected private channel </h3>
     <% end %>
 
   </div>
+ <div role="tabpanel" class="tab-pane fade" id="add_cost">
+ <!-- tab to add hbn master playlist with cost -->
+   <% if @hbnchecked == TRUE %>
+     <%= render partial: "media_tape_heads/hbn_cost_add" %>
+   <% else %>
+     <h3>You can't add HBN channels Listing when you have selected private channel </h3>
+   <% end %>
 
+ </div>
   <div role="tabpanel" class="tab-pane fade" id="profile">
   <!-- tab to add hbn single playlist without cost -->
     <% if @hbnchecked == TRUE %>
@@ -114,23 +132,70 @@
 
 <script>
   $(document).ready(function() {
-    $('#variants_select').change(function() {
+    //preset costs
+    $('#variants_select_preset').change(function() {
+      //get 'update_tapes' => 'media_tape_heads#update_tapes'
       $.ajax({
-        url: "<%= update_tapes_path %>",
+        url: "<%= update_tapes_preset_path %>",
         data: {
-          product_variant_id : $('#variants_select').val()
+          product_variant_id : $('#variants_select_preset').val()
         },
         dataType: "script"
       });
     });
-    $('#tapes_select').change(function() {
+    // auto costs
+    $('#variants_select_auto').change(function() {
+      //get 'update_tapes' => 'media_tape_heads#update_tapes'
       $.ajax({
-        url: "<%= tape_list_path %>",
+        url: "<%= update_tapes_auto_path %>",
         data: {
-          media_tape_head_id : $('#tapes_select').val()
+          product_variant_id : $('#variants_select_auto').val()
         },
         dataType: "script"
       });
     });
+    //variants_select_manual
+
+    $('#variants_select_manual').change(function() {
+      $.ajax({
+        url: "<%= update_tapes_manual_path %>",
+        data: {
+          product_variant_id : $('#variants_select_manual').val()
+        },
+        dataType: "script"
+      });
+    });
+    //get 'update_tapes' => 'media_tape_heads#update_tapes'
+    //get 'tape_list' => 'media_tape_heads#tape_list'
+    $('#tapes_select_preset').change(function() {
+      $.ajax({
+        url: "<%= tape_list_preset_path %>",
+        data: {
+          media_tape_head_id : $('#tapes_select_preset').val()
+        },
+        dataType: "script"
+      });
+    });
+    //get 'tape_list' => 'media_tape_heads#tape_list'
+    $('#tapes_select_auto').change(function() {
+      $.ajax({
+        url: "<%= tape_list_auto_path %>",
+        data: {
+          media_tape_head_id : $('#tapes_select_auto').val()
+        },
+        dataType: "script"
+      });
+    });
+    //get 'tape_list' => 'media_tape_heads#tape_list'
+    $('#tapes_select_manual').change(function() {
+      $.ajax({
+        url: "<%= tape_list_manual_path %>",
+        data: {
+          media_tape_head_id : $('#tapes_select_manual').val()
+        },
+        dataType: "script"
+      });
+    });
+
   });
 </script>

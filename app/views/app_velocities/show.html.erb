@@ -1,0 +1,19 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @app_velocity.name %>
+</p>
+
+<p>
+  <strong>Priority no:</strong>
+  <%= @app_velocity.priority_no %>
+</p>
+
+<p>
+  <strong>Description:</strong>
+  <%= @app_velocity.description %>
+</p>
+
+<%= link_to 'Edit', edit_app_velocity_path(@app_velocity) %> |
+<%= link_to 'Back', app_velocities_path %>

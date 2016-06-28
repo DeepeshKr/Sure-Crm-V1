@@ -1,0 +1,20 @@
+<div class="row">
+  <%= form_tag  url_for(:controller => 'payumoney_details', :action => 'open_orders'), method: "get" do  %>
+      <div class="col-xs-4">
+          <%= text_field_tag(:order_ref_no, @order_ref_no, :class => "form-control", :placeholder => "Order Ref No", :required => "true" )   %>
+      </div>
+
+      <div class="col-xs-2">
+        <%= submit_tag "Show", name: nil, class: "btn btn-primary" %>
+      </div>
+  <% end %>
+  <%= form_tag  url_for(:controller => 'payumoney_details', :action => 'open_orders'), method: "get" do  %>
+      <div class="col-xs-4">
+          <%= text_field_tag(:merchant_transaction_id, @merchant_transaction_id, :placeholder => "Merchant Id", :class => "form-control", :required => "true" )   %>
+      </div>
+
+      <div class="col-xs-2">
+        <%= submit_tag "Show", name: nil, class: "btn btn-primary" %>
+      </div>
+  <% end %>
+</div>

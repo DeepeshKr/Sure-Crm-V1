@@ -53,6 +53,8 @@ gem 'bootstrap_form'
 
 #simple form looks better
 gem 'simple_form'
+gem 'client_side_validations'
+gem 'client_side_validations-simple_form'
 
 #paginate gem
 gem 'kaminari'

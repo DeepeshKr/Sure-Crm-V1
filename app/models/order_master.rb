@@ -11,12 +11,13 @@ class OrderMaster < ActiveRecord::Base
   belongs_to :medium, foreign_key: "media_id"
   belongs_to :promotion, foreign_key: "promotion_id"
   belongs_to :order_final_status, foreign_key: "order_final_status_id"
-  belongs_to :order_last_mile, foreign_key: "order_last_mile_id"
+  belongs_to :order_list_mile, foreign_key: "order_last_mile_id"
 
   has_many :interaction_master, foreign_key: "orderid"
   has_many :page_trail, foreign_key: "order_id"
   has_many :order_line, foreign_key: "orderid", :dependent => :destroy
   has_many :sales_ppo, foreign_key: "order_id"
+  has_many :payumoney_detail, foreign_key: "orderid"
 
   accepts_nested_attributes_for :order_line,  :allow_destroy => true
 
@@ -53,6 +54,7 @@ class OrderMaster < ActiveRecord::Base
 #external order
 #order_for_id - Integer update with customer order id
 #external_order_no - string update with customer order id
+
   def neworder(source, cli, dnis, empcode, empid,request_ip, session_id)
 
     order_master = OrderMaster.create!(calledno: dnis, order_status_master_id: 10000,
@@ -155,7 +157,7 @@ class OrderMaster < ActiveRecord::Base
          orderline1 = OrderLine.where("orderid = ?", order_id).order("order_lines.id")
           .joins(:product_variant)
           .where('PRODUCT_VARIANTS.product_sell_type_id = ?', 10000)
-        
+
           if orderline1.present?
             qty1 = orderline1.first.pieces.to_i
             prod1 = orderline1.first.product_list.extproductcode[0..9].upcase
@@ -183,17 +185,17 @@ class OrderMaster < ActiveRecord::Base
           .order("order_lines.id")
            .joins(:product_variant)
           .where.not('PRODUCT_VARIANTS.product_sell_type_id = ?', 10000).offset(3)
-        
+
           if orderline4.present?
             qty4 = orderline4.first.pieces.to_i
             prod4 = orderline4.first.product_list.extproductcode[0..9].upcase
             #customer_order_list.update(prod4: orderline4.first.product_list.extproductcode.truncate(10).upcase, qty4: orderline4.first.pieces.to_i)
           end
-        
+
           orderline5 = OrderLine.where("orderid = ?", order_id).order("order_lines.id")
            .joins(:product_variant)
           .where.not('PRODUCT_VARIANTS.product_sell_type_id = ?', 10000).offset(4)
-        
+
           if orderline5.present?
             qty5 = orderline5.first.pieces.to_i
             prod5 = orderline5.first.product_list.extproductcode[0..9].upcase
@@ -203,7 +205,7 @@ class OrderMaster < ActiveRecord::Base
           .joins(:product_variant)
                   .where.not('PRODUCT_VARIANTS.product_sell_type_id = ?', 10000)
                   .offset(5)
-                
+
           if orderline6.present?
             qty6 = orderline6.first.pieces.to_i
             prod6 = orderline6.first.product_list.extproductcode[0..9].upcase
@@ -212,7 +214,7 @@ class OrderMaster < ActiveRecord::Base
           orderline7 = OrderLine.where("orderid = ?", order_id).order("order_lines.id")
            .joins(:product_variant)
                   .where.not('PRODUCT_VARIANTS.product_sell_type_id = ?', 10000).offset(6)
-                
+
           if orderline7.present?
             qty7 = orderline7.first.pieces.to_i
             prod7 = orderline7.first.product_list.extproductcode[0..9].upcase
@@ -230,17 +232,17 @@ class OrderMaster < ActiveRecord::Base
           orderline9 = OrderLine.where("orderid = ?", order_id).order("order_lines.id")
            .joins(:product_variant)
                   .where.not('PRODUCT_VARIANTS.product_sell_type_id = ?', 10000).offset(8)
-                
+
           if orderline9.present?
             qty9 = orderline9.first.pieces.to_i
             prod9 = orderline9.first.product_list.extproductcode[0..9].upcase
             #customer_order_list.update(prod9: orderline9.first.product_list.extproductcode.truncate(10).upcase, qty9: orderline9.first.pieces.to_i)
           end
-          
+
           # orderline10 = OrderLine.where("orderid = ?", order_id)
-#           .order("order_lines.id")
-#                   .where.not('PRODUCT_VARIANTS.product_sell_type_id = ?', 10000).offset(9)
-#      
+          #           .order("order_lines.id")
+          #                   .where.not('PRODUCT_VARIANTS.product_sell_type_id = ?', 10000).offset(9)
+    #
           # if orderline10.exists?
           #   customer_order_list.update(prod10: orderline10.first.product_variant.extproductcode, qty10: orderline10.first.pieces)
           # end
@@ -310,7 +312,7 @@ class OrderMaster < ActiveRecord::Base
                       uae_status: pro_order_master.customer.gender[0..49].upcase,
                       prod1: prod1, prod2: prod2, prod3: prod3, prod4: prod4, prod5: prod5, prod6: prod6, prod7: prod7, prod8:prod8, prod9: prod9, prod10: prod10,
                       qty1: qty1, qty2: qty2, qty3: qty3, qty4: qty4, qty5: qty5, qty6: qty6, qty7: qty7, qty8: qty8, qty9: qty9, qty10: qty10)
-            
+
           else
           customer_order_list = CustomerOrderList.create(ordernum: order_num,
           orderdate: (330.minutes).from_now.to_date,
@@ -387,9 +389,9 @@ class OrderMaster < ActiveRecord::Base
             uae_status: pro_order_master.customer.gender[0..49].upcase,
             prod1: prod1, prod2: prod2, prod3: prod3, prod4: prod4, prod5: prod5, prod6: prod6, prod7: prod7, prod8:prod8, prod9: prod9, prod10: prod10,
             qty1: qty1, qty2: qty2, qty3: qty3, qty4: qty4, qty5: qty5, qty6: qty6, qty7: qty7, qty8: qty8, qty9: qty9, qty10: qty10)
-            
+
           else
-            
+
             customerdetails = CUSTDETAILS.create(ordernum: order_num,
             transfer_ok: 0,
             orderdate: (330.minutes).from_now.to_date,
@@ -426,10 +428,10 @@ class OrderMaster < ActiveRecord::Base
             uae_status: pro_order_master.customer.gender[0..49].upcase,
             prod1: prod1, prod2: prod2, prod3: prod3, prod4: prod4, prod5: prod5, prod6: prod6, prod7: prod7, prod8:prod8, prod9: prod9, prod10: prod10,
             qty1: qty1, qty2: qty2, qty3: qty3, qty4: qty4, qty5: qty5, qty6: qty6, qty7: qty7, qty8: qty8, qty9: qty9, qty10: qty10)
-            
+
           end
-            
-          
+
+
 
           #- Integer update with customer order id
           pro_order_master.update(external_order_no: order_num.to_s, order_status_master_id: 10003)
@@ -439,21 +441,21 @@ class OrderMaster < ActiveRecord::Base
 
 
   end
-  
+
   def add_invoice_sms order_id
     this_time = Time.zone.now + 450.minutes
     order_master = OrderMaster.find(old_order_id)
-    
+
     amount = order_master.grand_total #params[:amount]
     customerName = order_master.customer.salute.upcase order_master.customer.first_name.upcase order_master.customer.last_name.upcase # params[:customerName]
-    
+
     description = " order ref no #{order_id} to be paid in 2 hrs" #params[:description]
     referenceId = order_master.id #params[:referenceId]
     customerMobileNumber = order_master.mobile #params[:customerMobileNumber]
     confirmSMSPhone = order_master.mobile # params[:confirmSMSPhone]
     url = "https://www.payumoney.com/payment/payment/smsInvoice?"
     encoded_url = URI.encode("amount=#{amount}&customerName=#{customerName}&description=#{description}&referenceId=#{referenceId}&customerMobileNumber=#{customerMobileNumber}&confirmSMSPhone=#{confirmSMSPhone}")
-    
+
     sms_message = MessageOnOrder.create(customer_id: order_master.customer_id,
       message_status_id: 10000, message_type_id: 10020,
       mobile_no: order_master.mobile,
@@ -461,20 +463,20 @@ class OrderMaster < ActiveRecord::Base
       alt_mobile_no: order_master.customer.alt_mobile,
       message: encoded_url,
       long_url: "#{url}#{encoded_url}")
-    
+
   end
-  
+
   def process_order order_id
         #this is post in customer order
         order_number = []
         msg = nil
         order_total = 0
-      
+
       return "No order ref numer " if order_id.blank?
-      
+
       order_master = OrderMaster.find(order_id)
-          
-      order_lines_regular = OrderLine.where(orderid: order_id).joins(:product_variant)      
+
+      order_lines_regular = OrderLine.where(orderid: order_id).joins(:product_variant)
       .where('PRODUCT_VARIANTS.product_sell_type_id = ?', 10000)
 
       order_lines_basic = OrderLine.where(orderid: order_id).joins(:product_variant)
@@ -485,7 +487,7 @@ class OrderMaster < ActiveRecord::Base
 
       order_lines_free = OrderLine.where(orderid: order_id).joins(:product_variant)
       .where('product_variants.product_sell_type_id = ?', 10060)
-      
+
       if order_lines_regular.count > 1
               notices = []
               notice = ""
@@ -542,11 +544,11 @@ class OrderMaster < ActiveRecord::Base
               when 10080 #paid over Pay u money
                 msg = ". "
               end
-          
+
      else #IF ONLY one regular product found
           # after this is done complete the ordering
           orderprocessed = update_customer_order_list(order_id)
-      
+
           order_number << orderprocessed  + " for Rs " + order_master.grand_total.to_i.to_s
             payment_mode_id = order_master.orderpaymentmode_id
             payment_mode_id = payment_mode_id.to_i
@@ -573,40 +575,40 @@ class OrderMaster < ActiveRecord::Base
       message: message)
 
     return message
-            
+
   end # end of process order
-  
+
   def check_if_paid
     #Please find the Authorization header value for MID-5406244
     #Authorization :- pae1W74vWnCezNDi1oiZ3HJyL7FgzxqfhuTWX5XljYA=
     merchantKey = 5406244
     url ="https://www.payumoney.com/payment/op/getPaymentResponse?"
-    
+
     pay_u_money = PayumoneyDetail.where("ORDERID IS NOT NULL")
-    
+
     pay_u_money.each do |pay|
       test_url ="https://test.payumoney.com/payment/op/getPaymentResponse?merchantKey=#{merchantKey}&merchantTransactionIds=#{pay.ORDERID}"
      puts parse_check_paid_uri test_url
     end
     # sample api https://www.payumoney.com/payment/op/getPaymentResponse?merchantKey=xbch78J&merchantTransactionIds=100123abc
-    
+
   end
 
 after_destroy :updateOrder
 
 def no_order_master(attributes)
   attributes[:id].blank?
-  end
+end
 
 def timetaken
     ended_on = self.updated_at.to_f
     started_at = self.created_at.to_f
     return (ended_on - started_at).to_i
-  end
+end
 
 def promo_cost
    #self.promotion
-  end
+end
 
 def codcharges
     productcost = OrderLine.where('orderid = ?', self.id)
@@ -622,7 +624,7 @@ def codcharges
       return 0
     end
 
-  end
+end
 
 def creditcardcharges
  productcost = OrderLine.where('orderid = ?', self.id)
@@ -778,7 +780,7 @@ end
 
 def grand_total
 
-return self.subtotal + self.shipping + self.codcharges + self.servicetax + self.maharastracodextra + self.creditcardcharges + self.maharastraccextra
+  return self.subtotal + self.shipping + self.codcharges + self.servicetax + self.maharastracodextra + self.creditcardcharges + self.maharastraccextra
 
 end
 
@@ -791,12 +793,12 @@ def create_hbn_sales_ppo
     total_nos, ppos = 0,0
     if order_masters.present?
     	order_masters.each do |order|
-        
+
         # fix the campaign details here
-        order.add_hbn_product_to_campaign.delay 
+        order.add_hbn_product_to_campaign.delay
         # create ppo here
         ppos_c = order.add_hbn_update.delay
-        
+
         ppos += ppos_c.to_i if ppos_c.present?
         total_nos += 1
       end
@@ -807,7 +809,7 @@ end
 def create_hbn_sales_ppo_between_dates from_date, upto_date #, product_variant_id
   from_date = Date.strptime(args[from_date], "%Y-%m-%d")
   upto_date = Date.strptime(args[upto_date], "%Y-%m-%d")
-  
+
   (sd).upto(ed).each do |for_date|
     #create sales ppo
       order_masters = OrderMaster.where("TRUNC(orderdate) = ?", for_date)
@@ -828,7 +830,7 @@ def create_hbn_sales_ppo_between_dates from_date, upto_date #, product_variant_i
 end
 
 #required to create ppo
-def add_hbn_update 
+def add_hbn_update
   #create sales ppo for each order line
   order_master = OrderMaster.find(self.id)
   if order_master.medium.blank?
@@ -871,7 +873,7 @@ def add_hbn_update
     :start_time => time_of_order,
     :order_id => ordln.orderid,
     :order_line_id=> ordln.id,
-    :product_cost => ordln.productcost, 
+    :product_cost => ordln.productcost,
     :pieces => ordln.pieces,
     :revenue => ordln.productrevenue,
     :transfer_order_revenue => ordln.transfer_order_revenue,
@@ -892,8 +894,8 @@ def add_hbn_update
     :state => order_master.customer_address.state,
     :mobile_no => order_master.mobile,
     :shipping_cost => ordln.product_postage)
-       
-    
+
+
     else
       @sale_ppo = SalesPpo.create(name: campaign_name,
       campaign_playlist_id: campaign_playlist_id,
@@ -905,7 +907,7 @@ def add_hbn_update
       :start_time => time_of_order,
       :order_id => ordln.orderid,
       :order_line_id => ordln.id,
-      :product_cost => ordln.productcost, 
+      :product_cost => ordln.productcost,
       :pieces => ordln.pieces,
       :revenue => ordln.productrevenue,
       :transfer_order_revenue => ordln.transfer_order_revenue,
@@ -926,28 +928,31 @@ def add_hbn_update
       :state => order_master.customer_address.state,
       :mobile_no => order_master.mobile,
       :shipping_cost => ordln.product_postage)
-     
+
       return 1
     end
   end
 end
 handle_asynchronously :add_hbn_update
- 
-def add_hbn_product_to_campaign 
+
+def add_hbn_product_to_campaign
   #media_id
    order_master = OrderMaster.find(self.id)
    mediumid = order_master.media_id
    missed_reason = nil
-   
+
    campaign_playlist_id = order_master.campaign_playlist_id || 0 if order_master.campaign_playlist_id.present?
-       
+
     product_variant = OrderLine.where(orderid: order_id)
     .joins(:product_variant)
     .where('PRODUCT_VARIANTS.product_sell_type_id = ?', 10000)
-    
-    product_variant_id = product_variant.first.productvariant_id 
+
+    product_variant_id = product_variant.first.productvariant_id || nil if product_variant.first.productvariant_id.present?
+
+    return if product_variant_id.blank?
+
     ext_product_code = ProductVariant.find(product_variant_id).extproductcode
-    
+
 
       order_time = order_master.orderdate + 330.minutes
       nowhour = order_time.strftime('%H').to_i
@@ -962,34 +967,34 @@ def add_hbn_product_to_campaign
       # on order and agains the campaign playlis
       if Medium.where(id: mediumid).present?
          channelname = Medium.find(mediumid).name
-        
+
       end
 
       if Medium.find(mediumid).media_group_id == 10000
         #HBN Master Media Id 11200
         #select the campaign from HBN Master Campaign List
-        campaignlist =  Campaign.where(mediumid: 11200).where("TRUNC(startdate) <= ? AND TRUNC(startdate) >= ?", todaydate, max_go_back_date) 
+        campaignlist =  Campaign.where(mediumid: 11200).where("TRUNC(startdate) <= ? AND TRUNC(startdate) >= ?", todaydate, max_go_back_date)
       # else
-#
-#         campaignlist =  Campaign.where(mediumid: mediumid).where("TRUNC(startdate) <= ? AND TRUNC(startdate) >= ?", todaydate, max_go_back_date)
-       
+      #
+      #         campaignlist =  Campaign.where(mediumid: mediumid).where("TRUNC(startdate) <= ? AND TRUNC(startdate) >= ?", todaydate, max_go_back_date)
+
       end
-       
-     
-      
+
+
+
       if campaignlist.present?
         campaign_playlist = CampaignPlaylist.where({campaignid: campaignlist})
         .where(list_status_id: 10000).where(productvariantid: product_variant_id)
         .where("(start_hr * 60 * 60) + (start_min * 60) <= ?", nowsecs)
         .where("TRUNC(for_date) <= ?", todaydate)
         .order("for_date DESC, start_hr DESC, start_min DESC")
-         
+
         if campaign_playlist.count > 0
           # update order with campaign playlist id
           campaign_playlist_id = campaign_playlist.first.id if campaign_playlist.first.id.present?
           #order_master.update(campaign_playlist_id: campaign_playlist.first.id)
           #puts missed_reason.colorize(:green)
-          
+
         else
           #update for earlier date playlists
           #this is designed for the playlist to go back as as required to assign this order for
@@ -1002,53 +1007,666 @@ def add_hbn_product_to_campaign
           if older_campaign_playlist.count > 0
             campaign_playlist_id = older_campaign_playlist.first.id if older_campaign_playlist.first.id.present?
           else
-            
+
             new_campaign_playlist = CampaignPlaylist.where({campaignid: campaignlist})
             .where(list_status_id: 10000).joins(:product_variant)
             .where("product_variants.extproductcode = ?", ext_product_code)
             .where("(start_hr * 60 * 60) + (start_min * 60) <= ?", @nowsecs)
             .where("TRUNC(for_date) <= ?", todaydate)
             .order("for_date DESC, start_hr DESC, start_min DESC")
-            
+
            if new_campaign_playlist.blank?
                #puts missed_reason
               older_prod_campaign_playlist = CampaignPlaylist.where(list_status_id: 10000)
                 .where("TRUNC(for_date) < ? AND TRUNC(for_date) >= ?", todaydate, max_go_back_date)
                 .joins(:product_variant).where("product_variants.extproductcode = ?", ext_product_code)
                 .order("for_date DESC, start_hr DESC, start_min DESC")
-                
-               
+
+
                 if older_prod_campaign_playlist.present?
-                   campaign_playlist_id = older_prod_campaign_playlist.first.id if older_prod_campaign_playlist.present?     
+                   campaign_playlist_id = older_prod_campaign_playlist.first.id if older_prod_campaign_playlist.present?
                 end
-            end  
+            end
           end
         end
 
-      
+
       end
-      
-      
-        
+
+
+
     #total_notes = "nothing done"
-    if campaign_playlist_id.present?  
+    if campaign_playlist_id.present?
       order_master.update(campaign_playlist_id: campaign_playlist_id)
       #total_notes = order_master.notes if  order_master.notes.present?
       #order_master.update(notes: total_notes)
     end
-  
+
     #check if found in sales ppo table
     if !SalesPpo.where(:order_id=> order_id).present?
       add_update order_id
     end
-        
+
 end
 handle_asynchronously :add_hbn_product_to_campaign
 
-private
+###### below lines for hbn sales ppo asynchronised ##########
+######## duplicate this is delayed job server #####
+def add_product_to_campaign_hbn_ppo order_id
+    #media_id
+    campaign_updated = nil
+    order_master = OrderMaster.find(order_id)
+    mediumid = order_master.media_id
+
+    campaign_playlist_id = nil #order_master.campaign_playlist_id || 0 if order_master.campaign_playlist_id.present?
+
+    product_variant = OrderLine.where(orderid: order_id)
+    .joins(:product_variant)
+    .where('PRODUCT_VARIANTS.product_sell_type_id = ?', 10000)
+
+    product_variant_id = product_variant.first.productvariant_id if product_variant.present?
+
+    order_time = order_master.orderdate + 330.minutes
+    nowhour = order_time.strftime('%H').to_i
+    nowminute = order_time.strftime('%M').to_i
+    todaydate = order_time
+
+    max_go_back_date = (todaydate.to_time - 48.hours).to_datetime
+    nowsecs = (nowhour * 60 * 60) + (nowminute * 60)
+
+    if Medium.where(id: mediumid).present?
+       channelname = Medium.find(mediumid).name
+       puts "Found channel: #{channelname}"
+       media = Medium.find(mediumid)
+      if (media.media_group_id != 10000 || media.media_group_id.blank?)
+        order_master.update(campaign_playlist_id: nil)
+        add_update order_id
+        return puts "NOT HBN Order removing from order master now"
+      end
+    end
+    #HBN Master Media Id 11200
+    #select the campaign from HBN Master Campaign List
+    # 2 days restrictions on time travel
+    # campaignlist =  Campaign.where(mediumid: 11200).where("TRUNC(startdate) <= ?
+    # AND TRUNC(startdate)>= ?", todaydate, max_go_back_date)
+    # no restrictions on time travel
+    campaignlist =  Campaign.where(mediumid: 11200).where("TRUNC(startdate) <= ?", todaydate)
+    # if !campaignlist.present?
+   #
+   #  end
+
+
+    campaign_playlist = CampaignPlaylist.where(campaignid: campaignlist)
+    .where(list_status_id: 10000).where(productvariantid: product_variant_id)
+    .where("(start_hr * 60 * 60) + (start_min * 60) <= ?", nowsecs)
+    .where("TRUNC(for_date) <= ?", todaydate)
+    .order("for_date DESC, start_hr DESC, start_min DESC")
+
+    if campaign_playlist.present?
+
+      # update order with campaign playlist id
+      campaign_playlist_id = campaign_playlist.first.id if campaign_playlist.first.id.present?
+      #order_master.update(campaign_playlist_id: campaign_playlist.first.id)
+
+      puts "#{campaign_playlist_id} Order was for #{order_time.strftime("%d-%b-%Y")} #{nowhour}:#{nowminute} and Regular Campaign #{campaign_playlist.first.for_date.strftime("%d-%b-%Y")} #{campaign_playlist.first.start_hr}:#{campaign_playlist.first.start_min}" if campaign_playlist.present?
+
+      campaign_updated = "Regular Campaign #{campaign_playlist.first.for_date.strftime("%d-%b-%Y")} #{campaign_playlist.first.start_hr}:#{campaign_playlist.first.start_min}" if campaign_playlist.present?
+    end
+
+    if campaign_playlist_id.blank?
+     #check for additional product variants
+       extended_campaign_playlist = CampaignPlaylistToProduct.where(product_variant_id: product_variant_id)
+       .joins(:campaign_playlist)
+       .where("campaign_playlists.list_status_id = 10000")
+       .where("(campaign_playlists.start_hr * 60 * 60) + (campaign_playlists.start_min * 60) <= ?", nowsecs)
+       .where("TRUNC(campaign_playlists.for_date) <= ?", todaydate)
+       .order("campaign_playlists.for_date DESC, campaign_playlists.start_hr DESC,
+       campaign_playlists.start_min DESC")
+
+      if extended_campaign_playlist.present?
+        puts "Found campaign playlist #{campaign_playlist_id} in Extended Playlist and update this for order #{order_id}"
+        campaign_playlist_id = extended_campaign_playlist.first.campaign_playlist_id if extended_campaign_playlist.present?
+        campaign_updated = " Externded Campaign Added"
+      end
+    end
+     #update for earlier date playlists
+    if !campaign_playlist_id.present?
+      #this is designed for the playlist to go back as as required to assign this order for
+      # a particular date
+      # older_campaign_playlist = CampaignPlaylist.where(productvariantid: product_variant_id)
+      # .where("TRUNC(for_date) <= ? AND TRUNC(for_date) >= ?",  todaydate - 1.day, max_go_back_date)
+      # .where(list_status_id: 10000)
+      # .order("for_date DESC, start_hr DESC, start_min DESC")
+      # now with no restrcitions to go back
+      older_campaign_playlist = CampaignPlaylist.where(campaignid: campaignlist)
+      .where(productvariantid: product_variant_id)
+      .where("TRUNC(for_date) <= ?",  todaydate - 1.day)
+      .where(list_status_id: 10000)
+      .order("for_date DESC, start_hr DESC, start_min DESC")
+
+      if older_campaign_playlist.present?
+
+         missed_reason = "Older campaign used Updated at #{order_time} order for #{channelname} with show #{older_campaign_playlist.name}
+         (id #{older_campaign_playlist.first.id} ) at Hour:#{nowhour}  Minutes:#{nowminute}"
+
+         #@order_master.update(campaign_playlist_id: older_campaign_playlist.first.id)
+         campaign_playlist_id = older_campaign_playlist.first.id if older_campaign_playlist.first.id.present?
+
+          puts "#{campaign_playlist_id} Order was for #{order_time.strftime("%d-%b-%Y")} #{nowhour}:#{nowminute} and Older Campaign #{older_campaign_playlist.first.for_date.strftime("%d-%b-%Y")} #{older_campaign_playlist.first.start_hr}:#{older_campaign_playlist.first.start_min}" if older_campaign_playlist.present?
+
+          campaign_updated = "Older Campaign #{older_campaign_playlist.first.for_date.strftime("%d-%b-%Y")} #{older_campaign_playlist.first.start_hr}:#{older_campaign_playlist.first.start_min}"  if older_campaign_playlist.present?
+      end
+    end
+
+    if campaign_playlist_id.blank?
+     #check for additional product variants
+     extended_older_campaign_playlist = CampaignPlaylistToProduct.where(product_variant_id: product_variant_id)
+     .joins(:campaign_playlist)
+     .where("campaign_playlists.list_status_id = 10000")
+     .where("TRUNC(campaign_playlists.for_date) <= ?",  todaydate - 1.day)
+     .order("campaign_playlists.for_date DESC, campaign_playlists.start_hr DESC,
+     campaign_playlists.start_min DESC")
+
+       if extended_campaign_playlist.present? && campaign_playlist_id.blank?
+          puts "Found campaign playlist #{campaign_playlist_id} in Extended Older Playlist and update this for order #{order_id}"
+        campaign_playlist_id = extended_older_campaign_playlist.first.campaign_playlist_id if extended_older_campaign_playlist.present?
+        campaign_updated = "Older Externded Campaign Added"
+       end
+    end
+
+    if !campaign_playlist_id.present?
+       return puts "NO campaign playlist found in product campaign check"
+    end
+
+
+    if campaign_playlist_id.present?
+      order_master.update(campaign_playlist_id: campaign_playlist_id)
+      total_notes = "#{order_master.notes} #{campaign_updated}"
+      #total_notes = order_master.notes + " " +
+      order_master.update(notes: total_notes)
+
+      #check if found in sales ppo table
+      create_sales_hbn_ppo order_id
+
+      puts "Process Completed - Updated"
+    end
+
+end
+handle_asynchronously :add_product_to_campaign_hbn_ppo
+
+def create_sales_hbn_ppo order_id
+ #order_id = self.order_id
+     #create sales ppo for each order line
+  order_master = OrderMaster.find(order_id)
+
+  return puts "No media Order, skipped!"  if order_master.medium.blank?
+
+  return puts "Not a HBN Order, skipped!" if order_master.medium.media_group_id != 10000
+
+  return puts "Not a processed order, skipped!" if order_master.order_status_master_id < 10001
+
+   campaign_playlist_id = order_master.campaign_playlist_id || nil if order_master.campaign_playlist_id.present?
+   campaign_id = order_master.campaign_playlist.campaignid || nil if order_master.campaign_playlist
+
+  return  puts "No campaign playlist found in PPO"  if campaign_playlist_id.blank?
+
+   campaign_name = CampaignPlaylist.find(campaign_playlist_id).name || " " if order_master.campaign_playlist_id.present?
+   order_pieces = order_master.pieces || 0 if order_master.pieces.present?
+
+   if order_master.promotion.present?
+     if order_master.promotion.promo_cost.present?
+       total_promotion_cost = order_master.promotion.promo_cost || 0 if order_master.promotion.promo_cost.present?
+       per_order_promo_cost = (total_promotion_cost / order_pieces) if order_pieces.present?
+     end
+   end
+
+   order_lines = OrderLine.where(orderid: order_id)
+   time_of_order = order_master.orderdate.strftime('%Y-%b-%d %H:%M:%S')
+   puts "Found #{order_lines.count()} orders, now checking if they are in PPO!"
+   order_lines.each do |ordln|
+   #add or update ppo details
+   if SalesPpo.where(:order_line_id=> ordln.id).present?
+     @sale_ppo = SalesPpo.where(:order_line_id=> ordln.id).first
+
+     @sale_ppo.update(campaign_playlist_id: campaign_playlist_id,
+     name: campaign_name,
+     campaign_id: campaign_id,
+     :product_master_id => ordln.product_master_id,
+     product_variant_id: ordln.productvariant_id,
+     product_list_id: ordln.product_list_id,
+     prod: (ordln.product_list.extproductcode || nil if ordln.product_list.present?),
+     :start_time => time_of_order,
+     :order_id => ordln.orderid,
+     :order_line_id=> ordln.id,
+     :product_cost => ordln.productcost,
+     :pieces => ordln.pieces,
+     :revenue => ordln.productrevenue,
+     :transfer_order_revenue => ordln.transfer_order_revenue,
+     :transfer_order_dealer_price => ordln.transfer_order_dealer_price,
+     :damages => ordln.productcost * 0.10,
+     :returns => ordln.refund,
+     :commission_cost => ordln.media_commission,
+     :promotion_cost=> per_order_promo_cost,
+     :gross_sales => ordln.gross_sales,
+     :net_sale => ordln.net_sales,
+     :external_order_no => order_master.external_order_no,
+     :order_status_id => order_master.order_status_master_id,
+     :order_pincode => order_master.pincode,
+     :media_id => order_master.media_id,
+     :promo_cost_total => total_promotion_cost,
+     :dnis => order_master.calledno,
+     :city => order_master.city,
+     :state => order_master.customer_address.state,
+     :mobile_no => order_master.mobile,
+     :shipping_cost => ordln.product_postage)
+
+     puts "Created NEW Sales PPO with id #{@sale_ppo.id} created on #{@sale_ppo.created_at.strftime("%d-%b-%y %H:%M")} for order id #{order_master.id}"
+
+     else
+       @sale_ppo = SalesPpo.create(name: campaign_name,
+       campaign_playlist_id: campaign_playlist_id,
+       campaign_id: campaign_id,
+       :product_master_id => ordln.product_master_id,
+       product_variant_id: ordln.productvariant_id,
+       product_list_id: ordln.product_list_id,
+       prod: (ordln.product_list.extproductcode || nil if ordln.product_list.present?),
+       :start_time => time_of_order,
+       :order_id => ordln.orderid,
+       :order_line_id => ordln.id,
+       :product_cost => ordln.productcost,
+       :pieces => ordln.pieces,
+       :revenue => ordln.productrevenue,
+       :transfer_order_revenue => ordln.transfer_order_revenue,
+       :transfer_order_dealer_price => ordln.transfer_order_dealer_price,
+       :damages => ordln.productcost * 0.10,
+       :returns => ordln.refund,
+       :commission_cost => ordln.media_commission,
+       :promotion_cost=> per_order_promo_cost,
+       :gross_sales => ordln.gross_sales,
+       :net_sale => ordln.net_sales,
+       :external_order_no => order_master.external_order_no,
+       :order_status_id => order_master.order_status_master_id,
+       :order_pincode => order_master.pincode,
+       :media_id => order_master.media_id,
+       :promo_cost_total => total_promotion_cost,
+       :dnis => order_master.calledno,
+       :city => order_master.city,
+       :state => order_master.customer_address.state,
+       :mobile_no => order_master.mobile,
+       :shipping_cost => ordln.product_postage)
+
+       return puts "Updated existing Sales PPO with id #{@sale_ppo.id} created on #{@sale_ppo.created_at.strftime("%d-%b-%y %H:%M")} for order id #{order_master.id}"
+     end
+
+  end
+end
+handle_asynchronously :create_sales_hbn_ppo
+######## duplicate this is delayed job server #####
+
+
+def re_create_sales_ppo
+  order_id = self.id
+ #order_id = self.order_id
+     #create sales ppo for each order line
+   order_master = OrderMaster.find(order_id)
+   if order_master.medium.blank?
+     # remove_from_sales_ppo order_id
+     return puts "Not a HBN Order, skipped!" #.colorize(:blue)
+   end
+   if order_master.medium.media_group_id != 10000
+     remove_from_sales_ppo order_id
+     return puts "Not a HBN Order, skipped!" #.colorize(:red)
+   end
+   # .where('ORDER_STATUS_MASTER_ID > 10002')
+   if order_master.order_status_master_id < 10001
+     remove_from_sales_ppo order_id
+     return puts "Not a processed order, skipped!" #.colorize(:red)
+   end
+
+   campaign_playlist_id = order_master.campaign_playlist_id || nil if order_master.campaign_playlist_id.present?
+   campaign_id = order_master.campaign_playlist.campaignid || nil if order_master.campaign_playlist
+   if campaign_playlist_id.present?
+     puts "Found campaign playlist #{campaign_playlist_id} and update this for order #{order_id} IN PPO" #.colorize(:blue)
+   else
+     remove_from_sales_ppo order_id
+   return  puts "No campaign playlist found in PPO" #.colorize(:red)
+
+   end
+   campaign_name = CampaignPlaylist.find(campaign_playlist_id).name || " " if order_master.campaign_playlist_id.present?
+   order_pieces = order_master.pieces || 0 if order_master.pieces.present?
+   if order_master.promotion.present?
+     if order_master.promotion.promo_cost.present?
+       total_promotion_cost = order_master.promotion.promo_cost || 0 if order_master.promotion.promo_cost.present?
+       per_order_promo_cost = (total_promotion_cost / order_pieces) if order_pieces.present?
+     end
+   end
+
+   order_lines = OrderLine.where(orderid: order_id)
+   time_of_order = order_master.orderdate.strftime('%Y-%b-%d %H:%M:%S')
+   puts "Found #{order_lines.count()} orders, now checking if they are in PPO!" #.colorize(:blue)
+   order_lines.each do |ordln|
+   #add or update ppo details
+   if SalesPpo.where(:order_line_id=> ordln.id).present?
+     @sale_ppo = SalesPpo.where(:order_line_id=> ordln.id).first
+
+     @sale_ppo.update(campaign_playlist_id: campaign_playlist_id,
+     name: campaign_name,
+     campaign_id: campaign_id,
+     :product_master_id => ordln.product_master_id,
+     product_variant_id: ordln.productvariant_id,
+     product_list_id: ordln.product_list_id,
+     prod: (ordln.product_list.extproductcode || nil if ordln.product_list.present?),
+     :start_time => time_of_order,
+     :order_id => ordln.orderid,
+     :order_line_id=> ordln.id,
+     :product_cost => ordln.productcost,
+     :pieces => ordln.pieces,
+     :revenue => ordln.productrevenue,
+     :transfer_order_revenue => ordln.transfer_order_revenue,
+     :transfer_order_dealer_price => ordln.transfer_order_dealer_price,
+     :damages => ordln.productcost * 0.10,
+     :returns => ordln.refund,
+     :commission_cost => ordln.media_commission,
+     :promotion_cost=> per_order_promo_cost,
+     :gross_sales => ordln.gross_sales,
+     :net_sale => ordln.net_sales,
+     :external_order_no => order_master.external_order_no,
+     :order_status_id => order_master.order_status_master_id,
+     :order_pincode => order_master.pincode,
+     :media_id => order_master.media_id,
+     :promo_cost_total => total_promotion_cost,
+     :dnis => order_master.calledno,
+     :city => order_master.city,
+     :state => order_master.customer_address.state,
+     :mobile_no => order_master.mobile,
+     :shipping_cost => ordln.product_postage)
+
+     puts "Updated existing Sales PPO with id #{@sale_ppo.id} created on #{@sale_ppo.created_at.strftime("%d-%b-%y %H:%M")} for order id #{order_master.id}" #.colorize(:light_yellow).colorize( :background => :black)
+     end
+   end
+end
+handle_asynchronously :re_create_sales_ppo
+
+def add_product_to_campaign
+  order_id = self.id
+  # (order_id)
+  #media_id
+  order_master = OrderMaster.find(order_id)
+  mediumid = order_master.media_id
+  missed_reason = nil
+
+  campaign_playlist_id = order_master.campaign_playlist_id || 0 if order_master.campaign_playlist_id.present?
+  product_variant = OrderLine.where(orderid: order_id).joins(:product_variant).where('PRODUCT_VARIANTS.product_sell_type_id = ?', 10000)
+  product_variant_id = product_variant.first.productvariant_id || nil if product_variant.first.productvariant_id.present?
+
+  return if product_variant_id.blank?
+
+  ext_product_code = ProductVariant.find(product_variant_id).extproductcode
+  order_time = order_master.orderdate + 330.minutes
+  nowhour = order_time.strftime('%H').to_i
+  nowminute = order_time.strftime('%M').to_i
+  todaydate = order_time
+
+  max_go_back_date = (todaydate.to_time - 48.hours).to_datetime
+  nowsecs = (nowhour * 60 * 60) + (nowminute * 60)
+  # check if media is part of HBN group
+  # check if media is part of HBN group, if yes, update the HBN group
+  # campaign playlist id both ways
+  # on order and agains the campaign playlis
+  if Medium.where(id: mediumid).present?
+    channelname = Medium.find(mediumid).name
+    media = Medium.find(mediumid)
+    if (media.media_group_id != 10000 || media.media_group_id.blank?)
+      order_master.update(campaign_playlist_id: nil)
+      add_update order_id
+      remove_from_sales_ppo order_id
+      return puts "NOT HBN Order removing from order master now" #.colorize(:red)
+    end
+  end
+
+  #HBN Master Media Id 11200
+  #select the campaign from HBN Master Campaign List
+  # 2 days restrictions on time travel
+  # campaignlist =  Campaign.where(mediumid: 11200).where("TRUNC(startdate) <= ?
+  # AND TRUNC(startdate)>= ?", todaydate, max_go_back_date)
+  # no restrictions on time travel
+  campaignlist =  Campaign.where(mediumid: 11200).where("TRUNC(startdate) <= ?", todaydate)
+  # if !campaignlist.present?
+ #
+ #  end
+
+ campaign_playlist = CampaignPlaylist.where(campaignid: campaignlist)
+ .where(list_status_id: 10000).where(productvariantid: product_variant_id)
+ .where("(start_hr * 60 * 60) + (start_min * 60) <= ?", nowsecs)
+ .where("TRUNC(for_date) <= ?", todaydate)
+ .order("for_date DESC, start_hr DESC, start_min DESC")
+
+ if campaign_playlist.present?
+
+   # update order with campaign playlist id
+   campaign_playlist_id = campaign_playlist.first.id if campaign_playlist.first.id.present?
+   #order_master.update(campaign_playlist_id: campaign_playlist.first.id)
+
+   puts "#{campaign_playlist_id} Order was for #{order_time.strftime("%d-%b-%Y")} #{nowhour}:#{nowminute} and Regular Campaign #{campaign_playlist.first.for_date.strftime("%d-%b-%Y")} #{campaign_playlist.first.start_hr}:#{campaign_playlist.first.start_min}"  if campaign_playlist.present?
+   #.colorize(:navy_blue) #puts missed_reason.colorize(:green)
+   campaign_updated = "Regular Campaign #{campaign_playlist.first.for_date.strftime("%d-%b-%Y")} #{campaign_playlist.first.start_hr}:#{campaign_playlist.first.start_min}" if campaign_playlist.present?
+ end
+ if campaign_playlist_id.blank?
+ #check for additional product variants
+ extended_campaign_playlist = CampaignPlaylistToProduct.where(product_variant_id: product_variant_id)
+ .joins(:campaign_playlist)
+ .where("campaign_playlists.list_status_id = 10000")
+ .where("(campaign_playlists.start_hr * 60 * 60) + (campaign_playlists.start_min * 60) <= ?", nowsecs)
+ .where("TRUNC(campaign_playlists.for_date) <= ?", todaydate)
+ .order("campaign_playlists.for_date DESC, campaign_playlists.start_hr DESC,
+ campaign_playlists.start_min DESC")
+
+    if extended_campaign_playlist.present?
+      puts "Found campaign playlist #{campaign_playlist_id} in Extended Playlist and update this for order #{order_id}" #..colorize(:white).colorize(:background => :red)
+      campaign_playlist_id = extended_campaign_playlist.first.campaign_playlist_id if extended_campaign_playlist.present?
+    end
+ end
+ #update for earlier date playlists
+ if !campaign_playlist_id.present?
+   #this is designed for the playlist to go back as as required to assign this order for
+   # a particular date
+   # older_campaign_playlist = CampaignPlaylist.where(productvariantid: product_variant_id)
+   # .where("TRUNC(for_date) <= ? AND TRUNC(for_date) >= ?",  todaydate - 1.day, max_go_back_date)
+   # .where(list_status_id: 10000)
+   # .order("for_date DESC, start_hr DESC, start_min DESC")
+   # now with no restrcitions to go back
+   older_campaign_playlist = CampaignPlaylist.where(campaignid: campaignlist)
+   .where(productvariantid: product_variant_id)
+   .where("TRUNC(for_date) <= ?",  todaydate - 1.day)
+   .where(list_status_id: 10000)
+   .order("for_date DESC, start_hr DESC, start_min DESC")
+
+   if older_campaign_playlist.present?
+
+      missed_reason = "Older campaign used Updated at #{order_time} order for #{channelname} with show #{older_campaign_playlist.name}
+      (id #{older_campaign_playlist.first.id} ) at Hour:#{nowhour}  Minutes:#{nowminute}"
+
+      #@order_master.update(campaign_playlist_id: older_campaign_playlist.first.id)
+      campaign_playlist_id = older_campaign_playlist.first.id if older_campaign_playlist.first.id.present?
+
+       puts "#{campaign_playlist_id} Order was for #{order_time.strftime("%d-%b-%Y")} #{nowhour}:#{nowminute} and Older Campaign #{older_campaign_playlist.first.for_date.strftime("%d-%b-%Y")} #{older_campaign_playlist.first.start_hr}:#{older_campaign_playlist.first.start_min}" #..colorize(:red) if older_campaign_playlist.present?
+
+       campaign_updated = "Older Campaign #{older_campaign_playlist.first.for_date.strftime("%d-%b-%Y")} #{older_campaign_playlist.first.start_hr}:#{older_campaign_playlist.first.start_min}"  if older_campaign_playlist.present?
+   end
+ end
+
+ if campaign_playlist_id.blank?
+ #check for additional product variants
+ extended_older_campaign_playlist = CampaignPlaylistToProduct.where(product_variant_id: product_variant_id)
+ .joins(:campaign_playlist)
+ .where("campaign_playlists.list_status_id = 10000")
+ .where("TRUNC(campaign_playlists.for_date) <= ?",  todaydate - 1.day)
+ .order("campaign_playlists.for_date DESC, campaign_playlists.start_hr DESC,
+ campaign_playlists.start_min DESC")
+
+    if extended_older_campaign_playlist.present? && campaign_playlist_id.blank?
+     puts "Found campaign playlist #{campaign_playlist_id} in Extended Older Playlist and update this for order #{order_id}" #..colorize(:white).colorize(:background => :red)
+     campaign_playlist_id = extended_older_campaign_playlist.first.campaign_playlist_id if extended_older_campaign_playlist.present?
+    end
+  end
+
+  if campaign_playlist_id.present?
+    puts "Found campaign playlist #{campaign_playlist_id} and update this for order #{order_id}" #.colorize(:blue)
+  else
+    return puts "NO campaign playlist found in product campaign check" #.colorize(:red)
+  end
+
+  if campaign_playlist_id.present?
+    order_master.update(campaign_playlist_id: campaign_playlist_id)
+    #total_notes = order_master.notes + " " + campaign_updated
+    #order_master.update(notes: total_notes)
+
+     #check if found in sales ppo table
+    add_update order_id
+
+    puts "Process Completed - Updated"
+  end
+end
+handle_asynchronously :add_product_to_campaign
+
+def remove_from_sales_ppo order_id
+  order_master = OrderMaster.find(order_id)
+
+  # if order_master.medium.media_group_id == 10000
+ #    return puts "A HBN Order, skipped!".colorize(:blue)
+ #  end
+ #  # .where('ORDER_STATUS_MASTER_ID > 10002')
+ #  if order_master.order_status_master_id > 10002
+ #    return puts "A processed order, skipped!".colorize(:blue)
+ #  end
+
+  order_lines = OrderLine.where(orderid: order_id)
+  order_lines.each do |ordln|
+  #add or update ppo details
+    if SalesPpo.where(:order_line_id=> ordln.id).present?
+      sale_ppo = SalesPpo.where(:order_line_id=> ordln.id).first
+      sale_ppo.destroy
+      puts "Destroyed for order id #{order_master.id}" #.colorize(:black).colorize(:background => :red)
+    end
+  end
+end
+handle_asynchronously :remove_from_sales_ppo
+
+def add_update order_id
+  #create sales ppo for each order line
+  order_master = OrderMaster.find(order_id)
+  if order_master.medium.blank?
+    return puts "Not a HBN Order, skipped!" #.colorize(:blue)
+  end
+  if order_master.medium.media_group_id != 10000
+    return puts "Not a HBN Order, skipped!" #.colorize(:blue)
+  end
+  # .where('ORDER_STATUS_MASTER_ID > 10002')
+  if order_master.order_status_master_id < 10002
+    return puts "Not a processed order, skipped!" #.colorize(:blue)
+  end
+
+  campaign_playlist_id = order_master.campaign_playlist_id || nil if order_master.campaign_playlist_id.present?
+  if campaign_playlist_id.blank?
+    return
+  end
+
+  campaign_id = order_master.campaign_playlist.campaignid || nil if order_master.campaign_playlist
+  campaign_name = CampaignPlaylist.find(campaign_playlist_id).name || " " if order_master.campaign_playlist_id.present?
+  order_pieces = order_master.pieces || 0 if order_master.pieces.present?
+  if order_master.promotion.present?
+    if order_master.promotion.promo_cost.present?
+      total_promotion_cost = order_master.promotion.promo_cost || 0 if order_master.promotion.promo_cost.present?
+      per_order_promo_cost = (total_promotion_cost / order_pieces) if order_pieces.present?
+    end
+  end
+
+  order_lines = OrderLine.where(orderid: order_id)
+  time_of_order = order_master.orderdate.strftime('%Y-%b-%d %H:%M:%S')
+  puts "Found #{order_lines.count()} orders, now checking if they are in PPO!" #.colorize(:blue)
+  order_lines.each do |ordln|
+  #add or update ppo details
+  if SalesPpo.where(:order_line_id=> ordln.id).present?
+    @sale_ppo = SalesPpo.where(:order_line_id=> ordln.id).first
+
+    @sale_ppo.update(campaign_playlist_id: campaign_playlist_id,
+    name: campaign_name,
+    campaign_id: campaign_id,
+    :product_master_id => ordln.product_master_id,
+    product_variant_id: ordln.productvariant_id,
+    product_list_id: ordln.product_list_id,
+    prod: (ordln.product_list.extproductcode || nil if ordln.product_list.present?),
+    :start_time => time_of_order,
+    :order_id => ordln.orderid,
+    :order_line_id=> ordln.id,
+    :product_cost => ordln.productcost,
+    :pieces => ordln.pieces,
+    :revenue => ordln.productrevenue,
+    :transfer_order_revenue => ordln.transfer_order_revenue,
+    :transfer_order_dealer_price => ordln.transfer_order_dealer_price,
+    :damages => ordln.productcost * 0.10,
+    :returns => ordln.refund,
+    :commission_cost => ordln.media_commission,
+    :promotion_cost=> per_order_promo_cost,
+    :gross_sales => ordln.gross_sales,
+    :net_sale => ordln.net_sales,
+    :external_order_no => order_master.external_order_no,
+    :order_status_id => order_master.order_status_master_id,
+    :order_pincode => order_master.pincode,
+    :media_id => order_master.media_id,
+    :promo_cost_total => total_promotion_cost,
+    :dnis => order_master.calledno,
+    :city => order_master.city,
+    :state => order_master.customer_address.state,
+    :mobile_no => order_master.mobile,
+    :shipping_cost => ordln.product_postage)
+
+
+    else
+      @sale_ppo = SalesPpo.create(name: campaign_name,
+      campaign_playlist_id: campaign_playlist_id,
+      campaign_id: campaign_id,
+      :product_master_id => ordln.product_master_id,
+      product_variant_id: ordln.productvariant_id,
+      product_list_id: ordln.product_list_id,
+      prod: (ordln.product_list.extproductcode || nil if ordln.product_list.present?),
+      :start_time => time_of_order,
+      :order_id => ordln.orderid,
+      :order_line_id => ordln.id,
+      :product_cost => ordln.productcost,
+      :pieces => ordln.pieces,
+      :revenue => ordln.productrevenue,
+      :transfer_order_revenue => ordln.transfer_order_revenue,
+      :transfer_order_dealer_price => ordln.transfer_order_dealer_price,
+      :damages => ordln.productcost * 0.10,
+      :returns => ordln.refund,
+      :commission_cost => ordln.media_commission,
+      :promotion_cost=> per_order_promo_cost,
+      :gross_sales => ordln.gross_sales,
+      :net_sale => ordln.net_sales,
+      :external_order_no => order_master.external_order_no,
+      :order_status_id => order_master.order_status_master_id,
+      :order_pincode => order_master.pincode,
+      :media_id => order_master.media_id,
+      :promo_cost_total => total_promotion_cost,
+      :dnis => order_master.calledno,
+      :city => order_master.city,
+      :state => order_master.customer_address.state,
+      :mobile_no => order_master.mobile,
+      :shipping_cost => ordln.product_postage)
+
+      return 1
+    end
+  end
+end
+handle_asynchronously :add_update
+
+###### above lines for hbn sales ppo asynchronised ##########
+
+  private
   def on_create
-  #self.update_column(pieces: 0,subtotal: 0, taxes: 0, codcharges: 0, shipping:0, total: 0)
-  self.update(pieces: OrderLine.where('orderid = ?', self.id).sum(:pieces),
+    #self.update_column(pieces: 0,subtotal: 0, taxes: 0, codcharges: 0, shipping:0, total: 0)
+    self.update(pieces: OrderLine.where('orderid = ?', self.id).sum(:pieces),
      subtotal: OrderLine.where('orderid = ?', self.id).sum(:subtotal),
      shipping: OrderLine.where('orderid = ?', self.id).sum(:shipping),
       taxes:  OrderLine.where('orderid = ?', self.id).sum(:taxes),
@@ -1073,7 +1691,7 @@ private
       taxes:  OrderLine.where('orderid = ?', self.id).sum(:taxes),
       codcharges: OrderLine.where('orderid = ?', self.id).sum(:codcharges),
       total: OrderLine.where('orderid = ?', self.id).sum(:total))
-  #self.update_column(pieces: 0,subtotal: 0, taxes: 0, codcharges: 0, shipping:0, total: 0)
+      #self.update_column(pieces: 0,subtotal: 0, taxes: 0, codcharges: 0, shipping:0, total: 0)
   end
 
   def parse_uri url
@@ -1087,7 +1705,7 @@ private
         get_response = JSON.parse(response.read_body)
         return get_response
   end
-  
+
   def parse_check_paid_uri url
         url = URI.parse(encoded_url)
         http = Net::HTTP.new(url.host, url.port)
@@ -1099,4 +1717,5 @@ private
         get_response = JSON.parse(response.read_body)
         return get_response
   end
+
 end

@@ -27,5 +27,6 @@
 
 //= require moment
 //= require bootstrap-datetimepicker
+//= require rails.validations.simple_form
 //= require pickers
 //= require select2

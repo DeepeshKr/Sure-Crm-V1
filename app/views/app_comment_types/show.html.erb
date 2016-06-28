@@ -1,0 +1,19 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @app_comment_type.name %>
+</p>
+
+<p>
+  <strong>Priority no:</strong>
+  <%= @app_comment_type.priority_no %>
+</p>
+
+<p>
+  <strong>Description:</strong>
+  <%= @app_comment_type.description %>
+</p>
+
+<%= link_to 'Edit', edit_app_comment_type_path(@app_comment_type) %> |
+<%= link_to 'Back', app_comment_types_path %>

@@ -7,7 +7,8 @@ class MediaCostMastersController < ApplicationController
 
   def index
     # @media_cost_masters = MediaCostMaster.order('updated_at DESC').limit(10)
-    flash[:success] = recalculate_media_total_cost
+    flash[:success] = "Media costs updated"
+    MediaCostMaster.recalculate_media_total_cost
      @summary = 'Recently updated Masters'
      @totalmediacost = 0
       @showhbn = 1
@@ -40,7 +41,25 @@ class MediaCostMastersController < ApplicationController
     @pvt_channel = MediaCostMaster.where('media_id <> 11200').order("media_id, str_hr, str_min")
   end
 
+  def get_costs
+    @begin_hr = params[:begin_hr]
+    @begin_min = params[:begin_min]
+    @begin_sec = params[:begin_sec]
+    @total_secs = params[:total_secs]
 
+    #show_cost_of_playlist start_hour, start_min, start_sec, play_duration_sec
+    return if @begin_hr.blank?
+    return if @begin_min.blank?
+    return if @begin_sec.blank?
+    return if @total_secs.blank?
+
+
+    media_cost = MediaCostMaster.new
+    @media_cost =  media_cost.show_cost_of_playlist @begin_hr.to_i, @begin_min.to_i, @begin_sec.to_i, @total_secs.to_i
+
+    #attr_accessor :loops, :cost_details, :cost_cal_per_sec, :secs_used, :secs_bal, :loop_cost
+
+  end
 
   def show
     respond_with(@media_cost_master)

@@ -96,6 +96,13 @@ GEM
       mime-types (>= 1.16)
     chartkick (1.4.1)
     choice (0.1.7)
+    client_side_validations (4.2.4)
+      jquery-rails (>= 3.1.2, < 5.0.0)
+      js_regex (~> 1.0, >= 1.0.9)
+      rails (>= 4.0.0, < 4.3.0)
+    client_side_validations-simple_form (3.2.3)
+      client_side_validations (~> 4.2.3)
+      simple_form (~> 3.2)
     coderay (1.1.0)
     coffee-rails (4.0.1)
       coffee-script (>= 2.2.0)
@@ -151,6 +158,8 @@ GEM
       thor (>= 0.14, < 2.0)
     jquery-ui-rails (5.0.5)
       railties (>= 3.2.16)
+    js_regex (1.0.17)
+      regexp_parser (= 0.3.6)
     json (1.8.3)
     kaminari (0.16.3)
       actionpack (>= 3.0.0)
@@ -253,6 +262,7 @@ GEM
     redis-namespace (1.5.2)
       redis (~> 3.0, >= 3.0.4)
     ref (2.0.0)
+    regexp_parser (0.3.6)
     remotipart (1.2.1)
     responders (2.1.1)
       railties (>= 4.2.0, < 5.1)
@@ -353,6 +363,8 @@ DEPENDENCIES
   bootstrap_form
   bootsy
   byebug
+  client_side_validations
+  client_side_validations-simple_form
   coffee-rails (~> 4.0.0)
   daemons
   datetimepicker-rails!

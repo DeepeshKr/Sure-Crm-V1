@@ -1,0 +1,9 @@
+<!-- def title(page_title) -->
+<% title "Request new Feature / Error at #{@timenow}" %>
+<!-- end of the title-->
+<h3>New App Feature Request / Error Details</h3>
+
+<%= render 'new_feature' %>
+
+<%= link_to 'Back', url_for(:back), class: "btn btn-info btn-xs" %>
+<!-- = link_to 'Back', app_feature_requests_path -->

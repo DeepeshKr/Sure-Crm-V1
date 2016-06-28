@@ -6,15 +6,15 @@
 <% if @to_date.present? %>
 	<%= hidden_field_tag :to_date, @to_date %>
 <% end %>
- 
+
 <div class="row">
   	<div class="col-xs-8">
-   
+
     <%= select_tag :media_id, options_from_collection_for_select(@hbnmedialist, :id, :mediainfo, selected: @media_id), {prompt: "Please select the HBN Media", label: "HBN Media", :class => "form-control"} %>
-    
+
   	</div>
   	<div class="col-xs-4">
-         <%= submit_tag("Show Report", :class => "btn btn-success btn-sm") %> 
+         <%= submit_tag("Filter Report", :class => "btn btn-success btn-sm") %> 
 	</div>
 </div>
 <% end %>

@@ -10,28 +10,34 @@
       <th>Frmes</th>
       <th>Tape ext ref</th>
       <th>Unique tape name</th>
-      <th>Media</th>
       <th>Product variant</th>
 
     </tr>
   </thead>
-
+<% @total_secs = 0 %> <% @total_tapes = 0 %>
   <tbody>
     <% @media_tapes.each do |media_tape| %>
       <tr>
-        <td><%= media_tape.sort_order %></td>
+        <td><%= media_tape.sort_order %> <% @total_tapes += 1 %> </td>
         <td><%= media_tape.name %></td>
         <td><%= media_tape.release_date.strftime("%d/%m/%Y") %></td>
-        <td><%= media_tape.duration_secs %></td>
+        <td><%= media_tape.duration_secs %> <% @total_secs += media_tape.duration_secs %></td>
         <td><%= media_tape.frames %></td>
         <td><%= media_tape.tape_ext_ref_id %></td>
         <td><%= media_tape.unique_tape_name %></td>
-        <td><%= media_tape.medium.name || "No Media Selected"  if media_tape.medium.present? %></td>
         <td><%= media_tape.product_variant.productinfo || "No Product Selected" if media_tape.product_variant.present? %></td>
 
       </tr>
     <% end %>
   </tbody>
+  <thead>
+    <tr>
+     <th colspan="3">Total Secs</th>
+     <th> <%= @total_secs %></th>
+     <th colspan="3">Total Tapes</th>
+     <th><%= @total_tapes %></th>
+    </tr>
+  </thead>
 </table>
 
 <br/>

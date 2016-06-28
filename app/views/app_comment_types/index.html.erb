@@ -1,0 +1,34 @@
+<!-- set page title start -->
+<% title "App Comment Types" %>
+<!-- set page title end -->
+<p id="notice"><%= notice %></p>
+
+<h1>App Comment Types</h1>
+
+<table class="table table-hover table-stripped">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Priority no</th>
+      <th>Description</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @app_comment_types.each do |app_comment_type| %>
+      <tr>
+        <td><%= app_comment_type.name %></td>
+        <td><%= app_comment_type.priority_no %></td>
+        <td><%= app_comment_type.description %></td>
+        <td><%= link_to 'Show', app_comment_type %></td>
+        <td><%= link_to 'Edit', edit_app_comment_type_path(app_comment_type) %></td>
+        <td><%= link_to 'Destroy', app_comment_type, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New App comment type', new_app_comment_type_path %>

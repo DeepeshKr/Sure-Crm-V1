@@ -1,0 +1,34 @@
+<%= simple_form_for(@app_feature_request) do |f| %>
+  <%= f.error_notification %>
+
+  <div class="form-inputs">
+    <%= f.input :name %>
+    <%= f.input :app_id %>
+    <%= f.input :app_feature_type_id %>
+    <%= f.input :problem_this_solves %>
+    <%= f.input :mandatory_requirements %>
+    <%= f.input :technical_notes %>
+    <%= f.input :request_by %>
+    <%= f.input :require_by_date %>
+    <%= f.input :estimated_completion_date %>
+    <%= f.input :actual_completion_date %>
+    <%= f.input :user_approved_date %>
+    <%= f.input :user_satisfaction_level_id %>
+    <%= f.input :velocity_id %>
+    <%= f.input :current_status_id %>
+    <%= f.input :priority_id %>
+    <%= f.input :assigned_to %>
+    <%= f.input :extra_notes %>
+    <%= f.input :tables_used %>
+    <%= f.input :estimated_hours %>
+    <%= f.input :actual_hours %>
+    <%= f.input :bug_count %>
+    <%= f.input :linked_app_feature_id %>
+    <%= f.input :queue_no %>
+    <%= f.input :comment_count %>
+  </div>
+
+  <div class="form-actions">
+    <%= f.button :submit %>
+  </div>
+<% end %>

@@ -1,0 +1,34 @@
+<!-- set page title start -->
+<% title "App Statuses" %>
+<!-- set page title end -->
+<p id="notice"><%= notice %></p>
+
+<h1>App Statuses</h1>
+
+<table class="table table-hover table-stripped">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Priority no</th>
+      <th>Description</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @app_statuses.each do |app_status| %>
+      <tr>
+        <td><%= app_status.name %></td>
+        <td><%= app_status.priority_no %></td>
+        <td><%= app_status.description %></td>
+        <td><%= link_to 'Show', app_status %></td>
+        <td><%= link_to 'Edit', edit_app_status_path(app_status) %></td>
+        <td><%= link_to 'Destroy', app_status, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New App status', new_app_status_path %>

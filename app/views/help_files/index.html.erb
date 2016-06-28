@@ -1,3 +1,6 @@
+<!-- set page title start -->
+<% title "Help Files #{@searchvalue} " %>
+<!-- set page title end -->
 <p id="notice"><%= notice %></p>
 <div class="row">
 <div class="col-xs-4">
@@ -6,7 +9,7 @@
 <div class="col-xs-8">
 <%= render 'search' %>
 </div>
-</div>  
+</div>
 
 
 <table class="table table-hover">
@@ -21,17 +24,19 @@
   <tbody>
     <% @help_files.each do |help_file| %>
       <tr>
-        <td><%= help_file.name %><%= help_file.link %></td>
+        <td><%= help_file.name %> <br>
+          <%= link_to 'View', help_file.link, class:"btn btn-info btn-xs" %>
+        </td>
         <td><%= help_file.description %></td>
-        
+
         <td><%= link_to 'Show', help_file %></td>
-       
+
       </tr>
     <% end %>
   </tbody>
 </table>
 
 <br>
- <% if (current_user.employee_role.sortorder < 10) %> 
+ <% if (current_user.employee_role.sortorder < 10) %>
 <%= link_to 'New Help file', new_help_file_path, class:"btn btn-primary" %>
 <% end %>

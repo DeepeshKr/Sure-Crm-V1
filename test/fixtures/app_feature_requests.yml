@@ -1,0 +1,53 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  name: MyString
+  app_id: 1
+  app_feature_type_id: 1
+  problem_this_solves: MyText
+  mandatory_requirements: MyText
+  technical_notes: MyText
+  request_by: 1
+  require_by_date: 2016-06-15 11:25:28
+  estimated_completion_date: 2016-06-15 11:25:28
+  actual_completion_date: 2016-06-15 11:25:28
+  user_approved_date: 2016-06-15 11:25:28
+  user_satisfaction_level_id: 1
+  velocity_id: 1
+  current_status_id: 1
+  priority_id: 1
+  assigned_to: 1
+  extra_notes: MyText
+  tables_used: MyText
+  estimated_hours: 1
+  actual_hours: 1
+  bug_count: 1
+  linked_app_feature_id: 1
+  queue_no: 1
+  comment_count: 1
+
+two:
+  name: MyString
+  app_id: 1
+  app_feature_type_id: 1
+  problem_this_solves: MyText
+  mandatory_requirements: MyText
+  technical_notes: MyText
+  request_by: 1
+  require_by_date: 2016-06-15 11:25:28
+  estimated_completion_date: 2016-06-15 11:25:28
+  actual_completion_date: 2016-06-15 11:25:28
+  user_approved_date: 2016-06-15 11:25:28
+  user_satisfaction_level_id: 1
+  velocity_id: 1
+  current_status_id: 1
+  priority_id: 1
+  assigned_to: 1
+  extra_notes: MyText
+  tables_used: MyText
+  estimated_hours: 1
+  actual_hours: 1
+  bug_count: 1
+  linked_app_feature_id: 1
+  queue_no: 1
+  comment_count: 1

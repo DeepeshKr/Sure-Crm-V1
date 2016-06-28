@@ -1,0 +1,15 @@
+<h1>Editing App Feature Request</h1>
+<!-- def title(page_title) -->
+<% title "Edit #{@app_feature_request.name}" %>
+<!-- end of the title-->
+<% if current_user.role == 10022 %>
+  <%= render 'tec_update' %>
+<% else %>
+    <%= render 'new_feature' %>
+<% end %>
+<!-- = render 'form' -->
+
+
+<%= link_to 'Show', @app_feature_request %> |
+<%= link_to 'Back', url_for(:back), class: "btn btn-info btn-xs" %>
+<!-- = link_to 'Back', app_feature_requests_path % -->

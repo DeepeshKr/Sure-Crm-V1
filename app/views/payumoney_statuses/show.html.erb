@@ -1,0 +1,29 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @payumoney_status.name %>
+</p>
+
+<p>
+  <strong>Priority no:</strong>
+  <%= @payumoney_status.priority_no %>
+</p>
+
+<p>
+  <strong>External description:</strong>
+  <%= @payumoney_status.external_description %>
+</p>
+
+<p>
+  <strong>Valid payment:</strong>
+  <%= @payumoney_status.valid_payment %>
+</p>
+
+<p>
+  <strong>Description:</strong>
+  <%= @payumoney_status.description %>
+</p>
+
+<%= link_to 'Edit', edit_payumoney_status_path(@payumoney_status) %> |
+<%= link_to 'Back', payumoney_statuses_path %>

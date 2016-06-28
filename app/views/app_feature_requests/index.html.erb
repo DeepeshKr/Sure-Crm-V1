@@ -1,0 +1,135 @@
+<!-- set page title start -->
+<% title "App Feature Requests " %>
+<!-- set page title end -->
+<p id="notice"><%= notice %></p>
+<ul class="nav nav-tabs">
+	<li class="active"><a data-toggle="tab" href="#new">New</a></li>
+	<li><a data-toggle="tab" href="#queue">Queue</a></li>
+	<li><a data-toggle="tab" href="#working">Working</a></li>
+	<li><a data-toggle="tab" href="#beta">Staging</a></li>
+	<li><a data-toggle="tab" href="#delayed">Delayed</a></li>
+	<li><a data-toggle="tab" href="#others">Others</a></li>
+	<li><a data-toggle="tab" href="#live">Live</a></li>
+</ul>
+<br>
+<div class="tab-content">
+    <div id="new" class="tab-pane fade in active">
+			<div class="row">
+				<div class="col-xs-12">
+				   <%= render partial: 'home_index', :locals => {:name_of_status_list => "New Features",
+			       :app_feature_requests => @app_new_features, :about_the_list => "Footer with details" }  %>
+				</div>
+			</div>
+
+			<div class="row">
+				<div class="col-xs-12">
+					<%= render partial: 'home_index', :locals => {:name_of_status_list => "New Errors",
+						:app_feature_requests => @app_new_errors, :about_the_list => "Footer with details" }  %>
+				</div>
+			</div>
+		</div>
+
+		<div id="queue" class="tab-pane fade">
+			<div class="row">
+				<div class="col-xs-12">
+					 <%= render partial: 'home_index', :locals => {:name_of_status_list => "Queued Features",
+						 :app_feature_requests => @app_queued_features, :about_the_list => "Footer with details" }  %>
+				</div>
+			</div>
+
+			<div class="row">
+				<div class="col-xs-12">
+					<%= render partial: 'home_index', :locals => {:name_of_status_list => "Queued Errors",
+						:app_feature_requests => @app_queued_errors, :about_the_list => "Footer with details" }  %>
+				</div>
+			</div>
+		</div>
+
+		<div id="working" class="tab-pane fade">
+			<div class="row">
+				<div class="col-xs-12">
+					 <%= render partial: 'home_index', :locals => {:name_of_status_list => "Working Features",
+						 :app_feature_requests => @app_working_features, :about_the_list => "Footer with details" }  %>
+				</div>
+			</div>
+
+			<div class="row">
+				<div class="col-xs-12">
+					<%= render partial: 'home_index', :locals => {:name_of_status_list => "Working Errors",
+						:app_feature_requests => @app_working_errors, :about_the_list => "Footer with details" }  %>
+				</div>
+			</div>
+		</div>
+
+		<div id="beta" class="tab-pane fade">
+			<div class="row">
+				<div class="col-xs-12">
+				   <%= render partial: 'home_index', :locals => {:name_of_status_list => "Features to be Released",
+			       :app_feature_requests => @app_beta_features, :about_the_list => "Footer with details" }  %>
+				</div>
+			</div>
+
+			<div class="row">
+				<div class="col-xs-12">
+					<%= render partial: 'home_index', :locals => {:name_of_status_list => "Errors to be Released",
+						:app_feature_requests => @app_beta_errors, :about_the_list => "Footer with details" }  %>
+				</div>
+			</div>
+		</div>
+		<div id="delayed" class="tab-pane fade">
+			<div class="row">
+				<div class="col-xs-12">
+					 <%= render partial: 'home_index', :locals => {:name_of_status_list => "All Features",
+						 :app_feature_requests => @app_delayed_features, :about_the_list => "Footer with details" }  %>
+				</div>
+			</div>
+
+			<div class="row">
+				<div class="col-xs-12">
+					<%= render partial: 'home_index', :locals => {:name_of_status_list => "All Errors",
+						:app_feature_requests => @app_delayed_errors, :about_the_list => "Footer with details" }  %>
+				</div>
+			</div>
+		</div>
+		<div id="others" class="tab-pane fade">
+			<div class="row">
+				<div class="col-xs-12">
+				   <%= render partial: 'home_index', :locals => {:name_of_status_list => "All Features",
+			       :app_feature_requests => @app_features, :about_the_list => "Footer with details" }  %>
+				</div>
+			</div>
+
+			<div class="row">
+				<div class="col-xs-12">
+					<%= render partial: 'home_index', :locals => {:name_of_status_list => "All Errors",
+						:app_feature_requests => @app_errors, :about_the_list => "Footer with details" }  %>
+				</div>
+			</div>
+		</div>
+
+		<div id="live" class="tab-pane fade">
+			<div class="row">
+				<div class="col-xs-12">
+				   <%= render partial: 'home_index', :locals => {:name_of_status_list => "Completed Features",
+			       :app_feature_requests => @app_completed_features, :about_the_list => "Footer with details" }  %>
+				</div>
+			</div>
+
+			<div class="row">
+				<div class="col-xs-12">
+					<%= render partial: 'home_index', :locals => {:name_of_status_list => "Completed Errors",
+						:app_feature_requests => @app_completed_errors, :about_the_list => "Footer with details" }  %>
+				</div>
+			</div>
+		</div>
+
+
+
+
+<div class="row">
+	<div class="col-xs-4">
+
+	</div>
+</div>
+<!-- row 2 -->
+<br>

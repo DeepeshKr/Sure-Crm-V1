@@ -24,7 +24,7 @@
     <tr>
 	<td><%= @sno %></td>
     <td><%= ord.external_order_no %> (<small>Ref No: <%= ord.id %></small>) </td>
-    <td> <%= (ord.orderdate + 330.minutes).strftime('%d-%b-%Y') %> </td>
+    <td> <%= (ord.orderdate + 330.minutes).strftime('%d-%b-%Y') %> at: <small><%= (ord.orderdate + 330.minutes).strftime('%H:%M %p') %> </small></td>
 	<td> <%= ord.medium.name  if ord.medium %></td>
     <td>
       <%= ord.customer_address.city  if ord.customer_address %>
@@ -47,7 +47,7 @@
        <% @sno += 1 %>
 
     <% end %>
-	
+
   </tbody>
   <thead>
   <tr>

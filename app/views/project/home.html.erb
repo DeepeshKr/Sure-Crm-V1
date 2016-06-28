@@ -3,12 +3,14 @@
 <!-- end of the title-->
 
 <!-- def title(page_title) -->
-<% title "Opened at #{@timenow}" %>
+<% title " Opened at #{@timenow}" %>
 <!-- end of the title-->
 
 <div class="well well-sm">
  <% if logged_in? %>
    <h4>Welcome to the Sure CRM App <%= current_user.name %>, you are logged in as <%= current_user.employee_role.name %> <small> <%= @timenow %></small> </h4>
+   <small> <small>Your Role Id <%= current_user.role %></small></small>
+   <small> <small>Your Id <%= current_user.id %></small></small>
 <% else %>
   <h4>Welcom to Sure CRM</h4>
 <small>Only Authorised people are allowed to move ahead form here</small>
@@ -18,21 +20,113 @@
 
 <div class="row">
 <div class="col-xs-8">
-  <div class="panel panel-primary">
-     <!-- Default panel contents -->
-    <div class="panel-heading">Your Pending Tasks</div>
-    <% if logged_in? %>
+
+
+  <!-- New  Requests start -->
+  <div class="panel panel-success">
     <div class="panel-body">
-      <p>Coming soon...</p>
+      <% if logged_in? %>
+        <div class="row">
+          <div class="col-xs-8"> <p class="lead">Request a New App or feature in an app or Report Error</p> </div>
+          <div class="col-xs-4"> <%= link_to 'New request', new_app_feature_request_path, class: "btn btn-success" %></div>
+        </div>
+        <% else %>
+        <h5>You are not logged in</h5>
+     <% end %>
     </div>
-
-  <% else %>
-     <div class="panel-body">
-     <h5>You are not logged in</h5>
-    </div>
-  <% end %>
-
   </div>
+     <!-- New Requests end -->
+    <% if logged_in? %>
+     <!-- New error upload end -->
+   <%  if current_user.role == 10162 || current_user.role == 10022 %>
+
+     <!-- New error upload start -->
+     <div class="panel panel-danger">
+        <!-- Default panel contents -->
+       <div class="panel-heading">Error Upload to Server</div>
+
+       <div class="panel-body">
+         <% if logged_in? %>
+         <%= render partial: 'app_feature_requests/stage_update', :locals => {:app_feature_requests => @app_upload_errors }  %>
+           <% else %>
+           <h5>You are not logged in</h5>
+        <% end %>
+       </div>
+     </div>
+
+     <!-- New feature upload start -->
+     <div class="panel panel-info">
+        <!-- Default panel contents -->
+       <div class="panel-heading">Feature Upload to Server</div>
+
+       <div class="panel-body">
+         <% if logged_in? %>
+         <%= render partial: 'app_feature_requests/stage_update', :locals => {:app_feature_requests => @app_upload_requests}  %>
+           <% else %>
+           <h5>You are not logged in</h5>
+        <% end %>
+       </div>
+     </div>
+        <!-- New feature upload end -->
+    <%  end %>
+    <%  end %>
+
+  <!-- New error Requests start -->
+  <div class="panel panel-danger">
+     <!-- Default panel contents -->
+    <div class="panel-heading">Error Requests</div>
+
+    <div class="panel-body">
+      <% if logged_in? %>
+      <%= render partial: 'app_feature_requests/quick_list', :locals => {:app_feature_requests => @app_feature_errors }  %>
+        <% else %>
+        <h5>You are not logged in</h5>
+     <% end %>
+    </div>
+  </div>
+     <!-- New error Requests end -->
+  <!-- New feature Requests start -->
+  <div class="panel panel-info">
+     <!-- Default panel contents -->
+    <div class="panel-heading">Feature Requests</div>
+
+    <div class="panel-body">
+      <% if logged_in? %>
+      <%= render partial: 'app_feature_requests/quick_list', :locals => {:app_feature_requests => @app_feature_requests}  %>
+        <% else %>
+        <h5>You are not logged in</h5>
+     <% end %>
+    </div>
+  </div>
+     <!-- New feature Requests end -->
+     <!-- Pending Tasks start -->
+  <div class="panel panel-primary">
+  <!-- Default panel contents -->
+   <div class="panel-heading">Your Teams Requests / Errors</div>
+
+       <div class="panel-body">
+         <% if !logged_in? %>
+           <p>Coming soon...</p>
+           <h5>You are not logged in</h5>
+        <% end %>
+       </div>
+  </div>
+  <!-- Pending Tasks end -->
+
+  <!-- New  Requests start -->
+  <div class="panel panel-success">
+    <div class="panel-body">
+      <% if logged_in? %>
+        <div class="row">
+          <div class="col-xs-8"> <p class="lead">Request a New App or feature in an app or Report Error</p> </div>
+          <div class="col-xs-4"> <%= link_to 'New request', new_app_feature_request_path, class: "btn btn-success" %></div>
+        </div>
+        <% else %>
+        <h5>You are not logged in</h5>
+     <% end %>
+    </div>
+  </div>
+     <!-- New Requests end -->
 </div>
 
 <div class="col-xs-4">

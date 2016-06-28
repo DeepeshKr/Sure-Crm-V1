@@ -1,5 +1,5 @@
 class InteractionMastersController < ApplicationController
-    before_action { protect_controllers(12) } 
+    before_action { protect_controllers(12) }
   before_action :set_interaction_master, only: [:show, :new_ticket, :edit, :update, :destroy]
 
 
@@ -15,12 +15,12 @@ class InteractionMastersController < ApplicationController
    # .where( interaction_status_id: 10000)
 
    # @lists.each do | list |
-   #   list.update(closedon: use_date, employee_id:10100, 
+   #   list.update(closedon: use_date, employee_id:10100,
    #    employee_code:"em001",
    #    interaction_status_id: 10003)
    # end
 
-   
+
    dropdowns
     if params.has_key?(:category) and params.has_key?(:status)
 
@@ -46,8 +46,8 @@ class InteractionMastersController < ApplicationController
        @category_name = "Search for date / mobile or Category"
     end
 
-    
-  end 
+
+  end
   def dealer_enquiry
       @interactioncategorylist =  InteractionCategory.where("id = 10020").order("sortorder")
       @interactionstatuslist =  InteractionStatus.all.order("sortorder")
@@ -62,7 +62,7 @@ class InteractionMastersController < ApplicationController
         respond_with(@interaction_masters)
     elsif params.has_key?(:for_date)
         for_date =  Date.strptime(params[:for_date], "%m/%d/%Y")
-        
+
         @interaction_masters = InteractionMaster.where("TRUNC(created_at) = ?", for_date)
         .where("interaction_category_id = ?", 10020).order("id DESC")
         .paginate(:page => params[:page])
@@ -71,7 +71,7 @@ class InteractionMastersController < ApplicationController
     else
         @category_name = "Select any category"
     end
- 
+
   end
 
   def show
@@ -85,8 +85,8 @@ class InteractionMastersController < ApplicationController
     @em_interaction_transcript = InteractionTranscript.new(:interactionid => params[:id], :interactionuserid => 10001, employee_id: @empid, ip: request.remote_ip)
     @cm_interaction_transcript = InteractionTranscript.new(:interactionid => params[:id], :interactionuserid => 10000, employee_id: @empid, ip: request.remote_ip)
      @interaction_transcripts = InteractionTranscript.where("interactionid = ?", params[:id]).order(:created_at)
-    
-     flash[:notice] = "This has been updated" 
+
+     flash[:notice] = "This has been updated"
     respond_with(@interaction_master, @interaction_transcripts, @em_interaction_transcript, @cm_interaction_transcript)
   end
 
@@ -106,17 +106,17 @@ class InteractionMastersController < ApplicationController
        interaction_category_id: params[:interaction_category_id],
        state: params[:state], mobile: params[:mobile],
        employee_id: params[:employee_id], employee_code: params[:employee_code],
-       interaction_status_id: 10000, interaction_priority_id: 10000, 
+       interaction_status_id: 10000, interaction_priority_id: 10000,
        createdon: t, resolveby: t + 10.days)
         #customer_id: interaction_master_params[:customer_id], interaction_category_id: interaction_master_params[:interaction_category_id], interaction_priority_id: interaction_master_params[:interaction_priority_id]
         #@interaction_transcript = InteractionTranscript.new(interactionid: @interaction_master.id, interactionuserid: 10000, description: params[:description])
-      @interaction_transcript = @interaction_master.interaction_transcript.create(interactionuserid: 10000, 
-        description: params[:description], 
+      @interaction_transcript = @interaction_master.interaction_transcript.create(interactionuserid: 10000,
+        description: params[:description],
         employee_id: params[:employee_id],
         callednumber: params[:callednumber],
         ip: request.remote_ip )
-  
-    
+
+
      # if @interaction_master.interaction_category.sortorder > 100
      # mobile, description, problem, interactionid
         MailerAlerts.customer_request("vipin@telebrandsindia.com", params[:mobile], @interaction_transcript.description, @interaction_master.interaction_category.name, @interaction_master.id ).deliver_now
@@ -129,7 +129,7 @@ class InteractionMastersController < ApplicationController
         flash[:success] = "The order details are logged with order, you are now ready to start new call, close this window!"
           #respond_with(@interaction_master.customer)
         else
-          flash[:success] = "The details are logged, you are now ready to start new call, close this window!"  
+          flash[:success] = "The details are logged, you are now ready to start new call, close this window!"
         end
     redirect_to root_path
   end
@@ -149,13 +149,13 @@ class InteractionMastersController < ApplicationController
      interaction_category_id: params[:interaction_category_id],
      state: params[:state], mobile: params[:mobile],
      employee_id: params[:employee_id], employee_code: params[:employee_code],
-     interaction_status_id: 10000, interaction_priority_id: 10000, 
+     interaction_status_id: 10000, interaction_priority_id: 10000,
      createdon: Time.now, resolveby: Time.now + 10.days)
    #customer_id: interaction_master_params[:customer_id], interaction_category_id: interaction_master_params[:interaction_category_id], interaction_priority_id: interaction_master_params[:interaction_priority_id]
     #@interaction_transcript = InteractionTranscript.new(interactionid: @interaction_master.id, interactionuserid: 10000, description: params[:description])
     @interaction_transcript = @interaction_master.interaction_transcript(interactionuserid: 10000, description: params[:description])
    # @customer = @interaction_master.customer
-    respond_with(@interaction_master.customer)  
+    respond_with(@interaction_master.customer)
   else
      flash[:error] = "You can report this order after some products are added or order process is midway!"
   end
@@ -170,20 +170,20 @@ class InteractionMastersController < ApplicationController
      interaction_category_id: params[:interaction_category_id],
      state: params[:state], mobile: params[:mobile],
      employee_id: params[:employee_id], employee_code: params[:employee_code],
-     interaction_status_id: 10003, interaction_priority_id: 10000, 
+     interaction_status_id: 10003, interaction_priority_id: 10000,
      createdon: Time.now, resolveby: Time.now,
       closedon: Time.now)
-    
+
     if params[:orderid].present?
         flash[:success] = "The disposition is logged with order, you are now ready to start new call, close this window!"
       #respond_with(@interaction_master.customer)
     else
       flash[:success] = "The disposition is logged, you are now ready to start new call, close this window!"
-      
+
     end
-    redirect_to root_pathrect_to root_path
-    
-    
+    redirect_to root_path
+
+
   end
 
   def update_ticket
@@ -217,14 +217,14 @@ class InteractionMastersController < ApplicationController
 
     def interaction_master_params
       params.require(:interaction_master).permit(:createdon, :closedon, :resolveby,
-       :interaction_status_id, :customer_id, 
+       :interaction_status_id, :customer_id,
         :interaction_category_id, :product_variant_id,
          :orderid, :interaction_priority_id,
          :campaign_playlist_id, :notes, :description)
     end
 
     def customer_params
-      params.require(:customer).permit(:salute, :first_name, :last_name, :mobile, 
+      params.require(:customer).permit(:salute, :first_name, :last_name, :mobile,
       :alt_mobile, :emailid, :alt_emailid, :calledno, :orderpaymentmode_id, :city, :state)
     end
 

@@ -30,7 +30,7 @@
       <th>Taluk</th>
       <th>Districtname</th>
       <th>Statename</th>
-      
+      <th></th>
     </tr>
   </thead>
 
@@ -46,7 +46,7 @@
         <td><%= india_pincode_list.taluk %></td>
         <td><%= india_pincode_list.districtname %></td>
         <td><%= india_pincode_list.statename %></td>
-        
+        <td><%= link_to 'Edit', edit_india_pincode_list_path(india_pincode_list) %></td>
       </tr>
     <% end %>
   </tbody>
@@ -74,4 +74,3 @@
   </div>
 </div> -->
 </div>
-

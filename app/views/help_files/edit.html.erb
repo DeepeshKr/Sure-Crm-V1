@@ -3,4 +3,7 @@
 <%= render 'form' %>
 
 <%= link_to 'Show', @help_file %> |
-<%= link_to 'Back', help_files_path %>
+<%= link_to 'Back', help_files_path %> |
+<% if (current_user.employee_role.sortorder < 10) %>
+<%= link_to 'Destroy', @help_file, method: :delete, data: { confirm: 'Are you sure?' }, class:"btn btn-warning btn-sm" %>
+<% end %>

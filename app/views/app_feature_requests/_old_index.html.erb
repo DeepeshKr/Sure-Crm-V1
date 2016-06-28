@@ -1,0 +1,67 @@
+<h1>App Feature Requests</h1>
+
+<table class="table table-hover table-stripped">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>App</th>
+      <th>App feature type</th>
+      <th>Problem this solves</th>
+      <th>Mandatory requirements</th>
+      <th>Technical notes</th>
+      <th>Request by</th>
+      <th>Require by date</th>
+      <th>Estimated completion date</th>
+      <th>Actual completion date</th>
+      <th>User approved date</th>
+      <th>User satisfaction level</th>
+      <th>Velocity</th>
+      <th>Current status</th>
+      <th>Priority</th>
+      <th>Assigned to</th>
+      <th>Extra notes</th>
+      <th>Tables used</th>
+      <th>Estimated hours</th>
+      <th>Actual hours</th>
+      <th>Bug count</th>
+      <th>Linked app feature</th>
+      <th>Queue no</th>
+      <th>Comment count</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @app_feature_requests.each do |app_feature_request| %>
+      <tr>
+        <td><%= app_feature_request.name %></td>
+        <td><%= app_feature_request.app_list.name %></td>
+        <td><%= app_feature_request.app_feature_type.name %></td>
+        <td><%= app_feature_request.problem_this_solves %></td>
+        <td><%= app_feature_request.mandatory_requirements %></td>
+        <td><%= app_feature_request.technical_notes %></td>
+        <td><%= app_feature_request.employee.fullname %></td>
+        <td><%= app_feature_request.require_by_date %></td>
+        <td><%= app_feature_request.estimated_completion_date %></td>
+        <td><%= app_feature_request.actual_completion_date %></td>
+        <td><%= app_feature_request.user_approved_date %></td>
+        <td><%= app_feature_request.user_satisfaction_level_id %></td>
+        <td><%= app_feature_request.app_velocity.name %></td>
+        <td><%= app_feature_request.app_status.name %></td>
+        <td><%= app_feature_request.app_priority.name %></td>
+        <td><%= app_feature_request.assigned_to %></td>
+        <td><%= app_feature_request.extra_notes %></td>
+        <td><%= app_feature_request.tables_used %></td>
+        <td><%= app_feature_request.estimated_hours %></td>
+        <td><%= app_feature_request.actual_hours %></td>
+        <td><%= app_feature_request.bug_count %></td>
+        <td><%= app_feature_request.linked_app_feature_id %></td>
+        <td><%= app_feature_request.queue_no %></td>
+        <td><%= app_feature_request.comment_count %></td>
+        <td><%= link_to 'Show', app_feature_request %></td>
+        <td><%= link_to 'Edit', edit_app_feature_request_path(app_feature_request) %></td>
+        <td><%= link_to 'Destroy', app_feature_request, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

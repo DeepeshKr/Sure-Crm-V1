@@ -10,7 +10,9 @@
   <div class="col-xs-10">
     <div class="row">
       <div class="col-xs-12"><small>Show the entire product range sale between dates</small></div>
-      <div class="col-xs-12"><%= render partial: 'search', :locals => {:searchaction => "summary"} %> </div>
+      <div class="col-xs-12">
+        <%= render partial: 'search', :locals => {:searchaction => "summary"} %>
+      </div>
     </div>
 
   </div>
@@ -40,25 +42,25 @@
   <tr>
     <th>Qty</th>
 	<th>Value</th>
-	
+
     <th>Qty</th>
     <th>Value</th>
-	
+
     <th>Qty</th>
     <th>Value</th>
-    
+
 	<th>Qty</th>
     <th>Value</th>
-	
+
     <th>Qty</th>
     <th>Value</th>
-    
+
 	<th>Qty</th>
     <th>Value</th>
-    
+
 	<th>Qty</th>
     <th>Value</th>
-	
+
     <th>Qty</th>
     <th>Value</th>
   </tr>
@@ -97,21 +99,21 @@
       <th> Total</th>
       <th class="text-right">  <%= @purchased_qty %> </th>
       <th class="text-right">  <%= @purchased_val %> </th>
-	  
+
       <th class="text-right">  <%= @retail_returns_qty %> </th>
       <th class="text-right">  <%= @retail_returns_val %> </th>
       <th class="text-right">  <%= @wholesale_returns_qty %> </th>
       <th class="text-right">  <%= @wholesale_returns_val %> </th>
       <th class="text-right">  <%= @other_returns_qty %> </th>
       <th class="text-right">  <%= @other_returns_val %> </th>
-	  
+
       <th class="text-right">  <%= @retail_sales_qty %> </th>
       <th class="text-right">  <%= @retail_sales_val %> </th>
       <th class="text-right">  <%= @wholesale_sale_qty %> </th>
       <th class="text-right">  <%= @wholesale_sale_val %> </th>
       <th class="text-right">  <%= @branch_sales_qty %> </th>
       <th class="text-right">  <%= @branch_sales_val %> </th>
-	  
+
       <th class="text-right">  <%= @corrections_qty %> </th>
       <th class="text-right">  <%= @corrections_val %> </th>
       <th>  </th>

@@ -1,0 +1,29 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Details:</strong>
+  <%= @app_feature_comment.details %>
+</p>
+
+<p>
+  <strong>App feature request:</strong>
+  <%= @app_feature_comment.app_feature_request_id %>
+</p>
+
+<p>
+  <strong>Comments by:</strong>
+  <%= @app_feature_comment.comments_by_id %>
+</p>
+
+<p>
+  <strong>Comment type:</strong>
+  <%= @app_feature_comment.comment_type_id %>
+</p>
+
+<p>
+  <strong>Display level:</strong>
+  <%= @app_feature_comment.display_level_id %>
+</p>
+
+<%= link_to 'Edit', edit_app_feature_comment_path(@app_feature_comment) %> |
+<%= link_to 'Back', app_feature_comments_path %>

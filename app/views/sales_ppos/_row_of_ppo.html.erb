@@ -49,7 +49,7 @@
 		<td class="text-right" title="Revenue">   <%= c.total_revenue_1 %> <% @total_revenue_1 += c.total_revenue_1 %> </td>
 		<td class="text-right" title="Product Cost">   <%= c.total_product_cost_1 %> <% @total_product_cost_1 += c.total_product_cost_1 %>  </td>
 		<td class="text-right" title="Variable Cost">   <%= c.total_var_cost_1 %> <% @total_var_cost_1 += c.total_var_cost_1 %> </td>
-		<td class="text-right" title="Fixed Media Cost"> <%= c.total_fixed_cost_1 %>  </td>
+		<td class="text-right" title="Fixed Media Cost"> <%= c.total_fixed_cost_1 %> <br>   <!-- %= link_to 'Edit Cost',campaign_playlists_new_media_cost_path(id: c.campaign_playlist_id, redirect_to: request.original_url), {:style=>'color:#0000A0;'} % --> </td>
 		<td class="text-right" title="Refunds"> <%= c.total_refund_1 %>  <% @total_refund_1 += c.total_refund_1 %> </td>
 		<td class="text-right" title="Damages"> <%= c.total_product_dam_cost_1 %> <% @total_product_dam_cost_1 += c.total_product_dam_cost_1 %>  </td>
 		<td class="text-right" title="Profitability">   <%= c.profit_per_order_1 %>  </td>
@@ -61,7 +61,7 @@
 			<% end %>
 			<hr>
 				<%= link_to "Show Details", {:controller => :sales_ppos, :action => :details, campaign_id: c.campaign_playlist_id}, :target => "_blank", class: "btn btn-info btn-xs" %>
-			
+
 		</td>
 	</tr>
 
@@ -74,7 +74,7 @@
 		<td class="text-right" title="Revenue">   <%= c.total_revenue_2 %>  <% @total_revenue_2 += c.total_revenue_2 %>  </td>
 		<td class="text-right" title="Product Cost">   <%= c.total_product_cost_2 %>  <% @total_product_cost_2 += c.total_product_cost_2 %>  </td>
 		<td class="text-right" title="Variable Cost">   <%= c.total_var_cost_2 %> <% @total_var_cost_2 += c.total_var_cost_2 %>  </td>
-		<td class="text-right" title="Fixed Media Cost"> <%= c.total_fixed_cost_2 %>    </td>
+		<td class="text-right" title="Fixed Media Cost"> <%= c.total_fixed_cost_2 %>  <br>   <!-- % = link_to 'Edit Cost',campaign_playlists_new_media_cost_path(id: c.campaign_playlist_id, redirect_to: request.original_url), {:style=>'color:#0000A0;'} % -->  </td>
 		<td class="text-right" title="Refunds"> <%= c.total_refund_2 %>  <% @total_refund_2 += c.total_refund_2 %> </td>
 		<td class="text-right" title="Damages"> <%= c.total_product_dam_cost_2 %> <% @total_product_dam_cost_2 += c.total_product_dam_cost_2 %>  </td>
 		<td class="text-right" title="Profitability">   <%= c.profit_per_order_2 %>  </td>

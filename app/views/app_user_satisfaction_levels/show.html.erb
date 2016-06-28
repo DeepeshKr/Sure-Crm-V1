@@ -1,0 +1,19 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @app_user_satisfaction_level.name %>
+</p>
+
+<p>
+  <strong>Priority no:</strong>
+  <%= @app_user_satisfaction_level.priority_no %>
+</p>
+
+<p>
+  <strong>Description:</strong>
+  <%= @app_user_satisfaction_level.description %>
+</p>
+
+<%= link_to 'Edit', edit_app_user_satisfaction_level_path(@app_user_satisfaction_level) %> |
+<%= link_to 'Back', app_user_satisfaction_levels_path %>

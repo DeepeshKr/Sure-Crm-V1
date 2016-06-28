@@ -1,0 +1,35 @@
+<div class="panel panel-success">
+  <div class="panel-heading"><h3 class="panel-title">Add New Comment</h3></div>
+    <div class="panel-body">
+
+<%= simple_form_for(app_feature_comment) do |f| %>
+  <%= f.error_notification %>
+  <%= f.hidden_field :app_feature_request_id %>
+  <%= f.hidden_field :comments_by_id %>
+  <div class="form-inputs">
+    <div class="row">
+      <div class="col-xs-12">
+        <%= f.input :details, :placeholder => "Please add your comments on the above feature", :required => true, :label => "Add your Comments"  %>
+      </div>
+    </div>
+
+  <div class="row">
+    <div class="col-xs-4">
+      <%= f.input :comment_type_id, :collection => @comment_types,:label_method => :name,:value_method => :id,
+      :required => true, :label => "Comment Type" ,:include_blank => false %>
+    </div>
+    <div class="col-xs-3">
+      <%= f.input :display_level_id, :collection => @display_level, :label_method => :name,:value_method => :id,
+      :required => true, :label => "Display" ,:include_blank => false %>
+    </div>
+    <div class="col-xs-3 col-xs-offset-2">
+      <div class="form-actions">
+        <%= f.button :submit, class: "btn btn-primary" %>
+      </div>
+    </div>
+  </div>
+
+  </div>
+<% end %>
+</div>
+</div>

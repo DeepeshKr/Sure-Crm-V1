@@ -1,0 +1,15 @@
+<%= simple_form_for(@app_feature_comment) do |f| %>
+  <%= f.error_notification %>
+
+  <div class="form-inputs">
+    <%= f.input :details %>
+    <%= f.input :app_feature_request_id %>
+    <%= f.input :comments_by_id %>
+    <%= f.input :comment_type_id %>
+    <%= f.input :display_level_id %>
+  </div>
+
+  <div class="form-actions">
+    <%= f.button :submit %>
+  </div>
+<% end %>

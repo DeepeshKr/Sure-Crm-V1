@@ -2,9 +2,33 @@
 <% title @page_heading  %>
 <!-- set page title end -->
 <div class="row">
-	<div class="col-xs-6"><h3>Payumoney Orders</h3> 
-	<%= link_to "Pay u Money SMS Status", "/message_on_orders_payumoney", class:"btn btn-info btn-xs" %> </div>
-	<div class="col-xs-6">
+	<div class="col-xs-2"><h3>Payumoney Orders</h3>	</div>
+
+	<div class="col-xs-3">
+		<%= form_tag  url_for(:controller => 'payumoney_details', :action => 'index'), method: "get" do  %>
+
+				<div class="col-xs-8">
+						<%= text_field_tag(:order_ref_no, @order_ref_no, :placeholder => "Order Ref No", :class => "form-control", :required => "true" )   %>
+				</div>
+
+				<div class="col-xs-4">
+					<%= submit_tag "Show ", name: nil, class: "btn btn-primary" %>
+				</div>
+		<% end %>
+ </div>
+ <div class="col-xs-3">
+	 <%= form_tag  url_for(:controller => 'payumoney_details', :action => 'index'), method: "get" do  %>
+
+			 <div class="col-xs-8">
+					 <%= text_field_tag(:mobile_no, @mobile_no, :placeholder => "Mobile No", :class => "form-control", :required => "true" )   %>
+			 </div>
+
+			 <div class="col-xs-4">
+				 <%= submit_tag "Show ", name: nil, class: "btn btn-primary" %>
+			 </div>
+	 <% end %>
+ </div>
+	<div class="col-xs-4">
 		<div class="row">
 		  <%= form_tag  url_for(:controller => 'payumoney_details', :action => 'index'), method: "get" do  %>
 
@@ -19,14 +43,20 @@
 		      </div>
 
 		      <div class="col-xs-4">
-		        <%= submit_tag "Show Report", name: nil, class: "btn btn-primary" %>
+		        <%= submit_tag "Show ", name: nil, class: "btn btn-primary" %>
 		      </div>
 		  <% end %>
 		</div>
-		
+
 	</div>
 </div>
-
+<div class="row">
+<div class="col-xs-3">	<!-- = link_to "Pay u Money SMS Status", "/message_on_orders_payumoney", class:"btn btn-info btn-xs" --> </div>
+<div class="col-xs-3">	<%= link_to "Pay u Money Open Orders", "/payumoney_details_open_orders", class:"btn btn-success btn-xs" %>
+ </div>
+<div class="col-xs-3"> </div>
+<div class="col-xs-3"> </div>
+</div>
 <hr>
 <% if @payumoney_details.present? %>
 <table class="table table-hover">
@@ -34,13 +64,13 @@
     <tr>
       <th>Created</th>
 	  <th>Payment Id / Merchant Transaction Id</th>
-	  <th>Order ref no</th>
+	  <th>Order ref no / Transaction</th>
       <th>Amount</th>
       <th>Mobile Number</th>
-      <th>Status</th>
-      <th>Full Response</th>
+      <th>Pay U Status </th>
+			<th>Internal Status</th>
       <th>Last Updated</th>
-
+			<th>Details</th>
     </tr>
   </thead>
   <tbody>
@@ -48,13 +78,16 @@
       <tr>
       <td><%= (payumoney_detail.created_at + 330.minutes).strftime("%d-%b-%y %H:%M") %></td>
         <td><%= payumoney_detail.paymentId %> <br> <%= payumoney_detail.merchantTransactionId %> </td>
-        <td> <%= link_to payumoney_detail.orderid, detailedordersearch_path(order_id: payumoney_detail.orderid), 
-			 	:target => "_blank" if payumoney_detail.orderid.present? %>  </td>
+        <td> <%= link_to payumoney_detail.orderid, detailedordersearch_path(order_id: payumoney_detail.orderid),
+			 	:target => "_blank", class: "btn btn-info btn-xs" if payumoney_detail.orderid.present? %> <br>
+			<small><%= payumoney_detail.transaction_ref %></small>   </td>
         <td><%= payumoney_detail.amount.round(2) %></td>
         <td><%= payumoney_detail.customerMobileNumber %></td>
-		<td><%= payumoney_detail.status %></td>
-        <td><small><%= payumoney_detail.full_response %></small></td>
+				<td><%= payumoney_detail.status %> </td>
+				<td><%= payumoney_detail.payumoney_status.name if payumoney_detail.payumoney_status %></td>
         <td><%= (payumoney_detail.updated_at + 330.minutes).strftime("%d-%b-%y %H:%M") %></td>
+				<td> <%= link_to "Details", payumoney_details_detail_path(id: payumoney_detail.id),
+				 class: "btn btn-info btn-xs" %></td>
       </tr>
     <% end %>
   </tbody>

@@ -1,24 +1,48 @@
- <div class="row">
-	 <div class="col-xs-4">
+<% title "City Media Sales Report between #{@from_date} and #{@to_date}" %>
 
-	 <h4>Sales Report for day <%=  @orderdate %> </h4>
-	 </div>
-	 <div class="col-xs-8">
-    <%= render partial: 'hbn_media_list', :locals => {:searchaction => "city"}  %>
-   <%= render partial: 'media_list', :locals => {:searchaction => "city"}  %>
-   <%= render partial: 'date_range_search', :locals => {:searchaction => "city"}  %>
+<div class="panel panel-primary">
+ <div class="panel-heading">City Media Sales Report between <%= @from_date %> and <%= @to_date %></div>
+  <div class="panel-body">
+    <div class="row">
+       <div class="col-xs-12">
+       <%= render partial: 'date_range_search', :locals => {:searchaction => "city"}  %>
+     </div>
+    </div>
 
-	</div>
- </div>
- <div class="well well-sm">
- <h5><%= @city_search_results %></h5>
- </div>
+        <div class="row">
+         <div class="col-xs-6">
+             <div class="panel panel-info">
+               <div class="panel-heading">Filter HBN media for dates <%= @from_date %> and <%= @to_date %></div>
+                <div class="panel-body">
+                  <%= render partial: 'hbn_media_list', :locals => {:searchaction => "city"}  %>
+                </div>
+             </div
+         </div>
+       </div>
+         <div class="col-xs-6">
+           <div class="panel panel-info">
+             <div class="panel-heading">Filter Pvt media for dates <%= @from_date %> and <%= @to_date %></div>
+              <div class="panel-body">
+                <%= render partial: 'media_list', :locals => {:searchaction => "city"}  %>
+              </div>
+           </div>
+         </div>
+  </div>
+</div>
+</div>
+
+<div class="well well-sm"><h5><%= @city_search_results %></h5></div>
+
 <% if @employeeorderlist.present? %>
 <table class="table table-hover table-bordered">
   <thead>
     <tr>
      <th>No</th>
+     <th>State</th>
      <th>City</th>
+     <th>Media</th>
+     <th>Pay U Orders</th>
+     <th>Pay U Value</th>
      <th>CC Orders</th>
      <th>CC Value</th>
      <th>COD Orders</th>
@@ -27,48 +51,42 @@
      <th>Total Value</th>
     </tr>
   </thead>
+
 <tbody>
    <% @employeeorderlist.each do |c| %>
    <tr>
    <td><%= @sno %></td>
-
-<td>
- <%= link_to c[:employee], orderlist_path(employee_id: c[:id], for_date: c[:for_date], completed: 'yes'), :target => "_blank" %>
-
-</td>
-<td class="text-right">
-   <%= c[:ccorders] %>
-</td>
-<td class="text-right">
-   <%= c[:ccvalue] %>
-</td>
-<td class="text-right">
-   <%= c[:codorders] %>
-</td>
-<td class="text-right">
-   <%= c[:codvalue] %>
-</td>
-
-<td class="text-right">
-   <%= c[:nos] %>
-</td>
-<td class="text-right">
-   <%= c[:total] %>
-</td>
-
+   <td><%= c[:state] %></td>
+   <td><%= link_to c[:employee], orderlist_path(employee_id: c[:id], for_date: c[:for_date], completed: 'yes'), :target => "_blank" %></td>
+   <td><%= c[:channel] %></td>
+   <td class="text-right"><%= c[:pay_u_orders] %> <% @pay_u_nos += c[:pay_u_orders] %></td>
+   <td class="text-right"><%= c[:pay_u_value] %> <% @pay_u_values += c[:pay_u_value] %></td>
+   <td class="text-right"><%= c[:ccorders] %> <% @cc_nos += c[:ccorders] %></td>
+   <td class="text-right"><%= c[:ccvalue] %> <% @cc_values += c[:ccvalue] %></td>
+   <td class="text-right"><%= c[:codorders] %> <% @cod_nos += c[:codorders] %></td>
+   <td class="text-right"><%= c[:codvalue] %> <% @cod_values += c[:codvalue] %></td>
+   <td class="text-right"><%= c[:nos] %><% @total_nos += c[:nos] %> </td>
+   <td class="text-right"><%= c[:total] %> <% @total_values += c[:total] %> </td>
   </tr>
   <% @sno += 1 %>
  <% end %>
+</tbody>
+<thead>
+  <tr>
+   <th colspan="4">Total</th>
+   <th class="text-right"><%= @pay_u_nos %></th>
+   <th class="text-right"><%= @pay_u_values %></th>
+   <th class="text-right"><%= @cc_nos %></th>
+   <th class="text-right"><%= @cc_values %></th>
+   <th class="text-right"><%= @cod_nos %></th>
+   <th class="text-right"><%= @cod_values %></th>
+   <th class="text-right"><%= @total_nos %></th>
+   <th class="text-right"><%= @total_values %></th>
+  </tr>
+</thead>
+</table>
 
+<%= link_to 'Download CSV file', city_report_path(from_date: @or_for_date, to_date: @to_date, media_id: @media_id , format: :csv), class: "btn btn-info btn-sm" %>
 
-
-  </tbody>
-
-  </table>
-
-  <%= link_to 'Download CSV file', city_report_path(from_date: @or_for_date, to_date: @to_date , format: :csv), class: "btn btn-info btn-sm" %>
-
-
-
-  <% end %>
+<% end %>
  <br>

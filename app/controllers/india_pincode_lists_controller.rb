@@ -59,18 +59,23 @@ class IndiaPincodeListsController < ApplicationController
 
   # GET /india_pincode_lists/new
   def new
+    redirect_to india_pincode_list_path, notice: 'You are not authorised to edit this!' and return if current_user.employee_role.sortorder > 8
+
     @india_pincode_list = IndiaPincodeList.new
   end
 
   # GET /india_pincode_lists/1/edit
   def edit
-      before_action {protect_controllers(8)}
+     redirect_to india_pincode_list_path, notice: 'You are not authorised to edit this!' and return if current_user.employee_role.sortorder > 8
+
+
   end
 
   # POST /india_pincode_lists
   # POST /india_pincode_lists.json
   def create
-      before_action {protect_controllers(8)}
+    redirect_to india_pincode_list_path, notice: 'You are not authorised to edit this!' and return if current_user.employee_role.sortorder > 8
+
     @india_pincode_list = IndiaPincodeList.new(india_pincode_list_params)
 
     respond_to do |format|
@@ -87,7 +92,8 @@ class IndiaPincodeListsController < ApplicationController
   # PATCH/PUT /india_pincode_lists/1
   # PATCH/PUT /india_pincode_lists/1.json
   def update
-      before_action {protect_controllers(8)}
+    edirect_to india_pincode_list_path, notice: 'You are not authorised to edit this!' and return if current_user.employee_role.sortorder > 8
+
     respond_to do |format|
       if @india_pincode_list.update(india_pincode_list_params)
         format.html { redirect_to @india_pincode_list, notice: 'India pincode list was successfully updated.' }

@@ -35,7 +35,7 @@
  </div>
 <!-- filters here -->
  <%= render partial: 'simulate_ppo'  %>
- <!-- :locals => {:order_lines =>  @order_lines_common, 
+ <!-- :locals => {:order_lines =>  @order_lines_common,
  	order_description: "Common Upsell"}-->
 <!-- filters here -->
  <br>
@@ -70,16 +70,17 @@
 	    <strong>Total Revenue (R2) <%= @total_revenue_2.round(0) if @total_revenue_2.present? %></strong>
 	  </div>
 	  <div class="col-xs-2">
-	   <%= link_to 'Download CSV file', product_performance_path(from_date: @from_date, to_date: @to_date, product_variant_id: @product_variant_id, format: :csv), class: "btn btn-info btn-sm" %>
+
+	   <%= link_to 'Download CSV file', sales_ppos_product_performance_path(from_date: @from_date, to_date: @to_date, product_variant_id: @product_variant_id,  format: :csv), class: "btn btn-info btn-sm" %>
 	  </div>
 	</div>
  </div>
 </div>
  <br>
- 
+
 <%= render partial: 'recreate_ppo'  %>
-<!-- :locals => {:order_lines =>  @order_lines_common, 
-	order_description: "Common Upsell"}-->	
+<!-- :locals => {:order_lines =>  @order_lines_common,
+	order_description: "Common Upsell"}-->
 <hr>
 
 <script>

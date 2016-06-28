@@ -18,20 +18,31 @@ Rails.application.configure do
 # Show full error reports and disable caching.
   # config.consider_all_requests_local       = true
   # config.action_controller.perform_caching = false
-
   config.action_mailer.delivery_method = :smtp
   config.action_mailer.smtp_settings = {
-  :address              => "3.0.3.85",
-  :port                 => 25,
-  :user_name            => "noreply@telebrandsindia.com",
-  :password             => "noreply",
-  :authentication       => 'plain'}
+  :address              => "smtp.gmail.com",
+  :port                 => 587,
+  :domain               => "gmail.com",
+  :user_name            => "sure.crm.app@gmail.com",
+  :password             => "Sure@1234",
+  :authentication       => 'plain',
+  :enable_starttls_auto => true  }
+  
+  # ####these options are only needed if you choose smtp delivery
+  #
+  # config.action_mailer.smtp_settings = {
+  # :address        => '3.0.3.85',
+  # :port           => 25,
+  # :domain         => 'www.hbnindia.com',
+  # :authentication => :login,
+  # :user_name      => 'noreply@hbnindia.com',
+  # :password       => 'noreply@321'}
 
   # smtp       port 25            pop    3.0.3.85    port  110
   config.action_mailer.perform_deliveries = true
 
   # Don't care if the mailer can't send.
-  config.action_mailer.raise_delivery_errors = true
+  config.action_mailer.raise_delivery_errors = false
 
   # Full error reports are disabled and caching is turned on.
   config.consider_all_requests_local       = false
@@ -67,10 +78,10 @@ Rails.application.configure do
 
   # Set to :debug to see everything in the log.
   # config.log_level = :info
-  # The available log levels are: :debug, :info, :warn, :error, :fatal, and :unknown, 
+  # The available log levels are: :debug, :info, :warn, :error, :fatal, and :unknown,
   config.log_level = :error # In any environment initializer, or
   # Rails.logger.level = 0 # at any time
-  
+
   # Prepend all log lines with the following tags.
   # config.log_tags = [ :subdomain, :uuid ]
 

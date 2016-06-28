@@ -3,7 +3,7 @@ class CustomerOrderListsController < ApplicationController
 
   respond_to :html
 
-  def index 
+  def index
     @complete = 'yes'
     if params[:complete].present?
         if params[:complete] = 'yes'
@@ -12,12 +12,12 @@ class CustomerOrderListsController < ApplicationController
     elsif params[:ordernum].present?
         @ordernum
            @customer_order_lists = CustomerOrderList.where("ordernum = ?", params[:ordernum]).order("id DESC").limit(200)
-       
+
    else
      @customer_order_lists = CustomerOrderList.where(ordernum: nil).order("id DESC").limit(200)
     #    @customer_order_lists = CustomerOrderList.order("id DESC").limit(100)
     end
-   
+
     respond_with(@customer_order_lists)
   end
 
@@ -28,8 +28,8 @@ class CustomerOrderListsController < ApplicationController
         @customer_address = CustomerAddress.find(order_masters.first.customer_address_id)
         @order_master = order_masters.first
         @order_lines = OrderLine.where(orderid: @order_master.id).order("id")
-      #end 
-    end  
+      #end
+    end
 
     respond_with(@customer_order_list)
   end
@@ -78,7 +78,7 @@ class CustomerOrderListsController < ApplicationController
       expyear = nil
       name_on_card = nil
       cardname = nil
-      
+
       order_id = OrderMaster.where(external_order_no: @customer_order_list.ordernum).first.id
       @order_master = OrderMaster.find(order_id)
 
@@ -126,7 +126,7 @@ class CustomerOrderListsController < ApplicationController
             prod1 = orderline1.first.product_list.extproductcode[0..9].upcase
             #customer_order_list.update(qty1: qty1, prod1: prod1)
           end
-          
+
           orderline2 = OrderLine.where("orderid = ?", order_id).order("id").offset(1)
           if orderline2.present?
             qty2 = orderline2.first.pieces.to_i
@@ -182,7 +182,7 @@ class CustomerOrderListsController < ApplicationController
           if @order_master.customer_address.st.upcase == "MAH"
              qty10 = 1
             prod10 = "2.5"
-            
+
           end
 
 
@@ -191,39 +191,38 @@ class CustomerOrderListsController < ApplicationController
           #order_num =  hash["nextval"]
 
           ActiveRecord::Base.establish_connection("#{Rails.env}_testora")
-        
+
           #hash = ActiveRecord::Base.connection.exec_query("select order_seq.nextval from dual")[0]
-          
+
           order_num =  hash["nextval"]
 
-          flash[:notice] = "Order Number is #{order_num}" 
+          flash[:notice] = "Order Number is #{order_num}"
           #CustomerOrderList
           customer_order_list = CustomerOrderList.create(ordernum: order_num,
           orderdate: Time.zone.now,
-          title: @order_master.customer.salute[0..4].upcase, 
-          fname: @order_master.customer.first_name[0..29].upcase, 
-          lname: @order_master.customer.last_name[0..29].upcase, 
-          add1: @order_master.customer_address.address1[0..29].upcase, 
-          add2: @order_master.customer_address.address2[0..29].upcase, 
+          title: @order_master.customer.salute[0..4].upcase,
+          fname: @order_master.customer.first_name[0..29].upcase,
+          lname: @order_master.customer.last_name[0..29].upcase,
+          add1: @order_master.customer_address.address1[0..29].upcase,
+          add2: @order_master.customer_address.address2[0..29].upcase,
           add3: (@order_master.customer_address.address3[0..29].upcase if @order_master.customer_address.address3.present?),
-          landmark: @order_master.customer_address.landmark[0..49].upcase, 
-          city: @order_master.customer_address.city[0..29].upcase, 
-          mstate: @order_master.customer_address.state[0..49].upcase, 
-          state: @order_master.customer_address.st[0..4].upcase, 
-          pincode: @order_master.customer_address.pincode, 
-          mstate: @order_master.customer_address.state[0..49].upcase, 
-          tel1: @order_master.customer.mobile[0..19].upcase, 
+          landmark: @order_master.customer_address.landmark[0..49].upcase,
+          city: @order_master.customer_address.city[0..29].upcase,
+          mstate: @order_master.customer_address.state[0..49].upcase,
+          state: @order_master.customer_address.st[0..4].upcase,
+          pincode: @order_master.customer_address.pincode,
+          tel1: @order_master.customer.mobile[0..19].upcase,
           tel2: (@order_master.customer_address.telephone1[0..19].upcase if @order_master.customer_address.telephone1.present?),
-          fax: (@order_master.customer_address.fax[0..19].upcase if @order_master.customer_address.fax.present?), 
-          email: (@order_master.customer.emailid[0..19].upcase if @order_master.customer.emailid.present?), 
-          ccnumber:  creditcardno, 
-          expmonth:  expmonth, 
-          expyear:  expyear, 
+          fax: (@order_master.customer_address.fax[0..19].upcase if @order_master.customer_address.fax.present?),
+          email: (@order_master.customer.emailid[0..19].upcase if @order_master.customer.emailid.present?),
+          ccnumber:  creditcardno,
+          expmonth:  expmonth,
+          expyear:  expyear,
           cardtype: cardtype,
-          carddisc: creditcardcharges, 
-          ipadd: (@order_master.userip[0..49] if @order_master.userip.present?), 
+          carddisc: creditcardcharges,
+          ipadd: (@order_master.userip[0..49] if @order_master.userip.present?),
           dnis: @order_master.calledno,
-          channel: @order_master.medium.name.strip[0..48].upcase, 
+          channel: @order_master.medium.name.strip[0..48].upcase,
           chqdisc: @order_master.creditcardcharges,
           totalamt: @order_master.subtotal + @order_master.shipping + @order_master.codcharges + @order_master.servicetax + @order_master.maharastracodextra ,
           trandate: Time.zone.now,
@@ -234,34 +233,33 @@ class CustomerOrderListsController < ApplicationController
           uae_status: @order_master.customer.gender[0..49].upcase,
           prod1: prod1, prod2: prod2, prod3: prod3, prod4: prod4, prod5: prod5, prod6: prod6, prod7: prod7, prod8:prod8, prod9: prod9, prod10: prod10,
           qty1: qty1, qty2: qty2, qty3: qty3, qty4: qty4, qty5: qty5, qty6: qty6, qty7: qty7, qty8: qty8, qty9: qty9, qty10: qty10)
-      
+
           #CUSTDETAILS
           customerdetails = CUSTDETAILS.create(ordernum: order_num,
           orderdate: Time.zone.now,
-          title: @order_master.customer.salute[0..4].upcase, 
-          fname: @order_master.customer.first_name[0..29].upcase, 
-          lname: @order_master.customer.last_name[0..29].upcase, 
-          add1: @order_master.customer_address.address1[0..29].upcase, 
-          add2: @order_master.customer_address.address2[0..29].upcase, 
+          title: @order_master.customer.salute[0..4].upcase,
+          fname: @order_master.customer.first_name[0..29].upcase,
+          lname: @order_master.customer.last_name[0..29].upcase,
+          add1: @order_master.customer_address.address1[0..29].upcase,
+          add2: @order_master.customer_address.address2[0..29].upcase,
           add3: 'DIST-' + (@order_master.customer_address.address3[0..17].upcase if @order_master.customer_address.address3.present?) + '-' + @order_master.customer_address.state[0..5].upcase,
-          landmark: @order_master.customer_address.landmark[0..49].upcase, 
-          city: @order_master.customer_address.city[0..29].upcase, 
-          mstate: @order_master.customer_address.state[0..49].upcase, 
-          state: @order_master.customer_address.st[0..4].upcase, 
-          pincode: @order_master.customer_address.pincode, 
-          mstate: @order_master.customer_address.state[0..49].upcase, 
-          tel1: @order_master.customer.mobile[0..19].upcase, 
+          landmark: @order_master.customer_address.landmark[0..49].upcase,
+          city: @order_master.customer_address.city[0..29].upcase,
+          state: @order_master.customer_address.st[0..4].upcase,
+          pincode: @order_master.customer_address.pincode,
+          mstate: @order_master.customer_address.state[0..49].upcase,
+          tel1: @order_master.customer.mobile[0..19].upcase,
           tel2: (@order_master.customer_address.telephone1[0..19].upcase if @order_master.customer_address.telephone1.present?),
-          fax: (@order_master.customer_address.fax[0..19].upcase if @order_master.customer_address.fax.present?), 
-          email: (@order_master.customer.emailid[0..19].upcase if @order_master.customer.emailid.present?), 
-          ccnumber:  creditcardno, 
-          expmonth:  expmonth, 
-          expyear:  expyear, 
+          fax: (@order_master.customer_address.fax[0..19].upcase if @order_master.customer_address.fax.present?),
+          email: (@order_master.customer.emailid[0..19].upcase if @order_master.customer.emailid.present?),
+          ccnumber:  creditcardno,
+          expmonth:  expmonth,
+          expyear:  expyear,
           cardtype: cardtype,
-          carddisc: creditcardcharges, 
-          ipadd: (@order_master.userip[0..49] if @order_master.userip.present?), 
+          carddisc: creditcardcharges,
+          ipadd: (@order_master.userip[0..49] if @order_master.userip.present?),
           dnis: @order_master.calledno,
-          channel: @order_master.medium.name.strip[0..48].upcase, 
+          channel: @order_master.medium.name.strip[0..48].upcase,
           chqdisc: @order_master.creditcardcharges,
           totalamt: @order_master.subtotal + @order_master.shipping + @order_master.codcharges + @order_master.servicetax + @order_master.maharastracodextra ,
           trandate: Time.zone.now,
@@ -272,14 +270,14 @@ class CustomerOrderListsController < ApplicationController
           uae_status: @order_master.customer.gender[0..49].upcase,
           prod1: prod1, prod2: prod2, prod3: prod3, prod4: prod4, prod5: prod5, prod6: prod6, prod7: prod7, prod8:prod8, prod9: prod9, prod10: prod10,
           qty1: qty1, qty2: qty2, qty3: qty3, qty4: qty4, qty5: qty5, qty6: qty6, qty7: qty7, qty8: qty8, qty9: qty9, qty10: qty10)
-      
-          
+
+
           #- Integer update with customer order id
-          #@order_master.update(external_order_no: order_num.to_s, order_status_master_id: 10003) 
+          #@order_master.update(external_order_no: order_num.to_s, order_status_master_id: 10003)
           flash[:success] = "The order is successfully processed with id: #{order_num}"
 
           return order_num.to_s #customer_order_list.ordernum
-       
+
 
       #end
     end

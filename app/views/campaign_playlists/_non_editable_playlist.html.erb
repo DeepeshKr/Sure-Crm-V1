@@ -7,6 +7,9 @@
 	<th>Variant ID</th>
     <th>Product Name</th>
     <th>Start time</th>
+    <th>End time</th>
+    <th>Duration</th>
+    <th>Cost</th>
     <th>Status</th>
     <th>Updated Date</th>
 	<th>View Sales</th>
@@ -21,6 +24,10 @@
 	  <td><%= campaign_playlist.productvariantid %></td>
       <td><%= campaign_playlist.product_variant.name if campaign_playlist.product_variant  %></td>
       <td><%= campaign_playlist.starttime %></td>
+      <td><%= campaign_playlist.playlist_group_end_time %></td>
+      <td><%= campaign_playlist.playlist_group_minutes %></td>
+
+      <td><%= campaign_playlist.cost_of_group_playlist %></td>
 	  <td><%= campaign_playlist.campaign_play_list_status.name if campaign_playlist.campaign_play_list_status%></td>
       <td><%= campaign_playlist.updated_at.strftime("%d-%b-%Y %I:%M %p") %></td>
 	  <td><%= link_to 'View Sales', { :controller => :campaign_playlists, :action => :search, :id => campaign_playlist.id}, class: "btn btn-primary btn-xs" %></td>

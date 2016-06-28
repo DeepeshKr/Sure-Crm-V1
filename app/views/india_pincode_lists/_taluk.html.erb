@@ -1,0 +1,35 @@
+<div class="panel panel-success">
+  <div class="panel-heading"><h3 class="panel-primary">Update Taluk used as City for Most Addresses</h3></div>
+    <div class="panel-body">
+
+<%= simple_form_for(@india_pincode_list) do |f| %>
+  <%= f.error_notification %>
+
+  <div class="form-inputs">
+    <div class="row">
+      <div class="col-xs-3"><%= f.input :officename,:label => "Post Office Name", :input_html => { :readonly => true } %> </div>
+      <div class="col-xs-2"><%= f.input :pincode,:label => "Pincode", :input_html => { :readonly => true } %> </div>
+      <div class="col-xs-3"><%= f.input :divisionname, :input_html => { :readonly => true } %> </div>
+      <div class="col-xs-3"><%= f.label :statename %>
+      <%= @india_pincode_list.statename %> </div>
+    </div>
+    <div class="row">
+      <div class="col-xs-3"><%= f.input :regionname,:label => "Region", :input_html => { :readonly => true } %> </div>
+      <div class="col-xs-3"><%= f.input :circlename,:label => "Circle", :input_html => { :readonly => true } %> </div>
+      <div class="col-xs-3"><%= f.input :districtname, :input_html => { :readonly => true } %> </div>
+      <div class="col-xs-3"><%= f.input :taluk,:label => "Taluk / City / Place",:required => true %> </div>
+    </div>
+
+    <div class="row">
+      <div class="col-xs-6"><p class="lead"><%= @india_pincode_list.statename %> </p></div>
+      <div class="col-xs-3 col-xs-offset-3">
+        <div class="form-actions">
+          <%= f.button :submit, "Update State" %>
+        </div>
+      </div>
+    </div>
+
+</div>
+<% end %>
+</div>
+</div>

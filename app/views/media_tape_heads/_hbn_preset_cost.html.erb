@@ -1,0 +1,69 @@
+<%= form_tag  url_for(:controller => 'campaign_playlists',
+:action => 'create_playlist_with_media_tape_head'), method: "post" do |f| %>
+<!-- :anchor => "data-entry-tabs" -->
+<%= hidden_field_tag :for_date, @for_date %>
+<%= hidden_field_tag :time_slot, "auto_hbn" %>
+<%= hidden_field_tag :campaignid, @campaignid %>
+<%= hidden_field_tag :day, @day %>
+<br>
+<small>Time Shown below is the last playlist time slot</small>
+<div class="row">
+	<div class="col-xs-1 ">
+	  <%= select_tag :begin_hr, options_for_select(0..23,  selected: @begin_hr), {:id => 'begin_hr_preset', :class => "form-control" } %>
+	<small>  Hr </small>
+	</div>
+	<div class="col-xs-1">
+	  <%= select_tag :begin_min, options_for_select(0..59,  selected: @begin_min), {:id => 'begin_min_preset', :class => "form-control"}  %>
+	<small>  Min </small>
+	</div>
+
+	 <div class="col-xs-1">
+	  <%= select_tag :begin_sec, options_for_select(0..59,  selected: @begin_sec), {:id => 'begin_sec_preset', :class => "form-control"}  %>
+	<small>  Sec </small>
+ 	</div>
+	<div class="col-xs-1">
+	 <%= select_tag :begin_frame, options_for_select(0..24,  selected: @begin_sec), :class => "form-control"  %>
+ <small>  Frame </small>
+ </div>
+ <div class="col-xs-8">
+		<%= collection_select(nil, :product_variant_id,  @productvariantlist,  :id, :name, {:prompt   => "Select a Product Variant"}, {:id => 'variants_select_preset', :class => "form-control"}) %>	</div>
+</div>
+<br/>
+<div class="row">
+	<div class="col-xs-8">
+		<%= collection_select(nil, :media_tape_head_id, @media_tape_head_list, :id, :name, {:prompt   => "Select a Media Tape Head"}, {:id => 'tapes_select_preset', :class => "form-control"}) %>
+
+	</div>
+  <div class="col-xs-4">
+    <%=  collection_select(nil, :media_cost, @hbn_media_cost_master, :cost_per_sec, :cost_segment, { :prompt => '-- Select Media Cost --'}, {:class => "form-control", :required => true }) %>
+  </div>
+</div>
+<hr>
+<div id='tape_list_preset'>
+
+
+</div>
+
+
+
+<% end %>
+
+<br>
+
+   <br>
+  <div class="well">
+  <div class="row">
+  <div class="col-xs-8">
+  <h4>Reset the entire Playlist above by clicking this button</h4>
+  </div>
+   <%= bootstrap_form_tag url: updatecampaigntimings_path, :method => :POST do |f| %>
+    <%= hidden_field_tag :campaignid, @campaignid %>
+    <div class="col-xs-3">
+      <%= submit_tag "Reset Playlist", name: nil,  class: "btn btn-warning" %>
+
+    </div>
+    <% end %>
+  </div>
+  </div>
+    <br>
+      <br>

@@ -1,0 +1,16 @@
+<div class"row">
+	<%= simple_form_for campaign_playlists_update_media_cost_path, :url => campaign_playlists_update_media_cost_path, :method => :post do |f| %>
+		<%= f.hidden_field :campaign_playlist_id, value: @campaign_playlist_id %>
+    <%= f.hidden_field :redirect_to_url, value: @redirect_to %>
+    <div class="col-xs-7">
+      <%= f.label "Update Media Cost from #{@campaign_playlist.cost.round(2)} to #{@auto_calculated_price.round(2)} this will impact the group total and PPO"  %>
+    </div>
+		<div class="col-xs-3">
+		<!-- = f.input :product_variant_id -->
+			<%= f.input :updated_media_cost, label: false, input_html: {id: 'sign_up_code', value:  @auto_calculated_price.round(2), required: true} %>
+		</div>
+		<div class="col-xs-2">
+			<%= f.button :submit, "Update Price", :class => "btn btn-info btn-sm"%>
+		</div>
+	<% end %>
+</div>

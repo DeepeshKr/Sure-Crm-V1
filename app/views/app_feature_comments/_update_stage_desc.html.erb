@@ -1,0 +1,33 @@
+<div class="panel panel-success">
+  <div class="panel-heading"><h3 class="panel-title">Update Activity / Actions</h3></div>
+    <div class="panel-body">
+
+<%= simple_form_for(app_feature_comment) do |f| %>
+  <%= f.error_notification %>
+  <%= f.hidden_field :app_feature_request_id %>
+  <%= f.hidden_field :comments_by_id %>
+  <%= f.hidden_field :comment_type_id %>
+  <%= f.hidden_field :display_level_id %>
+  <%= f.hidden_field :current_stage_id, :value => current_stage_id %>
+  <%= f.hidden_field :new_stage_id, :value => new_stage_id %>
+  <div class="form-inputs">
+    <div class="row">
+      <div class="col-xs-12">
+        <%= f.input :details, :placeholder => "Please update with the details on what you updated", :required => true,
+         :label => "Details on Updation of Ticket"  %>
+      </div>
+    </div>
+
+  <div class="row">
+
+    <div class="col-xs-3 col-xs-offset-9">
+      <div class="form-actions">
+        <%= f.button :submit, 'Update Ticket!', class: "btn btn-primary" %>
+      </div>
+    </div>
+  </div>
+
+  </div>
+<% end %>
+</div>
+</div>

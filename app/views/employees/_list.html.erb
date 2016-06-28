@@ -2,8 +2,8 @@
   <div class="panel-heading">
 	  <div class="row">
 		 <div class="col-xs-8"><h3 class="panel-title"><%= emp_name %></h3> </div>
-		 <div class="col-xs-4"><h3 class="panel-title"> <% if emp_nos.present? %> Nos: <%= emp_nos %> <% end %> </h3></div>
-  	  </div>	 
+		 <div class="col-xs-4"><h3 class="panel-title">Nos: <%= emp_nos if emp_nos.present? %> </h3></div>
+  	  </div>
   </div>
 
  <% if employees.present? %>
@@ -28,15 +28,15 @@
         Reporting to: <%= employee.manager.fullname if employee.manager %>
         </small>
         </td>
-      
+
          <td><%= employee.mobile %><br>
         <small><%= employee.emailid %></small></td>
-        
+
         <td><%= employee.employment_type.name if employee.employment_type %></td>
         <td><%= employee.employee_role.name if employee.employee_role %></td>
          <td><%= employee.enablelogin %></td>
-        
-        
+
+
       </tr>
     <% end %>
   </tbody>

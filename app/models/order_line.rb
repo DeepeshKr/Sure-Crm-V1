@@ -205,7 +205,7 @@ def maharastracodextra
         #check if payment using any other mode is selected like
         # payumoney atom cc credit card
          if self.order_master.orderpaymentmode_id.present?
-            if self.order_master.orderpaymentmode_id != 10001 
+            if self.order_master.orderpaymentmode_id != 10001
              return  0
             end
          end
@@ -348,7 +348,7 @@ def media_commission
     .where(:media_commision_id => [10020, 10021, 10040, 10041, 10060]) #.pluck(:value)
   if media_variable.present?
          #discount the total value by 50% as media_correction
-       media_correction = 0.5
+       media_correction = 1.0
        #PAID_CORRECTION
     if media_variable.first.paid_correction.present?
      media_correction = media_variable.first.paid_correction #||= 0.5
@@ -368,7 +368,7 @@ def call_centre_commission
   #            .where.not('PRODUCT_VARIANTS.product_sell_type_id = ?', 10000).each do |ord| upsell_products << " #{ord.product_variant.extproductcode}
   ext_prod_code = self.product_variant.extproductcode
   if ProductVariant.where(extproductcode: ext_prod_code ).where("product_sell_type_id != ?", 10000).present?
-    
+
   product_cost = ProductCostMaster.where('prod = ?', self.product_variant.extproductcode)
     #.pluck(:value)
     if product_cost.present?

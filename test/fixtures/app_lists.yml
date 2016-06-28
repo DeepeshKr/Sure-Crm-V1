@@ -1,0 +1,17 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  name: MyString
+  priority_no: 1
+  primary_goal_of_app: MyText
+  description: MyText
+  version: MyString
+  location: MyString
+
+two:
+  name: MyString
+  priority_no: 1
+  primary_goal_of_app: MyText
+  description: MyText
+  version: MyString
+  location: MyString

@@ -1,5 +1,5 @@
 class MediaTapeHeadsController < ApplicationController
-   before_action { protect_controllers(8) } 
+   before_action { protect_controllers(8) }
   before_action :set_media_tape_head, only: [:show, :edit, :update, :destroy]
   before_action :last_ext_tape_id, only: [:show]
   before_action :dropdowns, only: [:new, :edit, :update]
@@ -14,7 +14,7 @@ class MediaTapeHeadsController < ApplicationController
   def show
    @sort_order = find_sort_order(params[:id])
     @rand = rand(10000 .. 99999)
-     @medialist = Medium.where('media_commision_id = ?',  10000).order('name') 
+     @medialist = Medium.where('media_commision_id = ?',  10000).order('name')
 
     @media_tapes = MediaTape.where("media_tape_head_id = ?", params[:id]).order(:sort_order)
 
@@ -22,12 +22,30 @@ class MediaTapeHeadsController < ApplicationController
 
     @media_tape = MediaTape.new(media_tape_head_id: @media_tape_head.id,
      product_variant_id: @media_tape_head.product_variant_id,
-     name: @new_name, 
+     name: @new_name,
      tape_ext_ref_id: @last_tape_id, duration_secs: 0,
       unique_tape_name: @rand, sort_order: @sort_order)
   end
 
-  def update_tapes
+  def update_tapes_preset
+    #http://pullmonkey.com/2012/08/11/dynamic-select-boxes-ruby-on-rails-3/
+    media_tapes = MediaTapeHead.where('product_variant_id = ?' ,params[:product_variant_id])
+    #if media_tapes.present?
+    # map to name and id for use in our options_for_select
+    @media_tape_head_list = media_tapes.map{|a| [a.name, a.id]}.insert(0, "Select an Media Tape")
+    @media_tapes = nil
+    #end
+  end
+  def update_tapes_auto
+    #http://pullmonkey.com/2012/08/11/dynamic-select-boxes-ruby-on-rails-3/
+    media_tapes = MediaTapeHead.where('product_variant_id = ?' ,params[:product_variant_id])
+    #if media_tapes.present?
+    # map to name and id for use in our options_for_select
+    @media_tape_head_list = media_tapes.map{|a| [a.name, a.id]}.insert(0, "Select an Media Tape")
+    @media_tapes = nil
+    #end
+  end
+  def update_tapes_manual
     #http://pullmonkey.com/2012/08/11/dynamic-select-boxes-ruby-on-rails-3/
     media_tapes = MediaTapeHead.where('product_variant_id = ?' ,params[:product_variant_id])
     #if media_tapes.present?
@@ -37,9 +55,31 @@ class MediaTapeHeadsController < ApplicationController
     #end
   end
 
-  def tape_list
+  def tape_list_preset
+    @media_tapes = MediaTape.where("media_tape_head_id = ?", params[:media_tape_head_id]).order(:sort_order)
+    #render :json => @media_tapes
+    # respond_to do |format|
+    #   format.html { render html: @media_tapes }
+    #   format.json { render json: @media_tapes }
+    # end
+  end
 
-     @media_tapes = MediaTape.where("media_tape_head_id = ?", params[:media_tape_head_id]).order(:sort_order)
+  def tape_list_auto
+    @media_tapes = MediaTape.where("media_tape_head_id = ?", params[:media_tape_head_id]).order(:sort_order)
+    #render :json => @media_tapes
+      # respond_to do |format|
+      #   format.html { render html: @media_tapes }
+      #   format.json { render json: @media_tapes }
+      # end
+  end
+
+  def tape_list_manual
+    @media_tapes = MediaTape.where("media_tape_head_id = ?", params[:media_tape_head_id]).order(:sort_order)
+    #render :json => @media_tapes
+    # respond_to do |format|
+    #   format.html { render html: @media_tapes }
+    #   format.json { render json: @media_tapes }
+    # end
   end
 
   # GET /media_tape_heads/new
@@ -50,8 +90,8 @@ class MediaTapeHeadsController < ApplicationController
   # GET /media_tape_heads/1/edit
   def edit
     @new_name || @media_tape_head.name.to_s.split('.')[0]
-  end 
- 
+  end
+
   # POST /media_tape_heads
   # POST /media_tape_heads.json
   def create
@@ -96,7 +136,7 @@ class MediaTapeHeadsController < ApplicationController
         format.json { render json: @media_tape_head.errors, status: :unprocessable_entity }
       end
     end
-  end 
+  end
 
   # DELETE /media_tape_heads/1
   # DELETE /media_tape_heads/1.json
@@ -122,7 +162,7 @@ class MediaTapeHeadsController < ApplicationController
       params.require(:media_tape_head).permit(:name, :description, :product_variant_id)
     end
     def last_ext_tape_id
-     
+
       if MediaTape.exists?
         media_tape = MediaTape.last
           return @last_tape_id = media_tape.tape_ext_ref_id + 1
@@ -130,9 +170,9 @@ class MediaTapeHeadsController < ApplicationController
         return @last_tape_id =  1
 
       end
-    
+
     end
-    def find_sort_order(media_tape_head_id)  
+    def find_sort_order(media_tape_head_id)
         media_tape = MediaTape.where('media_tape_head_id = ?', media_tape_head_id).order("sort_order")
       if media_tape.present?
           return @sort_order = media_tape.last.sort_order.to_i + 1
@@ -140,8 +180,8 @@ class MediaTapeHeadsController < ApplicationController
         return @sort_order =  1
 
       end
-    
+
     end
 
-    
+
 end

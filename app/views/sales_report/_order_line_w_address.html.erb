@@ -10,6 +10,7 @@
     <th>City</th>
     <th>State</th>
     <th>Product</th>
+    <th>Media</th>
     <th>Total</th>
   </tr>
   </thead>
@@ -18,7 +19,8 @@
   <% @sno = 1 %> <% totalnos = 0 %> <% totalvalue = 0 %>
     <% @order_lines.each do |order_line| %>
     <tr>
-    <td><%= order_line.order_master.external_order_no %> (<small>Ref No: <%= order_line.order_master.id %></small>) </td>
+    <td><%= order_line.order_master.external_order_no %> <br>
+    <%= link_to order_line.order_master.id, order_masters_review_path(order_id: order_line.order_master.id), class:"btn btn-info btn-xs" %> </td>
     <td> <%= (order_line.order_master.orderdate + 330.minutes).strftime('%d-%b-%Y') %> </td>
     <td>
       <%= order_line.order_master.customer.first_name if order_line.order_master.customer %>
@@ -35,6 +37,12 @@
       <%= order_line.order_master.customer_address.state  if order_line.order_master.customer_address %>
     </td>
     <td> <%= order_line.product_variant.name  if order_line.product_variant %></td>
+    <td> <%= order_line.order_master.medium.name  if order_line.order_master.medium %> <br>
+      <% if  order_line.order_master.campaign_playlist_id.present? %>
+      <br>
+        <%= link_to order_line.order_master.campaign_playlist_id, campaign_playlists_search_path(id: order_line.order_master.campaign_playlist_id), class:"btn btn-info btn-xs" if order_line.order_master.campaign_playlist_id.present? %>
+      <% end %>
+     </td>
      <td> <%= order_line.subtotal %></td>
 
 

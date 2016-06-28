@@ -1,5 +1,10 @@
+<!-- def title(page_title) -->
+<% title "Product Sold #{@product_master_id} between dates" %>
+<!-- end of the title-->
+
 <div class="row">
  <div class="col-xs-3"><h3>Product <%= @product_master_id %> </h3></div>
+
   <%= form_tag  url_for(:controller => 'sales_report', :action => "product_sold"), method: "get" do  %>
   <div class="col-xs-4">
 	 	 <%= select_tag :product_master_id,  options_from_collection_for_select(@product_master,
@@ -38,5 +43,6 @@
 <% end %>
 
 <script>
-$('#datepicker').datepicker({format: 'yyyy-mm-dd'});
+$('#datepicker_from').datepicker({format: 'yyyy-mm-dd'});
+$('#datepicker_to').datepicker({format: 'yyyy-mm-dd'});
 </script>

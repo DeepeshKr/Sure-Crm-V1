@@ -1,0 +1,35 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Listing Payumoney Statuses</h1>
+
+<table class="table table-hover table-stripped">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Priority no</th>
+      <th>External description</th>
+      <th>Valid payment</th>
+      <th>Description</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @payumoney_statuses.each do |payumoney_status| %>
+      <tr>
+        <td><%= payumoney_status.name %></td>
+        <td><%= payumoney_status.priority_no %></td>
+        <td><%= payumoney_status.external_description %></td>
+        <td><%= payumoney_status.valid_payment %></td>
+        <td><%= payumoney_status.description %></td>
+        <td><%= link_to 'Show', payumoney_status %></td>
+        <td><%= link_to 'Edit', edit_payumoney_status_path(payumoney_status) %></td>
+        <td><%= link_to 'Destroy', payumoney_status, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Payumoney status', new_payumoney_status_path, class: "btn btn-primary" %>

@@ -4,7 +4,7 @@
 
        <!--   <li>          <p style="margin-top:12px;">   <%= link_to "Customer",  new_customer_path, class: "btn btn-info btn-sm" %>  </p>         </li> -->
          <% if logged_in? %>
-        
+
 
          <% if (current_user.employee_role.sortorder < 8) %>
 
@@ -29,7 +29,7 @@
               <li><%= link_to "Existing Dealers New", "/dealers" %></li>
               <li><%= link_to "List of Dealer Enquiries", "/dealer_enquiry?category=10020&status=10000" %></li>
                 <li class="divider"></li>
-			  
+
             </ul>
          </li>
         <% end %>
@@ -41,12 +41,12 @@
 					 <li><%= link_to "Sales Summary Team Report", "/sales_reports_team" , data: { confirm: 'All the reports are listed here' } %></li>
 			   <% if (current_user.employee_role.sortorder < 8) %>
 		      <li><%= link_to "Sales Summary Report", "/sales_reports" , data: { confirm: 'All the reports are listed here' } %></li>
-			  
+
              <li><%= link_to "EOD Sales Report HBN", "/channel_consolidated_daily_report?source=hbn" , data: { confirm: 'This is new HBN EOD report!' } %></li>
               <li><%= link_to "EOD Sales Report Pvt", "/channel_consolidated_daily_report?source=pvt" , data: { confirm: 'This is new Pvt EOD report!' } %></li>
 			  <li><%= link_to "Sales Incentive Rates", "/sales_incentives" %></li>
 			  <% end %>
-			  
+
               <% if (current_user.employee_role.sortorder < 5) %>
                <li><%= link_to "PPO Report", "/ppo_report" , data: { confirm: 'This Report Will take some time to show, please dont refresh!'} %></li>
 			   <li><%= link_to "New PPO Report", "/sales_ppos" , data: { confirm: 'This is the NEW Report and more accurate, please dont refresh!'} %></li>
@@ -54,8 +54,7 @@
 			   <li><%= link_to "Default Rates", "/sales_ppo_defaults" %></li>
                <li><%= link_to "PPO Report (Test Products)", "/product_test_ppos" %></li>
 			   <li><%= link_to "Check of PPO details", "/sales_ppos/show_all" %></li>
-			   <li><%= link_to "Search Campaign Playlist", "/campaign_playlists_search" %></li>
-				 
+				 <li><%= link_to "Daily Tasks", "/daily_tasks" %></li>
             <% end %>
 
 
@@ -186,7 +185,9 @@
                  <li><%= link_to "Media Tapes Heads", "/media_tape_heads" %></li>
                <!--  <li><%= link_to "Media Tapes", "/media_tapes" %></li> -->
                 <li><%= link_to "Media Cost Master", "/media_cost_masters" %></li>
-                 <li><%= link_to "Playlist Status", "/campaign_play_list_statuses" %></li>
+                <li><%= link_to "Check Media Costs", "/media_cost_masters_get_costs" %></li>
+                <li><%= link_to "Playlist Status", "/campaign_play_list_statuses" %></li>
+                <li><%= link_to "Search Playlist", "/campaign_playlists/search" %></li>
               <li class="divider"></li>
 
                   <li><%= link_to "Campaign Stages", "/campaign_stages" %></li>
@@ -215,6 +216,7 @@
             <li><%= link_to "Message Type", "/message_types" %></li>
             <li><%= link_to "Message Status", "/message_statuses" %></li>
              	 <li class="divider"></li>
+                	<li><%= link_to "Pay U Money Status", "/payumoney_statuses" %></li>
              	 	<li><%= link_to "Interaction Categories", "/interaction_categories" %></li>
              	 	<li><%= link_to "Interaction Priorities", "/interaction_priorities" %></li>
              	 	<li><%= link_to "Interaction Status", "/interaction_statuses" %></li>
@@ -226,11 +228,11 @@
 	               	<li><%= link_to "Order Source", "/order_sources" %></li>
 	               	<li><%= link_to "Bill Number", "/bills" %></li>
 	           	 <li><%= link_to "Order For", "/order_fors" %></li>
-                   
+
            </ul>
          </li>
          <% end %>
-		 
+
           <% if (current_user.employee_role.sortorder < 2) %>
           <li class="dropdown">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">Set up <b class="caret"></b></a>
@@ -238,11 +240,12 @@
                 <li><%= link_to "Daily Tasks", "/daily_tasks" %></li>
 				<li><%= link_to "Server Lists", "/list_of_servers" %></li>
                	<li class="divider"></li>
-				
+                <li><%= link_to "Feature Requests", "/app_feature_requests" %></li>
+                <li class="divider"></li>
 				<li><%= link_to "Delayed Job", "/delayed_job/overview", target: "_blank" %> </li>
 				<li><%= link_to "Resque Job", "/resque", target: "_blank" %> </li>
 				<li><%= link_to "Resque Job New", "/resque_web", target: "_blank" %> </li>
-				<li><!-- = link_to "Delayed Job", "/jobs" % --> </li>	
+				<li><!-- = link_to "Delayed Job", "/jobs" % --> </li>
                 <li class="divider"></li>
               	<li><%= link_to "Change Log Type", "/change_log_types" %></li>
              </ul>
@@ -250,9 +253,9 @@
           <% end %>
          <% else %>
           <li>
-			  <p style="margin-top:12px;">         
-				  <%= link_to "Login",  login_path, class: "btn btn-info btn-sm" %>         
-			  </p>         
+			  <p style="margin-top:12px;">
+				  <%= link_to "Login",  login_path, class: "btn btn-info btn-sm" %>
+			  </p>
 		  </li>
 
         <% end %>

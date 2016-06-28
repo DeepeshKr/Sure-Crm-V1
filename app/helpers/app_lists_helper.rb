@@ -1,0 +1,2 @@
+module AppListsHelper
+end

@@ -36,6 +36,7 @@
     <th>S No</th>
     <th>Date</th>
     <th>Media</th>
+    <th>State</th>
     <th>City</th>
     <th>Products</th>
     <th>Value</th>
@@ -47,6 +48,7 @@
    <td><% @sno += 1 %> <%= @sno %> </td>
    <td><%= c[:orderdate] %></td>
   <td> <%= c[:channel] %></td>
+  <td> <%= c[:state] %></td>
   <td> <%= c[:city] %></td>
   <td> <%= c[:products] %></td>
   <td class="text-right"><%= c[:total] %> <% total_value += c[:total] %></td>
@@ -55,8 +57,9 @@
  <% end %>
   </tbody>
   <tfoot>
-    <th colspan="4">Total</th>
-    <th><%= @sno %></th>
+    <th colspan="2">Total Nos</th>
+    <th class="text-right"><%= @sno %></th>
+    <th colspan="3">Total Value</th>
     <th class="text-right"><%= total_value %></th>
   </tfoot>
   </table>

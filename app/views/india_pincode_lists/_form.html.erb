@@ -1,19 +1,35 @@
+<div class="panel panel-success">
+  <div class="panel-heading"><h3 class="panel-title">Add / Update Address (Taluk get's picked up)</h3></div>
+    <div class="panel-body">
+
 <%= simple_form_for(@india_pincode_list) do |f| %>
   <%= f.error_notification %>
 
   <div class="form-inputs">
-    <%= f.input :officename %>
-    <%= f.input :pincode %>
-    <%= f.input :deliverystatus %>
-    <%= f.input :divisionname %>
-    <%= f.input :regionname %>
-    <%= f.input :circlename %>
-    <%= f.input :taluk %>
-    <%= f.input :districtname %>
-    <%= f.input :statename %>
-  </div>
+    <div class="row">
+      <div class="col-xs-3"><%= f.input :officename %> </div>
+      <div class="col-xs-2"><%= f.input :pincode %> </div>
+      <div class="col-xs-3"><%= f.input :divisionname %> </div>
+      <div class="col-xs-4"><%= f.select(:statename,
+        options_from_collection_for_select(State.all, :name, :name, :selected => @india_pincode_list.statename),
+        {}, :class => "form-control", label: "State")  %></div>
+    </div>
+    <div class="row">
+      <div class="col-xs-3"><%= f.input :regionname %> </div>
+      <div class="col-xs-3"><%= f.input :circlename %> </div>
+      <div class="col-xs-3"><%= f.input :taluk %> </div>
+      <div class="col-xs-3"><%= f.input :districtname %> </div>
+    </div>
 
-  <div class="form-actions">
-    <%= f.button :submit %>
+
+  </div>
+  <div class="row">
+    <div class="col-xs-3 col-xs-offset-9">
+      <div class="form-actions">
+        <%= f.button :submit, class: "btn btn-primary" %>
+      </div>
+    </div>
   </div>
 <% end %>
+</div>
+</div>

@@ -1,0 +1,34 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @app_list.name %>
+</p>
+
+<p>
+  <strong>Priority no:</strong>
+  <%= @app_list.priority_no %>
+</p>
+
+<p>
+  <strong>Primary goal of app:</strong>
+  <%= @app_list.primary_goal_of_app %>
+</p>
+
+<p>
+  <strong>Description:</strong>
+  <%= @app_list.description %>
+</p>
+
+<p>
+  <strong>Version:</strong>
+  <%= @app_list.version %>
+</p>
+
+<p>
+  <strong>Location:</strong>
+  <%= @app_list.location %>
+</p>
+
+<%= link_to 'Edit', edit_app_list_path(@app_list) %> |
+<%= link_to 'Back', app_lists_path %>

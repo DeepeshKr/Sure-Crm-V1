@@ -1,0 +1,34 @@
+<!-- set page title start -->
+<% title "App User Satisfaction Levels" %>
+<!-- set page title end -->
+<p id="notice"><%= notice %></p>
+
+<h1>App User Satisfaction Levels</h1>
+
+<table class="table table-hover table-stripped">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Priority no</th>
+      <th>Description</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @app_user_satisfaction_levels.each do |app_user_satisfaction_level| %>
+      <tr>
+        <td><%= app_user_satisfaction_level.name %></td>
+        <td><%= app_user_satisfaction_level.priority_no %></td>
+        <td><%= app_user_satisfaction_level.description %></td>
+        <td><%= link_to 'Show', app_user_satisfaction_level %></td>
+        <td><%= link_to 'Edit', edit_app_user_satisfaction_level_path(app_user_satisfaction_level) %></td>
+        <td><%= link_to 'Destroy', app_user_satisfaction_level, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New App user satisfaction level', new_app_user_satisfaction_level_path %>

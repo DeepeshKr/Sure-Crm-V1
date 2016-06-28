@@ -12,12 +12,12 @@ class ProductStock < ActiveRecord::Base
 	  	if product.present?
 	  		product.first.name + " (" + self.barcode + ")"
 	  	else
-	  		"<span style=color:violet;font-weight: normal; font-size:11px;>No barcode found in Product (Sell) List </span>"
+	  		"No barcode found in Product (Sell) List"
 	  	end
   	else
-  		"<span style=color:violet;font-weight: normal; font-size:11px;>No barcode found in Product stock </span>"
+  		"No barcode found in Product stock"
   	end
-  	
-     
+
+
    end
 end
