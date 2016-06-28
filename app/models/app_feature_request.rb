@@ -24,9 +24,10 @@ class AppFeatureRequest < ActiveRecord::Base
 
   def schedule
     return nil if self.require_by_date.blank?
-    return nil if self.estimated_completion_date.blank?
-    return "On Time in " if self.require_by_date >= self.estimated_completion_date
-    return "Delayed by " if self.require_by_date < self.estimated_completion_date
+    check_date = Date.today + 330.minutes
+    check_date = self.estimated_completion_date if self.estimated_completion_date.blank?
+    return "On Time in " if self.require_by_date >= check_date
+    return "Delayed by " if self.require_by_date < check_date
   end
 
 end

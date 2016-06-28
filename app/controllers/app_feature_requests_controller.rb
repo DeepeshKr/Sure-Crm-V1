@@ -156,7 +156,8 @@ class AppFeatureRequestsController < ApplicationController
   private
     def employee_id
       @empcode = current_user.employee_code
-      @employee_id = Employee.where(employeecode: @empcode).first.id
+      @employee = Employee.where(employeecode: @empcode)
+      @employee_id = @employee.first.id
     end
     def current_time
         @current_time = (Time.zone.now + 330.minutes)
@@ -168,11 +169,12 @@ class AppFeatureRequestsController < ApplicationController
     def show_edit
       @closed_no_edit, @allow_edit, @show_all_details, @allow_comments = 0,0,0,0
       if @app_feature_request.present?
-        if (current_user.id == @app_feature_request.request_by) || (current_user.employee_role.sortorder < 5)
+        if (current_user.employee_code == @app_feature_request.employee.employeecode) || (current_user.employee_role.sortorder < 5)
           @show_all_details = 1
         end
 
-       if (current_user.id == @app_feature_request.request_by) || (current_user.employee_role.sortorder < 5) || (@app_feature_request.app_status.priority_no < 11)
+       if  (current_user.employee_code == @app_feature_request.employee.employeecode) || (current_user.employee_role.sortorder < 5) ||
+         (@app_feature_request.app_status.priority_no < 11)
          @allow_comments = 1
          @allow_edit = 1
        end
