@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160621165940) do
+ActiveRecord::Schema.define(version: 20160629105334) do
 
   create_table "address_types", force: :cascade do |t|
     t.string   "name"
@@ -1287,6 +1287,7 @@ ActiveRecord::Schema.define(version: 20160621165940) do
     t.string   "transaction_ref"
     t.integer  "payumoney_status_id",   precision: 38
     t.text     "transaction_history"
+    t.integer  "no_of_links",           precision: 38
   end
 
   add_index "payumoney_details", ["customermobilenumber"], name: "i_pay_det_cus"
@@ -1737,11 +1738,12 @@ ActiveRecord::Schema.define(version: 20160621165940) do
     t.string   "city"
     t.string   "state"
     t.string   "mobile_no"
-    t.datetime "created_at",                                 null: false
-    t.datetime "updated_at",                                 null: false
+    t.datetime "created_at",                                           null: false
+    t.datetime "updated_at",                                           null: false
     t.integer  "shipping_cost",               precision: 38
     t.integer  "transfer_order_revenue",      precision: 38
     t.integer  "transfer_order_dealer_price", precision: 38
+    t.decimal  "commission_on_order",         precision: 14, scale: 4
   end
 
   add_index "sales_ppos", ["campaign_id"], name: "i_sales_ppos_campaign_id"

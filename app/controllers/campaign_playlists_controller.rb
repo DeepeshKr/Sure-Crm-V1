@@ -719,6 +719,7 @@ end
 
       @order_lines_regular = OrderLine.joins(:order_master)
       .where("order_masters.campaign_playlist_id = ?", params[:id])
+      .where("order_masters.order_status_master_id > 10000")
       .joins(:product_variant)
       .where("product_variants.product_sell_type_id = ?", main_product_type_id)
       .order("order_lines.created_at")
@@ -733,6 +734,7 @@ end
 
       @order_lines_basic = OrderLine.joins(:order_master)
       .where("order_masters.campaign_playlist_id = ?", params[:id])
+      .where("order_masters.order_status_master_id > 10000")
       .joins(:product_variant)
       .where("product_variants.product_sell_type_id = ?", basic_product_type_id)
       .order("order_lines.created_at")
@@ -747,6 +749,7 @@ end
 
       @order_lines_common = OrderLine.joins(:order_master)
       .where("order_masters.campaign_playlist_id = ?", params[:id])
+      .where("order_masters.order_status_master_id > 10000")
       .joins(:product_variant)
       .where("product_variants.product_sell_type_id = ?", common_product_type_id)
       .order("order_lines.created_at")
@@ -758,7 +761,7 @@ end
         @common_cost += order.productcost
         @common_revenue += order.productrevenue
       end
-      @sales_ppos = SalesPpo.where('order_status_id > 10002')
+      @sales_ppos = SalesPpo.where('order_status_id > 10000')
       .where(campaign_playlist_id: params[:id])
       .order("start_time")
     end

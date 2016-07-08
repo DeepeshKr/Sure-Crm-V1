@@ -4,6 +4,7 @@ class SalesPposController < ApplicationController
   before_action :hbn_fixed_costs, only: [:index, :show_wise ] #, :hourly, :hour_performance, :product_performance, :product_hour_performance, :operator_performance, :show, :ppo_products, :channel]
   before_action :all_cancelled_orders
   before_action :view_memory
+  before_action :daily_task_ppo_status, only: [:index, :product_performance ]
 
   # GET /sales_ppos
   # GET /sales_ppos.json
@@ -19,7 +20,7 @@ class SalesPposController < ApplicationController
         @from_date = from_date.to_date - 7.days #30.days
         @to_date = from_date.to_date
     end
-
+    @regenerate_ppo = "Regenerate PPOS between #{@from_date} and #{@to_date}"
     ppo_sales = SalesPpo.new
     @employeeorderlist = ppo_sales.sales_ppos_between_dates @from_date, @to_date
 
@@ -83,14 +84,14 @@ class SalesPposController < ApplicationController
         @to_date = @campaign_playlist.for_date.strftime("%Y-%m-%d")
 
       @order_masters = OrderMaster.where(campaign_playlist_id: @campaign_playlist_id)
-         .where('ORDER_STATUS_MASTER_ID > 10002')
+         .where('ORDER_STATUS_MASTER_ID > 10000')
          .where.not(ORDER_STATUS_MASTER_ID: @cancelled_status_id)
          .order("created_at")
 
          @all_order_masters = OrderMaster.where(campaign_playlist_id: @campaign_playlist_id)
-            .where('ORDER_STATUS_MASTER_ID > 10002').count
+            .where('ORDER_STATUS_MASTER_ID > 10000').count
 
-      @sales_ppos = SalesPpo.where('order_status_id > 10002')
+      @sales_ppos = SalesPpo.where('order_status_id > 10000')
       .where(campaign_playlist_id: @campaign_playlist_id)
       .order("start_time")
       if params.has_key?(:product_variant_id)
@@ -315,7 +316,7 @@ class SalesPposController < ApplicationController
 
          halfhourago = Time.at(date - 30.minutes)
 
-          orderlist = OrderMaster.where('ORDER_STATUS_MASTER_ID > 10002')
+          orderlist = OrderMaster.where('ORDER_STATUS_MASTER_ID > 10000')
           .where('ORDER_STATUS_MASTER_ID <> 10006')
           .joins(:medium).where("media.media_group_id = 10000")
           .where('orderdate >= ? AND orderdate <= ?', halfhourago, Time.at(date))
@@ -429,6 +430,7 @@ class SalesPposController < ApplicationController
   end
 
   def product_performance
+
     @return_url = request.original_url
     @total_sales_1, @total_sales_2, @total_revenue_1, @total_revenue_2 = 0,0,0,0
     @report_results = "Please select date range to show report"
@@ -472,9 +474,24 @@ class SalesPposController < ApplicationController
      @transfer_default = params[:transfer_default]
    end
 
-   @product_price_default = nil
-   if params[:product_price].present?
-     @product_price_default = params[:product_price]
+   @sim_product_price = nil
+   if params[:sim_product_price].present?
+     @sim_product_price = params[:sim_product_price]
+   end
+
+   @sim_retail_sales_pieces = nil
+   if params[:sim_retail_sales_pieces].present?
+     @sim_retail_sales_pieces = params[:sim_retail_sales_pieces]
+   end
+
+   @sim_to_sales_pieces = nil
+   if params[:sim_to_sales_pieces].present?
+     @sim_to_sales_pieces = params[:sim_to_sales_pieces]
+   end
+
+   @sim_product_total = nil
+   if params[:sim_product_total].present?
+     @sim_product_total = params[:sim_product_total]
    end
 
    @regenerate_ppo = "Re Generate PPO for #{@product_name} with product price Rs. #{@product_price} between #{@from_date} and #{@to_date}"
@@ -482,7 +499,7 @@ class SalesPposController < ApplicationController
    ppo_sales = SalesPpo.new
    # change default retail and transfer order conversion rate
    # change product price , ret_def = nil, to_def = nil, product_cost = nil
-   @employeeorderlist = ppo_sales.sales_product_ppos_for_date @from_date, @to_date, @product_variant_id, @retail_default, @transfer_default, @product_price_default
+   @employeeorderlist = ppo_sales.sales_product_ppos_for_date @from_date, @to_date, @product_variant_id, @retail_default, @transfer_default, @sim_product_price, @sim_retail_sales_pieces, @sim_to_sales_pieces, @sim_product_total
 
    @serial_no += 1
 
@@ -840,20 +857,15 @@ class SalesPposController < ApplicationController
 
       if @campaign_playlist_id.present? || @product_variant_id.present?
         sales_ppos.each do |ppo|
-          #new_ppo = SalesPpo.new
-            ppo.add_product_to_campaign
-
-            ppo.re_create_sales_ppo #ppo.order_id
-           #create_sales_ppo ppo.order_id
+            ppo.delay.change_ppo_product_costs ppo.order_id
            nos =+ 1
-           #byebug
         end
       else
-        sales_ppos = OrderMaster.where("orderdate >= ? AND orderdate <= ?", @from_date, @to_date)
-        sales_ppos.each do |ppo|
+        order_masters = OrderMaster.where("orderdate >= ? AND orderdate <= ?", @from_date, @to_date)
+        order_masters.each do |ord|
           #new_ppo = SalesPpo.new
           # a synchronised between days and calls all other functions
-            ppo.add_product_to_campaign_hbn_ppo ppo.id
+            ord.delay.add_product_to_campaign_hbn_ppo ord.id
              #ppo.order_id
            #create_sales_ppo ppo.order_id
             nos =+ 1
@@ -983,84 +995,117 @@ class SalesPposController < ApplicationController
       end
     end
 
-    def create_sales_ppo order_id
-      # order_id = self.order_id
+    # def create_sales_ppo order_id
+    #   # order_id = self.order_id
+    #
+    #    order_master = OrderMaster.find(order_id)
+    #     time_of_order = order_master.orderdate.strftime('%Y-%b-%d %H:%M:%S')
+    #    campaign_playlist_id = order_master.campaign_playlist_id || nil if order_master.campaign_playlist_id.present?
+    #    campaign_id = order_master.campaign_playlist.campaignid || nil if order_master.campaign_playlist
+    #    if campaign_playlist_id.blank?
+    #      remove_from_sales_ppo order_id
+    #      return  puts "No campaign playlist found in PPO"
+    #    end
+    #    campaign_name = CampaignPlaylist.find(campaign_playlist_id).name || " " if order_master.campaign_playlist_id.present?
+    #    order_pieces = order_master.pieces || 0 if order_master.pieces.present?
+    #    if order_master.promotion.present?
+    #      if order_master.promotion.promo_cost.present?
+    #        total_promotion_cost = order_master.promotion.promo_cost || 0 if order_master.promotion.promo_cost.present?
+    #        per_order_promo_cost = (total_promotion_cost / order_pieces) if order_pieces.present?
+    #      end
+    #    end
+    #
+    #    order_lines = OrderLine.where(orderid: order_id)
+    #
+    #    puts "Found #{order_lines.count()} orders, now checking if they are in PPO!" #.colorize(:blue)
+    #    order_lines.each do |ordln|
+    #    #add or update ppo details
+    #    #byebug
+    #    if SalesPpo.where(:order_line_id=> ordln.id).present?
+    #      @sale_ppo = SalesPpo.where(:order_line_id=> ordln.id).first
+    #
+    #      @sale_ppo.update(campaign_playlist_id: campaign_playlist_id,
+    #      name: campaign_name,
+    #      campaign_id: campaign_id,
+    #      :product_master_id => ordln.product_master_id,
+    #      product_variant_id: ordln.productvariant_id,
+    #      product_list_id: ordln.product_list_id,
+    #      prod: (ordln.product_list.extproductcode || nil if ordln.product_list.present?),
+    #      :start_time => time_of_order,
+    #      :order_id => ordln.orderid,
+    #      :order_line_id=> ordln.id,
+    #      :product_cost => ordln.productcost,
+    #      :pieces => ordln.pieces,
+    #      :revenue => ordln.productrevenue,
+    #      :transfer_order_revenue => ordln.transfer_order_revenue,
+    #      :transfer_order_dealer_price => ordln.transfer_order_dealer_price,
+    #      :damages => ordln.productcost * 0.10,
+    #      :returns => ordln.refund,
+    #      :commission_cost => ordln.variable_media_commission,
+    #      :commission_on_order => ordln.fixed_media_commission,
+    #      :promotion_cost=> per_order_promo_cost,
+    #      :gross_sales => ordln.gross_sales,
+    #      :net_sale => ordln.net_sales,
+    #      :external_order_no => order_master.external_order_no,
+    #      :order_status_id => order_master.order_status_master_id,
+    #      :order_pincode => order_master.pincode,
+    #      :media_id => order_master.media_id,
+    #      :promo_cost_total => total_promotion_cost,
+    #      :dnis => order_master.calledno,
+    #      :city => order_master.city,
+    #      :state => order_master.customer_address.state,
+    #      :mobile_no => order_master.mobile,
+    #      :shipping_cost => ordln.product_postage)
+    #
+    #      puts "Updated existing Sales PPO with id #{@sale_ppo.id} created on #{@sale_ppo.created_at.strftime("%d-%b-%y %H:%M")} for order id #{order_master.id}" #.colorize(:light_yellow).colorize( :background => :black)
+    #      end
+    #    end
+    # end
+    #
+    # def remove_from_sales_ppo order_id
+    #   order_master = OrderMaster.find(order_id)
+    #
+    #   order_lines = OrderLine.where(orderid: order_id)
+    #   order_lines.each do |ordln|
+    #   #add or update ppo details
+    #     if SalesPpo.where(:order_line_id=> ordln.id).present?
+    #       sale_ppo = SalesPpo.where(:order_line_id=> ordln.id).first
+    #       sale_ppo.destroy
+    #       puts "Destroyed for order id #{order_master.id}" #.colorize(:black).colorize(:background => :red)
+    #     end
+    #   end
+    # end
+    #
+    def daily_task_ppo_status
+      todaydate = Date.today #Time.zone.now + 330.minutes
+      @from_date = todaydate - 7.days #30.days
+      @to_date = todaydate
+      @daily_task_ppo_status = []
 
-       order_master = OrderMaster.find(order_id)
-        time_of_order = order_master.orderdate.strftime('%Y-%b-%d %H:%M:%S')
-       campaign_playlist_id = order_master.campaign_playlist_id || nil if order_master.campaign_playlist_id.present?
-       campaign_id = order_master.campaign_playlist.campaignid || nil if order_master.campaign_playlist
-       if campaign_playlist_id.blank?
-         remove_from_sales_ppo order_id
-         return  puts "No campaign playlist found in PPO"
-       end
-       campaign_name = CampaignPlaylist.find(campaign_playlist_id).name || " " if order_master.campaign_playlist_id.present?
-       order_pieces = order_master.pieces || 0 if order_master.pieces.present?
-       if order_master.promotion.present?
-         if order_master.promotion.promo_cost.present?
-           total_promotion_cost = order_master.promotion.promo_cost || 0 if order_master.promotion.promo_cost.present?
-           per_order_promo_cost = (total_promotion_cost / order_pieces) if order_pieces.present?
-         end
-       end
+      @pay_u_orders = SalesPpo.where('order_status_id = 10001')
 
-       order_lines = OrderLine.where(orderid: order_id)
+      @pay_u_order_count = @pay_u_orders.distinct.count('order_id')
+      @pay_u_order_value = @pay_u_orders.sum(:gross_sales)
+      #upto
+      (@to_date).downto(@from_date).each do |day|
+       #for_date =  Date.strptime(day, "%Y-%m-%d")
 
-       puts "Found #{order_lines.count()} orders, now checking if they are in PPO!" #.colorize(:blue)
-       order_lines.each do |ordln|
-       #add or update ppo details
-       #byebug
-       if SalesPpo.where(:order_line_id=> ordln.id).present?
-         @sale_ppo = SalesPpo.where(:order_line_id=> ordln.id).first
+      totalorders = OrderMaster.where("TRUNC(orderdate) = ?", day)
+      .where('ORDER_STATUS_MASTER_ID > 10002').count
 
-         @sale_ppo.update(campaign_playlist_id: campaign_playlist_id,
-         name: campaign_name,
-         campaign_id: campaign_id,
-         :product_master_id => ordln.product_master_id,
-         product_variant_id: ordln.productvariant_id,
-         product_list_id: ordln.product_list_id,
-         prod: (ordln.product_list.extproductcode || nil if ordln.product_list.present?),
-         :start_time => time_of_order,
-         :order_id => ordln.orderid,
-         :order_line_id=> ordln.id,
-         :product_cost => ordln.productcost,
-         :pieces => ordln.pieces,
-         :revenue => ordln.productrevenue,
-         :transfer_order_revenue => ordln.transfer_order_revenue,
-         :transfer_order_dealer_price => ordln.transfer_order_dealer_price,
-         :damages => ordln.productcost * 0.10,
-         :returns => ordln.refund,
-         :commission_cost => ordln.media_commission,
-         :promotion_cost=> per_order_promo_cost,
-         :gross_sales => ordln.gross_sales,
-         :net_sale => ordln.net_sales,
-         :external_order_no => order_master.external_order_no,
-         :order_status_id => order_master.order_status_master_id,
-         :order_pincode => order_master.pincode,
-         :media_id => order_master.media_id,
-         :promo_cost_total => total_promotion_cost,
-         :dnis => order_master.calledno,
-         :city => order_master.city,
-         :state => order_master.customer_address.state,
-         :mobile_no => order_master.mobile,
-         :shipping_cost => ordln.product_postage)
+      hbnorders = OrderMaster.where("TRUNC(orderdate) = ?", day)
+      .where('ORDER_STATUS_MASTER_ID > 10002').joins(:medium).where("media.media_group_id = 10000").count
 
-         puts "Updated existing Sales PPO with id #{@sale_ppo.id} created on #{@sale_ppo.created_at.strftime("%d-%b-%y %H:%M")} for order id #{order_master.id}" #.colorize(:light_yellow).colorize( :background => :black)
-         end
-       end
-    end
+       total_ppo_orders = SalesPpo.where('order_status_id > 10002')
+       .where("TRUNC(start_time) = ? ", day).distinct.count('order_id')
 
-    def remove_from_sales_ppo order_id
-      order_master = OrderMaster.find(order_id)
 
-      order_lines = OrderLine.where(orderid: order_id)
-      order_lines.each do |ordln|
-      #add or update ppo details
-        if SalesPpo.where(:order_line_id=> ordln.id).present?
-          sale_ppo = SalesPpo.where(:order_line_id=> ordln.id).first
-          sale_ppo.destroy
-          puts "Destroyed for order id #{order_master.id}" #.colorize(:black).colorize(:background => :red)
-        end
+
+        @daily_task_ppo_status << {:total_orders => totalorders.to_i,
+          :hbn_orders => hbnorders.to_i,
+        :for_date =>  day.strftime("%d-%b-%Y"),
+        :total_ppo => total_ppo_orders.to_i,
+        :difference => (hbnorders - total_ppo_orders).to_i}
       end
     end
-
   end

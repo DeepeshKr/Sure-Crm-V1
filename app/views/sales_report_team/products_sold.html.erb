@@ -1,0 +1,46 @@
+<!-- def title(page_title) -->
+<% title "Product Sold #{@product_master_id} between dates" %>
+<!-- end of the title-->
+
+<div class="row">
+ <div class="col-xs-3"><h3>Product <%= @product_master_id %> </h3></div>
+
+  <%= form_tag  url_for(:controller => 'sales_report_team', :action => "products_sold"), method: "get" do  %>
+  <div class="col-xs-4">
+	 	  <%= text_field_tag(:prod, @prod, :class => "form-control", :required => "true" )   %>
+	</div>
+   <div class="col-xs-4">
+     <div class="input-daterange input-group">
+       <%= text_field_tag(:from_date, @from_date, :data => {:provide => "datepicker"}, :id => "datepicker_from", :class => "form-control", :required => "true" )   %>
+       <span class="input-group-addon">to</span>
+        <%= text_field_tag(:to_date, @to_date, :data => {:provide => "datepicker"}, :id => "datepicker_to", :class => "form-control", :required => "true" )   %>
+     </div>
+  </div>
+  <div class="col-xs-1"> <%= submit_tag "Show", name: nil, class: "btn btn-primary" %>
+  </div>
+ <% end %>
+</div>
+
+<hr>
+
+ <%= render('order_line_wo_address') %>
+
+ <% if @product_master_id.present? %>
+
+<div class="well well-sm">
+<div class="row">
+  <div class="col-xs-6">
+  Download CSV file
+  </div>
+  <div class="col-xs-6">
+    <%= link_to 'Download CSV file', products_sold_path(from_date: @from_date, product_master_id: @product_master_id, format: :csv), class: "btn btn-info btn-sm" %>
+  </div>
+</div>
+</div>
+
+<% end %>
+
+<script>
+$('#datepicker_from').datepicker({format: 'yyyy-mm-dd'});
+$('#datepicker_to').datepicker({format: 'yyyy-mm-dd'});
+</script>

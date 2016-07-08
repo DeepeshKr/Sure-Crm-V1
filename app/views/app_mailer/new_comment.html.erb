@@ -10,7 +10,8 @@
                       </td>
                       <!-- *|IFNOT:ARCHIVE_PAGE|* -->
                       <td valign="top" width="180" class="preheaderContent" style="padding-top:10px; padding-right:20px; padding-bottom:10px; padding-left:0;" mc:edit="preheader_content01">
-                          Email not displaying correctly?<br /><a href=<%= @url %> target="_blank">View it in your browser</a>.
+                          Email not displaying correctly?<br />
+                          <a href=<%= @url %> target="_blank">View it in your browser</a>.
                       </td>
                       <!-- *|END:IF|* -->
                   </tr>
@@ -50,7 +51,7 @@
                           is <%= @app_feature_comment.app_feature_request.app_status.name %>
                           and follows <%= @app_feature_comment.app_feature_request.app_priority.name %>
                           pace of work and estimated to be completed
-                          by <%= @app_feature_comment.app_feature_request.estimated_completion_date.strftime('%d-%b-%y') %>.
+                          by <%= @app_feature_comment.app_feature_request.estimated_completion_date.strftime('%d-%b-%y') if @app_feature_comment.app_feature_request.estimated_completion_date.present? %>.
                           You can view the request <a href="<%= @url %>" target="_blank">click here</a>
                       </td>
                   </tr>
@@ -107,10 +108,14 @@
           <table border="0" cellpadding="0" cellspacing="0" width="100%" id="templateBody">
               <tr>
                   <td valign="top" class="bodyContent" mc:edit="body_content">
-                    Desired Completion date </td><td> <%= @app_feature_comment.app_feature_request.require_by_date.strftime('%d-%b-%y') %>
+                    Desired Completion date </td>
+                    <td valign="top" class="bodyContent" mc:edit="body_content">
+                    <%= @app_feature_comment.app_feature_request.require_by_date.strftime('%d-%b-%y') %>
                   </td>
                   <td valign="top" class="bodyContent" mc:edit="body_content">
-                    Expected Completion date</td><td> <%= @app_feature_comment.app_feature_request.estimated_completion_date.strftime('%d-%b-%y') %>
+                    Expected Completion date</td>
+                    <td valign="top" class="bodyContent" mc:edit="body_content">
+                      <%= @app_feature_comment.app_feature_request.estimated_completion_date.strftime('%d-%b-%y') if @app_feature_comment.app_feature_request.estimated_completion_date.present? %>
                   </td>
                   <td valign="top" class="bodyContent" mc:edit="body_content">
                     Current Status </td><td> <%= @app_feature_comment.app_feature_request.app_status.name %>
@@ -119,13 +124,17 @@
               </tr>
               <tr>
                   <td valign="top" class="bodyContent" mc:edit="body_content">
-                    Pace of Work: </td><td> <%= @app_feature_comment.app_feature_request.app_velocity.name if @app_feature_comment.app_feature_request.app_velocity %>
+                    Pace of Work: </td>
+                    <td valign="top" class="bodyContent" mc:edit="body_content">
+                    <%= @app_feature_comment.app_feature_request.app_velocity.name if @app_feature_comment.app_feature_request.app_velocity %>
                   </td>
                   <td valign="top" class="bodyContent" mc:edit="body_content">
-                    Estimated Hours:</td><td> <%= @app_feature_comment.app_feature_request.estimated_hours %>
+                    Estimated Hours:</td><td> <%= @app_feature_comment.app_feature_request.estimated_hours if @app_feature_comment.app_feature_request.estimated_hours %>
                   </td>
                   <td valign="top" class="bodyContent" mc:edit="body_content">
-                  Priority</td><td>  <%= @app_feature_comment.app_feature_request.app_priority.name %>
+                  Priority</td>
+                  <td valign="top" class="bodyContent" mc:edit="body_content">
+                  <%= @app_feature_comment.app_feature_request.app_priority.name %>
                   </td>
               </tr>
           </table>
@@ -140,7 +149,7 @@
                         <br>
                         <br>
                         <br>
-                       Remain updated on this request by <a href=<%= @url %>clicking here</a>
+                       Remain updated on this request by <a href=<%= @url %> target="_blank">clicking here</a>
                        <br>
                        <br>
                        <br>

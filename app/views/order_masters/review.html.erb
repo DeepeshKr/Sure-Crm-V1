@@ -97,3 +97,12 @@
   </div>
   <%= render 'sales_ppos/sales_ppo_list' %>
 </div>
+
+ <% if (current_user.employee_role.sortorder < 6) %>
+<div class="panel panel-primary">
+ <div class="panel-heading">
+   <h3 class="panel-title">PPO Calculation - not visible to most of the team</h3>
+ </div>
+ <%= render 'sales_ppos/calculation' %>
+</div>
+<% end %>

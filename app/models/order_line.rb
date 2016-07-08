@@ -117,7 +117,7 @@ def creditcardcharges
          end
       end
 
-      if self.product_variant.product_sell_type_id != 10000 #or self.product_variant.product_sell_type_id != 10060
+      if (self.product_variant.product_sell_type_id != 10000) && (check_if_replacement(self.product_list_id) == "false")
             charges = 0
       end
 
@@ -126,6 +126,13 @@ def creditcardcharges
     end
     return creditcardcharges
   end
+end
+
+def check_if_replacement product_list_id
+        add_on_replacements = ProductMasterAddOn.where("activeid = 10000 AND replace_by_product_id IS NOT NULL").pluck(:product_list_id)
+
+       return add_on_replacements.include? product_list_id
+       # ['Cat', 'Dog', 'Bird'].include? 'Dog'
 end
 
 #service it levied on COD charges only at 12.36%
@@ -344,8 +351,91 @@ def refund
 end
 
 def media_commission
+  #  media_variable = Medium.where('id = ? AND value is not null', self.order_master.media_id)
+  #   .where(:media_commision_id => [10020, 10021, 10040, 10041, 10060]) #.pluck(:value)
+  # if media_variable.present?
+  #        #discount the total value by 50% as media_correction
+  #      media_correction = 1.0
+  #      #PAID_CORRECTION
+  #   if media_variable.first.paid_correction.present?
+  #    media_correction = media_variable.first.paid_correction #||= 0.5
+  #   end
+  #   total_commission = 0
+  #   total_commission += ((self.subtotal * 0.888889) * media_variable.first.value.to_f)  * media_correction if media_variable.first.value.present?
+  #   if total_commission > 0
+  #     total_commission += ((self.subtotal * 0.888889) * media_variable.first.agent_comm.to_f)  * media_correction if media_variable.first.agent_comm.present?
+  #   end
+  #   return total_commission
+  # else
+    return 0
+  # end
+end
+def variable_media_commision_percent
+  media_variable = Medium.where('id = ? AND value is not null', self.order_master.media_id)
+   .where(:media_commision_id => [10021, 10040, 10041, 10060]) #.pluck(:value)
+   return 0 if media_variable.blank?
+
+   return media_variable.first.value.to_f
+end
+
+def variable_media_agent_commision_percent
+  media_variable = Medium.where('id = ? AND value is not null', self.order_master.media_id)
+   .where(:media_commision_id => [10021, 10040, 10041, 10060]) #.pluck(:value)
+   return 0 if media_variable.blank?
+
+   return media_variable.first.agent_comm.to_f
+end
+
+def variable_media_commission
+
    media_variable = Medium.where('id = ? AND value is not null', self.order_master.media_id)
-    .where(:media_commision_id => [10020, 10021, 10040, 10041, 10060]) #.pluck(:value)
+    .where(:media_commision_id => [10021, 10040, 10041, 10060]) #.pluck(:value)
+  if media_variable.present?
+         #discount the total value by 50% as media_correction
+       media_correction = 1.0
+       #PAID_CORRECTION
+      if (media_variable.first.media_commision_id == 10060 || media_variable.first.media_commision_id == 10041)
+        #retail_def = 45.00
+        retail_def = SalesPpoDefault.find_by_name("Retail").value
+        #transfer_def = 65.00
+        transfer_def = SalesPpoDefault.find_by_name("Transfer Order").value
+        media_correction = retail_def.to_f / 100
+
+      end
+    # if media_variable.first.paid_correction.present?
+    #  media_correction = media_variable.first.paid_correction #||= 0.5
+    # end
+    total_commission = 0
+    total_commission += ((self.subtotal * 0.888889) * media_variable.first.value.to_f)  * media_correction if media_variable.first.value.present?
+    if total_commission > 0
+      total_commission += ((self.subtotal * 0.888889) * media_variable.first.agent_comm.to_f)  * media_correction if media_variable.first.agent_comm.present?
+    end
+    return total_commission
+  else
+    return 0
+  end
+end
+
+def fixed_media_commision_percent
+  media_variable = Medium.where('id = ? AND value is not null', self.order_master.media_id)
+   .where(:media_commision_id => [10020]) #.pluck(:value)
+   return 0 if media_variable.blank?
+
+   return media_variable.first.value.to_f
+end
+
+def fixed_media_agent_commision_percent
+  media_variable = Medium.where('id = ? AND value is not null', self.order_master.media_id)
+   .where(:media_commision_id => [10020]) #.pluck(:value)
+   return 0 if media_variable.blank?
+
+   return media_variable.first.agent_comm.to_f
+end
+
+def fixed_media_commission
+  # Based on Orders Generated = 10020 (to be loaded as cost on paid orders)
+   media_variable = Medium.where('id = ? AND value is not null', self.order_master.media_id)
+    .where(:media_commision_id => [10020]) #.pluck(:value)
   if media_variable.present?
          #discount the total value by 50% as media_correction
        media_correction = 1.0

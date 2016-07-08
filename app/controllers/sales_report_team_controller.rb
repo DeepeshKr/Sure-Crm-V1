@@ -3,22 +3,25 @@ class SalesReportTeamController < ApplicationController
    respond_to :html
    before_action :drop_downs, only: [:city, :update, :destroy, :deleteupsell]
    before_action :all_cancelled_orders
-   
+
   def index
-   @from_date = (Date.current + 330.minutes).strftime("%Y-%m-%d")   
+   @from_date = (Date.current + 330.minutes).strftime("%Y-%m-%d")
   end
-  
+
   def show_wise
         #add this link to show
         #<%= link_to "View PPO", ppo_details_path(campaign_id: c[:campaign_id]), :target => "_blank" %>
         @searchaction = "show_wise"
-        for_date = (330.minutes).from_now.to_date
 
-        use_from_to_date 1
+        if params[:from_date].present?
+          for_date =  Date.strptime(params[:from_date], "%Y-%m-%d")
+          @from_date = for_date.beginning_of_day + 330.minutes
+        end
+        #use_from_to_date 0
         if @from_date == nil
           return
         end
-          
+
          @sno = 1
 
         @total_nos = 0
@@ -29,35 +32,42 @@ class SalesReportTeamController < ApplicationController
             @hourlist ||= []
             employeeunorderlist ||= []
 
-        @orderdate = for_date
-        @searchaction = 'show'
+
+
+
           #@for_date = @campaign.startdate
-         campaign_playlists =  CampaignPlaylist.joins(:campaign)
-         .where("campaigns.startdate = ?", for_date)
+         campaign_playlists =  CampaignPlaylist
+         .where("TRUNC(for_date) = ? ", for_date)
          .order(:start_hr, :start_min, :start_sec)
          .where(list_status_id: 10000) #.limit(10)
 
+         #return if campaign_playlists.blank?
+
          campaign_playlists.each do | playlist |
-           orderlist = OrderMaster.where('ORDER_STATUS_MASTER_ID > 10002')
+           orderlist = OrderMaster.where('ORDER_STATUS_MASTER_ID > 10000')
            .where.not(ORDER_STATUS_MASTER_ID: @cancelled_status_id)
            .where(campaign_playlist_id: playlist.id)
 
             totalorders = orderlist.sum(:total)
                nos = orderlist.count()
              pieces = orderlist.sum(:pieces)
-              employeeunorderlist << {:show =>  playlist.product_variant.name,
+              employeeunorderlist << {:id => playlist.id,
+                :for_date => playlist.for_date,
+                :show =>  playlist.product_variant.name,
               :campaign_id => playlist.id,
+              :prod => playlist.product_variant.extproductcode,
                :pieces => pieces,
               :nos => nos,
               :at_time => playlist.starttime,
+              :end_time => playlist.playlist_group_end_time,
               :total => totalorders}
             end
-            
+
             #this is for date on the view
-            @from_date = (@from_date + 330.minutes).strftime("%Y-%m-%d")
-            @to_date = (@to_date + 330.minutes).strftime("%Y-%m-%d")
-            
-            
+            @from_date = (@from_date).strftime("%Y-%m-%d")
+            #@to_date = (@to_date + 330.minutes).strftime("%Y-%m-%d")
+
+            @header_text = "HBN Show response for #{@from_date}"
             @employeeorderlist = employeeunorderlist
 
   end
@@ -85,11 +95,11 @@ class SalesReportTeamController < ApplicationController
         e = o.employee_id
 
         name = (Employee.find(e).first_name  || "NA" if Employee.find(e).first_name.present?)
-        
+
         orderlist = OrderMaster.where('ORDER_STATUS_MASTER_ID > 10002')
         .where.not(ORDER_STATUS_MASTER_ID: @cancelled_status_id)
         .where('orderdate >= ? AND orderdate <= ?', @from_date, @to_date).where(employee_id: e)
-        
+
         timetaken = orderlist.sum(:codcharges)
         pay_u_value = orderlist.where(orderpaymentmode_id: 10080).sum(:total)
         pay_u_orders = orderlist.where(orderpaymentmode_id: 10080).count()
@@ -231,9 +241,9 @@ class SalesReportTeamController < ApplicationController
               end
           end #end csv
 
-    
+
   end #end function
-  
+
   def agent_common_upsell_order
      product_type_id = 10001
     @searchaction = "agent_common_upsell_order"
@@ -257,17 +267,17 @@ class SalesReportTeamController < ApplicationController
           e = o.employee_id
 
           name = (Employee.find(e).first_name  || "NA" if Employee.find(e).first_name.present?)
-        
+
           # orderlist = OrderMaster.where('ORDER_STATUS_MASTER_ID > 10002')
     #       .where.not(ORDER_STATUS_MASTER_ID: @cancelled_status_id)
     #       .where('orderdate >= ? AND orderdate <= ?', @from_date, @to_date).where(employee_id: e)
-        
+
           orderlist = OrderLine.joins(:order_master).where('order_masters.ORDER_STATUS_MASTER_ID > 10002')
           .where('order_masters.orderdate >= ? AND order_masters.orderdate <= ?', @from_date, @to_date)
           .where("order_masters.employee_id = ?", e)
           .where.not("order_masters.ORDER_STATUS_MASTER_ID IN (?)", @cancelled_status_id)
           .joins(:product_variant).where("product_variants.product_sell_type_id = ?", product_type_id)
-          
+
           timetaken = orderlist.sum(:codcharges)
           pay_u_value = orderlist.where("order_masters.orderpaymentmode_id = 10080").sum(:total)
           pay_u_orders = orderlist.where("order_masters.orderpaymentmode_id = 10080").count()
@@ -292,7 +302,7 @@ class SalesReportTeamController < ApplicationController
         @from_date = (@from_date + 330.minutes).strftime("%Y-%m-%d")
         @to_date = (@to_date + 330.minutes).strftime("%Y-%m-%d")
         @orderdate = "Common Upsell orders between #{@from_date} and #{@to_date} found #{order_masters.count} agents!"
-        
+
           respond_to do |format|
           csv_file_name = "employee_sales_#{@or_for_date}.csv"
             format.html
@@ -303,10 +313,10 @@ class SalesReportTeamController < ApplicationController
           end
 
   end
-  
+
   def agent_basic_upsell_order
    product_type_id = 10040
-   
+
     @searchaction = "agent_basic_upsell_order"
       @sno = 1
 
@@ -328,17 +338,17 @@ class SalesReportTeamController < ApplicationController
         e = o.employee_id
 
         name = (Employee.find(e).first_name  || "NA" if Employee.find(e).first_name.present?)
-        
+
         # orderlist = OrderMaster.where('ORDER_STATUS_MASTER_ID > 10002')
-  #       .where.not(ORDER_STATUS_MASTER_ID: @cancelled_status_id)
-  #       .where('orderdate >= ? AND orderdate <= ?', @from_date, @to_date).where(employee_id: e)
-        
+        #       .where.not(ORDER_STATUS_MASTER_ID: @cancelled_status_id)
+        #       .where('orderdate >= ? AND orderdate <= ?', @from_date, @to_date).where(employee_id: e)
+
         orderlist = OrderLine.joins(:order_master).where('order_masters.ORDER_STATUS_MASTER_ID > 10002')
         .where('order_masters.orderdate >= ? AND order_masters.orderdate <= ?', @from_date, @to_date)
         .where("order_masters.employee_id = ?", e)
         .where.not("order_masters.ORDER_STATUS_MASTER_ID IN (?)", @cancelled_status_id)
         .joins(:product_variant).where("product_variants.product_sell_type_id = ?", product_type_id)
-          
+
         timetaken = orderlist.sum(:codcharges)
         pay_u_value = orderlist.where("order_masters.orderpaymentmode_id = 10080").sum(:total)
         pay_u_orders = orderlist.where("order_masters.orderpaymentmode_id = 10080").count()
@@ -363,7 +373,7 @@ class SalesReportTeamController < ApplicationController
       @from_date = (@from_date + 330.minutes).strftime("%Y-%m-%d")
       @to_date = (@to_date + 330.minutes).strftime("%Y-%m-%d")
       @orderdate = "Basic Upsell orders between #{@from_date} and #{@to_date} found #{order_masters.count} agents!"
-       
+
         respond_to do |format|
         csv_file_name = "employee_sales_#{@or_for_date}.csv"
           format.html
@@ -374,11 +384,72 @@ class SalesReportTeamController < ApplicationController
         end
 
   end
- 
+
   def not_completed
-    
+
   end
-  
+
+  def products_sold
+    @sno = 1
+      @ordersearch = "No Products sold for the period / day"
+
+    if params[:from_date].present?
+
+        product_name = " "
+        use_from_to_date 1
+        if @from_date == nil
+          return
+        end
+        sold_product_list ||= []
+
+        if params.has_key?(:prod)
+          @prod = params[:prod]
+          @product_lists = ProductList.where(extproductcode: params[:prod])
+          if @product_lists.blank?
+            return flash[:errors] = "No prod details found!"
+          end
+          @product_list_ids = @product_lists.pluck(:id) if @product_lists.present?
+          sold_product_list = OrderLine.where('order_lines.orderdate >= ? and order_lines.orderdate <= ?', @from_date, @to_date)
+          .where(product_list_id: @product_list_ids).joins(:order_master)
+          .where('ORDER_MASTERS.ORDER_STATUS_MASTER_ID > 10000')
+          .joins(:order_master => :medium).where("media.media_group_id = 10000")
+          #.where.not('order_masters.ORDER_STATUS_MASTER_ID IN (10040, 10006, 10008)')#.limit(10)
+          #.uniq.pluck(:orderid)
+          product_name = @product_lists.first.name
+
+           @order_lines_csv ||= []
+                sold_product_list.each do |o|
+                  @order_lines_csv << {:order_no => o.order_master.external_order_no,
+                :ref_no => o.orderid, :order_date =>  (o.order_master.orderdate + 330.minutes).strftime('%d-%b-%Y'),
+                :status => o.order_master.order_status_master.name,
+                :customer => o.order_master.customer.first_name + " " + o.order_master.customer.last_name,
+                :city => o.order_master.customer_address.city + " " + o.order_master.customer_address.pincode,
+                :state => o.order_master.customer_address.state,
+                :product => o.product_variant.name,
+                :total => o.subtotal}
+              end
+
+         @order_lines = sold_product_list #.order("orderdate")
+
+        #this is for date on the view
+        @from_date = (@from_date + 330.minutes).strftime("%Y-%m-%d")
+        @to_date = (@to_date + 330.minutes).strftime("%Y-%m-%d")
+
+          respond_to do |format|
+            csv_file_name = "#{product_name}_sold_#{@from_date}.csv"
+              format.html
+              format.csv do
+                headers['Content-Disposition'] = "attachment; filename=\"#{csv_file_name}\""
+                headers['Content-Type'] ||= 'text/csv'
+              end
+          end
+
+        end
+
+        #@order_masters = OrderMaster.where(id: sold_product_list)
+     end
+  end
+
   private
 
   def shows_between
@@ -389,7 +460,7 @@ class SalesReportTeamController < ApplicationController
       end
 
       #media segregation only HBN
-      media_segments
+      # media_segments
 
       @show_date = for_date.strftime("%d-%b-%Y")
 
@@ -481,21 +552,22 @@ class SalesReportTeamController < ApplicationController
          @show_date = for_date
 
         #media segregation only HBN
-        media_segments
+        # media_segments
 
-        order_masters = OrderMaster.where('orderdate >= ? AND orderdate <= ?', from_date, to_date).where('ORDER_STATUS_MASTER_ID > 10002').where.not(ORDER_STATUS_MASTER_ID: @all_cancelled_orders)
+        order_masters = OrderMaster.where('orderdate >= ? AND orderdate <= ?', from_date, to_date).where('ORDER_STATUS_MASTER_ID > 10002')
+          .where.not(ORDER_STATUS_MASTER_ID: @all_cancelled_orders)
         .select(:id).distinct
-        
+
         order_masters_cod = OrderMaster.where(orderpaymentmode_id: 10001)
         .where('orderdate >= ? AND orderdate <= ?', from_date, to_date)
         .where('ORDER_STATUS_MASTER_ID > 10002')
         .where.not(ORDER_STATUS_MASTER_ID: @all_cancelled_orders).select(:id).distinct
-        
+
         order_masters_cc = OrderMaster.where(orderpaymentmode_id: 10000)
         .where('orderdate >= ? AND orderdate <= ?', from_date, to_date)
         .where('ORDER_STATUS_MASTER_ID > 10002')
         .where.not(ORDER_STATUS_MASTER_ID: @all_cancelled_orders).select(:id).distinct
-        
+
         order_masters_payu = OrderMaster.where(orderpaymentmode_id: 10080)
         .where('orderdate >= ? AND orderdate <= ?', from_date, to_date)
         .where('ORDER_STATUS_MASTER_ID > 10002')
@@ -516,26 +588,26 @@ class SalesReportTeamController < ApplicationController
           .where('orderdate >= ? AND orderdate <= ?', start_time, end_time)
           .where('ORDER_STATUS_MASTER_ID > 10002')
           .where.not(ORDER_STATUS_MASTER_ID: @all_cancelled_orders).select(:id).distinct
-          
+
           order_masters_cc = OrderMaster.where(orderpaymentmode_id: 10000)
           .where('orderdate >= ? AND orderdate <= ?', start_time, end_time)
           .where('ORDER_STATUS_MASTER_ID > 10002')
           .where.not(ORDER_STATUS_MASTER_ID: @all_cancelled_orders).select(:id).distinct
-          
+
           order_masters_payu = OrderMaster.where(orderpaymentmode_id: 10080)
           .where('orderdate >= ? AND orderdate <= ?', start_time, end_time)
           .where('ORDER_STATUS_MASTER_ID > 10002')
           .where.not(ORDER_STATUS_MASTER_ID: @all_cancelled_orders).select(:id).distinct
-        
+
          end
-         
-         
-         
+
+
+
          if params.has_key?(:show)
            @show = params[:show]
            case @show # a_variable is the variable we want to compare
              when "all"    #compare to 1
-              
+
                # order_masters = order_masters.select(:id).distinct
                # order_masters_cod = order_masters_cod.select(:id).distinct
                # order_masters_cc= order_masters_cc.select(:id).distinct
@@ -579,8 +651,8 @@ class SalesReportTeamController < ApplicationController
           name = (ProductList.find(e).productlistdetails  || "NA" if ProductList.find(e).productlistdetails.present?)
           orderlist = OrderLine.where(orderid: order_masters).where(product_list_id: e)
           timetaken = orderlist.sum(:codcharges)
-          payuvalue = OrderLine.where(orderid: order_masters_payu).where(product_list_id: e).sum(:total) 
-          payuorders = OrderLine.where(orderid: order_masters_payu).where(product_list_id: e).count() 
+          payuvalue = OrderLine.where(orderid: order_masters_payu).where(product_list_id: e).sum(:total)
+          payuorders = OrderLine.where(orderid: order_masters_payu).where(product_list_id: e).count()
           ccvalue = OrderLine.where(orderid: order_masters_cc).where(product_list_id: e).sum(:total)
           ccorders = OrderLine.where(orderid: order_masters_cc).where(product_list_id: e).count()
           codorders = OrderLine.where(orderid: order_masters_cod).where(product_list_id: e).count()
@@ -603,8 +675,8 @@ class SalesReportTeamController < ApplicationController
           name = (ProductList.find(e).productlistdetails  || "NA" if ProductList.find(e).productlistdetails.present?)
           orderlist = OrderLine.where(orderid: order_masters).where(product_list_id: e)
           timetaken = orderlist.sum(:codcharges)
-          payuvalue = OrderLine.where(orderid: order_masters_payu).where(product_list_id: e).sum(:total) 
-          payuorders = OrderLine.where(orderid: order_masters_payu).where(product_list_id: e).count() 
+          payuvalue = OrderLine.where(orderid: order_masters_payu).where(product_list_id: e).sum(:total)
+          payuorders = OrderLine.where(orderid: order_masters_payu).where(product_list_id: e).count()
           ccvalue = OrderLine.where(orderid: order_masters_cc).where(product_list_id: e).sum(:total)
           ccorders = OrderLine.where(orderid: order_masters_cc).where(product_list_id: e).count()
           codorders = OrderLine.where(orderid: order_masters_cod).where(product_list_id: e).count()
@@ -614,7 +686,7 @@ class SalesReportTeamController < ApplicationController
           common_product_list_orderlist << {:total => totalorders,
              :id => e, :product => name, :for_date =>  @or_for_date,
                 :prod => o.product_list.extproductcode,
-            :nos => noorders, :payuvalue => payuvalue, :payuorders => payuorders, 
+            :nos => noorders, :payuvalue => payuvalue, :payuorders => payuorders,
             :codorders => codorders, :codvalue => codvalue,
              :ccorders => ccorders, :ccvalue => ccvalue  }
           end
@@ -628,7 +700,7 @@ class SalesReportTeamController < ApplicationController
           name = (ProductList.find(e).productlistdetails  || "NA" if ProductList.find(e).productlistdetails.present?)
           orderlist = OrderLine.where(orderid: order_masters).where(product_list_id: e)
           timetaken = orderlist.sum(:codcharges)
-          payuvalue = OrderLine.where(orderid: order_masters_payu).where(product_list_id: e).sum(:total) 
+          payuvalue = OrderLine.where(orderid: order_masters_payu).where(product_list_id: e).sum(:total)
           payuorders = OrderLine.where(orderid: order_masters_payu).where(product_list_id: e).count()
           ccvalue = OrderLine.where(orderid: order_masters_cc).where(product_list_id: e).sum(:total)
           ccorders = OrderLine.where(orderid: order_masters_cc).where(product_list_id: e).count()
@@ -639,15 +711,15 @@ class SalesReportTeamController < ApplicationController
           basic_product_list_orderlist << {:total => totalorders,
              :id => e, :product => name, :for_date =>  @or_for_date,
              :prod => o.product_list.extproductcode,
-            :nos => noorders,:payuvalue => payuvalue, :payuorders => payuorders, 
+            :nos => noorders,:payuvalue => payuvalue, :payuorders => payuorders,
             :codorders => codorders, :codvalue => codvalue,
              :ccorders => ccorders, :ccvalue => ccvalue  }
           end
           @basic_product_list_orderlist = basic_product_list_orderlist.sort_by{|c| c[:total]}.reverse
-          
+
           @from_date = (@from_date).strftime("%Y-%m-%d")
           @to_date = (@to_date).strftime("%Y-%m-%d")
-          
+
           respond_to do |format|
             csv_file_name = "products_sold_report_#{@or_for_date}.csv"
               format.html
@@ -678,7 +750,7 @@ class SalesReportTeamController < ApplicationController
 
     @sales_staff = Employee.all.joins(:employee_role).where("employee_roles.sortorder > 7")
   end
-  
+
   def use_from_to_date back_days
     @from_date = Date.current - back_days.days #30.days
     @to_date = Date.current
@@ -700,7 +772,7 @@ class SalesReportTeamController < ApplicationController
   end
   # I want to give access of following reports to Sr Team Captains only;
 #
-#   HBN Showwise Report: http://3.0.3.26:120/sales_report/show?from_date=2016-05-18 
+#   HBN Showwise Report: http://3.0.3.26:120/sales_report/show?from_date=2016-05-18
 # http://3.0.3.26:3000/sales_report_team/show_wise?from_date=2016-05-18
 #   Agent Order Report: http://3.0.3.26:120/sales_report/employee?from_date=2016-05-18
 #   Agentwise Upsale (Common) Report: http://3.0.3.26:120/not_completed?from_date=2016-05-18

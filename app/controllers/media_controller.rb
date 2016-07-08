@@ -13,8 +13,9 @@ class MediaController < ApplicationController
      @media = Medium.all.order("updated_at DESC").limit(50).paginate(:page => params[:page])
       @inactivemedia = Medium.where(active:0).order("updated_at DESC").limit(50).paginate(:page => params[:page])
     if params[:telephone].present?
-       @media = Medium.where(telephone: params[:telephone]).paginate(:page => params[:page])
        @telephone = params[:telephone]
+       @media = Medium.where("telephone like ? or dnis like ? ", "#{@telephone}%", "#{@telephone}%").paginate(:page => params[:page])
+
         @inactivemedia = Medium.where(active:0).where(telephone: params[:telephone]).paginate(:page => params[:page])
     end
      if params.has_key?(:state)
@@ -22,16 +23,16 @@ class MediaController < ApplicationController
        @state = params[:state]
        @inactivemedia = Medium.where(active:0).where(state: params[:state]).paginate(:page => params[:page])
     end
-    
-    if params[:dnis].present?
+
+    if params[:name].present?
        @media = Medium.where(dnis: params[:dnis]).order("updated_at DESC").paginate(:page => params[:page])
-       @dnis = params[:dnis]
+       @name = params[:name]
        @inactivemedia = Medium.where(active:0).where(dnis: params[:dnis]).order("updated_at DESC").paginate(:page => params[:page])
     end
     if params[:name].present?
       @search = params[:name]
       @search = @search.upcase
-      @media = Medium.where("name like ? or ref_name like ?", "#{@search}%", "#{@search}%").order("updated_at DESC").paginate(:page => params[:page])
+      @media = Medium.where("name like ? or ref_name like ?", "%#{@search}%", "%#{@search}%").order("updated_at DESC").paginate(:page => params[:page])
       @inactivemedia = Medium.where(active:0).where("name like ? or ref_name like ?", "#{@search}%", "#{@search}%").order("updated_at DESC").paginate(:page => params[:page])
        @dnis = params[:dnis]
     end

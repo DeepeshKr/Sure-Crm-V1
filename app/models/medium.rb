@@ -4,6 +4,7 @@ class Medium < ActiveRecord::Base
    has_one :corporate
    has_many :campaign_playlist, through: :campaign
    has_many :order_master,  foreign_key: "media_id"
+   has_many :order_line, :through => :order_master
    has_many :media_tape, foreign_key: "media_id"
    has_many :media_cost_master, foreign_key: "media_id"
    has_many :promotion, foreign_key: "media_id"

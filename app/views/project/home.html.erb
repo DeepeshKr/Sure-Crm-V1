@@ -46,11 +46,7 @@
        <div class="panel-heading">Error Upload to Server</div>
 
        <div class="panel-body">
-         <% if logged_in? %>
          <%= render partial: 'app_feature_requests/stage_update', :locals => {:app_feature_requests => @app_upload_errors }  %>
-           <% else %>
-           <h5>You are not logged in</h5>
-        <% end %>
        </div>
      </div>
 
@@ -60,28 +56,19 @@
        <div class="panel-heading">Feature Upload to Server</div>
 
        <div class="panel-body">
-         <% if logged_in? %>
          <%= render partial: 'app_feature_requests/stage_update', :locals => {:app_feature_requests => @app_upload_requests}  %>
-           <% else %>
-           <h5>You are not logged in</h5>
-        <% end %>
        </div>
      </div>
         <!-- New feature upload end -->
     <%  end %>
     <%  end %>
-
+  <% if logged_in? %>
   <!-- New error Requests start -->
   <div class="panel panel-danger">
      <!-- Default panel contents -->
     <div class="panel-heading">Error Requests</div>
-
     <div class="panel-body">
-      <% if logged_in? %>
       <%= render partial: 'app_feature_requests/quick_list', :locals => {:app_feature_requests => @app_feature_errors }  %>
-        <% else %>
-        <h5>You are not logged in</h5>
-     <% end %>
     </div>
   </div>
      <!-- New error Requests end -->
@@ -89,15 +76,46 @@
   <div class="panel panel-info">
      <!-- Default panel contents -->
     <div class="panel-heading">Feature Requests</div>
-
     <div class="panel-body">
-      <% if logged_in? %>
       <%= render partial: 'app_feature_requests/quick_list', :locals => {:app_feature_requests => @app_feature_requests}  %>
-        <% else %>
-        <h5>You are not logged in</h5>
-     <% end %>
     </div>
   </div>
+
+  <% if @app_testing_features.present? %>
+      <%= render partial: 'app_feature_requests/panel_list',
+      :locals => {:app_feature_requests => @app_testing_features,
+        :app_heading => "Testing Required for these Requests"}  %>
+  <% end %>
+  <% if @app_testing_errors.present? %>
+      <%= render partial: 'app_feature_requests/panel_list',
+      :locals => {:app_feature_requests => @app_testing_errors,
+        :app_heading => "Testing Required for these Requests"}  %>
+  <% end %>
+  <% if @app_beta_features.present? %>
+      <%= render partial: 'app_feature_requests/panel_list',
+      :locals => {:app_feature_requests => @app_beta_features,
+        :app_heading => "Released on Staging Server http://3.0.3.26:120 try it before live"}  %>
+  <% end %>
+  <% if @app_beta_errors.present? %>
+      <%= render partial: 'app_feature_requests/panel_list',
+      :locals => {:app_feature_requests => @app_beta_errors,
+        :app_heading => "Released on Staging Server http://3.0.3.26:120 try it before live"}  %>
+  <% end %>
+  <% if @app_completed_features.present? %>
+      <%= render partial: 'app_feature_requests/panel_list',
+      :locals => {:app_feature_requests => @app_beta_features,
+        :app_heading => "Request is now released and live"}  %>
+  <% end %>
+  <% if @app_completed_errors.present? %>
+      <%= render partial: 'app_feature_requests/panel_list',
+      :locals => {:app_feature_requests => @app_beta_errors,
+        :app_heading => "Request is now released and live"}  %>
+  <% end %>
+
+  <!-- not logged in check end -->
+  <% else %>
+  <h5>You are not logged in</h5>
+  <% end %>
      <!-- New feature Requests end -->
      <!-- Pending Tasks start -->
   <div class="panel panel-primary">

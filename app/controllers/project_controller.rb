@@ -7,12 +7,25 @@ class ProjectController < ApplicationController
   def home
     @current_time = (Time.zone.now + 330.minutes)
     if logged_in?
-        @current_user_id = current_user.id 
+      already_covered = [10008, 10010, 10012]
+        @current_user_id = current_user.id
         @empcode = current_user.employee_code
         @employee_id = Employee.where(employeecode: @empcode).first.id
 
-        @app_feature_requests = AppFeatureRequest.where(request_by: @employee_id, app_feature_type_id: 10000)
-        @app_feature_errors = AppFeatureRequest.where(request_by: @employee_id, app_feature_type_id: 10001)
+        @all_app_requests = AppFeatureRequest.where(request_by: @employee_id)
+
+        @app_feature_requests = @all_app_requests.where(app_feature_type_id: 10000).where.not(current_status_id: already_covered)
+        @app_feature_errors = @all_app_requests.where(app_feature_type_id: 10001).where.not(current_status_id: already_covered)
+
+        #testing
+        @app_testing_features = @all_app_requests.where(app_feature_type_id: 10000, current_status_id: 10008)
+        @app_testing_errors = @all_app_requests.where(app_feature_type_id: 10001, current_status_id: 10008)
+        #staging
+        @app_beta_features = @all_app_requests.where(app_feature_type_id: 10000, current_status_id: 10010)
+        @app_beta_errors = @all_app_requests.where(app_feature_type_id: 10001, current_status_id: 10010)
+        #live
+        @app_completed_features = @all_app_requests.where(app_feature_type_id: 10000, current_status_id: 10012)
+        @app_completed_errors = @all_app_requests.where(app_feature_type_id: 10001, current_status_id: 10012)
 
        if current_user.role == 10022 || current_user.role == 10162
          @app_upload_requests = AppFeatureRequest.where(app_feature_type_id: 10000, current_status_id: 10010)

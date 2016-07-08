@@ -1,0 +1,55 @@
+<% if @sales_ppos.present? %>
+<table class="table table-hover table-stripped table-bordered">
+  <thead>
+    <tr>
+	  <th>SNo </th>
+      <th>Ref Id</th>
+	    <th>Order no</th>
+      <th class="text-right">Pieces</th>
+      <th class="text-right">Product Cost</th>
+      <th class="text-right">Damages</th>
+      <th class="text-right">Returns</th>
+      <th class="text-right">Shipping</th>
+      <th class="text-right">Commission <br><small><small>Variable</small></small></th>
+      <th class="text-right">Calculation</th>
+      <th class="text-right">Percent / Agent</th>
+      <th class="text-right">Commission <br><small><small>On Order</small></small></th>
+      <th class="text-right">Calculation</th>
+      <th class="text-right">Percent / Agent</th>
+    </tr>
+  </thead>
+ <% @sno= 1 %>
+  <tbody>
+    <% @sales_ppos.each do |sales_ppo| %>
+      <tr>
+		    <td> <%= @sno %> </td>
+        <td><%= sales_ppo.id %></td>
+		    <td><%= sales_ppo.order_id %></td>
+        <td class="text-right"><%= sales_ppo.pieces %></td>
+        <td class="text-right"><%= sales_ppo.product_cost %></td>
+        <td class="text-right"><%= sales_ppo.damages %></td>
+        <td class="text-right"><%= sales_ppo.returns %></td>
+        <td class="text-right"><%= sales_ppo.shipping_cost %></td>
+        <td class="text-right"><%= sales_ppo.commission_cost %></td>
+        <td class="text-right"><%= OrderLine.find(sales_ppo.order_line_id).variable_media_commission.to_i %></td>
+        <td class="text-right">
+          <%= OrderLine.find(sales_ppo.order_line_id).variable_media_commision_percent.round(3) %> <br>
+          <%= OrderLine.find(sales_ppo.order_line_id).variable_media_agent_commision_percent.round(3) %>
+        </td>
+        <td class="text-right"><%= sales_ppo.commission_on_order %></td>
+        <td class="text-right"><%= OrderLine.find(sales_ppo.order_line_id).fixed_media_commission.to_i %></td>
+        <td class="text-right">
+          <%= OrderLine.find(sales_ppo.order_line_id).fixed_media_commision_percent.round(3) %><br>
+          <%= OrderLine.find(sales_ppo.order_line_id).fixed_media_agent_commision_percent.round(3) %>
+        </td>
+
+
+      </tr>
+	   <% @sno += 1 %>
+    <% end %>
+  </tbody>
+</table>
+<% else %>
+
+<h4>No details found in PPO table </h4>
+<% end %>

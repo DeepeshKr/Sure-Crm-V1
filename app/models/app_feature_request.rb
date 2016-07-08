@@ -25,9 +25,46 @@ class AppFeatureRequest < ActiveRecord::Base
   def schedule
     return nil if self.require_by_date.blank?
     check_date = Date.today + 330.minutes
-    check_date = self.estimated_completion_date if self.estimated_completion_date.blank?
+    #check_date = self.estimated_completion_date if self.estimated_completion_date.present?
     return "On Time in " if self.require_by_date >= check_date
     return "Delayed by " if self.require_by_date < check_date
   end
+
+  def working_schedule
+    return nil if self.estimated_completion_date.blank?
+    check_date = self.estimated_completion_date
+    return "On Time in " if self.require_by_date >= check_date
+    return "Is delayed by " if self.require_by_date < check_date
+  end
+
+  def completion_schedule
+    return nil if self.actual_completion_date.blank?
+    check_date = self.actual_completion_date
+    return "On Time in " if self.require_by_date >= check_date
+    return "Was delayed by " if self.require_by_date < check_date
+  end
+
+  def update_date
+  #10010 Feature in beta live
+    if (self.current_status_id == 10010)
+      current_time = (Time.zone.now + 330.minutes)
+      self.update(actual_completion_date: current_time)
+    end
+  end
+
+#after_update :update_date
+
+private
+
+
+
+def do_bug_count
+
+end
+
+def do_comment_count
+
+end
+
 
 end

@@ -1,0 +1,34 @@
+<% if app_feature_requests.present? %>
+<div class="panel panel-primary">
+   <!-- Default panel contents -->
+  <div class="panel-heading"><%= app_heading %></div>
+
+  <div class="panel-body">
+
+    <table class="table table-hover table-stripped">
+      <thead>
+        <th>Name</th>
+        <th>Require by</th>
+        <th>Employee</th>
+        <th>Status</th>
+        <th>Pace</th>
+        <th> </th>
+      </thead>
+      <tbody>
+        <% app_feature_requests.each do |app_feature_request| %>
+          <tr>
+            <td><%= app_feature_request.name %></td>
+            <td><%= app_feature_request.require_by_date.strftime('%d-%b-%y') if app_feature_request.require_by_date %><br>
+  <%= app_feature_request.schedule %>
+              <%= distance_of_time_in_words((app_feature_request.require_by_date + 330.minutes), @current_time) || "NA" if app_feature_request.require_by_date.present? %></td>
+            <td><%= app_feature_request.employee.fullname %></td>
+            <td><%= app_feature_request.app_status.name if app_feature_request.app_status %></td>
+            <td><%= app_feature_request.app_velocity.name if app_feature_request.app_velocity %></td>
+            <td><%= link_to 'Show', app_feature_request, class: "btn btn-info btn-xs" %></td>
+          </tr>
+          <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>
+<% end %>

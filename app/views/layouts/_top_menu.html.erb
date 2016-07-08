@@ -43,19 +43,19 @@
 		      <li><%= link_to "Sales Summary Report", "/sales_reports" , data: { confirm: 'All the reports are listed here' } %></li>
 
              <li><%= link_to "EOD Sales Report HBN", "/channel_consolidated_daily_report?source=hbn" , data: { confirm: 'This is new HBN EOD report!' } %></li>
-              <li><%= link_to "EOD Sales Report Pvt", "/channel_consolidated_daily_report?source=pvt" , data: { confirm: 'This is new Pvt EOD report!' } %></li>
-			  <li><%= link_to "Sales Incentive Rates", "/sales_incentives" %></li>
-			  <% end %>
+            <li><%= link_to "EOD Sales Report Pvt", "/channel_consolidated_daily_report?source=pvt" , data: { confirm: 'This is new Pvt EOD report!' } %></li>
+			      <li><%= link_to "Sales Incentive Rates", "/sales_incentives" %></li>
+			     <% end %>
 
-              <% if (current_user.employee_role.sortorder < 5) %>
-               <li><%= link_to "PPO Report", "/ppo_report" , data: { confirm: 'This Report Will take some time to show, please dont refresh!'} %></li>
+        <% if (current_user.employee_role.sortorder < 5) %>
+         <li><%= link_to "PPO Report", "/ppo_report" , data: { confirm: 'This Report Will take some time to show, please dont refresh!'} %></li>
 			   <li><%= link_to "New PPO Report", "/sales_ppos" , data: { confirm: 'This is the NEW Report and more accurate, please dont refresh!'} %></li>
 			   <li><%= link_to "Return Rates", "/return_rates" %></li>
 			   <li><%= link_to "Default Rates", "/sales_ppo_defaults" %></li>
-               <li><%= link_to "PPO Report (Test Products)", "/product_test_ppos" %></li>
+         <li><%= link_to "PPO Report (Test Products)", "/product_test_ppos" %></li>
 			   <li><%= link_to "Check of PPO details", "/sales_ppos/show_all" %></li>
-				 <li><%= link_to "Daily Tasks", "/daily_tasks" %></li>
-            <% end %>
+				 <li><%= link_to "Employee Incentives", "/employee_incentives/index" %></li>
+        <% end %>
 
 
             <% if (current_user.employee_role.sortorder < 5) %>

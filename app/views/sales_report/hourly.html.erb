@@ -16,6 +16,8 @@
       <th class="text-right">No</th>
       <th class="text-right">Start Time</th>
       <th class="text-right">End Time</th>
+      <th class="text-right">Pay U Orders</th>
+      <th class="text-right">Pay U Value</th>
       <th class="text-right">CC Orders</th>
       <th class="text-right">CC Value</th>
       <th class="text-right">COD Orders</th>
@@ -29,31 +31,19 @@
    <% @employeeorderlist.each do |c| %>
    <tr>
    <td><%= @sno %></td>
-
- <td><%= c[:starttime] %></td>
- <td><%= c[:endtime] %></td>
-<td class="text-right">
-   <%= c[:ccorders] %>
-</td>
-<td class="text-right">
-   <%= c[:ccvalue] %>
-</td>
-<td class="text-right">
-   <%= c[:codorders] %>
-</td>
-<td class="text-right">
-   <%= c[:codvalue] %>
-</td>
-
-<td class="text-right">
-   <%= c[:nos] %>
-</td>
-<td class="text-right">
-   <%= c[:total] %>
-</td>
-<td>
-  <%= link_to "Details", hourly_products_path(from_date: c[:start_time], to_date: c[:end_time]), :target => "_blank", class: "btn btn-primary btn-sm" %>
-</td>
+   <td><%= c[:starttime] %></td>
+   <td><%= c[:endtime] %></td>
+   <td class="text-right"><%= c[:pay_u_orders] %></td>
+   <td class="text-right"><%= c[:pay_u_value] %></td>
+  <td class="text-right"><%= c[:ccorders] %></td>
+  <td class="text-right"><%= c[:ccvalue] %></td>
+  <td class="text-right"><%= c[:codorders] %></td>
+  <td class="text-right"><%= c[:codvalue] %></td>
+  <td class="text-right"><%= c[:nos] %></td>
+  <td class="text-right"> <%= c[:total] %></td>
+  <td><%= link_to "Details", hourly_products_path(from_date: c[:start_time], to_date: c[:end_time]),
+  :target => "_blank", class: "btn btn-primary btn-xs" %>
+  </td>
   </tr>
   <% @sno += 1 %>
  <% end %>

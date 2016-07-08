@@ -1,5 +1,5 @@
-<% if @employeeunorderlist.present? %>
-<table class="table table-bordered"> 
+<% if @daily_task_ppo_status.present? %>
+<table class="table table-bordered">
 	 <thead>
 	    <tr>
 			<th>Date</th>
@@ -10,7 +10,7 @@
 		</tr>
 	 </thead>
 	 <tbody>
-	     <% @employeeunorderlist.each do |c| %>
+	     <% @daily_task_ppo_status.each do |c| %>
 	    <tr>
 			<td><%= c[:for_date] %></td>
 			<td><%= c[:total_orders] %></td>
@@ -19,6 +19,6 @@
 			<td><%= c[:difference] %></td>
 		</tr>
 		<% end %>
-	</tbody>	 
+	</tbody>
 </table>
 <% end %>

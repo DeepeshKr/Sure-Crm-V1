@@ -6,6 +6,7 @@
 	<li class="active"><a data-toggle="tab" href="#new">New</a></li>
 	<li><a data-toggle="tab" href="#queue">Queue</a></li>
 	<li><a data-toggle="tab" href="#working">Working</a></li>
+	<li><a data-toggle="tab" href="#test">Testing</a></li>
 	<li><a data-toggle="tab" href="#beta">Staging</a></li>
 	<li><a data-toggle="tab" href="#delayed">Delayed</a></li>
 	<li><a data-toggle="tab" href="#others">Others</a></li>
@@ -57,6 +58,22 @@
 				<div class="col-xs-12">
 					<%= render partial: 'home_index', :locals => {:name_of_status_list => "Working Errors",
 						:app_feature_requests => @app_working_errors, :about_the_list => "Footer with details" }  %>
+				</div>
+			</div>
+		</div>
+
+		<div id="test" class="tab-pane fade">
+			<div class="row">
+				<div class="col-xs-12">
+					 <%= render partial: 'home_index', :locals => {:name_of_status_list => "Testing Features",
+						 :app_feature_requests => @app_testing_features, :about_the_list => "Footer with details" }  %>
+				</div>
+			</div>
+
+			<div class="row">
+				<div class="col-xs-12">
+					<%= render partial: 'home_index', :locals => {:name_of_status_list => "Testing Errors",
+						:app_feature_requests => @app_testing_errors, :about_the_list => "Footer with details" }  %>
 				</div>
 			</div>
 		</div>

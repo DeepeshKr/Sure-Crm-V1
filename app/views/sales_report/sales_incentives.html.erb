@@ -8,12 +8,12 @@
 		 <h3><%= @employee_name %> Incentives</h3>
    	 </div>
    	 <div class="col-xs-6">
-		 
+
 		 <div class="row">
 		   <%= form_tag  url_for(:controller => 'sales_report', :action => "sales_incentives"), method: "get" do  %>
     	   		<%= hidden_field_tag :show_for, @show_for %>
 				<%= hidden_field_tag :employee_id, @employee_id %>
-			
+
 		       <div class="col-xs-8">
 		         <div class="input-daterange input-group">
 		           <%= text_field_tag(:from_date, @from_date, :data => {:provide => "datepicker"}, :id => "datepicker_from", :class => "form-control", :required => "true" )   %>
@@ -44,22 +44,22 @@
 				<p class="lead">Employee Incentives from <%= @from_date %> to <%= @to_date %></p>
 			</div>
    	   <%= form_tag  url_for(:controller => 'sales_report', :action => 'sales_incentives'), method: "get" do  %>
-	
+
    			<%= hidden_field_tag :from_date, @from_date %>
    			<%= hidden_field_tag :to_date, @to_date %>
    			<%= hidden_field_tag :show_for, "Employee" %>
-	
+
 			<div class="col-xs-4">
 			  <%= select_tag :employee_id,  options_from_collection_for_select(@sales_agents,
 			 :id, :employee_name, selected: @employee_id ),
 			      {:class => "form-control", label: "Select the Product if required ", required: true }  %>
 			</div>
-			<div class="col-xs-2"><%= submit_tag "Show", name: nil, class: "btn btn-primary" %></div>			
+			<div class="col-xs-2"><%= submit_tag "Show", name: nil, class: "btn btn-primary" %></div>
    		<% end %>
 		  </div>
 		 </div>
 	 </div>
-	 
+
  	<% if @show_results == "true" %>
  	<!-- New Report -->
  	<div class="row">
@@ -67,22 +67,49 @@
  	    <%= render partial: 'one_new_report', :locals => {:employeesales => @employee_sales}  %>
  	  </div>
  	</div>
+  <div class="panel panel-primary">
+    <div class="panel-body">
+      <table class="table table-hover table-bordered">
+        <tr><td>Source</td><td>Sales </td><td>Nos </td>
+          <td>Transfer Orders</td><td>Nos </td>
+          <td> Refunds</td> <td>Nos </td>
+          <td>Total Nos</td>
+          <td>Total Value</td>
+        </tr>
+        <tr><td>Old</td>
+          <td><%= @total_sales_value %> </td><td><%= @total_sales_nos %> </td>
+          <td> <%= @total_transfer_value %></td><td><%= @total_transfer_nos %> </td>
+          <td> <%= @total_refunds_value %></td> <td><%= @total_refunds_nos %></td> </td>
+          <td> <%= @total_sales_nos + @total_transfer_nos + @total_refunds_nos %> </td>
+          <td><%= @total_sales_value + @total_transfer_value + @total_refunds_value %> </td>
+        </tr>
+        <tr><td>New</td>
+          <td><%= @total_sales_value_s %> </td><td><%= @total_sales_nos_s %> </td>
+          <td> <%= @total_transfer_value_s %></td><td><%= @total_transfer_nos_s %> </td>
+          <td> <%= @total_refunds_value_s %></td> <td><%= @total_refunds_nos_s %></td> </td>
+          <td> <%= @total_sales_nos_s + @total_transfer_nos_s + @total_refunds_nos_s %> </td>
+          <td> <%= @total_sales_value_s + @total_transfer_value_s + @total_refunds_value_s %></td>
+        </tr>
+      </table>
+    </div>
+ </div>
+
  	<% end %>
-	
+
      <div class="panel panel-info">
 		<div class="panel-body">
 			<div class="row">
 			<div class="col-xs-8">
 				<p class="lead">Floor Managers Incentives from <%= @from_date %> to <%= @to_date %></p>
 			</div>
-   	   			
+
    				<div class="col-xs-4">
-   				 <%= link_to 'View Floor Manager Report', sales_report_sales_incentives_path(show_for: "Supervisor", from_date: @from_date, to_date: @to_date), type:"button", class: "btn btn-primary btn-sm", data: { confirm: "The Sales Supervisor Report is getting generated from #{@from_date} to #{@to_date} and usually takes about 5 min or so, please be patient" } %> 
+   				 <%= link_to 'View Floor Manager Report', sales_report_sales_incentives_path(show_for: "Supervisor", from_date: @from_date, to_date: @to_date), type:"button", class: "btn btn-primary btn-sm", data: { confirm: "The Sales Supervisor Report is getting generated from #{@from_date} to #{@to_date} and usually takes about 5 min or so, please be patient" } %>
    				</div>
-   				
+
 		  </div>
 		  </div>
-	 </div>	  
+	 </div>
 	<% if @show_supervisor == "true" %>
 	<!-- New Report -->
 	<div class="row">
@@ -90,23 +117,25 @@
 	    <%= render partial: 'one_new_report', :locals => {:employeesales => @employee_sales_1}  %>
 	  </div>
 	</div>
+
+
 	<% end %>
-	
+
      <div class="panel panel-info">
   		<div class="panel-body">
   			<div class="row">
   			<div class="col-xs-8">
   			<p class="lead">Ops Managers Incentives from <%= @from_date %> to <%= @to_date %> </p>
   			</div>
-   	   			
+
      				<div class="col-xs-4">
-			         	<%= link_to 'View Ops Manager Report', sales_report_sales_incentives_path(show_for: "Manager", from_date: @from_date, to_date: @to_date), type:"button", class: "btn btn-primary btn-sm", data: { confirm: "The Ops Manager Report is getting generated from #{@from_date} to #{@to_date} and usually takes about 5 min or so, please be patient" } %> 
+			         	<%= link_to 'View Ops Manager Report', sales_report_sales_incentives_path(show_for: "Manager", from_date: @from_date, to_date: @to_date), type:"button", class: "btn btn-primary btn-sm", data: { confirm: "The Ops Manager Report is getting generated from #{@from_date} to #{@to_date} and usually takes about 5 min or so, please be patient" } %>
      				</div>
-   				
+
   		  </div>
   		  </div>
   	  </div>
-	  
+
   	<% if @show_manager == "true" %>
   	<!-- New Report -->
   	<div class="row">
@@ -116,19 +145,19 @@
   	</div>
 
   	<% end %>
-  	  
- </div>
-	
 
-	  	 	
+ </div>
+
+
+
 	<!-- exec end-->
 	<!-- super start-->
-	  		
 
-	  	 	
-			
 
-	  	 	
+
+
+
+
 <script>
 $('#datepicker_to').datepicker({format: 'yyyy-mm-dd'});
 $('#datepicker_from').datepicker({format: 'yyyy-mm-dd'});

@@ -77,6 +77,12 @@
  </div>
 </div>
  <br>
+<div class="panel panel-primary">
+   <!-- Default panel contents -->
+  <div class="panel-heading">PPO Status => Pay U Pending Orders: <%= @pay_u_order_count %> of Value: <%= @pay_u_order_value %> </div>
+		<%= render partial: 'daily_tasks/order_to_ppo'  %>
+</div>
+ <br>
 
 <%= render partial: 'recreate_ppo'  %>
 <!-- :locals => {:order_lines =>  @order_lines_common,

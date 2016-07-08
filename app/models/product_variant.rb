@@ -39,9 +39,13 @@ after_save :updator
    def productdetails
      self.name + " -- Basic: Rs." + (self.price.to_s ||= 'No Price') + " -- Total: Rs."  + (self.total.to_s ||= 'No Price') + " :(#{self.id})"
    end
-   
+
   def get_product_value
     total = (self.price.to_f  * 0.888889 + self.shipping.to_f * 0.98125).to_i
+  end
+
+  def calculate_product_total
+      self.total = self.price +self.taxes + self.shipping
   end
 private
   def create_product_cost_master

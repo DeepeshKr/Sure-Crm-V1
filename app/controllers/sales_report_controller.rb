@@ -1138,36 +1138,16 @@ class SalesReportController < ApplicationController
            halfhourago = Time.at(date - 30.minutes)
 
 
-            orderlist = OrderMaster.where('ORDER_STATUS_MASTER_ID > 10002')
+            orderlist = OrderMaster.where('ORDER_STATUS_MASTER_ID > 10000')
             .where.not(ORDER_STATUS_MASTER_ID: @cancelled_status_id)
+            .joins(:medium).where("media.media_group_id = 10000")
             .where('orderdate >= ? AND orderdate <= ?', halfhourago, Time.at(date))
-            #.joins(:medium).where("media.media_group_id = 10000")
 
-            # orderlists = OrderMaster.where('ORDER_STATUS_MASTER_ID > 10002').where('ORDER_STATUS_MASTER_ID <> 10006')
-            # .where('orderdate >= ? AND orderdate <= ?', halfhourago, Time.at(date))
-
-
-            #halfhourlist ||= []
-              #  orderlists.each do |order_list|
-              #     campaign_name = order_list.campaign_playlist.playlist_details + " " + order_list.campaign_playlist.starttime if order_list.campaign_playlist
-               #
-              #     products = ""
-              #     #cats.each do |cat| cat.name end
-              #     if order_list.order_line.present?
-              #       #products = o.order_line.each(&:description)
-              #       order_list.order_line.each do |ord| products << ord.description end
-              #     end
-              #     order_time = (order_list.orderdate + 300.minutes).strftime("%H:%M")
-              #       halfhourlist << {
-              #         :campaign => campaign_name,
-              #         :products => products,
-              #         :order_time => order_time,
-              #         :order_id => order_list.external_order_no
-              #          }
-              #  end
 
             ccvalue = orderlist.where(orderpaymentmode_id: 10000).sum(:total)
             ccorders = orderlist.where(orderpaymentmode_id: 10000).count()
+            pay_u_value = orderlist.where(orderpaymentmode_id: 10080).sum(:total)
+            pay_u_orders = orderlist.where(orderpaymentmode_id: 10080).count()
             codorders = orderlist.where(orderpaymentmode_id: 10001).count()
             codvalue = orderlist.where(orderpaymentmode_id: 10001).sum(:total)
             totalorders = orderlist.sum(:total)
@@ -1177,9 +1157,13 @@ class SalesReportController < ApplicationController
             :endtime => Time.at(date).strftime("%d-%b %H:%M %p"),
             :start_time => (halfhourago - 330.minutes).strftime("%Y-%m-%d %H:%M"),
             :end_time => (Time.at(date) - 330.minutes).strftime("%Y-%m-%d %H:%M"),
-            :nos => noorders, :codorders => codorders,
+            :nos => noorders,
+            :codorders => codorders,
             :codvalue => codvalue,
-            :ccorders => ccorders, :ccvalue => ccvalue  }
+            :ccorders => ccorders,
+            :ccvalue => ccvalue,
+            :pay_u_orders => pay_u_orders,
+            :pay_u_value => pay_u_value}
           end
          @employeeorderlist = employeeunorderlist #.sort_by{|c| c[:total]}.reverse
 
@@ -1227,8 +1211,9 @@ class SalesReportController < ApplicationController
          halfhourago = Time.at(date - 30.minutes)
 
 
-          orderlists = OrderMaster.where('ORDER_STATUS_MASTER_ID > 10002')
+          orderlists = OrderMaster.where('ORDER_STATUS_MASTER_ID > 10000')
           .where.not(ORDER_STATUS_MASTER_ID: @cancelled_status_id)
+          .joins(:medium).where("media.media_group_id = 10000")
           .where('orderdate >= ? AND orderdate <= ?', halfhourago, Time.at(date))
           #.joins(:medium).where("media.media_group_id = 10000")
 
@@ -1312,7 +1297,7 @@ class SalesReportController < ApplicationController
     if params.has_key?(:to_date)
        @to_date =  DateTime.strptime(params[:to_date], "%Y-%m-%d %H:%M")
     end
-    @order_masters = OrderMaster.where('ORDER_STATUS_MASTER_ID > 10002')
+    @order_masters = OrderMaster.where('ORDER_STATUS_MASTER_ID > 10000')
     .where.not(ORDER_STATUS_MASTER_ID: @cancelled_status_id)
     .joins(:medium).where("media.media_group_id = 10000")
     .where("orderdate >= ? AND orderdate <= ?",@from_date, @to_date)
@@ -1378,41 +1363,51 @@ class SalesReportController < ApplicationController
         end
 
         order_masters = OrderMaster.where('orderdate >= ? AND orderdate <= ?', @from_date, @to_date)
-                .where('ORDER_STATUS_MASTER_ID > 10002')
+                .where('ORDER_STATUS_MASTER_ID > 10000')
                 .where.not(ORDER_STATUS_MASTER_ID: @cancelled_status_id)
 
 
         if params.has_key?(:show)
            @show = params[:show]
-          case @show # a_variable is the variable we want to compare
-            when "all"    #compare to 1
+         else
+           @show = "all"
+        end
 
-              # order_masters = order_masters.select(:id).distinct
-              # order_masters_cod = order_masters_cod.select(:id).distinct
-              # order_masters_cc= order_masters_cc.select(:id).distinct
-              # order_masters_payu = order_masters_payu.select(:id).distinct
-              @btn1 = "btn btn-success"
-              @message = "Showing all "
-            when "hbn"    #compare to 2
-              @show = "hbn"
-              hbn_order_masters = order_masters.joins(:medium).where("media.media_group_id = 10000").select(:media_id, :city).distinct
-              order_masters_cod = order_masters_cod.joins(:medium).where("media.media_group_id = 10000")
-              order_masters_cc= order_masters_cc.joins(:medium).where("media.media_group_id = 10000")
-              order_masters_payu = order_masters_payu.joins(:medium).where("media.media_group_id = 10000")
-              @btn2 = "btn btn-success"
-              @message = "Showing all HBN"
-            when "pvt"
-              @show = "pvt"
-              paid_order_masters = order_masters.joins(:medium).where("media.media_group_id IS NULL")
-              order_masters_cod = order_masters_cod.joins(:medium).where("media.media_group_id IS NULL")
-              order_masters_cc= order_masters_cc.joins(:medium).where("media.media_group_id IS NULL")
-              order_masters_payu = order_masters_payu.joins(:medium).where("media.media_group_id IS NULL")
-              @btn3 = "btn btn-success"
-              @message = "Showing all Pvt"
-            else
-              @orderdate =  "Wrong Selection made"
-          end
-        end #params.has_key?(:show)
+      case @show # a_variable is the variable we want to compare
+        when "all"    #compare to 1
+          hbn_order_masters = order_masters.joins(:medium).select(:media_id, :city).distinct
+          paid_order_masters = order_masters.joins(:medium)
+          other_order_masters = order_masters.joins(:medium)
+          # order_masters = order_masters.select(:id).distinct
+          # order_masters_cod = order_masters_cod.select(:id).distinct
+          # order_masters_cc= order_masters_cc.select(:id).distinct
+          # order_masters_payu = order_masters_payu.select(:id).distinct
+          @btn1 = "btn btn-success"
+          @message = "Showing all "
+        #  @orderdate = "Showing all "
+        when "hbn"    #compare to 2
+          @show = "hbn"
+          hbn_order_masters = order_masters.joins(:medium).where("media.media_group_id = 10000").select(:media_id, :city).distinct
+          order_masters_cod = order_masters_cod.joins(:medium).where("media.media_group_id = 10000")
+          order_masters_cc= order_masters_cc.joins(:medium).where("media.media_group_id = 10000")
+          order_masters_payu = order_masters_payu.joins(:medium).where("media.media_group_id = 10000")
+          @btn2 = "btn btn-success"
+          @message = "Showing all HBN"
+        #  @orderdate = "Showing all HBN"
+        when "pvt"
+          @show = "pvt"
+          hbn_order_masters = order_masters.joins(:medium).where("media.media_group_id IS NULL").select(:media_id, :city).distinct
+          paid_order_masters = order_masters.joins(:medium).where("media.media_group_id IS NULL")
+          order_masters_cod = order_masters_cod.joins(:medium).where("media.media_group_id IS NULL")
+          order_masters_cc= order_masters_cc.joins(:medium).where("media.media_group_id IS NULL")
+          order_masters_payu = order_masters_payu.joins(:medium).where("media.media_group_id IS NULL")
+          @btn3 = "btn btn-success"
+          @message = "Showing all Pvt"
+        #  @orderdate = "Showing all Pvt"
+        else
+          @orderdate =  "Wrong Selection made"
+      end
+     #params.has_key?(:show)
 
     #
     #         # hbn_order_masters = OrderMaster.where('orderdate >= ? AND orderdate <= ?', @from_date, @to_date)
@@ -1432,20 +1427,19 @@ class SalesReportController < ApplicationController
     #         .select(:media_id, :city).distinct
     #
         total_hbn_order_masters = OrderMaster.where('orderdate >= ? AND orderdate <= ?', @from_date, @to_date)
-        .where('ORDER_STATUS_MASTER_ID > 10002')
+        .where('ORDER_STATUS_MASTER_ID > 10000')
         .where.not(ORDER_STATUS_MASTER_ID: @cancelled_status_id)
          .joins(:medium).where("media.media_group_id = 10000")
 
         total_paid_order_masters = OrderMaster.where('orderdate >= ? AND orderdate <= ?', @from_date, @to_date)
-        .where('ORDER_STATUS_MASTER_ID > 10002')
+        .where('ORDER_STATUS_MASTER_ID > 10000')
         .where.not(ORDER_STATUS_MASTER_ID: @cancelled_status_id)
         .joins(:medium).where("media.media_group_id IS NULL")
 
         total_other_order_masters = OrderMaster.where('orderdate >= ? AND orderdate <= ?', @from_date, @to_date)
-        .where('ORDER_STATUS_MASTER_ID > 10002')
+        .where('ORDER_STATUS_MASTER_ID > 10000')
         .where.not(ORDER_STATUS_MASTER_ID: @cancelled_status_id)
         .where(media_id: @others)
-
 
 
         hbn_order_list ||= []
@@ -1539,7 +1533,7 @@ class SalesReportController < ApplicationController
         @from_date = (@from_date + 330.minutes).strftime("%Y-%m-%d")
         @to_date = (@to_date + 330.minutes).strftime("%Y-%m-%d")
 
-         @orderdate = "Orders for #{@from_date} to #{@to_date}: HBN Channel #{total_hbn_order_masters.count} for Rs. #{total_hbn_order_masters.sum(:total)}, Paid channels #{total_paid_order_masters.count} for Rs. #{total_paid_order_masters.sum(:total)} and Free Channel #{total_other_order_masters.count} for Rs. #{total_other_order_masters.sum(:total)}!"
+        #  @orderdate = "Orders for #{@from_date} to #{@to_date}: HBN Channel #{total_hbn_order_masters.count} for Rs. #{total_hbn_order_masters.sum(:total)}, Paid channels #{total_paid_order_masters.count} for Rs. #{total_paid_order_masters.sum(:total)} and Free Channel #{total_other_order_masters.count} for Rs. #{total_other_order_masters.sum(:total)}!"
 
           respond_to do |format|
           csv_file_name = "channel_sales_#{@or_for_date}.csv"
@@ -1732,6 +1726,7 @@ class SalesReportController < ApplicationController
   end
 
   def product_sold
+    @sno = 0
       @ordersearch = "No Products sold for the period / day"
        @product_master = ProductMaster.where(productactivecodeid: 10000).order('name') #.limit(10)
     if params[:from_date].present?
@@ -1753,7 +1748,7 @@ class SalesReportController < ApplicationController
           @product_master_id = params[:product_master_id]
           sold_product_list = OrderLine.where('order_lines.orderdate >= ? and order_lines.orderdate <= ?', @from_date, @to_date)
           .where(product_master_id: @product_master_id).joins(:order_master)
-          .where('ORDER_MASTERS.ORDER_STATUS_MASTER_ID > 10002')
+          .where('ORDER_MASTERS.ORDER_STATUS_MASTER_ID > 10000')
           .where.not('order_masters.ORDER_STATUS_MASTER_ID IN (10040, 10006, 10008)')#.limit(10)
           #.uniq.pluck(:orderid)
           product_name = ProductMaster.find(@product_master_id).name
@@ -1940,9 +1935,40 @@ class SalesReportController < ApplicationController
         flash[:error] = "Please select the employee to view the details"
         return
       end
-        @employee_name = Employee.find(@employee_id).fullname
+        @employee = Employee.find(@employee_id)
+        @employee_name = @employee.fullname
+        @employeecode = @employee.employeecode
         employee_sale = EmployeeSales.new
         @employee_sales = employee_sale.sales_data @from_date, @to_date, @employee_id
+
+        #employeecode
+        @total_sales_value = VPP.where("operator = ? and paiddate >= ? and paiddate <= ? and cfo is null and custref IS NOT NULL", @employeecode, @from_date, @to_date).sum(:basic)
+        @total_sales_nos = VPP.where("operator = ? and paiddate >= ? and paiddate <= ? and cfo is null and custref IS NOT NULL", @employeecode, @from_date, @to_date).count
+
+        @total_transfer_value = DEALTRAN.where("status = ? and operator = ? and statusdate >= ? and statusdate <= ?","D", @employeecode, @from_date, @to_date).sum(:basicprice)
+        @total_transfer_nos = DEALTRAN.where("status = ? and operator = ? and statusdate >= ? and statusdate <= ?","D", @employeecode, @from_date, @to_date).count
+
+        @total_refunds_value = VPP.where("operator = ? and refunddate >= ? and refunddate <= ? and custref IS NOT NULL",  @employeecode, @from_date, @to_date).sum(:basic)
+        @total_refunds_nos = VPP.where("operator = ? and refunddate >= ? and refunddate <= ? and custref IS NOT NULL",  @employeecode, @from_date, @to_date).count
+
+
+        @total_sales_value_s = OrderMaster.where('paid_date >= ? AND paid_date <= ?', @from_date, @to_date)
+        .where(employee_id: @employee_id).where.not(order_status_master_id: 10041).sum(:subtotal)
+        @total_sales_nos_s = OrderMaster.where('paid_date >= ? AND paid_date <= ?', @from_date, @to_date)
+        .where(employee_id: @employee_id).where.not(order_status_master_id: 10041).count
+        #order_status_master_id, 10041
+
+        @total_transfer_value_s = OrderMaster.where('paid_date >= ? AND paid_date <= ?', @from_date, @to_date)
+        .where(employee_id: @employee_id).where(order_status_master_id: 10041).sum(:subtotal)
+        @total_transfer_nos_s = OrderMaster.where('paid_date >= ? AND paid_date <= ?', @from_date, @to_date)
+        .where(employee_id: @employee_id).where(order_status_master_id: 10041).count
+
+        @total_refunds_value_s = OrderMaster.where('refund_date >= ? AND refund_date <= ?', @from_date, @to_date)
+        .where(employee_id: @employee_id).sum(:subtotal)
+        @total_refunds_nos_s = OrderMaster.where('refund_date >= ? AND refund_date <= ?', @from_date, @to_date)
+        .where(employee_id: @employee_id).count
+
+        # b where a. = b.operator and a.oper_no > 42 and b. >= '" & mfrom & "' and b.paiddate <= '" & mto & "' and cfo is null order by a.name
         # @employee_sales_2 = employee_sale.sales_data @month_2, @employee_id
         # @employee_sales_3 = employee_sale.sales_data @month_3, @employee_id
         # @employee_sales_4 = employee_sale.sales_data @month_4, @employee_id

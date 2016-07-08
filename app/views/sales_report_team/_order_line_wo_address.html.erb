@@ -1,0 +1,65 @@
+<% if @order_lines.present? %>
+<table class="table table-hover table-bordered">
+  <thead>
+  <tr>
+    <th>S No</th>
+    <th>Ref No</th>
+    <th>Order date</th>
+    <th>Payment / Status</th>
+    <th>Customer <br> City</th>
+    <th>State</th>
+    <th>Product</th>
+    <th>Media</th>
+    <th>Sub Total</th>
+    <th>P H</th>
+  </tr>
+  </thead>
+
+  <tbody>
+  <% @sno = 1 %> <% totalnos = 0 %> <% totalvalue = 0 %>
+    <% @order_lines.each do |order_line| %>
+    <tr>
+    <td><%= @sno %> </td>
+    <td><%= order_line.order_master.external_order_no %> <br>
+    <%= link_to order_line.order_master.id, order_masters_review_path(order_id: order_line.order_master.id), class:"btn btn-info btn-xs" %> </td>
+    <td> <%= (order_line.order_master.orderdate + 330.minutes).strftime('%d-%b-%Y') %> <br>
+  T:  <%= (order_line.order_master.orderdate + 330.minutes).strftime('%H:%M') %> </td>
+    <td> <%= order_line.order_master.orderpaymentmode.name if order_line.order_master.orderpaymentmode %>
+      <small><%= order_line.order_master.order_status_master.name %></small>
+    </td>
+    <td><small>  <%= order_line.order_master.customer.first_name if order_line.order_master.customer %>
+      <%= order_line.order_master.customer.last_name if order_line.order_master.customer %> </small> <br>
+      <small>  <small>
+      <%= order_line.order_master.customer_address.city  if order_line.order_master.customer_address %>
+      <%= order_line.order_master.customer_address.pincode  if order_line.order_master.customer_address %>
+      </small></small>
+    </td>
+    <td>
+      <%= order_line.order_master.customer_address.state  if order_line.order_master.customer_address %>
+    </td>
+    <td>
+      <%= ProductList.find(order_line.product_list_id).show_prod %> <br>
+       <small><small><%= order_line.product_variant.name  if order_line.product_variant %></td>
+    <td> <%= order_line.order_master.medium.name  if order_line.order_master.medium %> <br>
+      <% if  order_line.order_master.campaign_playlist_id.present? %>
+      <br>
+        <%= link_to order_line.order_master.campaign_playlist_id, campaign_playlists_search_path(id: order_line.order_master.campaign_playlist_id), class:"btn btn-info btn-xs" if order_line.order_master.campaign_playlist_id.present? %>
+      <% end %>
+     </td>
+
+     <td> <%= order_line.order_master.subtotal %></td>
+     <td> <%= order_line.order_master.shipping %></td>
+
+      </tr>
+       <% @sno += 1 %>
+
+    <% end %>
+  </tbody>
+
+</table>
+<% else %>
+<div class="well well-sm">
+<h4> <%= @ordersearch %></h4>
+
+</div>
+<% end %>

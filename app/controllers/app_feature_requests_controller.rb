@@ -6,8 +6,8 @@ class AppFeatureRequestsController < ApplicationController
   # GET /app_feature_requests
   # GET /app_feature_requests.json
   def index
-    working = [10006, 10008, 10009]
-    already_covered = [10000,10004, 10010, 10012]
+    working = [10006, 10009]
+    already_covered = [10000,10004, 10008, 10010, 10012]
     delayed = [10001, 10002, 10007, 10011]
     others = working + already_covered + delayed
     @app_new_features = AppFeatureRequest.where(app_feature_type_id: 10000, current_status_id: 10000)
@@ -18,6 +18,9 @@ class AppFeatureRequestsController < ApplicationController
 
     @app_working_features = AppFeatureRequest.where(app_feature_type_id: 10000, current_status_id: working)
     @app_working_errors = AppFeatureRequest.where(app_feature_type_id: 10001, current_status_id: working)
+
+    @app_testing_features = AppFeatureRequest.where(app_feature_type_id: 10000, current_status_id: 10008)
+    @app_testing_errors = AppFeatureRequest.where(app_feature_type_id: 10001, current_status_id: 10008)
 
     @app_beta_features = AppFeatureRequest.where(app_feature_type_id: 10000, current_status_id: 10010)
     @app_beta_errors = AppFeatureRequest.where(app_feature_type_id: 10001, current_status_id: 10010)
@@ -91,8 +94,8 @@ class AppFeatureRequestsController < ApplicationController
           format.html {redirect_to app_feature_requests_path, notice: "Request was successfully created with id: #{@app_feature_request.id}"  }
         else
           @employee = Employee.find(@app_feature_request.request_by)
-          AppMailer.new_ticket(@employee.emailid, @app_feature_request).deliver_now if @employee.emailid.present?
-
+          AppMailer.delay(:queue => 'emailing').new_ticket(@employee.emailid, @app_feature_request) if @employee.emailid.present?
+          # .deliver_now
           AppMailer.new_ticket("deepesh@tec2grow.com", @app_feature_request).deliver_now
         end
 
@@ -112,6 +115,7 @@ class AppFeatureRequestsController < ApplicationController
   def update
     respond_to do |format|
       if @app_feature_request.update(app_feature_request_params)
+        @app_feature_request.update_date
         if current_user.role == 10022
           format.html {redirect_to app_feature_requests_path, notice: "Request id: #{@app_feature_request.id} was successfully updated "  }
         # else

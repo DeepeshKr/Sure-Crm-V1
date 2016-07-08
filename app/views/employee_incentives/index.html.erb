@@ -1,0 +1,218 @@
+<% title "Sales Incentives #{@employee_name}" %>
+
+ <div class="panel panel-primary">
+  <div class="panel-heading">Showing Sales between date <%= @from_date %> and <%= @to_date %></div>
+   <div class="panel-body">
+    <div class="row">
+   	 <div class="col-xs-6">
+		 <h3><%= @employee_name %> Incentives</h3>
+   	 </div>
+   	 <div class="col-xs-6">
+
+		 <div class="row">
+		   <%= form_tag  url_for(:controller => 'employee_incentives', :action => "index"), method: "get" do  %>
+    	   		<%= hidden_field_tag :show_for, @show_for %>
+				<%= hidden_field_tag :employee_id, @employee_id %>
+
+		       <div class="col-xs-8">
+		         <div class="input-daterange input-group">
+		           <%= text_field_tag(:from_date, @from_date, :data => {:provide => "datepicker"}, :id => "datepicker_from", :class => "form-control", :required => "true" )   %>
+		           <span class="input-group-addon">to</span>
+
+		            <%= text_field_tag(:to_date, @to_date, :data => {:provide => "datepicker"}, :id => "datepicker_to", :class => "form-control", :required => "true" )   %>
+
+		         </div>
+		       </div>
+
+		       <div class="col-xs-4">
+		         <%= submit_tag "Show Report", name: nil, class: "btn btn-primary"  %>
+		       </div>
+		   <% end %>
+		 </div>
+
+   	 </div>
+    </div>
+   </div>
+     <div class="panel panel-info">
+		<div class="panel-body">
+			<div class="row">
+			<div class="col-xs-6">
+				<p class="lead">Employee Incentives from <%= @from_date %> to <%= @to_date %></p>
+			</div>
+   	   <%= form_tag  url_for(:controller => 'employee_incentives', :action => 'index'), method: "get" do  %>
+
+   			<%= hidden_field_tag :from_date, @from_date %>
+   			<%= hidden_field_tag :to_date, @to_date %>
+   			<%= hidden_field_tag :show_for, "Employee" %>
+
+			<div class="col-xs-4">
+			  <%= select_tag :employee_id,  options_from_collection_for_select(@sales_agents,
+			 :id, :employee_name, selected: @employee_id ),
+			      {:class => "form-control", label: "Select the Product if required ", required: true }  %>
+			</div>
+			<div class="col-xs-2"><%= submit_tag "Show", name: nil, class: "btn btn-primary" %></div>
+   		<% end %>
+		  </div>
+		 </div>
+	 </div>
+
+ 	<!-- New Report -->
+ 	<div class="row">
+ 	  <div class="col-xs-12">
+ 	    <%= render partial: 'sales_report/one_new_report', :locals => {:employeesales => @employee_sales}  %>
+ 	  </div>
+ 	</div>
+  <% if @employee_id.present? %>
+  <div class="panel panel-primary">
+    <div class="panel-heading">Order Comparison Summary</div>
+    <div class="panel-body">
+      <table class="table table-hover table-bordered">
+        <tr><td>Source</td><td>Sales </td><td>Nos </td>
+          <td>Transfer Orders</td><td>Nos </td>
+          <td> Refunds</td> <td>Nos </td>
+          <td>Total Nos</td>
+          <td>Total Value</td>
+          <td>Average</td>
+        </tr>
+        <tr><td>Old</td>
+          <td><%= @total_sales_value %> </td><td><%= @total_sales_nos %> </td>
+
+          <td> <%= @total_transfer_value %></td><td><%= @total_transfer_nos %> </td>
+          <td> <%= @total_refunds_value %></td> <td><%= @total_refunds_nos %></td> </td>
+          <td> <%= @total_sales_nos + @total_transfer_nos + @total_refunds_nos %> </td>
+          <td><%= @total_sales_value + @total_transfer_value + @total_refunds_value %> </td>
+          <td><%= (@total_sales_value + @total_transfer_value + @total_refunds_value) /
+          (@total_sales_nos + @total_transfer_nos + @total_refunds_nos) %> </td>
+        </tr>
+        <tr><td>New</td>
+          <td><%= @total_sales_value_s %> </td><td><%= @total_sales_nos_s %> </td>
+          <td> <%= @total_transfer_value_s %></td><td><%= @total_transfer_nos_s %> </td>
+          <td> <%= @total_refunds_value_s %></td> <td><%= @total_refunds_nos_s %></td> </td>
+          <td> <%= @total_sales_nos_s + @total_transfer_nos_s + @total_refunds_nos_s %> </td>
+          <td> <%= @total_sales_value_s + @total_transfer_value_s + @total_refunds_value_s %></td>
+          <td><%= ((@total_sales_value_s + @total_transfer_value_s + @total_refunds_value_s) / (@total_sales_nos_s + @total_transfer_nos_s + @total_refunds_nos_s)).round(0) %> </td>
+
+        </tr>
+      </table>
+    </div>
+ </div>
+
+ <div class="row">
+   <div class="col-xs-6">
+     <div class="panel panel-primary">
+       <div class="panel-heading">VPP Orders</div>
+        <table class="table table-hover table-bordered">
+          <thead>
+          <tr>
+            <th>Order No</th>
+            <th>Value</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @sale_vpp.each do |vpp| %>
+            <tr>
+              <td> <%= link_to vpp.custref, custordersearch_path(ordernum: vpp.custref),
+              :target => "_blank", class: "btn btn-info btn-xs" if vpp.custref.present? %>
+            </td>
+              <td> <%= vpp.basic %></td>
+            </tr>
+          <% end %>
+        </tbody>
+        </table>
+     </div>
+   </div>
+   <div class="col-xs-6">
+     <div class="panel panel-primary">
+       <div class="panel-heading">Sure CRM Orders</div>
+        <table class="table table-hover table-bordered">
+          <thead>
+          <tr>
+            <th>Order No</th>
+            <th>Value</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @order_sales.each do |order| %>
+            <tr>
+              <td>
+                <%= link_to order.external_order_no, custordersearch_path(ordernum: order.external_order_no),
+                :target => "_blank", class: "btn btn-info btn-xs" if order.external_order_no.present? %>
+              </td>
+              <td> <%= order.subtotal %></td>
+            </tr>
+          <% end %>
+        </tbody>
+        </table>
+     </div>
+
+   </div>
+ </div>
+
+ <div class="row">
+   <div class="col-xs-6">
+     <div class="panel panel-primary">
+       <div class="panel-heading">Dealtran Orders</div>
+        <table class="table table-hover table-bordered">
+          <thead>
+          <tr>
+            <th>Order No</th>
+            <th>Value</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @deal_trans.each do |vpp| %>
+            <tr>
+              <td>
+                <%= link_to vpp.custref, custordersearch_path(ordernum: vpp.custref),
+                :target => "_blank", class: "btn btn-info btn-xs" if vpp.custref.present? %>
+              </td>
+              <td> <%= vpp.basicprice %></td>
+            </tr>
+          <% end %>
+        </tbody>
+        </table>
+     </div>
+   </div>
+   <div class="col-xs-6">
+     <div class="panel panel-primary">
+       <div class="panel-heading">Sure CRM Transfer Orders</div>
+        <table class="table table-hover table-bordered">
+          <thead>
+          <tr>
+            <th>Order No</th>
+            <th>Value</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @order_transfer.each do |order| %>
+            <tr>
+              <td>
+                <%= link_to order.external_order_no, custordersearch_path(ordernum: order.external_order_no),
+                :target => "_blank", class: "btn btn-info btn-xs" if order.external_order_no.present? %>
+            </td>
+              <td> <%= order.subtotal %></td>
+            </tr>
+          <% end %>
+        </tbody>
+        </table>
+     </div>
+
+   </div>
+ </div>
+<% end %>
+ </div>
+
+
+
+	<!-- exec end-->
+	<!-- super start-->
+
+
+
+
+
+
+<script>
+$('#datepicker_to').datepicker({format: 'yyyy-mm-dd'});
+$('#datepicker_from').datepicker({format: 'yyyy-mm-dd'});
+</script>

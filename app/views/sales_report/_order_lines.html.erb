@@ -52,13 +52,16 @@
        <td class="text-right">
         <%= order_line.total %>
        </td>
-	   
+
        <td class="text-right">
           <%= order_line.order_master.employee_name %>
        </td>
 
         <td class="text-right">
-      <%= order_line.order_master.timetaken %>
+      <%= order_line.order_master.timetaken %> <br>
+      <small> <small>
+        <%= order_line.order_master.order_status_master.name %> <br>
+      <%= order_line.order_master.orderpaymentmode.name if order_line.order_master.orderpaymentmode %></small> </small>
         </td>
       </tr>
       <% @sno += 1 %>

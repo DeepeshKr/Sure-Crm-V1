@@ -1,27 +1,32 @@
 
 <div class="row">
-  <div class="col-xs-3">
-  <div class="well well-sm">
+  <div class="col-xs-4">
+<div class="panel panel-primary">
+  <div class="panel-heading">Name</div>
+    <div class="panel-body">
+      <div class="row">
+        <%= bootstrap_form_tag url: media_path, :method => :GET, :enforce_utf8 => false do |f| %>
+          <div class="col-xs-9">
+              <%= text_field_tag(:name, @name,
+              {:class => "form-control", :placeholder => "Name"})  %>
+          </div>
+          <div class="col-xs-3">
+              <%= submit_tag "Ok", name: nil,  class: "btn btn-primary" %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+  </div>
+  <div class="col-xs-4">
+    <div class="panel panel-primary">
+      <div class="panel-heading">State</div>
+        <div class="panel-body">
   <div class="row">
     <%= bootstrap_form_tag url: media_path, :method => :GET, :enforce_utf8 => false do |f| %>
       <div class="col-xs-9">
-          <%= text_field_tag(:telephone, @telephone,
-          {:class => "form-control", :placeholder => "Telephone"})  %>
-      </div>
-      <div class="col-xs-3">
-          <%= submit_tag "Ok", name: nil,  class: "btn btn-primary" %>
-      </div>
-    <% end %>
-  </div>
-  </div>
-  </div>
-  <div class="col-xs-3">
-  <div class="well well-sm">
-  <div class="row">
-    <%= bootstrap_form_tag url: media_path, :method => :GET, :enforce_utf8 => false do |f| %>
-      <div class="col-xs-9">
-      <%= select_tag(:state, 
-                options_from_collection_for_select(State.all, :name, :name, selected: @state), 
+      <%= select_tag(:state,
+                options_from_collection_for_select(State.all, :name, :name, selected: @state),
                 {:class => "form-control"} )  %>
       </div>
       <div class="col-xs-3">
@@ -30,15 +35,18 @@
     <% end %>
   </div>
   </div>
+</div>
   </div>
-  <div class="col-xs-2">
-  <div class="well well-sm">
+  <div class="col-xs-4">
+    <div class="panel panel-primary">
+      <div class="panel-heading">Telephone / DNIS</div>
+        <div class="panel-body">
     <div class="row">
       <%= bootstrap_form_tag url: media_path, :method => :GET, :enforce_utf8 => false do |f| %>
-      
+
       <div class="col-xs-7">
-            <%= text_field_tag(:dnis, @dnis,
-            {:class => "form-control", :placeholder => "DNIS"})  %>
+            <%= text_field_tag(:telephone, @telephone,
+            {:class => "form-control", :placeholder => "Ph / DNIS"})  %>
         </div>
         <div class="col-xs-5">
             <%= submit_tag "Ok", name: nil,  class: "btn btn-primary btn-sm" %>
@@ -46,14 +54,20 @@
       <% end %>
       </div>
     </div>
+    </div>
   </div>
- <div class="col-xs-3">
-   <div class="well well-sm">
+</div>
+<div class="row">
+
+ <div class="col-xs-5">
+   <div class="panel panel-primary">
+     <div class="panel-heading">Commission</div>
+       <div class="panel-body">
   <div class="row">
     <%= bootstrap_form_tag url: media_path, :method => :GET, :enforce_utf8 => false do |f| %>
       <div class="col-xs-9">
-      <%= select_tag(:commission, 
-                options_from_collection_for_select(MediaCommision.all, :id, :name, selected: @commission), 
+      <%= select_tag(:commission,
+                options_from_collection_for_select(MediaCommision.all, :id, :name, selected: @commission),
                 {:class => "form-control"} )  %>
       </div>
       <div class="col-xs-3">
@@ -61,21 +75,19 @@
       </div>
     <% end %>
   </div>
+</div>
   </div>
-  </div> 
-  <div class="col-xs-1">
-  <div class="well well-sm">
-    
+  </div>
+  <div class="col-xs-3">
+    <div class="panel panel-primary">
+      <div class="panel-heading">All</div>
+        <div class="panel-body">
+
       <%= bootstrap_form_tag url: media_path, :method => :GET, :enforce_utf8 => false do |f| %>
-     
       <%= hidden_field_tag :showall, @showall %>
-           
-           
-       
             <%= submit_tag "All", name: nil,  class: "btn btn-primary" %>
-        
       <% end %>
-     
     </div>
+  </div>
   </div>
 </div>

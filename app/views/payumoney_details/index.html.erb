@@ -66,6 +66,7 @@
 	  <th>Payment Id / Merchant Transaction Id</th>
 	  <th>Order ref no / Transaction</th>
       <th>Amount</th>
+			<th>Links</th>
       <th>Mobile Number</th>
       <th>Pay U Status </th>
 			<th>Internal Status</th>
@@ -82,6 +83,7 @@
 			 	:target => "_blank", class: "btn btn-info btn-xs" if payumoney_detail.orderid.present? %> <br>
 			<small><%= payumoney_detail.transaction_ref %></small>   </td>
         <td><%= payumoney_detail.amount.round(2) %></td>
+					<td><%= payumoney_detail.no_of_links %></td>
         <td><%= payumoney_detail.customerMobileNumber %></td>
 				<td><%= payumoney_detail.status %> </td>
 				<td><%= payumoney_detail.payumoney_status.name if payumoney_detail.payumoney_status %></td>

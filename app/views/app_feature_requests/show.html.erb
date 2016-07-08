@@ -16,11 +16,24 @@
 <tr>
   <td>Require by:</td><td><%= @app_feature_request.require_by_date.strftime('%d-%b-%y') %>
   <br><small><small>  <%= @app_feature_request.schedule %>
-                <%= distance_of_time_in_words((@app_feature_request.require_by_date + 330.minutes), @current_time) || "NA" if @app_feature_request.require_by_date.present? %></td>
+                <%= distance_of_time_in_words((@app_feature_request.require_by_date + 330.minutes),
+                @current_time) || "NA" if @app_feature_request.require_by_date.present? %></td>
               </small></small>
 </td>
-  <td>Estimated:</td><td><%= @app_feature_request.estimated_completion_date.strftime('%d-%b-%y') if @app_feature_request.estimated_completion_date %> </td>
-  <td>Completed On:</td><td> <%= @app_feature_request.actual_completion_date.strftime('%d-%b-%y') if @app_feature_request.actual_completion_date %> </td>
+  <td>Estimated:</td><td><%= @app_feature_request.estimated_completion_date.strftime('%d-%b-%y') if @app_feature_request.estimated_completion_date %>
+    <br><small><small>  <%= @app_feature_request.working_schedule %>
+                  <%= distance_of_time_in_words(@app_feature_request.require_by_date,
+                  @app_feature_request.estimated_completion_date) || "NA" if @app_feature_request.estimated_completion_date.present? %></td>
+                </small></small>
+
+  </td>
+  <td>Completed On:</td>
+  <td> <%= @app_feature_request.actual_completion_date.strftime('%d-%b-%y') if @app_feature_request.actual_completion_date %>
+    <br><small><small>  <%= @app_feature_request.completion_schedule %>
+                  <%= distance_of_time_in_words(@app_feature_request.require_by_date,
+                  @app_feature_request.actual_completion_date) || "NA" if @app_feature_request.actual_completion_date.present? %></td>
+                </small></small>
+  </td>
   <td>Approved:</td><td>
   <%= @app_feature_request.user_approved_date.strftime('%d-%b-%y') if @app_feature_request.user_approved_date %> </td>
 <tr>

@@ -1,6 +1,12 @@
 Rails.application.routes.draw do
 
 
+  get 'employee_incentives/index'
+
+  get 'employee_incentives/search'
+
+  get 'employee_incentives/details'
+
   resources :payumoney_statuses
   resources :app_comment_display_levels
   resources :app_comment_types
@@ -18,6 +24,8 @@ Rails.application.routes.draw do
   get 'sales_report_team/show_wise'
   get 'sales_report_team/agent_order'
   get 'pay_u_orders_sales_report_team' => 'sales_report_team#pay_u_orders'
+  get 'sales_report_team/products_sold'
+  get 'products_sold_sales_report_team' => 'sales_report_team#products_sold'
   get 'sales_report_team/pay_u_orders'
   get 'agent_common_upsell_order_sales_report_team' => 'sales_report_team#agent_common_upsell_order'
   get 'sales_report_team/agent_common_upsell_order'
