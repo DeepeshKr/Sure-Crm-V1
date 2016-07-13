@@ -43,16 +43,18 @@
 		<small>Desc: <%= c.description %> </small>
 		</td>
 		<td title="Name"><small><%= c.total_name_1 %> </small> </td>
-		<td class="text-right" title="Orders"> <%= c.total_nos_1 %> <% @total_nos_1 += c.total_nos_1 %></td>
-		<td class="text-right" title="Pieces"> <%= c.total_pieces_1 %> <% @total_pieces_1 += c.total_pieces_1 %> </td>
-		<td class="text-right" title="Sales">   <%= c.total_sales_1 %> <% @total_sales_1 += c.total_sales_1 %>  </td>
-		<td class="text-right" title="Revenue">   <%= c.total_revenue_1 %> <% @total_revenue_1 += c.total_revenue_1 %> </td>
-		<td class="text-right" title="Product Cost">   <%= c.total_product_cost_1 %> <% @total_product_cost_1 += c.total_product_cost_1 %>  </td>
-		<td class="text-right" title="Variable Cost">   <%= c.total_var_cost_1 %> <% @total_var_cost_1 += c.total_var_cost_1 %> </td>
-		<td class="text-right" title="Fixed Media Cost"> <%= c.total_fixed_cost_1 %> <br>   <!-- %= link_to 'Edit Cost',campaign_playlists_new_media_cost_path(id: c.campaign_playlist_id, redirect_to: request.original_url), {:style=>'color:#0000A0;'} % --> </td>
-		<td class="text-right" title="Refunds"> <%= c.total_refund_1 %>  <% @total_refund_1 += c.total_refund_1 %> </td>
-		<td class="text-right" title="Damages"> <%= c.total_product_dam_cost_1 %> <% @total_product_dam_cost_1 += c.total_product_dam_cost_1 %>  </td>
-		<td class="text-right" title="Profitability">   <%= c.profit_per_order_1 %>  </td>
+		<td class="text-right" title="Orders"> <%= c.total_nos_1 %> <% @total_nos_1 += c.total_nos_1 if c.total_nos_1.present? %></td>
+		<td class="text-right" title="Pieces"> <%= c.total_pieces_1 %> <% @total_pieces_1 += c.total_pieces_1 if c.total_pieces_1.present? %> </td>
+		<td class="text-right" title="Sales">   <%= number_with_delimiter(c.total_sales_1.to_i) %> <% @total_sales_1 += c.total_sales_1 if c.total_sales_1.present? %>  </td>
+		<td class="text-right" title="Revenue">   <%= number_with_delimiter(c.total_revenue_1.to_i) %> <% @total_revenue_1 += c.total_revenue_1 if c.total_revenue_1.present? %> </td>
+		<td class="text-right" title="Product Cost">   <%= number_with_delimiter(c.total_product_cost_1.to_i) %> <% @total_product_cost_1 += c.total_product_cost_1 if c.total_product_cost_1.present? %>  </td>
+		<td class="text-right" title="Variable Cost"><%= number_with_delimiter(c.total_var_cost_1.to_i + c.total_var_on_order_cost_1.to_i) %>
+    <% @total_var_cost_1 += c.total_var_cost_1 if c.total_var_cost_1.present? %>
+    <% @total_var_cost_1 += c.total_var_on_order_cost_1 if c.total_var_on_order_cost_1.present? %> </td>
+		<td class="text-right" title="Fixed Media Cost"> <%= number_with_delimiter(c.total_fixed_cost_1.to_i) if c.total_fixed_cost_1.present? %> <% @total_fixed_cost_1 += c.total_fixed_cost_1 if c.total_fixed_cost_1.present? %> <br>   <!-- %= link_to 'Edit Cost',campaign_playlists_new_media_cost_path(id: c.campaign_playlist_id, redirect_to: request.original_url), {:style=>'color:#0000A0;'} % --> </td>
+		<td class="text-right" title="Refunds"> <%= number_with_delimiter(c.total_refund_1.to_i) %>  <% @total_refund_1 += c.total_refund_1 if c.total_refund_1.present? %> </td>
+		<td class="text-right" title="Damages"> <%= number_with_delimiter(c.total_product_dam_cost_1.to_i) %> <% @total_product_dam_cost_1 += c.total_product_dam_cost_1 if c.total_product_dam_cost_1.present? %>  </td>
+		<td class="text-right" title="Profitability"> <%= number_with_delimiter(c.profit_per_order_1.to_i) if c.profit_per_order_1.present? %>  </td>
 		<td rowspan="2">
 			<%= link_to "Old", ppo_products_path(campaign_id: c.campaign_playlist_id), :target => "_blank", class: "btn btn-primary btn-xs"  %>
 			<% if c.product_variant_id.present? %>
@@ -68,16 +70,18 @@
 <!-- second -->
 	<tr>
 		<td title="Name"><small><%= c.total_name_2 %></small></td>
-		<td class="text-right" title="Orders"><%= c.total_nos_2 %>  <% @total_nos_2 += c.total_nos_2 %></td>
-		<td class="text-right" title="Pieces"> <%= c.total_pieces_2 %>  <% @total_pieces_2 += c.total_pieces_2 %> </td>
-		<td class="text-right" title="Sales">   <%= c.total_sales_2 %> <% @total_sales_2 += c.total_sales_2 %>   </td>
-		<td class="text-right" title="Revenue">   <%= c.total_revenue_2 %>  <% @total_revenue_2 += c.total_revenue_2 %>  </td>
-		<td class="text-right" title="Product Cost">   <%= c.total_product_cost_2 %>  <% @total_product_cost_2 += c.total_product_cost_2 %>  </td>
-		<td class="text-right" title="Variable Cost">   <%= c.total_var_cost_2 %> <% @total_var_cost_2 += c.total_var_cost_2 %>  </td>
-		<td class="text-right" title="Fixed Media Cost"> <%= c.total_fixed_cost_2 %>  <br>   <!-- % = link_to 'Edit Cost',campaign_playlists_new_media_cost_path(id: c.campaign_playlist_id, redirect_to: request.original_url), {:style=>'color:#0000A0;'} % -->  </td>
-		<td class="text-right" title="Refunds"> <%= c.total_refund_2 %>  <% @total_refund_2 += c.total_refund_2 %> </td>
-		<td class="text-right" title="Damages"> <%= c.total_product_dam_cost_2 %> <% @total_product_dam_cost_2 += c.total_product_dam_cost_2 %>  </td>
-		<td class="text-right" title="Profitability">   <%= c.profit_per_order_2 %>  </td>
+		<td class="text-right" title="Orders"><%= c.total_nos_2 %>  <% @total_nos_2 += c.total_nos_2 if c.total_nos_2.present? %></td>
+		<td class="text-right" title="Pieces"> <%= c.total_pieces_2 %>  <% @total_pieces_2 += c.total_pieces_2 if c.total_pieces_2.present? %> </td>
+		<td class="text-right" title="Sales">   <%= number_with_delimiter(c.total_sales_2.to_i) %> <% @total_sales_2 += c.total_sales_2 if c.total_sales_2.present? %>   </td>
+		<td class="text-right" title="Revenue">   <%= number_with_delimiter(c.total_revenue_2.to_i) %>  <% @total_revenue_2 += c.total_revenue_2 if c.total_revenue_2.present? %>  </td>
+		<td class="text-right" title="Product Cost">   <%= number_with_delimiter(c.total_product_cost_2.to_i) %>  <% @total_product_cost_2 += c.total_product_cost_2 if c.total_product_cost_2.present? %>  </td>
+		<td class="text-right" title="Variable Cost">   <%= number_with_delimiter(c.total_var_cost_2.to_i + c.total_var_on_order_cost_2.to_i) %>
+    <% @total_var_cost_2 += c.total_var_cost_2 if c.total_var_cost_2.present? %>
+     <% @total_var_on_order_cost_2 += c.total_var_on_order_cost_2 if c.total_var_on_order_cost_2.present? %>  </td>
+		<td class="text-right" title="Fixed Media Cost"> <%= number_with_delimiter(c.total_fixed_cost_2.to_i) %>  <% @total_fixed_cost_2 += c.total_fixed_cost_2 if c.total_fixed_cost_2.present? %> <br>   <!-- % = link_to 'Edit Cost',campaign_playlists_new_media_cost_path(id: c.campaign_playlist_id, redirect_to: request.original_url), {:style=>'color:#0000A0;'} % -->  </td>
+		<td class="text-right" title="Refunds"> <%= number_with_delimiter(c.total_refund_2.to_i) %>  <% @total_refund_2 += c.total_refund_2 if c.total_refund_2.present? %> </td>
+		<td class="text-right" title="Damages"> <%= number_with_delimiter(c.total_product_dam_cost_2.to_i) %> <% @total_product_dam_cost_2 += c.total_product_dam_cost_2 if c.total_product_dam_cost_2.present? %>  </td>
+		<td class="text-right" title="Profitability">   <%= number_with_delimiter(c.profit_per_order_2.to_i) if c.profit_per_order_2.present? %>  </td>
 
 	</tr>
 
@@ -85,6 +89,40 @@
   <% @sno += 1 %>
  <% end %>
   </tbody>
+  <thead>
+    <tr>
+ 	   <td rowspan="2" colspan="2">Total</td>
+ 		<td title="Name"><small>Row 1 </small></td>
+ 		<td class="text-right" title="Orders"><%= number_with_delimiter(@total_nos_1.to_i) %></td>
+ 		<td class="text-right" title="Pieces"><%= number_with_delimiter(@total_pieces_1.to_i) %> </td>
+ 		<td class="text-right" title="Sales"><%= number_with_delimiter(@total_sales_1.to_i) %>  </td>
+ 		<td class="text-right" title="Revenue"><%= number_with_delimiter(@total_revenue_1.to_i) %> </td>
+ 		<td class="text-right" title="Product Cost"><%= number_with_delimiter(@total_product_cost_1.to_i) %>  </td>
+ 		<td class="text-right" title="Variable Cost"><%= number_with_delimiter(@total_var_cost_1.to_i + @total_var_on_order_cost_1.to_i) %> </td>
+ 		<td class="text-right" title="Fixed Media Cost"> <%= number_with_delimiter(@total_fixed_cost_1.to_i) %> </td>
+ 		<td class="text-right" title="Refunds"> <%= number_with_delimiter(@total_refund_1.to_i) %> </td>
+ 		<td class="text-right" title="Damages"> <%= number_with_delimiter(@total_product_dam_cost_1.to_i) %>  </td>
+ 		<td class="text-right" title="Profitability">   </td>
+ 		<td rowspan="2">
+
+ 		</td>
+ 	</tr>
+    <tr>
+  		<td title="Name"><small>Row 2</small></td>
+  		<td class="text-right" title="Orders"><%= number_with_delimiter(@total_nos_2.to_i) %></td>
+  		<td class="text-right" title="Pieces"> <%= number_with_delimiter(@total_pieces_2.to_i) %> </td>
+  		<td class="text-right" title="Sales"> <%= number_with_delimiter(@total_sales_2.to_i) %>   </td>
+  		<td class="text-right" title="Revenue"><%= number_with_delimiter(@total_revenue_2.to_i) %>  </td>
+  		<td class="text-right" title="Product Cost"><%= number_with_delimiter(@total_product_cost_2.to_i) %>  </td>
+  		<td class="text-right" title="Variable Cost"><%= number_with_delimiter(@total_var_cost_2.to_i + @total_var_on_order_cost_2.to_i) %>  </td>
+  		<td class="text-right" title="Fixed Media Cost"> <%= number_with_delimiter(@total_fixed_cost_2.to_i) %> </td>
+  		<td class="text-right" title="Refunds"> <%= number_with_delimiter(@total_refund_2.to_i) %> </td>
+  		<td class="text-right" title="Damages"> <%= number_with_delimiter(@total_product_dam_cost_2.to_i) %>  </td>
+  		<td class="text-right" title="Profitability">   </td>
+
+  	</tr>
+
+  </thead>
  </table>
   </div>
  </div>

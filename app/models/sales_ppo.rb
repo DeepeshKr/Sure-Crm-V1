@@ -161,8 +161,8 @@ class SalesPpo < ActiveRecord::Base
     ret_sales_ppo.total_revenue_1 = sales_ppo_1.total_revenue
     ret_sales_ppo.total_product_cost_1 = sales_ppo_1.total_product_cost
     ret_sales_ppo.total_var_cost_1 = sales_ppo_1.total_var_cost
-    ret_sales_ppo.total_var_on_order_cost_1 = 0
-    # ret_sales_ppo.total_fixed_cost_1 = sales_ppo_1.total_fixed_cost
+    ret_sales_ppo.total_var_on_order_cost_1 = sales_ppo_1.total_var_on_order_cost
+    ret_sales_ppo.total_fixed_cost_1 = sales_ppo_1.total_fixed_cost
     ret_sales_ppo.total_refund_1 = sales_ppo_1.total_refund
     ret_sales_ppo.total_product_dam_cost_1 = sales_ppo_1.total_product_dam_cost
     ret_sales_ppo.profit_per_order_1 = sales_ppo_1.profit_per_order
@@ -227,6 +227,7 @@ class SalesPpo < ActiveRecord::Base
     ret_sales_ppo.total_product_cost_1 = sales_ppo_1.total_product_cost
     ret_sales_ppo.total_var_cost_1 = sales_ppo_1.total_var_cost
     ret_sales_ppo.total_fixed_cost_1 = sales_ppo_1.total_fixed_cost
+    ret_sales_ppo.total_var_on_order_cost_1 = sales_ppo_1.total_var_on_order_cost
     ret_sales_ppo.total_refund_1 = sales_ppo_1.total_refund
     ret_sales_ppo.total_product_dam_cost_1 = sales_ppo_1.total_product_dam_cost
     ret_sales_ppo.profit_per_order_1 = sales_ppo_1.profit_per_order
@@ -237,6 +238,7 @@ class SalesPpo < ActiveRecord::Base
     ret_sales_ppo.total_revenue_2 = sales_ppo_2.total_revenue
     ret_sales_ppo.total_product_cost_2 = sales_ppo_2.total_product_cost
     ret_sales_ppo.total_var_cost_2 = sales_ppo_2.total_var_cost
+    ret_sales_ppo.total_var_on_order_cost_2 = sales_ppo_2.total_var_on_order_cost
     ret_sales_ppo.total_fixed_cost_2 = sales_ppo_2.total_fixed_cost
     ret_sales_ppo.total_refund_2 = sales_ppo_2.total_refund
     ret_sales_ppo.total_product_dam_cost_2 = sales_ppo_2.total_product_dam_cost
@@ -1433,7 +1435,7 @@ class SalesPpo < ActiveRecord::Base
     #total_fixed_cost = campaign_playlists.first.cost.to_i || 0 if campaign_playlists.first.cost.present?
     total_fixed_cost = campaign_playlists.sum(:cost).to_f
 
-    #total_fixed_cost = campaign_playlists.sum(:group_total_cost).to_f if campaign_playlists.first.group_total_cost.present?
+    # total_fixed_cost = campaign_playlists.sum(:group_total_cost).to_f if campaign_playlists.first.group_total_cost.present?
 
 
     # tranfer order 10020 tranfer order delivered 10041 tranfer order cancelled 10040

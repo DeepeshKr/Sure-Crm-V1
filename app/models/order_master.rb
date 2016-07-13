@@ -795,9 +795,9 @@ def create_hbn_sales_ppo
     	order_masters.each do |order|
 
         # fix the campaign details here
-        order.add_hbn_product_to_campaign.delay
+        order.delay(:queue => 'hbn sales ppos', priority: 100).add_hbn_product_to_campaign
         # create ppo here
-        ppos_c = order.add_hbn_update.delay
+        #ppos_c = order.add_hbn_update.delay
 
         ppos += ppos_c.to_i if ppos_c.present?
         total_nos += 1
@@ -818,9 +818,9 @@ def create_hbn_sales_ppo_between_dates from_date, upto_date #, product_variant_i
       if order_masters.present?
       	order_masters.each do |order|
           # fix the campaign details here
-          order.add_hbn_product_to_campaign.delay(order.id)
+          order.delay(:queue => 'hbn sales ppos', priority: 100).add_hbn_product_to_campaign
           # create ppo here
-          ppos_c = order.add_hbn_update.delay(order.id)
+          # ppos_c = order.add_hbn_update.delay(order.id)
           ppos += ppos_c.to_i if ppos_c.present?
           total_nos += 1
         end
@@ -931,11 +931,10 @@ def add_hbn_update
       :mobile_no => order_master.mobile,
       :shipping_cost => ordln.product_postage)
 
-      return 1
     end
   end
 end
-handle_asynchronously :add_hbn_update
+handle_asynchronously :add_hbn_update, :priority => 100
 
 def add_hbn_product_to_campaign
   #media_id
@@ -1050,7 +1049,7 @@ def add_hbn_product_to_campaign
     end
 
 end
-handle_asynchronously :add_hbn_product_to_campaign
+handle_asynchronously :add_hbn_product_to_campaign, :priority => 100
 
 ###### below lines for hbn sales ppo asynchronised ##########
 ######## duplicate this is delayed job server #####
@@ -1194,7 +1193,7 @@ def add_product_to_campaign_hbn_ppo order_id
     end
 
 end
-handle_asynchronously :add_product_to_campaign_hbn_ppo
+handle_asynchronously :add_product_to_campaign_hbn_ppo, :priority => 100
 
 def create_sales_hbn_ppo order_id
  #order_id = self.order_id
@@ -1304,7 +1303,7 @@ def create_sales_hbn_ppo order_id
 
   end
 end
-handle_asynchronously :create_sales_hbn_ppo
+handle_asynchronously :create_sales_hbn_ppo, :priority => 100
 ######## duplicate this is delayed job server #####
 
 
@@ -1390,7 +1389,7 @@ def re_create_sales_ppo
      end
    end
 end
-handle_asynchronously :re_create_sales_ppo
+handle_asynchronously :re_create_sales_ppo, :priority => 100
 
 def add_product_to_campaign
   order_id = self.id
@@ -1532,7 +1531,7 @@ def add_product_to_campaign
     puts "Process Completed - Updated"
   end
 end
-handle_asynchronously :add_product_to_campaign
+handle_asynchronously :add_product_to_campaign, :priority => 100
 
 def remove_from_sales_ppo order_id
   order_master = OrderMaster.find(order_id)
@@ -1555,7 +1554,7 @@ def remove_from_sales_ppo order_id
     end
   end
 end
-handle_asynchronously :remove_from_sales_ppo
+handle_asynchronously :remove_from_sales_ppo, :priority => 100
 
 def add_update order_id
   #create sales ppo for each order line
@@ -1666,7 +1665,7 @@ def add_update order_id
     end
   end
 end
-handle_asynchronously :add_update
+handle_asynchronously :add_update, :priority => 1000
 
 ###### above lines for hbn sales ppo asynchronised ##########
 

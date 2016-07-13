@@ -857,7 +857,9 @@ class SalesPposController < ApplicationController
 
       if @campaign_playlist_id.present? || @product_variant_id.present?
         sales_ppos.each do |ppo|
-            ppo.delay.change_ppo_product_costs ppo.order_id
+            order_master = OrderMaster.find(ppo.order_id)
+            order_master.delay(:queue => 'hbn sales ppos', priority: 100).add_product_to_campaign_hbn_ppo
+            #ppo.delay.change_ppo_product_costs ppo.order_id
            nos =+ 1
         end
       else
@@ -865,7 +867,7 @@ class SalesPposController < ApplicationController
         order_masters.each do |ord|
           #new_ppo = SalesPpo.new
           # a synchronised between days and calls all other functions
-            ord.delay.add_product_to_campaign_hbn_ppo ord.id
+            ord.delay.delay(:queue => 'hbn sales ppos', priority: 100).add_product_to_campaign_hbn_ppo #ord.id
              #ppo.order_id
            #create_sales_ppo ppo.order_id
             nos =+ 1
@@ -912,7 +914,7 @@ class SalesPposController < ApplicationController
       :gross_sales, :net_sale, :external_order_no, :order_status_id,
       :order_last_mile_id, :order_pincode, :media_id, :promo_cost_total,
       :dnis, :city, :state, :mobile_no, :transfer_order_revenue,
-      :transfer_order_dealer_price)
+      :transfer_order_dealer_price, :commission_on_order)
     end
 
     def hbn_fixed_costs
@@ -964,8 +966,8 @@ class SalesPposController < ApplicationController
 
       @serial_no = 1
 
-      @total_sales_1, @total_revenue_1, @total_product_cost_1, @total_var_cost_1, @total_refund_1, @total_product_dam_cost_1,@total_pieces_1, @total_nos_1 = 0,0,0,0,0,0,0,0,0.0
-       @total_sales_2, @total_revenue_2, @total_product_cost_2, @total_var_cost_2, @total_refund_2, @total_product_dam_cost_2,@total_pieces_2, @total_nos_2 = 0,0,0,0,0,0,0,0,0.0
+      @total_sales_1, @total_revenue_1, @total_product_cost_1, @total_var_cost_1, @total_var_on_order_cost_1 @total_fixed_cost_1, @total_refund_1, @total_product_dam_cost_1,@total_pieces_1, @total_nos_1 = 0,0,0,0,0,0,0,0,0,0,0.0
+       @total_sales_2, @total_revenue_2, @total_product_cost_2, @total_var_cost_2, @total_var_on_order_cost_2, @total_fixed_cost_2, @total_refund_2, @total_product_dam_cost_2,@total_pieces_2, @total_nos_2 = 0,0,0,0,0,0,0,0,0,0,0.0
     end
 
     def all_return_rates

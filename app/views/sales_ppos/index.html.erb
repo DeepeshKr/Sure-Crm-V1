@@ -49,16 +49,16 @@
 		<small>Desc: <%= c.description %> </small>
 		</td>
 		<td title="Name"><small><%= c.total_name_1 %> </small> </td>
-		<td class="text-right" title="Orders"> <%= c.total_nos_1 %> </td>
-		<td class="text-right" title="Pieces"> <%= c.total_pieces_1 %>  </td>
-		<td class="text-right" title="Sales">   <%= c.total_sales_1 %>   </td>
-		<td class="text-right" title="Revenue">   <%= c.total_revenue_1 %>  </td>
-		<td class="text-right" title="Product Cost">   <%= c.total_product_cost_1 %>   </td>
-		<td class="text-right" title="Variable Cost">   <%= c.total_var_cost_1 %>  </td>
-		<td class="text-right" title="Fixed Media Cost"> <%= c.total_fixed_cost_1 %>   </td>
-		<td class="text-right" title="Refunds"> <%= c.total_refund_1 %>   </td>
-		<td class="text-right" title="Damages"> <%= c.total_product_dam_cost_1 %>   </td>
-		<td class="text-right" title="Profitability">   <%= c.profit_per_order_1 %>  </td>
+		<td class="text-right" title="Orders"> <%= c.total_nos_1.to_i %> </td>
+		<td class="text-right" title="Pieces"> <%= c.total_pieces_1.to_i %>  </td>
+		<td class="text-right" title="Sales"><%= number_with_delimiter(c.total_sales_1.to_i) %>   </td>
+		<td class="text-right" title="Revenue"><%= number_with_delimiter(c.total_revenue_1.to_i) %> </td>
+		<td class="text-right" title="Product Cost"> <%= number_with_delimiter(c.total_product_cost_1.to_i) %>   </td>
+		<td class="text-right" title="Variable Cost"> <%= number_with_delimiter(c.total_var_cost_1.to_i + c.total_var_on_order_cost_1.to_i) %>  </td>
+		<td class="text-right" title="Fixed Media Cost"> <%= number_with_delimiter(c.total_fixed_cost_1.to_i) %>   </td>
+		<td class="text-right" title="Refunds"> <%= number_with_delimiter(c.total_refund_1.to_i) %>   </td>
+		<td class="text-right" title="Damages"> <%= number_with_delimiter(c.total_product_dam_cost_1.to_i) %>   </td>
+		<td class="text-right" title="Profitability">   <%= number_with_delimiter(c.profit_per_order_1.to_i) %>  </td>
 		<td>
 			<!-- % = link_to "30 Min PPO", { :controller => :sales_ppos, :action => :half_hourly, :from_date => c.for_date.strftime("%Y-%m-%d")}, { class: "btn btn-info btn-xs"} % -->
 			<hr>
