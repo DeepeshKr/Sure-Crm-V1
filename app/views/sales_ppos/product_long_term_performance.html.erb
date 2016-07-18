@@ -1,0 +1,78 @@
+<!-- set page title start -->
+<% title "HBN Product Orders various Time #{@timenow}" %>
+<!-- set page title end -->
+ <div class="row">
+	 <div class="col-xs-4">
+
+	 <h4>HBN Long Term Product Orders</h4>
+
+
+	 </div>
+   <%= form_tag  url_for(:controller => 'sales_ppos', :action => "product_long_term_performance"), method: "get" do  %>
+
+   <div class="col-xs-3">
+
+
+   </div>
+       <div class="col-xs-3">
+         <div class="input-daterange input-group">
+           <%= text_field_tag(:from_date, @from_date, :data => {:provide => "datepicker"}, :id => "datepicker_from", :class => "form-control", :required => "true" )   %>
+           <span class="input-group-addon">to</span>
+
+            <%= text_field_tag(:to_date, @to_date, :data => {:provide => "datepicker"}, :id => "datepicker_to", :class => "form-control", :required => "true" )   %>
+
+         </div>
+       </div>
+
+       <div class="col-xs-1">
+         <%= submit_tag "Report", name: nil, class: "btn btn-primary" %>
+       </div>
+   <% end %>
+
+ </div>
+<!-- filters here -->
+ <!-- :locals => {:order_lines =>  @order_lines_common,
+ 	order_description: "Common Upsell"}-->
+<!-- filters here -->
+ <br>
+ <br>
+ <%= render partial: 'row_of_simple_ppo' %>
+ <br>
+ <br>
+
+
+
+<div class="panel panel-primary">
+  <div class="panel-body">
+	<div class="row">
+	  <div class="col-xs-2">
+	  	
+	  </div>
+	  <div class="col-xs-2">
+	  
+	  </div>
+	  <div class="col-xs-3">
+	   
+	  </div>
+	  <div class="col-xs-3">
+
+	  </div>
+	  <div class="col-xs-2">
+
+	   <%= link_to 'Download CSV file', sales_ppos_product_long_term_performance_path(from_date: @from_date, to_date: @to_date,  format: :csv), class: "btn btn-info btn-sm" %>
+	  </div>
+	</div>
+ </div>
+</div>
+
+ <br>
+
+
+<!-- :locals => {:order_lines =>  @order_lines_common,
+	order_description: "Common Upsell"}-->
+<hr>
+
+<script>
+$('#datepicker_to').datepicker({format: 'yyyy-mm-dd'});
+$('#datepicker_from').datepicker({format: 'yyyy-mm-dd'});
+</script>

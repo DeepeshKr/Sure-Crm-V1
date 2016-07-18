@@ -6,7 +6,7 @@
    	 	<h4><%= @regenerate_ppo %></h3>
    	 </div>
       <%= form_tag  url_for(:controller => 'sales_ppos', :action => "re_create_ppo"), method: "post" do  %>
-
+	   <%= hidden_field_tag :order_id, @order_id %>
 	  <%= hidden_field_tag :product_variant_id, @product_variant_id %>
 	  <%= hidden_field_tag :campaign_playlist_id, @campaign_playlist_id %>
 	  <%= hidden_field_tag :from_date, @from_date %>

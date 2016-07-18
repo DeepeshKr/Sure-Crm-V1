@@ -1,0 +1,48 @@
+<% if @order_master.present? %>
+<div class="panel panel-primary">
+
+
+  <table class="table table-hover table-bordered">
+	  <thead>
+	    <tr>
+	      <th>Order Date</th>
+	      <th>Process Date</th>
+		  <th>Ship Date</th>
+		  <th>Cancelled Date</th>
+		  <th>Paid Date</th>
+		  <th>Refund Date</th>
+		  <th>Returned Date</th>
+	  </tr>
+  </thead>
+  <tbody>
+
+     <tr>
+		 <td><%= @order_master.orderdate + 330.minutes %></td>
+		 <td><%= (@order_master.process_date + 330.minutes).strftime("%Y-%m-%d") if @order_master.process_date.present? %></td>
+		 <td><%= (@order_master.ship_date + 330.minutes).strftime("%Y-%m-%d") if @order_master.ship_date.present? %></td>
+		 <td><%= (@order_master.cancelled_date + 330.minutes).strftime("%Y-%m-%d") if @order_master.cancelled_date.present? %></td>
+		 <td><%= (@order_master.paid_date + 330.minutes).strftime("%Y-%m-%d") if @order_master.paid_date.present? %></td>
+		 <td><%= (@order_master.refund_date + 330.minutes).strftime("%Y-%m-%d") if @order_master.refund_date.present? %></td>
+		 <td><%= (@order_master.returned_date + 330.minutes).strftime("%Y-%m-%d") if @order_master.returned_date.present? %></td>  
+	 </tr>
+	 
+     <tr>
+		 <td>Delay</td>
+		 <td><%= distance_of_time_in_words(@order_master.orderdate + 330.minutes,
+			                   @order_master.process_date + 330.minutes) if @order_master.process_date.present? %></td>
+		 <td><%= distance_of_time_in_words(@order_master.orderdate + 330.minutes,
+			                   @order_master.ship_date + 330.minutes) if @order_master.ship_date.present? %></td>
+	 	<td><%= distance_of_time_in_words(@order_master.orderdate + 330.minutes,
+		                   @order_master.cancelled_date + 330.minutes) if @order_master.cancelled_date.present? %></td>
+	 	<td><%= distance_of_time_in_words(@order_master.orderdate + 330.minutes,
+		                   @order_master.paid_date + 330.minutes) if @order_master.paid_date.present? %></td>
+	 	<td><%= distance_of_time_in_words(@order_master.orderdate + 330.minutes,
+		                   @order_master.refund_date + 330.minutes) if @order_master.refund_date.present? %></td>
+	 	<td><%= distance_of_time_in_words(@order_master.orderdate + 330.minutes,
+		                   @order_master.returned_date + 330.minutes) if @order_master.returned_date.present? %></td> 
+	 </tr>
+	</tbody>
+  </table>
+
+ </div>
+ <% end %>

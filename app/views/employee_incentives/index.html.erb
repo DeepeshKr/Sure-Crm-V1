@@ -98,7 +98,7 @@
  </div>
 
  <div class="row">
-   <div class="col-xs-6">
+   <div class="col-xs-8">
      <div class="panel panel-primary">
        <div class="panel-heading">VPP Orders</div>
         <table class="table table-hover table-bordered">
@@ -106,6 +106,10 @@
           <tr>
             <th>Order No</th>
             <th>Value</th>
+			<th>Order Ref Id</th>
+			<th>Status</th>
+			<th>Paid</th>
+
           </tr>
         </thead>
         <tbody>
@@ -115,13 +119,24 @@
               :target => "_blank", class: "btn btn-info btn-xs" if vpp.custref.present? %>
             </td>
               <td> <%= vpp.basic %></td>
+			  <td> <%= vpp.order_master.id %></td>
+			  <td> <%= vpp.order_master.order_status_master.name if vpp.order_master.present? %>
+    	  		 <% if vpp.order_master.order_status_master.name != "Paid Order" %>
+    	  		<small><span style="color:red">VPP Paid Date <%= vpp.paiddate.strftime("%Y-%m-%d") %></span></small>
+    			<% end %>
+			  </td>
+			  <td> <%= vpp.order_master.paid_date.strftime("%Y-%m-%d") if vpp.order_master.paid_date.present? %>
+  	  		 <% if vpp.order_master.paid_date.blank? %>
+  	  		<span style="color:red">VPP Paid Date <%= vpp.paiddate.strftime("%Y-%m-%d") %></span>
+  			<% end %>
+			 </td>
             </tr>
           <% end %>
         </tbody>
         </table>
      </div>
    </div>
-   <div class="col-xs-6">
+   <div class="col-xs-4">
      <div class="panel panel-primary">
        <div class="panel-heading">Sure CRM Orders</div>
         <table class="table table-hover table-bordered">
@@ -149,7 +164,7 @@
  </div>
 
  <div class="row">
-   <div class="col-xs-6">
+   <div class="col-xs-8">
      <div class="panel panel-primary">
        <div class="panel-heading">Dealtran Orders</div>
         <table class="table table-hover table-bordered">
@@ -157,6 +172,10 @@
           <tr>
             <th>Order No</th>
             <th>Value</th>
+			<th>Order Ref Id</th>
+			<th>Status</th>
+			<th>Paid</th>
+			
           </tr>
         </thead>
         <tbody>
@@ -167,13 +186,24 @@
                 :target => "_blank", class: "btn btn-info btn-xs" if vpp.custref.present? %>
               </td>
               <td> <%= vpp.basicprice %></td>
+			  <td> <%= vpp.order_master.id %></td>
+			  <td> <%= vpp.order_master.order_status_master.name if vpp.order_master.present? %>
+  	  		 <% if vpp.order_master.order_status_master.name != "Transfer Order - Delivered" %>
+  	  		<small><span style="color:red">DealTran Status Date <%= vpp.paiddate.strftime("%Y-%m-%d") %></span></small>
+  			<% end %>
+			  </td>
+			  <td> <%= vpp.order_master.paid_date.strftime("%Y-%m-%d") if vpp.order_master.paid_date.present? %>
+	  		 <% if vpp.order_master.paid_date.blank? %>
+	  		<span style="color:red">DealTran Status Date <%= vpp.statusdate.strftime("%Y-%m-%d") %></span>
+			<% end %>
+			  </td>
             </tr>
           <% end %>
         </tbody>
         </table>
      </div>
    </div>
-   <div class="col-xs-6">
+   <div class="col-xs-4">
      <div class="panel panel-primary">
        <div class="panel-heading">Sure CRM Transfer Orders</div>
         <table class="table table-hover table-bordered">

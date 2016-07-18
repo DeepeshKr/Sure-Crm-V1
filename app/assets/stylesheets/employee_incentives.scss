@@ -1,3 +1,31 @@
 // Place all the styles related to the employee_incentives controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+
+tr.d00 td {
+  background-color: #FFFF00;
+  color: black;
+  //yellow
+}
+
+tr.d0 td {
+  background-color: #d9d9d9;
+  color: black;
+  //grey
+}
+
+tr.d1 td {
+  background-color: #ff6933; 
+  color: black;
+  //red
+}
+tr.d2 td {
+  background-color: #00a3cc;
+  color: black;
+  //blue
+}
+tr.d3 td {
+  background-color: #86b300;
+  color: black;
+  //green
+}

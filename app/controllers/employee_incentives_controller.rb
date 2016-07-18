@@ -35,7 +35,7 @@ class EmployeeIncentivesController < ApplicationController
         @employee_sales = employee_sale.sales_data @from_date, @to_date, @employee_id
 
         #employeecode
-        @sale_vpp =  VPP.where("basic > 0 and operator = ? and paiddate >= ? and paiddate <= ? and cfo is null and custref IS NOT NULL", @employeecode, @from_date, @to_date).order(:custref)
+        @sale_vpp =  VPP.where("basic > 0 and operator = ? and paiddate >= ? and paiddate <= ? and cfo is null and custref IS NOT NULL", @employeecode, @from_date, @to_date).order(:paiddate)
         @total_sales_value = @sale_vpp.sum(:basic)
         @total_sales_nos = @sale_vpp.count
 
@@ -44,7 +44,7 @@ class EmployeeIncentivesController < ApplicationController
         @total_refunds_value = @refund_vpp.sum(:basic)
         @total_refunds_nos = @refund_vpp.count
 
-        @deal_trans = DEALTRAN.where("status = ? and operator = ? and statusdate >= ? and statusdate <= ?","D", @employeecode, @from_date, @to_date).order(:custref)
+        @deal_trans = DEALTRAN.where("status = ? and operator = ? and statusdate >= ? and statusdate <= ?","D", @employeecode, @from_date, @to_date).order(:statusdate)
 
         @total_transfer_value = @deal_trans.sum(:basicprice)
         @total_transfer_nos = @deal_trans.count
@@ -52,14 +52,14 @@ class EmployeeIncentivesController < ApplicationController
         #####
         #####
         @order_sales = OrderMaster.where('paid_date >= ? AND paid_date <= ?', @from_date, @to_date)
-        .where(employee_id: @employee_id).where.not(order_status_master_id: 10041).order(:external_order_no)
+        .where(employee_id: @employee_id).where.not(order_status_master_id: 10041).order(:paid_date)
 
         @total_sales_value_s =   @order_sales.sum(:subtotal)
         @total_sales_nos_s =   @order_sales.sum(:pieces)
         #order_status_master_id, 10041
 
         @order_transfer = OrderMaster.where('paid_date >= ? AND paid_date <= ?', @from_date, @to_date)
-        .where(employee_id: @employee_id).where(order_status_master_id: 10041).order(:external_order_no)
+        .where(employee_id: @employee_id).where(order_status_master_id: 10041).order(:paid_date)
 
         @total_transfer_value_s = @order_transfer.sum(:subtotal)
         @total_transfer_nos_s = @order_transfer.sum(:pieces)

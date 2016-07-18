@@ -1,0 +1,98 @@
+<!-- set page title start -->
+<% title "HBN Product Orders various Time #{@timenow}" %>
+<!-- set page title end -->
+<div class="row">
+ <div class="col-xs-12">
+	 <h4>Simulate HBN Product Orders various Time</h4>
+ </div>
+</div>
+<!-- filters here -->
+<div class="panel panel-success">
+  <div class="panel-heading"><h3 class="panel-title">You can simulate the ppo with estimated values - this wont change the values stored </h3></div>
+  
+  	<div class="panel-body"> <!-- start panel body -->
+		  <!-- filters here -->
+	  	<%= form_tag  url_for(:controller => 'sales_ppos', :action => "simulate_product_performance"), method: "get" do  %>
+	
+		<div class="row">
+		    <div class="col-xs-3">
+		           <%= select_tag :product_variant_id, options_from_collection_for_select(@product_variants, :id, :productinfo, :selected => @product_variant_id), {:class => "form-control",  :required => true} %>
+
+		    </div>
+		        <div class="col-xs-3">
+		          <div class="input-daterange input-group">
+		            <%= text_field_tag(:from_date, @from_date, :data => {:provide => "datepicker"}, :id => "datepicker_from", :class => "form-control", :required => "true" )   %>
+		            <span class="input-group-addon">to</span>
+
+		             <%= text_field_tag(:to_date, @to_date, :data => {:provide => "datepicker"}, :id => "datepicker_to", :class => "form-control", :required => "true" )   %>
+		          </div>
+		        </div>
+				<div class="col-xs-1">Retail Sale</div>
+				<div class="col-xs-2"><%= text_field_tag :sim_retail_sales_pieces, @sim_retail_sales_pieces, :class => "form-control", :placeholder => "Retail Sales", :required => true %></div>
+				<div class="col-xs-1">Transfer Sale</div>
+				<div class="col-xs-2"><%= text_field_tag :sim_to_sales_pieces, @sim_to_sales_pieces, :class => "form-control", :placeholder => "Transfer Sales", :required => true %></div>
+		</div>
+	  	<div class="row">
+		<div class="col-xs-1">Product MRP</div>
+		<div class="col-xs-2"><%= text_field_tag :sim_product_total, @sim_product_total, :class => "form-control", :placeholder => "Product MRP", :required => true %></div>
+		<div class="col-xs-1">Product Cost</div>
+		<div class="col-xs-2"><%= text_field_tag :product_price, @product_price, :class => "form-control", :placeholder => "Product Cost", :required => true %></div>
+		<div class="col-xs-1">Retail Default</div>
+		<div class="col-xs-2"><%= text_field_tag :retail_default, @retail_default, :class => "form-control", :placeholder => "Retail Default", :required => true %></div>
+		<div class="col-xs-1">Transfer Default</div>
+		<div class="col-xs-2"><%= text_field_tag :transfer_default, @transfer_default, :class => "form-control", :placeholder => "Transfer Default", :required => true %></div>
+
+	  	</div>
+	  	<div class="row">		
+		 <div class="col-xs-2 col-xs-offset-10"><%= submit_tag "Show", name: nil, class: "btn btn-info btn-sm" %></div>
+		 </div>
+	   <% end %>
+	</div> <!-- end panel body -->
+</div>
+ <!-- :locals => {:order_lines =>  @order_lines_common,
+ 	order_description: "Common Upsell"}-->
+<!-- filters here -->
+ <br>
+ <br>
+ <%= render partial: 'row_of_ppo' %>
+ <br>
+ <br>
+
+
+
+<div class="well well-sm">
+<ul class="list-inline">
+  <li>* The pieces are including upsell</li>
+  <li>ppo = (revenue - (product_cost + fixed_cost + product_damages + media_var_cost + refund))</li>
+</ul>
+</div>
+<div class="panel panel-primary">
+  <div class="panel-body">
+	<div class="row">
+	  <div class="col-xs-2">
+	  
+	  </div>
+	  <div class="col-xs-2">
+	  	
+	  </div>
+	  <div class="col-xs-3">
+
+	  </div>
+	  <div class="col-xs-3">
+
+	  </div>
+	  <div class="col-xs-2">
+
+	   <%= link_to 'Download CSV file', sales_ppos_simulate_product_performance_path(from_date: @from_date, to_date: @to_date, product_variant_id: @product_variant_id,  format: :csv), class: "btn btn-info btn-sm" %>
+	  </div>
+	</div>
+ </div>
+</div>
+
+
+<hr>
+
+<script>
+$('#datepicker_to').datepicker({format: 'yyyy-mm-dd'});
+$('#datepicker_from').datepicker({format: 'yyyy-mm-dd'});
+</script>

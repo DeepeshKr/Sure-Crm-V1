@@ -127,14 +127,14 @@
 		<div id="live" class="tab-pane fade">
 			<div class="row">
 				<div class="col-xs-12">
-				   <%= render partial: 'home_index', :locals => {:name_of_status_list => "Completed Features",
+				   <%= render partial: 'list_of_request', :locals => {:name_of_status_list => "Completed Features",
 			       :app_feature_requests => @app_completed_features, :about_the_list => "Footer with details" }  %>
 				</div>
 			</div>
 
 			<div class="row">
 				<div class="col-xs-12">
-					<%= render partial: 'home_index', :locals => {:name_of_status_list => "Completed Errors",
+					<%= render partial: 'list_of_request', :locals => {:name_of_status_list => "Completed Errors",
 						:app_feature_requests => @app_completed_errors, :about_the_list => "Footer with details" }  %>
 				</div>
 			</div>

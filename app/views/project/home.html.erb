@@ -84,12 +84,12 @@
   <% if @app_testing_features.present? %>
       <%= render partial: 'app_feature_requests/panel_list',
       :locals => {:app_feature_requests => @app_testing_features,
-        :app_heading => "Testing Required for these Requests"}  %>
+        :app_heading => "Testing Required for these Requests http://3.0.3.26:120 try it"}  %>
   <% end %>
   <% if @app_testing_errors.present? %>
       <%= render partial: 'app_feature_requests/panel_list',
       :locals => {:app_feature_requests => @app_testing_errors,
-        :app_heading => "Testing Required for these Requests"}  %>
+        :app_heading => "Testing Required for these Requests http://3.0.3.26:120 try it"}  %>
   <% end %>
   <% if @app_beta_features.present? %>
       <%= render partial: 'app_feature_requests/panel_list',
@@ -103,12 +103,12 @@
   <% end %>
   <% if @app_completed_features.present? %>
       <%= render partial: 'app_feature_requests/panel_list',
-      :locals => {:app_feature_requests => @app_beta_features,
+      :locals => {:app_feature_requests => @app_completed_features,
         :app_heading => "Request is now released and live"}  %>
   <% end %>
   <% if @app_completed_errors.present? %>
       <%= render partial: 'app_feature_requests/panel_list',
-      :locals => {:app_feature_requests => @app_beta_errors,
+      :locals => {:app_feature_requests => @app_completed_errors,
         :app_heading => "Request is now released and live"}  %>
   <% end %>
 

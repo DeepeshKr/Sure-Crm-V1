@@ -137,6 +137,7 @@ class MediaController < ApplicationController
 
   private
     def dropdowns
+      @states = Medium.select(:state).distinct.order(:state)
       @statelist = State.all
       @media_commission = MediaCommision.all
       @media_group = MediaGroup.all

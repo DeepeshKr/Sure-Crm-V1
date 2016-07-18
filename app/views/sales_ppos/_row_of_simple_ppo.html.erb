@@ -2,7 +2,7 @@
 
 <div class="row fixed-table">
   <div class="table-content">
-	  <table class="table table-hover table-bordered table-striped">
+	  <table class="table table-hover table-bordered">
   		<thead class="header">
      <tr>
      	<th rowspan="2">No</th>
@@ -11,7 +11,7 @@
         <th colspan="3">Income</th>
         <th rowspan="2" class="text-right"><small>Revenue </small></th>
         <th colspan="5">Expense</th>
-       	<th rowspan="2">PPO </th>
+       	<th rowspan="2">PPO</th>
       	<th>More </th>
      </tr>
      <tr>
@@ -28,7 +28,7 @@
 <tbody>
 	<% @sno = 1 %>
    <% @employeeorderlist.each do |c| %>
-   <tr>
+    <tr class=<%=c.css_1 %>>
 	   <td rowspan="2"><%= @sno %></td>
 
 	 	<td rowspan="2"><%= c.show %> <small> Id: <%= c.campaign_playlist_id %> </small><br>
@@ -40,7 +40,7 @@
 		<small><%= link_to "Cost Details", productcost_path(search: c.prod), :target => "_blank", class: "btn btn-primary btn-xs" %> </small>
 		<br>
 		<%= c.for_date.strftime('%d-%b') if c.for_date.present? %> At: <%= c.show_time %> <br>
-		<small>Desc: <%= c.description %> </small>
+
 		</td>
 		<td title="Name"><small><%= c.total_name_1 %> </small> </td>
 		<td class="text-right" title="Orders"> <%= c.total_nos_1 %> <% @total_nos_1 += c.total_nos_1 if c.total_nos_1.present? %></td>
@@ -58,17 +58,17 @@
 		<td rowspan="2">
 			<%= link_to "Old", ppo_products_path(campaign_id: c.campaign_playlist_id), :target => "_blank", class: "btn btn-primary btn-xs"  %>
 			<% if c.product_variant_id.present? %>
-			<hr>
-			<%= link_to "Product Details", {:controller => :sales_ppos, :action => :details, campaign_id: c.campaign_playlist_id, product_variant_id: c.product_variant_id}, :target => "_blank", class: "btn btn-info btn-xs" %>
+			<br> <br>
+			<%= link_to "Product", {:controller => :sales_ppos, :action => :details, campaign_id: c.campaign_playlist_id, product_variant_id: c.product_variant_id}, :target => "_blank", class: "btn btn-info btn-xs" %>
 			<% end %>
-			<hr>
-				<%= link_to "Show Details", {:controller => :sales_ppos, :action => :details, campaign_id: c.campaign_playlist_id}, :target => "_blank", class: "btn btn-info btn-xs" %>
+			<br> <br>
+				<%= link_to "Show", {:controller => :sales_ppos, :action => :details, campaign_id: c.campaign_playlist_id}, :target => "_blank", class: "btn btn-info btn-xs" %>
 
 		</td>
 	</tr>
 
 <!-- second -->
-	<tr>
+	 <tr class=<%=c.css_2 %>>
 		<td title="Name"><small><%= c.total_name_2 %></small></td>
 		<td class="text-right" title="Orders"><%= c.total_nos_2 %>  <% @total_nos_2 += c.total_nos_2 if c.total_nos_2.present? %></td>
 		<td class="text-right" title="Pieces"> <%= c.total_pieces_2 %>  <% @total_pieces_2 += c.total_pieces_2 if c.total_pieces_2.present? %> </td>
@@ -78,7 +78,7 @@
 		<td class="text-right" title="Variable Cost">   <%= number_with_delimiter(c.total_var_cost_2.to_i + c.total_var_on_order_cost_2.to_i) %>
     <% @total_var_cost_2 += c.total_var_cost_2 if c.total_var_cost_2.present? %>
      <% @total_var_on_order_cost_2 += c.total_var_on_order_cost_2 if c.total_var_on_order_cost_2.present? %>  </td>
-		<td class="text-right" title="Fixed Media Cost"> <%= number_with_delimiter(c.total_fixed_cost_2.to_i) %>  <% @total_fixed_cost_2 += c.total_fixed_cost_2 if c.total_fixed_cost_2.present? %>   </td>
+		<td class="text-right" title="Fixed Media Cost"> <%= number_with_delimiter(c.total_fixed_cost_2.to_i) %>  <% @total_fixed_cost_2 += c.total_fixed_cost_2 if c.total_fixed_cost_2.present? %> <br>   <!-- % = link_to 'Edit Cost',campaign_playlists_new_media_cost_path(id: c.campaign_playlist_id, redirect_to: request.original_url), {:style=>'color:#0000A0;'} % -->  </td>
 		<td class="text-right" title="Refunds"> <%= number_with_delimiter(c.total_refund_2.to_i) %>  <% @total_refund_2 += c.total_refund_2 if c.total_refund_2.present? %> </td>
 		<td class="text-right" title="Damages"> <%= number_with_delimiter(c.total_product_dam_cost_2.to_i) %> <% @total_product_dam_cost_2 += c.total_product_dam_cost_2 if c.total_product_dam_cost_2.present? %>  </td>
 		<td class="text-right" title="Profitability">   <%= number_with_delimiter(c.profit_per_order_2.to_i) if c.profit_per_order_2.present? %>  </td>

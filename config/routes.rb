@@ -164,6 +164,8 @@ Rails.application.routes.draw do
   get 'media_cost_masters_get_costs' => 'media_cost_masters#get_costs'
   #new sales ppo
   post 'sales_ppos/re_create_ppo'
+  post 'sales_ppos/recreate_ppo_for_order_id'
+  post 'sales_ppos/recreate_ppo_between_days'
 
   get 'sales_ppos/index'
   get 'sales_ppos' => 'sales_ppos#index'
@@ -180,8 +182,17 @@ Rails.application.routes.draw do
 
   get 'sales_ppos/operator_sales_performance'
   get 'sales_ppos_operator_sales_performance' => 'sales_ppos#operator_sales_performance'
+  
   get 'sales_ppos/product_performance'
   get 'sales_ppos_product_performance' => 'sales_ppos#product_performance'
+  
+  get 'sales_ppos/simulate_product_performance'
+  get 'sales_ppos_simulate_product_performance' => 'sales_ppos#simulate_product_performance'
+
+  
+  get 'sales_ppos/product_long_term_performance'
+  get 'sales_ppos_product_long_term_performance' => 'sales_ppos#product_long_term_performance'
+  
   get 'sales_ppos/show_performance'
   get 'sales_ppos_show_performance' => 'sales_ppos#show_performance'
 
@@ -204,7 +215,6 @@ Rails.application.routes.draw do
   get 'show_ppo' => 'sales_ppo_report#show'
   get 'sales_ppo_report/channel'
   get 'channel_ppo' => 'sales_ppo_report#channel'
-
 
 
   get 'sales_ppo_report/product_performance'

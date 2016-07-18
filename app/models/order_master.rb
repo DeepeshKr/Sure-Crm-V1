@@ -946,7 +946,7 @@ def add_hbn_product_to_campaign
 
     product_variant = OrderLine.where(orderid: order_id)
     .joins(:product_variant)
-    .where('PRODUCT_VARIANTS.product_sell_type_id = ?', 10000)
+   .where('PRODUCT_VARIANTS.product_sell_type_id = ? OR PRODUCT_VARIANTS.product_sell_type_id = ?', 10000, 10040)
 
     product_variant_id = product_variant.first.productvariant_id || nil if product_variant.first.productvariant_id.present?
 
@@ -1045,7 +1045,7 @@ def add_hbn_product_to_campaign
 
     #check if found in sales ppo table
     if !SalesPpo.where(:order_id=> order_id).present?
-      add_update order_id
+     create_sales_hbn_ppo order_id
     end
 
 end
@@ -1063,7 +1063,7 @@ def add_product_to_campaign_hbn_ppo order_id
 
     product_variant = OrderLine.where(orderid: order_id)
     .joins(:product_variant)
-    .where('PRODUCT_VARIANTS.product_sell_type_id = ?', 10000)
+    .where('PRODUCT_VARIANTS.product_sell_type_id = ? OR PRODUCT_VARIANTS.product_sell_type_id = ?', 10000, 10040)
 
     product_variant_id = product_variant.first.productvariant_id if product_variant.present?
 
@@ -1400,7 +1400,8 @@ def add_product_to_campaign
   missed_reason = nil
 
   campaign_playlist_id = order_master.campaign_playlist_id || 0 if order_master.campaign_playlist_id.present?
-  product_variant = OrderLine.where(orderid: order_id).joins(:product_variant).where('PRODUCT_VARIANTS.product_sell_type_id = ?', 10000)
+  product_variant = OrderLine.where(orderid: order_id).joins(:product_variant).where('PRODUCT_VARIANTS.product_sell_type_id = ? OR PRODUCT_VARIANTS.product_sell_type_id = ?', 10000, 10040)
+  
   product_variant_id = product_variant.first.productvariant_id || nil if product_variant.first.productvariant_id.present?
 
   return if product_variant_id.blank?
@@ -1526,7 +1527,7 @@ def add_product_to_campaign
     #order_master.update(notes: total_notes)
 
      #check if found in sales ppo table
-    add_update order_id
+    order_master.delay(:queue => 'hbn sales ppos over take', priority: 100).re_create_sales_ppo
 
     puts "Process Completed - Updated"
   end

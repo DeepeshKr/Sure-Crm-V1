@@ -25,9 +25,9 @@
   <div class="row">
     <%= bootstrap_form_tag url: media_path, :method => :GET, :enforce_utf8 => false do |f| %>
       <div class="col-xs-9">
-      <%= select_tag(:state,
-                options_from_collection_for_select(State.all, :name, :name, selected: @state),
-                {:class => "form-control"} )  %>
+        <%= select_tag(:state,
+                    options_from_collection_for_select(@states, :state, :state, selected: @state),
+                    {:class => "form-control"})  %>
       </div>
       <div class="col-xs-3">
           <%= submit_tag "Ok", name: nil,  class: "btn btn-primary" %>

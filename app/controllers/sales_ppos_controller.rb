@@ -15,6 +15,8 @@ class SalesPposController < ApplicationController
     todaydate = Date.today #Time.zone.now + 330.minutes
     @from_date = todaydate - 7.days #30.days
     @to_date = todaydate
+    @return_url = request.original_url
+    
     if params.has_key?(:from_date)
         from_date =  Date.strptime(params[:from_date], "%Y-%m-%d")
         @from_date = from_date.to_date - 7.days #30.days
@@ -519,7 +521,146 @@ class SalesPposController < ApplicationController
         format.json {render json: @employeeorderlist, methods: [:total_product_dam_cost_1, :total_nos_2, :for_date, :show_time, :product_cost, :description, :total_name_1, :total_nos_1, :total_pieces_1, :total_sales_1, :total_revenue_1,:total_product_cost_1,:total_var_cost_1,:total_fixed_cost_1,:total_refund_1,:total_product_dam_cost_1,:profit_per_order_1, :total_name_2,:total_nos_2, :total_pieces_2,:total_sales_2, :total_revenue_2, :total_product_cost_2, :total_var_cost_2, :total_fixed_cost_2, :total_refund_2, :total_product_dam_cost_2, :profit_per_order_2]}
     end
   end
+  
+  def simulate_product_performance
 
+    @return_url = request.original_url
+    @total_sales_1, @total_sales_2, @total_revenue_1, @total_revenue_2 = 0,0,0,0
+    @report_results = "Please select date range to show report"
+    @hourlist = "Time UTC is your zone #{Time.zone.now} while actual time is #{Time.now}"
+    @sno = 1
+    @searchaction = "hourly"
+    @from_date = (330.minutes).from_now.to_date
+    for_date = (330.minutes).from_now.to_date
+
+    @product_variants = ProductVariant.all.order("name").where("activeid = 10000")
+    @product_name = ""
+    @product_price = nil
+   if params.has_key?(:product_variant_id)
+    @product_variant_id = params[:product_variant_id]
+    @product_variant = ProductVariant.find(@product_variant_id)
+    @product_name = @product_variant.name
+    @product_price = ProductCostMaster.find_by_prod(@product_variant.extproductcode).cost || 0 if ProductCostMaster.find_by_prod(@product_variant.extproductcode).present?
+   end
+
+   if params.has_key?(:from_date)
+     @from_date =  Date.strptime(params[:from_date], "%Y-%m-%d")
+     @or_for_date = for_date.strftime("%Y-%m-%d")
+   end
+
+   @to_date = (330.minutes).from_now.to_date
+   if params.has_key?(:to_date)
+     @to_date =  Date.strptime(params[:to_date], "%Y-%m-%d")
+   end
+
+   if @product_variant_id == nil && @from_date == nil && @to_date == nil
+     return
+   end
+   #@retail_default = 49
+   @retail_default = SalesPpoDefault.find_by_name("Retail").value
+   if params.has_key?(:retail_default)
+     @retail_default = params[:retail_default]
+   end
+   #@transfer_default = 65
+   @transfer_default = SalesPpoDefault.find_by_name("Transfer Order").value
+   if params.has_key?(:transfer_default)
+     @transfer_default = params[:transfer_default]
+   end
+
+   @sim_product_price = nil
+   if params[:sim_product_price].present?
+     @sim_product_price = params[:sim_product_price]
+   end
+
+   @sim_retail_sales_pieces = 0
+   if params[:sim_retail_sales_pieces].present?
+     @sim_retail_sales_pieces = params[:sim_retail_sales_pieces]
+   end
+
+   @sim_to_sales_pieces = 0
+   if params[:sim_to_sales_pieces].present?
+     @sim_to_sales_pieces = params[:sim_to_sales_pieces]
+   end
+
+   @sim_product_total = 0
+   if params[:sim_product_total].present?
+     @sim_product_total = params[:sim_product_total]
+   end
+
+   @regenerate_ppo = "Re Generate PPO for #{@product_name} with product price Rs. #{@product_price} between #{@from_date} and #{@to_date}"
+
+   ppo_sales = SalesPpo.new
+   # change default retail and transfer order conversion rate
+   # change product price , ret_def = nil, to_def = nil, product_cost = nil
+   @employeeorderlist = ppo_sales.simulate_sales_product_ppos_for_date @from_date, @to_date, @product_variant_id, @retail_default, @transfer_default, @sim_product_price, @sim_retail_sales_pieces, @sim_to_sales_pieces, @sim_product_total
+
+   @serial_no += 1
+
+   @report_results = "Searched for dates #{@from_date} to #{@to_date} and nothing found"
+   #@employeeorderlist = employeeunorderlist #.sort_by{|c| c[:total]}.reverse
+    respond_to do |format|
+      csv_file_name = "#{@product_name}_#{@product_price}_performance_between_#{@from_date}_#{@to_date}.csv"
+        format.html
+
+        #format.csv { send_data @employeeorderlist.to_new_csv}
+        #format.csv { send_data @employeeorderlist.to_new_csv, filename: "#{csv_file_name}" }
+        format.csv do
+            headers['Content-Disposition'] = "attachment; filename=\"#{csv_file_name}\""
+            headers['Content-Type'] ||= 'text/csv'
+        end
+
+        format.json {render json: @employeeorderlist, methods: [:total_product_dam_cost_1, :total_nos_2, :for_date, :show_time, :product_cost, :description, :total_name_1, :total_nos_1, :total_pieces_1, :total_sales_1, :total_revenue_1,:total_product_cost_1,:total_var_cost_1,:total_fixed_cost_1,:total_refund_1,:total_product_dam_cost_1,:profit_per_order_1, :total_name_2,:total_nos_2, :total_pieces_2,:total_sales_2, :total_revenue_2, :total_product_cost_2, :total_var_cost_2, :total_fixed_cost_2, :total_refund_2, :total_product_dam_cost_2, :profit_per_order_2]}
+    end
+  end
+  
+  def product_long_term_performance
+
+    @return_url = request.original_url
+    @total_sales_1, @total_sales_2, @total_revenue_1, @total_revenue_2 = 0,0,0,0
+    @report_results = "Please select date range to show report"
+    @hourlist = "Time UTC is your zone #{Time.zone.now} while actual time is #{Time.now}"
+    @sno = 1
+    @searchaction = "product_long_term_performance"
+    @from_date = (330.minutes).from_now.to_date
+    for_date = (330.minutes).from_now.to_date
+
+   if params.has_key?(:from_date)
+     @from_date =  Date.strptime(params[:from_date], "%Y-%m-%d")
+     @or_for_date = for_date.strftime("%Y-%m-%d")
+   end
+
+   @to_date = (330.minutes).from_now.to_date
+   if params.has_key?(:to_date)
+     @to_date =  Date.strptime(params[:to_date], "%Y-%m-%d")
+   end
+
+   if @from_date == nil && @to_date == nil
+     return
+   end
+  
+   ppo_sales = SalesPpo.new
+   # change default retail and transfer order conversion rate
+   # change product price , ret_def = nil, to_def = nil, product_cost = nil
+   @employeeorderlist = ppo_sales.sales_all_product_ppos_between_date @from_date, @to_date, @retail_default, @transfer_default
+
+   @serial_no += 1
+
+   @report_results = "Searched for dates #{@from_date} to #{@to_date} and nothing found"
+   #@employeeorderlist = employeeunorderlist #.sort_by{|c| c[:total]}.reverse
+    respond_to do |format|
+      csv_file_name = "Long_term_performance_between_#{@from_date}_#{@to_date}.csv"
+        format.html
+
+        #format.csv { send_data @employeeorderlist.to_new_csv}
+        #format.csv { send_data @employeeorderlist.to_new_csv, filename: "#{csv_file_name}" }
+        format.csv do
+            headers['Content-Disposition'] = "attachment; filename=\"#{csv_file_name}\""
+            headers['Content-Type'] ||= 'text/csv'
+        end
+
+    end
+  end
+  
   def show_performance
     @report_results = "Please select date range to show report"
     @hourlist = "Time UTC is your zone #{Time.zone.now} while actual time is #{Time.now}"
@@ -833,8 +974,8 @@ class SalesPposController < ApplicationController
       to_date =  Date.strptime(params[:to_date], "%Y-%m-%d")
       @to_date = to_date.end_of_day - 330.minutes
     end
-
     sales_ppos = SalesPpo.where("start_time >= ? AND start_time <= ?", @from_date, @to_date)
+    
 
     @product_variant_id = nil
     if params[:product_variant_id].present?
@@ -884,7 +1025,38 @@ class SalesPposController < ApplicationController
        redirect_to sales_ppos_path, notice: "The process of recreating #{nos} is complete."
      end
   end
-
+  
+  
+  def recreate_ppo_for_order_id
+    @order_id = nil
+    if params[:order_id].present?
+      @order_id = params[:order_id]
+       sales_ppos = OrderMaster.where(id: @order_id)
+    end
+    
+    if @order_id == nil && sales_ppos.blank
+      redirect_to sales_ppos_path, error: 'Unable to re-create ppos.'
+    end
+    
+    sales_ppos = OrderMaster.where(id: @order_id)
+    sales_ppos.each do |ppo|
+      #new_ppo = SalesPpo.new
+      # a synchronised between days and calls all other functions
+        ppo.add_product_to_campaign_hbn_ppo ppo.id
+         #ppo.order_id
+       #create_sales_ppo ppo.order_id
+        nos =+ 1
+       #byebug
+    end
+    if params.has_key?(:return_url)
+      @return_url = params[:return_url]
+      redirect_to @return_url, notice: "The process of recreating #{nos} ppos has is completed."
+   else
+      redirect_to sales_ppos_path, notice: "The process of recreating #{nos} is complete."
+    end
+  end
+  
+  
   def recreate_ppo_between_days
     sales_ppos = OrderMaster.where("orderdate >= ? AND orderdate <= ?", @from_date, @to_date)
     sales_ppos.each do |ppo|
@@ -966,7 +1138,8 @@ class SalesPposController < ApplicationController
 
       @serial_no = 1
 
-      @total_sales_1, @total_revenue_1, @total_product_cost_1, @total_var_cost_1, @total_var_on_order_cost_1 @total_fixed_cost_1, @total_refund_1, @total_product_dam_cost_1,@total_pieces_1, @total_nos_1 = 0,0,0,0,0,0,0,0,0,0,0.0
+      @total_sales_1, @total_revenue_1, @total_product_cost_1, @total_var_cost_1, @total_var_on_order_cost_1, @total_fixed_cost_1, @total_refund_1, @total_product_dam_cost_1,@total_pieces_1, @total_nos_1 = 0,0,0,0,0,0,0,0,0,0,0.0
+      
        @total_sales_2, @total_revenue_2, @total_product_cost_2, @total_var_cost_2, @total_var_on_order_cost_2, @total_fixed_cost_2, @total_refund_2, @total_product_dam_cost_2,@total_pieces_2, @total_nos_2 = 0,0,0,0,0,0,0,0,0,0,0.0
     end
 
@@ -996,88 +1169,7 @@ class SalesPposController < ApplicationController
         @to_date = @to_date.end_of_day - 330.minutes
       end
     end
-
-    # def create_sales_ppo order_id
-    #   # order_id = self.order_id
-    #
-    #    order_master = OrderMaster.find(order_id)
-    #     time_of_order = order_master.orderdate.strftime('%Y-%b-%d %H:%M:%S')
-    #    campaign_playlist_id = order_master.campaign_playlist_id || nil if order_master.campaign_playlist_id.present?
-    #    campaign_id = order_master.campaign_playlist.campaignid || nil if order_master.campaign_playlist
-    #    if campaign_playlist_id.blank?
-    #      remove_from_sales_ppo order_id
-    #      return  puts "No campaign playlist found in PPO"
-    #    end
-    #    campaign_name = CampaignPlaylist.find(campaign_playlist_id).name || " " if order_master.campaign_playlist_id.present?
-    #    order_pieces = order_master.pieces || 0 if order_master.pieces.present?
-    #    if order_master.promotion.present?
-    #      if order_master.promotion.promo_cost.present?
-    #        total_promotion_cost = order_master.promotion.promo_cost || 0 if order_master.promotion.promo_cost.present?
-    #        per_order_promo_cost = (total_promotion_cost / order_pieces) if order_pieces.present?
-    #      end
-    #    end
-    #
-    #    order_lines = OrderLine.where(orderid: order_id)
-    #
-    #    puts "Found #{order_lines.count()} orders, now checking if they are in PPO!" #.colorize(:blue)
-    #    order_lines.each do |ordln|
-    #    #add or update ppo details
-    #    #byebug
-    #    if SalesPpo.where(:order_line_id=> ordln.id).present?
-    #      @sale_ppo = SalesPpo.where(:order_line_id=> ordln.id).first
-    #
-    #      @sale_ppo.update(campaign_playlist_id: campaign_playlist_id,
-    #      name: campaign_name,
-    #      campaign_id: campaign_id,
-    #      :product_master_id => ordln.product_master_id,
-    #      product_variant_id: ordln.productvariant_id,
-    #      product_list_id: ordln.product_list_id,
-    #      prod: (ordln.product_list.extproductcode || nil if ordln.product_list.present?),
-    #      :start_time => time_of_order,
-    #      :order_id => ordln.orderid,
-    #      :order_line_id=> ordln.id,
-    #      :product_cost => ordln.productcost,
-    #      :pieces => ordln.pieces,
-    #      :revenue => ordln.productrevenue,
-    #      :transfer_order_revenue => ordln.transfer_order_revenue,
-    #      :transfer_order_dealer_price => ordln.transfer_order_dealer_price,
-    #      :damages => ordln.productcost * 0.10,
-    #      :returns => ordln.refund,
-    #      :commission_cost => ordln.variable_media_commission,
-    #      :commission_on_order => ordln.fixed_media_commission,
-    #      :promotion_cost=> per_order_promo_cost,
-    #      :gross_sales => ordln.gross_sales,
-    #      :net_sale => ordln.net_sales,
-    #      :external_order_no => order_master.external_order_no,
-    #      :order_status_id => order_master.order_status_master_id,
-    #      :order_pincode => order_master.pincode,
-    #      :media_id => order_master.media_id,
-    #      :promo_cost_total => total_promotion_cost,
-    #      :dnis => order_master.calledno,
-    #      :city => order_master.city,
-    #      :state => order_master.customer_address.state,
-    #      :mobile_no => order_master.mobile,
-    #      :shipping_cost => ordln.product_postage)
-    #
-    #      puts "Updated existing Sales PPO with id #{@sale_ppo.id} created on #{@sale_ppo.created_at.strftime("%d-%b-%y %H:%M")} for order id #{order_master.id}" #.colorize(:light_yellow).colorize( :background => :black)
-    #      end
-    #    end
-    # end
-    #
-    # def remove_from_sales_ppo order_id
-    #   order_master = OrderMaster.find(order_id)
-    #
-    #   order_lines = OrderLine.where(orderid: order_id)
-    #   order_lines.each do |ordln|
-    #   #add or update ppo details
-    #     if SalesPpo.where(:order_line_id=> ordln.id).present?
-    #       sale_ppo = SalesPpo.where(:order_line_id=> ordln.id).first
-    #       sale_ppo.destroy
-    #       puts "Destroyed for order id #{order_master.id}" #.colorize(:black).colorize(:background => :red)
-    #     end
-    #   end
-    # end
-    #
+    
     def daily_task_ppo_status
       todaydate = Date.today #Time.zone.now + 330.minutes
       @from_date = todaydate - 7.days #30.days

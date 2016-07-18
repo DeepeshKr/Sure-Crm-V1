@@ -236,6 +236,7 @@ class OrderMastersController < ApplicationController
   end
   
   def review
+     @return_url = request.original_url
     if params.has_key?(:order_id)
      @order_id = params[:order_id]
      @order_master = OrderMaster.find(@order_id)
