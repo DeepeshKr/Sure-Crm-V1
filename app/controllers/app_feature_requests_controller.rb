@@ -127,6 +127,13 @@ class AppFeatureRequestsController < ApplicationController
             AppMailer.upload(empl.emailid, @app_feature_request).deliver_now if empl.emailid.present?
           end
         end
+        
+        if @app_feature_request.current_status_id == 10003 # Need error logs or more information pending
+          @employees = Employee.where(employee_role_id: 10162) #send alerts to tec support to upload
+          @employees.each do |empl|
+            AppMailer.log(empl.emailid, @app_feature_request).deliver_now if empl.emailid.present?
+          end
+        end
 
         if @app_feature_request.current_status_id == 10008 # checking required
           @employee = Employee.find(@app_feature_request.request_by)

@@ -28,6 +28,8 @@ class ProjectController < ApplicationController
         @app_completed_errors = @all_app_requests.where(app_feature_type_id: 10001, current_status_id: 10012)
 
        if current_user.role == 10022 || current_user.role == 10162
+         @app_log_requests = AppFeatureRequest.where(app_feature_type_id: 10000, current_status_id: 10003)
+         @app_log_errors = AppFeatureRequest.where(app_feature_type_id: 10001, current_status_id: 10003)
          @app_upload_requests = AppFeatureRequest.where(app_feature_type_id: 10000, current_status_id: 10010)
          @app_upload_errors = AppFeatureRequest.where(app_feature_type_id: 10001, current_status_id: 10010)
 

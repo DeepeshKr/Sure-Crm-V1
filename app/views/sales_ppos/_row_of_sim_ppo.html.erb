@@ -1,0 +1,124 @@
+ <% if @employeeorderlist.present? %>
+
+<div class="row fixed-table">
+  <div class="table-content">
+	  <table class="table table-hover table-bordered table-striped">
+  		<thead class="header">
+     <tr>
+     	<th rowspan="2">No</th>
+     	<th rowspan="2" style="width:">Show</th>
+	   	<th rowspan="2">Name</th>
+        <th colspan="3">Income</th>
+        <th rowspan="2" class="text-right"><small>Revenue </small></th>
+        <th colspan="5">Expense</th>
+       	<th rowspan="2">PPO </th>
+     </tr>
+     <tr>
+        <th class="text-right"><small>Orders </small></th>
+        <th class="text-right"><small>Nos </small> *</th>
+       	<th class="text-right"><small>Sales </small></th>
+        <th class="text-right"><small>Product Cost </small></th>
+        <th class="text-right"><small>Comm -ision </small></th>
+       	<th class="text-right">Media Cost</th>
+        <th class="text-right">Refund</th>
+        <th class="text-right">Damages</th>
+       </tr>
+    </thead>
+<tbody>
+	<% @sno = 1 %>
+   <% @employeeorderlist.each do |c| %>
+   <tr>
+	   <td rowspan="2"><%= @sno %></td>
+
+	 	<td rowspan="2"><%= c.show %> <small> Id: <%= c.campaign_playlist_id %> </small><br>
+		 <% if c.product_cost == 0 %>
+		<span style="color:red">No Product Cost Found</span>
+		<% else %>
+		<span style="color:green"> Cost Rs: <%= c.product_cost %></span>
+		<% end %>
+		<small><%= link_to "Cost Details", productcost_path(search: c.prod), :target => "_blank", class: "btn btn-primary btn-xs" %> </small>
+		<br>
+		<%= c.for_date.strftime('%d-%b') if c.for_date.present? %> At: <%= c.show_time %> <br>
+		<small>Desc: <%= c.description %> </small>
+		</td>
+		<td title="Name"><small><%= c.total_name_1 %> </small> </td>
+		<td class="text-right" title="Orders"> <%= c.total_nos_1 %> <% @total_nos_1 += c.total_nos_1 if c.total_nos_1.present? %></td>
+		<td class="text-right" title="Pieces"> <%= c.total_pieces_1 %> <% @total_pieces_1 += c.total_pieces_1 if c.total_pieces_1.present? %> </td>
+		<td class="text-right" title="Sales">   <%= number_with_delimiter(c.total_sales_1.to_i) %> <% @total_sales_1 += c.total_sales_1 if c.total_sales_1.present? %>  </td>
+		<td class="text-right" title="Revenue">   <%= number_with_delimiter(c.total_revenue_1.to_i) %> <% @total_revenue_1 += c.total_revenue_1 if c.total_revenue_1.present? %> </td>
+		<td class="text-right" title="Product Cost">   <%= number_with_delimiter(c.total_product_cost_1.to_i) %> <% @total_product_cost_1 += c.total_product_cost_1 if c.total_product_cost_1.present? %>  </td>
+		<td class="text-right" title="Variable Cost"><%= number_with_delimiter(c.total_var_cost_1.to_i + c.total_var_on_order_cost_1.to_i) %>
+    <% @total_var_cost_1 += c.total_var_cost_1 if c.total_var_cost_1.present? %>
+    <% @total_var_cost_1 += c.total_var_on_order_cost_1 if c.total_var_on_order_cost_1.present? %> </td>
+		<td class="text-right" title="Fixed Media Cost"> <%= number_with_delimiter(c.total_fixed_cost_1.to_i) if c.total_fixed_cost_1.present? %> <% @total_fixed_cost_1 += c.total_fixed_cost_1 if c.total_fixed_cost_1.present? %> <br>   <!-- %= link_to 'Edit Cost',campaign_playlists_new_media_cost_path(id: c.campaign_playlist_id, redirect_to: request.original_url), {:style=>'color:#0000A0;'} % --> </td>
+		<td class="text-right" title="Refunds"> <%= number_with_delimiter(c.total_refund_1.to_i) %>  <% @total_refund_1 += c.total_refund_1 if c.total_refund_1.present? %> </td>
+		<td class="text-right" title="Damages"> <%= number_with_delimiter(c.total_product_dam_cost_1.to_i) %> <% @total_product_dam_cost_1 += c.total_product_dam_cost_1 if c.total_product_dam_cost_1.present? %>  </td>
+		<td class="text-right" title="Profitability"> <%= number_with_delimiter(c.profit_per_order_1.to_i) if c.profit_per_order_1.present? %>  </td>
+
+	</tr>
+
+<!-- second -->
+	<tr>
+		<td title="Name"><small><%= c.total_name_2 %></small></td>
+		<td class="text-right" title="Orders"><%= c.total_nos_2 %>  <% @total_nos_2 += c.total_nos_2 if c.total_nos_2.present? %></td>
+		<td class="text-right" title="Pieces"> <%= c.total_pieces_2 %>  <% @total_pieces_2 += c.total_pieces_2 if c.total_pieces_2.present? %> </td>
+		<td class="text-right" title="Sales">   <%= number_with_delimiter(c.total_sales_2.to_i) %> <% @total_sales_2 += c.total_sales_2 if c.total_sales_2.present? %>   </td>
+		<td class="text-right" title="Revenue">   <%= number_with_delimiter(c.total_revenue_2.to_i) %>  <% @total_revenue_2 += c.total_revenue_2 if c.total_revenue_2.present? %>  </td>
+		<td class="text-right" title="Product Cost">   <%= number_with_delimiter(c.total_product_cost_2.to_i) %>  <% @total_product_cost_2 += c.total_product_cost_2 if c.total_product_cost_2.present? %>  </td>
+		<td class="text-right" title="Variable Cost">   <%= number_with_delimiter(c.total_var_cost_2.to_i + c.total_var_on_order_cost_2.to_i) %>
+    <% @total_var_cost_2 += c.total_var_cost_2 if c.total_var_cost_2.present? %>
+     <% @total_var_on_order_cost_2 += c.total_var_on_order_cost_2 if c.total_var_on_order_cost_2.present? %>  </td>
+		<td class="text-right" title="Fixed Media Cost"> <%= number_with_delimiter(c.total_fixed_cost_2.to_i) %>  <% @total_fixed_cost_2 += c.total_fixed_cost_2 if c.total_fixed_cost_2.present? %>   </td>
+		<td class="text-right" title="Refunds"> <%= number_with_delimiter(c.total_refund_2.to_i) %>  <% @total_refund_2 += c.total_refund_2 if c.total_refund_2.present? %> </td>
+		<td class="text-right" title="Damages"> <%= number_with_delimiter(c.total_product_dam_cost_2.to_i) %> <% @total_product_dam_cost_2 += c.total_product_dam_cost_2 if c.total_product_dam_cost_2.present? %>  </td>
+		<td class="text-right" title="Profitability">   <%= number_with_delimiter(c.profit_per_order_2.to_i) if c.profit_per_order_2.present? %>  </td>
+
+	</tr>
+
+
+  <% @sno += 1 %>
+ <% end %>
+  </tbody>
+  <thead>
+    <tr>
+ 	   <td rowspan="2" colspan="2">Total</td>
+ 		<td title="Name"><small>Row 1 </small></td>
+ 		<td class="text-right" title="Orders"><%= number_with_delimiter(@total_nos_1.to_i) %></td>
+ 		<td class="text-right" title="Pieces"><%= number_with_delimiter(@total_pieces_1.to_i) %> </td>
+ 		<td class="text-right" title="Sales"><%= number_with_delimiter(@total_sales_1.to_i) %>  </td>
+ 		<td class="text-right" title="Revenue"><%= number_with_delimiter(@total_revenue_1.to_i) %> </td>
+ 		<td class="text-right" title="Product Cost"><%= number_with_delimiter(@total_product_cost_1.to_i) %>  </td>
+ 		<td class="text-right" title="Variable Cost"><%= number_with_delimiter(@total_var_cost_1.to_i + @total_var_on_order_cost_1.to_i) %> </td>
+ 		<td class="text-right" title="Fixed Media Cost"> <%= number_with_delimiter(@total_fixed_cost_1.to_i) %> </td>
+ 		<td class="text-right" title="Refunds"> <%= number_with_delimiter(@total_refund_1.to_i) %> </td>
+ 		<td class="text-right" title="Damages"> <%= number_with_delimiter(@total_product_dam_cost_1.to_i) %>  </td>
+ 		<td class="text-right" title="Profitability">   </td>
+ 		<td rowspan="2">
+
+ 		</td>
+ 	</tr>
+    <tr>
+  		<td title="Name"><small>Row 2</small></td>
+  		<td class="text-right" title="Orders"><%= number_with_delimiter(@total_nos_2.to_i) %></td>
+  		<td class="text-right" title="Pieces"> <%= number_with_delimiter(@total_pieces_2.to_i) %> </td>
+  		<td class="text-right" title="Sales"> <%= number_with_delimiter(@total_sales_2.to_i) %>   </td>
+  		<td class="text-right" title="Revenue"><%= number_with_delimiter(@total_revenue_2.to_i) %>  </td>
+  		<td class="text-right" title="Product Cost"><%= number_with_delimiter(@total_product_cost_2.to_i) %>  </td>
+  		<td class="text-right" title="Variable Cost"><%= number_with_delimiter(@total_var_cost_2.to_i + @total_var_on_order_cost_2.to_i) %>  </td>
+  		<td class="text-right" title="Fixed Media Cost"> <%= number_with_delimiter(@total_fixed_cost_2.to_i) %> </td>
+  		<td class="text-right" title="Refunds"> <%= number_with_delimiter(@total_refund_2.to_i) %> </td>
+  		<td class="text-right" title="Damages"> <%= number_with_delimiter(@total_product_dam_cost_2.to_i) %>  </td>
+  		<td class="text-right" title="Profitability">   </td>
+
+  	</tr>
+
+  </thead>
+ </table>
+  </div>
+ </div>
+  <% else %>
+  <div class="well well-sm">
+  <h5>Please select a date to generate the report </h5>
+  </div>
+  <% end %>
+ <br>

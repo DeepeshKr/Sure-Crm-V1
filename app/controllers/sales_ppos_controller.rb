@@ -581,18 +581,23 @@ class SalesPposController < ApplicationController
    if params[:sim_to_sales_pieces].present?
      @sim_to_sales_pieces = params[:sim_to_sales_pieces]
    end
-
-   @sim_product_total = 0
-   if params[:sim_product_total].present?
-     @sim_product_total = params[:sim_product_total]
+   
+   @sim_product_basic = 0
+   if params[:sim_product_basic].present?
+     @sim_product_basic = params[:sim_product_basic]
    end
-
+   
+   @sim_product_shipping = 0
+   if params[:sim_product_shipping].present?
+     @sim_product_shipping = params[:sim_product_shipping]
+   end
+   
    @regenerate_ppo = "Re Generate PPO for #{@product_name} with product price Rs. #{@product_price} between #{@from_date} and #{@to_date}"
 
    ppo_sales = SalesPpo.new
    # change default retail and transfer order conversion rate
    # change product price , ret_def = nil, to_def = nil, product_cost = nil
-   @employeeorderlist = ppo_sales.simulate_sales_product_ppos_for_date @from_date, @to_date, @product_variant_id, @retail_default, @transfer_default, @sim_product_price, @sim_retail_sales_pieces, @sim_to_sales_pieces, @sim_product_total
+   @employeeorderlist = ppo_sales.simulate_sales_product_ppos_for_date @from_date, @to_date, @product_variant_id, @retail_default, @transfer_default, @sim_product_price, @sim_retail_sales_pieces, @sim_to_sales_pieces, @sim_product_basic, @sim_product_shipping
 
    @serial_no += 1
 
@@ -1029,6 +1034,7 @@ class SalesPposController < ApplicationController
   
   def recreate_ppo_for_order_id
     @order_id = nil
+    nos = 0
     if params[:order_id].present?
       @order_id = params[:order_id]
        sales_ppos = OrderMaster.where(id: @order_id)
@@ -1042,7 +1048,7 @@ class SalesPposController < ApplicationController
     sales_ppos.each do |ppo|
       #new_ppo = SalesPpo.new
       # a synchronised between days and calls all other functions
-        ppo.add_product_to_campaign_hbn_ppo ppo.id
+        ppo.delay(:queue => 'hbn specific order regenerate', priority: 100).add_product_to_campaign_hbn_ppo 
          #ppo.order_id
        #create_sales_ppo ppo.order_id
         nos =+ 1

@@ -34,7 +34,8 @@
 		</div>
 	  	<div class="row">
 		<div class="col-xs-1">Product MRP</div>
-		<div class="col-xs-2"><%= text_field_tag :sim_product_total, @sim_product_total, :class => "form-control", :placeholder => "Product MRP", :required => true %></div>
+		<div class="col-xs-1"><%= text_field_tag :sim_product_shipping, @sim_product_shipping, :class => "form-control", :placeholder => "Shipping", :required => true %></div>
+		<div class="col-xs-1"><%= text_field_tag :sim_product_basic, @sim_product_basic, :class => "form-control", :placeholder => "Basic", :required => true %></div>
 		<div class="col-xs-1">Product Cost</div>
 		<div class="col-xs-2"><%= text_field_tag :product_price, @product_price, :class => "form-control", :placeholder => "Product Cost", :required => true %></div>
 		<div class="col-xs-1">Retail Default</div>
@@ -54,7 +55,7 @@
 <!-- filters here -->
  <br>
  <br>
- <%= render partial: 'row_of_ppo' %>
+ <%= render partial: 'row_of_sim_ppo' %>
  <br>
  <br>
 

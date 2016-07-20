@@ -39,7 +39,29 @@
     <% if logged_in? %>
      <!-- New error upload end -->
    <%  if current_user.role == 10162 || current_user.role == 10022 %>
+   
+    <!-- New error log required start -->
+    <div class="panel panel-danger">
+       <!-- Default panel contents -->
+      <div class="panel-heading">Error Log Required to solve the problem</div>
 
+      <div class="panel-body">
+        <%= render partial: 'app_feature_requests/stage_update', :locals => {:app_feature_requests => @app_log_errors }  %>
+      </div>
+    </div>
+	 <!-- New error log required end -->
+    <!-- New feature request is incomplete start -->
+	
+    <div class="panel panel-info">
+       <!-- Default panel contents -->
+      <div class="panel-heading">Feature request is incomplete, requires user input to complete</div>
+
+      <div class="panel-body">
+        <%= render partial: 'app_feature_requests/stage_update', :locals => {:app_feature_requests => @app_log_requests}  %>
+      </div>
+    </div>
+       <!-- New feature request is incomplete end -->
+	   
      <!-- New error upload start -->
      <div class="panel panel-danger">
         <!-- Default panel contents -->

@@ -1,0 +1,13 @@
+Status Changed: <%= @app_feature_request.name %>
+
+Your <%= @app_feature_request.app_feature_type.name %> up to for the
+app <%= @app_feature_request.app_list.name %> is
+ now updated to: <%= @app_feature_request.app_status.name %>
+
+You have requested the <%= @app_feature_request.app_feature_type.name %>to be completed by <%= @app_feature_request.require_by_date.strftime('%d-%b-%y') if @app_feature_request.require_by_date %>
+
+You can track / update by clicking on this link: <%= @url %>
+
+We shall update with any changes or on completion </p>
+
+Have a great day!

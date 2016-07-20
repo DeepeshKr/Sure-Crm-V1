@@ -264,6 +264,7 @@ class OrderMastersController < ApplicationController
      @message_on_pay_u_orders = MessageOnOrder.where(message_type_id: 10020, order_id: @order_id)
      @payumoney_details = PayumoneyDetail.where(orderid: @order_id)
      #ppo
+     @regenerate_ppo = "Regenerate PPO for order id #{@order_id}"
      @sales_ppos = SalesPpo.where(:order_id => @order_id).order("start_time")
      
    else
