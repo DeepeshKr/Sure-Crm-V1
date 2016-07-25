@@ -94,9 +94,9 @@ class AppFeatureRequestsController < ApplicationController
           format.html {redirect_to app_feature_requests_path, notice: "Request was successfully created with id: #{@app_feature_request.id}"  }
         else
           @employee = Employee.find(@app_feature_request.request_by)
-          AppMailer.delay(:queue => 'emailing').new_ticket(@employee.emailid, @app_feature_request) if @employee.emailid.present?
+          AppMailer.delay(:queue => 'emailing', priority: 100).new_ticket(@employee.emailid, @app_feature_request) if @employee.emailid.present?
           # .deliver_now
-          AppMailer.new_ticket("deepesh@tec2grow.com", @app_feature_request).deliver_now
+          AppMailer.delay(:queue => 'emailing', priority: 100).new_ticket("deepesh@tec2grow.com", @app_feature_request).deliver_now
         end
 
         format.html {redirect_to root_path, notice: "Request was successfully created with id: #{@app_feature_request.id}"  }

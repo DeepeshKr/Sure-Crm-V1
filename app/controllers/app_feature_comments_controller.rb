@@ -41,9 +41,9 @@ class AppFeatureCommentsController < ApplicationController
         else
           @app_feature_request = AppFeatureRequest.find(@app_feature_comment.app_feature_request_id)
           @employee = Employee.find(@app_feature_request.request_by)
-          AppMailer.delay(:queue => 'emailing').new_comment(@employee.emailid, @app_feature_comment).deliver_now if @employee.emailid.present?
+          AppMailer.new_comment(@employee.emailid, @app_feature_comment).deliver_now if @employee.emailid.present?
           if current_user.role != 10022
-            AppMailer.delay(:queue => 'emailing').new_comment("deepesh@tec2grow.com", @app_feature_comment).deliver_now
+            AppMailer.delay(:queue => 'emailing', priority: 100).new_comment("deepesh@tec2grow.com", @app_feature_comment)
           end
         end
         # if @app_feature_comment.app_feature_request.current_status_id == 10008 # check feature

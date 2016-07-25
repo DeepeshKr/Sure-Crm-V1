@@ -28,6 +28,8 @@ Rails.application.configure do
   :authentication       => 'plain',
   :enable_starttls_auto => true  }
   
+  
+  
   # ####these options are only needed if you choose smtp delivery
   #
   # config.action_mailer.smtp_settings = {

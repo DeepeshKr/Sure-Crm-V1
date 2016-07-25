@@ -24,7 +24,7 @@ class ProductVariant < ActiveRecord::Base
   validates_presence_of :price
   validates_presence_of :taxes
   #validates_uniqueness_of :variantbarcode, { case_sensitive: false }
-    #validates :total, presence: true
+  #validates :total, presence: true
   #validates_uniqueness_of :extproductcode, { case_sensitive: false }
 
 after_create :creator
@@ -43,10 +43,15 @@ after_save :updator
   def get_product_value
     total = (self.price.to_f  * 0.888889 + self.shipping.to_f * 0.98125).to_i
   end
-
-  def calculate_product_total
-      self.total = self.price +self.taxes + self.shipping
+  
+  def product_mrp
+    (self.price + self.shipping).to_i
   end
+  
+  def calculate_product_total
+    self.total = self.price +self.taxes + self.shipping
+  end
+  
 private
   def create_product_cost_master
     #check if the prod has pricing details entered

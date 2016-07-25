@@ -1,18 +1,23 @@
 <p id="notice"><%= notice %></p>
 <div class="row">
-
- <div class="col-xs-6"><h3><%= @search %> <%= @found %>  </h3>   </div>
-<div class="col-xs-6">
-<div class="row">
-  <div class="col-xs-6"><%= render 'search_city' %></div>
-  <div class="col-xs-6"><%= render 'search' %></div>
-</div>
-
-</div>
+	<div class="col-xs-6">
+		<div class="row">
+			 <%= form_tag  url_for(:controller => 'india_pincode_lists', :action => "index"), method: "get" do  %>
+		    <div class="col-xs-8">  
+		      <%= select_tag(:statename,
+		                  options_from_collection_for_select(State.all.order(:name), :name, :name, selected: @statename),
+		                  {:class => "form-control"})  %>
+		    </div>
+			 <div class="col-xs-4"><%= submit_tag "Search", name: nil, class: "btn btn-primary" %></div>
+			<% end %>
+		</div>
+	</div>
+  <div class="col-xs-3"><%= render 'search_city' %></div>
+  <div class="col-xs-3"><%= render 'search' %></div>
 </div>
 <br>
 <div class="alert alert-success">
-<h3>We use this list in our applications</h3>
+<h3>We use this list in our applications <%= @search %> <%= @found %>  </h3>
 </div>
 
 <div class="digg_pagination">

@@ -24,6 +24,12 @@ class AppMailer < ApplicationMailer
     @url  = "http://3.0.3.57/app_feature_requests/#{app_feature_request.id}"
     mail(to: email_id, subject: "Ticket no #{app_feature_request.id} is now #{app_feature_request.app_status.name}")
   end
+  
+  def log(email_id,app_feature_request)
+    @app_feature_request = app_feature_request
+    @url  = "http://3.0.3.57/app_feature_requests/#{app_feature_request.id}"
+    mail(to: email_id, subject: "Urgent - #{app_feature_request.app_status.name} Required for Ticket no #{app_feature_request.id}")
+  end
 
   def check(email_id,app_feature_request)
     @app_feature_request = app_feature_request

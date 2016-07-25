@@ -32,6 +32,7 @@
 	   <td rowspan="2"><%= @sno %></td>
 
 	 	<td rowspan="2"><%= c.show %> <small> Id: <%= c.campaign_playlist_id %> </small><br>
+			 <small> MRP: <%= ProductVariant.find(c.product_variant_id).product_mrp %> </small><br>
 		 <% if c.product_cost == 0 %>
 		<span style="color:red">No Product Cost Found</span>
 		<% else %>

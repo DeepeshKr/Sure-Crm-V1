@@ -1,0 +1,24 @@
+    <!-- < % = @india_pincode_lists.records.each do |india_pincode_list| % > -->
+      <!-- <tr>
+        <td><%= india_pincode_list.officename %></td>
+        <td><%= india_pincode_list.pincode %></td>
+        <td><%= india_pincode_list.deliverystatus %></td>
+        <td><%= india_pincode_list.divisionname %></td>
+        <td><%= india_pincode_list.regionname %></td>
+        <td><%= india_pincode_list.circlename %></td>
+        <td><%= india_pincode_list.taluk %></td>
+        <td><%= india_pincode_list.districtname %></td>
+        <td><%= india_pincode_list.statename %></td>
+      </tr>
+    <% end %> -->
+	
+	
+    <td><%= india_pincode_list.officename %></td>
+    <td><%= india_pincode_list.pincode %></td>
+    <td><%= india_pincode_list.deliverystatus %></td>
+    <td><%= india_pincode_list.divisionname %></td>
+    <td><%= india_pincode_list.regionname %></td>
+    <td><%= india_pincode_list.circlename %></td>
+    <td><%= india_pincode_list.taluk %></td>
+    <td><%= india_pincode_list.districtname %></td>
+    <td><%= india_pincode_list.statename %></td>

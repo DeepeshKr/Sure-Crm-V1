@@ -5,7 +5,7 @@ class StatesController < ApplicationController
   respond_to :html
 
   def index
-    @states = State.all
+    @states = State.all.order(:name)
     respond_with(@states)
   end
 
@@ -22,7 +22,7 @@ class StatesController < ApplicationController
    
   end
   def edit_all
-    @states = State.all
+    @states = State.all.order(:name)
   end
   def create
     @state = State.new(state_params)

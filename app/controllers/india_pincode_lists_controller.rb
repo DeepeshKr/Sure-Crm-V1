@@ -21,7 +21,13 @@ class IndiaPincodeListsController < ApplicationController
     elsif params[:location].present?
       @searchvalue = params[:location]
       @searchvalue = @searchvalue.upcase
-      @india_pincode_lists = IndiaPincodeList.where("UPPER(taluk) like ? OR UPPER(districtname) like ? or UPPER(regionname) like ? or UPPER(pincode) like ? or UPPER(divisionname) like ? or UPPER(circlename) like ? or UPPER(statename) like ?", "#{@searchvalue}%", "#{@searchvalue}%", "#{@searchvalue}%", "#{@searchvalue}%", "#{@searchvalue}%", "#{@searchvalue}%", "#{@searchvalue}%").paginate(:page => params[:page])
+      @india_pincode_lists = IndiaPincodeList.where("UPPER(taluk) like ? OR UPPER(districtname) like ? or UPPER(regionname) like ? or UPPER(pincode) like ? or UPPER(divisionname) like ? or UPPER(circlename) like ? or UPPER(statename) like ?", "%#{@searchvalue}%", "%#{@searchvalue}%", "%#{@searchvalue}%", "%#{@searchvalue}%", "%#{@searchvalue}%", "%#{@searchvalue}%", "%#{@searchvalue}%").paginate(:page => params[:page])
+      @search = "Seached for #{@searchvalue}"
+      @found = "Found of over #{@india_pincode_lists.count()} Cities"
+    elsif params.has_key?(:statename)
+      @statename = params[:statename]
+      @searchvalue = params[:statename].upcase
+      @india_pincode_lists = IndiaPincodeList.where("UPPER(statename) = ?", "#{@searchvalue}").paginate(:page => params[:page])
       @search = "Seached for #{@searchvalue}"
       @found = "Found of over #{@india_pincode_lists.count()} Cities"
     else
@@ -41,7 +47,42 @@ class IndiaPincodeListsController < ApplicationController
      # end
     end
   end
+  
+  def check_for_updates
+    if params.has_key?(:statename)
+       @statename = params[:statename]
+       @unorderlist ||= []
+       @update_state_from_india_post = "Update records from #{@statename} with new state for each pincode (Sample Shown Above)"
+       
+       json = IndiaPincodeList.check_for_changed_state @statename.upcase
+       #json = JSON.parse(jsonArray)
+       @total_records = json["count"]
+       json["records"].each do |o|
+         # do something
+         @unorderlist << {:officename => o["officename"],
+           :pincode => o["pincode"],
+           :deliverystatus => o["Deliverystatus"],
+           :divisionname => o["divisionname"],
+           :circlename => o["circlename"],
+           :taluk => o["Taluk"],
+           :districtname => o["Districtname"],
+           :regionname => o["regionname"],
+           :statename => o["statename"]}
+       end
+    end
 
+  end
+  
+  def update_pincode_list
+    if params.has_key?(:statename)
+       @statename = params[:statename]
+       redirect_to india_pincode_list_check_for_updates_path, notice: 'Updated the state list from the latest in India post!' and return 
+     else
+        redirect_to india_pincode_list_check_for_updates_path, notice: 'Nothing to update!' and return 
+    end
+    
+  end
+ 
 
   def import
     #begin
@@ -118,6 +159,14 @@ class IndiaPincodeListsController < ApplicationController
 
   private
     # Use callbacks to share common setup or constraints between actions.
+    def url_response encoded_url
+      url = URI.parse(encoded_url)
+      http = Net::HTTP.new(url.host, url.port)
+      http.use_ssl = true
+      request = Net::HTTP::Get.new(url)
+      response = http.request(request)
+    end
+    
     def set_india_pincode_list
       @india_pincode_list = IndiaPincodeList.find(params[:id])
     end

@@ -1,0 +1,58 @@
+<div class="row">
+	 <%= form_tag  url_for(:controller => 'india_pincode_lists', :action => "check_for_updates"), method: "get" do  %>
+	 <div class="col-xs-4"> <h3>Search State </h3></div>
+    <div class="col-xs-6">  
+      <%= select_tag(:statename,
+                  options_from_collection_for_select(State.all, :name, :name, selected: @statename),
+                  {:class => "form-control"})  %>
+    </div>
+	 <div class="col-xs-2"><%= submit_tag "Search", name: nil, class: "btn btn-primary" %></div>
+	<% end %>
+</div>
+
+
+<h3>Showing <%= @total_records%> Rows from India Post Website (External) for selected state</h3>
+<hr>
+<table class="table table-hover">
+  <thead>
+    <tr>
+      <th>Officename</th>
+      <th>Pincode</th>
+      <th>Deliverystatus</th>
+      <th>Divisionname</th>
+      <th>Regionname</th>
+      <th>Circlename</th>
+      <th>Taluk</th>
+      <th>Districtname</th>
+      <th>Statename</th>
+    </tr>
+  </thead>
+	<% if @unorderlist.present? %>
+  <tbody>
+    <% @unorderlist.each do |india_pincode_list| %> 
+      <tr>
+    <td><%= india_pincode_list[:officename] %></td>
+    <td><%= india_pincode_list[:pincode] %></td>
+    <td><%= india_pincode_list[:deliverystatus] %></td>
+    <td><%= india_pincode_list[:divisionname] %></td>
+    <td><%= india_pincode_list[:regionname] %></td>
+    <td><%= india_pincode_list[:circlename] %></td>
+    <td><%= india_pincode_list[:taluk] %></td>
+    <td><%= india_pincode_list[:districtname] %></td>
+    <td><%= india_pincode_list[:statename] %></td>
+      </tr>
+    <% end %>
+  </tbody>
+  <% else %>
+   <tbody>
+       <tr>
+         <td colspan="10">Nothing Found</td>
+        
+       </tr>
+	</tbody>
+  <% end %>
+  
+</table>
+<hr>
+
+<%= render partial: 'update_state'  %>

@@ -501,7 +501,8 @@ class SalesPposController < ApplicationController
    ppo_sales = SalesPpo.new
    # change default retail and transfer order conversion rate
    # change product price , ret_def = nil, to_def = nil, product_cost = nil
-   @employeeorderlist = ppo_sales.sales_product_ppos_for_date @from_date, @to_date, @product_variant_id, @retail_default, @transfer_default, @sim_product_price, @sim_retail_sales_pieces, @sim_to_sales_pieces, @sim_product_total
+   @employeeorderlist = ppo_sales.sales_product_ppos_for_date @from_date, @to_date, @product_variant_id, @retail_default, @transfer_default
+   #, @sim_product_price, @sim_retail_sales_pieces, @sim_to_sales_pieces, @sim_product_total
 
    @serial_no += 1
 
@@ -597,7 +598,8 @@ class SalesPposController < ApplicationController
    ppo_sales = SalesPpo.new
    # change default retail and transfer order conversion rate
    # change product price , ret_def = nil, to_def = nil, product_cost = nil
-   @employeeorderlist = ppo_sales.simulate_sales_product_ppos_for_date @from_date, @to_date, @product_variant_id, @retail_default, @transfer_default, @sim_product_price, @sim_retail_sales_pieces, @sim_to_sales_pieces, @sim_product_basic, @sim_product_shipping
+   @employeeorderlist = ppo_sales.simulate_sales_product_ppos_for_date @from_date, @to_date, @product_variant_id, @retail_default, @transfer_default 
+   #, @sim_product_price, @sim_retail_sales_pieces, @sim_to_sales_pieces, @sim_product_basic, @sim_product_shipping
 
    @serial_no += 1
 
@@ -1025,12 +1027,13 @@ class SalesPposController < ApplicationController
     @return_url = nil
      if params.has_key?(:return_url)
        @return_url = params[:return_url]
-       redirect_to @return_url, notice: "The process of recreating #{nos} ppos has is completed."
+        flash[:error] = "The process of recreating #{nos} ppos has is completed."
+       redirect_to @return_url and return 
     else
-       redirect_to sales_ppos_path, notice: "The process of recreating #{nos} is complete."
+       flash[:error] = "The process of recreating #{nos} is complete."
+       redirect_to sales_ppos_path and return
      end
   end
-  
   
   def recreate_ppo_for_order_id
     @order_id = nil
@@ -1062,7 +1065,6 @@ class SalesPposController < ApplicationController
     end
   end
   
-  
   def recreate_ppo_between_days
     sales_ppos = OrderMaster.where("orderdate >= ? AND orderdate <= ?", @from_date, @to_date)
     sales_ppos.each do |ppo|
@@ -1081,6 +1083,7 @@ class SalesPposController < ApplicationController
       redirect_to sales_ppos_path, notice: "The process of recreating #{nos} is complete."
     end
   end
+  
   private
     # Use callbacks to share common setup or constraints between actions.
     # Never trust parameters from the scary internet, only allow the white list through.

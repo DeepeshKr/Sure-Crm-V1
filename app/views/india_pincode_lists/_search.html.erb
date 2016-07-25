@@ -1,11 +1,11 @@
 <div class="row">
  <%= form_tag("/india_pincode_lists", method: "get") do  %>
-<div class="col-xs-9">
+<div class="col-xs-8">
 <%= text_field_tag(:pincode, nil, :class => "form-control", :required => "true", :placeholder => "Search Pincode", :value => @searchvalue  )   %>
 </div>
 
-<div class="col-xs-3">
-	<%= submit_tag "Search", name: nil, class: "btn btn-primary" %>
+<div class="col-xs-4">
+	<%= submit_tag "Ok", name: nil, class: "btn btn-primary" %>
 </div>
 <% end %>
 </div>

@@ -387,8 +387,11 @@ get 'sales_report_team/not_completed'
   get 'payumoney_details/details'
   get 'payumoney_details_detail' => 'payumoney_details#details'
 
-
-
+  get 'india_pincode_lists/check_for_updates'
+  get 'india_pincode_lists_check_for_updates' => 'india_pincode_lists#check_for_updates'
+  post 'india_pincode_lists/update_pincode_list'
+  post 'india_pincode_lists_update_pincode_list' => 'india_pincode_lists#details'
+  
    resources :india_city_lists
   resources :india_pincode_lists
 
