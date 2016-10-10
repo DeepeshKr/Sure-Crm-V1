@@ -1,0 +1,13 @@
+<div class="row">
+  <%= form_tag  url_for(:controller => 'customers', :action => 'index'), method: "get" do  %>
+
+      <div class="col-xs-8">
+          
+		  <%= text_field_tag(:mobile, @mobile, :class => "form-control", :required => "true", :placeholder => "Search Customer mobile" )   %>
+      </div>
+
+      <div class="col-xs-4">
+        <%= submit_tag "Show List", name: nil, class: "btn btn-primary" %>
+      </div>
+  <% end %>
+</div>

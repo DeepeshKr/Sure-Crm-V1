@@ -293,53 +293,49 @@ def product_postage
   return 0
 end
 
-# def productcost
-#    if self.product_list.present? #&& self.pieces.present?
-#     pcode = self.product_list.extproductcode
-#     ropmaster =  ROPMASTER_NEW.where("prod = ?", pcode).first
-#       if ropmaster.present?
-#           return ropmaster.totalcost #* self.pieces || 0
-#      else
-#         return 0
-#      end
-#   else
-#     return 0
-#   end
-# end
+
+######## product pricing change for ppo start #########
 
 def productrevenue
+  vat_rate = TaxRate.find_by_name("VAT")
+  shipping_rate = TaxRate.find_by_name("Shipping Reverse for PPO")
+  
   totalrevenue = 0
-  totalrevenue += (self.subtotal * (self.pieces ||= 1) * 0.888889) || 0
-  totalrevenue += (self.shipping * (self.pieces ||= 1) * 0.98125) || 0
-  return totalrevenue
-end
-
-def transfer_order_revenue
-  total = 0
-  total += (self.subtotal * (self.pieces ||= 1)) || 0
-  total += (self.shipping * (self.pieces ||= 1)) || 0
-  return total * 0.764444444445
-end
-
-def transfer_order_dealer_price
-  total = 0
-  total += (self.subtotal * (self.pieces ||= 1)) || 0
-  total += (self.shipping * (self.pieces ||= 1)) || 0
-  return total * 0.88888888889
+    totalrevenue += (self.subtotal * (self.pieces ||= 1) * vat_rate.reverse_rate.to_f) || 0
+    totalrevenue += (self.shipping * (self.pieces ||= 1) * shipping_rate.reverse_rate.to_f) || 0
+     return totalrevenue
 end
 
 def gross_sales
   totalrevenue = 0
-  totalrevenue += (self.subtotal * (self.pieces ||= 1)) || 0
-  totalrevenue += (self.shipping * (self.pieces ||= 1)) || 0
-  return totalrevenue
+    totalrevenue += (self.subtotal * (self.pieces ||= 1)) || 0
+    totalrevenue += (self.shipping * (self.pieces ||= 1)) || 0
+     return totalrevenue
 end
 
 def net_sales
+  vat_rate = TaxRate.find_by_name("VAT")
+  shipping_rate = TaxRate.find_by_name("Shipping Reverse for PPO")
   totalrevenue = 0
-  totalrevenue += (self.subtotal * (self.pieces ||= 1) * 0.888889) || 0
-  totalrevenue += (self.shipping * (self.pieces ||= 1) * 0.98125) || 0
+  totalrevenue += (self.subtotal * (self.pieces ||= 1) * vat_rate.reverse_rate.to_f) || 0
+  totalrevenue += (self.shipping * (self.pieces ||= 1) * shipping_rate.reverse_rate.to_f) || 0
   return totalrevenue
+end
+
+def transfer_order_revenue
+  transfer_order = TaxRate.find_by_name("Transfer Order Reverse Rate")
+   total = 0
+  total += (self.subtotal * (self.pieces ||= 1)) || 0
+  total += (self.shipping * (self.pieces ||= 1)) || 0
+   return total * transfer_order.reverse_rate.to_f
+end
+
+def transfer_order_dealer_price
+  vat_rate = TaxRate.find_by_name("VAT")
+  total = 0
+  total += (self.subtotal * (self.pieces ||= 1)) || 0
+  total += (self.shipping * (self.pieces ||= 1)) || 0
+  return total * vat_rate.reverse_rate.to_f # 0.88888888889
 end
 
 def refund
@@ -351,74 +347,20 @@ def refund
 end
 
 def media_commission
-  #  media_variable = Medium.where('id = ? AND value is not null', self.order_master.media_id)
-  #   .where(:media_commision_id => [10020, 10021, 10040, 10041, 10060]) #.pluck(:value)
-  # if media_variable.present?
-  #        #discount the total value by 50% as media_correction
-  #      media_correction = 1.0
-  #      #PAID_CORRECTION
-  #   if media_variable.first.paid_correction.present?
-  #    media_correction = media_variable.first.paid_correction #||= 0.5
-  #   end
-  #   total_commission = 0
-  #   total_commission += ((self.subtotal * 0.888889) * media_variable.first.value.to_f)  * media_correction if media_variable.first.value.present?
-  #   if total_commission > 0
-  #     total_commission += ((self.subtotal * 0.888889) * media_variable.first.agent_comm.to_f)  * media_correction if media_variable.first.agent_comm.present?
-  #   end
-  #   return total_commission
-  # else
-    return 0
-  # end
-end
-def variable_media_commision_percent
-  media_variable = Medium.where('id = ? AND value is not null', self.order_master.media_id)
-   .where(:media_commision_id => [10021, 10040, 10041, 10060]) #.pluck(:value)
-   return 0 if media_variable.blank?
-
-   return media_variable.first.value.to_f
-end
-
-def variable_media_agent_commision_percent
-  media_variable = Medium.where('id = ? AND value is not null', self.order_master.media_id)
-   .where(:media_commision_id => [10021, 10040, 10041, 10060]) #.pluck(:value)
-   return 0 if media_variable.blank?
-
-   return media_variable.first.agent_comm.to_f
-end
-
-def variable_media_commission
-
-   media_variable = Medium.where('id = ? AND value is not null', self.order_master.media_id)
-    .where(:media_commision_id => [10021, 10040, 10041, 10060]) #.pluck(:value)
-  if media_variable.present?
-         #discount the total value by 50% as media_correction
-       media_correction = 1.0
-       #PAID_CORRECTION
-      if (media_variable.first.media_commision_id == 10060 || media_variable.first.media_commision_id == 10041)
-        #retail_def = 45.00
-        retail_def = SalesPpoDefault.find_by_name("Retail").value
-        #transfer_def = 65.00
-        transfer_def = SalesPpoDefault.find_by_name("Transfer Order").value
-        media_correction = retail_def.to_f / 100
-
-      end
-    # if media_variable.first.paid_correction.present?
-    #  media_correction = media_variable.first.paid_correction #||= 0.5
-    # end
-    total_commission = 0
-    total_commission += ((self.subtotal * 0.888889) * media_variable.first.value.to_f)  * media_correction if media_variable.first.value.present?
-    if total_commission > 0
-      total_commission += ((self.subtotal * 0.888889) * media_variable.first.agent_comm.to_f)  * media_correction if media_variable.first.agent_comm.present?
-    end
-    return total_commission
-  else
-    return 0
-  end
+  return 0
 end
 
 def fixed_media_commision_percent
   media_variable = Medium.where('id = ? AND value is not null', self.order_master.media_id)
    .where(:media_commision_id => [10020]) #.pluck(:value)
+   return 0 if media_variable.blank?
+
+   return media_variable.first.value.to_f
+end
+
+def variable_media_commision_percent
+  media_variable = Medium.where('id = ? AND value is not null', self.order_master.media_id)
+   .where(:media_commision_id => [10020, 10040, 10041, 10060]) #.pluck(:value)
    return 0 if media_variable.blank?
 
    return media_variable.first.value.to_f
@@ -432,7 +374,16 @@ def fixed_media_agent_commision_percent
    return media_variable.first.agent_comm.to_f
 end
 
+def variable_media_agent_commision_percent
+  media_variable = Medium.where('id = ? AND value is not null', self.order_master.media_id)
+   .where(:media_commision_id => [10021, 10040, 10041, 10060]) #.pluck(:value)
+   return 0 if media_variable.blank?
+
+   return media_variable.first.agent_comm.to_f
+end
+
 def fixed_media_commission
+  vat_rate = TaxRate.find_by_name("VAT")
   # Based on Orders Generated = 10020 (to be loaded as cost on paid orders)
    media_variable = Medium.where('id = ? AND value is not null', self.order_master.media_id)
     .where(:media_commision_id => [10020]) #.pluck(:value)
@@ -444,15 +395,48 @@ def fixed_media_commission
      media_correction = media_variable.first.paid_correction #||= 0.5
     end
     total_commission = 0
-    total_commission += ((self.subtotal * 0.888889) * media_variable.first.value.to_f)  * media_correction if media_variable.first.value.present?
+    total_commission += ((self.subtotal * vat_rate.reverse_rate.to_f) * media_variable.first.value.to_f)  * media_correction if media_variable.first.value.present?
     if total_commission > 0
-      total_commission += ((self.subtotal * 0.888889) * media_variable.first.agent_comm.to_f)  * media_correction if media_variable.first.agent_comm.present?
+      total_commission += ((self.subtotal * vat_rate.reverse_rate.to_f) * media_variable.first.agent_comm.to_f)  * media_correction if media_variable.first.agent_comm.present?
     end
     return total_commission
   else
     return 0
   end
 end
+
+def variable_media_commission
+  vat_rate = TaxRate.find_by_name("VAT")
+   media_variable = Medium.where('id = ? AND value is not null', self.order_master.media_id)
+    .where(:media_commision_id => [10021, 10040, 10041, 10060]) #.pluck(:value)
+  if media_variable.present?
+         #discount the total value by 50% as media_correction
+       media_correction = 1.0
+       #PAID_CORRECTION
+      if (media_variable.first.media_commision_id == 10060 || media_variable.first.media_commision_id == 10041)
+        #retail_def = 45.00
+        retail_def = SalesPpoDefault.find_by_name("Retail").value
+        #transfer_def = 65.00
+        transfer_def = SalesPpoDefault.find_by_name("Transfer Order").value
+        media_correction = retail_def.to_f
+        media_correction = retail_def.to_f / 100
+
+      end
+    # if media_variable.first.paid_correction.present?
+    #  media_correction = media_variable.first.paid_correction #||= 0.5
+    # end
+    total_commission = 0
+    total_commission += ((self.subtotal * vat_rate.reverse_rate.to_f) * media_variable.first.value.to_f)  * media_correction if media_variable.first.value.present?
+    if total_commission > 0
+      total_commission += ((self.subtotal * vat_rate.reverse_rate.to_f) * media_variable.first.agent_comm.to_f)  * media_correction if media_variable.first.agent_comm.present?
+    end
+    return total_commission
+  else
+    return 0
+  end
+end
+
+######## product pricing change for ppo end #########
 
 def call_centre_commission
   #            .where.not('PRODUCT_VARIANTS.product_sell_type_id = ?', 10000).each do |ord| upsell_products << " #{ord.product_variant.extproductcode}
@@ -470,24 +454,6 @@ def call_centre_commission
     return 0
   end
 end
-# def productrevenue
-#   if self.product_list.present? #&& self.pieces.present?
-#     pcode = self.product_list.extproductcode
-#     ropmaster = ROPMASTER_NEW.where("prod = ?", pcode).first
-#     if ropmaster.present?
-#         if self.subtotal > 0
-#           return ropmaster.totalrevenue #* self.pieces || 0
-#         else
-#           return 0
-#         end
-#     else
-#       return 0
-#     end
-#   else
-#       return 0
-#     end
-# end
-
 
 
 private

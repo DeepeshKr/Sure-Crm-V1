@@ -1,0 +1,60 @@
+<% if @interaction_masters.present? %>
+	<table class="table table-hover table-bordered"> 
+		<thead> 
+			
+			<tr>
+				<th>Created</th> 
+				<th>Status</th> 
+				<th>Category</th> 
+				<th>Order</th>
+				<th>Mobile</th>
+				<th>By</th> 
+				<th>Mobile</th> 
+				
+			</tr> 
+		</thead> 
+		<tbody> 
+			<% @interaction_masters.each do |interaction_master| %> 
+			<tr>
+				<td><%= (interaction_master.created_at + 330.minutes).strftime("%d-%b-%y %H:%M %P") %></td>
+				<td><%= interaction_master.interaction_status.internal_description if interaction_master.interaction_status %></td>
+				<td><%= interaction_master.interaction_category.name %></td>
+				<td><%= interaction_master.orderid %></td>
+				<td><%= interaction_master.mobile %>
+				<td><%= interaction_master.employee.name || "Na" if interaction_master.employee %></td>
+				<td><%= interaction_master.mobile%></td>
+			</tr>
+			<tr> 
+				<td colspan="5"> 
+					<% if interaction_master.interaction_transcript.present? %> 
+					<table class="table table-bordered"> 
+						<thead> 
+							<tr>
+								<th>Comments by</th> 
+								<th>Details</th> 
+								<th>Created at</th>
+							</tr> 
+						</thead> 
+						<tbody> 
+							<% interaction_master.interaction_transcript.each do |interaction_transcript| %>
+							<tr> 
+								<td> <%= interaction_transcript.interaction_user.name if interaction_transcript.interaction_user %> 
+									<br> <%= interaction_transcript.employee.name if interaction_transcript.employee %> 
+								</td>
+								<td><small> <%= interaction_transcript.created_at + 330.minutes %></small></td>
+								<td><%= interaction_transcript.description %></td> 
+							</tr> 
+							<% end %> 
+						</tbody> 
+					</table> 
+					<% end %> 
+				</td> 
+			</tr> 
+			<% end %>
+		</tbody> 
+	</table>
+
+<% else %>
+<p class="lead">No Interaction details, or order closing details found, do check if the order is disposed, <strong>all orders have to be disposed!</strong> </p>
+
+<% end %>

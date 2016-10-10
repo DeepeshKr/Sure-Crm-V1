@@ -13,19 +13,18 @@
 #
 # Configure Using Gemfile
 # gem 'pg'
-# host: 49.248.13.34 125.99.123.150
-# host: 3.0.3.5
-# developmentserver: 49.248.13.34
-# host: 192.168.1.10:10
-# productionserver: 3.0.3.5
+#host: 49.248.13.34
+#host: 3.0.3.5
+#developmentserver: 49.248.13.34
+#productionserver: 3.0.3.5
 
 default: &default
   adapter: oracle_enhanced
   database: TLBRNDDB
   host: 3.0.3.5
-  # username: testora
-  # password: testora
-  # port: 1521
+  username: testora
+  password: testora
+  port: 1521
   # For details on connection pooling, see rails configuration guide
   # http://guides.rubyonrails.org/configuring.html#database-pooling
   #pool: 5
@@ -42,10 +41,19 @@ development_web:
   password: Well@come123
   database: telebrands_cable_operators
 
+development_sql_tpl_mall:
+  adapter: sqlserver
+  host: 209.105.239.188
+  username: TIPL_Login
+  password: dwOJ9okx71
+  database: TIPL_MALL
+  timeout: 10000
+
 development_testora:
   <<: *default
   username: testora
   password: testora
+  statement_limit: 600
   port: 1521
 
 development_ccview:
@@ -153,6 +161,14 @@ production_web:
   username: "telebrands_cable"
   password: "Well@come123"
   database: "telebrands_cable_operators"
+
+production_sql_tpl_mall:
+  adapter: sqlserver
+  host: 209.105.239.188
+  username: TIPL_Login
+  password: dwOJ9okx71
+  database: TIPL_MALL
+  timeout: 10000
 
 production_ccview:
   adapter: oracle_enhanced

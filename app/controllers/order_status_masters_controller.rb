@@ -5,7 +5,7 @@ class OrderStatusMastersController < ApplicationController
   respond_to :html
 
   def index
-    @order_status_masters = OrderStatusMaster.all
+    @order_status_masters = OrderStatusMaster.all.order(:sortorder)
     respond_with(@order_status_masters)
   end
 

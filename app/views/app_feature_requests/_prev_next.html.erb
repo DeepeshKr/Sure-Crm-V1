@@ -1,0 +1,35 @@
+<div class="panel panel-info">
+     <div class="panel-body">	
+		   <div class="row">
+			    <div class="col-xs-5 col-xs-offset-1">
+					
+		 		   <div class="panel panel-info">
+		  			 <div class="panel-heading"><h3 class="panel-title">Go Back </h3>  </div> 	
+					 	<%= simple_form_for @app_feature_request, html: { novalidate: false }  do |f| %>
+						<%= f.hidden_field :current_status_id %>
+			        	<div class="form-actions">
+			          	  <%= f.button :submit, class: "btn btn-primary"  %>
+			        	</div>
+						<% end %>
+			      	</div>
+					
+					
+			    </div>
+					
+				<div class="col-xs-5 col-xs-offset-1">
+					
+ 		 		   <div class="panel panel-info">
+ 		  			 <div class="panel-heading"><h3 class="panel-title">Next </h3>  </div> 	
+ 					 	<%= simple_form_for @app_feature_request, html: { novalidate: false }  do |f| %>
+ 						<%= f.hidden_field :current_status_id %>
+ 			        	<div class="form-actions">
+ 			          	  <%= f.button :submit, class: "btn btn-primary"  %>
+ 			        	</div>
+ 						<% end %>
+ 			      	</div>
+					
+				</div>
+		</div>
+	</div>
+</div>
+	

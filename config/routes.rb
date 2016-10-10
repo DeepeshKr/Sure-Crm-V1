@@ -1,10 +1,13 @@
 Rails.application.routes.draw do
 
 
+  resources :cust_details_track_logs
+  resources :cust_details_tracks
+  resources :sales_ppo_product_alerts
+  resources :sales_ppo_email_alerts
+  resources :product_master_images
   get 'employee_incentives/index'
-
   get 'employee_incentives/search'
-
   get 'employee_incentives/details'
 
   resources :payumoney_statuses
@@ -20,9 +23,15 @@ Rails.application.routes.draw do
   resources :app_feature_requests
   resources :campaign_playlist_to_products
   resources :sales_ppo_defaults
+  
   get 'sales_reports_team' => 'sales_report_team#index'
   get 'sales_report_team/show_wise'
+ 
+  get 'sales_report_team_show_wise' => 'sales_report_team#show_wise'
   get 'sales_report_team/agent_order'
+  get 'sales_report_team_agent_order_list' => 'sales_report_team#agent_order_list'
+  get 'sales_report_team/agent_order_list'
+  
   get 'pay_u_orders_sales_report_team' => 'sales_report_team#pay_u_orders'
   get 'sales_report_team/products_sold'
   get 'products_sold_sales_report_team' => 'sales_report_team#products_sold'
@@ -44,7 +53,7 @@ Rails.application.routes.draw do
   mount ResqueWeb::Engine => "/resque_web"
 
 
- # mount Delayed::Web::Engine, at: '/jobs'
+  mount Delayed::Web::Engine, at: '/jobs'
   resources :return_rates
   resources :list_of_servers
   resources :daily_task_logs
@@ -63,34 +72,26 @@ Rails.application.routes.draw do
   post 'states/update_all'
 
   resources :registration_statuses
-
   resources :fat_to_fit_email_statuses
-
   #resources :sales_ppos
   resources :campaign_missed_lists
-  resources :distributor_product_lists
-  resources :distributor_missed_pincodes
   resources :pincode_service_levels
   resources :courier_lists
-  resources :distributor_upload_orders
+
 
   get "cinergy_xml" => "campaign_playlists#cinergy_xml"
   get "recent_missed_orders" => 'distributor_missed_orders#recent'
   get "hbn_channels" => "media#all_hbn"
   post "send_demo_message" => 'message_on_orders#send_demo_message'
-  post 'distributor_upload_orders/switch_on'
-  post 'distributor_upload_orders/switch_off'
+
 
   get 'new_dept/list'
   get 'new_dept/search'
   get 'new_dept/details'
-
-  resources :distributor_missed_orders
-  resources :distributor_missed_order_types
+  
   resources :order_final_statuses
   resources :order_list_miles
   resources :vpp_deal_trans
-  resources :distributor_stock_ledger_types
 
   get 'deal_tran/list'
   get 'deal_tran/search'
@@ -98,15 +99,23 @@ Rails.application.routes.draw do
   get 'transfer_order' => 'corporates#transfer_order'
   get 'transfer_order_pricing' => 'corporates#transfer_order_pricing'
 
-  resources :distributor_stock_summaries
-
-  resources :distributor_pincode_lists
+  post 'distributor_upload_orders/switch_on'
+  post 'distributor_upload_orders/switch_off'
+  
   post "distributor_quick_add_pincode" => 'distributor_pincode_lists#quick_add_pincode'
   post "distributor_quick_add_state_pincode" => "distributor_pincode_lists#quick_add_state_pincode"
 
+  resources :distributor_missed_orders
+  resources :distributor_missed_order_types
+  resources :distributor_stock_summaries
+  resources :distributor_upload_orders
+  resources :distributor_product_lists
+  resources :distributor_missed_pincodes
+  resources :distributor_stock_ledger_types
   resources :distributor_stock_ledgers
-
   resources :distributor_stock_books
+  resources :distributor_pincode_lists
+
 
   resources :corporate_active_masters
   # get 'corporate_type' => 'corporates#list_type'
@@ -249,12 +258,10 @@ Rails.application.routes.draw do
   get 'product_costs_not_found' => 'product_cost_masters#product_costs_not_found'
   get 'showprod' => 'product_masters#showprod'
 
-
-
   devise_for :logins
-#sales report
-get 'sales_report_team_not_completed' => 'sales_report_team#not_completed'
-get 'sales_report_team/not_completed'
+  #sales report
+  get 'sales_report_team_not_completed' => 'sales_report_team#not_completed'
+  get 'sales_report_team/not_completed'
 
   get 'sales_reports' => 'sales_report#index'
   get 'sales_report/index'
@@ -270,26 +277,31 @@ get 'sales_report_team/not_completed'
   get 'pincode_orders' => 'sales_report#pincode_orders'
   get 'sales_report/daily'
   get 'daily_report' => 'sales_report#daily'
-
+  
+  get 'sales_report/channel_group_product_sold'
+  get 'sales_report_channel_group_product_sold' => "sales_report#channel_group_product_sold"
+  get 'sales_report/channel_group_sales_summary'
+  get 'sales_report_channel_group_sales_summary' => "sales_report#channel_group_sales_summary"
+  
   get 'sales_report/pay_u_orders'
   get 'pay_u_orders_sales_report' => 'sales_report#pay_u_orders'
-
-  ################3
-  # redundant reports
-  #############
-  get 'sales_report/channel_sales'
-  get 'channel_sales' => 'sales_report#channel_sales'
   get 'sales_report/channel'
   get 'channel_report' => 'sales_report#channel'
-  ################3
-  # redundant reports
-  #############
 
   get 'sales_report/channel_summary_report'
   get 'channel_summary_report' => 'sales_report#channel_summary_report'
+  
   get 'sales_report/channel_sales_summary'
   get 'channel_sales_summary' => 'sales_report#channel_sales_summary'
-
+  
+  get 'sales_report/channel_sales'
+  get 'channel_sales' => 'sales_report#channel_sales'
+  
+  get 'sales_report/channel_product_sales_report'
+  get 'sales_report_channel_product_sales_report' => 'sales_report#channel_product_sales_report'
+  get 'sales_report/channel_city_sales_report'
+  get 'sales_report_channel_city_sales_report' => 'sales_report#channel_city_sales_report'
+  
   # final report
   get 'sales_report/cdm_report'
   get 'cdm_report' => 'sales_report#cdm_report'
@@ -347,9 +359,15 @@ get 'sales_report_team/not_completed'
   # get 'custordersearch' => 'custdetails#search'
   get 'custordersearch' => 'order_masters#search'
   get 'detailedordersearch' => 'order_masters#detailed_search'
+  get 'order_masters_online_search' => 'order_masters#online_search'
+  get 'order_masters/online_search'
   get 'order_masters_review' => 'order_masters#review'
   get 'order_masters/review'
+  
   get 'custdetails/details'
+  get 'custdetails/product_details'
+  get 'custdetails/between_date'
+  
   get 'newwlsdet/list'
   get 'newwlsdet/search'
   get 'newwlsdet/details'
@@ -378,6 +396,9 @@ get 'sales_report_team/not_completed'
   # campaign playlist search
 
   # pay u money details search
+  post 'payumoney_details/process_order'
+  post 'payumoney_details/regenerate_sms_for_order'
+  
   get 'payumoney_details/index'
   get 'payumoney_details' => 'payumoney_details#index'
   get 'payumoney_details/search'
@@ -386,8 +407,10 @@ get 'sales_report_team/not_completed'
   get 'payumoney_details_open_orders' => 'payumoney_details#open_orders'
   get 'payumoney_details/details'
   get 'payumoney_details_detail' => 'payumoney_details#details'
+  
 
-  get 'india_pincode_lists/check_for_updates'
+
+  get 'india_pincode_lists/check_for_updates' 
   get 'india_pincode_lists_check_for_updates' => 'india_pincode_lists#check_for_updates'
   post 'india_pincode_lists/update_pincode_list'
   post 'india_pincode_lists_update_pincode_list' => 'india_pincode_lists#details'
@@ -506,7 +529,7 @@ get 'sales_report_team/not_completed'
   get 'newdealer' =>  'customerorder#new_dealer'
 
   post 'inoracle' => 'customer_order_lists#inoracle'
-
+  post 'customer_order_lists/inoracle''
   get 'producttraininglist' => 'product_training_manuals#index'
   post 'inlinetraining' => 'product_training_manuals#inlinecreate'
   # get 'dealersearch' => 'address_dealer#list'

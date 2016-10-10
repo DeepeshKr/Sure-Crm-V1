@@ -1,0 +1,158 @@
+<% title "Channel Product Sales Details for #{@media_name} #{@from_date} to #{@to_date}" %>
+   <%= form_tag  url_for(:controller => 'sales_report', :action => 'channel_product_sales_report'), method: "get" do  %>
+ <div class="row">
+	 <div class="col-xs-3"> <h4>Channel City Sales Report </h4>  </div>
+	  <div class="col-xs-4">   <%= select_tag :media_id,  options_from_collection_for_select(@media_list,
+		                :id, :mediainfo, selected: @media_id ),
+		                      {:class => "form-control", label: "Select the Channel", required: true } %></div>
+	 <div class="col-xs-3">
+        <div class="input-daterange input-group">
+          <%= text_field_tag(:from_date, @from_date, :data => {:provide => "datepicker"}, :id => "datepicker_from", :class => "form-control", :required => "true" )   %>
+          <span class="input-group-addon">to</span>
+
+           <%= text_field_tag(:to_date, @to_date, :data => {:provide => "datepicker"}, :id => "datepicker_to", :class => "form-control", :required => "true" )   %>
+
+        </div>
+    </div>
+    <div class="col-xs-1">
+              <%= submit_tag "Show", name: nil, class: "btn btn-primary" %>
+    </div>
+
+ </div>
+<% end %>
+	  <table class="table table-bordered table-stripped">
+          <tr><th colspan="3"><p class="text-center"><h4> Main Products</h4></p></th></tr>
+		<% if @main_product_list.present? %>
+           <tr>
+             <th>Main Products</th>
+             <th>Pieces</th>
+             <th>Value</th>
+           </tr>
+            <% @main_product_list.each do |pl| %>
+           <tr>
+             <td><%= pl[:prod] %></td>
+             <td class="text-right"><%= pl[:pieces] %> <% @main_nos_total += pl[:pieces]  %></td>
+             <td class="text-right"><%= (pl[:value]).round(2) %>  <% @main_value_total += pl[:value] %></td>
+           </tr>
+           <% end %>
+           <tr>
+             <td>Total</td>
+             <td class="text-right"><%= @main_nos_total %></td>
+             <td class="text-right"> <%= @main_value_total.round(2) %></td>
+           </tr>
+		 <% end %>
+         <tr>
+           <th colspan="3" class="text-centre"><p class="text-center"><h4> Basic Upsell Products</h4></p> </th>
+         </tr>
+		 <% if @bas_product_list.present? %>
+           <tr>
+             <th>Basic Upsell Products</th>
+             <th>Pieces</th>
+             <th>Value</th>
+           </tr>
+            <% @bas_product_list.each do |pl| %>
+           <tr>
+             <td><%= pl[:prod] %> </td>
+             <td class="text-right"><%= pl[:pieces] %>  <% @bas_nos_total += pl[:pieces]  %></td>
+             <td class="text-right"><%= (pl[:value]).round(2) %> <% @bas_value_total += pl[:value] %></td>
+           </tr>
+           <% end %>
+           <tr>
+             <td>Total</td>
+             <td class="text-right"><%= @bas_nos_total %></td>
+             <td class="text-right"><%= @bas_value_total.round(2) %></td>
+           </tr>
+		<% end %>
+        <tr>
+          <th colspan="3" class="text-centre">
+             <p class="text-center"><h4>Common Upsell Products</h4></p>
+          </th>
+        </tr>
+		<% if @com_product_list.present? %>
+		<tr>
+	         <th>Common Upsell Products</th>
+	         <th>Pieces</th>
+	         <th>Value</th>
+        </tr>
+            <% @com_product_list.each do |pl| %>
+           <tr>
+            <td><%= pl[:prod] %></td>
+            <td class="text-right"><%= pl[:pieces] %>  <% @com_nos_total += pl[:pieces]  %></td>
+            <td class="text-right"><%= (pl[:value]).round(2) %> <% @com_value_total += pl[:value] %></td>
+           </tr>
+           <% end %>
+           <tr>
+             <td>Total</td>
+             <td class="text-right"><%= @com_nos_total %></td>
+             <td class="text-right"><%= @com_value_total.round(2) %></td>
+           </tr>
+		<% end %>
+        <tr>
+          <th colspan="3" class="text-centre"><p class="text-center"><h4> Free Products</h4></p> </th>
+        </tr>
+		<% if @free_products.present? %>
+		<tr>
+			<th>Common Upsell Products</th>
+			<th>Pieces</th>
+			<th>Value</th>
+		</tr>
+            <% @free_products.each do |pl| %>
+        <tr>
+            <td><%= pl[:prod] %></td>
+            <td class="text-right"><%= pl[:pieces] %>  <% @free_nos_total += pl[:pieces]  %></td>
+            <td class="text-right"><%= (pl[:value]).round(2) %> <% @free_value_total += pl[:value] %></td>
+        </tr>
+           <% end %>
+        <tr>
+             <td>Total</td>
+             <td class="text-right"><%= @free_nos_total %></td>
+             <td class="text-right"><%= @free_value_total.round(2) %></td>
+        </tr>
+		<% end %>
+        <tr>
+          <th>
+           <h4>Grand Total </h4>
+          </th>
+          <th class="text-right">
+           <h4> <%= @main_nos_total + @bas_nos_total + @com_nos_total + (@free_nos_total || 0 )%></h4>
+          </th>
+          <th class="text-right">
+           <h4> <%= (@main_value_total.round(2) + (@bas_value_total || 0.0).round(2) + 
+			   (@com_value_total || 0.0).round(2)  + (@free_value_total || 0.0).round(2)).to_i %></h4>
+          </th>
+        </tr>
+		 </table>
+	    <div class="panel panel-primary">
+			<div class="panel-heading"><h3 class="panel-title">Total </h3></div>
+	        <table class="table table-bordered">
+				<tr>
+					<td>Total Main Products</td>
+					<td class="text-right"><%= @total_main_products %></td>
+					<td class="text-right"><%= @value_main_products.round(2)%></td>
+				</tr>
+				<tr>
+					<td>Total Basic Upsell Products</td>
+					<td class="text-right"><%= @total_bas_upsell %></td>
+					<td class="text-right"><%= @value_bas_upsell.round(2) %></td>
+				</tr>
+				<tr>
+					<td>Total Common Upsell Products</td>
+					<td class="text-right"><%= @total_com_product %></td>
+					<td class="text-right"><%= @value_com_product.round(2) %></td>
+				</tr>
+				<tr>
+					<td>Total Free Products</td>
+					<td class="text-right"><%= @total_free_product %></td>
+					<td class="text-right"><%= @value_free_product.round(2) %></td>
+				</tr>
+				<tr>
+					<th>Total Order Nos</th>
+					<th class="text-right"><%= @total_orders %></th>
+					<th class="text-right"><%= @total_amount %></th>
+				</tr>
+				
+			</table>       
+	                
+	 	</div>
+
+        

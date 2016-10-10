@@ -7,14 +7,14 @@ class CustomersController < ApplicationController
   def index
     if params[:mobile].present?
       # @customers = Customer.all
-      @customers = Customer.where('mobile = ?' ,params[:mobile])
+      @customers = Customer.where('mobile = ?' ,params[:mobile]).paginate(:page => params[:page])
       @calledno = params[:calledno]
       @mobile =  params[:mobile]
 
 
       respond_with(@customers, :mobile => params[:mobile], :calledno => params[:calledno], :force => 'yes')
     else
-      @customers = Customer.limit(500).reorder('id desc') #, :notice => "Showing recent 5 customers!"
+      @customers = Customer.limit(100).reorder('id desc').paginate(:page => params[:page]) #, :notice => "Showing recent 5 customers!"
     end
   end
 
@@ -25,7 +25,7 @@ class CustomersController < ApplicationController
     @order_master.customer_id = params[:id]
     
     @order_masters =  OrderMaster.where(customer_id:params[:id])
-    @interaction_masters =  InteractionMaster.where(customer_id:params[:id])
+    @interaction_masters =  InteractionMaster.where(customer_id:params[:id]).paginate(:page => params[:page])
     @interaction_master = InteractionMaster.new(customer_id: params[:id], interaction_status_id: 10000)
     respond_with(@customer, @order_master, @order_masters, @interaction_masters, @interaction_master)
   end
@@ -89,7 +89,7 @@ class CustomersController < ApplicationController
 
 
   def update
-     @customer = Customer.find(params[:customer_id])
+     #@customer = Customer.find(params[:customer_id])
     @customer.update(customer_params)
     respond_with(@customer)
   end

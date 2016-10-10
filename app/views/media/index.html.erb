@@ -1,5 +1,5 @@
 <!-- set page title start -->
-<% title "Media Listing" %>
+<% title "Media Listing #{@state_searched}#{@name}#{@telephone}" %>
 <!-- set page title end -->
 <%= render 'search' %>
 <div class="row">
@@ -11,6 +11,9 @@
       <%= link_to 'Download CSV list', media_path(showall: "true", format: :csv), class: "btn btn-success btn-sm" %>
     <% end %>
   </div>
+  <div class="col-xs-12">
+	  <p><%= @media.first.default_channel if @media.present? %></p>
+	</div>
 </div>
 
 <br>

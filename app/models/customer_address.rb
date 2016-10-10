@@ -8,12 +8,18 @@ class CustomerAddress < ActiveRecord::Base
  validates :state,  presence: true, length: { maximum: 50 }
  validates :city,  presence: true, length: { maximum: 50 }
 
-def st
-  if self.state.upcase == 'MAHARASHTRA'
-  	'MAH'
-  else
-  	'OTH'
+  def st
+    if self.state.upcase == 'MAHARASHTRA'
+    	'MAH'
+    else
+    	'OTH'
+    end
   end
-end
 
+  def state_code
+    states = State.where("UPPER(NAME) = ?", self.state.upcase)
+    return nil if states.blank?
+    return states.first.short_code
+  end
+  
 end

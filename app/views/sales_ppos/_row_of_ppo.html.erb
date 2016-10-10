@@ -11,7 +11,8 @@
         <th colspan="3">Income</th>
         <th rowspan="2" class="text-right"><small>Revenue </small></th>
         <th colspan="5">Expense</th>
-       	<th rowspan="2">PPO </th>
+       	<th rowspan="2">Product PPO </th>
+		<% if @show_ppo == true %><th rowspan="2">Show PPO </th> <% end %>
       	<th>More </th>
      </tr>
      <tr>
@@ -55,7 +56,8 @@
 		<td class="text-right" title="Fixed Media Cost"> <%= number_with_delimiter(c.total_fixed_cost_1.to_i) if c.total_fixed_cost_1.present? %> <% @total_fixed_cost_1 += c.total_fixed_cost_1 if c.total_fixed_cost_1.present? %> <br>   <!-- %= link_to 'Edit Cost',campaign_playlists_new_media_cost_path(id: c.campaign_playlist_id, redirect_to: request.original_url), {:style=>'color:#0000A0;'} % --> </td>
 		<td class="text-right" title="Refunds"> <%= number_with_delimiter(c.total_refund_1.to_i) %>  <% @total_refund_1 += c.total_refund_1 if c.total_refund_1.present? %> </td>
 		<td class="text-right" title="Damages"> <%= number_with_delimiter(c.total_product_dam_cost_1.to_i) %> <% @total_product_dam_cost_1 += c.total_product_dam_cost_1 if c.total_product_dam_cost_1.present? %>  </td>
-		<td class="text-right" title="Profitability"> <%= number_with_delimiter(c.profit_per_order_1.to_i) if c.profit_per_order_1.present? %>  </td>
+		<td class="text-right" title="Product Profitability"> <%= number_with_delimiter(c.profit_per_order_1.to_i) if c.profit_per_order_1.present? %>  </td>
+		<% if @show_ppo == true %><td class="text-right" title="Show Profitability"> <%= number_with_delimiter(c.profit_per_show_order_1.to_i) if c.profit_per_show_order_1.present? %>  </td> <% end %>
 		<td rowspan="2">
 			<%= link_to "Old", ppo_products_path(campaign_id: c.campaign_playlist_id), :target => "_blank", class: "btn btn-primary btn-xs"  %>
 			<% if c.product_variant_id.present? %>
@@ -82,8 +84,8 @@
 		<td class="text-right" title="Fixed Media Cost"> <%= number_with_delimiter(c.total_fixed_cost_2.to_i) %>  <% @total_fixed_cost_2 += c.total_fixed_cost_2 if c.total_fixed_cost_2.present? %>   </td>
 		<td class="text-right" title="Refunds"> <%= number_with_delimiter(c.total_refund_2.to_i) %>  <% @total_refund_2 += c.total_refund_2 if c.total_refund_2.present? %> </td>
 		<td class="text-right" title="Damages"> <%= number_with_delimiter(c.total_product_dam_cost_2.to_i) %> <% @total_product_dam_cost_2 += c.total_product_dam_cost_2 if c.total_product_dam_cost_2.present? %>  </td>
-		<td class="text-right" title="Profitability">   <%= number_with_delimiter(c.profit_per_order_2.to_i) if c.profit_per_order_2.present? %>  </td>
-
+		<td class="text-right" title="Product Profitability">   <%= number_with_delimiter(c.profit_per_order_2.to_i) if c.profit_per_order_2.present? %>  </td>
+		<% if @show_ppo == true %><td class="text-right" title="Show Profitability"> <%= number_with_delimiter(c.profit_per_show_order_2.to_i) if c.profit_per_show_order_2.present? %>  </td> <% end %>
 	</tr>
 
 

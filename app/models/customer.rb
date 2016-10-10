@@ -37,17 +37,10 @@ attr_accessor :comments
 #validates_presence_of :first_name
 # validates :first_name, presence: true
 validates :first_name,  :presence => { :message => "Need a proper first name!" }
-validates :alt_mobile,  allow_blank: true,   format: { with: VALID_MOBILE_REGEX }, uniqueness: true,
-length: { maximum: 12 }, :presence => { :message => "Enter only numbers" }
+validates :alt_mobile,  allow_blank: true,   format: { with: VALID_MOBILE_REGEX }, length: { maximum: 12 }, :presence => { :message => "Enter only numbers" } #, uniqueness: true,
 
 def gender
-  # if self.salute == "Mr"
-  #   return 'M'
-  #     elsif self.salute == 'Ms'
-  #   return 'F'
-  #     elsif self.salute == 'Mrs'
-  #   return 'F'
-  # end
+  return nil if self.salute.blank?
   case self.salute
       when "Mr"
           return "M"
@@ -55,6 +48,8 @@ def gender
           return "F"
       when "Ms"
           return "F"
+      else
+        return nil  
   end
 end
 
@@ -68,7 +63,7 @@ def fullname
 end
 
 def name
-  return self.first_name + " " + self.last_name
+  return "#{self.first_name}  #{self.last_name}"
 end
 
 def from_state

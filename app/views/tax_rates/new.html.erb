@@ -1,5 +1,13 @@
 <h1>New Tax Rate</h1>
 
 <%= render 'form' %>
-
+<br>
+<ul class="list list-inline">
+	<li>Reverse Tax Calculation:</li> 
+	<li>For Tax Rate (0.125)</li> 
+	<li>Reverse Tax Rate (1 / (1 + 0.125))</li>
+	<li>Reverse Rate: 0.888888888888889</li>
+	<li>Do your math</li>
+</ul>
+</br>
 <%= link_to 'Back', tax_rates_path %>

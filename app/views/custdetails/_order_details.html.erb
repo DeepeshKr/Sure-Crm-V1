@@ -1,0 +1,41 @@
+<% if @employeeorderlist.present? %>
+<% total_value, total_piece = 0, 0 %>
+<table class="table table-hover table-bordered">
+  <thead>
+    <tr>
+     <th>S No</th>
+     <th>Order Date</th>
+     <th>Channel</th>
+	 <th>Prod 1</th>
+	 <th>Prod 2</th>
+     <th>Order</th>
+	 <th>Actual Order date</th>
+	 <th>Order Ref check</th>
+	 <th>Order Status</th>
+	 <th>Payment Mode</th>
+     </tr>
+  </thead>
+<tbody>
+   <% @employeeorderlist.each do |c| %>
+   <tr>
+     <td><%= @sno %></td>
+     <td><%= c[:order_date] %></td>
+     <td><%= c[:channel] %></td>
+	 <td><%= c[:prod1] %></td>
+	 <td><%= c[:prod2] %></td>
+     <td><%= link_to c[:order_no], custordersearch_path(ordernum:  c[:order_no]), :target => "_blank", class: "btn btn-link" %></td>
+	 <td><%= c[:actual_date] %> </td>
+	 <td><%= link_to c[:order_ref], order_masters_review_path(order_id:  c[:order_ref]), :target => "_blank", class: "btn btn-link" %></td>
+	 <td><%= c[:order_status] %></td>
+	 <td><%= c[:payment_mode] %></td>
+   </tr>
+  <% @sno += 1 %>
+ <% end %>
+</tbody>
+</table>
+<% end %>
+
+<script>
+$('#datepicker_to').datepicker({format: 'yyyy-mm-dd'});
+$('#datepicker_from').datepicker({format: 'yyyy-mm-dd'});
+</script>

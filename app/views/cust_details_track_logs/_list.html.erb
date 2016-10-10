@@ -1,0 +1,20 @@
+<table class="table table-hover table-stripped">
+  <thead>
+    <tr>
+      <th>Time</th>
+      <th>Name</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @cust_details_track_logs.each do |cust_details_track_log| %>
+      <tr>
+        <td><%= (cust_details_track_log.created_at + 330.minutes).strftime("%d-%b-%y %H:%M:%S") %></td>
+        <td><%= cust_details_track_log.name %></td>
+        <td><%= cust_details_track_log.description %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+

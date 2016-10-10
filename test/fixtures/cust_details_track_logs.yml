@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  cust_details_track_id: 1
+  name: MyString
+  description: MyText
+
+two:
+  cust_details_track_id: 1
+  name: MyString
+  description: MyText

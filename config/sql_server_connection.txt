@@ -1,0 +1,13 @@
+development_sql_tpl_mall:
+  adapter: sqlserver
+  host: 209.105.239.188
+  username: TIPL_Login
+  password: dwOJ9okx71
+  database: TIPL_MALL
+
+production_sql_tpl_mall:
+  adapter: sqlserver
+  host: 209.105.239.188
+  username: TIPL_Login
+  password: dwOJ9okx71
+  database: TIPL_MALL

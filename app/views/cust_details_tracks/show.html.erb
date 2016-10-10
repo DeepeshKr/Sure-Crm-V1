@@ -1,0 +1,68 @@
+<p id="notice"><%= notice %></p>
+<% title "Check CUSTDETALS Ref Id #{@cust_details_track.id} | Order Num #{@cust_details_track.order_ref_id}" %>
+<div class="panel panel-info">
+  <div class="panel-heading"><h3 class="panel-title">Order Ref: <%= @cust_details_track.id %> | Order NUM <%= @cust_details_track.order_ref_id %></h3></div>
+    
+	<table class="table table-stripped table-hover table-bordered">
+		<tr>
+			<td><strong>Order ref:</strong></td>
+			<td><%= @cust_details_track.order_ref_id %></td>
+			<td colspan="2"><strong>Order date:</strong></td>
+			<td colspan="2"><%= @cust_details_track.order_date %></td>
+			<td><strong>Current status:</strong></td>
+			<td><%= @cust_details_track.current_status %></td>
+		</tr>
+		<tr>
+			<td><strong>Custdetails:</strong></td>
+			<td><%= @cust_details_track.custdetails %></td>
+			<td><strong>Vpp:</strong></td>
+			<td><%= @cust_details_track.vpp %></td>
+			<td><strong>Dealtran:</strong></td>
+			<td><%= @cust_details_track.dealtran %></td>
+			<td><strong>Ext ref:</strong></td>
+			<td><%= @cust_details_track.ext_ref_id %></td>
+		</tr>
+		<tr>
+			<td><strong>Last call back on:</strong></td>
+			<td><%= @cust_details_track.last_call_back_on %></td>
+			<td><strong>No of attempts:</strong></td>
+			<td><%= @cust_details_track.no_of_attempts %></td>
+			<td><strong>Mobile:</strong></td>
+			<td><%= @cust_details_track.mobile %></td>
+			<td><strong>Alt mobile:</strong></td>
+			<td><%= @cust_details_track.alt_mobile %></td>
+		</tr>
+		<tr>
+			<td><strong>Products:</strong></td>
+			<td colspan="7"><%= @cust_details_track.products %></td>
+		</tr>
+	</table>
+	<table class="table table-stripped table-bordered">
+	<tr>
+		<td><strong>Sure CRM In DATE:</strong></td>
+		<td><strong>Sure CRM Process DATE:</strong></td>
+		<td><strong>Back up Order DATE:</strong></td>
+		<td><strong>CUSTDETAILS (DATE):</strong></td>
+		<td><strong>CUSTDETAILS (TIME):</strong></td>
+		<td><strong>CUSTDETAILS (IN DATE):</strong></td>
+	</tr>
+	<tr>
+		<td><%= (@cust_details_track.order_master.created_at + 330.minutes).strftime("%d-%b-%Y %H:%M:%S") %></td>	
+		<td><%= @cust_details_track.order_master.process_date.strftime("%d-%b-%Y %H:%M:%S") %></td>
+		<td><%= @cust_details_track.customer_order_list_date %></td>
+		<td><%= @cust_details_track.custdetails_order_date %> </td>
+		<td><%= @cust_details_track.custdetails_order_time if @cust_details_track.custdetails_order_time.present? %></td>
+		<td><%= @cust_details_track.custdetails_in_date %></td>
+	</tr>
+	</table>
+	
+	<div class="panel-footer">
+		<%= render "cust_details_track_logs/list"%>
+	</div>
+	
+</div>
+
+
+<br>
+<%= link_to 'Back', url_for(:back), class:"btn btn-primary btn-sm" %>
+

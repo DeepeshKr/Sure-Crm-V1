@@ -1,0 +1,72 @@
+   <ul class="nav nav-tabs">
+   	<li class="active"><a data-toggle="tab" href="#log">Error Log Required<small>(F<%= @app_log_errors.count if @app_log_errors %> E<%= @app_log_requests.count if @app_log_requests %>)</small>
+   	</a></li>
+   	<li><a data-toggle="tab" href="#upload">Upload and Update<small>(F<%= @app_upload_requests.count if @app_upload_requests %> E<%= @app_upload_errors.count if @app_upload_errors %>)</small>
+   	</a></li>
+	</ul>
+	<div class="tab-content">
+	    <div id="log" class="tab-pane fade in active">
+				<div class="row">
+					<div class="col-xs-12">
+				       <!-- New error log required start -->
+				       <div class="panel panel-danger">
+				          <!-- Default panel contents -->
+				         <div class="panel-heading">Error Log Required to solve the problem</div>
+
+				         <div class="panel-body">
+				           <%= render partial: 'app_feature_requests/stage_update', :locals => {:app_feature_requests => @app_log_errors }  %>
+				         </div>
+				       </div>
+				   	 <!-- New error log required end -->
+					</div>
+				</div>
+
+				<div class="row">
+					<div class="col-xs-12">
+					    <!-- New feature request is incomplete start -->
+	
+					    <div class="panel panel-info">
+					       <!-- Default panel contents -->
+					      <div class="panel-heading">Feature request is incomplete, requires user input to complete</div>
+
+					      <div class="panel-body">
+					        <%= render partial: 'app_feature_requests/stage_update', :locals => {:app_feature_requests => @app_log_requests}  %>
+					      </div>
+					    </div>
+					       <!-- New feature request is incomplete end -->
+					</div>
+				</div>
+			</div>
+		
+			<div id="upload" class="tab-pane fade">
+				<div class="row">
+					<div class="col-xs-12">
+					     <!-- New error upload start -->
+					     <div class="panel panel-danger">
+					        <!-- Default panel contents -->
+					       <div class="panel-heading">Error Upload to Server</div>
+
+					       <div class="panel-body">
+					         <%= render partial: 'app_feature_requests/stage_update', :locals => {:app_feature_requests => @app_upload_errors }  %>
+					       </div>
+					     </div>
+						 <!-- New error upload end -->
+					</div>
+				</div>
+
+				<div class="row">
+					<div class="col-xs-12">
+				        <!-- New feature upload start -->
+				        <div class="panel panel-info">
+				           <!-- Default panel contents -->
+				          <div class="panel-heading">Feature Upload to Server</div>
+
+				          <div class="panel-body">
+				            <%= render partial: 'app_feature_requests/stage_update', :locals => {:app_feature_requests => @app_upload_requests}  %>
+				          </div>
+				        </div>
+				           <!-- New feature upload end -->
+					</div>
+				</div>
+			</div>
+	</div>

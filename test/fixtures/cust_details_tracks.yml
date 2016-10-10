@@ -1,0 +1,29 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  order_ref_id: 1
+  order_date: 2016-09-20 10:04:02
+  ext_ref_id: 1
+  custdetails: 1
+  vpp: 1
+  dealtran: 1
+  last_call_back_on: 2016-09-20 10:04:02
+  no_of_attempts: 1
+  mobile: MyString
+  alt_mobile: MyString
+  products: MyText
+  current_status: MyString
+
+two:
+  order_ref_id: 1
+  order_date: 2016-09-20 10:04:02
+  ext_ref_id: 1
+  custdetails: 1
+  vpp: 1
+  dealtran: 1
+  last_call_back_on: 2016-09-20 10:04:02
+  no_of_attempts: 1
+  mobile: MyString
+  alt_mobile: MyString
+  products: MyText
+  current_status: MyString

@@ -6,7 +6,24 @@ class MediaTapeHeadsController < ApplicationController
   # GET /media_tape_heads
   # GET /media_tape_heads.json
   def index
-    @media_tape_heads = MediaTapeHead.all.order("name")
+    #
+    #OR  UPPER(product_variants.name) like ?
+    
+    
+      if params.has_key?(:search) 
+        @search = "Search for " +  params[:search].upcase
+        @searchvalue = params[:search].upcase   
+       
+         @media_tape_heads = MediaTapeHead.joins(:product_variant).where("UPPER(media_tape_heads.name) like ? OR UPPER(product_variants.name) like ?","%#{@searchvalue}%", "%#{@searchvalue}%")
+         .paginate(:page => params[:page], :per_page => 25)
+         
+       else
+        
+          @media_tape_heads = MediaTapeHead.all.order("name").paginate(:page => params[:page], :per_page => 25)
+          @media_tape_head_recent = MediaTapeHead.limit(10).order("created_at DESC")
+      end
+      
+    
   end
 
   # GET /media_tape_heads/1

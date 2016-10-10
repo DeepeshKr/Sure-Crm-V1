@@ -30,6 +30,12 @@ class IndiaPincodeListsController < ApplicationController
       @india_pincode_lists = IndiaPincodeList.where("UPPER(statename) = ?", "#{@searchvalue}").paginate(:page => params[:page])
       @search = "Seached for #{@searchvalue}"
       @found = "Found of over #{@india_pincode_lists.count()} Cities"
+     elsif params.has_key?(:na_taluk)
+       @statename = "NA"
+       @searchvalue = "NA"
+       @india_pincode_lists = IndiaPincodeList.where("UPPER(taluk) = ?", "#{@searchvalue}").paginate(:page => params[:page])
+       @search = "Seached for #{@searchvalue}"
+       @found = "Found of over #{@india_pincode_lists.count()} Cities"
     else
       nos = IndiaPincodeList.all.count()
       @search = ""
@@ -43,7 +49,7 @@ class IndiaPincodeListsController < ApplicationController
       @searchvalue = params[:term].upcase
       @india_pincode_lists = IndiaPincodeList.where("pincode like ? OR districtname like ?", "#{@searchvalue}%", "#{@searchvalue}%").limit(200)
       #respond_to do |format|
-   render json: @india_pincode_lists
+   render json: @india_pincode_lists, methods: [:locality, :details, :location]
      # end
     end
   end
@@ -54,9 +60,12 @@ class IndiaPincodeListsController < ApplicationController
        @unorderlist ||= []
        @update_state_from_india_post = "Update records from #{@statename} with new state for each pincode (Sample Shown Above)"
        
-       json = IndiaPincodeList.check_for_changed_state @statename.upcase
+       json = IndiaPincodeList.check_for_changed_state @statename.upcase, nil
        #json = JSON.parse(jsonArray)
        @total_records = json["count"]
+       
+       redirect_to india_pincode_lists_check_for_updates_path, notice: "No records found for your search criteria!" and return  if json.blank?
+       
        json["records"].each do |o|
          # do something
          @unorderlist << {:officename => o["officename"],
@@ -69,16 +78,48 @@ class IndiaPincodeListsController < ApplicationController
            :regionname => o["regionname"],
            :statename => o["statename"]}
        end
+     elsif params.has_key?(:pincode)
+          @pincode = params[:pincode]
+          @unorderlist ||= []
+          @update_state_from_india_post = "You cannot update this right now"
+       
+          json = IndiaPincodeList.check_for_changed_state nil, @pincode
+          #json = JSON.parse(jsonArray)
+          @total_records = json["count"]
+          
+       redirect_to india_pincode_lists_check_for_updates_path, notice: "No records found for your search criteria!" and return  if json.blank?
+       
+       json["records"].each do |o|
+         # do something
+         @unorderlist << {:officename => o["officename"],
+           :pincode => o["pincode"],
+           :deliverystatus => o["Deliverystatus"],
+           :divisionname => o["divisionname"],
+           :circlename => o["circlename"],
+           :taluk => o["Taluk"],
+           :districtname => o["Districtname"],
+           :regionname => o["regionname"],
+           :statename => o["statename"]}
+       end
+       
     end
-
+    
+    
+    
+   
+    
   end
   
   def update_pincode_list
     if params.has_key?(:statename)
        @statename = params[:statename]
-       redirect_to india_pincode_list_check_for_updates_path, notice: 'Updated the state list from the latest in India post!' and return 
+      india_pincode =  IndiaPincodeList.new 
+     records = india_pincode.update_local_db_with_changed_state @statename
+         
+       redirect_to india_pincode_lists_check_for_updates_path, notice: "Updated the state list #{records} from the latest in India post!" and return 
+     
      else
-        redirect_to india_pincode_list_check_for_updates_path, notice: 'Nothing to update!' and return 
+        redirect_to india_pincode_lists_check_for_updates_path, notice: 'Nothing to update!' and return 
     end
     
   end

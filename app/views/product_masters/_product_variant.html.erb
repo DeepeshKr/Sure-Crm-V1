@@ -8,7 +8,8 @@
          <small><%= v.name %></small> 
         <strong>   Price:  <%= v.price %> Shipping: <%= v.shipping %> </strong>
          Sold As: <%= v.product_sell_type.name %> 
-              <small>Created: <%= v.created_at.strftime("%d-%b-%Y") %></small>   
+              <small>Created: <%= v.created_at.strftime("%d-%b-%Y") %> 
+			   At: <%= (v.created_at + 330.minutes).strftime("%H:%M:%S") %> </small>   
 
         </a>
 

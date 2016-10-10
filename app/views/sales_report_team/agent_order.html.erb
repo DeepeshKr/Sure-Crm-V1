@@ -11,7 +11,9 @@
 	 		
 	</div>
  </div>
-
+<div class="well well-sm">
+Order between <%= @first_order_at %>(first order for the day) and <%= @last_order_at %> (last order time in this report)
+</div>
 <% if @employeeorderlist.present? %>
 <table class="table table-hover table-bordered">
   <thead>
@@ -33,43 +35,59 @@
    <tr>
 		<td><%= @sno %></td>
 		<td>
-		 <%= link_to c[:employee], orderlist_path(employee_id: c[:id], for_date: c[:for_date], completed: 'yes'), :target => "_blank" %>
+		 <%= link_to c[:employee], sales_report_team_agent_order_list_path(employee_id: c[:id], for_date: c[:for_date]), :target => "_blank", class:"btn btn-info btn-xs"  %>
 
 		</td>
 		<td class="text-right">
-		   <%= c[:pay_u_orders] %> 
+		   <%= c[:pay_u_orders] %> <% @total_pay_u_orders += c[:pay_u_orders] %>
 		</td>
 		<td class="text-right">
-		   <%= c[:pay_u_value] %> 
+		   <%= c[:pay_u_value] %> <% @total_pay_u_value += c[:pay_u_value] %>
 		</td>
 		<td class="text-right">
-		   <%= c[:ccorders] %> 
+		   <%= c[:ccorders] %> <% @total_ccorders += c[:ccorders] %>
 		</td>
 		<td class="text-right">
-		   <%= c[:ccvalue] %> 
+		   <%= c[:ccvalue] %> <% @total_ccvalue += c[:ccvalue]  %>
 		</td>
 		<td class="text-right">
-		   <%= c[:codorders] %> 
+		   <%= c[:codorders] %> <% @total_codorders += c[:codorders]  %>
 		</td>
 		<td class="text-right">
-		   <%= c[:codvalue] %> 
+		   <%= c[:codvalue] %> <% @total_codvalue += c[:codvalue]  %>
 		</td>
 		<td class="text-right">
-		   <%= c[:nos] %> 
+		   <%= c[:nos] %> <% @total_nos += c[:nos]  %>
 		</td>
 		<td class="text-right">
-		   <%= c[:total] %> 
+		   <%= c[:total] %> <% @total_total += c[:total]  %>
 		</td>
 
   </tr> 
   <% @sno += 1 %> 
  <% end %>
 
- 
+    <tr>
+    <td colspan="2">Total</td>
+  	<td class="text-right"> <%= @total_pay_u_orders %> 	</td>
+  	<td class="text-right">	<%= @total_pay_u_value %> 	</td>
+  	<td class="text-right">   <%= @total_ccorders %> </td>
+  	<td class="text-right"><%= @total_ccvalue %> </td>
+  	<td class="text-right"><%= @total_codorders %> </td>
+  	<td class="text-right"><%= @total_codvalue %> </td>
+  	<td class="text-right"><%= @total_nos %> </td>
+  	<td class="text-right"><%= @total_total %> </td>
+
+    </tr>
 
   </tbody>
 
   </table>
+  
+  <hr>
+  
+
+  
   <% else %>
   <div class="well well-sm">
   <h5>Please select a date to generate the report </h5>

@@ -1,0 +1,122 @@
+  def channel_sales_summary
+    @btn1 = "btn btn-default"
+    @btn2 = "btn btn-default"
+    @btn3 = "btn btn-default"
+    # @media_manager = Medium.where(:media_commision_id => 10000).where("id <> 11200 and id <> 11700")
+     @sno = 1
+   
+      #@order_master.orderpaymentmode_id == 10000 #paid over CC
+      #@order_master.orderpaymentmode_id == 10001 #paid over COD
+    if params[:from_date].present?
+      #@summary ||= []
+      @or_for_date = params[:from_date]
+      for_date =  Date.strptime(params[:from_date], "%Y-%m-%d")
+
+      @from_date = for_date.beginning_of_day - 330.minutes
+      @to_date = for_date.end_of_day - 330.minutes
+      #@to_date = @from_date + 1.day
+
+      if params.has_key?(:to_date)
+        @to_date =  Date.strptime(params[:to_date], "%Y-%m-%d")
+      end
+      
+      if params.has_key?(:show)
+         @show = params[:show]
+       else
+         @show = "all"
+      end
+
+    case @show # a_variable is the variable we want to compare
+      when "all"    #compare to 1
+        order_masters = OrderMaster.where('orderdate >= ? AND orderdate <= ?', @from_date, @to_date)
+        .where('ORDER_STATUS_MASTER_ID > 10000')
+        .where.not(ORDER_STATUS_MASTER_ID: @cancelled_status_id)
+        .distinct.pluck(:media_id)
+       @btn1 = "btn btn-success"
+        @message = "Showing all "
+      when "hbn"    #compare to 2
+        @show = "hbn"
+        order_masters = OrderMaster.where('orderdate >= ? AND orderdate <= ?', @from_date, @to_date)
+        .where('ORDER_STATUS_MASTER_ID > 10000').joins(:medium).where("media.media_group_id = 10000")
+        .where.not(ORDER_STATUS_MASTER_ID: @cancelled_status_id)
+        .distinct.pluck(:media_id)
+      
+          @btn2 = "btn btn-success"
+        @message = "Showing all HBN"
+      #  @orderdate = "Showing all HBN"
+      when "pvt"
+        @show = "pvt"
+        order_masters = OrderMaster.where('orderdate >= ? AND orderdate <= ?', @from_date, @to_date)
+        .where('ORDER_STATUS_MASTER_ID > 10000').joins(:medium).where("media.media_group_id IS NULL")
+        .where.not(ORDER_STATUS_MASTER_ID: @cancelled_status_id)
+        .distinct.pluck(:media_id)
+      
+        @btn3 = "btn btn-success"
+        @message = "Showing all Pvt"
+      #  @orderdate = "Showing all Pvt"
+      else
+        @orderdate =  "Wrong Selection made"
+        return
+    end
+      @to_date = @to_date.end_of_day - 330.minutes
+      @total_nos = 0
+      @total_value = 0
+      
+      amount = 0.0
+      #@orderdate = "Searched for #{for_date} found #{order_masters.count} agents!"
+      employeeunorderlist ||= []
+
+      order_masters.each do |ord|
+        @num = 0
+        amount = 0
+        # orderlist = OrderMaster.where('ORDER_STATUS_MASTER_ID > 10002')
+        # .where('orderdate >= ? AND orderdate <= ?', @from_date, @to_date).where(employee_id: e)
+        # timetaken = orderlist.sum(:codcharges)
+         reverse_vat_rate = TaxRate.find(10001)
+         order_master_calculations = OrderMaster.where('orderdate >= ? AND orderdate <= ?', @from_date, @to_date)
+         .where('ORDER_STATUS_MASTER_ID > 10000')
+         .where.not(ORDER_STATUS_MASTER_ID: @cancelled_status_id)
+         .where(:media_id => ord)
+         order_master_calculations.each do |orc|
+           if reverse_vat_rate.present?
+             rate_charge = reverse_vat_rate.reverse_rate ||= 0.8888889
+             amount += orc.subtotal * rate_charge
+           end
+           @num += 1
+        end
+
+        amount = amount.round(2)
+
+        media = Medium.find(ord)
+        media_name = media.name #media_state
+        hbn = media.media_group.name || "Pvt" if media.media_group.present?
+
+          employeeunorderlist << {
+            :from_date => (@from_date + 330.minutes).strftime("%Y-%m-%d"),
+            :to_date => (@to_date + 330.minutes).strftime("%Y-%m-%d"),
+            :channel => media_name,
+            :group => hbn,
+            :media_id => ord,
+            :total_nos => @num,
+            :total_value => amount}
+
+          end
+
+      #this is for date on the view
+        @from_date = (@from_date + 330.minutes).strftime("%Y-%m-%d")
+        @to_date = (@to_date + 330.minutes).strftime("%Y-%m-%d")
+       # @employeeorderlist = employeeunorderlist.sort_by{|c| [c[:total],c[:group]]}.reverse if  @show == "all"
+        @employeeorderlist = employeeunorderlist.sort_by{|c| c[:total]}.reverse 
+
+        respond_to do |format|
+        csv_file_name = "channel_sales_summary_#{@from_date}_#{@to_date}.csv"
+          format.html
+          format.csv do
+            headers['Content-Disposition'] = "attachment; filename=\"#{csv_file_name}\""
+            headers['Content-Type'] ||= 'text/csv'
+          end
+        end
+
+    end
+  end
+ 

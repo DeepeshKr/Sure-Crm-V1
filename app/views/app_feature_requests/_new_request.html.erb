@@ -1,0 +1,12 @@
+  <div class="panel panel-success">
+    <div class="panel-body">
+      <% if logged_in? %>
+        <div class="row">
+          <div class="col-xs-8"> <p class="lead">Request a New App or feature in an app or Report Error</p> </div>
+          <div class="col-xs-4"> <%= link_to 'New request', new_app_feature_request_path, class: "btn btn-success" %></div>
+        </div>
+        <% else %>
+        <h5>You are not logged in</h5>
+     <% end %>
+    </div>
+  </div>

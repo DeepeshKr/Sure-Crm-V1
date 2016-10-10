@@ -1,17 +1,32 @@
 <div class="row">
-	 <%= form_tag  url_for(:controller => 'india_pincode_lists', :action => "check_for_updates"), method: "get" do  %>
-	 <div class="col-xs-4"> <h3>Search State </h3></div>
+	 <div class="col-xs-4"> 
+	 	<%= form_tag  url_for(:controller => 'india_pincode_lists', :action => "check_for_updates"), method: "get" do  %>
+    		<div class="row">
+ 			<div class="col-xs-9">  
+      		  <%= text_field_tag(:pincode, nil, :class => "form-control", :required => "true", :placeholder => "Search Pincode", :value => @pincode  )   %>
+     		 </div>
+ 	 		<div class="col-xs-3">
+				 <%= submit_tag "Search", name: nil, class: "btn btn-primary" %>
+			</div>
+ 		 </div>
+ 	<% end %>
+	 </div>
     <div class="col-xs-6">  
+      	 <%= form_tag  url_for(:controller => 'india_pincode_lists', :action => "check_for_updates"), method: "get" do  %>
+   		<div class="row">
+			<div class="col-xs-9">  
       <%= select_tag(:statename,
                   options_from_collection_for_select(State.all, :name, :name, selected: @statename),
                   {:class => "form-control"})  %>
-    </div>
-	 <div class="col-xs-2"><%= submit_tag "Search", name: nil, class: "btn btn-primary" %></div>
+    		  </div>
+	 		 <div class="col-xs-3"><%= submit_tag "Search", name: nil, class: "btn btn-primary" %></div>
+		 </div>
 	<% end %>
+	</div>
 </div>
 
 
-<h3>Showing <%= @total_records%> Rows from India Post Website (External) for selected state</h3>
+<h3>Showing <%= @total_records%> Rows from India Post Website (External) for <%= @statename %><%= @pincode %></h3>
 <hr>
 <table class="table table-hover">
   <thead>

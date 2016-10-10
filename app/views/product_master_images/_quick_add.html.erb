@@ -1,0 +1,21 @@
+<%= simple_form_for(@product_master_image) do |f| %>
+  <%= f.error_notification %>
+  <%= f.hidden_field :product_master_id %>
+  <%= f.hidden_field :product_list_id %>
+  <%= f.hidden_field :product_variant_id %>
+  <%= f.hidden_field :prod %>
+  <%= f.hidden_field :barcode %>
+  
+  <!-- f.hidden_field :current_stage_id, :value => current_stage_id -->
+  <!-- = f.hidden_field :new_stage_id, :value => new_stage_id % -->
+  <div class="form-inputs">
+    <%= f.input :name %>
+    <%= f.input :description %>
+    <%= f.input :sort_order %>
+   
+  </div>
+
+  <div class="form-actions">
+    <%= f.button :submit %>
+  </div>
+<% end %>

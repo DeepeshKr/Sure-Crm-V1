@@ -1,6 +1,25 @@
-<h4>Customer List</h4>
+<!-- set page title start -->
+<% title "Customer List #{@order_id} #{@mobile} #{@emailid} #{@calledno}" %>
+<!-- set page title end -->
+
+<div class="row">
+	<div class="col-xs-6">
+		<h4>Customer List</h4>
+	</div>
+	<div class="col-xs-6">
+		<%= render 'search' %>
+	</div>
+	
+</div>
+
+
 
 <% unless @customers.blank? %>
+<br>
+<div class="digg_pagination">
+    <%= will_paginate @customers, :container => false %>
+</div>
+<br>
 <table class="table table-hover">
   <thead>
     <tr>
@@ -39,5 +58,9 @@
 <h3>There are no customers</h3>  
 <%end%>
 <br>
-
-<%= link_to 'New Customer Order', new_customer_path(:calledno => @calledno, :mobile => @mobile, :force=>'yes') , class: "btn btn-info btn-lg" %>
+<br>
+<div class="digg_pagination">
+    <%= will_paginate @customers, :container => false %>
+</div>
+<br>
+<%= link_to 'New Customer', new_customer_path(:calledno => @calledno, :mobile => @mobile, :force=>'yes') , class: "btn btn-info btn-lg" %>

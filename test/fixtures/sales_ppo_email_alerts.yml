@@ -1,0 +1,9 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  email_id: MyString
+  last_delivered_on: 2016-09-13 10:02:02
+
+two:
+  email_id: MyString
+  last_delivered_on: 2016-09-13 10:02:02

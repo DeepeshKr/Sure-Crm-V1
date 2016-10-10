@@ -1,14 +1,14 @@
-<% headers = ['From','Upto','Channel','Group','Details','Nos','Value'] %><%= CSV.generate_line headers %><% @mainlist.each do |c| %><%= CSV.generate_line([c[:from_date],c[:to_date], c[:channel],c[:group],c[:details],c[:total_nos],c[:total_value]]).html_safe.strip %>
-<%= CSV.generate_line([' ',' ',' ','-','City', 'Count']).html_safe.strip %>
-<% c[:city_list].each do |cy| %><%= CSV.generate_line([c[:details],c[:details],c[:details],c[:details],cy[0], cy[1]]).html_safe.strip %>
+<% headers = ['From','Upto','Channel','Group','Details','Nos','Value'] %><%= CSV.generate_line headers %><% @mainlist.each do |c| %><%= CSV.generate_line([c[:from_date],c[:to_date], c[:channel],c[:group],'Total (details below)',c[:total_nos],c[:total_value]]).html_safe.strip %>
+<%= CSV.generate_line(['-','-','-','-','City', 'Count','Value']).html_safe.strip %>
+<% c[:city_list].each do |cy| %><%= CSV.generate_line([c[:from_date],c[:to_date], c[:channel],c[:group],cy[:city], cy[:pieces], cy[:value]]).html_safe.strip %>
 <% end %>
-<%= CSV.generate_line([' ',' ',' ','-','Main Product', 'Count']).html_safe.strip %>
-<% c[:main_products].each do |cy| %><%= CSV.generate_line([c[:details],c[:details],c[:details],c[:details],cy[0], cy[1]]).html_safe.strip %>
+<%= CSV.generate_line(['-','-','-','-','Main Product', 'Count', 'Value']).html_safe.strip %>
+<% c[:main_products].each do |cy| %><%= CSV.generate_line([c[:from_date],c[:to_date], c[:channel],c[:group],cy[:prod], cy[:pieces], cy[:value]]).html_safe.strip %>
 <% end %>
-<%= CSV.generate_line([' ',' ',' ','-','Basic Upsell', 'Count']).html_safe.strip %>
-<% c[:bas_upsell_products].each do |cy| %><%= CSV.generate_line([c[:details],c[:details],c[:details],c[:details],cy[0], cy[1]]).html_safe.strip %>
+<%= CSV.generate_line(['-','-','-','-','Basic Upsell', 'Count', 'Value']).html_safe.strip %>
+<% c[:bas_upsell_products].each do |cy| %><%= CSV.generate_line([c[:from_date],c[:to_date], c[:channel],c[:group],cy[:prod], cy[:pieces], cy[:value]]).html_safe.strip %>
 <% end %>
-<%= CSV.generate_line([' ',' ',' ','-','Common Upsell', 'Count']).html_safe.strip %>
-<% c[:com_upsell_products].each do |cy| %><%= CSV.generate_line([c[:details],c[:details],c[:details],c[:details],cy[0], cy[1]]).html_safe.strip %>
+<%= CSV.generate_line(['-','-','-','-','Common Upsell', 'Count', 'Value']).html_safe.strip %>
+<% c[:com_upsell_products].each do |cy| %><%= CSV.generate_line([c[:from_date],c[:to_date], c[:channel],c[:group],cy[:prod], cy[:pieces], cy[:value]]).html_safe.strip %>
 <% end %>
 <% end %>

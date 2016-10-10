@@ -8,6 +8,7 @@
     <table class="table table-hover table-stripped">
       <thead>
         <th>Name</th>
+		<th colspan="2">Requirements</th>
         <th>Require by</th>
         <th>Employee</th>
         <th>Status</th>
@@ -17,10 +18,13 @@
       <tbody>
         <% app_feature_requests.each do |app_feature_request| %>
           <tr>
-            <td><%= app_feature_request.name %></td>
+            <td><%=h truncate(app_feature_request.name) %></td>
+            <td><%=h truncate(app_feature_request.problem_this_solves) %></td>
+            <td><%=h truncate(app_feature_request.mandatory_requirements) %></td>
             <td><%= app_feature_request.require_by_date.strftime('%d-%b-%y') if app_feature_request.require_by_date %><br>
   <%= app_feature_request.schedule %>
               <%= distance_of_time_in_words((app_feature_request.require_by_date + 330.minutes), @current_time) || "NA" if app_feature_request.require_by_date.present? %></td>
+			  
             <td><%= app_feature_request.employee.fullname %></td>
             <td><%= app_feature_request.app_status.name if app_feature_request.app_status %></td>
             <td><%= app_feature_request.app_velocity.name if app_feature_request.app_velocity %></td>

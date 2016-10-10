@@ -1,0 +1,12 @@
+<div class="row">
+ <%= form_tag("/media_tape_heads", method: "get") do  %>
+<div class="col-xs-8">
+<%= text_field_tag(:search, nil, :class => "form-control", :required => "true", :placeholder => "Search Name / Variant Id", :value => @searchvalue  )   %>
+</div>
+
+<div class="col-xs-4">
+	<%= submit_tag "Search", name: nil, class: "btn btn-primary" %>
+</div>
+<% end %>
+ 
+</div>

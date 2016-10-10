@@ -78,34 +78,34 @@
         <td class="text-right"><%= product_stock_book.purchased_value %>
         <% @purchased_val += product_stock_book.purchased_value %></td>
         <td class="text-right"><%= product_stock_book.returned_retail_qty %>
-        <% @retail_returns_qty += product_stock_book.returned_retail_qty %> </td>
+        <% @retail_returns_qty += product_stock_book.returned_retail_qty if product_stock_book.returned_retail_qty.present? %> </td>
         <td class="text-right"><%= product_stock_book.returned_retail_value %>
-        <% @retail_returns_val += product_stock_book.returned_retail_value %> </td>
+        <% @retail_returns_val += product_stock_book.returned_retail_value if product_stock_book.returned_retail_value.present? %> </td>
         <td class="text-right"><%= product_stock_book.returned_wholesale_qty %>
-        <% @wholesale_returns_qty += product_stock_book.returned_wholesale_qty %> </td>
+        <% @wholesale_returns_qty += product_stock_book.returned_wholesale_qty if product_stock_book.returned_wholesale_qty.present? %> </td>
         <td class="text-right"><%= product_stock_book.returned_wholesale_value %>
-        <% @wholesale_returns_val += product_stock_book.returned_wholesale_value %>   </td>
+        <% @wholesale_returns_val += product_stock_book.returned_wholesale_value if product_stock_book.returned_wholesale_value.present? %>   </td>
         <td class="text-right"><%= product_stock_book.returned_others_qty %>
-        <% @other_returns_qty += product_stock_book.returned_others_qty %> </td>
+        <% @other_returns_qty += product_stock_book.returned_others_qty if product_stock_book.returned_others_qty.present? %> </td>
         <td class="text-right"><%= product_stock_book.returned_others_value %>
-        <% @other_returns_val += product_stock_book.returned_others_value %></td>
+        <% @other_returns_val += product_stock_book.returned_others_value if product_stock_book.returned_others_value.present? %></td>
         <td class="text-right"><%= product_stock_book.sold_retail_qty %>
-        <% @retail_sales_qty += product_stock_book.sold_retail_qty %></td>
+        <% @retail_sales_qty += product_stock_book.sold_retail_qty if product_stock_book.sold_retail_qty.present? %></td>
         <td class="text-right"><%= product_stock_book.sold_retail_value %>
-        <% @retail_sales_val += product_stock_book.sold_retail_value %> </td>
+        <% @retail_sales_val += product_stock_book.sold_retail_value if product_stock_book.sold_retail_value.present? %> </td>
         <td class="text-right"><%= product_stock_book.sold_wholesale %>
-        <% @wholesale_sale_qty += product_stock_book.sold_wholesale %> </td>
+        <% @wholesale_sale_qty += product_stock_book.sold_wholesale if product_stock_book.sold_wholesale.present? %> </td>
         <td class="text-right"><%= product_stock_book.sold_wholesale_value %>
-        <% @wholesale_sale_val += product_stock_book.sold_wholesale_value %> </td>
+        <% @wholesale_sale_val += product_stock_book.sold_wholesale_value if product_stock_book.sold_wholesale_value.present? %> </td>
         <td class="text-right"><%= product_stock_book.sold_branch_qty %>
-        <% @branch_sales_qty += product_stock_book.sold_branch_qty %> </td>
+        <% @branch_sales_qty += product_stock_book.sold_branch_qty if product_stock_book.sold_branch_qty.present? %> </td>
         <td class="text-right"><%= product_stock_book.sold_branch_value %>
-        <% @branch_sales_val += product_stock_book.sold_branch_value %> </td>
+        <% @branch_sales_val += product_stock_book.sold_branch_value if product_stock_book.sold_branch_value.present? %> </td>
         <td class="text-right"><%= product_stock_book.corrections_qty %>
-          <% @corrections_qty += product_stock_book.corrections_qty %>
+          <% @corrections_qty += product_stock_book.corrections_qty if product_stock_book.corrections_qty.present? %>
         </td>
         <td class="text-right"><%= product_stock_book.corrections_value %>
-        <% @corrections_val += product_stock_book.corrections_value %> </td>
+        <% @corrections_val += product_stock_book.corrections_value if product_stock_book.corrections_value.present? %> </td>
         <td class="text-right"><%= product_stock_book.closing_qty %></td>
         <td><%= link_to 'Show', product_stock_book, class: "btn btn-info btn-xs", :target => "_blank" %></td>
       </tr>

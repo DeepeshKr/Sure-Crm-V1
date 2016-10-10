@@ -119,11 +119,23 @@
           <%= simple_format h(@app_feature_request.extra_notes) %>
         </div>
       <div class="panel-footer">
-        <h3>Delayed Job has be on after restart</h3>
-            <br />
-            <p>Start Job# RAILS_ENV=production bin/delayed_job start</p>
-            <br />
-            <p>End Job# RAILS_ENV=production bin/delayed_job stop</p>
+		  <div class="row">
+			<div class="col-xs-6">
+	        	<h4>Delayed Job has be on after restart</h4><br>
+	            <p>Start Job# RAILS_ENV=production bin/delayed_job start</p>
+	            <br>
+	            <p>End Job# RAILS_ENV=production bin/delayed_job stop</p>
+			</div>
+			<div class="col-xs-6">
+				<% if @closed_no_edit == 0 %>
+			  	<%= render partial: 'app_feature_comments/update_stage_desc', :locals => {:current_stage_id =>  @current_stage_id,
+			    :app_feature_comment => @app_stage_feature_comment, :new_stage_id => @close_ticket_id,
+				:button_name => @button_name, :panel_heading => @panel_heading} %>
+				<% else %>
+		        <h5>This is <%= @app_feature_request.app_status.name if @app_feature_request.app_status %>  </h5>
+				<% end %>
+			</div>
+		</div>
       </div>
     </div>
     </div>
@@ -140,8 +152,8 @@
 <div class="panel-body">
   <div class="row">
     <div class="col-xs-4">
-    <% if @allow_edit == 1 %>
-    <%= link_to 'Edit Feature', edit_app_feature_request_path(@app_feature_request), class: "btn btn-info btn-sm" %>
+    <% if @closed_no_edit != 0 %>
+    	<%= link_to 'Edit Feature', edit_app_feature_request_path(@app_feature_request), class: "btn btn-info btn-sm" %>
     <% end %>
     </div>
     <div class="col-xs-4"><%= link_to 'Back to Earlier', url_for(:back), class: "btn btn-primary btn-sm" %> </div>
@@ -163,19 +175,26 @@
     </div>
 </div>
 <% end %>
-Allow Comments:<%= @allow_comments %>
-<% if @closed_no_edit == 0 %>
+
+
   <!-- % = link_to 'Back', app_feature_requests_path %  -->
   <% if @allow_comments == 1 %>
-    <%= render partial: 'app_feature_comments/quick_add', :locals => {:list_name =>  "Your Private Comments", :app_feature_comment => @app_feature_comment} %>
-  <% end %>
-
-  <%= render partial: 'app_feature_comments/update_stage_desc', :locals => {:current_stage_id =>  @current_stage_id,
-    :app_feature_comment => @app_stage_feature_comment, :new_stage_id => 10012} %>
+  	<button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#addComments" aria-expanded="false" 	aria-controls="addComments"> Add Comments</button>
+  <hr>
+  	<div class="collapse" id="addComments">
+	      <%= render partial: 'app_feature_comments/quick_add', :locals => {:list_name =>  "Your Private Comments", :app_feature_comment => @app_feature_comment} %>
+		  
+	</div>
+	<% if @closed_no_edit == 0 %>
+  	<%= render partial: 'app_feature_comments/update_stage_desc', :locals => {:current_stage_id =>  @current_stage_id,
+    :app_feature_comment => @app_stage_feature_comment, :new_stage_id => @next_stage_id,
+	:button_name => @button_name, :panel_heading => @panel_heading} %>
+	<% end %>
   <% else %>
   <div class="panel panel-warning">
     <div class="panel-body">
-      <h5>This is <%= @app_feature_request.app_status.name if @app_feature_request.app_status %> cant change anything now, create a new Request </h5>
+      <h5>This is <%= @app_feature_request.app_status.name if @app_feature_request.app_status %> 
+		  cant change anything now, create a new Request </h5>
     </div>
   </div>
 <% end %>

@@ -25,7 +25,7 @@ end
     end # end CSV.foreach
   end # end self.import(file)
   
-  def self.check_for_changed_state statename
+  def self.check_for_changed_state statename, pincode
     base_url = "https://data.gov.in/api/datastore/resource.json"
     resource_id_1 = "0a076478-3fd3-4e2c-b2d2-581876f56d77" # All India Pincode Directory along with Contact Details
     resource_id_2 = "7eca2fa3-d6f5-444e-b3d6-faa441e35294" # All Locality Search
@@ -35,8 +35,13 @@ end
     
     limit=100
     # Localitydetail1
-    filters = "filters[statename]=#{statename}"
-  
+    if statename.present?
+      filters = "filters[statename]=#{statename}"
+    end
+    if pincode.present?
+      filters = "filters[pincode]=#{pincode}"
+    end
+    
     api_url = "#{base_url}?resource_id=#{resource_id_1}&api-key=#{api_key}&#{filters}" 
   
     uri = URI(api_url)
@@ -46,7 +51,7 @@ end
      JSON.parse(jsonArray)
   end
   
-  def self.update_local_db_with_changed_state statename
+  def update_local_db_with_changed_state statename
     
     base_url = "https://data.gov.in/api/datastore/resource.json"
     resource_id_1 = "0a076478-3fd3-4e2c-b2d2-581876f56d77" # All India Pincode Directory along with Contact Details
@@ -55,12 +60,13 @@ end
     resource_id_4 = "04cbe4b1-2f2b-4c39-a1d5-1c2e28bc0e32" # All India Pincode directory with contact details along with Latitude and longitude
     api_key = "642f4b9bfbc00aa76834551930785f93"
     
-    limit=100
+    records = 0
      
-    india_pincode_lists = IndiaPincodeList.where(:statename => statename)
+    india_pincode_lists = IndiaPincodeList.where('UPPER(statename) = ?', statename.upcase)
+  
     india_pincode_lists.each do |indi|
       pincode =  indi.pincode
-      filters = "filters[pincode]=#{pincode}"
+      filters = "filters[pincode]=#{indi.pincode}"
   
       api_url = "#{base_url}?resource_id=#{resource_id_1}&api-key=#{api_key}&#{filters}" 
   
@@ -70,11 +76,13 @@ end
       json = JSON.parse(jsonArray)
         json["records"].each do |o|
           ### update local database with the state in the pincode
-          indi.update(:statename => o["statename"])
+          indi.delay(:queue => 'update state for pincode', priority: 100).update(:statename => o["statename"])
+          records += 1
         end
     end
-      
+    return records
   end
+  
   
     # if params.has_key?(:pincode)
 #       filters = "filters[pincode]=504273"

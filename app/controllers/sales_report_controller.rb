@@ -9,6 +9,7 @@ class SalesReportController < ApplicationController
     @product_master = ProductMaster.order('extproductcode') #.limit(10)
      @media_manager = Employee.where(:employee_role_id => 10121).order("first_name")
      @from_date = (Date.current + 330.minutes).strftime("%Y-%m-%d") #.strftime("%Y-%m-%d")
+    # @media_list = Medium.where(active:1).order(:name)
   end
 
   def not_completed
@@ -42,7 +43,7 @@ class SalesReportController < ApplicationController
           @from_date = for_date.beginning_of_day + 330.minutes
           @to_date = for_date.end_of_day + 330.minutes
 
-          orderlist = OrderMaster.where('ORDER_STATUS_MASTER_ID > 10002')
+          orderlist = OrderMaster.where('ORDER_STATUS_MASTER_ID > 10000')
           .where.not(ORDER_STATUS_MASTER_ID: @cancelled_status_id)
           .where('orderdate >= ? AND orderdate <= ?', @from_date, @to_date)
            #.where(media_id: @hbnlist)
@@ -165,7 +166,7 @@ class SalesReportController < ApplicationController
      end
      #  # Unclaimed order 10006
       order_masters = OrderMaster.where('orderdate >= ? AND orderdate <= ?', @from_date, @to_date)
-      .where('ORDER_STATUS_MASTER_ID > 10002')
+      .where('ORDER_STATUS_MASTER_ID > 10000')
       .where.not(ORDER_STATUS_MASTER_ID: @cancelled_status_id)
       .joins(:medium).where("media.employee_id = ? ", @bdm_id).distinct.pluck(:media_id)
       #.select("date(orderdate) as ordered_date, sum(subtotal) as total_value")
@@ -182,7 +183,7 @@ class SalesReportController < ApplicationController
         # timetaken = orderlist.sum(:codcharges)
          reverse_vat_rate = TaxRate.find(10001)
          order_master_calculations = OrderMaster.where('orderdate >= ? AND orderdate <= ?', @from_date, @to_date)
-         .where('ORDER_STATUS_MASTER_ID > 10002')
+         .where('ORDER_STATUS_MASTER_ID > 10000')
          .where.not(ORDER_STATUS_MASTER_ID: @cancelled_status_id)
          .where(:media_id => ord)
          order_master_calculations.each do |orc|
@@ -257,7 +258,7 @@ class SalesReportController < ApplicationController
       reverse_vat_rate = TaxRate.find(10001)
 
       order_masters = OrderMaster.where('orderdate >= ? AND orderdate <= ?', @from_date, @to_date)
-      .where('ORDER_STATUS_MASTER_ID > 10002')
+      .where('ORDER_STATUS_MASTER_ID > 10000')
       .where.not(ORDER_STATUS_MASTER_ID: @cancelled_status_id)
       .where(media_id: @media_id)
 
@@ -349,20 +350,20 @@ class SalesReportController < ApplicationController
 
         if @source == "hbn"
           order_masters = OrderMaster.where('orderdate >= ? AND orderdate <= ?', @from_date, @to_date)
-          .where('ORDER_STATUS_MASTER_ID > 10002')
+          .where('ORDER_STATUS_MASTER_ID > 10000')
           .where.not(ORDER_STATUS_MASTER_ID: @cancelled_status_id)
           .where("media.media_group_id = 10000")
           .joins(:medium).distinct.pluck(:media_id)
         elsif @source == "pvt"
             order_masters = OrderMaster.where('orderdate >= ? AND orderdate <= ?', @from_date, @to_date)
-          .where('ORDER_STATUS_MASTER_ID > 10002')
+          .where('ORDER_STATUS_MASTER_ID > 10000')
           .where.not(ORDER_STATUS_MASTER_ID: @cancelled_status_id)
           .joins(:medium).where("media.media_group_id IS NULL")
           .distinct.pluck(:media_id)
           #.limit(2)
         else
           order_masters = OrderMaster.where('orderdate >= ? AND orderdate <= ?', @from_date, @to_date)
-          .where('ORDER_STATUS_MASTER_ID > 10002')
+          .where('ORDER_STATUS_MASTER_ID > 10000')
           .where.not(ORDER_STATUS_MASTER_ID: @cancelled_status_id)
           .joins(:medium).distinct.pluck(:media_id)
 
@@ -385,7 +386,7 @@ class SalesReportController < ApplicationController
         # timetaken = orderlist.sum(:codcharges)
          reverse_vat_rate = TaxRate.find(10001)
          order_master_calculations = OrderMaster.where('orderdate >= ? AND orderdate <= ?', @from_date, @to_date)
-         .where('ORDER_STATUS_MASTER_ID > 10002')
+         .where('ORDER_STATUS_MASTER_ID > 10000')
          .where.not(ORDER_STATUS_MASTER_ID: @cancelled_status_id)
          .where(:media_id => ord)
 
@@ -402,52 +403,98 @@ class SalesReportController < ApplicationController
         media = Medium.find(ord)
         media_name = media.name
         hbn = media.media_group.name || nil if media.media_group.present?
-
+        
+       
         @order_cities = OrderMaster.where('orderdate >= ? AND orderdate <= ?', @from_date, @to_date)
-        .where('ORDER_STATUS_MASTER_ID > 10002')
+        .where('ORDER_STATUS_MASTER_ID > 10000')
       .where.not(ORDER_STATUS_MASTER_ID: @cancelled_status_id)
         .where(media_id: ord).group(:city).count
-
-
-
+        
+        @city_product_list ||= []
+        @order_cities.each do |pro|
+          @city_product_list << {
+              city: pro[0],
+              pieces: pro[1],
+              value: OrderMaster.where('orderdate >= ? AND orderdate <= ?', @from_date, @to_date)
+        .where('ORDER_STATUS_MASTER_ID > 10000')
+      .where.not(ORDER_STATUS_MASTER_ID: @cancelled_status_id)
+        .where(media_id: ord, city: pro[0]).sum("subtotal  * 0.888889 + shipping * 0.98125").to_i
+        # :price.to_f  * 0.888889 + :shipping.to_f * 0.98125)
+            }
+        end
+        
         @main_products = OrderLine.joins(:order_master).where('order_masters.orderdate >= ? AND order_masters.orderdate <= ?', @from_date, @to_date)
-        .where('order_masters.ORDER_STATUS_MASTER_ID > 10002')
+        .where('order_masters.ORDER_STATUS_MASTER_ID > 10000')
         .where.not('ORDER_STATUS_MASTER_ID IN (10040, 10006, 10008)')
         .where("order_masters.media_id = ?", ord).joins(:product_variant)
         .where("product_variants.product_sell_type_id = ?", 10000)
         .joins(:product_list).group("product_lists.extproductcode")
         .sum(:pieces)
-
+        
+        @main_product_list ||= []
+        @main_products.each do |pro|
+          @main_product_list << {
+            prod: pro[0],
+            pieces: pro[1],
+            value: ProductList.find_by_extproductcode(pro[0]).get_basic_value * pro[1].to_i
+            }
+        end
+       
         @bas_upsell_products = OrderLine.joins(:order_master)
         .where('order_masters.orderdate >= ? AND order_masters.orderdate <= ?', @from_date, @to_date)
-        .where('order_masters.ORDER_STATUS_MASTER_ID > 10002')
+        .where('order_masters.ORDER_STATUS_MASTER_ID > 10000')
         .where.not('ORDER_STATUS_MASTER_ID IN (10040, 10006, 10008)')
         .where("order_masters.media_id = ?", ord).joins(:product_variant)
         .where("product_variants.product_sell_type_id = ?", 10040)
         .joins(:product_list)
         .group("product_lists.extproductcode")
         .sum(:pieces)
-
+        
+        @bas_product_list ||= []
+        @bas_upsell_products.each do |pro|
+          @bas_product_list << {
+            prod: pro[0],
+            pieces: pro[1],
+            value: ProductList.find_by_extproductcode(pro[0]).get_basic_value * pro[1].to_i
+            }
+        end
+        
+        @com_product_list ||= []
         @com_upsell_products = OrderLine.joins(:order_master).where('order_masters.orderdate >= ? AND order_masters.orderdate <= ?', @from_date, @to_date)
-        .where('order_masters.ORDER_STATUS_MASTER_ID > 10002')
+        .where('order_masters.ORDER_STATUS_MASTER_ID > 10000')
         .where.not('ORDER_STATUS_MASTER_ID IN (10040, 10006, 10008)')
         .where("order_masters.media_id = ?", ord).joins(:product_variant)
         .where("product_variants.product_sell_type_id = ?", 10001)
         .joins(:product_list).group("product_lists.extproductcode").sum(:pieces)
-
+        
+        @com_upsell_products.each do |pro|
+          @com_product_list << {
+            prod: pro[0],
+            pieces: pro[1],
+            value: ProductList.find_by_extproductcode(pro[0]).get_basic_value * pro[1].to_i
+            }
+        end
+        
+        @free_product_list ||= []
         @free_products = OrderLine.joins(:order_master)
         .where('order_masters.orderdate >= ? AND order_masters.orderdate <= ?', @from_date, @to_date)
-        .where('order_masters.ORDER_STATUS_MASTER_ID > 10002')
+        .where('order_masters.ORDER_STATUS_MASTER_ID > 10000')
         .where.not('ORDER_STATUS_MASTER_ID IN (10040, 10006, 10008)')
         .where("order_masters.media_id = ?", ord).joins(:product_variant)
         .where("product_variants.product_sell_type_id = ?", 10060)
         .joins(:product_list).group("product_lists.name").sum(:pieces)
 
-        #.joins(:product_list).select('product_lists.name as name, count(*) as count, sum(order_lines.total) as total').group('product_list_id')
+        @free_products.each do |pro|
+          @free_product_list << {
+            prod: pro[0],
+            pieces: pro[1],
+            value: ProductList.find_by_extproductcode(pro[0]).get_basic_value * pro[1].to_i
+            }
+        end
 
 
         #.group_by{|oc| oc.city}
-        @order_cities = @order_cities.sort_by{|c| c[1]}.reverse
+        @city_product_list = @city_product_list.sort_by{|c| c[:value]}.reverse
         #@main_products = @main_products.sort_by{|c| c[1]}.reverse
         #@bas_upsell_products = @bas_upsell_products.sort_by{|c| c[1]}.reverse
         #@com_upsell_products = @com_upsell_products.sort_by{|c| c[1]}.reverse
@@ -462,12 +509,12 @@ class SalesReportController < ApplicationController
             :media_id => ord,
             :total_nos => @num,
             :total_value => amount,
-            :city_list => @order_cities,
-            :main_products => @main_products,
-            :bas_upsell_products => @bas_upsell_products,
-            :com_upsell_products => @com_upsell_products
+            :city_list => @city_product_list,
+            :main_products => @main_product_list,
+            :bas_upsell_products => @bas_product_list,
+            :com_upsell_products => @com_product_list
             }
-
+            #@order_cities @main_products
           end
 
       #this is for date on the view
@@ -488,97 +535,137 @@ class SalesReportController < ApplicationController
   end
 
   def channel_sales_summary
+    @btn1 = "btn btn-default"
+    @btn2 = "btn btn-default"
+    @btn3 = "btn btn-default"
+    @total_nos = 0
+    @total_value = 0
     # @media_manager = Medium.where(:media_commision_id => 10000).where("id <> 11200 and id <> 11700")
      @sno = 1
-     if params.has_key?(:source)
-       @source = params[:source]
-     end
-      #@order_master.orderpaymentmode_id == 10000 #paid over CC
-      #@order_master.orderpaymentmode_id == 10001 #paid over COD
-    if params[:from_date].present?
-      #@summary ||= []
-      @or_for_date = params[:from_date]
-      for_date =  Date.strptime(params[:from_date], "%Y-%m-%d")
+          if params.has_key?(:source)
+            @source = params[:source]
+          end
+           #@order_master.orderpaymentmode_id == 10000 #paid over CC
+           #@order_master.orderpaymentmode_id == 10001 #paid over COD
+         if params[:from_date].present?
+           #@summary ||= []
+           @or_for_date = params[:from_date]
+           for_date =  Date.strptime(params[:from_date], "%Y-%m-%d")
 
-      @from_date = for_date.beginning_of_day - 330.minutes
-      @to_date = for_date.end_of_day - 330.minutes
-      #@to_date = @from_date + 1.day
+           @from_date = for_date.beginning_of_day - 330.minutes
+           @to_date = for_date.end_of_day - 330.minutes
+           #@to_date = @from_date + 1.day
 
-      if params.has_key?(:to_date)
-        @to_date =  Date.strptime(params[:to_date], "%Y-%m-%d")
-      end
-
-      @to_date = @to_date.end_of_day - 330.minutes
-
-     @bdm_id = params[:bdm_id]
-     #  # Unclaimed order 10006
-      order_masters = OrderMaster.where('orderdate >= ? AND orderdate <= ?', @from_date, @to_date)
-      .where('ORDER_STATUS_MASTER_ID > 10002')
-      .where.not(ORDER_STATUS_MASTER_ID: @cancelled_status_id)
-      .joins(:medium).distinct.pluck(:media_id)
-      #.select("date(orderdate) as ordered_date, sum(subtotal) as total_value")
-    #  name = (Employee.find(@bdm_id))
-      amount = 0.0
-      #@orderdate = "Searched for #{for_date} found #{order_masters.count} agents!"
-      employeeunorderlist ||= []
-
-      order_masters.each do |ord|
-        @num = 0
-        amount = 0
-        # orderlist = OrderMaster.where('ORDER_STATUS_MASTER_ID > 10002')
-        # .where('orderdate >= ? AND orderdate <= ?', @from_date, @to_date).where(employee_id: e)
-        # timetaken = orderlist.sum(:codcharges)
-         reverse_vat_rate = TaxRate.find(10001)
-         order_master_calculations = OrderMaster.where('orderdate >= ? AND orderdate <= ?', @from_date, @to_date)
-         .where('ORDER_STATUS_MASTER_ID > 10002')
-         .where.not(ORDER_STATUS_MASTER_ID: @cancelled_status_id)
-         .where(:media_id => ord)
-         order_master_calculations.each do |orc|
-           if reverse_vat_rate.present?
-             rate_charge = reverse_vat_rate.reverse_rate ||= 0.8888889
-             amount += orc.subtotal * rate_charge
-
+           if params.has_key?(:to_date)
+             @to_date =  Date.strptime(params[:to_date], "%Y-%m-%d")
            end
-           @num += 1
-        end
 
-        amount = amount.round(2)
+           @to_date = @to_date.end_of_day - 330.minutes
 
-        media = Medium.find(ord)
-        media_name = media.name
-        hbn = media.media_group.name || "Pvt" if media.media_group.present?
-
-          employeeunorderlist << {
-            :from_date => (@from_date + 330.minutes).strftime("%Y-%m-%d"),
-            :to_date => (@to_date + 330.minutes).strftime("%Y-%m-%d"),
-            :channel => media_name,
-            :group => hbn,
-            :media_id => ord,
-            :total_nos => @num,
-            :total_value => amount}
-
+          @bdm_id = params[:bdm_id]
+          if params.has_key?(:show)
+             @show = params[:show]
+           else
+             @show = "all"
           end
+          #  # Unclaimed order 10006
+          case @show # a_variable is the variable we want to compare
+            when "all"  
+           order_masters = OrderMaster.where('orderdate >= ? AND orderdate <= ?', @from_date, @to_date)
+           .where('ORDER_STATUS_MASTER_ID > 10000')
+           .where.not(ORDER_STATUS_MASTER_ID: @cancelled_status_id)
+           .distinct.pluck(:media_id)
+           @btn1 = "btn btn-success"
+         when "hbn"    #compare to 2
+           @show = "hbn"
+           order_masters = OrderMaster.where('orderdate >= ? AND orderdate <= ?', @from_date, @to_date)
+           .where('ORDER_STATUS_MASTER_ID > 10000').joins(:medium).where("media.media_group_id = 10000")
+           .where.not(ORDER_STATUS_MASTER_ID: @cancelled_status_id)
+           .distinct.pluck(:media_id)
+            @btn2 = "btn btn-success"
+          when "pvt"
+            @show = "pvt"
+            order_masters = OrderMaster.where('orderdate >= ? AND orderdate <= ?', @from_date, @to_date)
+            .where('ORDER_STATUS_MASTER_ID > 10000').joins(:medium).where("media.media_group_id IS NULL")
+            .where.not(ORDER_STATUS_MASTER_ID: @cancelled_status_id)
+            .distinct.pluck(:media_id)
+             @btn3 = "btn btn-success"
+         else
+           @from_date = (@from_date + 330.minutes).strftime("%Y-%m-%d")
+           @to_date = (@to_date + 330.minutes).strftime("%Y-%m-%d")
+           @orderdate =  "Wrong Selection made"
+           return
+         end
+           amount = 0.0
+           #@orderdate = "Searched for #{for_date} found #{order_masters.count} agents!"
+           employeeunorderlist ||= []
 
-      #this is for date on the view
-        @from_date = (@from_date + 330.minutes).strftime("%Y-%m-%d")
-        @to_date = (@to_date + 330.minutes).strftime("%Y-%m-%d")
-        @employeeorderlist = employeeunorderlist.sort_by{|c| c[:total]}.reverse
+           order_masters.each do |ord|
+             next if ord.blank?
+             @num = 0
+             amount = 0
+             # orderlist = OrderMaster.where('ORDER_STATUS_MASTER_ID > 10002')
+             # .where('orderdate >= ? AND orderdate <= ?', @from_date, @to_date).where(employee_id: e)
+             # timetaken = orderlist.sum(:codcharges)
+              reverse_vat_rate = TaxRate.find(10001)
+              order_master_calculations = OrderMaster.where('orderdate >= ? AND orderdate <= ?', @from_date, @to_date)
+              .where('ORDER_STATUS_MASTER_ID > 10000')
+              .where.not(ORDER_STATUS_MASTER_ID: @cancelled_status_id)
+              .where(:media_id => ord)
+              
+              order_master_calculations.each do |orc|
+                if reverse_vat_rate.present?
+                  rate_charge = reverse_vat_rate.reverse_rate ||= 0.8888889
+                  amount += orc.subtotal * rate_charge
 
-        respond_to do |format|
-        csv_file_name = "channel_sales_#{@from_date}_#{@to_date}.csv"
-          format.html
-          format.csv do
-            headers['Content-Disposition'] = "attachment; filename=\"#{csv_file_name}\""
-            headers['Content-Type'] ||= 'text/csv'
-          end
-        end
+                end
+                @num += 1
+              end
 
-    end
+             amount = amount.round(2)
+
+             media = Medium.find(ord)
+             next if media.blank?
+               
+             media_name = media.media_state
+             hbn = media.media_group.name || "Pvt" if media.media_group.present?
+            
+             
+               employeeunorderlist << {
+                 :from_date => (@from_date + 330.minutes).strftime("%Y-%m-%d"),
+                 :to_date => (@to_date + 330.minutes).strftime("%Y-%m-%d"),
+                 :channel => media_name,
+                 :group => hbn,
+                 :media_id => ord,
+                 :total_nos => order_master_calculations.count,
+                 :total_value => amount}
+
+               end
+
+           #this is for date on the view
+             @from_date = (@from_date + 330.minutes).strftime("%Y-%m-%d")
+             @to_date = (@to_date + 330.minutes).strftime("%Y-%m-%d")
+             @employeeorderlist = employeeunorderlist.sort_by{|c| c[:total_value]}.reverse
+
+             respond_to do |format|
+             csv_file_name = "channel_sales_#{@from_date}_#{@to_date}.csv"
+               format.html
+               format.csv do
+                 headers['Content-Disposition'] = "attachment; filename=\"#{csv_file_name}\""
+                 headers['Content-Type'] ||= 'text/csv'
+               end
+             end
+
+         end
   end
-
+    
   def channel_summary_report
+    @btn1 = "btn btn-default"
+    @btn2 = "btn btn-default"
+    @btn3 = "btn btn-default"
     #@media_manager = Employee.where(:employee_role_id => 10121).order("first_name")
      @sno = 1
+     @media_list = Medium.where(active:1).order(:name)
      if params.has_key?(:source)
        @source = params[:source]
      end
@@ -588,33 +675,46 @@ class SalesReportController < ApplicationController
       #@summary ||= []
       @or_for_date = params[:from_date]
       for_date =  Date.strptime(params[:from_date], "%Y-%m-%d")
-
+      @ex_from_date = for_date
+      @ex_to_date = for_date 
+      
       @from_date = for_date.beginning_of_day - 330.minutes
       @to_date = for_date.end_of_day - 330.minutes
       #@to_date = @from_date + 1.day
 
       if params.has_key?(:to_date)
         @to_date =  Date.strptime(params[:to_date], "%Y-%m-%d")
+        @ex_to_date = for_date 
       end
-
+      
       @to_date = @to_date.end_of_day - 330.minutes
-
+      
+      #?utf8=%E2%9C%93&media_id=11780&from_date=2016-10-07&to_date=2016-10-07
+      if @media_id == nil && @from_date == nil && @to_date == nil
+         flash[:error] = "Found the following days between #{@from_date} to #{@to_date} and no media id"
+        return
+      end
      #@bdm_id = params[:bdm_id]
      @media_id = params[:media_id] || nil if params.has_key?(:media_id)
      if @media_id.blank?
+       flash[:error] = "Found the following days between #{@from_date} to #{@to_date} and no media id"
        return
      end
-     if @media_id == nil && @from_date == nil && @to_date == nil
-       return
-     end
+    
 
-       @media_name = Medium.find(@media_id).name
-         reverse_vat_rate = TaxRate.find(10001)
+    @media_name = Medium.find(@media_id).name
+      
+    reverse_vat_rate = TaxRate.find(10001)
 
-      order_masters = OrderMaster.where('orderdate >= ? AND orderdate <= ?', @from_date, @to_date)
-      .where('ORDER_STATUS_MASTER_ID > 10002')
+      order_masters = OrderMaster.where('TRUNC(orderdate) >= ? AND TRUNC(orderdate) <= ?', @from_date, @to_date)
+      .where('ORDER_STATUS_MASTER_ID > 10000')
       .where.not(ORDER_STATUS_MASTER_ID: @cancelled_status_id)
       .where(media_id: @media_id)
+      
+      # order_masters = OrderMaster.where('TRUNC(orderdate) >= ? AND TRUNC(orderdate) <= ?', @ex_from_date, @ex_to_date)
+      # .where('ORDER_STATUS_MASTER_ID > 10000')
+      # .where.not(ORDER_STATUS_MASTER_ID: @cancelled_status_id)
+      # .where(media_id: @media_id)
 
     #  name = (Employee.find(@bdm_id))
       amount = 0.0
@@ -643,21 +743,29 @@ class SalesReportController < ApplicationController
         # timetaken = orderlist.sum(:codcharges)
         # totalorders = orderlist.sum(:total)
         # noorders = orderlist.count()
-
+        ext_order = CUSTDETAILS.find_by_ordernum(o.external_order_no) if o.external_order_no
+       
+        
           employeeunorderlist << {:total => amount,
             :sno => @num,
             :orderdate =>  (o.orderdate + 330.minutes).strftime("%Y-%m-%d"),
             :city => o.city,
             :state => o.customer_address.state,
             :channel => o.medium.name,
-            :products => products}
+            :products => products,
+            :order_no => o.external_order_no,
+            :order_id => o.id,
+            :in_date => (ext_order.in_date.strftime("%Y-%m-%d") if ext_order.in_date if ext_order)}
             @num += 1
           end
 
       #this is for date on the view
         @from_date = (@from_date + 330.minutes).strftime("%Y-%m-%d")
         @to_date = (@to_date + 330.minutes).strftime("%Y-%m-%d")
-        @employeeorderlist = employeeunorderlist.sort_by{|c| c[:total]}.reverse
+        
+         @employeeorderlist = employeeunorderlist
+         
+        #@employeeorderlist = employeeunorderlist.sort_by{|c| c[:order_no]} if employeeunorderlist
 
         respond_to do |format|
         csv_file_name = "#{@media_name}_sales_#{@from_date}_#{@to_date}.csv"
@@ -670,15 +778,17 @@ class SalesReportController < ApplicationController
 
     end
   end
-
-  def disposition_report
+  
+  def channel_product_sales_report
+    #@media_manager = Employee.where(:employee_role_id => 10121).order("first_name")
+     @sno = 1
+     @media_list = Medium.where(active:1).order(:name)
     if params[:from_date].present?
       #@summary ||= []
       @or_for_date = params[:from_date]
       for_date =  Date.strptime(params[:from_date], "%Y-%m-%d")
-       @from_date = for_date
-      from_date = for_date.beginning_of_day - 330.minutes
-      to_date = for_date.end_of_day - 330.minutes
+
+      @from_date = for_date.beginning_of_day - 330.minutes
       @to_date = for_date.end_of_day - 330.minutes
       #@to_date = @from_date + 1.day
 
@@ -688,94 +798,324 @@ class SalesReportController < ApplicationController
 
       @to_date = @to_date.end_of_day - 330.minutes
 
+     #@bdm_id = params[:bdm_id]
+     @media_id = params[:media_id] || nil if params.has_key?(:media_id)
+     if @media_id.blank?
+       return
+     end
+     
+     if @media_id == nil && @from_date == nil && @to_date == nil
+       return
+     end
+      @total_main_products, @total_bas_upsell, @total_com_product, @total_free_product = 0, 0, 0, 0
+      @value_main_products, @value_bas_upsell, @value_com_product, @value_free_product = 0, 0, 0, 0
+       @media_name = Medium.find(@media_id).name
+       
+       @main_products = OrderLine.joins(:order_master)
+       .where('order_masters.orderdate >= ? AND order_masters.orderdate <= ?', @from_date, @to_date)
+       .where('order_masters.ORDER_STATUS_MASTER_ID > 10000')
+       .where.not('ORDER_STATUS_MASTER_ID IN (10040, 10006, 10008)')
+       .where("order_masters.media_id = ?", @media_id)
+       .joins(:product_variant).joins(:product_list)
+       .where("product_variants.product_sell_type_id = ? or product_lists.replace_main_product = ?", 10000, 1)
+       .group("product_lists.extproductcode")
+       .count(:orderid)
+       
+       @main_product_list ||= []
+       @main_products.each do |pro|
+         @main_product_list << {
+           prod: pro[0],
+           pieces: pro[1],
+           value: ProductList.find_by_extproductcode(pro[0]).get_basic_value * pro[1].to_i
+           }
+           @total_main_products += pro[1].to_i 
+           @value_main_products += ProductList.find_by_extproductcode(pro[0]).get_basic_value * pro[1].to_f
+       end
+      @main_product_list = @main_product_list.sort_by{|c| c[:value]}.reverse
+        
+      @main_nos_total = 0
+      @main_value_total = 0
+      #:replace_main_product
+      
+       @bas_upsell_products = OrderLine.joins(:order_master)
+       .where('order_masters.orderdate >= ? AND order_masters.orderdate <= ?', @from_date, @to_date)
+       .where('order_masters.ORDER_STATUS_MASTER_ID > 10000')
+       .where.not('ORDER_STATUS_MASTER_ID IN (10040, 10006, 10008)')
+       .where("order_masters.media_id = ?", @media_id)
+       .joins(:product_variant)
+       .joins(:product_list)
+       .where("product_variants.product_sell_type_id = ?", 10040)
+       .where("product_lists.replace_main_product is null or product_lists.replace_main_product <> ?", 1)
+       .group("product_lists.extproductcode")
+       .count(:orderid)
 
-      # @to_date = @to_date.end_of_day - 330.minutes
-      # @from_date = @from_date.beginning_of_day - 330.minutes
+       @bas_product_list ||= []
+       @bas_upsell_products.each do |pro|
+         @bas_product_list << {
+           prod: pro[0],
+           pieces: pro[1],
+           value: ProductList.find_by_extproductcode(pro[0]).get_basic_value * pro[1].round(2)
+           }
+           if pro[1].to_i > 0
+             @total_bas_upsell += pro[1].to_i 
+             @value_bas_upsell += ProductList.find_by_extproductcode(pro[0]).get_basic_value * pro[1].to_f
+           end
+       end
+       @bas_product_list = @bas_product_list.sort_by{|c| c[:value]}.reverse
 
-      #@to_date = (@to_date + 330.minutes)
-    #
-      interaction_masters = InteractionMaster.where('createdon >= ? AND createdon <= ?', @from_date, @to_date)
-      #.limit(100)
-      # .joins(:interaction_category)
-      # .where("interaction_categories.sortorder < 100 and interaction_categories.sortorder <> 25 and interaction_categories.sortorder <> 26 and interaction_categories.sortorder <> 27")
-      @orderdate = "Orders disposition between #{@from_date} and #{@to_date} found records!"
+       @bas_nos_total = 0
+       @bas_value_total = 0
 
-    # => Customer.find(inm.customer_id).fullname ||= "NA" if inm.customer?
-    # Customer.find(inm.customer_id).fullname ||= "NA" if inm.customer_id.present?
-    #   name = Employee.find(inm.employee_id).first_name ||= "NA" if Employee.find(inm.employee_id).present?
-    # #Employee.find(e).first_name ||= "NA" #if Employee.find(e).first_name.present?)
-      @sno = 1
-        employeeunorderlist ||= []
-        num = 1
-      interaction_masters.each do |inm|
+       @com_product_list ||= []
+       @com_upsell_products = OrderLine.joins(:order_master)
+       .where('order_masters.orderdate >= ? AND order_masters.orderdate <= ?', @from_date, @to_date)
+       .where('order_masters.ORDER_STATUS_MASTER_ID > 10000')
+       .where.not('ORDER_STATUS_MASTER_ID IN (10040, 10006, 10008)')
+       .where("order_masters.media_id = ?", @media_id)
+       .joins(:product_variant).joins(:product_list)
+       .where("product_variants.product_sell_type_id = ?", 10001)
+       .where("product_lists.replace_main_product is null or product_lists.replace_main_product <> ?", 1)
+       .group("product_lists.extproductcode")
+       .count(:orderid)
 
-          customer_name = inm.customer_id
-          name = Employee.find(inm.employee_id).first_name || "NA" if inm.employee_id.present?
-          products = ""
-          order_time = "NA"
-          #cats.each do |cat| cat.name end
-          if inm.orderid.present?
+       @com_nos_total = 0
+       @com_value_total = 0
 
-          order_masters = OrderMaster.find(inm.orderid)
-          city = order_masters.city ||= "NA"
-          total = order_masters.g_total
-          channel = "NA"
-              if order_masters.media_id.present?
-                if Medium.where(id: order_masters.media_id).present?
-                    channel = Medium.find(order_masters.media_id).name ||= "NA"
-                end
-              end
-
-              @add_on_replacements = ProductMasterAddOn.where("activeid = 10000 AND replace_by_product_id IS NOT NULL").pluck(:product_list_id)
-                #
-                #               @order_lines_regular = OrderLine.where(orderid: @order_id).joins(:product_variant)
-                #               .where('PRODUCT_VARIANTS.product_sell_type_id = ? OR PRODUCT_LIST_ID in (?)', 10000, @add_on_replacements)
-
-              products << "Ref No: #{inm.orderid} Products: "
-
-            if order_masters.order_line.present?
-              #@order_lines_regular =  order_masters.order_line
-              @order_lines_regular = OrderLine.where(orderid: inm.orderid).joins(:product_variant)
-                            .where('PRODUCT_VARIANTS.product_sell_type_id = ? OR PRODUCT_LIST_ID in (?)', 10000, @add_on_replacements)
-                @order_lines_regular.each do |ord|
-                  products << ord.product_list.extproductcode || "NA" if ord.product_list
-
-              end
-            end
-          order_time = (order_masters.created_at + 330.minutes).strftime("%Y-%m-%d %H:%M")
+       @com_upsell_products.each do |pro|
+         @com_product_list << {
+           prod: pro[0],
+           pieces: pro[1],
+           value: ProductList.find_by_extproductcode(pro[0]).get_basic_value * pro[1].round(2)
+           }
+          if pro[1].to_i > 0
+            @total_com_product += pro[1].to_i
+            @value_com_product += ProductList.find_by_extproductcode(pro[0]).get_basic_value * pro[1].to_f
           end
+       end
+      @com_product_list = @com_product_list.sort_by{|c| c[:value]}.reverse #if  @com_upsell_products.present?
+
+       @free_product_list ||= []
+       @free_products = OrderLine.joins(:order_master)
+       .where('order_masters.orderdate >= ? AND order_masters.orderdate <= ?', @from_date, @to_date)
+       .where('order_masters.ORDER_STATUS_MASTER_ID > 10000')
+       .where.not('ORDER_STATUS_MASTER_ID IN (10040, 10006, 10008)')
+       .where("order_masters.media_id = ?", @media_id)
+       .joins(:product_variant)
+       .joins(:product_list)
+       .where("product_variants.product_sell_type_id = ?", 10060)
+       .where("product_lists.replace_main_product is null or product_lists.replace_main_product <> ?", 1)
+       .group("product_lists.extproductcode")
+       .count(:orderid)
+       
+       @free_nos_total = 0
+       @free_value_total = 0
+       
+       @free_products.each do |pro|
+         @free_product_list << {
+           prod: pro[0],
+           pieces: pro[1],
+           value: ProductList.find_by_extproductcode(pro[0]).get_basic_value * pro[1].round(2)
+           }
+          if pro[1].to_i > 0
+            @total_free_product += pro[1].to_i
+            @value_free_upsell += ProductList.find_by_extproductcode(pro[0]).get_basic_value * pro[1].to_f
+          end
+       end
+       @free_product_list = @free_product_list.sort_by{|c| c[:value]}.reverse if @free_product_list.present?
+         
+       reverse_vat_rate = TaxRate.find(10001)
+       @order_master_calculations = OrderMaster.where('orderdate >= ? AND orderdate <= ?', @from_date, @to_date)
+       .where('ORDER_STATUS_MASTER_ID > 10000')
+       .where.not(ORDER_STATUS_MASTER_ID: @cancelled_status_id)
+       .where(:media_id => @media_id)
+       amount, @num = 0.0,0
+       @order_master_calculations.each do |orc|
+         if reverse_vat_rate.present?
+           rate_charge = reverse_vat_rate.reverse_rate ||= 0.8888889
+           amount += (orc.subtotal * rate_charge).to_f if orc.subtotal.present?
+
+         end
+         @num += 1
+       end
+
+      @total_amount = amount.round(2)  
+      @total_orders = @order_master_calculations.count
+         
+      #this is for date on the view
+      @from_date = (@from_date + 330.minutes).strftime("%Y-%m-%d")
+      @to_date = (@to_date + 330.minutes).strftime("%Y-%m-%d")
+       
+
+        respond_to do |format|
+        csv_file_name = "#{@media_name}_product_sales_#{@from_date}_#{@to_date}.csv"
+          format.html
+          format.csv do
+            headers['Content-Disposition'] = "attachment; filename=\"#{csv_file_name}\""
+            headers['Content-Type'] ||= 'text/csv'
+          end
+        end
+
+    end
+  end
+  
+  def channel_city_sales_report
+    #@media_manager = Employee.where(:employee_role_id => 10121).order("first_name")
+     @sno = 1
+     @media_list = Medium.where(active:1).order(:name)
+    if params[:from_date].present?
+      #@summary ||= []
+      @or_for_date = params[:from_date]
+      for_date =  Date.strptime(params[:from_date], "%Y-%m-%d")
+
+      @from_date = for_date.beginning_of_day - 330.minutes
+      @to_date = for_date.end_of_day - 330.minutes
+      #@to_date = @from_date + 1.day
+
+      if params.has_key?(:to_date)
+        @to_date =  Date.strptime(params[:to_date], "%Y-%m-%d")
+      end
+
+      @to_date = @to_date.end_of_day - 330.minutes
+
+     #@bdm_id = params[:bdm_id]
+     @media_id = params[:media_id] || nil if params.has_key?(:media_id)
+     if @media_id.blank?
+       return
+     end
+     if @media_id == nil && @from_date == nil && @to_date == nil
+       return
+     end
+        reverse_vat_rate = TaxRate.find(10001)
+       @media_name = Medium.find(@media_id).name
+       
+         @order_cities = OrderMaster.where('orderdate >= ? AND orderdate <= ?', @from_date, @to_date)
+         .where('ORDER_STATUS_MASTER_ID > 10000')
+       .where.not(ORDER_STATUS_MASTER_ID: @cancelled_status_id)
+         .where(media_id: @media_id).group(:city).count
+        
+         @city_product_list ||= []
+         @order_cities.each do |pro|
+           @city_product_list << {
+               city: pro[0],
+               pieces: pro[1],
+               value: OrderMaster.where('orderdate >= ? AND orderdate <= ?', @from_date, @to_date)
+         .where('ORDER_STATUS_MASTER_ID > 10000')
+         .where.not(ORDER_STATUS_MASTER_ID: @cancelled_status_id)
+         .where(media_id: @media_id, city: pro[0]).sum("subtotal  * #{reverse_vat_rate.reverse_rate.to_f}").round(2)
+         }
+         end
+         # + shipping * 0.98125 excluded 
+         @city_total_nos = 0
+         @city_total_value = 0
+      #this is for date on the view
+        @from_date = (@from_date + 330.minutes).strftime("%Y-%m-%d")
+        @to_date = (@to_date + 330.minutes).strftime("%Y-%m-%d")
+        @city_product_list = @city_product_list.sort_by{|c| c[:value]}.reverse
+
+        respond_to do |format|
+        csv_file_name = "#{@media_name}_city_sales_#{@from_date}_#{@to_date}.csv"
+          format.html
+          format.csv do
+            headers['Content-Disposition'] = "attachment; filename=\"#{csv_file_name}\""
+            headers['Content-Type'] ||= 'text/csv'
+          end
+        end
+
+    end
+  end
+  
+  def disposition_report
+    if params[:from_date].present?
+      #@summary ||= []
+      @or_for_date = params[:from_date]
+      for_date =  Date.strptime(params[:from_date], "%Y-%m-%d")
+      @from_date = for_date.beginning_of_day - 330.minutes  
+      @to_date = for_date.end_of_day - 330.minutes
+
+      if params.has_key?(:to_date)
+        @to_date =  Date.strptime(params[:to_date], "%Y-%m-%d")
+        @to_date = @to_date.end_of_day - 330.minutes
+      end
+      @to_date = @to_date.end_of_day - 330.minutes
+    end
+    
+    if @from_date == nil
+      @from_date = (Date.current + 330.minutes).strftime("%Y-%m-%d")
+      @to_date = (Date.current + 330.minutes).strftime("%Y-%m-%d")
+      return
+    end
+    
+    interaction_masters = InteractionMaster.where('created_at >= ? AND created_at <= ?', @from_date, @to_date).order(:created_at)
+    
+    @sno = 1
+      employeeunorderlist ||= []
+      
+      num = 1
+      ######
+      #######
+      interaction_masters.each do |inm|
+        product_list = "" # ||= []
+        customer_name = inm.customer.fullname || "NA" if inm.customer
+        name = Employee.find(inm.employee_id).first_name || "NA" if inm.employee_id.present?
+        products = ""
+        order_time = "NA"
+        order_id = inm.orderid if inm.orderid
+            #cats.each do |cat| cat.name end
+      if inm.orderid.present?
+
+        order_masters = OrderMaster.find(inm.orderid)
+        city = order_masters.city ||= "NA"
+        total = order_masters.g_total
+        channel = Medium.find(order_masters.media_id).name ||= "NA" if order_masters.media_id
+    
+        @add_on_replacements = ProductMasterAddOn.where("activeid = 10000 AND replace_by_product_id IS NOT NULL").pluck(:product_list_id)
+           
+        
+        if order_masters.order_line.present?
+          #@order_lines_regular =  order_masters.order_line
+          @order_lines_regular = OrderLine.where(orderid: inm.orderid).joins(:product_variant)
+                        .where('PRODUCT_VARIANTS.product_sell_type_id = ? OR PRODUCT_LIST_ID in (?)', 10000, @add_on_replacements)
+          @order_lines_regular.each do |ord|
+            product_list << ord.product_list.extproductcode
+          end
+        end
+        
+        product_list = product_list.gsub(/\s+/, '') if !product_list.nil?
+        product_list = product_list.gsub(/&quot;/, '') if !product_list.nil?
+        order_time = (order_masters.created_at + 330.minutes).strftime("%Y-%m-%d %H:%M")
+      end
+        
           employeeunorderlist << {:total => total,
           :sno => num,
           :employee => name,
           :mobile => inm.mobile,
           :customer => customer_name,
-          :order_time => order_time,
-          :on_date =>  (inm.created_at + 330.minutes).strftime("%Y-%m-%d %H:%M"),
-          :products => products,
+          :order_time => (inm.created_at + 330.minutes).strftime("%H:%M %p"),
+          :on_date =>  (inm.created_at + 330.minutes).strftime("%Y-%m-%d"),
+          :products => product_list,
           :city => city,
+          :order_id => order_id,
           :channel => channel,
           :disposition => inm.interaction_category.name,
           :no_of =>  num}
            num += 1
-        end
-        # CSV.generate_line([c[:sno], c[:mobile], c[:employee], c[:order_date], c[:customer], c[:phone], c[:product], c[:total], c[:address], c[:city], c[:total]]).html_safe.strip
-
-
-        @from_date = (@from_date + 330.minutes).strftime("%Y-%m-%d")
-        @to_date = (@to_date + 330.minutes).strftime("%Y-%m-%d")
-
+      end # end loop
+   
+    @from_date = (@from_date + 330.minutes).strftime("%Y-%m-%d")
+    @to_date = (@to_date + 330.minutes).strftime("%Y-%m-%d")
+    
+    @orderdate = "Disposition between #{@from_date} and #{@to_date} found #{interaction_masters.count} records!"
        #
-       @employeeorderlist = employeeunorderlist
-        respond_to do |format|
-          csv_file_name = "disposition_report_#{@from_date}_to_#{@to_date}.csv"
-            format.html
-            format.csv do
-              headers['Content-Disposition'] = "attachment; filename=\"#{csv_file_name}\""
-              headers['Content-Type'] ||= 'text/csv'
-            end
-        end #end csv
-    #
-    end #end if
+   @employeeorderlist = employeeunorderlist
+    respond_to do |format|
+      csv_file_name = "disposition_report_#{@from_date}_to_#{@to_date}.csv"
+        format.html
+        format.csv do
+          headers['Content-Disposition'] = "attachment; filename=\"#{csv_file_name}\""
+          headers['Content-Type'] ||= 'text/csv'
+        end
+    end #end csv
+  
 
   end
 
@@ -879,11 +1219,11 @@ class SalesReportController < ApplicationController
         when "pay_u_paid"    #compare to 1
           @btn3 = "btn btn-success"
           @message_details = "Pay U Paid"
-          order_masters = order_masters.where(orderpaymentmode_id: 10080).where("order_status_master_id > 10002")
+          order_masters = order_masters.where(orderpaymentmode_id: 10080).where("order_status_master_id > 10000")
         when "pay_u_cod"    #compare to 1
           @btn4 = "btn btn-success"
           @message_details = "Converted to COD"
-          order_masters = order_masters.where(orderpaymentmode_id: 10001).where("order_status_master_id > 10002")
+          order_masters = order_masters.where(orderpaymentmode_id: 10001).where("order_status_master_id > 10000")
       end
     end
 
@@ -954,7 +1294,6 @@ class SalesReportController < ApplicationController
     #
   end #end function
 
-
   def pincode_orders
     #     #media segregation only HBN
     #     #media_segments
@@ -983,7 +1322,7 @@ class SalesReportController < ApplicationController
     @pincode = ""
     if params[:pincode].present?
       @pincode = params[:pincode]
-      order_masters = OrderMaster.where('ORDER_STATUS_MASTER_ID > 10002')
+      order_masters = OrderMaster.where('ORDER_STATUS_MASTER_ID > 10000')
       .where.not(ORDER_STATUS_MASTER_ID: @cancelled_status_id)
       .where('orderdate >= ? AND orderdate <= ?', @from_date, @to_date)
       .where("pincode = ?", @pincode).limit(20)
@@ -1077,7 +1416,7 @@ class SalesReportController < ApplicationController
           e = o.employee_id
 
           name = (Employee.find(e).first_name  || "NA" if Employee.find(e).first_name.present?)
-          orderlist = OrderMaster.where('ORDER_STATUS_MASTER_ID > 10002')
+          orderlist = OrderMaster.where('ORDER_STATUS_MASTER_ID > 10000')
           .where('ORDER_STATUS_MASTER_ID <> 10006').where('TRUNC(orderdate) = ?',for_date)
           .where(media_id: @hbnlist).where(employee_id: e)
           timetaken = orderlist.sum(:codcharges)
@@ -1375,112 +1714,85 @@ class SalesReportController < ApplicationController
 
       case @show # a_variable is the variable we want to compare
         when "all"    #compare to 1
-          hbn_order_masters = order_masters.joins(:medium).select(:media_id, :city).distinct
-          paid_order_masters = order_masters.joins(:medium)
-          other_order_masters = order_masters.joins(:medium)
-          # order_masters = order_masters.select(:id).distinct
-          # order_masters_cod = order_masters_cod.select(:id).distinct
-          # order_masters_cc= order_masters_cc.select(:id).distinct
-          # order_masters_payu = order_masters_payu.select(:id).distinct
-          @btn1 = "btn btn-success"
+          hbn_order_masters = order_masters.joins(:medium).where("media.media_group_id = 10000").select(:media_id).distinct
+           #.select(:media_id, :city).distinct
+          paid_order_masters = order_masters.joins(:medium).where("media.media_group_id IS NULL").select(:media_id).distinct
+         @btn1 = "btn btn-success"
           @message = "Showing all "
-        #  @orderdate = "Showing all "
         when "hbn"    #compare to 2
           @show = "hbn"
-          hbn_order_masters = order_masters.joins(:medium).where("media.media_group_id = 10000").select(:media_id, :city).distinct
-          order_masters_cod = order_masters_cod.joins(:medium).where("media.media_group_id = 10000")
-          order_masters_cc= order_masters_cc.joins(:medium).where("media.media_group_id = 10000")
-          order_masters_payu = order_masters_payu.joins(:medium).where("media.media_group_id = 10000")
-          @btn2 = "btn btn-success"
+          hbn_order_masters = order_masters.joins(:medium).where("media.media_group_id = 10000").select(:media_id).distinct 
+            @btn2 = "btn btn-success"
           @message = "Showing all HBN"
         #  @orderdate = "Showing all HBN"
         when "pvt"
           @show = "pvt"
-          hbn_order_masters = order_masters.joins(:medium).where("media.media_group_id IS NULL").select(:media_id, :city).distinct
-          paid_order_masters = order_masters.joins(:medium).where("media.media_group_id IS NULL")
-          order_masters_cod = order_masters_cod.joins(:medium).where("media.media_group_id IS NULL")
-          order_masters_cc= order_masters_cc.joins(:medium).where("media.media_group_id IS NULL")
-          order_masters_payu = order_masters_payu.joins(:medium).where("media.media_group_id IS NULL")
-          @btn3 = "btn btn-success"
+           paid_order_masters = order_masters.joins(:medium).where("media.media_group_id IS NULL").select(:media_id).distinct
+             @btn3 = "btn btn-success"
           @message = "Showing all Pvt"
         #  @orderdate = "Showing all Pvt"
         else
           @orderdate =  "Wrong Selection made"
       end
      #params.has_key?(:show)
+   	 @total_hbn_pay_u_orders, @total_hbn_pay_u_value, @total_hbn_ccorders,  @total_hbn_ccvalue,  @total_hbn_codorders,  @total_hbn_codvalue,  @total_hbn_nos, @total_hbn_total = 0,0,0,0,0,0,0,0
+     
+     @total_pvt_pay_u_orders, @total_pvt_pay_u_value, @total_pvt_ccorders,  @total_pvt_ccvalue,  @total_pvt_codorders,  @total_pvt_codvalue,  @total_pvt_nos, @total_pvt_total = 0,0,0,0,0,0,0,0
+     
+   @employeeorderlist ||= []
 
-    #
-    #         # hbn_order_masters = OrderMaster.where('orderdate >= ? AND orderdate <= ?', @from_date, @to_date)
-    #  #        .where('ORDER_STATUS_MASTER_ID > 10002')
-    #  #        .where.not(ORDER_STATUS_MASTER_ID: @cancelled_status_id)
-    #  #         .joins(:medium).where("media.media_group_id = 10000").select(:media_id, :city).distinct
-    #
-    #         paid_order_masters = OrderMaster.where('orderdate >= ? AND orderdate <= ?', @from_date, @to_date)
-    #         .where('ORDER_STATUS_MASTER_ID > 10002')
-    #         .where.not(ORDER_STATUS_MASTER_ID: @cancelled_status_id)
-    #         .where(media_id: @paid).select(:media_id, :city).distinct
-    #
-    #         other_order_masters = OrderMaster.where('orderdate >= ? AND orderdate <= ?', @from_date, @to_date)
-    #         .where('ORDER_STATUS_MASTER_ID > 10002')
-    #         .where.not(ORDER_STATUS_MASTER_ID: @cancelled_status_id)
-    #         .where(media_id: @others)
-    #         .select(:media_id, :city).distinct
-    #
-        total_hbn_order_masters = OrderMaster.where('orderdate >= ? AND orderdate <= ?', @from_date, @to_date)
-        .where('ORDER_STATUS_MASTER_ID > 10000')
-        .where.not(ORDER_STATUS_MASTER_ID: @cancelled_status_id)
-         .joins(:medium).where("media.media_group_id = 10000")
-
-        total_paid_order_masters = OrderMaster.where('orderdate >= ? AND orderdate <= ?', @from_date, @to_date)
-        .where('ORDER_STATUS_MASTER_ID > 10000')
-        .where.not(ORDER_STATUS_MASTER_ID: @cancelled_status_id)
-        .joins(:medium).where("media.media_group_id IS NULL")
-
-        total_other_order_masters = OrderMaster.where('orderdate >= ? AND orderdate <= ?', @from_date, @to_date)
-        .where('ORDER_STATUS_MASTER_ID > 10000')
-        .where.not(ORDER_STATUS_MASTER_ID: @cancelled_status_id)
-        .where(media_id: @others)
-
-
-        hbn_order_list ||= []
-        num = 1
+        if hbn_order_masters.present? 
+          hbn_order_list ||= []
+          num = 1
           #hbn channels
           hbn_order_masters.each do |o|
-          e = o.media_id
-          c = o.city
+           e = o.media_id
+ #          c = o.city
+          # , city: c
           name = (Medium.find(e).name  || "NA" if Medium.find(e).name.present?)
 
           orderlist = OrderMaster.where('ORDER_STATUS_MASTER_ID > 10002')
           .where.not(ORDER_STATUS_MASTER_ID: @cancelled_status_id)
           .where('orderdate >= ? AND orderdate <= ?', @from_date, @to_date)
-          .where(media_id: e, city: c)
+          .where(media_id: e)
           timetaken = orderlist.sum(:codcharges)
+         
           ccvalue = orderlist.where(orderpaymentmode_id: 10000).sum(:total)
           ccorders = orderlist.where(orderpaymentmode_id: 10000).count()
           codorders = orderlist.where(orderpaymentmode_id: 10001).count()
           codvalue = orderlist.where(orderpaymentmode_id: 10001).sum(:total)
+          pay_u_orders = orderlist.where(orderpaymentmode_id: 10080).count()
+          pay_u_value = orderlist.where(orderpaymentmode_id: 10080).sum(:total)
           totalorders = orderlist.sum(:total)
           noorders = orderlist.count(:id)
 
           hbn_order_list << {:total => totalorders,
-             :id => e, :channel => name, :for_date =>  @or_for_date,
+            :id => e, :channel => name, :for_date =>  @or_for_date,
             :nos => noorders, :codorders => codorders, :codvalue => codvalue,
-            :city => o.city,
-             :ccorders => ccorders, :ccvalue => ccvalue  }
+            :ccorders => ccorders, :ccvalue => ccvalue,
+            :pay_u_orders => pay_u_orders, :pay_u_value => pay_u_value}
+          
+          @employeeorderlist << hbn_order_list
           end
 
           @hbn_order_list = hbn_order_list.sort_by{|c| c[:total]}.reverse
-
+        end
+        
+        if paid_order_masters.present? 
+          
           paid_order_list ||= []
-
+          
           paid_order_masters.each do |o|
-          e = o.media_id
-          c = o.city
+           e = o.media_id
+  #         c = o.city
+          # , city: c
           name = (Medium.find(e).name  || "NA" if Medium.find(e).name.present?)
+        
           orderlist = OrderMaster.where('ORDER_STATUS_MASTER_ID > 10002')
           .where.not(ORDER_STATUS_MASTER_ID: @cancelled_status_id)
           .where('orderdate >= ? AND orderdate <= ?', @from_date, @to_date)
-          .where(media_id: e, city: c)
+          .where(media_id: e)
+        
           timetaken = orderlist.sum(:codcharges)
           ccvalue = orderlist.where(orderpaymentmode_id: 10000).sum(:total)
           ccorders = orderlist.where(orderpaymentmode_id: 10000).count()
@@ -1492,43 +1804,49 @@ class SalesReportController < ApplicationController
           noorders = orderlist.count()
 
           paid_order_list << {:total => totalorders,
-             :id => e, :channel => name, :for_date =>  @or_for_date,
+            :id => e, :channel => name, :for_date =>  @or_for_date,
             :nos => noorders, :codorders => codorders, :codvalue => codvalue,
-            :city => o.city,
-             :ccorders => ccorders, :ccvalue => ccvalue  }
+            :ccorders => ccorders, :ccvalue => ccvalue,
+            :pay_u_orders => pay_u_orders, :pay_u_value => pay_u_value}
+            
+          @employeeorderlist << paid_order_list
           end
-
-          @paid_order_list = paid_order_list.sort_by{|c| c[:total]}.reverse
-
-          other_order_list ||= []
-
-          other_order_masters.each do |o|
-          e = o.media_id
-          c = o.city
-          name = (Medium.find(e).name  || "NA" if Medium.find(e).name.present?)
-          orderlist = OrderMaster.where('ORDER_STATUS_MASTER_ID > 10002')
-          .where.not(ORDER_STATUS_MASTER_ID: @cancelled_status_id)
-          .where('orderdate >= ? AND orderdate <= ?', @from_date, @to_date)
-          .where(media_id: e, city: c)
-          timetaken = orderlist.sum(:codcharges)
-          ccvalue = orderlist.where(orderpaymentmode_id: 10000).sum(:total)
-          ccorders = orderlist.where(orderpaymentmode_id: 10000).count()
-          codorders = orderlist.where(orderpaymentmode_id: 10001).count()
-          codvalue = orderlist.where(orderpaymentmode_id: 10001).sum(:total)
-          #10080
-          pay_u_orders = orderlist.where(orderpaymentmode_id: 10080).count()
-          pay_u_value = orderlist.where(orderpaymentmode_id: 10080).sum(:total)
-          totalorders = orderlist.sum(:total)
-          noorders = orderlist.count()
-          other_order_list << {:total => totalorders,
-             :id => e, :channel => name, :for_date =>  @or_for_date,
-            :nos => noorders, :codorders => codorders, :codvalue => codvalue,
-            :city => o.city,
-             :ccorders => ccorders, :ccvalue => ccvalue}
-          end
-
-          @other_order_list = other_order_list.sort_by{|c| c[:total]}.reverse
-
+           @paid_order_list = paid_order_list.sort_by{|c| c[:total]}.reverse
+           
+         
+        end
+         
+          # if other_order_masters.present?
+#
+#             other_order_list ||= []
+#
+#             other_order_masters.each do |o|
+#              e = o.media_id
+#      #        c = o.city
+#             # , city: c
+#               name = (Medium.find(e).name  || "NA" if Medium.find(e).name.present?)
+#               orderlist = OrderMaster.where('ORDER_STATUS_MASTER_ID > 10002')
+#               .where.not(ORDER_STATUS_MASTER_ID: @cancelled_status_id)
+#               .where('orderdate >= ? AND orderdate <= ?', @from_date, @to_date)
+#               .where(media_id: e)
+#               timetaken = orderlist.sum(:codcharges)
+#               ccvalue = orderlist.where(orderpaymentmode_id: 10000).sum(:total)
+#               ccorders = orderlist.where(orderpaymentmode_id: 10000).count()
+#               codorders = orderlist.where(orderpaymentmode_id: 10001).count()
+#               codvalue = orderlist.where(orderpaymentmode_id: 10001).sum(:total)
+#               #10080
+#               pay_u_orders = orderlist.where(orderpaymentmode_id: 10080).count()
+#               pay_u_value = orderlist.where(orderpaymentmode_id: 10080).sum(:total)
+#               totalorders = orderlist.sum(:total)
+#               noorders = orderlist.count()
+#               other_order_list << {:total => totalorders,
+#                  :id => e, :channel => name, :for_date =>  @or_for_date,
+#                 :nos => noorders, :codorders => codorders, :codvalue => codvalue,
+#                  :ccorders => ccorders, :ccvalue => ccvalue}
+#             end
+#
+#             @other_order_list = other_order_list.sort_by{|c| c[:total]}.reverse
+#           end
         #this is for date on the view
         @from_date = (@from_date + 330.minutes).strftime("%Y-%m-%d")
         @to_date = (@to_date + 330.minutes).strftime("%Y-%m-%d")
@@ -1548,7 +1866,7 @@ class SalesReportController < ApplicationController
 
   def employee
         @sno = 1
-
+        @total_pay_u_orders, @total_pay_u_value, @total_ccorders, @total_ccvalue, @total_codorders, @total_codvalue, @total_nos, @total_total = 0,0,0,0,0,0,0,0
         #@months = [['-', '']](1..12).each {|m| @months << [Date::MONTHNAMES[m], m]}
         #@order_master.orderpaymentmode_id == 10000 #paid over CC
         #@order_master.orderpaymentmode_id == 10001 #paid over COD
@@ -1571,7 +1889,11 @@ class SalesReportController < ApplicationController
         order_masters = OrderMaster.where('orderdate >= ? AND orderdate <= ?', @from_date, @to_date)
         .where('ORDER_STATUS_MASTER_ID > 10002')
         .where.not(ORDER_STATUS_MASTER_ID: @cancelled_status_id)
-        .select(:employee_id).distinct
+        
+        @first_order_at = order_masters.first.orderdate + 330.minutes
+        @last_order_at =  order_masters.last.orderdate + 330.minutes
+        
+        order_masters = order_masters.select(:employee_id).distinct
 
         @orderdate = "Searched for #{for_date} found #{order_masters.count} agents!"
         employeeunorderlist ||= []
@@ -1794,7 +2116,197 @@ class SalesReportController < ApplicationController
        @btn2 = "btn btn-default"
        @btn3 = "btn btn-default"
   end
+  
+  def channel_group_product_sold
+    @sno = 0
+    @source = "all"
+    
+    @from_date = Date.current - 7.days #30.days
+    @to_date = Date.current
+    if params[:from_date].present?
+      @from_date =  Date.strptime(params[:from_date], "%Y-%m-%d")
+      @from_date = @from_date.beginning_of_day - 330.minutes
+      @to_date = @from_date.end_of_day - 330.minutes
+      if params.has_key?(:to_date)
+        @to_date =  Date.strptime(params[:to_date], "%Y-%m-%d")
+        @to_date = @to_date.end_of_day - 330.minutes
+       end
+    end
+    
+     @host = "http://#{request.host}/sales_report/product?from_date=#{@to_date}"
+     @ordersearch = "You cannot generate report here, click #{@host}"
 
+    # if @from_date == nil
+#       return
+#     end
+    
+    sold_product_list ||= []
+
+    if params.has_key?(:prod)
+      #@product_master_id = params[:product_master_id]
+      #.uniq.pluck(:orderid)
+      @prod = params[:prod]
+      @product_list = ProductList.find_by_extproductcode(@prod) #.name
+    end
+    
+    if @product_list.blank?
+       @ordersearch = "Report generated from #{@host}, ERROR: no product found for #{@prod}"
+      return
+    end
+    #product_list.extproductcode
+    if params.has_key?(:source)
+      @source = params[:source]
+    end
+          
+    if @source == "hbn"
+       @ordersearch = "#{@ordersearch} showing for hbn #{@from_date} and #{@to_date}"
+      sold_product_list = OrderLine.where(product_list_id: @product_list.id)
+      .where('orderdate >= ? and orderdate <= ?', @from_date, @to_date)
+      .where(orderid: OrderMaster.where('ORDER_STATUS_MASTER_ID > 10000 and orderdate >= ? AND orderdate <= ?', @from_date, @to_date).where.not('ORDER_STATUS_MASTER_ID IN (10040, 10006, 10008)')
+     .joins(:medium).where("media.media_group_id = 10000").pluck(:id))
+     
+    elsif @source == "pvt"
+      @ordersearch = "#{@ordersearch} showing for pvt #{@from_date} and #{@to_date}"
+      sold_product_list = OrderLine.where(product_list_id: @product_list.id)
+      .where('orderdate >= ? and orderdate <= ?', @from_date, @to_date)
+      .where(orderid: OrderMaster.where('ORDER_STATUS_MASTER_ID > 10000 and orderdate >= ? AND orderdate <= ?', @from_date, @to_date).where.not('ORDER_STATUS_MASTER_ID IN (10040, 10006, 10008)')
+     .joins(:medium).where("media.media_group_id IS NULL").pluck(:id))
+     
+    else
+      @ordersearch = "#{@ordersearch} showing for all #{@from_date} and #{@to_date}"
+      sold_product_list = OrderLine.where('order_lines.orderdate >= ? and order_lines.orderdate <= ?', @from_date, @to_date)
+      .where(product_list_id:@product_list.id).joins(:order_master)
+      .where('ORDER_MASTERS.ORDER_STATUS_MASTER_ID > 10000')
+      .where.not('order_masters.ORDER_STATUS_MASTER_ID IN (10040, 10006, 10008)')#.limit(10)
+    end
+          
+    @order_lines_csv ||= []
+      sold_product_list.each do |o|
+          @order_lines_csv << {:order_no => o.order_master.external_order_no,
+        :ref_no => o.orderid, :order_date =>  (o.order_master.orderdate + 330.minutes).strftime('%d-%b-%Y'),
+        :customer => o.order_master.customer.first_name + " " + o.order_master.customer.last_name,
+        :channel => o.order_master.medium.name,
+        :city => o.order_master.customer_address.city + " " + o.order_master.customer_address.pincode,
+        :state => o.order_master.customer_address.state,
+        :product => o.product_variant.name,
+        :total => o.subtotal}
+      end
+
+    @order_lines = sold_product_list #.order("orderdate")
+
+    #this is for date on the view
+    @from_date = (@from_date + 330.minutes).strftime("%Y-%m-%d")
+    @to_date = (@to_date + 330.minutes).strftime("%Y-%m-%d")
+    
+    csv_name = [@product_list.name.parameterize].join("-")
+    respond_to do |format|
+      csv_file_name = "#{csv_name}_sold_#{@from_date}.csv"
+      format.html
+      format.csv do
+        headers['Content-Disposition'] = "attachment; filename=\"#{csv_file_name}\""
+        headers['Content-Type'] ||= 'text/csv'
+      end
+    end
+        #@order_masters = OrderMaster.where(id: sold_product_list)
+  end
+  #http://3.0.3.26:120/sales_report/channel_group_product_sold?from_date=2016-08-23&prod=3SNG&to_date=2016-08-23
+  
+  def channel_group_sales_summary
+    @total_nos = 0
+    @total_value = 0
+    @sno = 1
+    
+     @from_date = Date.current - 7.days #30.days
+     @to_date = Date.current
+     if params[:from_date].present?
+       @from_date =  Date.strptime(params[:from_date], "%Y-%m-%d")
+       @from_date = @from_date.beginning_of_day - 330.minutes
+       @to_date = @from_date.end_of_day - 330.minutes
+       if params.has_key?(:to_date)
+         @to_date =  Date.strptime(params[:to_date], "%Y-%m-%d")
+         @to_date = @to_date.end_of_day - 330.minutes
+        end
+     end
+    
+      @host = "http://#{request.host}/sales_report/product?from_date=#{@to_date}"
+      @ordersearch = "You cannot generate report here, click #{@host}"
+      
+      if params.has_key?(:prod)
+        #@product_master_id = params[:product_master_id]
+        #.uniq.pluck(:orderid)
+        @prod = params[:prod]
+        @product_list = ProductList.find_by_extproductcode(@prod) #.name
+      end
+    
+      if @product_list.blank?
+         @ordersearch = "Report generated from #{@host}, ERROR: no product found for #{@prod}"
+        return
+      end
+      
+      order_masters = OrderMaster.where('ORDER_STATUS_MASTER_ID > 10000')
+      .where('order_masters.orderdate >= ? AND order_masters.orderdate <= ?', @from_date, @to_date)
+      .joins(:order_line).where("order_lines.product_list_id = ?", @product_list.id)
+      .where.not(ORDER_STATUS_MASTER_ID: @cancelled_status_id)
+      .distinct.pluck(:media_id)
+      
+      amount = 0.0
+           #@orderdate = "Searched for #{for_date} found #{order_masters.count} agents!"
+      employeeunorderlist ||= []
+      
+      order_masters.each do |ord|
+        @num = 0
+        amount = 0                 
+        reverse_vat_rate = TaxRate.find(10001)
+        
+        order_master_calculations = OrderMaster.where('ORDER_STATUS_MASTER_ID > 10000')
+        .where('order_masters.orderdate >= ? AND order_masters.orderdate <= ?', @from_date, @to_date)
+        .joins(:order_line).where("order_lines.product_list_id = ?", @product_list.id)
+        .where.not(ORDER_STATUS_MASTER_ID: @cancelled_status_id)
+        .where(:media_id => ord)
+        order_master_calculations.each do |orc|
+          if reverse_vat_rate.present?
+            rate_charge = reverse_vat_rate.reverse_rate ||= 0.8888889
+            amount += orc.subtotal * rate_charge
+
+          end
+          @num += 1
+       end
+
+       amount = amount.round(2)
+
+       media = Medium.find(ord)
+       media_name = media.media_state
+       hbn = media.media_group.name || "Pvt" if media.media_group.present?
+      
+       
+       employeeunorderlist << {
+         :from_date => (@from_date + 330.minutes).strftime("%Y-%m-%d"),
+         :to_date => (@to_date + 330.minutes).strftime("%Y-%m-%d"),
+         :channel => media_name,
+         :group => hbn,
+         :media_id => ord,
+         :total_nos => @num,
+         :total_value => amount}
+
+      end
+
+    #this is for date on the view
+    @from_date = (@from_date + 330.minutes).strftime("%Y-%m-%d")
+    @to_date = (@to_date + 330.minutes).strftime("%Y-%m-%d")
+    @employeeorderlist = employeeunorderlist.sort_by{|c| c[:total_value]}.reverse
+
+    respond_to do |format|
+    csv_file_name = "channel_group_sales_#{@from_date}_#{@to_date}.csv"
+     format.html
+     format.csv do
+       headers['Content-Disposition'] = "attachment; filename=\"#{csv_file_name}\""
+       headers['Content-Type'] ||= 'text/csv'
+     end
+    end
+
+  end
+ 
+  
   def show
       #add this link to show
       #<%= link_to "View PPO", ppo_details_path(campaign_id: c[:campaign_id]), :target => "_blank" %>
@@ -2228,215 +2740,234 @@ class SalesReportController < ApplicationController
     @btn3 = "btn btn-info"
     @show = "all"
      #@summary ||= []
-      @from_date = Date.current - 7.days #30.days
-     @to_date = Date.current
-     if params[:from_date].present?
-     #     #@summary ||= []
-         @orderdate =  "Please select a date to generate the report"
-         for_date =  Date.strptime(params[:from_date], "%Y-%m-%d")
-        #@summary ||= []
-        @or_for_date = params[:from_date]
-        @to_date = for_date.end_of_day - 330.minutes
-        @from_date =  Date.strptime(params[:from_date], "%Y-%m-%d")
-        #@from_date = for_date.beginning_of_day - 330.minutes
-        product_name = " "
-        from_date = @from_date.beginning_of_day - 330.minutes
-        to_date = @from_date.end_of_day - 330.minutes
-        if params.has_key?(:to_date)
-           @to_date =  Date.strptime(params[:to_date], "%Y-%m-%d")
-           to_date = @to_date.end_of_day - 330.minutes
-        end
-         @orderdate = params[:for_date]
-           for_date =  Date.strptime(params[:from_date], "%Y-%m-%d")
+     use_from_to_date 1
+     if @from_date == nil
+       return
+     end
+      @show_date = @or_for_date
+
+      #media segregation only HBN
+      #media_segments
+
+      @order_masters = OrderMaster.where('orderdate >= ? AND orderdate <= ?', @from_date, @to_date).where('ORDER_STATUS_MASTER_ID > 10000').where.not(ORDER_STATUS_MASTER_ID: @all_cancelled_orders)
+      .select(:id).distinct
+
+      @order_masters_cod = OrderMaster.where(orderpaymentmode_id: 10001)
+      .where('orderdate >= ? AND orderdate <= ?', @from_date, @to_date)
+      .where('ORDER_STATUS_MASTER_ID > 10000')
+      .where.not(ORDER_STATUS_MASTER_ID: @all_cancelled_orders).select(:id).distinct
+
+      @order_masters_cc = OrderMaster.where(orderpaymentmode_id: 10000)
+      .where('orderdate >= ? AND orderdate <= ?', @from_date, @to_date)
+      .where('ORDER_STATUS_MASTER_ID > 10000')
+      .where.not(ORDER_STATUS_MASTER_ID: @all_cancelled_orders).select(:id).distinct
+
+      @order_masters_payu = OrderMaster.where(orderpaymentmode_id: 10080)
+      .where('orderdate >= ? AND orderdate <= ?', @from_date, @to_date)
+      .where('ORDER_STATUS_MASTER_ID > 10000')
+      .where.not(ORDER_STATUS_MASTER_ID: @all_cancelled_orders).select(:id).distinct
+
+     if params.has_key?(:start_time) && params.has_key?(:end_time)
+      start_time = Time.strptime(params[:start_time], "%Y-%m-%d %H:%M")
+      end_time = Time.strptime(params[:end_time], "%Y-%m-%d %H:%M")
+
+      @Show_start_time = start_time.strftime("%H:%M")
+      @Show_end_time = end_time.strftime("%H:%M")
 
 
-         @show_date = for_date
+      @order_masters = OrderMaster.where('orderdate >= ? AND orderdate <= ?', @from_date, @to_date)
+      .where('ORDER_STATUS_MASTER_ID > 10000').where('ORDER_STATUS_MASTER_ID <> 10006')
+      .select(:id).distinct
+      order_masters_cod = OrderMaster.where(orderpaymentmode_id: 10001)
+      .where('orderdate >= ? AND orderdate <= ?', @from_date, @to_date)
+      .where('ORDER_STATUS_MASTER_ID > 10000')
+      .where.not(ORDER_STATUS_MASTER_ID: @all_cancelled_orders).select(:id).distinct
 
-        #media segregation only HBN
-        media_segments
+      @order_masters_cc = OrderMaster.where(orderpaymentmode_id: 10000)
+      .where('orderdate >= ? AND orderdate <= ?', @from_date, @to_date)
+      .where('ORDER_STATUS_MASTER_ID > 10000')
+      .where.not(ORDER_STATUS_MASTER_ID: @all_cancelled_orders).select(:id).distinct
 
-        order_masters = OrderMaster.where('orderdate >= ? AND orderdate <= ?', from_date, to_date).where('ORDER_STATUS_MASTER_ID > 10002').where.not(ORDER_STATUS_MASTER_ID: @all_cancelled_orders)
-        .select(:id).distinct
+      @order_masters_payu = OrderMaster.where(orderpaymentmode_id: 10080)
+      .where('orderdate >= ? AND orderdate <= ?', @from_date, @to_date)
+      .where('ORDER_STATUS_MASTER_ID > 10000')
+      .where.not(ORDER_STATUS_MASTER_ID: @all_cancelled_orders).select(:id).distinct
 
-        order_masters_cod = OrderMaster.where(orderpaymentmode_id: 10001)
-        .where('orderdate >= ? AND orderdate <= ?', from_date, to_date)
-        .where('ORDER_STATUS_MASTER_ID > 10002')
-        .where.not(ORDER_STATUS_MASTER_ID: @all_cancelled_orders).select(:id).distinct
-
-        order_masters_cc = OrderMaster.where(orderpaymentmode_id: 10000)
-        .where('orderdate >= ? AND orderdate <= ?', from_date, to_date)
-        .where('ORDER_STATUS_MASTER_ID > 10002')
-        .where.not(ORDER_STATUS_MASTER_ID: @all_cancelled_orders).select(:id).distinct
-
-        order_masters_payu = OrderMaster.where(orderpaymentmode_id: 10080)
-        .where('orderdate >= ? AND orderdate <= ?', from_date, to_date)
-        .where('ORDER_STATUS_MASTER_ID > 10002')
-        .where.not(ORDER_STATUS_MASTER_ID: @all_cancelled_orders).select(:id).distinct
-
-         if params.has_key?(:start_time) && params.has_key?(:end_time)
-          start_time = Time.strptime(params[:start_time], "%Y-%m-%d %H:%M")
-          end_time = Time.strptime(params[:end_time], "%Y-%m-%d %H:%M")
-
-          @Show_start_time = start_time.strftime("%H:%M")
-          @Show_end_time = end_time.strftime("%H:%M")
-
-
-          order_masters = OrderMaster.where('orderdate >= ? AND orderdate <= ?', start_time, end_time)
-          .where('ORDER_STATUS_MASTER_ID > 10002').where('ORDER_STATUS_MASTER_ID <> 10006')
-          .select(:id).distinct
-          order_masters_cod = OrderMaster.where(orderpaymentmode_id: 10001)
-          .where('orderdate >= ? AND orderdate <= ?', start_time, end_time)
-          .where('ORDER_STATUS_MASTER_ID > 10002')
-          .where.not(ORDER_STATUS_MASTER_ID: @all_cancelled_orders).select(:id).distinct
-
-          order_masters_cc = OrderMaster.where(orderpaymentmode_id: 10000)
-          .where('orderdate >= ? AND orderdate <= ?', start_time, end_time)
-          .where('ORDER_STATUS_MASTER_ID > 10002')
-          .where.not(ORDER_STATUS_MASTER_ID: @all_cancelled_orders).select(:id).distinct
-
-          order_masters_payu = OrderMaster.where(orderpaymentmode_id: 10080)
-          .where('orderdate >= ? AND orderdate <= ?', start_time, end_time)
-          .where('ORDER_STATUS_MASTER_ID > 10002')
-          .where.not(ORDER_STATUS_MASTER_ID: @all_cancelled_orders).select(:id).distinct
-
-         end
+     end
 
 
 
-         if params.has_key?(:show)
-           @show = params[:show]
-           case @show # a_variable is the variable we want to compare
-             when "all"    #compare to 1
-
-               # order_masters = order_masters.select(:id).distinct
-               # order_masters_cod = order_masters_cod.select(:id).distinct
-               # order_masters_cc= order_masters_cc.select(:id).distinct
-               # order_masters_payu = order_masters_payu.select(:id).distinct
-               @btn1 = "btn btn-success"
-               @orderdate = "Showing all "
-             when "hbn"    #compare to 2
-               @show = "hbn"
-               order_masters = order_masters.joins(:medium).where("media.media_group_id = 10000")
-               order_masters_cod = order_masters_cod.joins(:medium).where("media.media_group_id = 10000")
-               order_masters_cc= order_masters_cc.joins(:medium).where("media.media_group_id = 10000")
-               order_masters_payu = order_masters_payu.joins(:medium).where("media.media_group_id = 10000")
-               @btn2 = "btn btn-success"
-               @orderdate = "Showing all HBN"
-             when "pvt"
-               @show = "pvt"
-               order_masters = order_masters.joins(:medium).where("media.media_group_id IS NULL")
-               order_masters_cod = order_masters_cod.joins(:medium).where("media.media_group_id IS NULL")
-               order_masters_cc= order_masters_cc.joins(:medium).where("media.media_group_id IS NULL")
-               order_masters_payu = order_masters_payu.joins(:medium).where("media.media_group_id IS NULL")
-               @btn3 = "btn btn-success"
-               @orderdate = "Showing all Pvt"
-             else
-               @orderdate =  "Wrong Selection made"
-           end
-         end
-
-           @add_on_replacements = ProductMasterAddOn.where("activeid = 10000 AND replace_by_product_id IS NOT NULL").pluck(:product_list_id)
-           @order_lines_regular = OrderLine.where(orderid: @order_id).joins(:product_variant)
-           .where('PRODUCT_VARIANTS.product_sell_type_id = ? OR PRODUCT_LIST_ID in (?)', 10000, @add_on_replacements)
-
-        regular_product_variant_list = ProductVariant.where(product_sell_type_id: 10000)
-        common_sell_product_variant_list = ProductVariant.where(product_sell_type_id: 10001)
-        basic_sell_product_variant_list =  ProductVariant.where(product_sell_type_id: 10040)
-
-        reg_order_lines = OrderLine.where(orderid: order_masters).where(productvariant_id: regular_product_variant_list).select(:product_list_id).distinct
-
-        common_order_lines = OrderLine.where(orderid: order_masters).where(productvariant_id: common_sell_product_variant_list).select(:product_list_id).distinct
-
-        basic_order_lines = OrderLine.where(orderid: order_masters).where(productvariant_id: basic_sell_product_variant_list).select(:product_list_id).distinct
-
-        #@orderdate = "Searched for #{for_date} found #{order_masters.count} agents!"
-          main_product_list_orderlist ||= []
-          num = 1
-          reg_order_lines.each do |o|
-          e = o.product_list_id
-
-          name = (ProductList.find(e).productlistdetails  || "NA" if ProductList.find(e).productlistdetails.present?)
-          orderlist = OrderLine.where(orderid: order_masters).where(product_list_id: e)
-          timetaken = orderlist.sum(:codcharges)
-          payuvalue = OrderLine.where(orderid: order_masters_payu).where(product_list_id: e).sum(:total)
-          payuorders = OrderLine.where(orderid: order_masters_payu).where(product_list_id: e).count()
-          ccvalue = OrderLine.where(orderid: order_masters_cc).where(product_list_id: e).sum(:total)
-          ccorders = OrderLine.where(orderid: order_masters_cc).where(product_list_id: e).count()
-          codorders = OrderLine.where(orderid: order_masters_cod).where(product_list_id: e).count()
-          codvalue = OrderLine.where(orderid: order_masters_cod).where(product_list_id: e).sum(:total)
-          totalorders = orderlist.sum(:total)
-          noorders = orderlist.count()
-          main_product_list_orderlist << {:total => totalorders,
-             :id => e, :product => name, :for_date =>  @or_for_date,
-                :prod => o.product_list.extproductcode,
-            :nos => noorders, :payuvalue => payuvalue, :payuorders => payuorders,
-            :codorders => codorders, :codvalue => codvalue,
-             :ccorders => ccorders, :ccvalue => ccvalue  }
-          end
-          @main_product_list = main_product_list_orderlist.sort_by{|c| c[:total]}.reverse
-
-          common_product_list_orderlist ||= []
-          common_order_lines.each do |o|
-          e = o.product_list_id
-
-          name = (ProductList.find(e).productlistdetails  || "NA" if ProductList.find(e).productlistdetails.present?)
-          orderlist = OrderLine.where(orderid: order_masters).where(product_list_id: e)
-          timetaken = orderlist.sum(:codcharges)
-          payuvalue = OrderLine.where(orderid: order_masters_payu).where(product_list_id: e).sum(:total)
-          payuorders = OrderLine.where(orderid: order_masters_payu).where(product_list_id: e).count()
-          ccvalue = OrderLine.where(orderid: order_masters_cc).where(product_list_id: e).sum(:total)
-          ccorders = OrderLine.where(orderid: order_masters_cc).where(product_list_id: e).count()
-          codorders = OrderLine.where(orderid: order_masters_cod).where(product_list_id: e).count()
-          codvalue = OrderLine.where(orderid: order_masters_cod).where(product_list_id: e).sum(:total)
-          totalorders = orderlist.sum(:total)
-          noorders = orderlist.count()
-          common_product_list_orderlist << {:total => totalorders,
-             :id => e, :product => name, :for_date =>  @or_for_date,
-                :prod => o.product_list.extproductcode,
-            :nos => noorders, :payuvalue => payuvalue, :payuorders => payuorders,
-            :codorders => codorders, :codvalue => codvalue,
-             :ccorders => ccorders, :ccvalue => ccvalue  }
-          end
-          @common_product_list_orderlist = common_product_list_orderlist.sort_by{|c| c[:total]}.reverse
-
-
-         basic_product_list_orderlist ||= []
-          basic_order_lines.each do |o|
-          e = o.product_list_id
-
-          name = (ProductList.find(e).productlistdetails  || "NA" if ProductList.find(e).productlistdetails.present?)
-          orderlist = OrderLine.where(orderid: order_masters).where(product_list_id: e)
-          timetaken = orderlist.sum(:codcharges)
-          payuvalue = OrderLine.where(orderid: order_masters_payu).where(product_list_id: e).sum(:total)
-          payuorders = OrderLine.where(orderid: order_masters_payu).where(product_list_id: e).count()
-          ccvalue = OrderLine.where(orderid: order_masters_cc).where(product_list_id: e).sum(:total)
-          ccorders = OrderLine.where(orderid: order_masters_cc).where(product_list_id: e).count()
-          codorders = OrderLine.where(orderid: order_masters_cod).where(product_list_id: e).count()
-          codvalue = OrderLine.where(orderid: order_masters_cod).where(product_list_id: e).sum(:total)
-          totalorders = orderlist.sum(:total)
-          noorders = orderlist.count()
-          basic_product_list_orderlist << {:total => totalorders,
-             :id => e, :product => name, :for_date =>  @or_for_date,
-             :prod => o.product_list.extproductcode,
-            :nos => noorders,:payuvalue => payuvalue, :payuorders => payuorders,
-            :codorders => codorders, :codvalue => codvalue,
-             :ccorders => ccorders, :ccvalue => ccvalue  }
-          end
-          @basic_product_list_orderlist = basic_product_list_orderlist.sort_by{|c| c[:total]}.reverse
-
-          @from_date = (@from_date).strftime("%Y-%m-%d")
-          @to_date = (@to_date).strftime("%Y-%m-%d")
-
-          respond_to do |format|
-            csv_file_name = "products_sold_report_#{@or_for_date}.csv"
-              format.html
-              format.csv do
-                headers['Content-Disposition'] = "attachment; filename=\"#{csv_file_name}\""
-                headers['Content-Type'] ||= 'text/csv'
-              end
-          end
-
+     if params.has_key?(:show)
+       @show = params[:show]
+       case @show # a_variable is the variable we want to compare
+         when "hbn"    #compare to 2
+           @show = "hbn"
+           @order_masters = @order_masters.joins(:medium).where("media.media_group_id = 10000")
+           @order_masters_cod = @order_masters_cod.joins(:medium).where("media.media_group_id = 10000")
+           @order_masters_cc= @order_masters_cc.joins(:medium).where("media.media_group_id = 10000")
+           @order_masters_payu = @order_masters_payu.joins(:medium).where("media.media_group_id = 10000")
+           @btn2 = "btn btn-success"
+           @orderdate = "Showing all HBN"
+         when "pvt"
+           @show = "pvt"
+           @order_masters = @order_masters.joins(:medium).where("media.media_group_id IS NULL")
+           @order_masters_cod = @order_masters_cod.joins(:medium).where("media.media_group_id IS NULL")
+           @order_masters_cc= @order_masters_cc.joins(:medium).where("media.media_group_id IS NULL")
+           @order_masters_payu = @order_masters_payu.joins(:medium).where("media.media_group_id IS NULL")
+           @btn3 = "btn btn-success"
+           @orderdate = "Showing all Pvt"
+         else
+           @orderdate =  "Wrong Selection made"
        end
+     else
+       @btn1 = "btn btn-success"
+       @orderdate = "Showing all "
+     end
+
+    @add_on_replacements = ProductMasterAddOn.where("activeid = 10000 AND replace_by_product_id IS NOT
+    NULL").pluck(:product_list_id)
+    @order_lines_regular = OrderLine.where(orderid: @order_id).joins(:product_variant)
+    .where('PRODUCT_VARIANTS.product_sell_type_id = ? OR PRODUCT_LIST_ID in (?)', 10000, @add_on_replacements)
+      
+    #regular_product_variant_list = ProductVariant.where(product_sell_type_id: 10000)
+    @reg_order_lines = OrderLine.where(orderid: @order_masters)
+    .joins(:product_variant)
+    .joins(:product_list)
+    .where("product_variants.product_sell_type_id = ? or product_lists.replace_main_product = ?", 10000, 1)
+    .select(:product_list_id).distinct
+    # .where("product_lists.replace_main_product = null or product_lists.replace_main_product = ?", 1)
+    #.where("product_lists.replace_main_product is null or product_lists.replace_main_product = ?", 1)
+    
+    
+    #common_sell_product_variant_list = ProductVariant.where(product_sell_type_id: 10001)
+    @common_order_lines = OrderLine.where(orderid: @order_masters)
+    .joins(:product_variant)
+    .joins(:product_list)
+    .where("product_variants.product_sell_type_id = ?", 10001)
+    .where("product_lists.replace_main_product is null or product_lists.replace_main_product <> ?", 1)
+    .select(:product_list_id).distinct
+    # .where("product_lists.replace_main_product is null or product_lists.replace_main_product <> ?", 1)
+    
+    #basic_sell_product_variant_list =  ProductVariant.where(product_sell_type_id: 10040)
+    @basic_order_lines = OrderLine.where(orderid: @order_masters)
+    .joins(:product_variant)
+    .joins(:product_list)
+    .where("product_variants.product_sell_type_id = ?", 10040)
+    .where("product_lists.replace_main_product is null or product_lists.replace_main_product <> ?", 1)
+    .select(:product_list_id).distinct
+    # .where("product_lists.replace_main_product is null or product_lists.replace_main_product <> ?", 1)
+
+    #@orderdate = "Searched for #{for_date} found #{order_masters.count} agents!"
+    main_product_list_orderlist ||= []
+    num = 1
+    @reg_order_lines.each do |o|
+    e = o.product_list_id
+
+    name = (ProductList.find(e).productlistdetails  || "NA" if ProductList.find(e).productlistdetails.present?)
+    orderlist = OrderLine.where(orderid: @order_masters).where(product_list_id: e)
+    timetaken = orderlist.sum(:codcharges)
+    payuvalue = OrderLine.where(orderid: @order_masters_payu).where(product_list_id: e).sum(:subtotal)
+    payuorders = OrderLine.where(orderid: @order_masters_payu).where(product_list_id: e).count()
+    ccvalue = OrderLine.where(orderid: @order_masters_cc).where(product_list_id: e).sum(:subtotal)
+    ccorders = OrderLine.where(orderid: @order_masters_cc).where(product_list_id: e).count()
+    codorders = OrderLine.where(orderid: @order_masters_cod).where(product_list_id: e).count()
+    codvalue = OrderLine.where(orderid: @order_masters_cod).where(product_list_id: e).sum(:subtotal)
+    totalorders = orderlist.sum(:subtotal)
+    noorders = orderlist.count()
+    
+    main_product_list_orderlist << {:total => totalorders,
+       :id => e, :product => name, :for_date =>  @or_for_date,
+          :prod => o.product_list.extproductcode,
+      :nos => noorders, :payuvalue => payuvalue, :payuorders => payuorders,
+      :codorders => codorders, :codvalue => codvalue,
+       :ccorders => ccorders, :ccvalue => ccvalue  }
+    end
+    
+    @main_product_list = main_product_list_orderlist.sort_by{|c| c[:total]}.reverse
+
+    common_product_list_orderlist ||= []
+    @common_order_lines.each do |o|
+    e = o.product_list_id
+
+    name = (ProductList.find(e).productlistdetails  || "NA" if ProductList.find(e).productlistdetails.present?)
+    orderlist = OrderLine.where(orderid: @order_masters).where(product_list_id: e)
+    timetaken = orderlist.sum(:codcharges)
+    payuvalue = OrderLine.where(orderid: @order_masters_payu).where(product_list_id: e).sum(:subtotal)
+    payuorders = OrderLine.where(orderid: @order_masters_payu).where(product_list_id: e).count()
+    ccvalue = OrderLine.where(orderid: @order_masters_cc).where(product_list_id: e).sum(:subtotal)
+    ccorders = OrderLine.where(orderid: @order_masters_cc).where(product_list_id: e).count()
+    codorders = OrderLine.where(orderid: @order_masters_cod).where(product_list_id: e).count()
+    codvalue = OrderLine.where(orderid: @order_masters_cod).where(product_list_id: e).sum(:subtotal)
+    totalorders = orderlist.sum(:subtotal)
+    noorders = orderlist.count()
+    common_product_list_orderlist << {:total => totalorders,
+       :id => e, :product => name, :for_date =>  @or_for_date,
+          :prod => o.product_list.extproductcode,
+      :nos => noorders, :payuvalue => payuvalue, :payuorders => payuorders,
+      :codorders => codorders, :codvalue => codvalue,
+       :ccorders => ccorders, :ccvalue => ccvalue  }
+    end
+    
+    @common_product_list_orderlist = common_product_list_orderlist.sort_by{|c| c[:total]}.reverse
+
+    basic_product_list_orderlist ||= []
+    @basic_order_lines.each do |o|
+    e = o.product_list_id
+
+      name = (ProductList.find(e).productlistdetails  || "NA" if ProductList.find(e).productlistdetails.present?)
+      orderlist = OrderLine.where(orderid: @order_masters).where(product_list_id: e)
+      timetaken = orderlist.sum(:codcharges)
+      payuvalue = OrderLine.where(orderid: @order_masters_payu).where(product_list_id: e).sum(:subtotal)
+      payuorders = OrderLine.where(orderid: @order_masters_payu).where(product_list_id: e).count()
+      ccvalue = OrderLine.where(orderid: @order_masters_cc).where(product_list_id: e).sum(:subtotal)
+      ccorders = OrderLine.where(orderid: @order_masters_cc).where(product_list_id: e).count()
+      codorders = OrderLine.where(orderid: @order_masters_cod).where(product_list_id: e).count()
+      codvalue = OrderLine.where(orderid: @order_masters_cod).where(product_list_id: e).sum(:subtotal)
+      totalorders = orderlist.sum(:subtotal)
+      noorders = orderlist.count()
+      basic_product_list_orderlist << {:total => totalorders, :id => e, :product => name, 
+        :for_date =>  @or_for_date,:prod => o.product_list.extproductcode,
+        :nos => noorders,:payuvalue => payuvalue, :payuorders => payuorders,
+        :codorders => codorders, :codvalue => codvalue, :ccorders => ccorders, :ccvalue => ccvalue  }
+    end
+    @basic_product_list_orderlist = basic_product_list_orderlist.sort_by{|c| c[:total]}.reverse
+
+    #this is for date on the view
+    @from_date = (@from_date + 330.minutes).strftime("%Y-%m-%d")
+    @to_date = (@to_date + 330.minutes).strftime("%Y-%m-%d")
+    
+    @filter = nil
+    if params.has_key?(:filter)
+      @filter = params[:filter]
+      case @filter # a_variable is the variable we want to compare
+        when "all"
+        # @basic_product_list_orderlist
+        # @common_product_list_orderlist
+        # @main_product_list
+        when "main"
+           # @main_product_list = nil
+           @basic_product_list_orderlist = nil
+           @common_product_list_orderlist = nil
+        when "basic"
+          #@main_product_list = nil
+          @basic_product_list_orderlist = nil
+          #@common_product_list_orderlist = nil
+        when "common"
+          #@main_product_list = nil
+          #@basic_product_list_orderlist = nil
+          @common_product_list_orderlist = nil
+        end
+          
+    end
+    respond_to do |format|
+      csv_file_name = "#{@filter}products_sold_report_#{@or_for_date}.csv"
+        format.html
+        format.csv do
+          headers['Content-Disposition'] = "attachment; filename=\"#{csv_file_name}\""
+          headers['Content-Type'] ||= 'text/csv'
+        end
+    end
+
   end
 
   def all_cancelled_orders
@@ -2496,26 +3027,4 @@ class SalesReportController < ApplicationController
 end
 
     #<%= render 'my_partial', :locals => {:greeting => 'Hello world', :x => 36} %>
-    #<h1> <%= locals[:greeting] %> , my x value is <%= locals[:x] %> </h1>
-    # add partial: to view info like
-    #<%= render partial: 'my_partial', :locals => {:greeting => 'Hello world', :x => 36} %>
-    #<h1> <%= greeting %> , my x value is <%= x %> </h1>
-#     <td>
-# <%= link_to "View", city_report_path(for_date: c[:for_date]), :target => "_blank" %>
-# </td>
-# <td>
-# <%= link_to "View", employee_report_path(for_date: c[:for_date]), :target => "_blank" %>
-# </td>
-# <td>
-# <%= link_to "View", hourly_report_path(for_date: c[:for_date]), :target => "_blank" %>
-# </td>
-
-# <td>
-# <%= link_to "View", channel_report_path(for_date: c[:for_date]), :target => "_blank" %>
-# </td>
-# <td>
-# <%= link_to "View", product_report_path(for_date: c[:for_date]), :target => "_blank" %>
-# </td>
-# <td>
-# <%= link_to "View", show_report_path(for_date: c[:for_date]), :target => "_blank" %>
-# </td>
+    

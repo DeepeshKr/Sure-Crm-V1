@@ -13,8 +13,16 @@
       </div>
     </div>
 
+	<% if @host == "3.0.3.57" || @host == "192.168.1.10" %>
+    <div class="row">
+        <div class="col-xs-9">
+            <p class="lead">Upload image to show the problem</p>
+        </div>
+     
+    </div>
+	<% end %>
   <div class="row">
-    <div class="col-xs-4">
+    <div class="col-xs-3">
       <%= f.input :comment_type_id, :collection => @comment_types,:label_method => :name,:value_method => :id,
       :required => true, :label => "Comment Type" ,:include_blank => false %>
     </div>
@@ -22,7 +30,10 @@
       <%= f.input :display_level_id, :collection => @display_level, :label_method => :name,:value_method => :id,
       :required => true, :label => "Display" ,:include_blank => false %>
     </div>
-    <div class="col-xs-3 col-xs-offset-2">
+    <div class="col-xs-3">
+        <%= f.input :user_image, as: :file, label: "Upload Image" %>
+    </div>
+    <div class="col-xs-2 col-xs-offset-1">
       <div class="form-actions">
         <%= f.button :submit, class: "btn btn-primary" %>
       </div>

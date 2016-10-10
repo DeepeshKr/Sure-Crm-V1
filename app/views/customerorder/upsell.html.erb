@@ -1,41 +1,35 @@
 <div class="panel panel-primary">
-  <div class="panel-heading">
-    <h3 class="panel-title">Up Sell Products</h3>
-  </div>
-<%= render "product_lists/upsell" %>
+  <div class="panel-heading"><h3 class="panel-title">Up Sell Products</h3></div>
+		<%= render "product_lists/upsell" %>
   </div> 
-          
-        <div class="row">
-        <div class="col-xs-4">
-              
-          <%= link_to "  Add Products", neworder_path(:order_id => @order_master.id), class: "btn btn-info btn-sm" %>
-          </div>
-          <div class="col-xs-4">
-              
-          <%= link_to " Change Address", address_path(:order_id => @order_master.id), class: "btn btn-info btn-sm" %>
-          </div>
-          <div class="col-xs-4">
-               <%= link_to "Check for Offers Or Make Payment", offers_path(:order_id => @order_master.id), class: "btn btn-success" %>
-         <!-- link_to " Next Make Payment", payment_path(:order_id => @order_master.id), class: "btn btn-success" -->
-          </div>
-          </div>
 
+<% if @order_master.present? %>
+<div class="row">
+	<div class="col-xs-4">
+      <%= link_to "  Add Products", neworder_path(:order_id => @order_master.id), class: "btn btn-info btn-sm" %>
+    </div>
+    <div class="col-xs-4">
+        <%= link_to " Change Address", address_path(:order_id => @order_master.id), class: "btn btn-info btn-sm" %>
+    </div>
+    <div class="col-xs-4">
+        <%= link_to "Check for Offers Or Make Payment", offers_path(:order_id => @order_master.id), class: "btn btn-success" %>
+     <!-- link_to " Next Make Payment", payment_path(:order_id => @order_master.id), class: "btn btn-success" -->
+    </div>
+</div>
+<% end %>
 <br>
 <%= render "upselledit" %>
 <br>
-
-     <div class="clearfix"></div>
-     <div class="panel panel-primary">
-  <div class="panel-heading">
-    <h3 class="panel-title">Customer Order Summary</h3>
-  </div>
+<div class="clearfix"></div>
+ 	<div class="panel panel-primary">
+  	  	<div class="panel-heading">
+    	  <h3 class="panel-title">Customer Order Summary</h3>
+  		</div>
   <%= render "order_customer" %>
   <%= render "order_address" %>
-   <%= render "ordered_all_non_edit" %>
-
-
-    
-<div class="panel-footer"><%= render "order_masters/order_footer" %></div>
+  <%= render "ordered_all_non_edit" %>
+   
+	<div class="panel-footer"><%= render "order_masters/order_footer" %></div>
 </div>
 <!-- bottom menu -->
   <%= render 'call_menu' %> 

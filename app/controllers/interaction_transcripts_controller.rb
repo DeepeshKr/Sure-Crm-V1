@@ -24,17 +24,16 @@ class InteractionTranscriptsController < ApplicationController
   def quick_create
     @empcode = current_user.employee_code
       #@empid = current_user.id
-      @empid = Employee.where(employeecode: @empcode).first.id
-
+    @empid = Employee.where(employeecode: @empcode).first.id
     @interaction_transcript = InteractionTranscript.create(interaction_transcript_params) 
-     
    # interaction_status_id = 
-    interaction_master = InteractionMaster.find(@interaction_transcript.interactionid)
-    interaction_master.update(interaction_status_id: params[:interaction_status_id], closedon:
-      params[:closedon])
-
+    #interaction_master = InteractionMaster.find(@interaction_transcript.interactionid)
+    @interaction_transcript.interaction_master.update_attribute(:interaction_status_id, params[:interaction_status_id])
+    @interaction_transcript.interaction_master.update_attribute(:closedon, params[:closedon])
 
     respond_with(@interaction_transcript.interaction_master)
+    
+    
   end
 
   def create

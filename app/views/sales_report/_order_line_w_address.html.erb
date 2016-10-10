@@ -2,6 +2,7 @@
 <table class="table table-hover table-bordered">
   <thead>
   <tr>
+	<th>S No</th>
     <th>Ref No</th>
     <th>Order date</th>
     <th>Customer</th>
@@ -19,6 +20,7 @@
   <% @sno = 1 %> <% totalnos = 0 %> <% totalvalue = 0 %>
     <% @order_lines.each do |order_line| %>
     <tr>
+	<td><%= @sno %> <% totalnos += 1 %></td>
     <td><%= order_line.order_master.external_order_no %> <br>
     <%= link_to order_line.order_master.id, order_masters_review_path(order_id: order_line.order_master.id), class:"btn btn-info btn-xs" %> </td>
     <td> <%= (order_line.order_master.orderdate + 330.minutes).strftime('%d-%b-%Y') %> </td>
@@ -43,13 +45,18 @@
         <%= link_to order_line.order_master.campaign_playlist_id, campaign_playlists_search_path(id: order_line.order_master.campaign_playlist_id), class:"btn btn-info btn-xs" if order_line.order_master.campaign_playlist_id.present? %>
       <% end %>
      </td>
-     <td> <%= order_line.subtotal %></td>
+     <td> <%= order_line.subtotal %> <% totalvalue += order_line.subtotal %></td>
 
 
       </tr>
        <% @sno += 1 %>
 
     <% end %>
+	<tr>
+		<th colspan="8">Total</th>
+		<th><%= totalnos %></th>
+		<th><%= totalvalue %></th>
+	</tr>
   </tbody>
 
 </table>

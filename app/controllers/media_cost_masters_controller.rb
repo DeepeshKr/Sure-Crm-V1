@@ -15,6 +15,7 @@ class MediaCostMastersController < ApplicationController
       #@showpvt = 1
      @media_cost_master = MediaCostMaster.new
     # respond_with(@media_cost_masters)
+    # :search
     if params.has_key?(:media_id)
       @media_id = params[:media_id]
       #show existing shows for the media selected

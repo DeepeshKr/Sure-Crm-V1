@@ -1,0 +1,22 @@
+<%= simple_form_for(@cust_details_track) do |f| %>
+  <%= f.error_notification %>
+
+  <div class="form-inputs">
+    <%= f.input :order_ref_id %>
+    <%= f.input :order_date %>
+    <%= f.input :ext_ref_id %>
+    <%= f.input :custdetails %>
+    <%= f.input :vpp %>
+    <%= f.input :dealtran %>
+    <%= f.input :last_call_back_on %>
+    <%= f.input :no_of_attempts %>
+    <%= f.input :mobile %>
+    <%= f.input :alt_mobile %>
+    <%= f.input :products %>
+    <%= f.input :current_status %>
+  </div>
+
+  <div class="form-actions">
+    <%= f.button :submit %>
+  </div>
+<% end %>

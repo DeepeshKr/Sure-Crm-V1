@@ -1,0 +1,2 @@
+module CustDetailsTrackLogsHelper
+end

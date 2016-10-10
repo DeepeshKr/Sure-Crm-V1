@@ -7,11 +7,15 @@
    </thead>
 	<tbody>
 		
-	 <% @sales_ppos.each do |sales_ppo| %>
+	 <!--  @sales_ppos.each do |sales_ppo| -->
 	    <tr>
-	        <td><%= sales_ppo.demo_date %></td>
-			<td><%= sales_ppo.total_name %></td>
+	        <td><!-- = sales_ppo.demo_date --></td>
+			<td><!-- = sales_ppo.total_name --></td>
 	  	</tr>
-	<% end %>
+	<!-- end -->
   	</tbody>
 </table>
+
+Total C <%= @total_c_nos %> <br>
+<br>
+Total CC <%= @total_cc_nos %>

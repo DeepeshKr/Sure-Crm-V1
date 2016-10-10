@@ -24,7 +24,7 @@ class OrderMastersController < ApplicationController
          if params[:for_date].present?
           for_date =  Date.strptime(params[:for_date], "%Y-%m-%d")
 
-          @order_masters = OrderMaster.where('ORDER_STATUS_MASTER_ID > 10002')
+          @order_masters = OrderMaster.where('ORDER_STATUS_MASTER_ID > 10000')
           .where('TRUNC(orderdate) = ?',for_date)
           .where(employee_id: @employee_id)
           .order("id").paginate(:page => params[:page])
@@ -159,82 +159,165 @@ class OrderMastersController < ApplicationController
 
 
   end
-
-  def search
-    @ordersearchresults = "Please search for Order, Results across Ordering, Processing and Dispatch"
-    @vppsearch = "Please search for Order, Results across Ordering, Processing and Dispatch"
-    @dealtransearch = "Please search for Orders in Transfer Orders"
-
-    if params.has_key?(:manifest)
-      @manifest = params[:manifest]
-      vpp_search = VPP.where(manifest: @manifest) #.where(custref: @ordernum)
-      if vpp_search.present?
-        #redirect_to custordersearch_path(:order_id => @order_id)
-        custref = vpp_search.first.custref
-        redirect_to custordersearch_path(:ordernum => vpp_search.first.custref)
-      else
-        flash[:error] = "The manifest does not exist!"
-      end
-    end
-
-    if params[:ordernum].present?
-      @ordernum = params[:ordernum]
-      @custdetails = CUSTDETAILS.where("ORDERNUM = ?", @ordernum)
-      @ordersearchresults = "No Results found in processing search #{@ordernum}"
-      @vppsearch = "No results found in Dispatch, we searched order number #{@ordernum}"
-      #if @custdetails.present?
-        order_masters = OrderMaster.where(external_order_no: @ordernum)
-        if order_masters.present?
-          #if @order_master.customer_address_id.present?
-            @customer_address = CustomerAddress.find(order_masters.first.customer_address_id)
-            @order_master = order_masters.first
-            @order_lines = OrderLine.where(orderid: @order_master.id).order("id")
-          #end
-        end
-        
-        @sales_ppos = SalesPpo.where(:external_order_no => @ordernum)
-        .order("start_time")
-        #custref related to
-       # if VPP.where(custref: @ordernum).present?
-          @vpp = VPP.where(custref: @ordernum)
-
-          if @vpp.present?
-            @manifest = @vpp.first.manifest
-          end
-       # end
-
-        # if DEALTRAN.where(custref: @ordernum).present?
-          @dealtran = DEALTRAN.where(custref: @ordernum)
-        #end
-
-      end
-    #end
-  end
-
+ 
+ 
   def detailed_search
+    @btn1 = "btn btn-default"
+    @btn2 = "btn btn-default"
+    @btn3 = "btn btn-default"
+    @cancelled_status_id = [10040, 10006, 10008]
     @sno = 1
-     @mobile = nil
-      @emailid = nil
-     @ordersearch = "Please search for any of the above details!"
+    @mobile = nil
+    @emailid = nil
+    @ordersearch = "Please search for any of the above details!"
     if params[:mobile].present?
         @mobile = params[:mobile]
+        customers = Customer.where('mobile = ? OR alt_mobile = ?', @mobile, @mobile).pluck("id")
         customer_addresses = CustomerAddress.where('telephone1 = ? OR telephone2 = ?', @mobile, @mobile).pluck("id")
-        @order_masters = OrderMaster.where(customer_address_id: customer_addresses).paginate(:page => params[:page])
+        @order_masters = OrderMaster.where("customer_address_id in (?) or customer_id in (?) or mobile = ?",customer_addresses,customers, @mobile)
+        .order("orderdate DESC").paginate(:page => params[:page])
     elsif params[:emailid].present?
         @emailid = params[:emailid]
         customers = Customer.where('emailid = ? OR alt_emailid = ?', @emailid, @emailid).pluck("id")
-        @order_masters = OrderMaster.where(customer_id: customers).paginate(:page => params[:page])
+        @order_masters = OrderMaster.where(customer_id: customers)
+        .order("orderdate DESC")
+        .paginate(:page => params[:page])
     elsif params[:order_id].present?
         @order_id = params[:order_id]
-        @order_masters = OrderMaster.where('id = ? or original_order_id = ?', @order_id, @order_id).paginate(:page => params[:page])
+        @order_masters = OrderMaster.where('id = ? or original_order_id = ?', @order_id, @order_id)
+        .order("orderdate DESC").paginate(:page => params[:page])
 
      elsif params[:calledno].present?
         @calledno = params[:calledno]
-        @order_masters = OrderMaster.where(calledno: @calledno).paginate(:page => params[:page])
+        @order_masters = OrderMaster.where(calledno: @calledno).order("orderdate DESC").paginate(:page => params[:page])
 
+    end
+    
+    status = params[:type_id].to_i
+    case status # a_variable is the variable we want to compare
+      when 10000    #compare to 1
+        @btn1 = "btn btn-success"
+        @message_details = "Showing all orders"
+        @order_masters = @order_masters.where('ORDER_STATUS_MASTER_ID >= 10000')
+          .where.not(ORDER_STATUS_MASTER_ID: @cancelled_status_id)
+      when 10001    #compare to 2
+        @btn2 = "btn btn-success"
+         @message_details = "Showing all Processed"
+         @order_masters = @order_masters.where('ORDER_STATUS_MASTER_ID > 10000')
+           .where.not(ORDER_STATUS_MASTER_ID: @cancelled_status_id)
+      else
+        @message_details = "Wrong Selection made"
     end
   end
   
+  def online_search
+    @limit = 250
+    @sno = 1
+    @from_date = (330.minutes).from_now.to_date
+    @to_date = (330.minutes).from_now.to_date
+    if params.has_key?(:from_date)
+      @from_date =  Date.strptime(params[:from_date], "%Y-%m-%d")
+    end
+    if params.has_key?(:to_date)
+      @to_date =  Date.strptime(params[:to_date], "%Y-%m-%d")
+    end
+    if params[:calledno].present?
+        @calledno = params[:calledno]
+    end
+    if @from_date.blank? || @to_date.blank? || @calledno.blank?
+      return
+    end
+    @order_masters = OrderMaster.where(calledno: @calledno)
+        .where('TRUNC(orderdate) >= ? and TRUNC(orderdate) <= ?', @from_date, @to_date)
+        .where('ORDER_STATUS_MASTER_ID > 10000')
+        .where('external_order_no IS NOT NULL')
+        .order("orderdate DESC")
+        .paginate(:page => params[:page])
+        # .where.not('ORDER_STATUS_MASTER_ID IN (10040, 10006, 10008)')
+        # begin
+#           @trans_details =  TransDetails.where(order_no: @order_masters_order_nos).limit(@limit).paginate(:page => params[:page])
+#           rescue StandardError=>e
+#             @error_message = "Unable to pull the data from hbn.telebrandsindia.com, got this error #{e}, try again!"
+#           else
+#             @trans_details
+#          end
+        #
+        # json["records"].each do |o|
+ #          # do something
+ #          @unorderlist << {:officename => o["officename"],
+ #            :pincode => o["pincode"],
+ #            :deliverystatus => o["Deliverystatus"],
+ #            :divisionname => o["divisionname"],
+ #            :circlename => o["circlename"],
+ #            :taluk => o["Taluk"],
+ #            :districtname => o["Districtname"],
+ #            :regionname => o["regionname"],
+ #            :statename => o["statename"]}
+ #        end
+    @from_date = (@from_date + 330.minutes).strftime("%Y-%m-%d")
+    @to_date = (@to_date + 330.minutes).strftime("%Y-%m-%d")
+
+  end
+   
+  # def online_add_to_order
+  #    if params.has_key?(:order_id)
+  #     @order_master = OrderMaster.find(params[:order_id])
+  #       @order_master(:queue => 'hbn website updation', priority: 100)updatemedia
+  #    end
+  # end
+  #get 'custordersearch' => 'order_masters#search'
+   def search
+     @ordersearchresults = "Please search for Order, Results across Ordering, Processing and Dispatch"
+     @vppsearch = "Please search for Order, Results across Ordering, Processing and Dispatch"
+     @dealtransearch = "Please search for Orders in Transfer Orders"
+
+     if params.has_key?(:manifest)
+       @manifest = params[:manifest]
+       vpp_search = VPP.where(manifest: @manifest) #.where(custref: @ordernum)
+       if vpp_search.present?
+         #redirect_to custordersearch_path(:order_id => @order_id)
+         custref = vpp_search.first.custref
+         redirect_to custordersearch_path(:ordernum => vpp_search.first.custref)
+       else
+         flash[:error] = "The manifest does not exist!"
+       end
+     end
+
+     if params[:ordernum].present?
+       @ordernum = params[:ordernum]
+       @custdetails = CUSTDETAILS.where("ORDERNUM = ?", @ordernum)
+       @ordersearchresults = "No Results found in processing search #{@ordernum}"
+       @vppsearch = "No results found in Dispatch, we searched order number #{@ordernum}"
+       #if @custdetails.present?
+         order_masters = OrderMaster.where(external_order_no: @ordernum)
+         if order_masters.present?
+           #if @order_master.customer_address_id.present?
+             @customer_address = CustomerAddress.find(order_masters.first.customer_address_id)
+             @order_master = order_masters.first
+             @order_lines = OrderLine.where(orderid: @order_master.id).order("id")
+           #end
+         end
+        
+         @sales_ppos = SalesPpo.where(:external_order_no => @ordernum)
+         .order("start_time")
+         #custref related to
+        # if VPP.where(custref: @ordernum).present?
+           @vpp = VPP.where(custref: @ordernum)
+
+           if @vpp.present?
+             @manifest = @vpp.first.manifest
+           end
+        # end
+
+         # if DEALTRAN.where(custref: @ordernum).present?
+           @dealtran = DEALTRAN.where(custref: @ordernum)
+         #end
+        
+
+       end
+     #end
+   end
+   # get 'order_masters_review' => 'order_masters#review'
   def review
      @return_url = request.original_url
     if params.has_key?(:order_id)
@@ -267,6 +350,32 @@ class OrderMastersController < ApplicationController
      @regenerate_ppo = "Regenerate PPO for order id #{@order_id}"
      @sales_ppos = SalesPpo.where(:order_id => @order_id).order("start_time")
      
+     @page_trails = PageTrail.where(order_id: @order_id).order(:created_at)
+     @interaction_masters = InteractionMaster.where("orderid = ? or mobile = ?", @order_id, @order_master.mobile).order(:created_at)
+     
+     begin
+       # do something 
+       @trans_details =  TransDetails.where(order_no: @order_master.external_order_no)
+     
+     rescue ActiveRecord::RecordNotFound
+       # handle not found error
+       flash[:success] = "No details found to show results (Date field in_date) "
+       return
+     rescue ActiveRecord::ActiveRecordError
+       # handle other ActiveRecord errors
+       flash[:success] = "No details found to show results (Date field in_date) "
+       return
+     rescue # StandardError
+       # handle most other errors
+       flash[:success] = "No details found to show results (Date field in_date) "
+       return
+     rescue Exception
+       # handle everything else
+       flash[:success] = "No details found to show results (Date field in_date) "
+       return
+     end
+     
+
    else
      return detailedordersearch_path
    end
@@ -319,3 +428,47 @@ class OrderMastersController < ApplicationController
         :original_order_id, :promotion_id)
     end
 end
+# create_table "order_masters", force: :cascade do |t|
+#   t.datetime "orderdate"
+#   t.string   "employeecode"
+#   t.integer  "employee_id",            precision: 38
+#   t.integer  "customer_id",            precision: 38
+#   t.integer  "customer_address_id",    precision: 38
+#   t.string   "billno"
+#   t.string   "external_order_no"
+#   t.integer  "pieces",                 precision: 38
+#   t.decimal  "subtotal"
+#   t.decimal  "taxes"
+#   t.decimal  "shipping"
+#   t.decimal  "codcharges"
+#   t.decimal  "total"
+#   t.integer  "order_status_master_id", precision: 38
+#   t.integer  "orderpaymentmode_id",    precision: 38
+#   t.integer  "campaign_playlist_id",   precision: 38
+#   t.text     "notes"
+#   t.datetime "created_at"
+#   t.datetime "updated_at"
+#   t.string   "calledno"
+#   t.integer  "order_source_id",        precision: 38
+#   t.integer  "media_id",               precision: 38
+#   t.integer  "corporate_id",           precision: 38
+#   t.integer  "order_for_id",           precision: 38
+#   t.string   "userip"
+#   t.string   "sessionid"
+#   t.string   "mobile"
+#   t.integer  "original_order_id",      precision: 38
+#   t.integer  "promotion_id",           precision: 38
+#   t.string   "city"
+#   t.string   "pincode"
+#   t.integer  "order_last_mile_id",     precision: 38
+#   t.integer  "order_final_status_id",  precision: 38
+#   t.decimal  "g_total",                precision: 12, scale: 2
+#   t.integer  "weight_kg",              precision: 38
+#   t.integer  "interaction_master_id",  precision: 38
+#   t.datetime "process_date"
+#   t.datetime "ship_date"
+#   t.datetime "cancelled_date"
+#   t.datetime "paid_date"
+#   t.datetime "refund_date"
+#   t.datetime "returned_date"
+# end

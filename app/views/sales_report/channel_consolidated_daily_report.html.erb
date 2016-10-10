@@ -70,13 +70,27 @@
        <div class="row">
          <div class="col-xs-4">
            <table class="table table-bordered">
+               <tr>
+                 <th>
+                  City
+                 </th>
+                 <th>
+                    Pieces
+                 </th>
+                 <th>
+                    Value
+                 </th>
+               </tr>
               <% c[:city_list].each do |cy| %>
              <tr>
                 <td>
-                  <%= cy[0] %>
+                  <%= cy[:city] %>
                 </td>
                 <td>
-                  <%= cy[1] %>
+                  <%= cy[:pieces] %>
+                </td>
+                <td>
+                  <%= cy[:value] %>
                 </td>
              </tr>
              <% end %>
@@ -98,15 +112,15 @@
              </tr>
               <% c[:main_products].each do |pl| %>
              <tr>
-                <td>
-                  <%= pl[0] %>
-                </td>
-                <td>
-                  <%= pl[1] %>
-                </td>
-                <td>
-                  <%= ProductVariant.find_by_extproductcode(pl[0]).get_product_value * pl[1].to_i rescue nil%>
-                </td>
+               <td>
+                 <%= pl[:prod] %>
+               </td>
+               <td>
+                 <%= pl[:pieces] %>
+               </td>
+               <td>
+                 <%= pl[:value] %>
+               </td>
              </tr>
              <% end %>
            </table>
@@ -125,15 +139,15 @@
              </tr>
               <% c[:bas_upsell_products].each do |pl| %>
              <tr>
-                <td>
-                  <%= pl[0] %>
-                </td>
-                <td>
-                  <%= pl[1] %>
-                </td>
-                <td>
-                  <%= ProductVariant.find_by_extproductcode(pl[0]).get_product_value * pl[1].to_i rescue nil%>
-                </td>
+               <td>
+                 <%= pl[:prod] %>
+               </td>
+               <td>
+                 <%= pl[:pieces] %>
+               </td>
+               <td>
+                 <%= pl[:value] %>
+               </td>
              </tr>
              <% end %>
            </table>
@@ -152,15 +166,15 @@
              </tr>
               <% c[:com_upsell_products].each do |pl| %>
              <tr>
-                <td>
-                  <%= pl[0] %>
-                </td>
-                <td>
-                  <%= pl[1] %>
-                </td>
-                <td>
-                  <%= ProductVariant.find_by_extproductcode(pl[0]).get_product_value * pl[1].to_i rescue nil%>
-                </td>
+               <td>
+                 <%= pl[:prod] %>
+               </td>
+               <td>
+                 <%= pl[:pieces] %>
+               </td>
+               <td>
+                 <%= pl[:value] %>
+               </td>
              </tr>
              <% end %>
            </table>

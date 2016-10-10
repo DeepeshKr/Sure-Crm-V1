@@ -7,6 +7,7 @@
     <th>Order date</th>
     <th>Payment / Status</th>
     <th>Customer <br> City</th>
+	<th>Mobile</th>
     <th>State</th>
     <th>Product</th>
     <th>Media</th>
@@ -17,9 +18,10 @@
 
   <tbody>
   <% @sno = 1 %> <% totalnos = 0 %> <% totalvalue = 0 %>
+ 	<% @total_nos = 0 %><% @total_subtotal = 0 %><% @total_shipping = 0 %>
     <% @order_lines.each do |order_line| %>
     <tr>
-    <td><%= @sno %> </td>
+    <td><%= @sno %> <% @total_nos += 1 %> </td>
     <td><%= order_line.order_master.external_order_no %> <br>
     <%= link_to order_line.order_master.id, order_masters_review_path(order_id: order_line.order_master.id), class:"btn btn-info btn-xs" %> </td>
     <td> <%= (order_line.order_master.orderdate + 330.minutes).strftime('%d-%b-%Y') %> <br>
@@ -34,6 +36,8 @@
       <%= order_line.order_master.customer_address.pincode  if order_line.order_master.customer_address %>
       </small></small>
     </td>
+	<td><%= order_line.order_master.mobile %>
+    </td>
     <td>
       <%= order_line.order_master.customer_address.state  if order_line.order_master.customer_address %>
     </td>
@@ -47,15 +51,22 @@
       <% end %>
      </td>
 
-     <td> <%= order_line.order_master.subtotal %></td>
-     <td> <%= order_line.order_master.shipping %></td>
+     <td> <%= order_line.order_master.subtotal %> <% @total_subtotal += order_line.order_master.subtotal %></td>
+     <td> <%= order_line.order_master.shipping %> <% @total_shipping += order_line.order_master.shipping %></td>
 
       </tr>
        <% @sno += 1 %>
 
     <% end %>
   </tbody>
-
+<thead>
+    <tr>
+      <th colspan="8">Total</th>
+	  <th><%= @total_nos %></th>
+      <th><%= @total_subtotal %></th>
+      <th><%= @total_shipping %></th>
+    </tr>
+</thead>
 </table>
 <% else %>
 <div class="well well-sm">

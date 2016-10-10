@@ -1,0 +1,36 @@
+<!--  if @go_live == true % -->
+<div class="panel panel-danger">
+  <div class="panel-body">
+    <div class="row">
+   	 <div class="col-xs-10">
+   	 	<h4><%= @regenerate_ppo %></h3>
+   	 </div>
+ 	</div>
+	<div class="row">
+      <%= form_tag  url_for(:controller => 'sales_ppos', :action => "re_create_ppo"), method: "post" do  %>
+      <div class="col-xs-4 col-xs-offset-6">
+        <div class="input-daterange input-group">
+          <%= text_field_tag(:from_date, @from_date, :data => {:provide => "datepicker"}, :id => "datepicker_from", :class => "form-control", :required => "true" )   %>
+          <span class="input-group-addon">to</span>
+           <%= text_field_tag(:to_date, @to_date, :data => {:provide => "datepicker"}, :id => "datepicker_to", :class => "form-control", :required => "true" )   %>
+        </div>
+      </div>
+      <div class="col-xs-2">     
+            <%= submit_tag "Re Generate", name: nil, class: "btn btn-danger" %>
+          </div>
+      <% end %>
+
+    </div>
+  </div>
+   <div class="panel-footer">Warning this take time and regenerates database overwrites old data, please use this caution. After you click on Re-Generate, do check after a while to the results to show up by refreshing the page. Longer date range would be longer time. Keep track of progress here: 
+   <br>
+   <%= link_to "Track Progress on PPO Regeneration", "/delayed_job/overview", class: "btn btn-info btn-xs"  %>
+   
+   <!-- = link_to ' page', @return_url, class: "btn btn-info btn-xs" -->
+   </div>
+</div>
+<!-- % end % -->
+<script>
+$('#datepicker_to').datepicker({format: 'yyyy-mm-dd'});
+$('#datepicker_from').datepicker({format: 'yyyy-mm-dd'});
+</script>

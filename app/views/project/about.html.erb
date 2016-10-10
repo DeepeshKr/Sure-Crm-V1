@@ -1,79 +1,22 @@
+<h3>Maintaince Page: List of all Maintaince Links with Description</h3>
 
-<% provide(:title, 'Sign up') %>
-<h1>About => Try New Things here</h1>
-Teste for: <%= @test %> <%= @values %>
-<p class="lead">
-n1<% @n1 %> n2<% @n2 %> n3<% @n3 %>
-<%= @list %>
-</p>
- <div class="row">
- <%= bootstrap_form_tag url: show_city_path, :method => :GET, :enforce_utf8 => false do |f| %>
-<div class="col-xs-3">
-<%= text_field_tag(:search, nil, :class => "form-control", :required => "true", :placeholder => "Search city", :id => "project" )   %>
-</div>
+<table>
+	<head>
+		<tr>
+			<th>S No</th>
+			<th>Description</th>
+			<th>Link</th>
+			<th>Current Status</th>
+		</tr>
+	</head>
+	<body>
+		<tr>
+			<td>S No</td>
+			<td>Description</td>
+			<td>Link</td>
+			<td>Current Status</td>
+		<tr>
+	</body>
+	
+</table>
 
-<div class="col-xs-3">
-<%= text_field_tag(:city, nil, :class => "form-control",:readonly => "true", :required => "true", :placeholder => "Selected City", :id => "project-id" )   %>
-</div>
-<div class="col-xs-2">
-<%= text_field_tag(:search, nil, :class => "form-control", :required => "true", :placeholder => "Search pincode", :id => "pincode" )   %>
-</div>
-<div class="col-xs-2">
-     <%= text_field_tag(:state, nil, :class => "form-control",:readonly => "true", :required => "true", :placeholder => "Selected City", :id => "project-state" )   %>
-
-  
-  </div>
-<div class="col-xs-1">
-  <%= submit_tag "Ok", name: nil, class: "btn btn-primary" %>
-</div>
-<% end %>
- 
-</div>
-<script type="text/javascript">
-   $(function() {
-    $( "#project" ).autocomplete({
-      minLength: 2,
-      source: "show_city",
-      focus: function( event, ui ) {
-        $( "#project" ).val( ui.item.name );
-        return false;
-      },
-      select: function( event, ui ) {
-        $( "#project" ).val( ui.item.name );
-        $( "#project-id" ).val( ui.item.name );
-        $( "#project-state" ).val( ui.item.state );
-        $("#state_id").val( ui.item.state );
-        return false;
-      }
-    })
-    .autocomplete( "instance" )._renderItem = function( ul, item ) {
-      return $( "<li>" )
-        .append(  item.name + " - <strong>" + item.state + "</strong>" )
-        .appendTo( ul );
-    };
-  });
-  </script>
-
-<script type="text/javascript">
-   $(function() {
-    var city = $("#project-id" ).val();
-    $( "#pincode" ).autocomplete({
-      minLength: 4,
-      source: "show_pincode?city="+ $("#project-id").val() ,
-      focus: function( event, ui ) {
-        $( "#pincode" ).val( ui.item.pincode );
-        return false;
-      }
-      ,
-      select: function( event, ui ) {
-        $( "#pincode" ).val( ui.item.pincode );
-        return false;
-      }
-    })
-      .autocomplete( "instance" )._renderItem = function( ul, item ) {
-      return $( "<li>" )
-         .append(  item.pincode + " " + item.officename  + " " + item.circlename + " <br>" + " " + item.taluk  )
-        .appendTo( ul );
-    };
-  });
-  </script>

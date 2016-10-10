@@ -1,0 +1,90 @@
+<ul class="nav nav-tabs">
+	<li class="active"><a data-toggle="tab" href="#new">New<small>(F<%= @app_new_features.count if @app_new_features %> E<%= @app_new_errors.count if @app_new_errors %>)</small></a></li>
+	<li><a data-toggle="tab" href="#working">Working<small>(F<%= @app_feature_requests.count if @app_feature_requests %> E<%= @app_feature_errors.count if @app_feature_errors %>)</small></a></li>
+	<li><a data-toggle="tab" href="#more">Need Info<small>(F<%= @app_more_features.count if @app_more_features %> E<%= @app_more_errors.count if @app_more_errors %>)</small></a></li>
+	<li><a data-toggle="tab" href="#test">Test<small>(F<%= @app_testing_features.count if @app_testing_features %> E<%= @app_testing_errors.count if @app_testing_errors %>)</small></a></li>
+	<li><a data-toggle="tab" href="#live">Live<small>(F<%= @app_completed_features.count if @app_completed_features %> E <%= @app_completed_errors.count if @app_completed_errors %>)</small></a></li>
+</ul>
+
+<div class="tab-content">
+    <div id="new" class="tab-pane fade in active">
+		<div class="row">
+			<div class="col-xs-12">
+			    <% if @app_new_features.present? %>
+			        <%= render partial: 'app_feature_requests/panel_list',
+			        :locals => {:app_feature_requests => @app_new_features,
+			          :app_heading => "New Features Requested"}  %>
+			    <% end %>
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="col-xs-12">
+			    <% if @app_new_errors.present? %>
+			        <%= render partial: 'app_feature_requests/panel_list',
+			        :locals => {:app_feature_requests => @app_new_errors,
+			          :app_heading => "New Errors Reported"}  %>
+			    <% end %>
+			</div>
+		</div>
+	</div>
+	<div id="working" class="tab-pane fade">	
+	    <% if @app_feature_requests.present? %>
+	         <%= render partial: 'app_feature_requests/panel_list',
+	         :locals => {:app_feature_requests => @app_feature_requests,
+	           :app_heading => "Working on these requests"}  %>
+	    <% end %>
+			     
+		
+		<% if @app_feature_errors.present? %>
+		    <%= render partial: 'app_feature_requests/panel_list',
+		      :locals => {:app_feature_requests => @app_feature_errors,
+		      :app_heading => "Working on these Errors"}  %>
+		<% end %>
+			
+	</div>
+	<div id="more" class="tab-pane fade">
+  	   <% if @app_more_features.present? %>
+  	       <%= render partial: 'app_feature_requests/panel_list',
+  	       :locals => {:app_feature_requests => @app_more_features,
+  	         :app_heading => "Need more info for these Requests http://3.0.3.26:120 tell us"}  %>
+  	   <% end %>
+
+  	    <% if @app_more_errors.present? %>
+  	        <%= render partial: 'app_feature_requests/panel_list',
+  	        :locals => {:app_feature_requests => @app_more_errors,
+  	          :app_heading => "Need more info for these Errors http://3.0.3.26:120 tell us"}  %>
+  	    <% end %>
+	</div>
+	
+	<div id="test" class="tab-pane fade">
+ 	   <% if @app_testing_features.present? %>
+ 	       <%= render partial: 'app_feature_requests/panel_list',
+ 	       :locals => {:app_feature_requests => @app_testing_features,
+ 	         :app_heading => "Testing Required for these Requests http://3.0.3.26:120 try it"}  %>
+ 	   <% end %>
+
+ 	    <% if @app_testing_errors.present? %>
+ 	        <%= render partial: 'app_feature_requests/panel_list',
+ 	        :locals => {:app_feature_requests => @app_testing_errors,
+ 	          :app_heading => "Testing Required for these Errors http://3.0.3.26:120 try it"}  %>
+ 	    <% end %>
+	</div>
+
+	<div id="live" class="tab-pane fade">
+		
+	   <% if @app_completed_features.present? %>
+	       <%= render partial: 'app_feature_requests/panel_list',
+	       :locals => {:app_feature_requests => @app_completed_features,
+	         :app_heading => "Request is now released and live"}  %>
+	   <% end %>
+
+	    <% if @app_completed_errors.present? %>
+	        <%= render partial: 'app_feature_requests/panel_list',
+	        :locals => {:app_feature_requests => @app_completed_errors,
+	          :app_heading => "Request is now released and live"}  %>
+	    <% end %>
+		
+	</div>
+
+</div>

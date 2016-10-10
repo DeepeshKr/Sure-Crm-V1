@@ -6,9 +6,10 @@ class UsersController < ApplicationController
   #before_filter :authenticate_user!
   def show
     @empcode = current_user.employee_code
-    employee_id = Employee.where(employeecode: @empcode).first.id
+    employee_id = @employee.id
     chkuser = User.where(employee_code: @empcode)
     @user = chkuser.first
+    @userpas = chkuser.first
     @userstatus = "This employee #{chkuser.first.name} has already got a Login Id: #{chkuser.first.employee_code} and password, you may change the password here"
    
     @user = User.find(params[:id])
@@ -28,6 +29,7 @@ class UsersController < ApplicationController
   def create
     @user = User.new(user_params)
     if @user.save 
+      
       redirect_to @user
     else
       render 'new'
@@ -50,6 +52,10 @@ class UsersController < ApplicationController
     else
       flash[:error] = 'You are not authorised to change the details!'
     end
+    
+    if params[:return_to].present?
+      redirect_to params[:return_to] and return
+    end
       respond_with(@user)
   end
 
@@ -68,6 +74,7 @@ class UsersController < ApplicationController
   private 
   def set_user
       @user = User.find(params[:id])
+      @employee = Employee.find_by_employeecode(@user.employee_code)
       #@roles = 
   end
   def user_params

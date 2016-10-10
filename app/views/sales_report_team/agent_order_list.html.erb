@@ -1,0 +1,48 @@
+	<!-- set page title start -->
+	<% title "Employee Report #{@orderdesc}" %>
+	<!-- set page title end -->
+	
+	<div class="panel panel-primary">
+    <div class="panel-heading"><h3><%= @orderdesc %></h3></div>
+      	<div class="panel-body"> 		
+			<%= render('order_masters/quicklist') %>
+		</div>
+	</div>
+	
+	<div class="panel panel-primary">
+		<div class="panel-body">
+		  <ul class="list-inline">
+		    <li>Pay U Order Ref Ids |</li>
+			<% if @pay_u_order_ids.present? %>
+				<% @pay_u_order_ids.each do |ids| %>
+			    <li><%= ids %></li> |
+			    <% end %>
+			<% end %>
+		  </ul>
+		</div>
+ 	</div>
+  	<div class="panel panel-primary">
+		<div class="panel-body">
+		  <ul class="list-inline">
+		    <li>Credit Card Ref Ids |</li>
+			<% if @ccorders_ids.present? %>
+				<% @ccorders_ids.each do |ids| %>
+			    <li><%= ids %></li> |
+			    <% end %>
+			<% end %>
+		  </ul>
+		 </div>
+ 	</div>
+  	<div class="panel panel-primary">
+		<div class="panel-body">
+		  <ul class="list-inline">
+		    <li>COD Order Ref Ids |</li>
+			<% if @codorders_ids.present? %>
+				<% @codorders_ids.each do |ids| %>
+			    <li><%= ids %></li> |
+			    <% end %>
+			<% end %>
+		  </ul>
+		</div>
+ 	</div>
+

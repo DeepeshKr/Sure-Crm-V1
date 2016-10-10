@@ -1,0 +1,2 @@
+module ProductMasterImagesHelper
+end

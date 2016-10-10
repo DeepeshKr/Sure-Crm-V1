@@ -1,0 +1,39 @@
+<div class="panel panel-primary">
+  <div class="panel-heading"><h3 class="panel-title">Customer Order details online hbn.telebrandsindia.com</h3></div>
+<% if @trans_details.present? %>
+<table class="table table-hover">
+  <thead>
+    <tr>
+      <th>Tid <br> Order No</th>
+      <th>Channel | City</th>
+	  <th>Order Date</th>
+      <th>All Dates</th>
+	  <th>Customer Name | Products</th>
+	  <th>Amount<br>Comm</th>
+    </tr>
+  </thead>
+   
+  <tbody>
+    <% @trans_details.each do |tran| %>
+      <tr>
+        <td><%= tran.tid %> <br>
+			Order No: <%= tran.order_no %></td>
+        <td><%= tran.channel %> | <%= tran.city %></td>
+        <td><%= tran.order_date.strftime('%d-%b-%Y') %></td>
+		<td>
+			Shipped:<%= tran.shipped.strftime('%d-%b-%Y') if tran.shipped %><br>
+			Paid: <%= tran.paid.strftime('%d-%b-%Y') if tran.paid %><br>
+			Return <%= tran.return.strftime('%d-%b-%Y') if tran.return  %><br>
+			Refund: <%= tran.refund.strftime('%d-%b-%Y') if tran.refund %>
+		</td>
+		<td>Customer: <%= tran.customer_name %> <br> <%= tran.product %></td>
+		<td><%= tran.amount %><br><%= tran.comm %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+ <% end %>
+ <% if @error_message.present? %>
+ <div class="panel-body"><h3><%= @error_message %> </h3></div>
+ <% end %>
+</div>

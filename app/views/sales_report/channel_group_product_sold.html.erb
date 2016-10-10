@@ -1,0 +1,29 @@
+<!-- def title(page_title) -->
+<% title "List of Orders for Product  #{@product_master_id}  between dates" %>
+<!-- end of the title-->
+
+<div class="row">
+ <div class="col-xs-12">
+	 <h3>List of Orders for <%= @prod %> Sold Between <%= @from_date %> and <%= @to_date %> </h3>
+ </div>  
+</div>
+
+<hr>
+
+ <%= render('order_line_wo_address') %>
+
+ <% if @order_lines_csv.present? %>
+
+<div class="well well-sm">
+<div class="row">
+  <div class="col-xs-6">
+  Download CSV file
+  </div>
+  <div class="col-xs-6">
+    <%= link_to 'Download CSV file', sales_report_channel_group_product_sold_path(from_date: @from_date, to_date: @to_date , source: @source, prod: @prod, format: :csv), class: "btn btn-info btn-sm" %>
+  </div>
+</div>
+</div>
+
+<% end %>
+

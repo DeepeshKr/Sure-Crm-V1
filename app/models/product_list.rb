@@ -15,7 +15,7 @@ class ProductList < ActiveRecord::Base
   has_many :distributor_stock_summary, foreign_key: "product_variant_id"
   has_many :sales_ppo, foreign_key: "product_list_id"
 
-
+  has_many :sales_ppo_product_alert, foreign_key: "product_list_id"
   #has_many :product_master_add_on, :class_name => 'PointOfContact',  foreign_key: "replace_by_product_id"
   #coding not completed for this
   #has_many :interaction_master, foreign_key: "productvariantid"
@@ -44,8 +44,23 @@ class ProductList < ActiveRecord::Base
   def show_prod
     return self.extproductcode
   end
-
-   def productlistdetails
+  
+  def get_product_value
+    reverse_vat_rate = TaxRate.find(10001)
+    reverse_ship_rate = TaxRate.find(10020)
+    
+    total = (self.product_variant.price.to_f  * reverse_vat_rate.reverse_rate.to_f + self.product_variant.shipping.to_f * reverse_ship_rate.reverse_rate.to_f).to_i
+  end
+  
+  def get_basic_value
+    reverse_vat_rate = TaxRate.find(10001)
+    reverse_ship_rate = TaxRate.find(10020)
+    
+    total = (self.product_variant.price.to_f  * reverse_vat_rate.reverse_rate.to_f).round(2)
+  end
+  
+  
+  def productlistdetails
     if self.product_variant_id.present?
       if ProductVariant.where(id: self.product_variant_id).present?
         product_variant = ProductVariant.find(self.product_variant_id)
@@ -166,6 +181,10 @@ class ProductList < ActiveRecord::Base
   end
 private
   def create_product_cost_master
+    reverse_vat_rate = TaxRate.find(10001)
+    reverse_ship_rate = TaxRate.find(10020)
+    reverse_service_rate = TaxRate.find(10000)
+  
   #check if the prod has pricing details entered
   #if not found create new record
   product_cost = ProductCostMaster.where(prod: self.extproductcode)
@@ -176,12 +195,12 @@ private
         ProductCostMaster.create(prod: self.extproductcode,
           product_list_id: self.id, product_id: self.product_master_id,
           :product_cost => 0,
-          :basic_cost => product_variant.price * 0.8888888,
-          :shipping_handling => product_variant.shipping * 0.88888888,
+          :basic_cost => product_variant.price * reverse_vat_rate.reverse_rate.to_f,
+          :shipping_handling => product_variant.shipping * reverse_vat_rate.reverse_rate.to_f,
           :postage => 0,
           :tel_cost => 0,
-          :transf_order_basic => (product_variant.price * 0.8888888 + product_variant.shipping * 0.88888888) * 0.86,
-          :dealer_network_basic => (product_variant.price * 0.8888888 + product_variant.shipping * 0.88888888) * 0.70,
+          :transf_order_basic => (product_variant.price * reverse_vat_rate.reverse_rate.to_f + product_variant.shipping * reverse_vat_rate.reverse_rate.to_f) * 0.86,
+          :dealer_network_basic => (product_variant.price * reverse_vat_rate.reverse_rate.to_f + product_variant.shipping * reverse_vat_rate.reverse_rate.to_f) * 0.70,
           :wholesale_variable_cost => 0,
           :royalty => 0,
           :cost_of_return => 0,
@@ -193,12 +212,12 @@ private
       product_cost.update(product_list_id: self.id,
       product_id: self.product_master_id,
         :product_cost => 0,
-        :basic_cost => product_variant.price * 0.8888888,
-        :shipping_handling => product_variant.shipping * 0.88888888,
+        :basic_cost => product_variant.price * reverse_vat_rate.reverse_rate.to_f,
+        :shipping_handling => product_variant.shipping * reverse_vat_rate.reverse_rate.to_f,
         :postage => 0,
         :tel_cost => 0,
-        :transf_order_basic => (product_variant.price * 0.8888888 + product_variant.shipping * 0.88888888) * 0.86,
-        :dealer_network_basic => (product_variant.price * 0.8888888 + product_variant.shipping * 0.88888888) * 0.70,
+        :transf_order_basic => (product_variant.price * reverse_vat_rate.reverse_rate.to_f + product_variant.shipping * reverse_vat_rate.reverse_rate.to_f) * 0.86,
+        :dealer_network_basic => (product_variant.price * reverse_vat_rate.reverse_rate.to_f + product_variant.shipping * reverse_vat_rate.reverse_rate.to_f) * 0.70,
         :wholesale_variable_cost => 0,
         :royalty => 0,
         :cost_of_return => 0,

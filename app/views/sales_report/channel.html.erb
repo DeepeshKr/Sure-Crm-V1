@@ -4,9 +4,9 @@
  	 <div class="col-xs-6">
  	 <h4>Channel Sales Report <%=  @orderdate %> </h4>
       <div class="btn-group" role="group" aria-label="...">
-      	<%= link_to 'All', product_report_path(show: "all", from_date: @from_date, to_date: @to_date), type:"button", class: @btn1 %>
-      	<%= link_to 'HBN', product_report_path(show: "hbn", from_date: @from_date, to_date: @to_date), type:"button", class: @btn2 %>
-      	<%= link_to 'Pvt', product_report_path(show: "pvt", from_date: @from_date, to_date: @to_date), type:"button", class: @btn3 %> 
+      	<%= link_to 'All', channel_report_path(show: "all", from_date: @from_date, to_date: @to_date), type:"button", class: @btn1 %>
+      	<%= link_to 'HBN', channel_report_path(show: "hbn", from_date: @from_date, to_date: @to_date), type:"button", class: @btn2 %>
+      	<%= link_to 'Pvt', channel_report_path(show: "pvt", from_date: @from_date, to_date: @to_date), type:"button", class: @btn3 %> 
   	</div>
  	 </div>
  	 <div class="col-xs-6">
@@ -14,18 +14,15 @@
  	</div>
   </div>
   
- <div class="well well-sm">
-<h4><%=  @orderdate %> </h4>
-</div>
-<h4>HBN Chanels Orders </h4>
-
 <% if @hbn_order_list.present? %>
+<h4>HBN Chanels Orders </h4>
 <table class="table table-hover table-bordered">
   <thead>
     <tr>
      <th>No</th>
      <th>Channel</th>
-     <th>City</th>
+     <th>Pay U Orders</th>
+     <th>Pay U Value</th>
      <th>CC Orders</th>
        <th>CC Value</th>
       <th>COD Orders</th>
@@ -38,65 +35,53 @@
 <tbody>
    <% @hbn_order_list.each do |c| %>
    <tr>
-   <td><%= @sno %></td>
-
-<td>
- <%=  c[:channel] %>
- 
-</td>
-<td>
- <%=  c[:city] %>
- 
-</td>
-<td class="text-right">
-   <%= c[:ccorders] %> 
-</td>
-<td class="text-right">
-   <%= c[:ccvalue] %> 
-</td>
-<td class="text-right">
-   <%= c[:codorders] %> 
-</td>
-<td class="text-right">
-   <%= c[:codvalue] %> 
-</td>
-
-<td class="text-right">
-   <%= c[:nos] %> 
-</td>
-<td class="text-right">
-   <%= c[:total] %> 
-</td>
-<td >
-   <%= link_to "View Cities", city_report_path(from_date: @from_date, to_date: @to_date, media_id: c[:id]), :target => "_blank" %>
-</td>
+   	<td><%= @sno %></td>
+ 	<td><%=  c[:channel] %></td>
+	<td class="text-right"> <%= c[:pay_u_orders] %> <% @total_hbn_pay_u_orders += c[:pay_u_orders] %>	</td>
+	<td class="text-right">	   <%= c[:pay_u_value] %> <% @total_hbn_pay_u_value += c[:pay_u_value] %>	</td>
+	
+	<td class="text-right">   <%= c[:ccorders] %> <% @total_hbn_ccorders += c[:ccorders] %> </td>
+	<td class="text-right"><%= c[:ccvalue] %> <% @total_hbn_ccvalue += c[:ccvalue] %></td>
+	
+	<td class="text-right"><%= c[:codorders] %> <% @total_hbn_codorders+= c[:codorders] %></td>
+	<td class="text-right"><%= c[:codvalue] %> <% @total_hbn_codvalue += c[:codvalue] %></td>
+	
+	<td class="text-right"><%= c[:nos] %> <% @total_hbn_nos += c[:nos] %></td>
+	<td class="text-right"><%= c[:total] %> <% @total_hbn_total += c[:total] %></td>
+	<td ><%= link_to "View Cities", city_report_path(from_date: @from_date, to_date: @to_date, media_id: c[:id]), :target => "_blank" %>
+	</td>
   </tr> 
   <% @sno += 1 %> 
  <% end %>
-
- 
-
-  </tbody>
-
+    
+    <tr>
+    <td colspan="2">Total</td>
+  	<td class="text-right"> <%= @total_hbn_pay_u_orders %> 	</td>
+  	<td class="text-right">	<%= @total_hbn_pay_u_value %> 	</td>
+  	<td class="text-right">   <%= @total_hbn_ccorders %> </td>
+  	<td class="text-right"><%= @total_hbn_ccvalue %> </td>
+  	<td class="text-right"><%= @total_hbn_codorders %> </td>
+  	<td class="text-right"><%= @total_hbn_codvalue %> </td>
+  	<td class="text-right"><%= @total_hbn_nos %> </td>
+  	<td class="text-right"><%= @total_hbn_total %> </td>
+  	<td></td>
+    </tr> 
+    </tbody>
   </table>
-  <% else %>
-  <div class="well well-sm">
-  <h5>Please select a date to generate the report or No sales in HBN </h5>
-  </div>
   <% end %>
- <br>
-
-<h4>Paid Chanels Orders </h4>
 
 <% if @paid_order_list.present? %>
+ <br>
+	<h4>Paid Chanels Orders </h4>
 <table class="table table-hover table-bordered">
   <thead>
     <tr>
      <th>No</th>
      <th>Channel</th>
-      <th>City</th>
+     <th>Pay U Orders</th>
+     <th>Pay U Value</th>
      <th>CC Orders</th>
-       <th>CC Value</th>
+     <th>CC Value</th>
       <th>COD Orders</th>
        <th>COD Value</th>
        <th>Total Orders</th>
@@ -107,121 +92,53 @@
 <tbody>
    <% @paid_order_list.each do |c| %>
    <tr>
-   <td><%= @sno %></td>
-
-<td>
- <%=  c[:channel] %>
- 
-</td>
-<td>
- <%=  c[:city] %>
- 
-</td>
-<td class="text-right">
-   <%= c[:ccorders] %> 
-</td>
-<td class="text-right">
-   <%= c[:ccvalue] %> 
-</td>
-<td class="text-right">
-   <%= c[:codorders] %> 
-</td>
-<td class="text-right">
-   <%= c[:codvalue] %> 
-</td>
-
-<td class="text-right">
-   <%= c[:nos] %> 
-</td>
-<td class="text-right">
-   <%= c[:total] %> 
-</td>
-<td >
-   <%= link_to "View Cities", city_report_path(from_date: @from_date, to_date: @to_date,media_id: c[:id]), :target => "_blank" %>
-</td>
+   	<td><%= @sno %></td>
+	<td> <%=  c[:channel] %></td>
+	<td class="text-right">   <%= c[:pay_u_orders] %> <% @total_pvt_pay_u_orders += c[:pay_u_orders] %> </td>
+	<td class="text-right">   <%= c[:pay_u_value] %> <% @total_pvt_pay_u_value += c[:pay_u_value] %></td>
+	<td class="text-right">   <%= c[:ccorders] %> <% @total_pvt_ccorders += c[:ccorders] %></td>
+	<td class="text-right">   <%= c[:ccvalue] %> <% @total_pvt_ccvalue += c[:ccvalue] %></td>
+	<td class="text-right"> <%= c[:codorders] %> <% @total_pvt_codorders += c[:codorders] %></td>
+	<td class="text-right"><%= c[:codvalue] %> <% @total_pvt_codvalue += c[:codvalue] %></td>
+	<td class="text-right"><%= c[:nos] %> <% @total_pvt_nos += c[:nos] %></td>
+	<td class="text-right"><%= c[:total] %> <% @total_pvt_total += c[:total] %></td>
+	<td><%= link_to "View Cities", city_report_path(from_date: @from_date, to_date: @to_date,media_id: c[:id]), :target => "_blank" %></td>
   </tr> 
   <% @sno += 1 %> 
  <% end %>
 
- 
+ <tr>
+ <td colspan="2">Total</td>
+<td class="text-right"> <%= @total_pvt_pay_u_orders %> 	</td>
+<td class="text-right">	<%= @total_pvt_pay_u_value %> 	</td>
+<td class="text-right">   <%= @total_pvt_ccorders %> </td>
+<td class="text-right"><%= @total_pvt_ccvalue %> </td>
+<td class="text-right"><%= @total_pvt_codorders %> </td>
+<td class="text-right"><%= @total_pvt_codvalue %> </td>
+<td class="text-right"><%= @total_pvt_nos %> </td>
+<td class="text-right"><%= @total_pvt_total %> </td>
+<td></td>
+ </tr>
 
   </tbody>
 
   </table>
-  <% else %>
-  <div class="well well-sm">
-  <h5>Please select a date to generate the report or No sales in Paid Channels </h5>
-  </div>
+ 
   <% end %>
  <br>
- 
-<h4>Other Chanels Orders </h4>
+ <% if @paid_order_list.present? || @hbn_order_list.present? %>
+ <div class="well well-sm">
+   <div class="row">
+     <div class="col-xs-8">
+       <h4>Download the entire list</h4>
+     </div>
+     <div class="col-xs-4">
+         <%= link_to 'Download CSV file', channel_report_path(from_date: @from_date, to_date: @to_date, format: :csv), class: "btn btn-info btn-sm" %>
+     </div>
+   </div>
 
-<% if @other_order_list.present? %>
-<table class="table table-hover table-bordered">
-  <thead>
-    <tr>
-     <th>No</th>
-     <th>Channel</th>
-      <th>City</th>
-     <th>CC Orders</th>
-       <th>CC Value</th>
-      <th>COD Orders</th>
-       <th>COD Value</th>
-       <th>Total Orders</th>
-     <th>Total Value</th>
-    <th>City</th>
-     </tr>
-  </thead>
-<tbody>
-   <% @other_order_list.each do |c| %>
-   <tr>
-   <td><%= @sno %></td>
-
-<td>
- <%=  c[:channel] %>
- 
-</td>
-<td>
- <%=  c[:city] %>
- 
-</td>
-<td class="text-right">
-   <%= c[:ccorders] %> 
-</td>
-<td class="text-right">
-   <%= c[:ccvalue] %> 
-</td>
-<td class="text-right">
-   <%= c[:codorders] %> 
-</td>
-<td class="text-right">
-   <%= c[:codvalue] %> 
-</td>
-
-<td class="text-right">
-   <%= c[:nos] %> 
-</td>
-<td class="text-right">
-   <%= c[:total] %> 
-</td>
-<td >
-     <%= link_to "View Cities", city_report_path(from_date: @from_date, to_date: @to_date, media_id: c[:id]), :target => "_blank" %>
-</td>
-  </tr> 
-  <% @sno += 1 %> 
+ </div>
  <% end %>
 
- 
-
-  </tbody>
-
-  </table>
-  <% else %>
-  <div class="well well-sm">
-  <h5>Please select a date to generate the report or No sales in Other Channels </h5>
-  </div>
-  <% end %>
- <br>
 
 

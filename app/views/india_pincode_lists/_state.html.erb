@@ -7,7 +7,7 @@
 
   <div class="form-inputs">
     <div class="row">
-      <div class="col-xs-3"><%= f.input :officename,:label => "Post Office Name", :input_html => { :readonly => true } %> </div>
+      <div class="col-xs-3"><%= f.input :officename,:label => "Post Office Name", :input_html => { :readonly => true } %> 	</div>
       <div class="col-xs-2"><%= f.input :pincode,:label => "Pincode", :input_html => { :readonly => true } %> </div>
       <div class="col-xs-3"><%= f.input :divisionname, :input_html => { :readonly => true } %> </div>
       <div class="col-xs-3"><%= f.label :statename %>
@@ -21,9 +21,9 @@
     </div>
 
     <div class="row">
-      <div class="col-xs-6"><p class="lead"><%= @india_pincode_list.statename %> </p></div>
+      <div class="col-xs-6"><p class="lead"><%= @india_pincode_list.statename.titlecase %> </p></div>
       <div class="col-xs-6">  <%= f.select(:statename,
-        options_from_collection_for_select(State.all, :name, :name, :selected => @india_pincode_list.statename),
+        options_from_collection_for_select(State.all, :name, :name, :selected => @india_pincode_list.statename.titlecase),
         {}, :class => "form-control", label: "State")  %>
       </div>
     </div>

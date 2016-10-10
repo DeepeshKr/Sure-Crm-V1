@@ -13,6 +13,10 @@
  </div>
 
 <% if @employeeorderlist.present? %>
+
+<div class="well well-sm">
+Order between <%= @first_order_at %>(first order for the day) and <%= @last_order_at %> (last order time in this report)
+</div>
 <table class="table table-hover table-bordered">
   <thead>
     <tr>
@@ -37,35 +41,63 @@
 
 		</td>
 		<td class="text-right">
-		   <%= c[:pay_u_orders] %> 
+		   <%= c[:pay_u_orders] %>  <% @total_pay_u_orders += c[:pay_u_orders] %> 
 		</td>
 		<td class="text-right">
-		   <%= c[:pay_u_value] %> 
+		   <%= c[:pay_u_value] %> <% @total_pay_u_value += c[:pay_u_value] %> 
 		</td>
 		<td class="text-right">
-		   <%= c[:ccorders] %> 
+		   <%= c[:ccorders] %> <% @total_ccorders += c[:ccorders] %> 
 		</td>
 		<td class="text-right">
-		   <%= c[:ccvalue] %> 
+		   <%= c[:ccvalue] %> <% @total_ccvalue += c[:ccvalue] %> 
 		</td>
 		<td class="text-right">
-		   <%= c[:codorders] %> 
+		   <%= c[:codorders] %> <% @total_codorders += c[:codorders] %> 
 		</td>
 		<td class="text-right">
-		   <%= c[:codvalue] %> 
+		   <%= c[:codvalue] %> <% @total_codvalue += c[:codvalue] %> 
 		</td>
 		<td class="text-right">
-		   <%= c[:nos] %> 
+		   <%= c[:nos] %> <% @total_nos += c[:nos] %> 
 		</td>
 		<td class="text-right">
-		   <%= c[:total] %> 
+		   <%= c[:total] %> <% @total_total += c[:total] %> 
 		</td>
 
   </tr> 
   <% @sno += 1 %> 
  <% end %>
 
- 
+  <tr>
+	<td colspan="2">Total</td>
+	
+	<td class="text-right">
+	   <%= @total_pay_u_orders %> 
+	</td>
+	<td class="text-right">
+	   <%= @total_pay_u_value %> 
+	</td>
+	<td class="text-right">
+	   <%= @total_ccorders %> 
+	</td>
+	<td class="text-right">
+	   <%= @total_ccvalue %> 
+	</td>
+	<td class="text-right">
+	   <%= @total_codorders %> 
+	</td>
+	<td class="text-right">
+	   <%= @total_codvalue %> 
+	</td>
+	<td class="text-right">
+	   <%= @total_nos %> 
+	</td>
+	<td class="text-right">
+	   <%= @total_total %> 
+	</td>
+
+ </tr>
 
   </tbody>
 

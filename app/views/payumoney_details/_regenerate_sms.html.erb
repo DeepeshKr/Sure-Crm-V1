@@ -1,0 +1,27 @@
+<!--  if @go_live == true % -->
+<div class="panel panel-danger">
+  <div class="panel-body">
+    <div class="row">
+   	 <div class="col-xs-3">
+   	 	<h4>Regenerate Order SMS</h3>
+   	 </div>
+      <%= form_tag  url_for(:controller => 'payumoney_details', :action => "regenerate_sms_for_order"), method: "post" do  %>
+	   <%= hidden_field_tag :pay_u_id, @pay_u_id %>
+	  <%= hidden_field_tag :return_url, @return_url %>
+	 <div class="col-xs-7">
+			 <%= text_field_tag(:user_details, nil, :placeholder => "Your Reasons", :class => "form-control", :required => "true" )   %>
+	 </div>
+	  
+          <div class="col-xs-2">
+            <%= submit_tag "Send Pay U SMS", name: nil, class: "btn btn-warning" %>
+          </div>
+      <% end %>
+
+    </div>
+  </div>
+   <div class="panel-footer">Warning this would regenerate pay u money order SMS and upset the auto checking process. Failed (some) orders tend to be manually converted to paid at times.
+   
+   <!-- = link_to ' page', @return_url, class: "btn btn-info btn-xs" -->
+   </div>
+</div>
+<!-- % end % -->

@@ -19,16 +19,19 @@
 <div class="row">
 	<div class="col-xs-6">
 		<p><strong>Campaign: <%= @campaign_playlist.campaign.name if @campaign_playlist.campaign %></strong></p>
-		<h3> <%= @campaign_playlist.product_variant.name %></h3>
+		<h3> <%= @campaign_playlist.product_variant.name %> 
+			<small>(<%= @campaign_playlist.productvariantid %>)</small>
+		</h3>
 	</div>
 <div class="col-xs-6">
 <strong>Start time:</strong> <%= @campaign_playlist.starttime %> &nbsp;
  <strong>End time:</strong> <%= @campaign_playlist.endtime %>
  <p>
   <strong>Product Advertised:</strong>
-  <%= @campaign_playlist.product_variant.name if @campaign_playlist.product_variant %>
+  <%= @campaign_playlist.product_variant.name if @campaign_playlist.product_variant %> (<%= @campaign_playlist.productvariantid %>)
 </p>
-
+<p><strong>Created time:</strong> <%= (@campaign_playlist.created_at + 330.minutes).strftime('%d-%b %H:%M %P') %> &nbsp; <strong>Updated time:</strong> <%= (@campaign_playlist.updated_at  + 330.minutes).strftime('%d-%b %H:%M %P') %></p>
+<p>Status: <% @campaign_playlist.campaign_play_list_status.name if @campaign_playlist.campaign_play_list_status %></p>
 </div>
 </div>
 
@@ -57,12 +60,12 @@
 			order_description: "Common Upsell"}  %>
   </div>
   
-  
+   <% if (current_user.employee_role.sortorder < 6) %>
   <div class="panel panel-primary">
-    <div class="panel-heading"><h3 class="panel-title">Sales PPO Master Data</h3> 
-    </div>
+    <div class="panel-heading"><h3 class="panel-title">Sales PPO Master Data</h3></div>
   	<%= render 'sales_ppos/sales_ppo_mini_list' %>
   </div>
+  <% end %>
   <hr>
  <% else %>
  <div class="well well-sm">

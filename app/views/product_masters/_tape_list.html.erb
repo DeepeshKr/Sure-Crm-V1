@@ -9,7 +9,7 @@
       
       <th>Sec</th>
       <th>Ref No</th>
-      
+      <th>Created on</th>
       <th>Released On</th>
         <th>Ref Id</th>
      
@@ -24,8 +24,11 @@
         
        <td><%= media_tape.duration_secs %></td>
         <td><%= media_tape.tape_ext_ref_id %></td>
-       
-        <td><%= media_tape.release_date.strftime("%d-%b-%Y") %></td>
+       <td><small><%= media_tape.created_at.strftime("%d-%b-%Y") %> 
+		   <small>At: <%= (media_tape.created_at + 330.minutes).strftime("%H:%M:%S") %></small> </small>
+	   </td>
+        <td><%= media_tape.release_date.strftime("%d-%b-%Y") %>
+		</td>
         
         <td>  <%= media_tape.unique_tape_name %> </td>
         

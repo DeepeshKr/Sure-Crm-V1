@@ -40,10 +40,16 @@
     
     <%= f.text_field :list_barcode, :required => true, :placeholder => "Require code for this product looks like 00013" %>
   </div>
+   <div class="panel panel-primary">
+  <div class="row">
+	  <div class="col-xs-11"><%= f.check_box :replace_main_product, label: "This product can Replace Main Product (check if this an up grade)", inline: true   %> </div>
+	  <div class="col-xs-1"><p></p></div>
+  </div>
+ </div>
   <div class="field">
       <%= f.select :active_status_id,  options_from_collection_for_select(ProductActiveCode.all, :id, :name, selected: @product_list.active_status_id), {} %>
-   
   </div>
+  
   <div class="row">
     <div class="col-xs-3 col-md-offset-9">
       <%= f.submit class:"btn btn-primary" %>

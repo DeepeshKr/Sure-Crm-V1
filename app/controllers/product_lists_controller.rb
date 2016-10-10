@@ -104,6 +104,6 @@ class ProductListsController < ApplicationController
     def product_list_params
       params.require(:product_list).permit(:name, :product_variant_id,
        :product_spec_list_id, :extproductcode, 
-       :list_barcode, :active_status_id, :product_master_id)
+       :list_barcode, :active_status_id, :product_master_id, :replace_main_product)
     end
 end

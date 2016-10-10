@@ -25,7 +25,7 @@ class InteractionMastersController < ApplicationController
     if params.has_key?(:category) and params.has_key?(:status)
 
        @categoryid = params[:category]
-      @interaction_masters = InteractionMaster.where("interaction_category_id = ? and interaction_status_id = ?", params[:category], params[:status])
+      @interaction_masters = InteractionMaster.where("interaction_category_id = ? and interaction_status_id = ?", params[:category], params[:status]).order(:created_at).paginate(:page => params[:page])
       #.joins(:interaction_status).where('interaction_statuses.sortorder < 4')
        @category_name = InteractionCategory.find(params[:category]).name
       if params[:status].present?
@@ -35,13 +35,30 @@ class InteractionMastersController < ApplicationController
        @category_name = "Search for Category and Status selected above"
     elsif params.has_key?(:for_date)
        for_date =  Date.strptime(params[:for_date], "%m/%d/%Y")
-        @interaction_masters = InteractionMaster.where("TRUNC(INTERACTION_MASTERS.created_at) = ?", for_date).joins(:interaction_category).where('interaction_categories.sortorder > 100 and interaction_categories.sortorder < 300')
+        @interaction_masters = InteractionMaster
+        .where("TRUNC(INTERACTION_MASTERS.created_at) = ?", for_date).joins(:interaction_category)
+        .where('interaction_categories.sortorder > 100 and interaction_categories.sortorder < 300')
+        .order(:created_at)
+        .paginate(:page => params[:page])
+        
        @category_name = "Searched for order for #{for_date} and found #{@interaction_masters.count()}"
     elsif params.has_key?(:mobile)
       @mobile = params[:mobile]
       @mobile = @mobile.strip
         @interaction_masters = InteractionMaster.where(mobile: @mobile)
+        .order(:created_at)
+        .paginate(:page => params[:page])
        @category_name = "Searched for order for mobile #{params[:mobile]} and found #{@interaction_masters.count()}"
+       
+     elsif params.has_key?(:inside_search)
+       @inside_search = params[:inside_search]
+      
+         @interaction_masters = InteractionMaster.joins(:interaction_transcript)
+         .where("interaction_transcripts.description like ?", "%#{@inside_search}%")
+         .order("interaction_masters.created_at")
+         .paginate(:page => params[:page])
+        @category_name = "Searched for interactions for text #{@inside_search} and found #{@interaction_masters.count()}"
+        
       else
        @category_name = "Search for date / mobile or Category"
     end

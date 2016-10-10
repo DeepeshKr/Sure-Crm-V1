@@ -15,10 +15,10 @@
         <tbody>
           <% app_feature_requests.each do |app_feature_request| %>
             <tr>
-              <td><%= app_feature_request.name %></td>
+              <td><%=h truncate(app_feature_request.name) %></td>
               <td><%= app_feature_request.require_by_date.strftime('%d-%b-%y') if app_feature_request.require_by_date %></td>
-              <td><%= app_feature_request.problem_this_solves %></td>
-              <td><%= app_feature_request.mandatory_requirements %></td>
+              <td><%=h truncate(app_feature_request.problem_this_solves, length: 100) %></td>
+              <td><%=h truncate(app_feature_request.mandatory_requirements) %></td>
               <td><%= app_feature_request.employee.fullname %></td>
               <td><%= app_feature_request.created_at.strftime('%d-%b-%y') %></td>
               <td><%= link_to 'Show', app_feature_request %> </br> <%= link_to 'Edit', edit_app_feature_request_path(app_feature_request) %></td>

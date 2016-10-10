@@ -1,0 +1,12 @@
+
+<%= simple_form_for(@sales_ppo_email_alert) do |f| %>
+  <%= f.error_notification %>
+	<div class="row">
+		<div class="col-xs-10">
+			<%= f.input :email_id, required: true, hint: 'Please enter any valid email id.', :label => false %>
+		</div>
+		<div class="col-xs-2">
+			<%= f.button :submit, :value => "Add New Email Id" %>
+		</div>
+	</div>
+<% end %>

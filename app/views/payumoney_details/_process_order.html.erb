@@ -1,0 +1,27 @@
+<!--  if @go_live == true % -->
+<div class="panel panel-danger">
+  <div class="panel-body">
+    <div class="row">
+   	 <div class="col-xs-3">
+   	 	<h4>Process order</h3>
+   	 </div>
+      <%= form_tag  url_for(:controller => 'payumoney_details', :action => "process_order"), method: "post" do  %>
+	   <%= hidden_field_tag :pay_u_id, @pay_u_id %>
+	  <%= hidden_field_tag :return_url, @return_url %>
+	 <div class="col-xs-7">
+			 <%= text_field_tag(:user_details, nil, :placeholder => "Pay U Response", :class => "form-control", :required => "true" )   %>
+	 </div>
+	  
+          <div class="col-xs-2">
+            <%= submit_tag "Process Order", name: nil, class: "btn btn-danger" %>
+          </div>
+      <% end %>
+
+    </div>
+  </div>
+   <div class="panel-footer">Warning this would complete the ordering process and relevant sms would be generated of payment completed.
+   
+   <!-- = link_to ' page', @return_url, class: "btn btn-info btn-xs" -->
+   </div>
+</div>
+<!-- % end % -->

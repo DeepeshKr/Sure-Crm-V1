@@ -1,31 +1,41 @@
+<% title "Media Tape Heads #{@search}" %>
 <p id="notice"><%= notice %></p>
-
-<h1>Listing Media Tape Heads</h1>
-
-<table class="table table-hover">
-  <thead>
-    <tr>
-      <th>Tape Head</th>
-      <th>Product Variant</th>
-      <th>Parts</th>
-      <th colspan="3"></th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <% @media_tape_heads.each do |media_tape_head| %>
-      <tr>
-        <td><%= media_tape_head.name %></td>
-       <td><%= media_tape_head.product_variant.name if media_tape_head.product_variant.present? %></td>
-       <td><%= media_tape_head.parts %></td>
-        <td><%= link_to 'Add Multiple Tapes', media_tape_head, class: 'btn btn-success btn-xs' %></td>
-        <td><%= link_to 'Edit', edit_media_tape_head_path(media_tape_head) %></td>
-        <td><%= link_to 'Destroy', media_tape_head, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
-
+<div class="row">
+	<div class="col-xs-4">
+		<h4>All Media Tape Heads</h4>
+	</div>
+	<div class="col-xs-8">
+		<%= render('search') %> 
+	</div>
+</div>
+<br>
+<% if @media_tape_head_recent.present? %>
+<div class="panel panel-primary">
+ <div class="panel-heading"><h4>Recently Added Tape Heads</h4></div>
+  <!-- <div class="panel-body"> -->
+	  <%= render('tape_head_list', :media_tape_heads => @media_tape_head_recent, :allow_destroy => true) %>  
+	 <!-- </div> -->
+ <div class="panel-footer">
+	 <div class="row">
+		 <div class="col-xs-8">
+			  <p>All the recent 10 Media Tape heads a listed here</p>
+		 </div>
+		 <div class="col-xs-4">
+			  <%= link_to 'New Media tape head', new_media_tape_head_path, class: 'btn btn-primary btn-xs' %>
+		 </div>
+	 </div>
+	
+ </div>
+</div>
+<% end %>
+<div class="panel panel-primary">
+ <div class="panel-heading"><h4>All Regular Tape Heads</h4></div>
+ <%= render('tape_head_list', :media_tape_heads => @media_tape_heads, :allow_destroy => false) %>
+</div>
+<br>
+<div class="digg_pagination">
+    <%= will_paginate @media_tape_heads, :container => false %>
+</div>
 <br>
 
 <%= link_to 'New Media tape head', new_media_tape_head_path, class: 'btn btn-primary btn-xs' %>

@@ -25,7 +25,7 @@
       <% order_lines.each do |order_line| %>
 			<tr>
 				<td rowspan="2"><%= @sno %></td>
-				<td colspan="3"><%= order_line.description %></td>
+				<td colspan="3"><%= order_line.description %> <small>PV: <%= order_line.productvariant_id %> : PL: <%= order_line.product_list_id %> </small></td>
 				<td><small><%= (order_line.order_master.orderdate + 330.minutes).strftime('%d-%b %H:%M %P') %></small></td>
 				<td> <%= order_line.order_master.order_status_master.name if order_line.order_master.order_status_master.present? %></td>
 			</tr>

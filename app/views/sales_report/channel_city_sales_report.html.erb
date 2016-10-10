@@ -1,0 +1,59 @@
+<% title "Channel City Sales Details for #{@media_name} #{@from_date} to #{@to_date}" %>
+   <%= form_tag  url_for(:controller => 'sales_report', :action => 'channel_city_sales_report'), method: "get" do  %>
+ <div class="row">
+	 <div class="col-xs-3"> <h4>Channel City Sales Report </h4>  </div>
+	  <div class="col-xs-4">   <%= select_tag :media_id,  options_from_collection_for_select(@media_list,
+		                :id, :mediainfo, selected: @media_id ),
+		                      {:class => "form-control", label: "Select the Channel", required: true } %></div>
+	 <div class="col-xs-3">
+        <div class="input-daterange input-group">
+          <%= text_field_tag(:from_date, @from_date, :data => {:provide => "datepicker"}, :id => "datepicker_from", :class => "form-control", :required => "true" )   %>
+          <span class="input-group-addon">to</span>
+
+           <%= text_field_tag(:to_date, @to_date, :data => {:provide => "datepicker"}, :id => "datepicker_to", :class => "form-control", :required => "true" )   %>
+
+        </div>
+    </div>
+    <div class="col-xs-1">
+              <%= submit_tag "Show", name: nil, class: "btn btn-primary" %>
+    </div>
+
+ </div>
+<% end %>
+           <table class="table table-bordered table-stripped">
+               <tr>
+                 <th>
+                  City
+                 </th>
+                 <th>
+                    Pieces
+                 </th>
+                 <th>
+                    Value
+                 </th>
+               </tr>
+              <% @city_product_list.each do |cy| %>
+             <tr>
+                <td class="text-right">
+                  <%= cy[:city] %>
+                </td>
+                <td class="text-right">
+                  <%= cy[:pieces] %> <% @city_total_nos += cy[:pieces] %>
+                </td>
+                <td class="text-right">
+                  <%= cy[:value] %> <% @city_total_value += cy[:value] %>
+                </td>
+             </tr>
+             <% end %>
+             <tr>
+                <td>
+                  Total
+                </td>
+                <td class="text-right">
+                  <%= @city_total_nos %>
+                </td>
+                <td class="text-right">
+                  <%= @city_total_value %>
+                </td>
+             </tr>
+           </table>

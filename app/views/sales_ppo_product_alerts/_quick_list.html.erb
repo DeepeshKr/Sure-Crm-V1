@@ -1,0 +1,24 @@
+ <div class="panel panel-primary">
+  <div class="panel-heading">
+    <h3 class="panel-title">List for PPO Email Alerts</h3>
+  	</div>
+		<table class="table table-bordered table-stripped">
+		   <thead>
+		     <tr>
+			   <th>Prod</th>
+			   <th>Product</th>
+		       <th></th>
+		     </tr>
+		   </thead>
+
+		   <tbody>
+		     <% @sales_ppo_product_alerts.each do |sales_ppo_product_alert| %>
+		       <tr>
+				 <td><%= sales_ppo_product_alert.product_list.extproductcode %></td>
+		         <td><%= sales_ppo_product_alert.product_list.productname %></td>
+		     	 <td><%= link_to 'Destroy', sales_ppo_product_alert, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+		       </tr>
+		     <% end %>
+		   </tbody>
+		 </table>
+  	</div>

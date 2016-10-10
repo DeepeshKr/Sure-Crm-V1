@@ -1,0 +1,31 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Listing Cust Details Track Logs</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Cust details track</th>
+      <th>Name</th>
+      <th>Description</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @cust_details_track_logs.each do |cust_details_track_log| %>
+      <tr>
+        <td><%= cust_details_track_log.cust_details_track_id %></td>
+        <td><%= cust_details_track_log.name %></td>
+        <td><%= cust_details_track_log.description %></td>
+        <td><%= link_to 'Show', cust_details_track_log %></td>
+        <td><%= link_to 'Edit', edit_cust_details_track_log_path(cust_details_track_log) %></td>
+        <td><%= link_to 'Destroy', cust_details_track_log, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Cust details track log', new_cust_details_track_log_path %>

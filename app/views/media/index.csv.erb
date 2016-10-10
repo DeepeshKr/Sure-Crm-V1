@@ -1,5 +1,5 @@
-<% headers = ['DNIS ', 'Channel Name', 'State', 'Telephone'] %>
+<% headers = ['DNIS ', 'Channel Name', 'State', 'Telephone', 'Active'] %>
 <%= CSV.generate_line headers %>
 	 <% @media.each do |c| %>
-	 <%= CSV.generate_line([c.dnis, c.name, c.state, c.telephone]).html_safe.strip  %>
+	 <%= CSV.generate_line([c.dnis, c.name, c.state, c.telephone, c.active]).html_safe.strip  %>
 <% end %>

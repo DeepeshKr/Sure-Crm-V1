@@ -1,0 +1,12 @@
+<%= simple_form_for(@sales_ppo_product_alert) do |f| %>
+  <%= f.error_notification %>
+	<div class="row">
+		<div class="col-xs-8">
+		    <%= f.input :product_list_id, :collection => @product_list, :label_method => :productname,
+		    :value_method => :id,:hint => "Select Product:", :label => false, :include_blank => false %>
+		</div>
+		<div class="col-xs-4">
+			<%= f.button :submit,  :value => "Add Product to Email List" %>
+		</div>
+	</div>
+<% end %>

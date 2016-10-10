@@ -1,0 +1,1 @@
+json.extract! @cust_details_track, :id, :order_ref_id, :order_date, :ext_ref_id, :custdetails, :vpp, :dealtran, :last_call_back_on, :no_of_attempts, :mobile, :alt_mobile, :products, :current_status, :created_at, :updated_at

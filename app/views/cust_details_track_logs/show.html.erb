@@ -1,0 +1,19 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Cust details track:</strong>
+  <%= @cust_details_track_log.cust_details_track_id %>
+</p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @cust_details_track_log.name %>
+</p>
+
+<p>
+  <strong>Description:</strong>
+  <%= @cust_details_track_log.description %>
+</p>
+
+<%= link_to 'Edit', edit_cust_details_track_log_path(@cust_details_track_log) %> |
+<%= link_to 'Back', cust_details_track_logs_path %>

@@ -11,8 +11,8 @@ class ProductVariantsController < ApplicationController
       
       @search = "Search for " +  params[:search].upcase
       @searchvalue = params[:search].upcase   
-       @product_variants = ProductVariant.where('activeid = 10000').where("name like ? OR extproductcode like ? or description like ? or variantbarcode like ?", "#{@searchvalue}%", "#{@searchvalue}%", "#{@searchvalue}%", "#{@searchvalue}%").paginate(:page => params[:page], :per_page => 10)
-      @inactive_product_variants = ProductVariant.where('activeid <> 10000').where("name like ? OR extproductcode like ? or description like ? or variantbarcode like ?", "#{@searchvalue}%", "#{@searchvalue}%", "#{@searchvalue}%", "#{@searchvalue}%").paginate(:page => params[:page], :per_page => 5)
+       @product_variants = ProductVariant.where('activeid = 10000').where("UPPER(name) like ? OR UPPER(extproductcode) like ? or UPPER(description) like ? or UPPER(variantbarcode) like ?", "#{@searchvalue}%", "#{@searchvalue}%", "#{@searchvalue}%", "#{@searchvalue}%").paginate(:page => params[:page], :per_page => 10)
+      @inactive_product_variants = ProductVariant.where('activeid <> 10000').where("UPPER(name) like ? OR UPPER(extproductcode) like ? or UPPER(description) like ? or UPPER(variantbarcode) like ?", "#{@searchvalue}%", "#{@searchvalue}%", "#{@searchvalue}%", "#{@searchvalue}%").paginate(:page => params[:page], :per_page => 5)
       @found = @product_variants.count
      
      elsif params[:showall] == 'true'

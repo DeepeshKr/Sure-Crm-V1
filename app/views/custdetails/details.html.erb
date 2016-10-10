@@ -1,2 +1,133 @@
-<h1>Custdetails#details</h1>
-<p>Find me in app/views/custdetails/details.html.erb</p>
+<% title "Media Cross Check CUSTDETALS for #{@channel} from #{@from_date} to #{@to_date}" %>
+
+   <%= form_tag  url_for(:controller => 'custdetails', :action => 'details'), method: "get" do  %>
+ <div class="row">
+	 <div class="col-xs-4"> <h4>Cross Check CUSTDETAILS for Channel</h4>   </div>
+	  <div class="col-xs-3"> <%= text_field_tag(:channel, @channel, :class => "form-control", :placeholder => "Channel name", :required => "true" )   %> </div>
+	 <div class="col-xs-4">
+        <div class="input-daterange input-group">
+          <%= text_field_tag(:from_date, @from_date, :data => {:provide => "datepicker"}, :id => "datepicker_from", :class => "form-control", :required => "true" )   %>
+          <span class="input-group-addon">to</span>
+          <%= text_field_tag(:to_date, @to_date, :data => {:provide => "datepicker"}, :id => "datepicker_to", :class => "form-control", :required => "true" )   %>
+        </div>
+    </div>
+    <div class="col-xs-1">
+              <%= submit_tag "Show", name: nil, class: "btn btn-primary" %>
+    </div>
+
+ </div>
+<% end %>
+
+<div>
+<table class="table table-hover table-bordered table-stripped">
+  <thead>
+     <th>Description</th>
+     <th>Cust Details (Date wise)</th>
+	 <th>Sure CRM (Date and Time wise)</th>
+     </tr>
+  </thead>
+<tbody>
+    <tr>
+      <td>Start (Date / Date time)</td>
+	  <td class="text-right"><%= @from_date %></td>
+ 	  <td class="text-right"><%= @ex_from_date + 330.minutes if @ex_from_date %></td>
+    </tr>
+    <tr>
+      <td>End (Date / Date time)</td>
+	  <td class="text-right"><%= @to_date %></td>
+ 	  <td class="text-right"><%= @ex_to_date + 330.minutes if @ex_to_date%></td>
+    </tr>
+    <tr>
+      <td>Channel</td>
+	  <td class="text-right"><%= @channel %></td>
+ 	  <td class="text-right"><%= @media %></td>
+    </tr>
+   <tr>
+     <td>Pay U Money - under process orders (Add)</td>
+     <td colspan="2" class="text-right"><%= @ex_pay_u_money_order %></td>
+   </tr>
+    <tr>
+      <td>Processed orders - check status (Add)</td>
+      <td rowspan="2" class="text-right"><%= @custdetails_order %></td>
+	  <td class="text-right"><%= @ex_processed_orders %></td>
+    </tr>
+    <tr>
+      <td>Cancelled orders - not shown in any reports (Less)</td>
+	  <td class="text-right"><%= @ex_cancelled_orders %></td>
+    </tr>
+     <tr>
+       <td>First Serial Order (taking all orders cld, ret etc)</td>
+       <td class="text-right"><%= @first_custdetails_order %></td>
+    	  <td class="text-right"> <%= @first_all_ex_order_master %></td>
+     </tr>
+      <tr>
+        <td>First Order (only in SURE CRM Reports)</td>
+        <td class="text-center">No Filtering</td>
+ 	   <td class="text-right"><%= @first_ex_order_master %>
+ 	   </td>
+      </tr>
+     <tr>
+       <td>Last Order (only in SURE CRM Reports)</td>
+       <td class="text-center">No Filtering</td>
+	   <% if @last_ex_order_master.present? %>
+	   <td class="text-right"><%= @last_ex_order_master  %></td>
+	   <% else %>
+	   <td>Pay U order Pending</td>
+	   <% end %>
+	   
+     </tr>
+     <tr>
+       <td>Last Order (taking all orders cld, ret etc)</td>
+       <td class="text-right"><%= @last_custdetails_order %></td>
+	   <% if @last_all_ex_order_master.present? %>
+	   <td class="text-right"><%= @last_all_ex_order_master  %>
+	   <% if @last_ex_order_master != @last_all_ex_order_master %>
+	   <br><small>(Actually Ends at <%= @last_all_ex_order_master %> only valid ones are shown in Sure CRM)</small>
+	   <% end %>
+	   </td>
+	   <% else %>
+	   <td>Pay U order Pending
+	   <% if @last_ex_order_master != @last_all_ex_order_master %>
+	   <br><small>(Actually Ends at <%= @last_all_ex_order_master %> only valid ones are shown in Sure CRM)</small>
+	   <% end %>
+	   </td>
+	   <% end %>
+	  
+     </tr>
+    <tr>
+	 <% if @ex_new_orders.present? %>
+     <tr>
+       <td>Removed Orders in Cust Details with cross check (<%= (@ex_processed_orders || 0) + (@ex_cancelled_orders || 0) - (@custdetails_order)  %>)</td>
+	   <td colspan="2">
+		   <% if @missing_order_cross_check.present? %>
+				<table class="table">
+					<tr>
+						<td>Order No</td>
+						<td>Ext Ref</td>
+						<td>Processed at</td>
+						<td>More</td>
+					</tr>
+					<% @missing_order_cross_check.each do |c| %>
+					<tr>
+						<td><%= c.ordernum %></td>
+						<td><%= c.id %></td>
+						<td><small><%= c.created_at + 330.minutes %> </small></td>
+						<td>
+							<%= link_to 'View More', order_masters_review_path(order_id: c.order_ref), :target => "_blank", class:"btn btn-info btn-xs" %></td>
+					</tr>
+					<% end %>
+				</table>
+	   			
+			<% end %>
+		</td>
+     </tr>
+	<% else %>
+	<tr>
+			<td colspan="3" class="text-center"><strong>Wow nothing removed in CUSTDETAILS</strong></td>
+	</tr>
+	<% end %>
+</tbody>
+</table>
+</div>
+
+ <%= render "order_details" %>

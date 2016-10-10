@@ -48,7 +48,6 @@
 			     <% end %>
 
         <% if (current_user.employee_role.sortorder < 5) %>
-         <li><%= link_to "PPO Report", "/ppo_report" , data: { confirm: 'This Report Will take some time to show, please dont refresh!'} %></li>
 			   <li><%= link_to "New PPO Report", "/sales_ppos" , data: { confirm: 'This is the NEW Report and more accurate, please dont refresh!'} %></li>
 			   <li><%= link_to "Return Rates", "/return_rates" %></li>
 			   <li><%= link_to "Default Rates", "/sales_ppo_defaults" %></li>
@@ -89,10 +88,15 @@
             <ul class="dropdown-menu">
             <li><%= link_to "Customer Orders (Search)", "/custordersearch"  %></li>
             <li><%= link_to "Customer Orders (Details Search)", "/detailedordersearch"  %></li>
+			<li><%= link_to "HBN Online Orders (hbn.telebrandsindia.com)", order_masters_online_search_path  %></li>
+			<li><%= link_to "CUSTDETAILS Report", custdetails_between_date_path  %></li>
+			<li><%= link_to "Missed in CUSTDETAILS", cust_details_tracks_path  %></li>
+			<li><%= link_to "Add to CUSTDETAILS", customer_order_lists_path  %></li>
             <li class="divider"></li>
             <li><%= link_to "All Interactions", "/interaction" %></li>
+			<li><%= link_to "India Post Pincode List", "/india_pincode_lists_check_for_updates" %></li>
             <li><%= link_to "PINCODE List", "/india_pincode_lists" %></li>
-            <li><%= link_to "City List ", "/india_city_lists" %></li>
+            <li><%= link_to "City List (unused)", "/india_city_lists" %></li>
             <li class="divider"></li>
             <li><%= link_to "Salutes", "/salutes" %></li>
             <li><%= link_to "States", "/states" %></li>
@@ -100,11 +104,10 @@
             <li><%= link_to "SMS on Order", "/message_on_orders" %></li>
 			<li><%= link_to "Pay u Money ", "/payumoney_details" %></li>
             <li class="divider"></li>
-	            <% if (current_user.employee_role.sortorder < 8) %>
-	                <li><%= link_to "New Employees", "/employees/new" %></li>
-	                <li><%= link_to "Employee List", "/employees" %></li>
-	            <% end %>
-			<li><%= link_to "Sales Team", "/sales_team" %></li>
+            <% if (current_user.employee_role.sortorder < 8) %>
+                <li><%= link_to "Employee List", "/employees" %></li>
+				<li><%= link_to "Sales Team", "/sales_team" %></li>
+            <% end %>
             </ul>
          </li>
          <% end %>

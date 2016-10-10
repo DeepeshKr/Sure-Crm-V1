@@ -1,0 +1,14 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Email:</strong>
+  <%= @sales_ppo_email_alert.email_id %>
+</p>
+
+<p>
+  <strong>Last delivered on:</strong>
+  <%= @sales_ppo_email_alert.last_delivered_on %>
+</p>
+
+<%= link_to 'Edit', edit_sales_ppo_email_alert_path(@sales_ppo_email_alert) %> |
+<%= link_to 'Back', sales_ppo_email_alerts_path %>

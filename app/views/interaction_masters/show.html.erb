@@ -1,3 +1,6 @@
+<!-- set page title start -->
+<% title "Interaction Details #{@interaction_master.id}" %>
+<!-- set page title end -->
 <p id="notice"><%= notice %></p>
 <div class="row">
 <div class="col-xs-6">
@@ -104,7 +107,7 @@
 			<%= hidden_field_tag :closedon, :value => @closed_date %>
 			<%= f.hidden_field :description, :value => @quick_close_text %>
 			<%= hidden_field_tag :interaction_status_id, :value => @close_id %>
-						 
+			
   
   	<div class="row">
   	<div class="col-xs-6 col-xs-offset-6">

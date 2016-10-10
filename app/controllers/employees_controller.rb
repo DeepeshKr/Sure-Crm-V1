@@ -8,6 +8,7 @@ class EmployeesController < ApplicationController
 # :location, :employment_type_id, :employee_role_id, :reporting_to_id, 
 #:enablelogin, :description
   def index
+    @now_time = Time.zone.now + 330.minutes
      @showall = 'true'    
     if params.has_key?(:search)
       @search = "Search for " +  params[:search].upcase
@@ -36,6 +37,7 @@ class EmployeesController < ApplicationController
   end
   
   def sales_team
+    @now_time = Time.zone.now + 330.minutes
     valid_employement_types = [10005,10006,10007,10000,10001,10002,10010] # trainee, probation etc
     valid_sales_roles = [10002,10021,10020,10161,10003,10081] # amanger team capatain etc
     @employees = Employee.where(employment_type_id: valid_employement_types, employee_role_id:valid_sales_roles)

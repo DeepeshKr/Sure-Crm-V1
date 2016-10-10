@@ -1,0 +1,37 @@
+<!-- set page title start -->
+<% title "Sales PPO Product Email Alerts" %>
+<!-- set page title end -->
+<p id="notice"><%= notice %></p>
+
+ <div class="panel panel-primary">
+  <div class="panel-heading">
+    <h3 class="panel-title">List for PPO Email Alerts</h3>
+  	</div>
+		<table class="table table-bordered table-stripped">
+		  <thead>
+		    <tr>
+		      <th>Email</th>
+		      <th>Last delivered on</th>
+		      <th></th>
+		    </tr>
+		  </thead>
+
+		  <tbody>
+		    <% @sales_ppo_email_alerts.each do |sales_ppo_email_alert| %>
+		      <tr>
+		        <td><%= sales_ppo_email_alert.email_id %></td>
+		        <td><%= (sales_ppo_email_alert.last_delivered_on + 330.minutes).strftime("%d-%b-%y %H:%M %P") if sales_ppo_email_alert.last_delivered_on %></td>
+		        <td><%= link_to 'Destroy', sales_ppo_email_alert, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+		      </tr>
+		    <% end %>
+		  </tbody>
+		</table>
+  	</div>
+	
+	<%= render 'quick_add' %>
+	
+	<%= render 'sales_ppo_product_alerts/quick_list'%>
+	
+	<%= render 'sales_ppo_product_alerts/quick_add'%>
+	
+	

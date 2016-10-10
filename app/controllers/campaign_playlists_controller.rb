@@ -186,6 +186,9 @@ class CampaignPlaylistsController < ApplicationController
       @campaign_playlist_id = params["/campaign_playlists/update_media_cost"][:campaign_playlist_id]
       @campaign_playlist = CampaignPlaylist.find(@campaign_playlist_id)
       @campaign_playlist.update(cost: @updated_media_cost)
+      
+      group_cost = @campaign_playlist.cost_of_group_playlist
+      
         flash[:success] = "Campaign Playlists updated with cost #{@updated_media_cost}"
     redirect_to @redirect_to
   end
@@ -199,6 +202,8 @@ class CampaignPlaylistsController < ApplicationController
     @campaign_playlist.campaign.update(cost: CampaignPlaylist.where(:campaignid => campaign_playlist_params[:campaignid]).sum(:cost))
 
     @campaign_playlist.update(campaign_playlist_params)
+    
+    group_cost = @campaign_playlist.cost_of_group_playlist
     #reset timings
     #update_timings(@campaign_playlist.campaign_id)
 
@@ -252,31 +257,34 @@ class CampaignPlaylistsController < ApplicationController
             end_min = @end_min
             end_sec = @end_sec
 
-     @campaign_playlist = CampaignPlaylist.create(name: media_tapes.name,
-            campaignid: campaignid,
-            start_hr: begin_hr,
-            start_min: begin_min,
-            start_sec: begin_sec,
-            ref_name: "Inserted Playlist",
-            list_status_id: list_status_id,
-            end_hr: end_hr,
-            end_min: end_min,
-            end_sec: end_sec,
-            cost: cost,
-            channeltapeid: media_tapes.tape_ext_ref_id,
-            internaltapeid: media_tapes.unique_tape_name,
-            productvariantid: media_tapes.product_variant_id,
-            filename: media_tapes.name,
-            description: (media_tapes.description || " ") + " Inserted Playlist on " + (Date.today).to_s,
-            duration_secs: media_tapes.duration_secs,
-            tape_id: media_tapes.tape_ext_ref_id,
-            for_date: for_date)
-
+            @campaign_playlist = CampaignPlaylist.create(name: media_tapes.name,
+              campaignid: campaignid,
+              start_hr: begin_hr,
+              start_min: begin_min,
+              start_sec: begin_sec,
+              ref_name: "Inserted Playlist",
+              list_status_id: list_status_id,
+              end_hr: end_hr,
+              end_min: end_min,
+              end_sec: end_sec,
+              cost: cost,
+              channeltapeid: media_tapes.tape_ext_ref_id,
+              internaltapeid: media_tapes.unique_tape_name,
+              productvariantid: media_tapes.product_variant_id,
+              filename: media_tapes.name,
+              description: (media_tapes.description || " ") + " Inserted Playlist on " + (Date.today).to_s,
+              duration_secs: media_tapes.duration_secs,
+              tape_id: media_tapes.tape_ext_ref_id,
+              for_date: for_date)
+            
            @campaign_playlist.update(playlist_group_id: @campaign_playlist.id)
            #respond_with(@media_cost_master)
+           # total group cost
+           group_cost = @campaign_playlist.cost_of_group_playlist
+           
       if @campaign_playlist.valid?
           update_timings(campaignid)
-          flash[:success] = "Playlist Inserted successfully added "
+          flash[:success] = "Playlist Inserted successfully added group cost Rs #{group_cost}"
            @campaign_playlist.save
           respond_with(@campaign_playlist.campaign)
       else
@@ -317,8 +325,14 @@ class CampaignPlaylistsController < ApplicationController
             tape_id: old_campaign_playlist.tape_id,
             for_date: Time.now + 1.days,
             playlist_group_id: old_campaign_playlist.playlist_group_id)
-
+            
+            new_group_cost = @new_campaign_playlist.cost_of_group_playlist
+            
+            old_group_cost = old_campaign_playlist.cost_of_group_playlist
+            
         end
+        
+        
 
        respond_with(@new_campaign_playlist.campaign)
   end
@@ -417,7 +431,10 @@ class CampaignPlaylistsController < ApplicationController
             begin_min = campaign_time.end_min
             begin_sec = campaign_time.end_second
             begin_frame = campaign_time.end_frames
-
+            
+            # total group cost
+            group_cost = new_campaign_playlist.cost_of_group_playlist
+            
           end
 
           flash[:success] = "Campaign Playlists updated with #{media_tapes.count()} tapes"
@@ -483,15 +500,19 @@ end
     def set_campaign_playlist
       @campaign_playlist = CampaignPlaylist.find(params[:id])
     end
+    
     def dropdown
      @medialist = Medium.where('media_commision_id = ?',  10000).order('name')
     end
+    
     def activestatus
      @active_status = CampaignPlayListStatus.all.order('id')
     end
+    
     def proddropdown
      @productvariant = ProductVariant.where('activeid = 10000').order('name')
     end
+    
     def campaign_playlist_params
       params.require(:campaign_playlist).permit(:name, :campaignid,
         :start_hr, :start_min, :start_sec,
@@ -503,6 +524,7 @@ end
         :list_status_id, :for_date, :total_revenue, :playlist_group_id,
         :start_frame, :end_frame, :frames, :day, :group_total_cost)
     end
+    
     def set_media_tape
       @media_tapes = MediaTape.all
     end
@@ -765,4 +787,5 @@ end
       .where(campaign_playlist_id: params[:id])
       .order("start_time")
     end
+    
 end

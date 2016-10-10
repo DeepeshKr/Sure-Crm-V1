@@ -8,14 +8,20 @@ has_many :distributor_stock_ledger, foreign_key: "corporate_id"
 has_many :distributor_stock_book, foreign_key: "corporate_id"
 has_many :distributor_missed_order, foreign_key: "corporate_id"
 
+validates :name, presence: {message: "You need to enter a name!" }
+validates :address1, presence: {message: "You need to enter an address!" }
+validates :telephone1, presence: {message: "You need to enter a telephone!" }
+validates :city, presence: {message: "You need to enter a city" }
+validates :country, presence: {message: "You need to enter a country" }
 
-validates :tally_id,  allow_blank: true, uniqueness: true
-validates :cst_no,  allow_blank: true, uniqueness: true
+validates :tally_id,  allow_blank: true, uniqueness: { message: "Tally Id has to been used, or leave it blank" }
+validates :cst_no,  allow_blank: true, uniqueness: { message: "CST No has to been used or leave it blank" }
 #validates :gst_no,  allow_blank: true, uniqueness: true
-validates :vat_no,  allow_blank: true, uniqueness: true
-validates :tin_no,  allow_blank: true, uniqueness: true
-validates :web_id,  allow_blank: true, uniqueness: true
-validates :pan_card_no,  allow_blank: true, uniqueness: true
+validates :vat_no,  allow_blank: true, uniqueness: { message: "VAT has has to been used or leave it blank" }
+validates :tin_no,  allow_blank: true, uniqueness: { message: "Tin No has to been used or leave it blank" }
+validates :web_id,  allow_blank: true, uniqueness: { message: "Web Id card has to been used or leave it blank" }
+validates :pan_card_no,  allow_blank: true, uniqueness: { message: "Pan card has to been used or leave it blank" }
+
 
 validates :commission_percent, :inclusion => { :in => 0.0..1.0, :message => "The commission percent should be between 0 and 1"}, allow_nil: true
 

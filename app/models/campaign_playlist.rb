@@ -59,16 +59,18 @@ class CampaignPlaylist < ActiveRecord::Base
     SecureRandom.uuid
       #  SecureRandom.base58(24)
   end
- def starttime
- # str = ":"
-     #  self.end_hr + ":" + self.end_min + ":" + self.end_sec
-     #str.concat(self.start_hr)
-      self.start_hr.to_s.rjust(2, '0') << ":" << self.start_min.to_s.rjust(2, '0')  << ":" << self.start_sec.to_s.rjust(2, '0') << ":" << self.start_frame.to_s.rjust(2, '0')
-    #t = (self.end_hr + ":" + self.end_min + ":" + self.end_sec)  - (self.start_hr + ":" + self.start_min + ":" + self.start_sec)
-   # mm, ss = t.divmod(60)
-   #  "%d m %d s" % [mm, ss]
+ 
+  def starttime
+   # str = ":"
+       #  self.end_hr + ":" + self.end_min + ":" + self.end_sec
+       #str.concat(self.start_hr)
+        self.start_hr.to_s.rjust(2, '0') << ":" << self.start_min.to_s.rjust(2, '0')  << ":" << self.start_sec.to_s.rjust(2, '0') << ":" << self.start_frame.to_s.rjust(2, '0')
+      #t = (self.end_hr + ":" + self.end_min + ":" + self.end_sec)  - (self.start_hr + ":" + self.start_min + ":" + self.start_sec)
+     # mm, ss = t.divmod(60)
+     #  "%d m %d s" % [mm, ss]
 
   end
+  
   def endtime
      #str = ":"
      #  self.end_hr + ":" + self.end_min + ":" + self.end_sec
@@ -99,7 +101,7 @@ class CampaignPlaylist < ActiveRecord::Base
     self.product_variant.name + " on " + self.for_date.strftime("%d-%b-%y") || nil + " " + self.start_hr.to_s.rjust(2, '0') || "00" + ":" + self.start_min.to_s.rjust(2, '0') || "00"
   end
 
-def productrevenue
+  def productrevenue
      orderrevenue =  OrderMaster.where(campaign_playlist_id: self.id)
     if orderrevenue.present?
         total = 0
@@ -113,7 +115,6 @@ def productrevenue
     end
 
   end
-
 
   def productcost
       ordercost =  OrderMaster.where(campaign_playlist_id: self.id).where('ORDER_STATUS_MASTER_ID > 10002')
@@ -129,8 +130,6 @@ def productrevenue
         return 0
       end
   end
-
-
 
   def add_sec_fr
 
@@ -209,61 +208,62 @@ def productrevenue
   end
 
   def cost_of_group_playlist
-    return 0 if  self.playlist_group_id.blank?
+    return 0 if self.playlist_group_id.blank?
+    
     total_cost = CampaignPlaylist.where(playlist_group_id: self.playlist_group_id).sum(:cost)
     #campaign_playlist = CampaignPlaylist.find(self.id)
     self.update_column(:group_total_cost, total_cost)
     #self.group_total_cost = total_cost
-    return "Rs #{total_cost}"
+    return "#{total_cost}"
   end
 
-  def self.group_playlist_cost_update
-    if self.playlist_group_id.present?
-        total_cost = CampaignPlaylist.where(playlist_group_id: self.playlist_group_id).sum(:cost)
-        #campaign_playlist = CampaignPlaylist.find(self.id)
-        self.update_column(:group_total_cost, total_cost)
-        return total_cost
-        #self.group_total_cost = total_cost
-    end
+  def group_playlist_cost_update
+    return 0 if self.playlist_group_id.present?
+    
+      total_cost = CampaignPlaylist.where(playlist_group_id: self.playlist_group_id).sum(:cost)
+      #campaign_playlist = CampaignPlaylist.find(self.id)
+      self.update_column(:group_total_cost, total_cost)
+      return total_cost
   end
+  # ca = CampaignPlaylist.find_by_campaignid(16103)
+  # ca.group_playlist_cost_update
+# after_create :updatecampaign , :group_playlist_cost_update
 
-after_create :updatecampaign , :group_playlist_cost_update
-
-after_update :updatecampaign , :group_playlist_cost_update
+# after_update :updatecampaign , :group_playlist_cost_update
 
 private
 
 
-    def hour_min_sec(s_hr,s_min, s_sec, e_hr, e_min, e_sec)
-         first = (s_hr.to_i * 60 * 60) + (s_min.to_i * 60) + s_sec.to_i
-         last = (e_hr.to_i * 60 * 60) + (e_min * 60) + e_sec.to_i
+  def hour_min_sec(s_hr,s_min, s_sec, e_hr, e_min, e_sec)
+       first = (s_hr.to_i * 60 * 60) + (s_min.to_i * 60) + s_sec.to_i
+       last = (e_hr.to_i * 60 * 60) + (e_min * 60) + e_sec.to_i
 
-        difference = last - first
-        seconds    =  difference % 60
-        difference = (difference - seconds) / 60
-        minutes    =  difference % 60
-        difference = (difference - minutes) / 60
-        hours      =  difference % 24
+      difference = last - first
+      seconds    =  difference % 60
+      difference = (difference - seconds) / 60
+      minutes    =  difference % 60
+      difference = (difference - minutes) / 60
+      hours      =  difference % 24
 
-        return hours.to_s.rjust(2, '0') << ":" << minutes.to_s.rjust(2, '0') << ":" << seconds.to_s.rjust(2, '0')
+      return hours.to_s.rjust(2, '0') << ":" << minutes.to_s.rjust(2, '0') << ":" << seconds.to_s.rjust(2, '0')
 
+  end
+
+  def updatecampaign
+    campaign = Campaign.find(self.campaignid)
+    campaign.update(cost: CampaignPlaylist.where('campaignid = ?', self.campaignid).sum(:cost))
+
+
+  end
+
+  def group_playlist_cost_update
+    if self.playlist_group_id.present?
+        total_cost = CampaignPlaylist.where(playlist_group_id: self.playlist_group_id).sum(:cost)
+        #campaign_playlist = CampaignPlaylist.find(self.id)
+        self.update_column(:group_total_cost, total_cost)
+        #self.group_total_cost = total_cost
     end
-
-    def updatecampaign
-      campaign = Campaign.find(self.campaignid)
-      campaign.update(cost: CampaignPlaylist.where('campaignid = ?', self.campaignid).sum(:cost))
-
-
-    end
-
-    def group_playlist_cost_update
-      if self.playlist_group_id.present?
-          total_cost = CampaignPlaylist.where(playlist_group_id: self.playlist_group_id).sum(:cost)
-          #campaign_playlist = CampaignPlaylist.find(self.id)
-          self.update_column(:group_total_cost, total_cost)
-          #self.group_total_cost = total_cost
-      end
-    end
+  end
  #   create_table "campaign_playlists", force: :cascade do |t|
  #      t.string   "name"
  #      t.integer  "campaignid",        precision: 38

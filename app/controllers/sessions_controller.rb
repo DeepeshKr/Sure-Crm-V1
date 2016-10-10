@@ -38,9 +38,9 @@ class SessionsController < ApplicationController
       log_in user
       
       if params[:return_to].present?
-        redirect_to params[:return_to]
+        redirect_to params[:return_to] and return
       else
-        redirect_to root_path
+        redirect_to root_path and return
       end
       
     else

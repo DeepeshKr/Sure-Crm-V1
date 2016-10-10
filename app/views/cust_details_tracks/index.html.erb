@@ -1,0 +1,85 @@
+<p id="notice"><%= notice %></p>
+
+<% title "Check CUSTDETALS from #{@from_date} to #{@to_date}" %>
+
+   <%= form_tag  url_for(:controller => 'cust_details_tracks', :action => 'index'), method: "get" do  %>
+ <div class="row">
+	 <div class="col-xs-3"><h4>CUSTDETAILS between Dates</h4></div>
+	 <div class="col-xs-2"> <%= text_field_tag(:ordernum, @ordernum, :class => "form-control", :placeholder => "Order No")   %> </div>
+	 <div class="col-xs-4">
+        <div class="input-daterange input-group">
+          <%= text_field_tag(:from_date, @from_date, :data => {:provide => "datepicker"}, :id => "datepicker_from", :class => "form-control", :required => "true" )   %>
+          <span class="input-group-addon">to</span>
+          <%= text_field_tag(:to_date, @to_date, :data => {:provide => "datepicker"}, :id => "datepicker_to", :class => "form-control", :required => "true" )   %>
+        </div>
+    </div>
+	<div class="col-xs-2">
+		<%= check_box_tag :show_missed, :true, @show_missed %>
+		        <%= label_tag "Show Missed" %>
+	</div>
+    <div class="col-xs-1">
+        <%= submit_tag "Show", name: nil, class: "btn btn-primary" %>
+    </div>
+
+ </div>
+<% end %>
+<br>
+<% if current_user.role == 10022 %>
+	<%= render 'report_summary' %>
+<% end %>
+<br>
+<div class="digg_pagination">
+    <%= will_paginate @cust_details_tracks, :container => false %>
+</div>
+<br>
+
+<table class="table table-bordered table-hover">
+  <thead>
+	  
+    <tr>
+      <th>Order date</th>
+      <th>Processed</th>
+	  <th>Value</th>
+      <th>Last call | Attempts</th>
+      <th>Mobile | Alt mobile</th>
+      <th>Products</th>
+      <th></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @cust_details_tracks.each do |cust_details_track| %>
+      <tr>
+        <td><%= cust_details_track.order_date.strftime("%d-%b-%y") %><br>
+			<small>At: <%= cust_details_track.order_date.strftime("%H:%M:%S") %></small>
+		</td>
+        <td><%= cust_details_track.processed %> <br>
+		<%= link_to cust_details_track.order_master_id, order_masters_review_path(order_id: cust_details_track.order_master_id), :target => "_blank", class:"btn btn-primary btn-xs" %> |
+		<%= link_to cust_details_track.order_ref_id, custordersearch_path(ordernum: cust_details_track.order_ref_id), :target => "_blank", class:"btn btn-info btn-xs" %>
+		</td>
+		<td><%= cust_details_track.order_master.total_value %></td>
+        <td><%= cust_details_track.last_call_back_on.strftime("%d-%b-%y %H:%M:%S") if cust_details_track.last_call_back_on %> <br> <%= cust_details_track.no_of_attempts %></td>
+        <td><%= cust_details_track.mobile %> | <%= cust_details_track.alt_mobile %></td>
+        <td><%= simple_format h(cust_details_track.products) %> <br>
+		- <small><%= cust_details_track.order_master.order_status_master.name  if cust_details_track.order_master.order_status_master %></small> - <small><small><small>
+			<%= cust_details_track.current_status %>: <%= cust_details_track.ext_ref_id %></small></small></small> </td>
+        <td><%= link_to 'Show', cust_details_track, class:"btn btn-link" %>
+			<%= link_to 'Add to CustDetails', customer_order_lists_path(ordernum: cust_details_track.order_ref_id), :target => "_blank", class:"btn btn-info btn-sm" %>
+		</td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+<br>
+<div class="digg_pagination">
+    <%= will_paginate @cust_details_tracks, :container => false %>
+</div>
+<br>
+
+<script>
+$('#datepicker_to').datepicker({format: 'yyyy-mm-dd'});
+$('#datepicker_from').datepicker({format: 'yyyy-mm-dd'});
+</script>
+

@@ -1,0 +1,24 @@
+<!-- set page title start -->
+<% title "Live Feature Requests " %>
+<!-- set page title end -->
+<div class="row">
+	<div class="col-xs-6">
+		<h3>All Live Requests / Errors</h3>
+	</div>
+	<div class="col-xs-6">
+		
+	</div>
+</div>
+<div class="row">
+	<div class="col-xs-12">
+	   <%= render partial: 'home_index', :locals => {:name_of_status_list => "Completed Features",
+       :app_feature_requests => @app_completed_features, :about_the_list => "Footer with details" }  %>
+	</div>
+</div>
+
+<div class="row">
+	<div class="col-xs-12">
+		<%= render partial: 'home_index', :locals => {:name_of_status_list => "Completed Errors",
+			:app_feature_requests => @app_completed_errors, :about_the_list => "Footer with details" }  %>
+	</div>
+</div>

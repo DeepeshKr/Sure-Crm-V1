@@ -1,0 +1,85 @@
+<div class="row">
+	<div class="col-xs-6">
+		<div class="panel panel-info">
+		  <div class="panel-heading"><h3 class="panel-title">Report summary</h3></div>
+		  <% if @orders_in_pool.present? %>
+			<table class="table table-hover table-bordered table-stripped">
+			  <thead>
+				 <tr>
+				     <th>Description</th>
+				     <th>Cust Details</th>
+					 <th>Sure CRM</th>
+			 
+			     </tr>
+			  </thead>
+			<tbody>
+			    <tr>
+			      <td>Start (Date / Date time)</td>
+			 	  <td class="text-center" colspan="2"><%= @orders_in_pool.last.from_date %></td>
+	     
+			    </tr>
+				<tr>
+		  	      <td>End (Date / Date time)</td>
+		  	 	  <td class="text-center" colspan="2"><%= @orders_in_pool.last.to_date%></td>
+				</tr>
+				<tr>
+					<td>CUSTDETAILS Order Nos</td>
+					<td colspan="2" class="text-right"><%= number_with_delimiter(@orders_in_pool.last.custdetails_order) %></td>
+				</tr>
+				<tr>
+					<td>CUSTDETAILS Missed Nos</td>
+					<td colspan="2" class="text-right"><%= @orders_in_pool.last.missed_order_nos %>
+					(<%= number_to_percentage((@orders_in_pool.last.missed_order_nos.to_f / @orders_in_pool.last.total_nos.to_f) * 100, precision: 2) if @orders_in_pool.last.missed_order_nos.present? %>)
+					</td>
+				</tr>
+				<tr>
+					<td>CUSTDETAILS Missed Value</td>
+					<td colspan="2" class="text-right">Rs. <%= number_with_delimiter(@orders_in_pool.last.missed_order_value) %>
+						(<%= number_to_percentage((@orders_in_pool.last.missed_order_value.to_f / @orders_in_pool.last.total_value.to_f) * 100, precision: 2) if @orders_in_pool.last.missed_order_value.present? %>)
+					</td>
+				</tr>
+				<tr>
+					<td>Total Order Nos</td>
+					<td colspan="2" class="text-right"><%= number_with_delimiter(@orders_in_pool.last.total_nos) %></td>
+				</tr>
+				<tr>
+					<td>Total Order Value</td>
+					<td colspan="2" class="text-right">Rs. <%= number_with_delimiter(@orders_in_pool.last.total_value) %></td>
+				</tr>
+			</tbody>
+			</table>
+			<% end %>
+		</div>
+	</div>
+	<div class="col-xs-6">
+		<div class="panel panel-info">
+		   <div class="panel-heading"><h3 class="panel-title">Order Queue Split</h3></div>
+			<% if @orders_in_pool.present? %>
+				<table class="table table-hover table-bordered table-stripped">
+				  <thead>
+					 <tr>
+					     <th colspan="2">Queue Name</th>
+					     <th>Nos</th>
+						 <th>Value</th>
+						 <th>Percent</th>
+				     </tr>
+				  </thead>
+				<tbody>
+					<% @orders_in_pool.each do |order_in_pool| %>
+					
+				    <tr>
+				      <td colspan="2"><%= order_in_pool.pool_name %></td>
+				 	  <td class="text-right"><%= number_with_delimiter(order_in_pool).nos %></td>
+				      <td class="text-right"><%= number_with_delimiter(order_in_pool.value) %></td>
+					   <td class="text-right"><%= number_to_percentage(order_in_pool.percent, precision: 2) %></td>
+				    </tr>
+					
+				    <% end %>
+				</tbody>
+				</table>
+			<% end %>
+		</div>
+	</div>
+	
+</div>
+

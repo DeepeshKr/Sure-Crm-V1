@@ -12,13 +12,57 @@
  <%= render partial: 'date_range_search', :locals => {:searchaction => "product"}  %>
 	</div>
  </div>
+ <br>
+ <div class="panel panel-primary hide">
+   <div class="panel-heading"><h3 class="panel-title">Order Summary</h3></div>
+   <div class="row">
+	   	<div class="col-xs-6">
+			<table class="table table-stripped table-hover table-bordered">
+				<tr>
+					<td>Total Orders </td>
+					<td class="text-right"><%= @order_masters.count if @order_masters.present? %></td>
+				</tr>
+				<tr>
+					<td>Pay U Money Orders </td>
+					<td class="text-right"><%= @order_masters_payu.count if @order_masters_payu.present? %></td>
+				</tr>
+				<tr>
+					<td>Credit Card Orders </td>
+					<td class="text-right"><%= @order_masters_cc.count if @order_masters_cc.present? %></td>
+				</tr>
+				<tr>
+					<td>COD Orders </td>
+					<td class="text-right"><%= @order_masters_cod.count if @order_masters_cod.present? %></td>
+				</tr>
+			</table>
+		</div>
+		<div class="col-xs-6">
+			<table class="table table-stripped table-hover">
+				<tr>
+					<td>Main Products Sold</td>
+					<td class="text-right"><%= @reg_order_lines.count if @reg_order_lines.present? %></td>
+				</tr>
+				<tr>
+					<td>Basic Upsell Products</td>
+					<td class="text-right"><%= @basic_order_lines.count if @basic_order_lines.present? %></td>
+				</tr>
+				<tr>
+					<td>Common Upsell Products</td>
+					<td class="text-right"><%= @common_order_lines.count if @common_order_lines.present? %></td>
+				</tr>
+			</table>
+		</div>
+	</div>
+	<div class="panel-footer">Upsell is not a regular product and add's up to Common or Basic upsell</div>
+ </div>
 
- <%= render partial: 'product_list', :locals => {:main_product_list => @main_product_list, :list_name => "Main Product"}  %>
+ <%= render partial: 'product_list', :locals => {:main_product_list => @main_product_list, :list_name => "Main Product", :filter => "main"}  %>
 
  <hr>
- <%= render partial: 'product_list', :locals => {:main_product_list => @basic_product_list_orderlist, :list_name => "Basic Product"}  %>
+ 
+ <%= render partial: 'product_list', :locals => {:main_product_list => @basic_product_list_orderlist, :list_name => "Basic Product", :filter => "basic"}  %>
  <hr>
- <%= render partial: 'product_list', :locals => {:main_product_list => @common_product_list_orderlist, :list_name => "Common Product"}  %>
+ <%= render partial: 'product_list', :locals => {:main_product_list => @common_product_list_orderlist, :list_name => "Common Product", :filter => "common"}  %>
  <hr>
  <div class="well well-sm">
  <div class="row">

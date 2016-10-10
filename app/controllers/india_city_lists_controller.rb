@@ -25,7 +25,7 @@ class IndiaCityListsController < ApplicationController
 
      if params[:search].present?
       @searchvalue = params[:search].upcase   
-      @india_city_lists = IndiaCityList.where("name like ? OR state like ?", "#{@searchvalue}%", "#{@searchvalue}%").paginate(:page => params[:page])
+      @india_city_lists = IndiaCityList.where("upper(name) like ? OR upper(state) like ?", "%#{@searchvalue}%", "%#{@searchvalue}%").paginate(:page => params[:page])
       @search = "Seached for #{@searchvalue}"
       @found = "Found of over #{@india_city_lists.count()} Cities"
       respond_to do |format|

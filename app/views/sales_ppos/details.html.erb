@@ -1,38 +1,46 @@
 <!-- set page title start -->
 <% title @page_heading  %>
 <!-- set page title end -->
-<div class="well">
-<div class="row">
-	<div class="col-xs-8">
-		<h3><%= @campaign_playlist.product_variant.name if @campaign_playlist.product_variant  %> 
-		<small><%= @campaign_playlist.ref_name %> </small>
-		<small>PV: <%= @campaign_playlist.productvariantid %> </small>
-		<small>Med: <%= @campaign_playlist.campaign.mediumid %> </small>
-		</h3>
+<div class="panel panel-primary">
+  <div class="panel-heading">
+   <h3 class="panel-title">
+	<div class="row">
+		<div class="col-xs-7"> <%= @campaign_playlist.product_variant.name if @campaign_playlist.product_variant  %>  </div>
+		<div class="col-xs-5">Aired on <%= @campaign_playlist.for_date.strftime('%d-%b-%Y') %> =>
+				<%= @campaign_playlist.start_hr.to_s.rjust(2, '0') %>:
+				<%= @campaign_playlist.start_min.to_s.rjust(2, '0') %>:
+				<%= @campaign_playlist.start_sec.to_s.rjust(2, '0') %>
+		</div>
 	</div>
-	<div class="col-xs-4">
-		<p class="lead">
-		<%= @campaign_playlist.for_date.strftime('%d-%b-%Y') %> =>
-		<%= @campaign_playlist.start_hr.to_s.rjust(2, '0') %>:
-		<%= @campaign_playlist.start_min.to_s.rjust(2, '0') %>:
-		<%= @campaign_playlist.start_sec.to_s.rjust(2, '0') %>
-		</p>
+	</h3>
 	</div>
-<div class="row">
-	<div class="col-xs-10 col-xs-offset-2">
-		<p> <%= @showing_results_for %> </p>
-	</div>	
-</div>		
-</div>
+
+		<table class="table table-bordered"> 
+		  <tbody>
+		    <tr>
+				<td colspan="6"><%= @showing_results_for %></th>
+				<td>Product Price <%= @product_price %> </th>
+				
+			</tr>
+			<tr>
+				<td colspan="4">Ref Name: <%= @campaign_playlist.ref_name %> </th>
+				<td><%= link_to 'Campaign Summary', campaign_playlists_search_path(id: @campaign_playlist.id), type:"button", class: "btn btn-info btn-xs" %> </th>
+				<td>PV: <%= @campaign_playlist.productvariantid %> </th>
+				<td>Med: <%= @campaign_playlist.campaign.mediumid %> </th>
+			</tr>
+		</tbody>
+		</table>
+		<div class="row">
+			<div class="col-xs-8"><%= render 'open_orders' %> </div>
+			<div class="col-xs-4"><%= render 'all_orders' %> 
+			</div>
+		</div>
 
 </div>
+
 
 <!--Start show details of dispatch open orders etc -->
-<div class="row">
-	<div class="col-xs-8"><%= render 'open_orders' %> </div>
-	<div class="col-xs-3 col-xs-offset-1"><%= render 'all_orders' %> 
-	</div>
-</div>
+
 
 <!--show details of dispatch open orders etc end -->
 <div class="row">

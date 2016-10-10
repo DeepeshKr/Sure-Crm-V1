@@ -1,4 +1,5 @@
 class AppFeatureRequest < ActiveRecord::Base
+  mount_uploader :user_image, AppFeatureRequestUploader
   belongs_to :employee, foreign_key: "request_by" #, class_name: "Employee"
   #belongs_to :employee, foreign_key: "assigned_to", class_name: "Working"
   belongs_to :app_list, foreign_key: "app_id"
@@ -51,7 +52,24 @@ class AppFeatureRequest < ActiveRecord::Base
       self.update(actual_completion_date: current_time)
     end
   end
-
+  
+  # def self.image_full_url
+#     if self.user_image.present?
+#       return "http://3.0.3.57/uploads/app_feature_request/user_image/#{self.id}/#{self.user_image}"
+#     end
+#   end
+  
+  def image_full_url host
+    # image_tag app_feature_comment.user_image.url
+    #http://192.168.1.10:89/uploads/app_feature_comment/user_image/10500/embed-504165888.jpg
+    #http://192.168.1.10:89/uploads/app_feature_comment/user_image/10463/Images-3.jpg
+    return nil if self.user_image.blank?
+    if host == "192.168.1.10"
+      return "http://192.168.1.10:89#{self.user_image}" 
+    else
+      return "http://3.0.3.57#{self.user_image}" 
+    end
+  end
 #after_update :update_date
 
 private

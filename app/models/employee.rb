@@ -1,5 +1,5 @@
 class Employee < ActiveRecord::Base
-
+   mount_uploader :pic, EmployeeUploader
  before_save :downcase
 
  validates :first_name,  presence: true, length: { maximum: 50 }
@@ -36,6 +36,19 @@ def fullname
   #(self.title || "NA") + " " + (self.first_name || "NA" )  + " " + (self.last_name || "NA" ) + " (" + (self.designation || "NA" ) + ")"
 end
 
+def open_orders
+  OrderMaster.where("interaction_master_id IS NULL").where(employee_id: self.id).pluck(:id).count ||= 0
+end
+
+def last_logged
+  session = Sessions.where(employee_code: self.employeecode).order(:created_at)
+  #.created_at
+  return nil if session.blank?
+  session.last.created_at
+  #"#{( + 330.minutes).strftime("%d-%b-%Y %H:%M:%S")} from IP #{session.last.userip}"
+  
+end
+
 def self.full_name id
   employee = Employee.find(id)
   return "#{employee.title} #{employee.first_name} #{employee.last_name}"
@@ -48,6 +61,18 @@ end
 
 def employee_name
    (self.first_name || "NA") + " " + (self.last_name || " ") + (self.employeecode.to_s || " ")
+end
+
+def image_full_url host
+  # image_tag app_feature_comment.user_image.url
+  #http://192.168.1.10:89/uploads/app_feature_comment/user_image/10500/embed-504165888.jpg
+  #http://192.168.1.10:89/uploads/app_feature_comment/user_image/10463/Images-3.jpg
+  return nil if self.pic.file.nil?
+  if host == "192.168.1.10"
+    return "http://192.168.1.10:89/uploads/app_feature_comment/user_image/#{self.id}/#{self.pic_identifier}" 
+  else
+    return "http://3.0.3.57/uploads/app_feature_comment/user_image/#{self.id}/#{self.pic_identifier}" 
+  end
 end
 
 private

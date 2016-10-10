@@ -37,6 +37,7 @@ belongs_to :medium, foreign_key: "media_id"
 	end
 
 	def self.cost_of_playlist start_hour, start_min, start_sec, play_duration_sec
+    orginal_play_duration_sec = play_duration_sec
 		return 0 if (play_duration_sec >= 86400)
 		return 0 if (start_hour > 23 || start_hour < 0)
 		return 0 if (start_min > 59 || start_min < 0)
@@ -49,22 +50,27 @@ belongs_to :medium, foreign_key: "media_id"
 		loop_details = []
 		balance_secs = play_duration_sec + start_secs
 		total_cost_of_playlist = 0
-
+    
 		while balance_secs > 0  do
 			start_costs = MediaCostMaster.where("starting_sec <= ?", start_secs).order("starting_sec DESC")
-			# loop_details << "#{start_costs.first.name} starting at #{start_costs.first.starting_sec} ending at #{start_costs.first.ending_sec} checked for lower than #{start_secs}"
-			#
-			# puts "Loop Start #{max_loop} balance #{balance_secs} start at #{start_secs}"
-
-			if (balance_secs <= start_costs.first.ending_sec)
+			loop_details << "#{start_costs.first.name} starting at #{start_costs.first.starting_sec} ending at #{start_costs.first.ending_sec} start sec is #{start_secs} duration of tape is #{play_duration_sec} where balance is #{balance_secs}"
+      
+      if start_costs.first.starting_sec < 84601 #if less than 23:30
+        ending_secs = start_costs.first.ending_sec 
+      else 
+        ending_secs = 86400 # if more than 23:30 use this
+      end
+     # puts "Loop Start #{max_loop} balance #{balance_secs} start at #{start_secs}"
+      
+			if (balance_secs <= ending_secs)
 				calculate_secs = play_duration_sec #balance_secs - start_costs.first.starting_sec
 			#	 puts "Loop #{max_loop} LOWER: #{balance_secs} calculate secs #{calculate_secs}"
 				balance_secs = 0
 			else
 
-				calculate_secs = start_costs.first.ending_sec - start_secs
+				calculate_secs = ending_secs - start_secs
 				play_duration_sec -= calculate_secs
-				balance_secs = start_costs.first.ending_sec + play_duration_sec
+				balance_secs = ending_secs + play_duration_sec
 				start_secs = start_costs.first.ending_sec
 
 			#	 puts "Loop #{max_loop} HIGHER: Calculated: #{calculate_secs} Balance: #{balance_secs}"

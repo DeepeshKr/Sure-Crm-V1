@@ -8,39 +8,39 @@
 
  <% if employees.present? %>
 	<table class="table table-hover">
-  <thead>
-    <tr>
-    <th>Employee code</th>
-      <th> Name</th>
-      <th>Mobile  emailid</th>
-      <th>Employment type</th>
-      <th>Employee role</th>
-      <th>Login</th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <% employees.each do |employee| %>
-      <tr>
-        <td><%= employee.employeecode %> <%= link_to 'Edit', edit_employee_path(employee) %></td>
-        <td><%= employee.fullname %> <br>
-        <small>  <%= employee.designation %> <br>
-        Reporting to: <%= employee.manager.fullname if employee.manager %>
-        </small>
-        </td>
-
-         <td><%= employee.mobile %><br>
-        <small><%= employee.emailid %></small></td>
-
-        <td><%= employee.employment_type.name if employee.employment_type %></td>
-        <td><%= employee.employee_role.name if employee.employee_role %></td>
-         <td><%= employee.enablelogin %></td>
-
-
-      </tr>
-    <% end %>
-  </tbody>
-</table>
+	  <thead>
+	    <tr>
+	    <th>Employee code</th>
+	      <th> Name</th>
+	      <th>Mobile  emailid</th>
+		  <th>Open Order</th>
+		  <th>Last Logged</th>
+	      <th>Employment type</th>
+	      <th>Employee role</th>
+	      <th>Login</th>
+	    </tr>
+	  </thead>
+	  <tbody>
+	    <% employees.each do |employee| %>
+	      <tr>
+	        <td><%= employee.employeecode %> <%= link_to 'Edit', edit_employee_path(employee) %></td>
+	        <td><%= employee.fullname %> <br>
+	        	<small>  <%= employee.designation %> <br>
+	        		Reporting to: <%= employee.manager.fullname if employee.manager %>
+	        	</small>
+	        </td>
+	        <td><%= employee.mobile %><br><small><%= employee.emailid %></small></td>
+			<td><%= employee.open_orders if employee.open_orders %> </td>
+			<td><%= (employee.last_logged + 330.minutes).strftime('%d-%b-%y %H:%M:%S') if employee.last_logged %>
+			<br><small><%= distance_of_time_in_words((employee.last_logged + 330.minutes),
+	        @now_time) if employee.last_logged %> </small></td>
+	        <td><%= employee.employment_type.name if employee.employment_type %></td>
+	        <td><%= employee.employee_role.name if employee.employee_role %></td>
+	        <td><%= employee.enablelogin %></td>
+	      </tr>
+	    <% end %>
+	  </tbody>
+	</table>
  <% else %>
 	<div class="well well-sm">
 		<h4>No Employee for this role </h4>

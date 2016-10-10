@@ -36,8 +36,36 @@
 
 
 </div>
+
+
 <div class="panel-footer">
 <%= link_to 'Back to Earlier List', url_for(:back), class: "btn btn-success btn-xs" %>
 </div>
 </div>
+
+ <div class="panel panel-primary">
+  <div class="panel-heading">
+    <h3 class="panel-title">Customer Order Summary <%=  @allow_to_close %></h3>
+  </div>
+  	<%= render "order_masters/order_customer" %>
+  	<%= render "order_masters/order_address" %>
+ 	<%= render "order_masters/ordered_all_non_edit" %>
+
+  <div class="panel-footer">
+	<%= render "order_masters/order_footer" %>
+  </div>
+</div>
+
+<%= render "message_on_orders/sms" %>
+<%= render "message_on_orders/pay_u" %>
+<%= render "payumoney_details/list" %>
+
+	<% if  @allow_to_close == true %>
+
+		<%= render "payumoney_details/process_order" %>
+
+		<%= render "payumoney_details/regenerate_sms" %>
+
+	<% end %>
+
 <% end %>

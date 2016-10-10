@@ -1,70 +1,67 @@
-
-
 <% if @interaction_masters.present? %>
+<div class="digg_pagination"> <%= will_paginate @interaction_masters, :container => false %> </div>
 
-
-<div class="digg_pagination">
-    <%= will_paginate @interaction_masters, :container => false %>
-</div>
-
-<table class="table table-hover">
-  
-    
- 
-
- <thead>
-    <% @interaction_masters.each do |interaction_master| %>
-      <tr>
-        <th>Created: <%= interaction_master.createdon.strftime("%d-%b-%Y") rescue nil %></th>
-        <th>Resolve by: <%= interaction_master.resolveby.strftime("%d-%b-%Y") rescue nil %></th>
-        <th>Status:<%= interaction_master.interaction_status.internal_description %></th>
-        <th>Category: <%= interaction_master.interaction_category.name %></th>
-        <th>By: <%= interaction_master.employee.name || "Na" if interaction_master.employee %></th>  
-        <th>Mobile: <%= interaction_master.mobile%></th>
-
-        <th><%= link_to 'More...', interaction_master, class: "btn btn-primary btn-xs" %></th>
-       
-       
-      </tr>
-       </thead>
-       <tbody>
-      <tr>
-      <td colspan="6">
-         <% if interaction_master.interaction_transcript.present? %>
-          <table class="table table-bordered">
-            <thead>
-              <tr>
-                <th>Comments by</th>
-                <th>Details</th>
-                
-              </tr>
-            </thead>
-
-            <tbody>
-              <% interaction_master.interaction_transcript.each do |interaction_transcript| %>
-                <tr>
-                  <td>
-                  <%= interaction_transcript.interaction_user.name if interaction_transcript.interaction_user %> <br>
-          <small> <%= interaction_transcript.created_at + 330.minutes %> </small> <br>
-
-          <%= interaction_transcript.employee.name if interaction_transcript.employee %>
-           </td>
-                  <td><%= interaction_transcript.description %></td>
-                  
-                </tr>
-              <% end %>
-            </tbody>
-          </table>
-<% end %>
-      </td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
-
-
-<div class="digg_pagination">
-    <%= will_paginate @interaction_masters, :container => false %>
-</div>
+	<table class="table table-hover table-bordered table-stripped"> 
+		<thead> 
+			
+			<tr>
+				<th>Created</th> 
+				<th>Status</th> 
+				<th>Category</th> 
+				<th>By</th> 
+				<th>Mobile</th> 
+				<th>More</th>
+			</tr> 
+		</thead> 
+		
+		<tbody> 
+			<% @interaction_masters.each do |interaction_master| %> 
+			<tr>
+				<td><%= (interaction_master.created_at + 330.minutes).strftime("%d-%b-%y %H:%M %P") %></td>
+				<td title="Current Status"><%= interaction_master.interaction_status.internal_description if interaction_master.interaction_status %></td>
+				<td title="Category"><%= interaction_master.interaction_category.name %></td>
+				<td title="Employee"><%= interaction_master.employee.name || "Na" if interaction_master.employee %></td>
+				<td title="Mobile"><%= interaction_master.mobile%></td>
+				<td><%= link_to 'More...', interaction_master, class: "btn btn-primary btn-xs" %></td>
+			</tr>
+				<% if interaction_master.interaction_transcript.present? %> 
+			<tr> 
+				<td> <%= interaction_master.id %> <br>
+				<small><small><%= (interaction_master.updated_at + 330.minutes).strftime("%d-%b-%y %H:%M %P") %></small></small>
+				</td>
+				<td colspan="5"> 
+				
+					<table class="table table-bordered"> 
+						<thead> 
+							<tr>
+								<th>Created at</th>
+								<th>Comments by</th> 
+								<th>Name</th>
+								<th>Details</th> 
+							</tr> 
+						</thead> 
+						<tbody> 
+							<% interaction_master.interaction_transcript.order(:created_at).each do |interaction_transcript| %>
+							<tr> 
+								<td><small> <%= interaction_transcript.created_at + 330.minutes %></small></td>
+								<td> <%= interaction_transcript.interaction_user.name if interaction_transcript.interaction_user %></td>
+								<td><%= interaction_transcript.employee.name if interaction_transcript.employee %> </td>
+								<td><%= interaction_transcript.description %></td> 
+							</tr> 
+							<% end %> 
+						</tbody> 
+					</table> 
+					
+				</td> 
+			</tr> 
+				<% end %> 
+			<% end %>
+		</tbody> 
+		
+	</table>
+	
+<div class="digg_pagination"> <%= will_paginate @interaction_masters, :container => false %> </div>
+<% else %>
+<p>No Interaction details, order closing details found </p>
 
 <% end %>

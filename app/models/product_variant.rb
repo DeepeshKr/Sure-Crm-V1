@@ -52,6 +52,20 @@ after_save :updator
     self.total = self.price +self.taxes + self.shipping
   end
   
+  def get_product_value
+    reverse_vat_rate = TaxRate.find(10001)
+    reverse_ship_rate = TaxRate.find(10020)
+    
+    total = (self.product_variant.price.to_f  * reverse_vat_rate.reverse_rate.to_f + self.product_variant.shipping.to_f * reverse_ship_rate.reverse_rate.to_f).to_i
+  end
+  
+  def get_basic_value
+    reverse_vat_rate = TaxRate.find(10001)
+    reverse_ship_rate = TaxRate.find(10020)
+    
+    total = (self.product_variant.price.to_f  * reverse_vat_rate.reverse_rate.to_f).round(2)
+  end
+  
 private
   def create_product_cost_master
     #check if the prod has pricing details entered

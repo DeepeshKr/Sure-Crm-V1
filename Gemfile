@@ -121,6 +121,10 @@ gem 'bcrypt', '~> 3.1.7'
 # Use unicorn as the app server
 #gem 'unicorn'
 
+# gem for SQL Server 
+gem 'tiny_tds', '~> 0.7.0'
+gem 'activerecord-sqlserver-adapter', '~> 4.2.0'
+
 #gems for Oracle
 gem 'ruby-oci8', '~>2.2.1'
 
@@ -136,6 +140,9 @@ gem 'upmin-admin'
 
 #rails charting http://ankane.github.io/chartkick/
 #gem "chartkick"
+
+#image uploader
+gem 'carrierwave'
 
 #dependencies for gruff
 # need to install on ubuntu sudo apt-get install libmagickwand-dev imagemagick

@@ -1,0 +1,66 @@
+<!-- def title(page_title) -->
+<% title "Channel Group Sales Summary for Product  #{@product_master_id} between dates #{@from_date} to #{@to_date}" %>
+<!-- end of the title-->
+
+<div class="row">
+ <div class="col-xs-12"><h3>List of Orders for <%= @prod %> Sold Between <%= @from_date %> and <%= @to_date %> for <%= @source %>   </h3></div>  
+</div>
+
+<hr>
+
+<% if @employeeorderlist.present? %>
+<% total_value, total_piece = 0, 0 %>
+<table class="table table-hover table-bordered">
+  <thead>
+    <tr>
+     <th>S No</th>
+     <th>From</th>
+     <th>Upto</th>
+     <th>Channel</th>
+     <th>Group</th>
+     <th>Nos</th>
+     <th>Value</th>
+     <th colspan="3"> More </th>
+     </tr>
+  </thead>
+<tbody>
+   <% @employeeorderlist.each do |c| %>
+   <tr>
+     <td><%= @sno %></td>
+     <td><%= c[:from_date] %></td>
+     <td><%= c[:to_date] %></td>
+     <td><%= c[:channel] %></td>
+     <td><%= c[:group] %></td>
+     <td class="text-right"><%= c[:total_nos] %> <% @total_nos += c[:total_nos] %></td>
+     <td class="text-right"><%= c[:total_value] %> <% @total_value += c[:total_value] %></td>
+     <td>
+         <%= link_to 'More', channel_summary_report_path(from_date: @from_date, to_date: @to_date , media_id: c[:media_id]), :target => "_blank", class: "btn btn-link" %> </td>
+		<td> <%= link_to 'Cities', sales_report_channel_city_sales_report_path(from_date: @from_date, to_date: @to_date , media_id: c[:media_id]), :target => "_blank", class: "btn btn-link" %> </td>
+		<td> <%= link_to 'Products', sales_report_channel_product_sales_report_path(from_date: @from_date, to_date: @to_date , media_id: c[:media_id]), :target => "_blank", class: "btn btn-link" %>
+     </td>
+   </tr>
+  <% @sno += 1 %>
+ <% end %>
+ 
+</tbody>
+  <thead>
+    <tr>
+     <th colspan="5">Total</th>
+    
+     <th><%= @total_nos %></th>
+     <th><%= @total_value %></th>
+     <th></th>
+     </tr>
+  </thead>
+</table>
+  <div class="well well-sm">
+    <%= link_to 'Download CSV file', sales_report_channel_group_sales_summary_path(from_date: @from_date, to_date: @to_date, prod: @prod, format: :csv), class: "btn btn-info btn-sm" %>
+  </div>
+
+  <% end %>
+ <br>
+
+<script>
+$('#datepicker_to').datepicker({format: 'yyyy-mm-dd'});
+$('#datepicker_from').datepicker({format: 'yyyy-mm-dd'});
+</script>

@@ -1,0 +1,96 @@
+<br>
+
+<table class="table table-bordered">
+  <thead>
+    <tr>
+		<td>ref id </td>
+	    <td>ordernum </td>
+		<td>order ref id </td>
+	    <td>orderdate </td>
+	    <td>channel </td>
+	    <td>dnis </td>
+	    <td>username  </td>
+	    <td>ipadd </td>
+		<td>title  fname  lname </td>
+		<td>add1  add2  add3  landmark </td>
+		<td>city </td>
+		<td>pincode </td>
+		<td>state </td>
+		<td>mstate </td>
+		<td>tel1 </td>
+		<td>tel2 </td>
+		<td>email </td>
+		<td>carddisc </td>
+		<td>totalamt </td>
+		<td>prod1 </td>
+		<td>qty1 </td>
+		<td>prod2 </td>
+	  	<td> qty2  </td>
+		<td> prod3  </td> 
+		<td> qty3  </td>
+		<td> prod4 </td> 
+		<td> qty4  </td>
+		<td> prod5  </td> 
+		<td> qty5  </td>
+		<td> prod6  </td> 
+		<td> qty6  </td>
+		<td> prod7  </td> 
+		<td> qty7  </td>
+		<td> prod8  </td> 
+		<td> qty8  </td>
+		<td> prod9  </td> 
+		<td> qty9  </td>
+		<td> prod10  </td> 
+		<td> qty10  </td>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @customer_order_lists.each do |c| %>
+      <tr>
+		<td><%= c.id %></td>
+        <td><%= c.ordernum %></td>
+		<td><%= c.order_id %></td>
+        <td><%= c.orderdate %></td>
+        <td><%= c.channel %></td>
+        <td><%= c.dnis %></td>
+        <td><%= c.username %> </td>
+        <td><%= c.ipadd %></td>
+		<td><%= c.title %> <%= c.fname %> <%= c.lname %></td>
+		<td><%= c.add1 %> <%= c.add2 %> <%= c.add3 %> <%= c.landmark %></td>
+		<td><%= c.city %></td>
+		<td><%= c.pincode %></td>
+		<td><%= c.state %></td>
+		<td><%= c.mstate %></td>
+		<td><%= c.tel1 %></td>
+		<td><%= c.tel2 %></td>
+		<td><%= c.email %></td>
+		<td><%= c.carddisc %></td>
+		<td><%= c.totalamt %></td>
+		<td><%= c.prod1 %></td>
+		<td><%= c.qty1 %></td>
+		<td><%= c.prod2 %></td>
+  	  	<td> <%= c.qty2 %> </td>
+		<td> <%= c.prod3 %> </td> 
+		<td> <%= c.qty3 %> </td>
+		<td> <%= c.prod4 %></td> 
+		<td> <%= c.qty4 %> </td>
+		<td> <%= c.prod5 %> </td> 
+		<td> <%= c.qty5 %> </td>
+		<td> <%= c.prod6 %> </td> 
+		<td> <%= c.qty6 %> </td>
+		<td> <%= c.prod7 %> </td> 
+		<td> <%= c.qty7 %> </td>
+		<td> <%= c.prod8 %> </td> 
+		<td> <%= c.qty8 %> </td>
+		<td> <%= c.prod9 %> </td> 
+		<td> <%= c.qty9 %> </td>
+		<td> <%= c.prod10 %> </td> 
+		<td> <%= c.qty10 %> </td>
+	</tr>
+    <% end %>
+  </tbody>
+</table>
+
+
+ 

@@ -14,7 +14,10 @@
             <div class="col-xs-2">
            Status: <strong> <%= product_master.product_active_code.name if product_master.product_active_code.present?%></strong>
           	</div>   
-          	 <div class="col-xs-4">
+           <div class="col-xs-1"> <small>Created: <%= product_master.created_at.strftime("%d-%b-%Y") %> 
+		   <small>At: <%= (product_master.created_at + 330.minutes).strftime("%H:%M:%S") %></small> </small>
+	   </div>
+          	 <div class="col-xs-3">
           <strong>Category : </strong>   <%= product_master.product_category.name if product_master.product_category %>
           	</div>   
         </div>

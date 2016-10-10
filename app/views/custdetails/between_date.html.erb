@@ -1,0 +1,23 @@
+<% title "Employee Cross Check CUSTDETALS for #{@channel} from #{@from_date} to #{@to_date}" %>
+
+   <%= form_tag  url_for(:controller => 'custdetails', :action => 'between_date'), method: "get" do  %>
+ <div class="row">
+	 <div class="col-xs-4"> <h4>Cross Check CUSTDETAILS between Dates</h4>   </div>
+	   <div class="col-xs-3"> <%= text_field_tag(:employee, @employee, :class => "form-control", :placeholder => "Employee name" )   %> </div>
+	 <div class="col-xs-4">
+        <div class="input-daterange input-group">
+          <%= text_field_tag(:from_date, @from_date, :data => {:provide => "datepicker"}, :id => "datepicker_from", :class => "form-control", :required => "true" )   %>
+          <span class="input-group-addon">to</span>
+          <%= text_field_tag(:to_date, @to_date, :data => {:provide => "datepicker"}, :id => "datepicker_to", :class => "form-control", :required => "true" )   %>
+        </div>
+    </div>
+    <div class="col-xs-1">
+              <%= submit_tag "Show", name: nil, class: "btn btn-primary" %>
+    </div>
+
+ </div>
+<% end %>
+
+
+
+ <%= render "order_details" %>

@@ -32,10 +32,9 @@ class CorporatesController < ApplicationController
         #Transfer Order Distributor
         @transferordercorporates = Corporate.where(corporate_type_id: 10021).order(:updated_at).paginate(:page => params[:page])
         #REgular Distributor
-         @regularcorporates = Corporate.where(corporate_type_id: 10000).order(:updated_at).paginate(:page => params[:page])
-
-         #Others Distributor
-          @corporates = Corporate.where("corporate_type_id IS NULL").order(:updated_at).paginate(:page => params[:page])
+        @regularcorporates = Corporate.where(corporate_type_id: 10000).order(:updated_at).paginate(:page => params[:page])
+        #Others Distributor
+        @corporates = Corporate.where("corporate_type_id IS NULL").order(:updated_at).paginate(:page => params[:page])
 
 
 
@@ -101,7 +100,9 @@ class CorporatesController < ApplicationController
     #add pincode
     @distributor_pincode_list = DistributorPincodeList.new(corporate_id: @corporate.id,sort_order: 1)
 
-
+    @return_to = request.original_url
+    #request.request_uri only returns the relative URL
+    
     #show distributor stock summary
     @distributor_stock_summaries = DistributorStockSummary.all.where(corporate_id: @corporate.id)
 
@@ -119,6 +120,8 @@ class CorporatesController < ApplicationController
     chkuser = User.where(employee_code: @corporate.id)
      #@addnewlogin = false
      @addnewlogin = true || false if chkuser.present?
+     @employee_name = @corporate.name
+     @page_heading = "Showing details about #{@corporate.name}"
     if chkuser.present?
       @userpas = chkuser.first
       @userstatus = "#{chkuser.first.name} has already got a Login Id: #{chkuser.first.employee_code} and password, you may change the password here"
@@ -156,7 +159,9 @@ class CorporatesController < ApplicationController
   def add
     @corporate = Corporate.new
     unless @corporate.valid?
-     flash[:error] = @corporate.errors.full_messages.join(" ")
+     flash[:info] = @corporate.errors.full_messages
+     flash[:error] = @corporate.errors.full_messages
+     redirect_to corporates_url
      redirect_to :action => 'createnew'
        else
          flash[:success] = "Corporate added successfully"
@@ -216,7 +221,7 @@ class CorporatesController < ApplicationController
             @corporate.save
 
       else
-          flash[:error] = @corporate.errors.full_messages.join("<br/>")
+          flash[:error] = @corporate.errors.full_messages
       end
 
     respond_with(@corporate)
@@ -229,7 +234,7 @@ class CorporatesController < ApplicationController
             @corporate.save
 
       else
-          flash[:error] = @corporate.errors.full_messages.join("<br/>")
+          flash[:error] = @corporate.errors.full_messages
       end
     respond_with(@corporate)
   end

@@ -1,0 +1,143 @@
+<% if @order_masters.present? %>
+<br>
+<div class="row">
+		<div class="col-xs-12">
+			<div class="digg_pagination">
+			<%= will_paginate @order_masters %>
+			</div>
+		</div>
+		
+</div>  
+<br>
+<table class="table table-hover table-bordered">
+  <thead>
+    <tr>
+    <th>No <br>Time Taken <br></th>
+    <th>Channel / Show</th>
+      <th>Orderdate / Employee</th>
+      <th>Customer / Mobile</th>
+      <th>Online</th>
+    </tr>
+  </thead>
+
+  <tbody>
+  <% @sno = 1 %> <% totalnos = 0 %> <% totalvalue = 0 %>
+    <% @order_masters.each do |order_master| %>
+      <tr>
+      <td><%= @sno %> <br>
+		  <strong>
+		           External Order No: <br><% if order_master.external_order_no.present? %>
+		            <%= link_to order_master.external_order_no, custordersearch_path(ordernum: order_master.external_order_no), class:"btn btn-info btn-xs" %>
+		            <% else %>
+		            Un processed order
+		            <% end %>
+		            </strong> <br>
+					Internal Order Ref:<br>
+					   <%= link_to order_master.id, order_masters_review_path(order_id: order_master.id), class:"btn btn-info btn-xs" %>
+					
+					  <br>
+	  <small>Time Taken: <%= (order_master.timetaken) %> Secs</small> 
+  
+  	</td>
+      <td><%= order_master.medium.name if order_master.medium %> <br>
+      <%= order_master.campaign_playlist.product_variant.name || "No Show" if order_master.campaign_playlist.present? %><br>
+	  <%= order_master.order_status_master.name %>
+       </td>
+        <td><%= (order_master.orderdate).strftime('%d-%b-%Y') %>
+    <small><%= Time.at(order_master.orderdate).strftime('%H:%M %P %Z') %></small>
+<br>
+<%= order_master.employee.name if order_master.employee %>
+        <small><strong><%= order_master.employeecode %> </strong></small>
+ <small><%= order_master.employee_id %> </small> <br>
+ 
+Order No:  <%= order_master.external_order_no if order_master.external_order_no.present? %> <br>
+Order Ref No:  <%= order_master.id %>
+
+        </td>
+
+<td><%= order_master.customer.first_name rescue nil %> <%= order_master.customer.last_name rescue nil %> <br>
+  <%= order_master.mobile %>
+  
+ City: <%= order_master.customer_address.city  rescue nil %> <br>
+  State:        <%= order_master.customer_address.state  rescue nil %> <br>
+</td>
+<td>
+	<% if order_master.trans_detail.present? %>
+  <table class="table table-hover table-bordered">
+    <thead>
+      <tr>
+
+        <th>Tid</th>
+        <th>Order Date</th>
+        <th>Order No</th>
+        <th>Channel</th>
+        <th>Product</th>
+        <th>Amount</th>
+        <th>Shipped</th>
+        <th>Paid</th>
+        <th>Return</th>
+        <th>Refund</th>
+        <th>Customer Name</th>
+  	  <th>City</th>
+        <th>Comm</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <% order_master.trans_details.each do |tran| %>
+        <tr>
+          <td><%= tran.tid %></td>
+          <td><%= tran.order_date %></td>
+          <td><%= tran.order_no %></td>
+          <td><%= tran.channel %></td>
+          <td><%= tran.product %></td>
+          <td><%= tran.amount %></td>
+  		<td><%= tran.shipped %></td>
+  		<td><%= tran.paid %></td>
+  		<td><%= tran.return %></td>
+         	<td><%= tran.refund %></td>
+          <td><%= tran.customer_name %></td>
+  		<td><%= tran.city %></td>
+  		<td><%= tran.comm %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+	<% end %>
+</td>
+
+
+
+
+
+
+      </tr>
+       <% @sno += 1 %>
+       <% totalnos += order_master.pieces %>
+       <% totalvalue += order_master.total %>
+    <% end %>
+  </tbody>
+  <tfoot>
+
+    <tr>
+    <th colspan="3">Total</th>
+      <th>Pieces: <%= totalnos %> </th>
+       <th> Value: <%= totalvalue %></th>
+
+
+    </tr>
+
+
+  </tfoot>
+</table>
+<br>
+<div class="digg_pagination">
+<%= will_paginate @order_masters %>
+</div>
+<br>
+<% else %>
+<div class="well well-sm">
+<h4> <%= @ordersearch %></h4>
+
+</div>
+<% end %>

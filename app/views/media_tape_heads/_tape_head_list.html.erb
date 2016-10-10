@@ -1,0 +1,31 @@
+<% if media_tape_heads.present? %>
+<table class="table table-hover">
+  <thead>
+    <tr>
+      <th>Tape Head</th>
+      <th>Product Variant</th>
+      <th>Parts</th>
+	  <% if allow_destroy == true %>
+      <th colspan="3"></th>
+	  <% else %>
+	  <th colspan="2"></th>
+	  <% end %>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% media_tape_heads.each do |media_tape_head| %>
+      <tr>
+        <td><%= media_tape_head.name %></td>
+       <td><%= media_tape_head.product_variant.name if media_tape_head.product_variant.present? %></td>
+       <td><%= media_tape_head.parts %></td>
+        <td><%= link_to 'Add Multiple Tapes', media_tape_head, class: 'btn btn-success btn-xs' %></td>
+        <td><%= link_to 'Edit', edit_media_tape_head_path(media_tape_head) %></td>
+        <% if allow_destroy == true %>
+		<td><%= link_to 'Destroy', media_tape_head, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+		<% end %>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+<% end %>

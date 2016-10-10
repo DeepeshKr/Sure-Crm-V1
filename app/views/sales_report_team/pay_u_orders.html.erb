@@ -24,6 +24,7 @@
     <tr>
      <th>No</th>
 	 <th>Ref Id / Order No</th>
+	 <th>Payu ID</th>
 	 <th>Agent</th>
 	 <th>Date Time </th>
      <th>Customer </th>
@@ -42,6 +43,7 @@
    <tr>
    	<td><%= c[:sno] %></td>
    	<td><%= c[:order_id] %> <br><small> <%= c[:order_no] %></small></td>
+	<td><%= c[:pay_u_ref_id] %></td>
 	<td><%= c[:employee] %></td>
 	<td><%= c[:orderdate] %> <br> <%= c[:ordertime]%> </td>
    	<td><%= c[:customer] %> <br> <small>Mob: <%= c[:mobile] %> </small></td>
@@ -59,7 +61,7 @@
   </tbody>
 <tfoot>
   <tr>
-  <th colspan="8"><strong>Total</strong></th>
+  <th colspan="9"><strong>Total</strong></th>
   <th colspan="2">Order Nos: <%= @sno - 1 %> </th>
   <th><strong> <%= total_piece %></strong></th>
   <th><strong><%= total_value %></strong></th>

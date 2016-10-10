@@ -25,10 +25,10 @@ class SalesPpo < ActiveRecord::Base
   :total_fixed_cost, :cor_fixed_cost
 
  attr_accessor :show, :show_time, :total_nos_1, :total_pieces_1,:total_sales_1, :total_revenue_1, :total_product_cost_1,  :total_var_cost_1,:total_var_on_order_cost_1,
-  :total_fixed_cost_1, :total_refund_1, :total_product_dam_cost_1, :profit_per_order_1, :total_name_1, :css_1
+  :total_fixed_cost_1, :total_refund_1, :total_product_dam_cost_1, :profit_per_order_1, :total_name_1, :css_1, :profit_per_show_order_1
 
   attr_accessor :total_nos_2, :total_pieces_2,:total_sales_2, :total_revenue_2, :total_product_cost_2, :total_var_cost_2,
-  :total_var_on_order_cost_2, :total_fixed_cost_2,  :total_refund_2, :total_product_dam_cost_2, :profit_per_order_2, :total_name_2, :css_2
+  :total_var_on_order_cost_2, :total_fixed_cost_2,  :total_refund_2, :total_product_dam_cost_2, :profit_per_order_2, :total_name_2, :css_2, :profit_per_show_order_2
 
 attr_accessor  :total_nos_3, :total_pieces_3, :total_sales_3, :total_revenue_3, :total_product_cost_3, :total_var_cost_3,
   :total_var_on_order_cost_3, :total_fixed_cost_3, :total_refund_3, :total_product_dam_cost_3, :profit_per_order_3, :total_name_3, :css_3
@@ -341,49 +341,35 @@ attr_accessor  :total_nos_3, :total_pieces_3, :total_sales_3, :total_revenue_3, 
    ## end all tasks above this
    return out_sales_ppos
   end
-
-  # used by product ppo controler
-  #:sim_product_cost, :sim_retail_sales_pieces, :sim_to_sales_pieces, :sim_product_total
-  def simulate_sales_product_ppos_for_date from_date, to_date, product_variant_id, ret_def = 0, to_def = 0, sim_product_cost = 0, sim_retail_sales_pieces = 0, sim_to_sales_pieces = 0, sim_product_total = 0
+    
+  def simulate_sales_product_ppos_for_date from_date, product_variant_id, ret_sim, to_sim, sim_product_cost = 0, sim_retail_sales_pieces = 0, sim_to_sales_pieces = 0, sim_product_basic = 0, sim_basic_shipping = 0, postage_cost = 0, transfer_total_on_paid_commission_cost = 0, retail_total_on_paid_commission_cost = 0, retail_total_order_commission = 0, transfer_total_order_commission = 0
+    
     out_sales_ppos = []
     nos = 1
-
+    
     #retail_def = 49.00
     retail_def = SalesPpoDefault.find_by_name("Retail").value
     #transfer_def = 65.00
     transfer_def = SalesPpoDefault.find_by_name("Transfer Order").value
 
-    retail_def = ret_def.to_f if ret_def.to_i > 0
-    transfer_def = to_def.to_f if to_def.to_i > 0
-    ### product_variant_ids
-    product_variant_ids = []
-    product_variant_ids << product_variant_id
-    # if (CampaignPlaylistToProduct.find_by_campaign_playlist_id(campaign_playlist_id).present?)
-    #   product_variant_ids << CampaignPlaylistToProduct.where(campaign_playlist_id: campaign_playlist_id).pluck(:product_variant_id)
-    # end
-    ### product_variant_ids
-    campaign_playlists = CampaignPlaylist.where("for_date >= ? and for_date <= ?", from_date, to_date)
-           .where(productvariantid: product_variant_ids)
+
+    campaign_playlists = CampaignPlaylist.where("for_date = ? ", from_date)
            .where(list_status_id: 10000)
            .order("for_date, start_hr, start_min")
 
       return if campaign_playlists.blank?
 
       combined_fixed_cost = campaign_playlists.sum(:cost).to_f
-      combined_fixed_cost = campaign_playlists.first.group_total_cost.to_f if campaign_playlists.first.group_total_cost.present?
-
+      
     #combined_fixed_cost = campaign_playlists.sum(:cost).to_f
     campaign_playlists.each do |playlist|
     campaign = Campaign.find(playlist.campaignid)
-    return_rate = ReturnRate.new
+    
+     #def sim_calculate_product_ppo campaign_playlist_id, show_all, show_shipped, ret_correct, to_correct, results, product_variant_id, sim_product_cost, sim_retail_sales_pieces, sim_to_sales_pieces, sim_product_basic, sim_product_shipping, transfer_shipping_cost, retail_shipping_cost, transfer_total_on_paid_commission_cost, retail_total_on_paid_commission_cost, retail_total_order_commission, transfer_total_order_commission
+     
+    sales_ppo_1 = sim_calculate_product_ppo playlist.id, true, false, ret_sim, to_sim, "all", product_variant_id, sim_product_cost, sim_retail_sales_pieces, sim_to_sales_pieces, sim_product_basic, sim_basic_shipping, postage_cost, postage_cost, transfer_total_on_paid_commission_cost, retail_total_on_paid_commission_cost, retail_total_order_commission, transfer_total_order_commission
 
-
-    rate_best_of_threes = return_rate.retail_best_of_three(playlist.productvariantid, campaign.mediumid)
-    rate_best_of_three = rate_best_of_threes.first
-    #campaign_playlist_id, show_all, show_shipped, ret_correct, to_correct, results
-    sales_ppo_1 = sim_calculate_product_ppo playlist.id, true, false, rate_best_of_three.rate, 65.0, "all", product_variant_id, sim_product_cost, sim_retail_sales_pieces, sim_to_sales_pieces, sim_product_total
-
-    sales_ppo_2 = sim_calculate_product_ppo playlist.id, true, false, retail_def, transfer_def, "all", product_variant_id, sim_product_cost, sim_retail_sales_pieces, sim_to_sales_pieces, sim_product_total
+    sales_ppo_2 = sim_calculate_product_ppo playlist.id, true, false, retail_def, transfer_def, "all", product_variant_id, sim_product_cost, sim_retail_sales_pieces, sim_to_sales_pieces, sim_product_basic, sim_basic_shipping, postage_cost, postage_cost, transfer_total_on_paid_commission_cost, retail_total_on_paid_commission_cost, retail_total_order_commission, transfer_total_order_commission
     #    byebug
     #retail_rate = final_return_rate.round(1) if final_return_rate.present?
     ret_sales_ppo = SalesPpo.new
@@ -392,7 +378,7 @@ attr_accessor  :total_nos_3, :total_pieces_3, :total_sales_3, :total_revenue_3, 
     ret_sales_ppo.campaign_playlist_id = playlist.id
     ret_sales_ppo.prod = sales_ppo_1.prod
     ret_sales_ppo.product_cost = sales_ppo_1.product_cost
-    ret_sales_ppo.total_name_1 = "R #{rate_best_of_three.rate.round(1)}% | T 65%"
+    ret_sales_ppo.total_name_1 = "R #{ret_sim}% | T #{to_sim}%"
     ret_sales_ppo.total_name_2 = "R #{retail_def}% | T #{transfer_def}%"
     ret_sales_ppo.show = playlist.product_variant.name
     ret_sales_ppo.show_time = playlist.starttime
@@ -422,14 +408,14 @@ attr_accessor  :total_nos_3, :total_pieces_3, :total_sales_3, :total_revenue_3, 
 
 
 
-    ret_sales_ppo.description = "R-1: #{rate_best_of_three.note} @ #{rate_best_of_three.rate.round(1)}| R-2:  #{sales_ppo_2.correction}"
+    ret_sales_ppo.description = "Simulated R-1: R #{ret_sim}% | T #{to_sim}%"
     out_sales_ppos << ret_sales_ppo
            ## save to return the sales ppo
     end
    ## end all tasks above this
    return out_sales_ppos
+  
   end
-
 
   def sales_product_ppos_for_date from_date, to_date, product_variant_id, ret_def = 0, to_def = 0
     out_sales_ppos = []
@@ -469,8 +455,12 @@ attr_accessor  :total_nos_3, :total_pieces_3, :total_sales_3, :total_revenue_3, 
     rate_best_of_three = rate_best_of_threes.first
     #campaign_playlist_id, show_all, show_shipped, ret_correct, to_correct, results
     sales_ppo_1 = calculate_product_ppo playlist.id, true, false, rate_best_of_three.rate, 65.0, "all", product_variant_id
+    sales_ppo_1_s = calculate_campaign_ppo playlist.id, true, false, rate_best_of_three.rate, 65.0, "all"
+    
     #, sim_product_cost, sim_retail_sales_pieces, sim_to_sales_pieces, sim_product_total
     sales_ppo_2 = calculate_product_ppo playlist.id, true, false, retail_def, transfer_def, "all", product_variant_id
+    sales_ppo_2_s = calculate_campaign_ppo playlist.id, true, false, retail_def, transfer_def, "all"
+ 
     #, sim_product_cost, sim_retail_sales_pieces, sim_to_sales_pieces, sim_product_total
     #    byebug
     #retail_rate = final_return_rate.round(1) if final_return_rate.present?
@@ -492,10 +482,12 @@ attr_accessor  :total_nos_3, :total_pieces_3, :total_sales_3, :total_revenue_3, 
     ret_sales_ppo.total_revenue_1 = sales_ppo_1.total_revenue
     ret_sales_ppo.total_product_cost_1 = sales_ppo_1.total_product_cost
     ret_sales_ppo.total_var_cost_1 = sales_ppo_1.total_var_cost
+    ret_sales_ppo.total_var_on_order_cost_1 = sales_ppo_1.total_var_on_order_cost
     ret_sales_ppo.total_fixed_cost_1 = sales_ppo_1.total_fixed_cost
     ret_sales_ppo.total_refund_1 = sales_ppo_1.total_refund
     ret_sales_ppo.total_product_dam_cost_1 = sales_ppo_1.total_product_dam_cost
     ret_sales_ppo.profit_per_order_1 = sales_ppo_1.profit_per_order
+    ret_sales_ppo.profit_per_show_order_1 = sales_ppo_1_s.profit_per_order
     # row 2
     ret_sales_ppo.total_nos_2 = sales_ppo_2.total_nos
     ret_sales_ppo.total_pieces_2 = sales_ppo_2.total_pieces
@@ -503,11 +495,12 @@ attr_accessor  :total_nos_3, :total_pieces_3, :total_sales_3, :total_revenue_3, 
     ret_sales_ppo.total_revenue_2 = sales_ppo_2.total_revenue
     ret_sales_ppo.total_product_cost_2 = sales_ppo_2.total_product_cost
     ret_sales_ppo.total_var_cost_2 = sales_ppo_2.total_var_cost
+    ret_sales_ppo.total_var_on_order_cost_2 = sales_ppo_2.total_var_on_order_cost
     ret_sales_ppo.total_fixed_cost_2 = sales_ppo_2.total_fixed_cost
     ret_sales_ppo.total_refund_2 = sales_ppo_2.total_refund
     ret_sales_ppo.total_product_dam_cost_2 = sales_ppo_2.total_product_dam_cost
     ret_sales_ppo.profit_per_order_2 = sales_ppo_2.profit_per_order
-
+     ret_sales_ppo.profit_per_show_order_2 = sales_ppo_2_s.profit_per_order
 
 
     ret_sales_ppo.description = "R-1: #{rate_best_of_three.note} @ #{rate_best_of_three.rate.round(1)}| R-2:  #{sales_ppo_2.correction}"
@@ -563,11 +556,13 @@ attr_accessor  :total_nos_3, :total_pieces_3, :total_sales_3, :total_revenue_3, 
       rate_best_of_three = rate_best_of_threes.first
       #campaign_playlist_id, show_all, show_shipped, ret_correct, to_correct, results
       sales_ppo_1 = calculate_product_ppo playlist.id, true, false, rate_best_of_three.rate, 65.0, "all", playlist.productvariantid
+      #calculate_product_ppo campaign_playlist_id, show_all, show_shipped, ret_correct, to_correct, results, product_variant_id
+      sales_ppo_1_s = calculate_campaign_ppo playlist.id, true, false, rate_best_of_three.rate, 65.0, "all"
       #, sim_product_cost, sim_retail_sales_pieces, sim_to_sales_pieces, sim_product_total
       sales_ppo_2 = calculate_product_ppo playlist.id, true, false, retail_def, transfer_def, "all", playlist.productvariantid
-      #, sim_product_cost, sim_retail_sales_pieces, sim_to_sales_pieces, sim_product_total
-      #    byebug
-      #retail_rate = final_return_rate.round(1) if final_return_rate.present?
+      
+      sales_ppo_2_s = calculate_campaign_ppo playlist.id, true, false, retail_def, transfer_def, "all"
+    
       ret_sales_ppo = SalesPpo.new
       ret_sales_ppo.product_variant_id = playlist.productvariantid
       ret_sales_ppo.for_date = playlist.for_date
@@ -589,7 +584,9 @@ attr_accessor  :total_nos_3, :total_pieces_3, :total_sales_3, :total_revenue_3, 
       ret_sales_ppo.total_refund_1 = sales_ppo_1.total_refund
       ret_sales_ppo.total_product_dam_cost_1 = sales_ppo_1.total_product_dam_cost
       ret_sales_ppo.profit_per_order_1 = sales_ppo_1.profit_per_order
-      ret_sales_ppo.css_1 = css_class sales_ppo_1.profit_per_order
+      #show wise
+      ret_sales_ppo.profit_per_show_order_1 = sales_ppo_1_s.profit_per_order
+      ret_sales_ppo.css_1 = css_class sales_ppo_1_s.profit_per_order
       # row 2
       ret_sales_ppo.total_nos_2 = sales_ppo_2.total_nos
       ret_sales_ppo.total_pieces_2 = sales_ppo_2.total_pieces
@@ -601,7 +598,9 @@ attr_accessor  :total_nos_3, :total_pieces_3, :total_sales_3, :total_revenue_3, 
       ret_sales_ppo.total_refund_2 = sales_ppo_2.total_refund
       ret_sales_ppo.total_product_dam_cost_2 = sales_ppo_2.total_product_dam_cost
       ret_sales_ppo.profit_per_order_2 = sales_ppo_2.profit_per_order
-      ret_sales_ppo.css_2 = css_class sales_ppo_2.profit_per_order
+      #show wise
+      ret_sales_ppo.profit_per_show_order_2 = sales_ppo_2_s.profit_per_order
+      ret_sales_ppo.css_2 = css_class sales_ppo_2_s.profit_per_order
 
 
 
@@ -1333,8 +1332,7 @@ attr_accessor  :total_nos_3, :total_pieces_3, :total_sales_3, :total_revenue_3, 
       return sales_ppo
   end
 
-  def sim_calculate_product_ppo campaign_playlist_id, show_all, show_shipped, ret_correct, to_correct, results, product_variant_id, sim_product_cost, sim_retail_sales_pieces = 0, sim_to_sales_pieces = 0, sim_product_basic = 0,
-    sim_product_shipping = 0
+  def sim_calculate_product_ppo campaign_playlist_id, show_all, show_shipped, ret_correct, to_correct, results, product_variant_id, sim_product_cost, sim_retail_sales_pieces, sim_to_sales_pieces, sim_product_basic, sim_product_shipping, transfer_shipping_cost, retail_shipping_cost, transfer_total_on_paid_commission_cost, retail_total_on_paid_commission_cost, retail_total_order_commission, transfer_total_order_commission
 
     retail_correction = (ret_correct.to_f / 100).to_f || 1.0 if ret_correct.present?
     transfer_correction = (to_correct.to_f / 100).to_f || 1.0 if to_correct.present?
@@ -1342,73 +1340,53 @@ attr_accessor  :total_nos_3, :total_pieces_3, :total_sales_3, :total_revenue_3, 
     campaign_playlist =  CampaignPlaylist.find(campaign_playlist_id)
     campaign = Campaign.find(campaign_playlist.campaignid)
     
-    total_fixed_cost = campaign_playlists.sum(:cost).to_f
+    total_fixed_cost = campaign_playlist.group_total_cost.to_f
 
-    product_variant_ids = []
-    product_variant_ids << product_variant_id
-    if (CampaignPlaylistToProduct.find_by_campaign_playlist_id(campaign_playlist_id).present?)
-      product_variant_ids << CampaignPlaylistToProduct.where(campaign_playlist_id: campaign_playlist_id).pluck(:product_variant_id)
-    end
      sales_ppos = SalesPpo.where('order_status_id > 10000')
-          .where(campaign_playlist_id: campaign_playlist_id,
-          product_variant_id: product_variant_ids)
+          .where(campaign_playlist_id: campaign_playlist_id)
           .order("start_time")
-
+          #,product_variant_id: product_variant_ids
           sales_ppo = SalesPpo.new
-          sales_ppo.product_variant_id = product_variant_id
+          #sales_ppo.product_variant_id = product_variant_id
           sales_ppo.for_date = campaign_playlist.for_date
-          sales_ppo.prod = campaign_playlist.product_variant.extproductcode
+          #sales_ppo.prod = ProductVariant.find(product_variant_id).extproductcode if product_variant_id.present?
 
           sales_ppo.campaign_playlist_id = sales_ppos.first.campaign_playlist_id if sales_ppos.present?
-          sales_ppo.product_cost = sim_product_cost
           
-         retail_totalrevenue = (sim_product_basic * sim_retail_sales_pieces * 0.888889) + (sim_product_shipping * sim_retail_sales_pieces * 0.98125)
+          all_orders =  sim_to_sales_pieces.to_i + sim_retail_sales_pieces.to_i
+          retail_orders = sim_retail_sales_pieces.to_i 
+          transfer_orders = sim_to_sales_pieces.to_i 
           
+          sales_ppo.product_cost = sim_product_cost.to_i * all_orders
           
-           # shipped order 10005
-          if show_all == false
-            sales_ppos = sales_ppos.where.not(order_status_id: cancelled_status_ids)
-          end
-           # shipped order 10005
-           if show_shipped == true
-             sales_ppos = sales_ppos.where('order_status_id > 10004')
-           end
-          all_orders =  sim_to_sales_pieces + sim_retail_sales_pieces
-          #all_orders = sales_ppos.distinct.count('order_id')
-          retail_orders = sim_retail_sales_pieces.to_i #sales_ppos.where.not(order_status_id: tranfer_order_ids).distinct.count('order_id')
-          transfer_orders = sim_to_sales_pieces.to_i #sales_ppos.where(order_status_id: tranfer_order_ids).distinct.count('order_id')
-
-          transfer_ppos = sales_ppos.where(order_status_id: tranfer_order_ids)
-          retail_sales_ppos = sales_ppos.where.not(order_status_id: tranfer_order_ids)
-
-          if transfer_ppos.present?
+          if sim_to_sales_pieces.present?
              transfer_postage_name = "Charge Reversal"
                #transfer_total_nos = (transfer_ppos.distinct.count('order_id') * transfer_correction).round(2)
                transfer_total_nos = sim_to_sales_pieces
          
             transfer_total_pieces = sim_to_sales_pieces.to_i
-            transfer_total_sales = sim_to_sales_pieces.to_i * sim_product_total.to_f
-            transfer_total_product_cost = sim_product_cost.to_f * sim_to_sales_pieces.to_i
+             transfer_total_sales = (sim_to_sales_pieces.to_f * (sim_product_basic.to_f + sim_product_shipping.to_f)).to_f
+            # transfer_total_sales = transfer_order_dealer_price sim_product_basic, sim_product_shipping, sim_to_sales_pieces
             
-            transfer_total_revenue = (sim_product_basic + sim_product_shipping) * transfer_total_pieces * 0.764444444445)
+            transfer_total_product_cost = (sim_product_cost.to_f * (sim_to_sales_pieces.to_f * transfer_correction.to_f)).round(0)
             
-            transfer_total_revenue = (transfer_total_revenue * transfer_correction).round(2)
+            transfer_total_revenue = sim_transfer_order_revenue sim_product_basic, sim_product_shipping, transfer_total_pieces
+            
+            transfer_total_revenue = (transfer_total_revenue * transfer_correction.to_f).round(2)
 
-             transfer_total_var_cost = 0 #(transfer_ppos.sum(:commission_cost) * transfer_correction).round(2)
+             transfer_total_var_cost = transfer_total_on_paid_commission_cost.to_f
              reverse_correction = (1.0 - transfer_correction).to_f
-             transfer_total_var_on_order_cost = 0 #(transfer_ppos.sum(:commission_on_order) * (1.0 + reverse_correction)).round(2)
+             transfer_total_var_on_order_cost = transfer_total_order_commission.to_i
 
-             transfer_net_sale = (transfer_ppos.sum(:net_sale) * transfer_correction).round(2)
+             transfer_net_sale = (transfer_total_sales * transfer_correction).round(2)
 
-             transfer_total_promo_cost = (transfer_ppos.sum(:promotion_cost) * transfer_correction).round(2)
+             transfer_total_promo_cost = 0 
 
-             transfer_order_total_revenue = (transfer_ppos.where(order_status_id: tranfer_order_ids)
-             .sum(:transfer_order_revenue) * transfer_correction.round(2)) || 0
+             transfer_order_total_revenue = (transfer_total_revenue * transfer_correction.to_f).round(2) || 0
 
              transfer_order_total_revenue = (transfer_order_total_revenue).round(2)
 
-             transfer_rev_shipping_cost = (transfer_ppos.where(order_status_id: tranfer_order_ids)
-             .sum(:shipping_cost) * transfer_correction).round(2)
+             transfer_rev_shipping_cost = (0 * transfer_correction).round(2)
 
              if transfer_orders > 0
               transfer_total_fixed_cost = ((total_fixed_cost.to_f / all_orders.to_i) * transfer_orders.to_i).round(2)
@@ -1420,7 +1398,7 @@ attr_accessor  :total_nos_3, :total_pieces_3, :total_sales_3, :total_revenue_3, 
              ### dont correct these values they are already corrected from above
              transfer_total_product_dam_cost = (transfer_total_product_cost * 0.10).round(2)
              transfer_total_refund = (transfer_total_sales * 0.02).round(2)
-
+             
              transfer_total_cost_per_order = ((transfer_total_product_cost || 0) + (transfer_total_fixed_cost || 0) + (transfer_total_var_cost || 0) + (transfer_total_var_on_order_cost || 0) + (transfer_total_refund || 0) + (transfer_total_product_dam_cost || 0) + (transfer_total_promo_cost || 0)).round(2)
 
              transfer_total_cost_per_order = (transfer_total_cost_per_order - (transfer_rev_shipping_cost || 0)).round(2)
@@ -1431,57 +1409,49 @@ attr_accessor  :total_nos_3, :total_pieces_3, :total_sales_3, :total_revenue_3, 
                transfer_cor_total_nos = transfer_total_nos.to_i
              end
 
-             transfer_cost_per_order = (transfer_total_cost_per_order.to_f / transfer_cor_total_nos.to_i).round(2)
+             transfer_cost_per_order = (transfer_total_cost_per_order.to_f / transfer_cor_total_nos.to_f).round(2)
              transfer_total_profit = ((transfer_total_revenue || 0) - (transfer_total_cost_per_order || 0)).round(2) || 0
             
              transfer_profit_per_order  = ((transfer_total_profit  / (transfer_cor_total_nos.to_i || 0)).round(2) || 0)
           end
-
-          if retail_sales_ppos.present?
+          
+          if sim_retail_sales_pieces.present?
               ####### retail orders are below ############
             retail_postage_name = "Charge Correction"
             retail_correction = retail_correction ||= 1.0
-
-            if sim_retail_sales_pieces.to_i > 0
-              retail_total_pieces = (sim_retail_sales_pieces.to_f * retail_correction).round(2)
-              retail_total_sales = (sim_retail_sales_pieces.to_f * sim_product_total.to_f * retail_correction).round(2)
-              retail_total_product_cost = (sim_product_cost.to_f * retail_correction).round(2)
-            end
-
-            # retail_total_sales = (retail_sales_ppos.sum(:gross_sales)  * retail_correction).round(2)
-            retail_total_nos = (sim_retail_sales_pieces.to_i * retail_correction.to_i) #.round(2)
-
-            retail_total_revenue = (retail_total_sales * retail_correction).round(2)
-
-            if product_cost.present?
-              retail_total_product_cost = ((retail_total_pieces * product_cost) * retail_correction).round(2)
-            end
-
-
-            retail_total_var_cost = (retail_sales_ppos.sum(:commission_cost) * retail_correction).round(2)
+            
+            retail_total_pieces = (sim_retail_sales_pieces.to_f * retail_correction).round(2)
+            retail_total_sales = (sim_retail_sales_pieces.to_f * (sim_product_basic.to_f + sim_product_shipping.to_f) * retail_correction).round(2)
+            
+            # 2578
+            retail_total_product_cost = (sim_product_cost.to_f * (sim_retail_sales_pieces.to_f * retail_correction.to_f))
+            
+            retail_total_nos = (sim_retail_sales_pieces.to_f * retail_correction.to_f) #.round(2)
+            retail_total_revenue = ((productrevenue sim_product_basic, sim_product_shipping, sim_retail_sales_pieces) * retail_correction).round(2)
+            #retail_total_revenue = (retail_total_revenue * retail_correction).round(2)
+            
+            # ((sim_product_basic.to_f * sim_retail_sales_pieces.to_f * 0.888889) + (sim_product_shipping.to_f * sim_retail_sales_pieces.to_f * 0.98125) * retail_correction).round(2)
+    
+            retail_total_var_cost = retail_total_on_paid_commission_cost.to_f #(retail_sales_ppos.sum(:commission_cost) * retail_correction).round(2)
             reverse_correction = (1.0 - retail_correction).to_f
-            retail_total_var_on_order_cost = (retail_sales_ppos.sum(:commission_on_order) * (1.0 + reverse_correction)).round(2)
-
-            retail_net_sale = (retail_sales_ppos.sum(:net_sale) * retail_correction).round(2)
-
-            retail_total_promo_cost = (retail_sales_ppos.sum(:promotion_cost) * retail_correction).round(2)
-
+            retail_total_var_on_order_cost = (retail_total_order_commission.to_f * (1.0 + reverse_correction)).round(2)
+            retail_net_sale = (retail_total_revenue).round(2)
+            retail_total_promo_cost = 0 #(retail_sales_ppos.sum(:promotion_cost) * retail_correction).round(2)
             #.where.not(order_status_id: tranfer_order_ids)
             reverse_correction = (1.0 - retail_correction).to_f
-            retail_shipping_cost = (retail_sales_ppos.sum(:shipping_cost) * reverse_correction).round(2)
 
             if retail_orders > 0
               retail_total_fixed_cost = ((total_fixed_cost.to_f / all_orders.to_f) * retail_orders).round(2)
               #sales_ppo.total_fixed_cost = ((retail_total_fixed_cost || 0) + (transfer_total_fixed_cost || 0)).round(2)
             else
-               retail_total_fixed_cost = total_fixed_cost
+               retail_total_fixed_cost = total_fixed_cost.to_f
             end
 
             ### dont correct these values they are already corrected from above
             retail_total_product_dam_cost = (retail_total_product_cost * 0.10).round(2)
             retail_total_refund = (retail_total_sales * 0.02).round(2)
 
-            retail_total_cost_per_order = ((retail_total_product_cost || 0) + (retail_total_fixed_cost || 0 ) + (retail_total_var_cost || 0 ) + (retail_total_var_on_order_cost || 0) + (retail_total_refund || 0 ) + (retail_total_product_dam_cost || 0) + (retail_shipping_cost || 0) + (retail_total_promo_cost || 0)).round(2)
+            retail_total_cost_per_order = ((retail_total_product_cost || 0) + (retail_total_fixed_cost || 0 ) + (retail_total_var_cost || 0 ) + (retail_total_var_on_order_cost.to_f || 0) + (retail_total_refund || 0 ) + (retail_total_product_dam_cost.to_f || 0) + (retail_shipping_cost.to_f || 0) + (retail_total_promo_cost || 0)).round(2)
 
             #revise total nos if it is less than 1
              retail_cor_total_nos = 1
@@ -1495,16 +1465,17 @@ attr_accessor  :total_nos_3, :total_pieces_3, :total_sales_3, :total_revenue_3, 
 
           end
 
-
-           if results=="all"
              retail_correction = retail_correction ||= 1.0
              transfer_correction = transfer_correction ||= 1.0
-             sales_ppo.description = "Combining retail #{retail_correction * 100} and TO #{transfer_correction * 100}"
-             sales_ppo.total_sales = ((retail_total_sales || 0) + (transfer_total_sales || 0)).round(2)
+             sales_ppo.description = "Simulated Output"
+             sales_ppo.total_sales = ((retail_total_sales.to_f || 0) + (transfer_total_sales.to_f || 0)).round(2)
+             
+             
              sales_ppo.total_revenue = ((retail_total_revenue || 0) + (transfer_total_revenue || 0)).round(2)
-
+             
              sales_ppo.total_nos = ((retail_total_nos.to_i || 0) + (transfer_total_nos.to_i || 0)).round(2)
              sales_ppo.total_pieces = ((retail_total_pieces.to_i || 0) + (transfer_total_pieces.to_i || 0)).round(2)
+             
              sales_ppo.total_product_cost = ((retail_total_product_cost.to_f || 0) + (transfer_total_product_cost.to_f || 0)).round(2)
              sales_ppo.total_product_dam_cost = ((retail_total_product_dam_cost || 0) + (transfer_total_product_dam_cost || 0)).round(2)
 
@@ -1515,9 +1486,9 @@ attr_accessor  :total_nos_3, :total_pieces_3, :total_sales_3, :total_revenue_3, 
              sales_ppo.total_var_on_order_cost = ((retail_total_var_on_order_cost || 0) + (transfer_total_var_on_order_cost || 0)).round(2)
 
              sales_ppo.total_fixed_cost = (total_fixed_cost || 0).round(2)
-             sales_ppo.cor_fixed_cost = (transfer_total_fixed_cost || 0) + (retail_total_fixed_cost || 0).round(2)
+             sales_ppo.cor_fixed_cost = (transfer_total_fixed_cost.to_f || 0) + (retail_total_fixed_cost.to_f || 0).round(2)
 
-             sales_ppo.shipping_cost = ((retail_shipping_cost || 0) - (transfer_rev_shipping_cost || 0)).round(2)
+             sales_ppo.shipping_cost = ((retail_shipping_cost.to_f || 0) - (transfer_rev_shipping_cost || 0)).round(2)
              sales_ppo.correction = ((((retail_correction.to_f * 100 )|| 0) + ((transfer_correction.to_f * 100) || 0))/ 2 ).round(2)
 
              sales_ppo.postage_name = " excluding Transfer Order add All Retail" #postage_name
@@ -1533,70 +1504,11 @@ attr_accessor  :total_nos_3, :total_pieces_3, :total_sales_3, :total_revenue_3, 
                sales_ppo.profit_per_order = ((sales_ppo.total_profit || 0) / sales_ppo.cor_total_nos).round(2)
              else
                 sales_ppo.cor_total_nos = 1
-             end
-
-           elsif results=="to"
-
-             sales_ppo.total_sales = (transfer_total_sales || 0)
-             sales_ppo.total_revenue = (transfer_total_revenue || 0)
-
-             sales_ppo.total_nos = (transfer_total_nos || 0)
-             sales_ppo.total_pieces = (transfer_total_pieces || 0)
-             sales_ppo.total_product_cost = (transfer_total_product_cost || 0)
-             sales_ppo.total_product_dam_cost = (transfer_total_product_dam_cost || 0)
-
-             sales_ppo.total_refund = (transfer_total_refund || 0)
-             sales_ppo.total_promo_cost = (transfer_total_promo_cost || 0)
-             sales_ppo.total_var_cost = (transfer_total_var_cost || 0)
-             sales_ppo.total_var_on_order_cost = (transfer_total_var_on_order_cost || 0)
-
-             sales_ppo.total_fixed_cost = (total_fixed_cost || 0).round(2)
-             sales_ppo.cor_fixed_cost = (transfer_total_fixed_cost || 0)
-
-             sales_ppo.shipping_cost = (transfer_rev_shipping_cost || 0)
-             sales_ppo.correction =  (transfer_correction * 100) || 1.0 if transfer_correction.present?
-
-             sales_ppo.postage_name = " less postage added" #postage_name
-
-             sales_ppo.total_cost_per_order = (transfer_total_cost_per_order || 0 )
-             sales_ppo.cost_per_order = (transfer_cost_per_order || 0 )
-             sales_ppo.total_profit = (transfer_total_profit || 0)
-             sales_ppo.profit_per_order = (transfer_profit_per_order || 0)
-             sales_ppo.cor_total_nos = (transfer_cor_total_nos || 0)
-
-           elsif results=="retail"
-
-             sales_ppo.total_sales = (retail_total_sales || 0)
-             sales_ppo.total_revenue = (retail_total_revenue || 0)
-
-             sales_ppo.total_nos = (retail_total_nos || 0)
-             sales_ppo.total_pieces = (retail_total_pieces || 0)
-             sales_ppo.total_product_cost = (retail_total_product_cost || 0)
-             sales_ppo.total_product_dam_cost = (retail_total_product_dam_cost || 0)
-
-             sales_ppo.total_refund = (retail_total_refund || 0)
-             sales_ppo.total_promo_cost = (retail_total_promo_cost || 0)
-             sales_ppo.total_var_cost = (retail_total_var_cost || 0)
-             sales_ppo.retail_var_on_order_cost = (retail_total_var_on_order_cost || 0)
-
-             sales_ppo.total_fixed_cost = (total_fixed_cost || 0)
-             sales_ppo.cor_fixed_cost = (retail_total_fixed_cost || 0).round(2)
-
-             sales_ppo.shipping_cost = (retail_shipping_cost || 0)
-             sales_ppo.correction = (retail_correction * 100.0) || 1.0 if retail_correction.present?
-
-             sales_ppo.postage_name = " add if not taking 100%" #postage_name
-
-             sales_ppo.total_cost_per_order = (retail_total_cost_per_order || 0 )
-             sales_ppo.cost_per_order = (retail_cost_per_order || 0 )
-             sales_ppo.total_profit = (retail_total_profit || 0)
-             sales_ppo.profit_per_order = (retail_profit_per_order || 0)
-             sales_ppo.cor_total_nos = (retail_cor_total_nos || 0)
-           end
+             end           
 
       return sales_ppo
-  end
 
+  end
 
   def daily_campaign_ppo for_date, show_all, show_shipped, ret_correct, to_correct, results
 
@@ -2088,17 +2000,30 @@ attr_accessor  :total_nos_3, :total_pieces_3, :total_sales_3, :total_revenue_3, 
   end
 
   def css_class ppo_value
-
     return "d0" if ppo_value.blank? #grey
-
     return "d1" if ppo_value < 0 #red
-
     return "d2" if ppo_value == 0 # blue
-
     return "d3" if ppo_value > 0 # green
-
-
-
+  end
+  
+  def productrevenue subtotal, shipping, pieces
+    totalrevenue = 0
+    totalrevenue += (subtotal.to_f * (pieces.to_f ||= 1) * 0.888889) || 0
+    totalrevenue += (shipping.to_f * (pieces.to_f ||= 1) * 0.98125) || 0
+    return totalrevenue
   end
 
+  def sim_transfer_order_revenue subtotal, shipping, pieces
+    total = 0
+    total += (subtotal.to_f * (pieces.to_f ||= 1)) || 0
+    total += (shipping.to_f * (pieces.to_f ||= 1)) || 0
+    return total * 0.764444444445
+  end
+
+  def transfer_order_dealer_price subtotal, shipping, pieces
+    total = 0
+    total += (subtotal.to_f * (pieces.to_f ||= 1)) || 0
+    total += (shipping.to_f * (pieces.to_f ||= 1)) || 0
+    return total * 0.88888888889
+  end 
 end

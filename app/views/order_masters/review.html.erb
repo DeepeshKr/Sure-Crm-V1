@@ -91,12 +91,17 @@
 <%= render "message_on_orders/pay_u" %>
 <%= render "payumoney_details/list" %>
 
+
+
+<%= render ('media/website_list') %>
+
  <div class="panel panel-primary">
   <div class="panel-heading">
     <h3 class="panel-title">Order in PPO Table</h3>
   </div>
   <%= render 'sales_ppos/sales_ppo_list' %>
 </div>
+
 
  <% if (current_user.employee_role.sortorder < 6) %>
 <div class="panel panel-primary">
@@ -109,4 +114,20 @@
  <%= render 'order_masters/all_dates' %>
  
   <%= render 'sales_ppos/recreate_ppo_for_order_id' %>
+<% end %>
+
+<% if current_user.role == 10022 %>
+	<div class="panel panel-primary">
+	 <div class="panel-heading">
+	   <h3 class="panel-title">Order Trail, how did the user work on the order</h3>
+	 </div>
+	 <%= render 'page_trails/list' %>
+	</div>
+	
+	<div class="panel panel-primary">
+	 <div class="panel-heading">
+	   <h3 class="panel-title">Interaction History, to check when the order was Disposed or if any tickets has been raised</h3>
+	 </div>
+	 <%= render 'interaction_masters/small_list' %>
+	</div>
 <% end %>

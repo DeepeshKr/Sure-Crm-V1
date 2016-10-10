@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160629105334) do
+ActiveRecord::Schema.define(version: 20160920060732) do
 
   create_table "address_types", force: :cascade do |t|
     t.string   "name"
@@ -49,6 +49,7 @@ ActiveRecord::Schema.define(version: 20160629105334) do
     t.integer  "display_level_id",       precision: 38
     t.datetime "created_at",                            null: false
     t.datetime "updated_at",                            null: false
+    t.string   "user_image"
   end
 
   create_table "app_feature_requests", force: :cascade do |t|
@@ -78,6 +79,7 @@ ActiveRecord::Schema.define(version: 20160629105334) do
     t.integer  "comment_count",              precision: 38
     t.datetime "created_at",                                null: false
     t.datetime "updated_at",                                null: false
+    t.string   "user_image"
   end
 
   add_index "app_feature_requests", ["actual_completion_date"], name: "i_app_fea_req_act_com_dat"
@@ -383,6 +385,44 @@ ActiveRecord::Schema.define(version: 20160629105334) do
     t.datetime "updated_at",                     null: false
   end
 
+  create_table "cust_details_track_logs", force: :cascade do |t|
+    t.integer  "cust_details_track_id", precision: 38
+    t.string   "name"
+    t.text     "description"
+    t.datetime "created_at",                           null: false
+    t.datetime "updated_at",                           null: false
+  end
+
+  add_index "cust_details_track_logs", ["cust_details_track_id"], name: "if88e44c584a16c852aa0173a4afab"
+
+  create_table "cust_details_tracks", force: :cascade do |t|
+    t.integer  "order_master_id",   precision: 38
+    t.integer  "order_ref_id",      precision: 38
+    t.datetime "order_date"
+    t.integer  "ext_ref_id",        precision: 38
+    t.integer  "custdetails",       precision: 38
+    t.integer  "vpp",               precision: 38
+    t.integer  "dealtran",          precision: 38
+    t.datetime "last_call_back_on"
+    t.integer  "no_of_attempts",    precision: 38
+    t.string   "mobile"
+    t.string   "alt_mobile"
+    t.text     "products"
+    t.string   "current_status"
+    t.datetime "created_at",                       null: false
+    t.datetime "updated_at",                       null: false
+  end
+ 
+  add_index "cust_details_tracks", ["alt_mobile"], name: "i_cus_det_tra_alt_mob"
+  add_index "cust_details_tracks", ["custdetails"], name: "i_cus_det_tra_cus"
+  add_index "cust_details_tracks", ["dealtran"], name: "i_cust_details_tracks_dealtran"
+  add_index "cust_details_tracks", ["ext_ref_id"], name: "i_cus_det_tra_ext_ref_id"
+  add_index "cust_details_tracks", ["last_call_back_on"], name: "i_cus_det_tra_las_cal_bac_on"
+  add_index "cust_details_tracks", ["mobile"], name: "i_cust_details_tracks_mobile"
+  add_index "cust_details_tracks", ["order_date"], name: "i_cus_det_tra_ord_dat"
+  add_index "cust_details_tracks", ["order_master_id"], name: "i_cus_det_tra_ord_mas_id"
+  add_index "cust_details_tracks", ["vpp"], name: "i_cust_details_tracks_vpp"
+
   create_table "customer_addresses", force: :cascade do |t|
     t.integer  "customer_id",   precision: 38
     t.string   "name"
@@ -416,69 +456,84 @@ ActiveRecord::Schema.define(version: 20160629105334) do
   end
 
   create_table "customer_order_lists", force: :cascade do |t|
-    t.integer  "ordernum",               precision: 38
+    t.integer  "ordernum",                precision: 38
     t.datetime "orderdate"
-    t.string   "title",      limit: 5
-    t.string   "fname",      limit: 30
-    t.string   "lname",      limit: 30
-    t.string   "add1",       limit: 30
-    t.string   "add2",       limit: 30
-    t.string   "add3",       limit: 30
-    t.string   "city",       limit: 20
-    t.integer  "pincode",                precision: 38
-    t.string   "tel1",       limit: 20
-    t.string   "tel2",       limit: 20
-    t.string   "fax",        limit: 20
-    t.string   "email",      limit: 30
-    t.string   "ccnumber",   limit: 16
-    t.string   "cvc",        limit: 5
-    t.string   "cardtype",   limit: 20
-    t.string   "expmonth",   limit: 2
-    t.string   "expyear",    limit: 4
-    t.string   "prod1",      limit: 10
-    t.integer  "qty1",                   precision: 38
-    t.string   "prod2",      limit: 10
-    t.integer  "qty2",                   precision: 38
-    t.string   "prod3",      limit: 10
-    t.integer  "qty3",                   precision: 38
-    t.string   "prod4",      limit: 10
-    t.integer  "qty4",                   precision: 38
-    t.string   "prod5",      limit: 10
-    t.integer  "qty5",                   precision: 38
-    t.string   "prod6",      limit: 10
-    t.integer  "qty6",                   precision: 38
-    t.string   "prod7",      limit: 10
-    t.integer  "qty7",                   precision: 38
-    t.string   "prod8",      limit: 10
-    t.integer  "qty8",                   precision: 38
-    t.string   "prod9",      limit: 10
-    t.integer  "qty9",                   precision: 38
-    t.string   "prod10",     limit: 10
-    t.integer  "qty10",                  precision: 38
-    t.string   "channel",    limit: 50
-    t.string   "state",      limit: 5
-    t.string   "username",   limit: 50
-    t.integer  "oper_no",                precision: 38
-    t.string   "recupd",     limit: 1
-    t.integer  "dt_hour",                precision: 38
-    t.integer  "dt_min",                 precision: 38
+    t.string   "title",       limit: 5
+    t.string   "fname",       limit: 30
+    t.string   "lname",       limit: 30
+    t.string   "add1",        limit: 30
+    t.string   "add2",        limit: 30
+    t.string   "add3",        limit: 30
+    t.string   "city",        limit: 20
+    t.integer  "pincode",                 precision: 38
+    t.string   "tel1",        limit: 20
+    t.string   "tel2",        limit: 20
+    t.string   "fax",         limit: 20
+    t.string   "email",       limit: 30
+    t.string   "ccnumber",    limit: 16
+    t.string   "cvc",         limit: 5
+    t.string   "cardtype",    limit: 20
+    t.string   "expmonth",    limit: 2
+    t.string   "expyear",     limit: 4
+    t.string   "prod1",       limit: 10
+    t.integer  "qty1",                    precision: 38
+    t.string   "prod2",       limit: 10
+    t.integer  "qty2",                    precision: 38
+    t.string   "prod3",       limit: 10
+    t.integer  "qty3",                    precision: 38
+    t.string   "prod4",       limit: 10
+    t.integer  "qty4",                    precision: 38
+    t.string   "prod5",       limit: 10
+    t.integer  "qty5",                    precision: 38
+    t.string   "prod6",       limit: 10
+    t.integer  "qty6",                    precision: 38
+    t.string   "prod7",       limit: 10
+    t.integer  "qty7",                    precision: 38
+    t.string   "prod8",       limit: 10
+    t.integer  "qty8",                    precision: 38
+    t.string   "prod9",       limit: 10
+    t.integer  "qty9",                    precision: 38
+    t.string   "prod10",      limit: 10
+    t.integer  "qty10",                   precision: 38
+    t.string   "channel",     limit: 50
+    t.string   "state",       limit: 5
+    t.string   "username",    limit: 50
+    t.integer  "oper_no",                 precision: 38
+    t.string   "recupd",      limit: 1
+    t.integer  "dt_hour",                 precision: 38
+    t.integer  "dt_min",                  precision: 38
     t.datetime "birthdate"
-    t.string   "mstate",     limit: 50
-    t.integer  "people",                 precision: 38
-    t.integer  "cards",                  precision: 38
-    t.string   "carddisc",   limit: 50
-    t.string   "recfile",    limit: 100
-    t.string   "ipadd",      limit: 50
-    t.string   "dnis",       limit: 50
-    t.string   "landmark",   limit: 50
-    t.string   "chqdisc",    limit: 50
-    t.integer  "totalamt",               precision: 38
+    t.string   "mstate",      limit: 50
+    t.integer  "people",                  precision: 38
+    t.integer  "cards",                   precision: 38
+    t.string   "carddisc",    limit: 50
+    t.string   "recfile",     limit: 100
+    t.string   "ipadd",       limit: 50
+    t.string   "dnis",        limit: 50
+    t.string   "landmark",    limit: 50
+    t.string   "chqdisc",     limit: 50
+    t.integer  "totalamt",                precision: 38
     t.datetime "trandate"
-    t.string   "uae_status", limit: 50
-    t.string   "emischeme",  limit: 50
-    t.datetime "created_at",                            null: false
-    t.datetime "updated_at",                            null: false
+    t.string   "uae_status",  limit: 50
+    t.string   "emischeme",   limit: 50
+    t.datetime "created_at",                             null: false
+    t.datetime "updated_at",                             null: false
+    t.integer  "order_id",                precision: 38
+    t.string   "dept_master"
+    t.string   "state_code"
+    t.datetime "in_date"
   end
+
+  add_index "customer_order_lists", ["city"], name: "i_customer_order_lists_city"
+  add_index "customer_order_lists", ["dept_master"], name: "i_cus_ord_lis_dep_mas"
+  add_index "customer_order_lists", ["order_id"], name: "i_cus_ord_lis_ord_id"
+  add_index "customer_order_lists", ["ordernum"], name: "i_cus_ord_lis_ord"
+  add_index "customer_order_lists", ["pincode"], name: "i_customer_order_lists_pincode"
+  add_index "customer_order_lists", ["prod1"], name: "i_customer_order_lists_prod1"
+  add_index "customer_order_lists", ["state"], name: "i_customer_order_lists_state"
+  add_index "customer_order_lists", ["state_code"], name: "i_cus_ord_lis_sta_cod"
+  add_index "customer_order_lists", ["tel1"], name: "i_customer_order_lists_tel1"
+  add_index "customer_order_lists", ["tel2"], name: "i_customer_order_lists_tel2"
 
   create_table "customers", force: :cascade do |t|
     t.string   "salute"
@@ -698,6 +753,7 @@ ActiveRecord::Schema.define(version: 20160629105334) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "reportingto",                    precision: 38
+    t.string   "pic"
   end
 
   create_table "employment_types", force: :cascade do |t|
@@ -831,7 +887,14 @@ ActiveRecord::Schema.define(version: 20160629105334) do
     t.datetime "updated_at",     null: false
   end
 
+  add_index "india_pincode_lists", ["circlename"], name: "i_ind_pin_lis_cir"
+  add_index "india_pincode_lists", ["districtname"], name: "i_ind_pin_lis_dis"
+  add_index "india_pincode_lists", ["divisionname"], name: "i_ind_pin_lis_div"
+  add_index "india_pincode_lists", ["officename"], name: "i_ind_pin_lis_off"
   add_index "india_pincode_lists", ["pincode"], name: "i_india_pincode_lists_pincode"
+  add_index "india_pincode_lists", ["regionname"], name: "i_ind_pin_lis_reg"
+  add_index "india_pincode_lists", ["statename"], name: "i_ind_pin_lis_sta"
+  add_index "india_pincode_lists", ["taluk"], name: "i_india_pincode_lists_taluk"
 
   create_table "interaction_categories", force: :cascade do |t|
     t.string   "name"
@@ -1269,7 +1332,13 @@ ActiveRecord::Schema.define(version: 20160629105334) do
     t.integer  "duration_secs", precision: 38
     t.datetime "created_at",                   null: false
     t.datetime "updated_at",                   null: false
+    t.text     "params"
+    t.text     "description"
   end
+
+  add_index "page_trails", ["employee_id"], name: "i_page_trails_employee_id"
+  add_index "page_trails", ["name"], name: "index_page_trails_on_name"
+  add_index "page_trails", ["order_id"], name: "index_page_trails_on_order_id"
 
   create_table "payumoney_details", force: :cascade do |t|
     t.integer  "paymentId",             precision: 38
@@ -1370,15 +1439,16 @@ ActiveRecord::Schema.define(version: 20160629105334) do
   end
 
   create_table "product_lists", force: :cascade do |t|
-    t.integer  "product_variant_id",   precision: 38
-    t.integer  "product_spec_list_id", precision: 38
+    t.integer  "product_variant_id",               precision: 38
+    t.integer  "product_spec_list_id",             precision: 38
     t.string   "extproductcode"
     t.string   "list_barcode"
-    t.datetime "created_at",                          null: false
-    t.datetime "updated_at",                          null: false
-    t.integer  "active_status_id",     precision: 38
+    t.datetime "created_at",                                      null: false
+    t.datetime "updated_at",                                      null: false
+    t.integer  "active_status_id",                 precision: 38
     t.string   "name"
-    t.integer  "product_master_id",    precision: 38
+    t.integer  "product_master_id",                precision: 38
+    t.boolean  "replace_main_product", limit: nil
   end
 
   add_index "product_lists", ["extproductcode"], name: "i_product_lists_extproductcode"
@@ -1398,6 +1468,26 @@ ActiveRecord::Schema.define(version: 20160629105334) do
     t.integer  "sort_order",            precision: 38
     t.integer  "replace_by_product_id", precision: 38
   end
+
+  create_table "product_master_images", force: :cascade do |t|
+    t.string   "name"
+    t.text     "description"
+    t.integer  "sort_order",         precision: 38
+    t.integer  "product_master_id",  precision: 38
+    t.string   "prod"
+    t.string   "barcode"
+    t.integer  "product_variant_id", precision: 38
+    t.integer  "product_list_id",    precision: 38
+    t.datetime "created_at",                        null: false
+    t.datetime "updated_at",                        null: false
+  end
+
+  add_index "product_master_images", ["barcode"], name: "i_pro_mas_ima_bar"
+  add_index "product_master_images", ["name"], name: "i_product_master_images_name"
+  add_index "product_master_images", ["prod"], name: "i_product_master_images_prod"
+  add_index "product_master_images", ["product_list_id"], name: "i_pro_mas_ima_pro_lis_id"
+  add_index "product_master_images", ["product_master_id"], name: "i_pro_mas_ima_pro_mas_id"
+  add_index "product_master_images", ["product_variant_id"], name: "i_pro_mas_ima_pro_var_id"
 
   create_table "product_master_ons", force: :cascade do |t|
     t.integer  "product_master_id", precision: 38
@@ -1658,6 +1748,21 @@ ActiveRecord::Schema.define(version: 20160629105334) do
     t.datetime "updated_at",                 null: false
   end
 
+  create_table "regusers", id: false, force: :cascade do |t|
+    t.decimal "userid",                                null: false
+    t.string  "username",   limit: 100
+    t.string  "password",   limit: 100
+    t.string  "channel",    limit: 50
+    t.string  "dept",       limit: 50
+    t.integer "commission", limit: 18,  precision: 18
+    t.string  "media",      limit: 1
+    t.string  "cdm",        limit: 50
+    t.string  "telnum",     limit: 50
+    t.string  "upd",        limit: 1
+    t.string  "city",       limit: 50
+    t.string  "district",   limit: 50
+  end
+
   create_table "return_rates", force: :cascade do |t|
     t.string   "name"
     t.integer  "sort_order",         precision: 38
@@ -1706,6 +1811,19 @@ ActiveRecord::Schema.define(version: 20160629105334) do
     t.text     "description"
     t.datetime "created_at",                          null: false
     t.datetime "updated_at",                          null: false
+  end
+
+  create_table "sales_ppo_email_alerts", force: :cascade do |t|
+    t.string   "email_id"
+    t.datetime "last_delivered_on"
+    t.datetime "created_at",        null: false
+    t.datetime "updated_at",        null: false
+  end
+
+  create_table "sales_ppo_product_alerts", force: :cascade do |t|
+    t.integer  "product_list_id", precision: 38
+    t.datetime "created_at",                     null: false
+    t.datetime "updated_at",                     null: false
   end
 
   create_table "sales_ppos", force: :cascade do |t|
@@ -2057,4 +2175,5 @@ ActiveRecord::Schema.define(version: 20160629105334) do
     t.integer  "convcharges",     precision: 38
   end
 
+  add_foreign_key "cust_details_tracks", "order_masters"
 end
