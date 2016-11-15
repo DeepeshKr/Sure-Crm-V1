@@ -1,0 +1,51 @@
+<!--  if @go_live == true % -->
+<div class="panel panel-danger">
+  <div class="panel-body">
+	<div class="row">
+	  	<%= form_tag  url_for(:controller => "pending_orders", :action => "generate_order_for_order_id"), method: "post" do  %>
+		  	<div class="col-xs-2">
+				<%= text_field_tag(:order_id, @order_id, :class => "form-control", :required => "true", :placeholder =>"Order Ref Id" )   %>
+			</div>
+	      	<div class="col-xs-1">
+	        	<%= submit_tag "Go", name: nil, class: "btn btn-danger" %>
+	      	</div>
+	  	<% end %>
+	  
+	  	<%= form_tag  url_for(:controller => "pending_orders", :action => "generate_order_for_order_no"), method: "post" do  %>
+	  	<div class="col-xs-2">
+			<%= text_field_tag(:order_no, @order_no, :class => "form-control", :required => "true", :placeholder =>"Order Ref No" )   %>
+		</div>
+      	<div class="col-xs-1">
+        	<%= submit_tag "Go", name: nil, class: "btn btn-danger" %>
+      	</div>
+	  	<% end %>
+	  
+	  	<%= form_tag  url_for(:controller => "pending_orders", :action => "generate_orders"), method: "post" do  %>
+      	<div class="col-xs-4">
+        	<div class="input-daterange input-group">
+          <%= text_field_tag(:from_date, @from_date.strftime("%Y-%m-%d"), :data => {:provide => "datepicker"}, :id => "datepicker_from_post", :class => "form-control", :required => "true" )   %>
+          <span class="input-group-addon">to</span>
+
+           <%= text_field_tag(:to_date, @to_date.strftime("%Y-%m-%d"), :data => {:provide => "datepicker"}, :id => "datepicker_to_post", :class => "form-control", :required => "true" )   %>
+
+        	</div>
+      	</div>
+
+      	<div class="col-xs-2">
+        	<%= submit_tag "Generate", name: nil, class: "btn btn-warning" %>
+      	</div>
+	  	<% end %>
+	</div>
+  </div>
+   <div class="panel-footer">
+	   Please use small date range to generate the pending orders. The sms would be queued for customers who have opted for COD option during the date range. The order ref id and order no are based on single order only
+   
+   <!-- = link_to ' page', @return_url, class: "btn btn-info btn-xs" -->
+   </div>
+</div>
+<!-- % end % -->
+
+<script>
+$('#datepicker_to_post').datepicker({format: 'yyyy-mm-dd'});
+$('#datepicker_from_post').datepicker({format: 'yyyy-mm-dd'});
+</script>

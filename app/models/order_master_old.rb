@@ -1,34 +1,35 @@
-class OrderMasterOld < ActiveRecord::Base
-  attr_accessor :grand_total
-  belongs_to :campaign_playlist, foreign_key: "campaign_playlist_id"
-  belongs_to :employee, foreign_key: "employee_id"
-  belongs_to :order_source
-  belongs_to :order_status_master, foreign_key: "order_status_master_id" #, polymorphic: true
-  belongs_to :order_source
-  belongs_to :orderpaymentmode,  foreign_key: "orderpaymentmode_id"
-  belongs_to :customer, foreign_key: "customer_id" #, polymorphic: true
-  belongs_to :customer_address, foreign_key: "customer_address_id" #, polymorphic: true
-  belongs_to :medium, foreign_key: "media_id"
-  belongs_to :promotion, foreign_key: "promotion_id"
-  belongs_to :order_final_status, foreign_key: "order_final_status_id"
-  belongs_to :order_list_mile, foreign_key: "order_last_mile_id"
-
-  has_many :interaction_master, foreign_key: "orderid"
-  has_many :page_trail, foreign_key: "order_id"
-  has_many :order_line, foreign_key: "orderid", :dependent => :destroy
-  has_many :sales_ppo, foreign_key: "order_id"
-  has_many :payumoney_detail, foreign_key: "orderid"
- 
-  accepts_nested_attributes_for :order_line,  :allow_destroy => true
-
-  validates_presence_of :calledno , :mobile
-
-  validates_associated :order_line
+class OrderMasterOld #< ActiveRecord::Base
+  # attr_accessor :grand_total
+#   belongs_to :campaign_playlist, foreign_key: "campaign_playlist_id"
+#   belongs_to :employee, foreign_key: "employee_id"
+#   belongs_to :order_source
+#   belongs_to :order_status_master, foreign_key: "order_status_master_id" #, polymorphic: true
+#   belongs_to :order_source
+#   belongs_to :orderpaymentmode,  foreign_key: "orderpaymentmode_id"
+#   belongs_to :customer, foreign_key: "customer_id" #, polymorphic: true
+#   belongs_to :customer_address, foreign_key: "customer_address_id" #, polymorphic: true
+#   belongs_to :medium, foreign_key: "media_id"
+#   belongs_to :promotion, foreign_key: "promotion_id"
+#   belongs_to :order_final_status, foreign_key: "order_final_status_id"
+#   belongs_to :order_list_mile, foreign_key: "order_last_mile_id"
+#
+#   has_many :interaction_master, foreign_key: "orderid"
+#   has_many :page_trail, foreign_key: "order_id"
+#   has_many :order_line, foreign_key: "orderid", :dependent => :destroy
+#   has_many :sales_ppo, foreign_key: "order_id"
+#   has_many :payumoney_detail, foreign_key: "orderid"
+#
+#   accepts_nested_attributes_for :order_line,  :allow_destroy => true
+#
+#   validates_presence_of :calledno , :mobile
+#
+#   validates_associated :order_line
 
   #external order
   #order_for_id - Integer update with customer order id
   #external_order_no - string update with customer order id
-
+  
+  # after_destroy :updateOrder
 
   def fullname
       self.customer.fullname if self.customer.present?
@@ -599,7 +600,7 @@ class OrderMasterOld < ActiveRecord::Base
 
   end
 
-after_destroy :updateOrder
+
 
 def no_order_master(attributes)
   attributes[:id].blank?

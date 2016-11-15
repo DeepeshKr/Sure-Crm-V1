@@ -23,7 +23,7 @@
 	<% end%>
       <tr>
         <td><%= app_feature_comment.app_comment_type.name %></td>
-        <td><%= app_feature_comment.details %></td>
+        <td><%= simple_format h(app_feature_comment.details) %></td>
         <td><%= app_feature_comment.employee.fullname %></td>
         <td><%= app_feature_comment.created_at.strftime('%d-%b-%y') %></td>
 		

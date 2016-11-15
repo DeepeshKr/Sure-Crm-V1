@@ -200,6 +200,7 @@ class ProductCostMastersController < ApplicationController
         :royalty, :cost_of_return, :call_centre_commission,
         :packaging_cost)
     end
+    
     def reset_prices
       product_cost_masters = ProductCostMaster.all
 
@@ -211,7 +212,8 @@ class ProductCostMastersController < ApplicationController
         pc.update(cost:cost, revenue:revenue)
       end
     end
- def update_all
+    
+    def update_all
       #update the entire list
     @ropmasters = ROPMASTER_NEW.all
     @ropmasters.each do |rop|
@@ -319,6 +321,7 @@ class ProductCostMastersController < ApplicationController
          end
       end
     end
+  
    # t.integer  "product_id",              limit: 16, precision: 38
    #  t.integer  "product_list_id",         limit: 16, precision: 38
    #  t.string   "prod"

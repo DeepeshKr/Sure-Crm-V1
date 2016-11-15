@@ -3,40 +3,73 @@
 <!-- set page title end -->
 <p id="notice"><%= notice %></p>
 <div class="row">
-<div class="col-xs-4">
-<h3>Help Menu</h3>
+<div class="col-xs-5">
+<h3><%= @showing_search %></h3>
 </div>
-<div class="col-xs-8">
+<div class="col-xs-7">
 <%= render 'search' %>
 </div>
 </div>
 
-
+<br>
+<div class="digg_pagination">
+    <%= will_paginate @help_files, :container => false %>
+</div>
+<br>
 <table class="table table-hover">
   <thead>
     <tr>
-      <th>Name</th>
-       <th>Description</th>
-       <th></th>
+		<th></th>
+      	<th>Name</th>
+       	<th>Description</th>
+       	<th></th>
     </tr>
   </thead>
 
   <tbody>
     <% @help_files.each do |help_file| %>
       <tr>
-        <td><%= help_file.name %> <br>
-          <%= link_to 'View', help_file.link, class:"btn btn-info btn-xs" %>
-        </td>
-        <td><%= help_file.description %></td>
-
-        <td><%= link_to 'Show', help_file %></td>
-
+		<td rowspan="2">	
+			<%= link_to image_tag( help_file.screen_shot.url, size: "100x80", alt: "No Image", border: 0), help_file.link, target: "_blank"  if !help_file.screen_shot.file.nil?  %> </td>   
+        <td rowspan="2"><strong><%= help_file.name.humanize %></strong></td>
+        <td><%= simple_format help_file.description %> </td>
+        <td><%= link_to 'Show Details', help_file, class:"btn btn-primary btn-sm" %></td>
       </tr>
+	  <tr> 
+		<td>TAG's: <small><%= help_file.tags %></small> | <small><small>Updated by: <%= help_file.employee.fullname if help_file.employee %></small></small></td>
+	  	<td><small><small>
+			<%= link_to "Visit Link", help_file.clickable_url(@host), 
+			target: "_blank", class:"btn btn-link" if help_file.clickable_url(@host).present? %>
+			</small></small></td>
+  	 </tr>
     <% end %>
   </tbody>
 </table>
-
+<br>
+<div class="digg_pagination">
+    <%= will_paginate @help_files, :container => false %>
+</div>
+<br>
 <br>
  <% if (current_user.employee_role.sortorder < 10) %>
 <%= link_to 'New Help file', new_help_file_path, class:"btn btn-primary" %>
 <% end %>
+
+<div class="row hide">
+<div class="col-xs-4"><p class="lead">Import Help File: </p></div>
+
+<div class="col-xs-8">
+
+  <div class="row">
+  <%= form_tag import_help_files_path, multipart: true do %>
+    <div class="col-xs-6 col-offset-xs-2">
+        <%= file_field_tag :file %>
+    </div>
+    <div class="col-xs-3">
+        <%= submit_tag "Import CSV", class: "btn btn-warning btn-sm" %>
+    </div>
+  <% end %>
+  </div>
+</div>
+
+</div>

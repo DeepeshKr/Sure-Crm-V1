@@ -1,62 +1,101 @@
-<%= render 'search' %>
-<p id="notice"><%= notice %></p>
+<%= bootstrap_form_for(@medium) do |f| %>
 
-<p>
-  <strong>Name:</strong>
-  <%= @medium.name %>
-</p>
+  <% if @change_name.present? %>
+	<div class="well well-sm">
+	  <%= @change_name %>
+	</div>
+  <% end %>
+	<div class="field">
+	     <%= f.text_field :name, label: "Name", required: true  %>
+	</div>
+  	<div class="field">
+     	<%= f.text_field :ref_name, label: "Reference Name - Please ensure it is unique", placeholder: "Unique general name of Channel", required: true %>
+  	</div>
+ <div class="row">
+    <div class="col-xs-2">
+    <%= f.text_field :dnis, placeholder: "dnis", required: true,  label: "4 digit dnis" %>
+    </div>
+  	<div class="col-xs-3">
+    <%= f.text_field :telephone, required: true,  label: "Incoming Telephone" %>
+  	</div>
+    <div class="col-xs-4">
+    <%= f.select(:state,
+        content_tag(:option,'All India',:value=>"")+options_from_collection_for_select(@statelist, :name, :name, @medium.state),
+        {:prompt => 'All India'}, :class => "form-control col-xs-1")  %>
+  	</div>
+  	<div class="col-xs-3">
 
-<p>
-  <strong>Telephone:</strong>
-  <%= @medium.telephone %>
-</p>
+    <%= f.text_field :alttelephone, label: "Alternate Telephone" %>
+  	</div>
+  </div>
+ <% if (current_user.employee_role.sortorder < 8) %>
+  <div class="row">
+  	<div class="col-xs-4 col-offset-xs-2">
+    <%= f.select(:media_commision_id,
+       options_from_collection_for_select(@media_commission, :id, :name, @medium.media_commision_id), {:prompt => 'None'}, :class => "form-control col-xs-1")  %>
+	</div>
+	<div class="col-xs-2">
+    <%= f.text_field :value, placeholder: "e.g. 0.20", label: "Operator Commission", within: 0...1 %>
+  	</div>
+  	<div class="col-xs-2">
+      <%= f.text_field :agent_comm, placeholder: "e.g. 0.20", label: "Agent Commission", within: 0...1 %>
+    </div>
+ 	<div class="col-xs-2">
+      <%= f.text_field :daily_charges, placeholder: "e.g. 200.20", label: "Daily Charges" %>
+     </div>
+      <div class="col-xs-2">
+        <%= f.text_field :paid_correction, placeholder: "e.g. 0.50", label: "Correction" %>
+        <small>Use this to correct the paid percent to realistic values</small>
+     </div>
+  </div>
+  <% end %>
+  
+   <div class="row">
+    <div class="col-xs-2">
+      <%= f.select(:media_group_id,
+        options_from_collection_for_select(@media_group, :id, :name, @medium.media_group_id),
+        {:prompt => 'None', include_blank: 'None'}, :class => "form-control col-xs-1")  %>
+    </div>
 
-<p>
-  <strong>Alttelephone:</strong>
-  <%= @medium.alttelephone %>
-</p>
-
-<p>
-  <strong>State:</strong>
-  <%= @medium.state %>
-</p>
-
-<p>
-  <strong>Active:</strong>
-  <%= @medium.active %>
-</p>
- <% if (current_user.employee_role.sortorder < 5) %> 
-<p>
-  <strong>Daily Charges:</strong>
-  <%= @medium.daily_charges %>
-</p>
-<p>
-  <strong>Shipped Correction:</strong>
-  <%= @medium.paid_correction %>
-</p>
+    <div class="col-xs-4">
+    <%= f.text_field :channel, placeholder: "Chanel", required: true, label: "Channel" %>
+    </div>
+    <div class="col-xs-1">
+    <%= f.text_field :slot, placeholder: "Slot", label: "Slot" %>
+    </div>
+      <div class="col-xs-2">
+          <%= f.number_field :corporateid, label: "Corporate Id", placeholder: "Ignore if you dont know" %>
+    </div>
+    <div class="col-xs-3">
+    <%= f.text_field :dept, placeholder: "Dept (for VPP)", required: true, label: "Dept (for VPP)" %>
+    </div>
+	
+  </div>
+<div class="field">
+ <%= f.select(:employee_id,
+    options_from_collection_for_select(@employees, :id, :name, selected: @medium.employee_id),
+        {:prompt => '-Select Managed by-', include_blank: '-Not managed by anyone-'} ,
+    {label: " Managed By"})  %>
+ </div>
+  <div class="field">
+    <%= f.text_area :description, label: "Description" %>
+  </div>
+  <div class="row">
+	<div class="col-xs-4 col-xs-offset-1">
+    	<%= f.check_box :active, label: "Active Media" %>
+	</div>
+  	<div class="col-xs-4 col-xs-offset-1">
+		
+  	</div>
+  	<div class="col-xs-2 ">
+	
+	</div>
+  </div>
 <% end %>
-<p>
-  <strong>Group:</strong>
-  <%=  @medium.media_group.name if @medium.media_group.present? %>
-</p>
-<p>
-  <strong>Commission:</strong>
-  <%=  @medium.media_commision.name if @medium.media_commision.present? %>
-  <%= @medium.value %>
-</p>
-<p>
-  <strong>Corporateid:</strong>
-  <%= @medium.corporateid %>
-</p>
 
-<p>
-  <strong>Description:</strong>
-  <%= @medium.description %>
-</p>
-
-<p>
-  <strong>BDM:</strong>
-  <%= @medium.employee.fullname ||= "NO BDM" if @medium.employee.present?  %>
-</p>
-<%= link_to 'Edit', edit_medium_path(@medium) %> |
-<%= link_to 'Back', media_path %>
+<div class="row">
+	<div class="col-xs-6 col-xs-offset-6">
+		<%= link_to 'Edit', edit_medium_path(@medium), class: "btn btn-primary btn-xs" %> |
+		<%= link_to 'Back', media_path, class: "btn btn-primary btn-xs" %>
+	</div>
+</div>

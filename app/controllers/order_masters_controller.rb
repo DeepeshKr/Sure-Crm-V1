@@ -402,10 +402,10 @@ class OrderMastersController < ApplicationController
     respond_with(@order_master)
   end
 
-  def destroy
-    @order_master.destroy
-    respond_with(@order_master)
-  end
+  # def destroy
+ #    @order_master.destroy
+ #    respond_with(@order_master)
+ #  end
 
   private
   def alldropdowns

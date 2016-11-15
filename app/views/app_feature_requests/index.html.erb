@@ -3,4 +3,27 @@
 <!-- set page title end -->
 <p id="notice"><%= notice %></p>
 
-<%= render partial: 'app_feature_requests/tab_index' %> 
+<div class="row">
+<div class="col-xs-5">
+<h3>Feature Requests / Bug Report</h3>
+</div>
+<div class="col-xs-7">
+<%= render 'search' %>
+</div>
+</div>
+
+<% if  @show_all_features == true %>
+	<%= render partial: 'app_feature_requests/tab_index' %> 
+
+<% elsif @show_all_features == false %>
+
+	<div class="row">
+		<div class="col-xs-12">
+			<%= render partial: 'home_index', :locals => {:name_of_status_list => "Search Results for #{@search}",
+				:app_feature_requests => @features_searched, 
+				:about_the_list => "If you have not found any results or relevant results for #{@search}, 
+				please raise a ticket for this query to be answered or bug to be fixed" }  %>
+		</div>
+	</div>
+	
+<% end %>

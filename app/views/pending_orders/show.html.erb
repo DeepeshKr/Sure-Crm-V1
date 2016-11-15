@@ -1,0 +1,49 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Order ref:</strong>
+  <%= @pending_order.order_ref_id %>
+</p>
+
+<p>
+  <strong>Order no:</strong>
+  <%= @pending_order.order_no %>
+</p>
+
+<p>
+  <strong>Order dispatch status:</strong>
+  <%= @pending_order.order_dispatch_status_id %>
+</p>
+
+<p>
+  <strong>Cod amount:</strong>
+  <%= @pending_order.cod_amount %>
+</p>
+
+<p>
+  <strong>Cod amount:</strong>
+  <%= @pending_order.cod_amount %>
+</p>
+
+<p>
+  <strong>Pay u amount:</strong>
+  <%= @pending_order.pay_u_amount %>
+</p>
+
+<p>
+  <strong>Pay u amount:</strong>
+  <%= @pending_order.pay_u_amount %>
+</p>
+
+<p>
+  <strong>Courier list:</strong>
+  <%= @pending_order.courier_list_id %>
+</p>
+
+<p>
+  <strong>Pay u status:</strong>
+  <%= @pending_order.pay_u_status_id %>
+</p>
+
+<%= link_to 'Edit', edit_pending_order_path(@pending_order) %> |
+<%= link_to 'Back', pending_orders_path %>

@@ -41,7 +41,26 @@ class MediaCostMastersController < ApplicationController
     @hbn_list = MediaCostMaster.where(media_id: 11200).order("str_hr, str_min")
     @pvt_channel = MediaCostMaster.where('media_id <> 11200').order("media_id, str_hr, str_min")
   end
+  
+  def hbn_cost_summary
+    @from_date = Date.current - 30.days #30.days
+    @to_date = Date.current
+    if params[:from_date].present?
+     
+      @from_date =  Date.strptime(params[:from_date], "%Y-%m-%d").beginning_of_day - 330.minutes
+      #@from_date = @from_date
+      @to_date = @from_date.end_of_day - 330.minutes
+     
+      if params.has_key?(:to_date)
+        @to_date =  Date.strptime(params[:to_date], "%Y-%m-%d").end_of_day - 330.minutes
+      end
 
+      @to_date = @to_date
+    end
+    
+    @hbn_cost_list = MediaCostMaster.calculate_average_cost(@from_date, @to_date)
+  end
+  
   def get_costs
     @begin_hr = params[:begin_hr]
     @begin_min = params[:begin_min]
@@ -53,10 +72,10 @@ class MediaCostMastersController < ApplicationController
     return if @begin_min.blank?
     return if @begin_sec.blank?
     return if @total_secs.blank?
+    
 
-
-    media_cost = MediaCostMaster.new
-    @media_cost =  media_cost.show_cost_of_playlist @begin_hr.to_i, @begin_min.to_i, @begin_sec.to_i, @total_secs.to_i
+    media_cost_check = MediaCostMaster.new
+    @media_cost =  media_cost_check.show_cost_of_playlist @begin_hr.to_i, @begin_min.to_i, @begin_sec.to_i, @total_secs.to_i
 
     #attr_accessor :loops, :cost_details, :cost_cal_per_sec, :secs_used, :secs_bal, :loop_cost
 
@@ -188,24 +207,27 @@ class MediaCostMastersController < ApplicationController
     end
     return "Total Cost Master for HBN is now divided by #{hbn_media_cost}"
   end
-    def set_media_cost_master
+  
+  def set_media_cost_master
       @media_cost_master = MediaCostMaster.find(params[:id])
+  end
+  
+  def dropdown
+    #.where(media_group_id: 10000)
+    if params.has_key?(:media_id)
+     @pvtmedialist = Medium.where('id = ?',  params[:media_id])
+    else
+     @pvtmedialist = Medium.where('media_commision_id = ?',  10000).where('media_group_id IS NULL or media_group_id <> 10000').order('name')
     end
-     def dropdown
-      #.where(media_group_id: 10000)
-      if params.has_key?(:media_id)
-       @pvtmedialist = Medium.where('id = ?',  params[:media_id])
-      else
-       @pvtmedialist = Medium.where('media_commision_id = ?',  10000).where('media_group_id IS NULL or media_group_id <> 10000').order('name')
-      end
 
-        @hbnmedialist = Medium.where('media_commision_id = ?',  10000).where('id = 11200').order('name')
-     #@medialist = Medium.where('media_commision_id = ? AND (media_group_id <> ? OR media_group_id IS NULL)',10000,  10000).order('name')
-    end
-    def media_cost_master_params
+      @hbnmedialist = Medium.where('media_commision_id = ?',  10000).where('id = 11200').order('name')
+   #@medialist = Medium.where('media_commision_id = ? AND (media_group_id <> ? OR media_group_id IS NULL)',10000,  10000).order('name')
+  end
+    
+  def media_cost_master_params
       params.require(:media_cost_master).permit(:name, :duration_secs,
         :total_cost, :media_id, :str_hr, :str_min,
          :str_sec, :end_hr, :end_min, :end_sec,
          :description, :slot_percent)
-    end
+  end
 end

@@ -229,6 +229,8 @@ class CampaignPlaylistsController < ApplicationController
    campaign_name = params[:playlist_name]
    for_date = params[:for_date]
    #for_date = for_date.strptime('%m/%d/%Y')
+   
+    campaignid = params[:campaignid]
     campaignid = campaign_playlist_params[:campaignid]
 
     media_tapes = MediaTape.find(campaign_playlist_params[:tape_id])
@@ -382,7 +384,7 @@ class CampaignPlaylistsController < ApplicationController
             #ref name is combination of media tape head and media tape name
             ref_name = MediaTapeHead.find(media_tape_head_id).name
 
-
+            byebug
               campaign_time = CampaignTime.new
 
               campaign_time.start_hour = begin_hr

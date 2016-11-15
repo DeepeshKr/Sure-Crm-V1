@@ -223,7 +223,103 @@ class SalesReportController < ApplicationController
           end
         end
   end
+  
+  def gender_report  
+     @sno = 1
+     use_from_to_date 0
+     if @from_date == nil
+       return
+     end
+     males = ["Mr"]
+     females = ["Mrs", "Ms"]
+     @from_date = (@from_date + 330.minutes).strftime("%Y-%m-%d")
+     @to_date = (@to_date + 330.minutes).strftime("%Y-%m-%d")
+     
+     #byebug
+      (@from_date).upto(@to_date).each do |for_date|
+        
+        
+      # order_masters = OrderMaster.where('orderdate >= ? AND orderdate <= ?', @from_date, @to_date)
+      # .where('ORDER_STATUS_MASTER_ID > 10000')
+      # .where.not(ORDER_STATUS_MASTER_ID: @cancelled_status_id)
+     
+    
+      @employeeorderlist ||= []
 
+      #order_masters.each do |ord|
+        @num = 0
+        amount = 0
+        # orderlist = OrderMaster.where('ORDER_STATUS_MASTER_ID > 10002')
+        # .where('orderdate >= ? AND orderdate <= ?', @from_date, @to_date).where(employee_id: e)
+        # timetaken = orderlist.sum(:codcharges)
+        reverse_vat_rate = TaxRate.find(10001)
+        rate_charge = reverse_vat_rate.reverse_rate ||= 0.8888889
+          
+         order_master_calculations = OrderMaster.where('TRUNC(orderdate) = ?', for_date)
+         .where('ORDER_STATUS_MASTER_ID > 10000')
+         .where.not(ORDER_STATUS_MASTER_ID: @cancelled_status_id)
+         
+         order_nos = order_master_calculations.count(:id)
+         order_value = (order_master_calculations.sum(:subtotal) * rate_charge).round(2)
+         
+         male_customer_nos = order_master_calculations.joins(:customer)
+         .where("customers.salute in (?)", males).count(:id)
+         male_customer_value = (order_master_calculations.joins(:customer)
+         .where("customers.salute in (?)", males).sum(:subtotal) * rate_charge).round(2)
+         
+         female_customer_nos = order_master_calculations.joins(:customer)
+         .where("customers.salute in (?)", females).count(:id)
+         female_customer_value = (order_master_calculations.joins(:customer)
+         .where("customers.salute in (?)", females).sum(:subtotal) * rate_charge).round(2)
+         
+         male_caller_nos = order_master_calculations.where(gender: "Male").count(:id)
+         male_caller_value = (order_master_calculations.where(gender: "Male").sum(:subtotal) * rate_charge).round(2)
+         
+         female_caller_nos = order_master_calculations.where(gender: "Female").count(:id)
+         female_caller_value = (order_master_calculations.where(gender: "Female").sum(:subtotal) * rate_charge).round(2)
+         
+         #gender
+        #  # order_master_calculations.each do |orc|
+# #            if reverse_vat_rate.present?
+# #
+# #              amount += orc.subtotal * rate_charge
+# #
+# #            end
+# #            @num += 1
+# #         end
+#
+#         amount = amount.round(2)
+
+# (for_date).strftime("%Y-%m-%d")
+          @employeeorderlist << {
+            :for_date => for_date,
+            :male_customer_nos => male_customer_nos,
+            :male_customer_value => male_customer_value,
+            :female_customer_nos => female_customer_nos,
+            :female_customer_value => female_customer_value,
+            :male_caller_nos => male_caller_nos,
+            :male_caller_value => male_caller_value,
+            :female_caller_nos => female_caller_nos,
+            :female_caller_value => female_caller_value,
+            :total_nos => order_nos,
+            :total_value => order_value}
+
+          end
+
+      #this is for date on the view
+        
+        #@employeeorderlist = employeeunorderlist #.sort_by{|c| c[:total]}.reverse
+
+        respond_to do |format|
+        csv_file_name = "gender_sales_#{@from_date}_#{@to_date}.csv"
+          format.html
+          format.csv do
+            headers['Content-Disposition'] = "attachment; filename=\"#{csv_file_name}\""
+            headers['Content-Type'] ||= 'text/csv'
+          end
+        end
+  end
+  
   def cdm_report
     @media_manager = Employee.where(:employee_role_id => 10121).order("first_name")
      @sno = 1
@@ -1022,101 +1118,6 @@ class SalesReportController < ApplicationController
         end
 
     end
-  end
-  
-  def disposition_report
-    if params[:from_date].present?
-      #@summary ||= []
-      @or_for_date = params[:from_date]
-      for_date =  Date.strptime(params[:from_date], "%Y-%m-%d")
-      @from_date = for_date.beginning_of_day - 330.minutes  
-      @to_date = for_date.end_of_day - 330.minutes
-
-      if params.has_key?(:to_date)
-        @to_date =  Date.strptime(params[:to_date], "%Y-%m-%d")
-        @to_date = @to_date.end_of_day - 330.minutes
-      end
-      @to_date = @to_date.end_of_day - 330.minutes
-    end
-    
-    if @from_date == nil
-      @from_date = (Date.current + 330.minutes).strftime("%Y-%m-%d")
-      @to_date = (Date.current + 330.minutes).strftime("%Y-%m-%d")
-      return
-    end
-    
-    interaction_masters = InteractionMaster.where('created_at >= ? AND created_at <= ?', @from_date, @to_date).order(:created_at)
-    
-    @sno = 1
-      employeeunorderlist ||= []
-      
-      num = 1
-      ######
-      #######
-      interaction_masters.each do |inm|
-        product_list = "" # ||= []
-        customer_name = inm.customer.fullname || "NA" if inm.customer
-        name = Employee.find(inm.employee_id).first_name || "NA" if inm.employee_id.present?
-        products = ""
-        order_time = "NA"
-        order_id = inm.orderid if inm.orderid
-            #cats.each do |cat| cat.name end
-      if inm.orderid.present?
-
-        order_masters = OrderMaster.find(inm.orderid)
-        city = order_masters.city ||= "NA"
-        total = order_masters.g_total
-        channel = Medium.find(order_masters.media_id).name ||= "NA" if order_masters.media_id
-    
-        @add_on_replacements = ProductMasterAddOn.where("activeid = 10000 AND replace_by_product_id IS NOT NULL").pluck(:product_list_id)
-           
-        
-        if order_masters.order_line.present?
-          #@order_lines_regular =  order_masters.order_line
-          @order_lines_regular = OrderLine.where(orderid: inm.orderid).joins(:product_variant)
-                        .where('PRODUCT_VARIANTS.product_sell_type_id = ? OR PRODUCT_LIST_ID in (?)', 10000, @add_on_replacements)
-          @order_lines_regular.each do |ord|
-            product_list << ord.product_list.extproductcode
-          end
-        end
-        
-        product_list = product_list.gsub(/\s+/, '') if !product_list.nil?
-        product_list = product_list.gsub(/&quot;/, '') if !product_list.nil?
-        order_time = (order_masters.created_at + 330.minutes).strftime("%Y-%m-%d %H:%M")
-      end
-        
-          employeeunorderlist << {:total => total,
-          :sno => num,
-          :employee => name,
-          :mobile => inm.mobile,
-          :customer => customer_name,
-          :order_time => (inm.created_at + 330.minutes).strftime("%H:%M %p"),
-          :on_date =>  (inm.created_at + 330.minutes).strftime("%Y-%m-%d"),
-          :products => product_list,
-          :city => city,
-          :order_id => order_id,
-          :channel => channel,
-          :disposition => inm.interaction_category.name,
-          :no_of =>  num}
-           num += 1
-      end # end loop
-   
-    @from_date = (@from_date + 330.minutes).strftime("%Y-%m-%d")
-    @to_date = (@to_date + 330.minutes).strftime("%Y-%m-%d")
-    
-    @orderdate = "Disposition between #{@from_date} and #{@to_date} found #{interaction_masters.count} records!"
-       #
-   @employeeorderlist = employeeunorderlist
-    respond_to do |format|
-      csv_file_name = "disposition_report_#{@from_date}_to_#{@to_date}.csv"
-        format.html
-        format.csv do
-          headers['Content-Disposition'] = "attachment; filename=\"#{csv_file_name}\""
-          headers['Content-Type'] ||= 'text/csv'
-        end
-    end #end csv
-  
-
   end
 
   def open_orders
@@ -2109,12 +2110,53 @@ class SalesReportController < ApplicationController
      end
   end
 
-  def product
-       @sno = 1
-       showproducts
-       @btn1 = "btn btn-default"
-       @btn2 = "btn btn-default"
-       @btn3 = "btn btn-default"
+  
+  def birthday_list
+    @months = [['-', '']]
+    (1..12).each {|m| @months << [Date::MONTHNAMES[m], m]}
+    
+    @sno = 0
+    @ordersearch = "No birthday's for the period / day"
+     if params.has_key?(:month)
+       @month = params[:month]
+      @month_name = Date::MONTHNAMES[@month.to_i]
+     end
+     if params.has_key?(:day)
+       @day = params[:day]
+     end
+     if @month == nil || @day == "nil"
+       @ordersearch = "Please select a month and day for birthday's for the period / day"
+       return
+     end
+    
+    @customer_list ||= []
+  
+    customer_birthday_list = Customer.where("extract(month from date_of_birth) = ? AND extract(day from date_of_birth) = ?", @month, @day )
+    
+    # Date.today.strftime('%m'), Date.today.strftime('%d')
+    # u = User.where("extract(month from date_of_birth) = ? AND extract(day from date_of_birth) = ?", Date.today.strftime('%m'), Date.today.strftime('%d'))
+    # order = OrderMaster.where("extract(month from orderdate) = ?", 12).pluck(:id)
+    # order = OrderMaster.where("MONTH(orderdate) = 12") orderdate
+    # EXTRACT(month FROM order_date)
+    # Model.where("YEAR(date_column) = 2012")
+    # Model.where("DAY(date_column) = 24")
+ 
+    customer_birthday_list.each do |o|
+      @customer_list << {:birth_date =>  ((o.date_of_birth).strftime('%d-%b-%Y') if o.date_of_birth.present?),
+      :customer => o.fullname,
+      :phone => "#{o.mobile} | #{o.alt_mobile}",
+      :emailid => "#{o.emailid} | #{o.alt_emailid}"}
+    end
+
+    respond_to do |format|
+      csv_file_name = "customer_birthdays_for_#{@month}_and#{@day}.csv"
+        format.html
+        format.csv do
+          headers['Content-Disposition'] = "attachment; filename=\"#{csv_file_name}\""
+          headers['Content-Type'] ||= 'text/csv'
+        end
+    end
+
   end
   
   def channel_group_product_sold

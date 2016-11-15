@@ -1,37 +1,51 @@
 Rails.application.routes.draw do
+  
+ 
+  devise_for :logins
+  #root             'product#home'
+  root 'project#home'
+  get 'oldhelp'    => 'project#help'
+  get 'log'    => 'project#help'
+  get 'oldabout'   => 'product#about'
+  get 'oldcontact' => 'product#contact'
+   get 'project/longtable'
 
+  get 'dealers' => 'address_dealer#list'
 
-  resources :cust_details_track_logs
-  resources :cust_details_tracks
-  resources :sales_ppo_product_alerts
-  resources :sales_ppo_email_alerts
-  resources :product_master_images
+ # get 'help'    => 'project#help'
+  get 'about'   => 'project#about'
+  get 'contact' => 'project#contact'
+  #get 'dropdown' => 'project#dropdown'
+  #get "project/update_text", as: "update_text"
+  get "productdetails" => 'product_masters#details'
+  get "producttraining" => 'product_training_manuals#training'
+  get "producttraining_text" => 'product_training_manuals#training_text'
+  get "productvariantdetails" => 'product_variants#details'
+  get "productvariantcombined" => 'product_variants#combined'
+  post "updatevariantmaster" => 'product_variants#update_variant_master_id'
+  get "mediatapesforproducts" => 'media_tapes#productwise'
+  get "mediatapesdetails" => 'media_tapes#tape_details'
+  get "addonproductlist" => 'media_tapes#product_lists'
+  get "addonproductlist" => 'product_master_add_ons#product_lists'
+  # addonproducts
+  # get "creditcard" => 'project#luhn'
+
+  get 'signup'  => 'users#new'
+  get    'login'   => 'sessions#new'
+  post   'login'   => 'sessions#create'
+  delete 'logout'  => 'sessions#destroy'
+  
   get 'employee_incentives/index'
   get 'employee_incentives/search'
   get 'employee_incentives/details'
 
-  resources :payumoney_statuses
-  resources :app_comment_display_levels
-  resources :app_comment_types
-  resources :app_feature_comments
-  resources :app_priorities
-  resources :app_statuses
-  resources :app_velocities
-  resources :app_user_satisfaction_levels
-  resources :app_feature_types
-  resources :app_lists
-  resources :app_feature_requests
-  resources :campaign_playlist_to_products
-  resources :sales_ppo_defaults
-  
+  # get sales report team
   get 'sales_reports_team' => 'sales_report_team#index'
   get 'sales_report_team/show_wise'
- 
   get 'sales_report_team_show_wise' => 'sales_report_team#show_wise'
   get 'sales_report_team/agent_order'
   get 'sales_report_team_agent_order_list' => 'sales_report_team#agent_order_list'
   get 'sales_report_team/agent_order_list'
-  
   get 'pay_u_orders_sales_report_team' => 'sales_report_team#pay_u_orders'
   get 'sales_report_team/products_sold'
   get 'products_sold_sales_report_team' => 'sales_report_team#products_sold'
@@ -40,6 +54,11 @@ Rails.application.routes.draw do
   get 'sales_report_team/agent_common_upsell_order'
   get 'agent_basic_upsell_order_sales_report_team' => 'sales_report_team#agent_basic_upsell_order'
   get 'sales_report_team/agent_basic_upsell_order'
+  
+  get 'disposition_report_sales_report_team' => 'sales_report_team#disposition_report'
+  get 'sales_report_team/disposition_report'
+  get 'showproducts_sales_report_team' => 'sales_report_team#showproducts'
+  get 'sales_report_team/showproducts'
 
  # require 'resque/server'
   require 'resque/server'
@@ -48,18 +67,9 @@ Rails.application.routes.draw do
   # like this probably already exists.
 
   mount Resque::Server.new, at: "/resque"
-
-
   mount ResqueWeb::Engine => "/resque_web"
-
-
   mount Delayed::Web::Engine, at: '/jobs'
-  resources :return_rates
-  resources :list_of_servers
-  resources :daily_task_logs
-  resources :daily_tasks
-  resources :cable_opertor_comms
-
+  
   match "/delayed_job" => DelayedJobWeb, :anchor => false, via: [:get, :post]
 
   get "select_two" => 'return_rates#demo'
@@ -71,28 +81,17 @@ Rails.application.routes.draw do
   post 'states_update_all' => 'states#update_all'
   post 'states/update_all'
 
-  resources :registration_statuses
-  resources :fat_to_fit_email_statuses
-  #resources :sales_ppos
-  resources :campaign_missed_lists
-  resources :pincode_service_levels
-  resources :courier_lists
-
-
   get "cinergy_xml" => "campaign_playlists#cinergy_xml"
   get "recent_missed_orders" => 'distributor_missed_orders#recent'
+  post "media_switch_cdm" => "media#switch_cdm"
+  post "media/switch_cdm"
   get "hbn_channels" => "media#all_hbn"
   post "send_demo_message" => 'message_on_orders#send_demo_message'
-
 
   get 'new_dept/list'
   get 'new_dept/search'
   get 'new_dept/details'
   
-  resources :order_final_statuses
-  resources :order_list_miles
-  resources :vpp_deal_trans
-
   get 'deal_tran/list'
   get 'deal_tran/search'
   get 'deal_tran/details'
@@ -104,57 +103,19 @@ Rails.application.routes.draw do
   
   post "distributor_quick_add_pincode" => 'distributor_pincode_lists#quick_add_pincode'
   post "distributor_quick_add_state_pincode" => "distributor_pincode_lists#quick_add_state_pincode"
-
-  resources :distributor_missed_orders
-  resources :distributor_missed_order_types
-  resources :distributor_stock_summaries
-  resources :distributor_upload_orders
-  resources :distributor_product_lists
-  resources :distributor_missed_pincodes
-  resources :distributor_stock_ledger_types
-  resources :distributor_stock_ledgers
-  resources :distributor_stock_books
-  resources :distributor_pincode_lists
-
-
-  resources :corporate_active_masters
-  # get 'corporate_type' => 'corporates#list_type'
-
-  resources :help_files
+  
   get 'help' => 'help_files#index'
   get 'search' => 'help_files#index'
-
-  resources :page_names
-
-  resources :page_trails
-
-  resources :promotions
-
-  resources :message_types
-
-  resources :message_statuses
-
+  
   get 'message_on_orders/payumoney'
   get 'message_on_orders_payumoney' => 'message_on_orders#payumoney'
-  resources :message_on_orders
-
-  resources :product_cost_masters
-   resources :product_cost_masters do
-    collection { post :import }
-  end
-  resources :fedex_bill_checks
-    resources :fedex_bill_checks do
-     collection { post :import }
-   end
+  
   get "fedex_bill_download" => "fedex_bill_checks#download"
   delete "fedex_bill_delete" => "fedex_bill_checks#delete"
   delete "remove_all_missed_orders" => "distributor_missed_orders#remove_missed"
   delete "remove_all_corporate_missed_orders" => "distributor_missed_orders#remove_missed"
   delete "remove_all_corporate_specific_missed_orders" => "distributor_missed_orders#remove_missed"
-
-  resources :product_test_ppos
-
-  resources :product_sample_stocks
+  
   #get 'test_ppo' => 'product_ppo_news#index'
 
   mount Bootsy::Engine => '/bootsy', as: 'bootsy'
@@ -167,10 +128,11 @@ Rails.application.routes.draw do
   get 'wholesale_sales' => 'tempinv_newwlsdet/list'
   get 'branch_sales' => 'newwlsdet/list'
 
-  resources :order_updates
-
   get 'media_cost_masters/get_costs'
   get 'media_cost_masters_get_costs' => 'media_cost_masters#get_costs'
+  
+  get 'media_cost_masters/hbn_cost_summary'
+  get 'media_cost_masters_hbn_cost_summary' => 'media_cost_masters#hbn_cost_summary'
   #new sales ppo
   post 'sales_ppos/re_create_ppo'
   post 'sales_ppos/recreate_ppo_for_order_id'
@@ -198,7 +160,6 @@ Rails.application.routes.draw do
   get 'sales_ppos/simulate_product_performance'
   get 'sales_ppos_simulate_product_performance' => 'sales_ppos#simulate_product_performance'
 
-  
   get 'sales_ppos/product_long_term_performance'
   get 'sales_ppos_product_long_term_performance' => 'sales_ppos#product_long_term_performance'
   
@@ -225,7 +186,6 @@ Rails.application.routes.draw do
   get 'sales_ppo_report/channel'
   get 'channel_ppo' => 'sales_ppo_report#channel'
 
-
   get 'sales_ppo_report/product_performance'
   get 'product_performance' => 'sales_ppo_report#product_performance'
   get 'sales_ppo_report/show_performance'
@@ -246,8 +206,6 @@ Rails.application.routes.draw do
   get 'sales_ppo_report/orders'
   get 'ppo_products' => 'sales_ppo_report#ppo_products'
 
-  resources :tax_rates
-
   get 'packing_cost/list'
   get 'packing_cost/search'
   get 'packing_cost/details'
@@ -258,7 +216,7 @@ Rails.application.routes.draw do
   get 'product_costs_not_found' => 'product_cost_masters#product_costs_not_found'
   get 'showprod' => 'product_masters#showprod'
 
-  devise_for :logins
+  
   #sales report
   get 'sales_report_team_not_completed' => 'sales_report_team#not_completed'
   get 'sales_report_team/not_completed'
@@ -305,6 +263,12 @@ Rails.application.routes.draw do
   # final report
   get 'sales_report/cdm_report'
   get 'cdm_report' => 'sales_report#cdm_report'
+  
+  get 'sales_report/gender_report'
+  get 'sales_report_gender_report' => 'sales_report#gender_report'
+  
+  get 'sales_report/birthday_list'
+  get 'sales_report_birthday_list' => 'sales_report#birthday_list'
   # source 1 (order sales)
   get 'cdm_sales_summary' => 'sales_report#cdm_sales_summary'
   get 'sales_report/cdm_sales_summary'
@@ -344,11 +308,6 @@ Rails.application.routes.draw do
   get 'order_summary' => 'sales_report#order_summary'
   get 'sales_report/orders'
   get 'orders_list' => 'sales_report#orders'
-
-
-  resources :media_tape_heads
-
-  resources :india_city_lists
 
   get 'tempinv_newwlsdet/list'
   get 'tempinv_newwlsdet/search'
@@ -408,56 +367,11 @@ Rails.application.routes.draw do
   get 'payumoney_details/details'
   get 'payumoney_details_detail' => 'payumoney_details#details'
   
-
-
   get 'india_pincode_lists/check_for_updates' 
   get 'india_pincode_lists_check_for_updates' => 'india_pincode_lists#check_for_updates'
   post 'india_pincode_lists/update_pincode_list'
   post 'india_pincode_lists_update_pincode_list' => 'india_pincode_lists#details'
   
-   resources :india_city_lists
-  resources :india_pincode_lists
-
-  resources :india_city_lists do
-    get :autocomplete_india_city_list_name, :on => :collection
-  end
-
-  resources :india_pincode_lists do
-    collection { post :import }
-    get :autocomplete_india_pincode_list_pincode, :on => :collection
-    get :autocomplete_india_pincode_list_taluk, :on => :collection
-     get :autocomplete_india_pincode_list_officename, :on => :collection
-    get :autocomplete_india_pincode_list_districtname, :on => :collection
-    get :autocomplete_india_pincode_list_regionname, :on => :collection
-
-  end
-
-  #auto fill details from here
-  resources :order_lines do
-      get :autocomplete_india_pincode_list_pincode, :on => :collection
-      get :autocomplete_india_pincode_list_taluk, :on => :collection
-      get :autocomplete_india_pincode_list_officename, :on => :collection
-      get :autocomplete_india_pincode_list_districtname, :on => :collection
-      get :autocomplete_india_pincode_list_regionname, :on => :collection
-      get :autocomplete_india_city_list_name, :on => :collection
-
-      get :autocomplete_product_variant_name, on: :collection
-      get :autocomplete_product_variant_description, on: :collection
-      get :autocomplete_product_list_name, on: :collection
-  end
-
-
-
-  resources :product_stock_books
-  resources :product_stock_adjusts
-  resources :product_stocks
-  resources :product_master_add_ons
-  resources :campaign_play_list_statuses
-  resources :product_lists
-  resources :media_cost_masters
-  resources :product_spec_lists
-  resources :media_tapes
-
   get 'tapeiddet/list'
   get 'tapeiddet/search'
   get 'tapeiddet/details'
@@ -467,8 +381,6 @@ Rails.application.routes.draw do
   get 'purchase/list'
   get 'purchase/search'
   get 'purchase/details'
-
-
 
   #step 1
   get 'neworder' => 'customerorder#newcall'
@@ -514,22 +426,18 @@ Rails.application.routes.draw do
   #step 6
   post 'processorder' => 'customerorder#process_order'
   get 'summary' => 'customerorder#summary'
-
   get 'orderlist' => 'order_masters#list'
-
   get 'dailyreport' => 'order_masters#daily_report'
-
   get 'dailyschedule' => 'campaign_playlists#perday'
 
- # put 'groupdestroy' => 'campaign_playlists#groupdestroy'
- # put 'campaign_playlists#groupdestroy'
+   # put 'groupdestroy' => 'campaign_playlists#groupdestroy'
+   # put 'campaign_playlists#groupdestroy'
 
   #other activities
   get 'dealersearch' => 'customerorder#dealers'
   get 'newdealer' =>  'customerorder#new_dealer'
-
   post 'inoracle' => 'customer_order_lists#inoracle'
-  post 'customer_order_lists/inoracle''
+  post 'customer_order_lists/inoracle'
   get 'producttraininglist' => 'product_training_manuals#index'
   post 'inlinetraining' => 'product_training_manuals#inlinecreate'
   # get 'dealersearch' => 'address_dealer#list'
@@ -543,15 +451,12 @@ Rails.application.routes.draw do
     #get 'update_all_for_code' => 'product_masters#update_all_for_code'
 
   post 'updatedescription' => 'order_line#update_description'
-
   get 'update_tapes_preset' => 'media_tape_heads#update_tapes_preset'
   get 'update_tapes_auto' => 'media_tape_heads#update_tapes_auto'
   get 'update_tapes_manual' => 'media_tape_heads#update_tapes_manual'
-
   get 'tape_list_preset' => 'media_tape_heads#tape_list_preset'
   get 'tape_list_auto' => 'media_tape_heads#tape_list_auto'
   get 'tape_list_manual' => 'media_tape_heads#tape_list_manual'
-
   get 'campaign_playlists/search'
   get 'campaign_playlists_search' => 'campaign_playlists#search'
   get 'campaign_playlists/new_media_cost'
@@ -568,25 +473,21 @@ Rails.application.routes.draw do
   post 'update_ppo_on_addition' => 'campaign_playlists#update_ppo_on_addition'
 
   #post 'neworder' => 'create_order#index'
-
   #get 'showcampaign' => 'campaigns#show'
   #get 'recentorders' => 'create_order#show_recentorders'
 
   get 'create' => 'customers#createnew'
   post   'add' => 'customers#add'
-
   get 'call_centre_dealers' => 'corporates#call_centre_dealers'
   get 'corporates/call_centre_dealers'
   get 'createc' => 'corporates#createnew'
   post   'addc' => 'corporates#add'
-
   post 'addmedia_togroup' => 'media_groups#addmedia'
   post 'addmedia_tocomission' => 'media_commisions#addmedia'
 
-    # get 'address_dealer/list'
-    # get 'newdealer' =>  'address_dealer#new_dealer'
-    # post 'newdealerenquiry' =>  'address_dealer#dealer_enquiry'
-
+  # get 'address_dealer/list'
+  # get 'newdealer' =>  'address_dealer#new_dealer'
+  # post 'newdealerenquiry' =>  'address_dealer#dealer_enquiry'
   get 'interaction' => 'interaction_masters#index'
   get 'dealer_enquiry' => 'interaction_masters#dealer_enquiry'
   get 'newinteraction' => 'interaction_masters#new_ticket'
@@ -607,58 +508,181 @@ Rails.application.routes.draw do
   get 'b_prodmaster/details'
   get 'bprodmaster' => 'b_prodmaster#list'
 
-    get 'duplicate_playlist' => 'campaign_playlists#duplicate'
-    post 'create_duplicate_playlist' => 'campaign_playlists#create_duplicate'
-    post 'create_new_quick_playlist' => 'campaign_playlists#quick_create'
+  get 'duplicate_playlist' => 'campaign_playlists#duplicate'
+  post 'create_duplicate_playlist' => 'campaign_playlists#create_duplicate'
+  post 'create_new_quick_playlist' => 'campaign_playlists#quick_create'
 
-    get 'product_upsell/list'
-    get 'product_upsell/search'
-    get 'product_upsell/details'
-    get 'product_upsell' => 'product_upsell#details'
-    get 'productupsell' => 'product_upsell#list'
+  get 'product_upsell/list'
+  get 'product_upsell/search'
+  get 'product_upsell/details'
+  get 'product_upsell' => 'product_upsell#details'
+  get 'productupsell' => 'product_upsell#list'
 
-    get 'productreport' => 'product_report#list'
-    get 'product_report/search'
-    get 'productdetails' => 'product_report#details'
+  get 'productreport' => 'product_report#list'
+  get 'product_report/search'
+  get 'productdetails' => 'product_report#details'
 
-    get 'showproductstock' => 'product_stocks#showfordate'
-    put 'updateproductstock' => 'product_stocks#updatefordate'
-     #stock report opening stock
-    get 'openingstockreport' => 'product_report#opening_stock_report'
-     #stock report purchases
-    get 'purchasedstockreport' => 'product_report#purchased_stock_report'
-     #stock report retail returns
-    get 'retailreturnedreport' => 'product_report#retail_returned_stock_report'
-    #stock report retail sold
-    get 'retailsoldreport' => 'product_report#retail_sold_stock_report'
-    #stock report wholesale returned
-     get 'wholesalereturnreport' => 'product_report#wholesale_return_stock_report'
-    #stock report wholesale sold
-    get 'wholesalesoldreport' => 'product_report#wholesale_sold_stock_report'
-    #stock report branch sold
-    get 'branchsoldreport' => 'product_report#branch_sold_stock_report'
+  get 'showproductstock' => 'product_stocks#showfordate'
+  put 'updateproductstock' => 'product_stocks#updatefordate'
+   #stock report opening stock
+  get 'openingstockreport' => 'product_report#opening_stock_report'
+   #stock report purchases
+  get 'purchasedstockreport' => 'product_report#purchased_stock_report'
+   #stock report retail returns
+  get 'retailreturnedreport' => 'product_report#retail_returned_stock_report'
+  #stock report retail sold
+  get 'retailsoldreport' => 'product_report#retail_sold_stock_report'
+  #stock report wholesale returned
+   get 'wholesalereturnreport' => 'product_report#wholesale_return_stock_report'
+  #stock report wholesale sold
+  get 'wholesalesoldreport' => 'product_report#wholesale_sold_stock_report'
+  #stock report branch sold
+  get 'branchsoldreport' => 'product_report#branch_sold_stock_report'
 
-    #stock correction report
-    get 'correctionstockreport' => 'product_report#corrections_stock_report'
+  #stock correction report
+  get 'correctionstockreport' => 'product_report#corrections_stock_report'
 
+  get 'product_cost/list'
+  get 'product_cost/cost'
+  get 'product_cost/search'
+  get 'product_cost/details'
+  get 'productcost' => 'product_cost#details'
+  
+  delete 'deleteproductstock' => 'product_stocks#destroy'
+  # get 'deleteproductstock' => 'product_stocks#deletestock'
+  delete 'deleteproductstockadjust' => 'product_stock_adjusts#delete'
+  
+  # post 'pending_order_generate_orders' => 'pending_order#generate_orders'
+ #  post 'pending_orders/generate_orders'
+ #  post 'pending_orders/generate_order_for_order_id'
+ #  post 'pending_orders/generate_order_for_order_no'
+  # get 'corporate_type' => 'corporates#list_type'
+  resources :help_files do
+    collection { post :import }
+  end
+  
+  resources :dispatch_call_statuses
+  resources :order_dispatch_statuses
+  resources :pending_orders do
+      collection { post :import, :generate_orders, :generate_order_for_order_id, :generate_order_for_order_no }
+  end
+  
+  resources :page_names
+  resources :page_trails
+  resources :promotions
+  resources :message_types
+  resources :message_statuses
+  resources :message_on_orders
+  
+  resources :registration_statuses
+  resources :fat_to_fit_email_statuses
+  #resources :sales_ppos
+  resources :campaign_missed_lists
+  resources :pincode_service_levels
+  resources :courier_lists
+  
+  resources :product_cost_masters
+   resources :product_cost_masters do
+    collection { post :import }
+  end
+  
+  resources :fedex_bill_checks
+    resources :fedex_bill_checks do
+     collection { post :import }
+  end
+  
+  resources :product_test_ppos
+  resources :product_sample_stocks
+  resources :order_updates
+  resources :tax_rates
+  
+  resources :india_city_lists
+  resources :india_pincode_lists
 
+  resources :india_city_lists do
+    get :autocomplete_india_city_list_name, :on => :collection
+  end
 
-    get 'product_cost/list'
-    get 'product_cost/cost'
-    get 'product_cost/search'
-    get 'product_cost/details'
-    get 'productcost' => 'product_cost#details'
+  resources :india_pincode_lists do
+    collection { post :import }
+    get :autocomplete_india_pincode_list_pincode, :on => :collection
+    get :autocomplete_india_pincode_list_taluk, :on => :collection
+    get :autocomplete_india_pincode_list_officename, :on => :collection
+    get :autocomplete_india_pincode_list_districtname, :on => :collection
+    get :autocomplete_india_pincode_list_regionname, :on => :collection
 
-    delete 'deleteproductstock' => 'product_stocks#destroy'
-    # get 'deleteproductstock' => 'product_stocks#deletestock'
-    delete 'deleteproductstockadjust' => 'product_stock_adjusts#delete'
+  end
+  
+  resources :media_tape_heads
+  resources :india_city_lists
+  resources :cust_details_track_logs
+  resources :cust_details_tracks
+  resources :sales_ppo_product_alerts
+  resources :sales_ppo_email_alerts
+  resources :product_master_images
+  resources :payumoney_statuses
+  resources :app_comment_display_levels
+  resources :app_comment_types
+  resources :app_feature_comments
+  resources :app_priorities
+  resources :app_statuses
+  resources :app_velocities
+  resources :app_user_satisfaction_levels
+  resources :app_feature_types
+  resources :app_lists
+  resources :app_feature_requests
+  resources :campaign_playlist_to_products
+  resources :sales_ppo_defaults
+  resources :return_rates
+  resources :list_of_servers
+  resources :daily_task_logs
+  resources :daily_tasks
+  resources :cable_opertor_comms
+  resources :order_final_statuses
+  resources :order_list_miles
+  resources :vpp_deal_trans
+  
+  resources :distributor_missed_orders
+  resources :distributor_missed_order_types
+  resources :distributor_stock_summaries
+  resources :distributor_upload_orders
+  resources :distributor_product_lists
+  resources :distributor_missed_pincodes
+  resources :distributor_stock_ledger_types
+  resources :distributor_stock_ledgers
+  resources :distributor_stock_books
+  resources :distributor_pincode_lists
+  resources :corporate_active_masters
+  
+  #auto fill details from here
+  resources :order_lines do
+    get :autocomplete_india_pincode_list_pincode, :on => :collection
+    get :autocomplete_india_pincode_list_taluk, :on => :collection
+    get :autocomplete_india_pincode_list_officename, :on => :collection
+    get :autocomplete_india_pincode_list_districtname, :on => :collection
+    get :autocomplete_india_pincode_list_regionname, :on => :collection
+    get :autocomplete_india_city_list_name, :on => :collection
 
+    get :autocomplete_product_variant_name, on: :collection
+    get :autocomplete_product_variant_description, on: :collection
+    get :autocomplete_product_list_name, on: :collection
+  end
+  
+  resources :product_stock_books
+  resources :product_stock_adjusts
+  resources :product_stocks
+  resources :product_master_add_ons
+  resources :campaign_play_list_statuses
+  resources :product_lists
+  resources :media_cost_masters
+  resources :product_spec_lists
+  resources :media_tapes
 
-     resources :sales_incentives
-    resources :user_roles
-    resources :customer_order_lists
-
-mount Upmin::Engine => '/admin'
+  mount Upmin::Engine => '/admin'
+  
+  resources :sales_incentives
+  resources :user_roles
+  resources :customer_order_lists
   resources :corporate_types, :media_commisions, :product_sell_types, :product_variant_add_ons
   resources :order_fors, :media_groups,  :create_order , :order_payments
   resources :media_groups, :media_commisions, :customer_credit_cards, :change_log_trails, :change_log_types
@@ -671,42 +695,7 @@ mount Upmin::Engine => '/admin'
   resources :employees, :users, :sessions, :product_active_codes, :states
   resources :salutes, :employment_types, :employee_roles, :order_line_dispatch_statuses
   resources :order_status_masters, :product_training_headings, :product_inventory_codes
-
   #resources :campaign_playlists, :collection => { :edit_individual => :post, :update_individual => :put }
   resources :campaign_playlists
-
-  #root             'product#home'
-  root 'project#home'
-  get 'oldhelp'    => 'project#help'
-  get 'log'    => 'project#help'
-  get 'oldabout'   => 'product#about'
-  get 'oldcontact' => 'product#contact'
-   get 'project/longtable'
-
-  get 'dealers' => 'address_dealer#list'
-
- # get 'help'    => 'project#help'
-  get 'about'   => 'project#about'
-  get 'contact' => 'project#contact'
-  #get 'dropdown' => 'project#dropdown'
-  #get "project/update_text", as: "update_text"
-  get "productdetails" => 'product_masters#details'
-  get "producttraining" => 'product_training_manuals#training'
-  get "producttraining_text" => 'product_training_manuals#training_text'
-  get "productvariantdetails" => 'product_variants#details'
-  get "productvariantcombined" => 'product_variants#combined'
-  post "updatevariantmaster" => 'product_variants#update_variant_master_id'
-  get "mediatapesforproducts" => 'media_tapes#productwise'
-  get "mediatapesdetails" => 'media_tapes#tape_details'
-  get "addonproductlist" => 'media_tapes#product_lists'
-  get "addonproductlist" => 'product_master_add_ons#product_lists'
-#addonproducts
-  #get "creditcard" => 'project#luhn'
-
-  get 'signup'  => 'users#new'
-  get    'login'   => 'sessions#new'
-  post   'login'   => 'sessions#create'
-  delete 'logout'  => 'sessions#destroy'
-
 
 end

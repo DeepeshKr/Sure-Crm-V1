@@ -15,20 +15,18 @@
 <br>
 
 <br>
- <div class="panel panel-primary">
-  <div class="panel-heading">
-    <h3 class="panel-title">Order in Dispatch / Paid / Returned (VPP)</h3>
-  </div>
-  <% if @vpp.present? %>
- <%= render 'vpp' %>
-
-<% else %>
-<div class="well well-sm">
-<h4><%= @vppsearch %></h4>
-</div>
-<% end %>
-</div>
-
+	<div class="panel panel-primary">
+	  	<div class="panel-heading">
+	    	<h3 class="panel-title">Order in Dispatch / Paid / Returned (VPP)</h3>
+	  	</div>
+	  	<% if @vpp.present? %>
+	 		<%= render 'vpp' %>
+		<% else %>
+		<div class="well well-sm">
+			<h4><%= @vppsearch %></h4>
+		</div>
+		<% end %>
+	</div>
 <br>
 <br>
  <div class="panel panel-primary">

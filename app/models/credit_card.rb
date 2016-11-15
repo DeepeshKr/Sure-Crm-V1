@@ -1,7 +1,7 @@
-class CreditCard < ActiveRecord::Base
-  before_validation :set_type
-  validates :number, presence:true, length: { is: 6}
-  validate :check_luhn
+class CreditCard #< ActiveRecord::Base
+  # before_validation :set_type
+ #  validates :number, presence:true, length: { is: 6}
+ #  validate :check_luhn
 #Methods for luhn validation
 
 #First checking the type of card

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160920060732) do
+ActiveRecord::Schema.define(version: 20161114085056) do
 
   create_table "address_types", force: :cascade do |t|
     t.string   "name"
@@ -412,7 +412,7 @@ ActiveRecord::Schema.define(version: 20160920060732) do
     t.datetime "created_at",                       null: false
     t.datetime "updated_at",                       null: false
   end
- 
+
   add_index "cust_details_tracks", ["alt_mobile"], name: "i_cus_det_tra_alt_mob"
   add_index "cust_details_tracks", ["custdetails"], name: "i_cus_det_tra_cus"
   add_index "cust_details_tracks", ["dealtran"], name: "i_cust_details_tracks_dealtran"
@@ -548,7 +548,10 @@ ActiveRecord::Schema.define(version: 20160920060732) do
     t.datetime "updated_at"
     t.string   "city"
     t.string   "state"
+    t.datetime "date_of_birth"
   end
+
+  add_index "customers", ["date_of_birth"], name: "i_customers_date_of_birth"
 
   create_table "daily_task_logs", force: :cascade do |t|
     t.integer  "daily_task_id", precision: 38
@@ -608,6 +611,17 @@ ActiveRecord::Schema.define(version: 20160920060732) do
 
   add_index "devises", ["email"], name: "index_devises_on_email", unique: true
   add_index "devises", ["reset_password_token"], name: "i_devises_reset_password_token", unique: true
+
+  create_table "dispatch_call_statuses", force: :cascade do |t|
+    t.string   "name"
+    t.text     "description"
+    t.integer  "sort_order",  precision: 38
+    t.datetime "created_at",                 null: false
+    t.datetime "updated_at",                 null: false
+  end
+
+  add_index "dispatch_call_statuses", ["name"], name: "i_dispatch_call_statuses_name"
+  add_index "dispatch_call_statuses", ["sort_order"], name: "i_dis_cal_sta_sor_ord"
 
   create_table "distributor_missed_order_types", force: :cascade do |t|
     t.string   "name"
@@ -864,7 +878,17 @@ ActiveRecord::Schema.define(version: 20160920060732) do
     t.integer  "employee_id",   precision: 38
     t.datetime "created_at",                   null: false
     t.datetime "updated_at",                   null: false
+    t.string   "domain"
+    t.string   "controller"
+    t.string   "action"
+    t.string   "screen_shot"
+    t.text     "parameters"
   end
+
+  add_index "help_files", ["action"], name: "index_help_files_on_action"
+  add_index "help_files", ["controller"], name: "index_help_files_on_controller"
+  add_index "help_files", ["link"], name: "index_help_files_on_link"
+  add_index "help_files", ["tags"], name: "index_help_files_on_tags"
 
   create_table "india_city_lists", force: :cascade do |t|
     t.string   "name"
@@ -1133,6 +1157,17 @@ ActiveRecord::Schema.define(version: 20160920060732) do
     t.datetime "updated_at",                 null: false
   end
 
+  create_table "order_dispatch_statuses", force: :cascade do |t|
+    t.string   "name"
+    t.text     "description"
+    t.integer  "sort_order",  precision: 38
+    t.datetime "created_at",                 null: false
+    t.datetime "updated_at",                 null: false
+  end
+
+  add_index "order_dispatch_statuses", ["name"], name: "i_order_dispatch_statuses_name"
+  add_index "order_dispatch_statuses", ["sort_order"], name: "i_ord_dis_sta_sor_ord"
+
   create_table "order_final_statuses", force: :cascade do |t|
     t.string   "name"
     t.integer  "sort_order",  precision: 38
@@ -1240,6 +1275,7 @@ ActiveRecord::Schema.define(version: 20160920060732) do
     t.datetime "paid_date"
     t.datetime "refund_date"
     t.datetime "returned_date"
+    t.string   "gender"
   end
 
   add_index "order_masters", ["TRUNC(\"CREATED_AT\")", "order_status_master_id", "media_id", "id"], name: "order_masters_idx01"
@@ -1251,6 +1287,7 @@ ActiveRecord::Schema.define(version: 20160920060732) do
   add_index "order_masters", ["customer_id"], name: "i_order_masters_customer_id"
   add_index "order_masters", ["employee_id"], name: "i_order_masters_employee_id"
   add_index "order_masters", ["external_order_no"], name: "i_ord_mas_ext_ord_no"
+  add_index "order_masters", ["gender"], name: "index_order_masters_on_gender"
   add_index "order_masters", ["interaction_master_id"], name: "i_ord_mas_int_mas_id"
   add_index "order_masters", ["media_id"], name: "i_order_masters_media_id"
   add_index "order_masters", ["mobile"], name: "index_order_masters_on_mobile"
@@ -1357,6 +1394,8 @@ ActiveRecord::Schema.define(version: 20160920060732) do
     t.integer  "payumoney_status_id",   precision: 38
     t.text     "transaction_history"
     t.integer  "no_of_links",           precision: 38
+    t.datetime "failed_time"
+    t.integer  "failed_count",          precision: 38
   end
 
   add_index "payumoney_details", ["customermobilenumber"], name: "i_pay_det_cus"
@@ -1376,6 +1415,40 @@ ActiveRecord::Schema.define(version: 20160920060732) do
     t.datetime "created_at",                          null: false
     t.datetime "updated_at",                          null: false
   end
+
+  create_table "pending_orders", force: :cascade do |t|
+    t.integer  "order_ref_id",             precision: 38
+    t.integer  "order_no",                 precision: 38
+    t.integer  "order_dispatch_status_id", precision: 38
+    t.integer  "cod_amount",               precision: 38
+    t.integer  "pay_u_amount",             precision: 38
+    t.integer  "courier_list_id",          precision: 38
+    t.integer  "pay_u_status_id",          precision: 38
+    t.integer  "dispatch_call_status_id",  precision: 38
+    t.string   "airway_bill"
+    t.string   "pod"
+    t.datetime "created_at",                              null: false
+    t.datetime "updated_at",                              null: false
+    t.datetime "order_date"
+    t.string   "tel_1"
+    t.string   "tel_2"
+    t.string   "manifest"
+    t.string   "courier_name"
+  end
+
+  add_index "pending_orders", ["airway_bill"], name: "i_pending_orders_airway_bill"
+  add_index "pending_orders", ["courier_list_id"], name: "i_pen_ord_cou_lis_id"
+  add_index "pending_orders", ["courier_name"], name: "i_pending_orders_courier_name"
+  add_index "pending_orders", ["dispatch_call_status_id"], name: "i_pen_ord_dis_cal_sta_id"
+  add_index "pending_orders", ["manifest"], name: "i_pending_orders_manifest"
+  add_index "pending_orders", ["order_date"], name: "i_pending_orders_order_date"
+  add_index "pending_orders", ["order_dispatch_status_id"], name: "i_pen_ord_ord_dis_sta_id"
+  add_index "pending_orders", ["order_no"], name: "i_pending_orders_order_no"
+  add_index "pending_orders", ["order_ref_id"], name: "i_pending_orders_order_ref_id"
+  add_index "pending_orders", ["pay_u_status_id"], name: "i_pen_ord_pay_u_sta_id"
+  add_index "pending_orders", ["pod"], name: "index_pending_orders_on_pod"
+  add_index "pending_orders", ["tel_1"], name: "index_pending_orders_on_tel_1"
+  add_index "pending_orders", ["tel_2"], name: "index_pending_orders_on_tel_2"
 
   create_table "pincode_service_levels", force: :cascade do |t|
     t.string   "pincode"
@@ -1917,6 +1990,11 @@ ActiveRecord::Schema.define(version: 20160920060732) do
     t.text     "description"
     t.datetime "created_at",                            null: false
     t.datetime "updated_at",                            null: false
+  end
+
+  create_table "temp_test_emp", primary_key: "temp_test_emp_id", force: :cascade do |t|
+    t.string "data_text", limit: 50
+    t.string "date_more", limit: 50
   end
 
   create_table "transfer_order_lines", force: :cascade do |t|

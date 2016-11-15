@@ -1,0 +1,105 @@
+<% title "Channel Sales Summary #{@from_date} to #{@to_date}" %>
+
+<%= form_tag  url_for(:controller => 'sales_report', :action => 'gender_report'), method: "get" do  %>
+ <div class="row">
+	 <div class="col-xs-4">
+
+	 <h4>Gender Sales Report </h4>
+	 </div>
+
+   <div class="col-xs-2">
+	   <p>Caller Gender was from Nov 1 2016 onwards</p>
+             
+   </div>
+	 <div class="col-xs-5">
+        <div class="input-daterange input-group">
+          <%= text_field_tag(:from_date, @from_date, :data => {:provide => "datepicker"}, :id => "datepicker_from", :class => "form-control", :required => "true" )   %>
+          <span class="input-group-addon">to</span>
+
+           <%= text_field_tag(:to_date, @to_date, :data => {:provide => "datepicker"}, :id => "datepicker_to", :class => "form-control", :required => "true" )   %>
+
+        </div>
+    </div>
+    <div class="col-xs-1">
+              <%= submit_tag "Show", name: nil, class: "btn btn-primary" %>
+    </div>
+
+ </div>
+<% end %>
+
+<% if @employeeorderlist.present? %>
+<% total_male_customer_nos, total_male_customer_value, total_female_customer_nos, total_female_customer_value, total_male_caller_nos, total_male_caller_value, total_female_caller_nos, total_female_caller_value, total_value, total_piece = 0,0,0,0,0,0,0,0,0,0 %>
+<table class="table table-hover table-bordered">
+  <thead>
+	<tr>
+        <th rowspan="2">S No</th>
+        <th rowspan="2">Date</th>
+		<th colspan="2">Male Customer</th>
+		<th colspan="2">Female Customer</th>
+		<th colspan="2">Male Caller</th>
+		<th colspan="2">Female Caller</th>
+        <th colspan="2">Total</th>
+
+	</tr>
+    <tr>
+     	<th>Nos</th>
+     	<th>Value</th>
+    	<th>Nos</th>
+    	<th>Value</th>
+     	<th>Nos</th>
+     	<th>Value</th>
+     	<th>Nos</th>
+     	<th>Value</th>
+     	<th>Nos</th>
+     	<th>Value</th>
+     </tr>
+  </thead>
+<tbody>
+   <% @employeeorderlist.each do |c| %>
+   <tr>
+     <td><%= @sno %></td>
+     <td><%= c[:for_date] %></td>
+     <td class="text-right"><%= c[:male_customer_nos] %> <% total_male_customer_nos += c[:male_customer_nos] %></td>
+     <td class="text-right"><%= c[:male_customer_value] %> <% total_male_customer_value += c[:male_customer_value] %> </td>
+     <td class="text-right"><%= c[:female_customer_nos] %> <% total_female_customer_nos += c[:female_customer_nos] %></td>
+     <td class="text-right"><%= c[:female_customer_value] %> <% total_female_customer_value += c[:female_customer_value] %> </td>
+     
+     <td class="text-right"><%= c[:male_caller_nos] %> <% total_male_caller_nos += c[:male_caller_nos] %></td>
+     <td class="text-right"><%= c[:male_caller_value] %> <% total_male_caller_value += c[:male_caller_value] %> </td>
+     <td class="text-right"><%= c[:female_caller_nos] %> <% total_female_caller_nos += c[:female_caller_nos] %></td>
+     <td class="text-right"><%= c[:female_caller_value] %> <% total_female_caller_value += c[:female_caller_value] %> </td>
+	 
+     <td class="text-right"><%= c[:total_nos] %> <% total_piece += c[:total_nos] %></td>
+     <td class="text-right"><%= c[:total_value] %> <% total_value += c[:total_value] %> </td>
+     
+   </tr>
+  <% @sno += 1 %>
+ <% end %>
+</tbody>
+<tfoot>
+  <tr>
+   <th colspan="2">Total</th>
+   <th class="text-right"><%= total_male_customer_nos %></th>
+   <th class="text-right"><%= total_male_customer_value %></th>
+   <th class="text-right"><%= total_female_customer_nos %></th>
+   <th class="text-right"><%= total_female_customer_value %></th>
+   <th class="text-right"><%= total_male_caller_nos %></th>
+   <th class="text-right"><%= total_male_caller_value %></th>
+   <th class="text-right"><%= total_female_caller_nos %></th>
+   <th class="text-right"><%= total_female_caller_value %></th>
+   <th class="text-right"><%= total_piece %></th>
+   <th class="text-right"><%= total_value %></th>
+   </tr>
+</tfoot>
+</table>
+  <div class="well well-sm">
+    <%= link_to 'Download CSV file', sales_report_gender_report_path(from_date: @from_date, to_date: @to_date, format: :csv), class: "btn btn-info btn-sm" %>
+  </div>
+
+  <% end %>
+ <br>
+
+<script>
+$('#datepicker_to').datepicker({format: 'yyyy-mm-dd'});
+$('#datepicker_from').datepicker({format: 'yyyy-mm-dd'});
+</script>

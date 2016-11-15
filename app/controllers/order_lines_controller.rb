@@ -78,18 +78,18 @@ class OrderLinesController < ApplicationController
     respond_with(@order_line.order_master)
   end
 
-  def destroy
-    @order_line.destroy
-    #respond_with(@order_line.order_master)
-    redirect_to neworder_path(:order_id => @order_line.orderid)  
-  end
-
-  def deleteupsell
-
-    @order_line.destroy
-    #respond_with(@order_line.order_master)
-    redirect_to upsell_path(:order_id => @order_line.orderid)  
-  end
+  # def destroy
+ #    @order_line.destroy
+ #    #respond_with(@order_line.order_master)
+ #    redirect_to neworder_path(:order_id => @order_line.orderid)
+ #  end
+ #
+ #  def deleteupsell
+ #
+ #    @order_line.destroy
+ #    #respond_with(@order_line.order_master)
+ #    redirect_to upsell_path(:order_id => @order_line.orderid)
+ #  end
 
   private
     def set_order_line

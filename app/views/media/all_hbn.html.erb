@@ -49,7 +49,7 @@
          <% if (current_user.employee_role.sortorder < 6) %>
         <td><%= medium.media_commision.name if medium.media_commision %></td>
          <td><%= medium.value %></td>
-        <td><%= medium.daily_charges  %><% @total_active_daily_charges += medium.daily_charges %></td>
+        <td><%= medium.daily_charges  %><% @total_active_daily_charges += medium.daily_charges if medium.daily_charges %></td>
         <td><%= medium.paid_correction %></td>
         <% end %>
          <% if (current_user.employee_role.sortorder < 6) %>
@@ -122,7 +122,7 @@
          <% if (current_user.employee_role.sortorder < 6) %>
         <td><%= medium.media_commision.name if medium.media_commision %></td>
          <td><%= medium.value %></td>
-        <td><%= medium.daily_charges  %><% @total_inactive_daily_charges += medium.daily_charges %></td>
+        <td><%= medium.daily_charges  %><% @total_inactive_daily_charges += medium.daily_charges if medium.daily_charges %></td>
         <td><%= medium.paid_correction %></td>
         <% end %>
          <% if (current_user.employee_role.sortorder < 6) %>

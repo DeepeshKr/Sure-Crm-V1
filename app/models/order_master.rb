@@ -18,9 +18,10 @@ class OrderMaster < ActiveRecord::Base
   has_many :order_line, foreign_key: "orderid", :dependent => :destroy
   has_many :sales_ppo, foreign_key: "order_id"
   has_many :payumoney_detail, foreign_key: "orderid"
+  has_many :pending_order, foreign_key: "order_ref_id"
   
-  has_one :cust_details_track
-  has_one :cust_order_list
+  # has_one :cust_details_track
+  # has_one :cust_order_list
  
   accepts_nested_attributes_for :order_line,  :allow_destroy => true
 
@@ -45,7 +46,6 @@ class OrderMaster < ActiveRecord::Base
   def lastvisitpage
     return self.page_trail.name  if self.page_trail.present?
   end
-
 
   def neworder(source, cli, dnis, empcode, empid,request_ip, session_id)
 
@@ -88,7 +88,12 @@ class OrderMaster < ActiveRecord::Base
   end
   
   def total_value
-     self.g_total ||= ((self.subtotal || 0) + (self.shipping || 0) + (self.creditcardcharges || 0) + (self.maharastraccextra || 0) + (self.maharastracodextra || 0 ) + (self.codcharges || 0))
+    calculated_total = (self.subtotal || 0) + (self.shipping || 0) + 
+    (self.creditcardcharges || 0) + (self.maharastraccextra || 0) + 
+    (self.maharastracodextra || 0 ) + (self.codcharges || 0)
+     return calculated_total  if !self.g_total.blank?
+     return calculated_total if self.g_total == 0
+     return self.g_total
   end
   
   def update_customer_order_list(order_id)
@@ -483,7 +488,6 @@ class OrderMaster < ActiveRecord::Base
 
 
   end
-   
   
   def add_invoice_sms total_amount, alternative_mobile = nil
     order_id = self.id
@@ -722,8 +726,6 @@ class OrderMaster < ActiveRecord::Base
 
   end
 
-
-
   def no_order_master(attributes)
     attributes[:id].blank?
   end
@@ -753,23 +755,7 @@ class OrderMaster < ActiveRecord::Base
       end
 
   end
-
-  def creditcardcharges
-   productcost = OrderLine.where('orderid = ?', self.id)
-    #return productcost.first.productcost
-    if productcost.exists?
-      total = 0
-      productcost.each do |c|
-        total += c.creditcardcharges || 0
-      end
-      return total.round(2)
-
-    else
-      return 0
-    end
-
-  end
-
+  
   def maharastracodextra
    productcost = OrderLine.where('orderid = ?', self.id)
     #return productcost.first.productcost
@@ -786,15 +772,14 @@ class OrderMaster < ActiveRecord::Base
     end
 
   end
-
-  def servicetax
-    productcost = OrderLine.where('orderid = ?', self.id)
+  
+  def creditcardcharges
+   productcost = OrderLine.where('orderid = ?', self.id)
     #return productcost.first.productcost
     if productcost.exists?
       total = 0
       productcost.each do |c|
-        total += c.servicetax || 0
-
+        total += c.creditcardcharges || 0
       end
       return total.round(2)
 
@@ -811,6 +796,56 @@ class OrderMaster < ActiveRecord::Base
       total = 0
       productcost.each do |c|
         total += c.maharastraccextra || 0
+
+      end
+      return total.round(2)
+
+    else
+      return 0
+    end
+
+  end
+  
+  def creditcard_savings
+   productcost = OrderLine.where('orderid = ?', self.id)
+    #return productcost.first.productcost
+    if productcost.exists?
+      total = 0
+      productcost.each do |c|
+        total += c.show_cc_savings || 0
+      end
+      return total.round(2)
+
+    else
+      return 0
+    end
+
+  end
+  
+  def maharastracc_savings
+   productcost = OrderLine.where('orderid = ?', self.id)
+    #return productcost.first.productcost
+    if productcost.exists?
+      total = 0
+      productcost.each do |c|
+        total += c.maharastracc_savings || 0
+
+      end
+      return total.round(2)
+
+    else
+      return 0
+    end
+
+  end
+  
+  def servicetax
+    productcost = OrderLine.where('orderid = ?', self.id)
+    #return productcost.first.productcost
+    if productcost.exists?
+      total = 0
+      productcost.each do |c|
+        total += c.servicetax || 0
 
       end
       return total.round(2)

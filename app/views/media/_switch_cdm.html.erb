@@ -7,19 +7,18 @@
    	 </div>
       <%= form_tag  url_for(:controller => 'media', :action => "switch_cdm"), method: "post" do  %>
 	   <div class="col-xs-5">
-		   <%= f.select(:employee_id,
-		      options_from_collection_for_select(@employees, :id, :name, selected: nil),
-		          {:prompt => '-Select Managed by-', include_blank: '-Not managed by anyone-'} ,
-		      {label: " Managed By"})  %>
+            <%= select_tag :current_employee_id,  options_from_collection_for_select(@employees,
+              :id, :name, selected: @current_employee_id ),
+                    {:class => "form-control", label: "Currently Managed By", include_blank: '-Not managed by anyone-' } %>
 	   </div>
 	   <div class="col-xs-5">
-		   <%= f.select(:employee_id,
-		      options_from_collection_for_select(@employees, :id, :name, selected: nil),
-		          {:prompt => '-Replace Managed by-', include_blank: '-Not managed by anyone-'} ,
-		      {label: " Replaced By"})  %>
+		   <%= select_tag :new_employee_id,  options_from_collection_for_select(@employees,
+              :id, :name, selected: @current_employee_id ),
+			  {:class => "form-control", label: "To be Replaced By", 
+				  include_blank: '-Replace managed by none-' } %>
 	   </div>
           <div class="col-xs-2">
-            <%= submit_tag "Re Generate", name: nil, class: "btn btn-danger" %>
+            <%= submit_tag "Replace", name: nil, class: "btn btn-danger" %>
           </div>
       <% end %>
 

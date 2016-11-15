@@ -84,7 +84,7 @@ class PayumoneyDetailsController < ApplicationController
     @total_open_orders = @payumoney_details.count || 0 if @payumoney_details.present?
     @page_heading = "Pay u Money Open Orders #{@total_open_orders}"
   end
-
+  
   def search
 
   end
@@ -95,11 +95,15 @@ class PayumoneyDetailsController < ApplicationController
     @payumoney_detail = PayumoneyDetail.find(params[:id])
     @pay_u_id = @payumoney_detail.id
     @return_url = request.original_url
+    order_review @payumoney_detail.orderid
     
-      order_review @payumoney_detail.orderid
-    if (@payumoney_detail.payumoney_status_id != 10006 && @payumoney_detail.payumoney_status_id != 10007)
-      @allow_to_close = true
-    end
+    # if (@payumoney_detail.payumoney_status_id != 10006 && @payumoney_detail.payumoney_status_id != 10007)
+ #
+ #    end
+    
+    # if @order_master.order_status_master_id < 10003
+   #     @allow_to_close = true
+   #  end 
      @page_heading = "Pay u money detail for order id #{@payumoney_detail.orderid} pay u ref id #{params[:id]}"
   end
   
@@ -120,7 +124,7 @@ class PayumoneyDetailsController < ApplicationController
     
     @payumoney = PayumoneyDetail.find(@pay_u_id)
     transaction_history = @payumoney.transaction_history
-    @payumoney.update(transaction_history: "#{transaction_history} \r\nEmployee manuually processed the order with pay u response code #{user_details} executed at #{this_time}")
+    @payumoney.update(transaction_history: "#{transaction_history} \r\nEmployee manually processed the order with pay u response code #{user_details} executed at #{this_time}")
     
     order_master = OrderMaster.find @payumoney.orderid
     
@@ -159,13 +163,13 @@ class PayumoneyDetailsController < ApplicationController
     user_details = params[:user_details]
     
     transaction_history = @payumoney.transaction_history
-    @payumoney.update(transaction_history: "#{transaction_history} \r\nEmployee manuually regenerated the order sms with user feedback #{user_details} executed at #{this_time}")
+    @payumoney.update(transaction_history: "#{transaction_history} \r\nEmployee manually regenerated the order sms with user feedback #{user_details} executed at #{this_time}")
     
     order_master = OrderMaster.find(@payumoney.orderid)
     
     redirect_to payumoney_details_path, notice: "No details found to process order, try again." and return if order_master.blank?
     
-    response = order_master.regenerate_pay_u_sms_invoice order 
+    response = order_master.regenerate_pay_u_sms_invoice @payumoney.orderid 
     flash[:error] = "#{response}"
     
     if params.has_key?(:return_url)

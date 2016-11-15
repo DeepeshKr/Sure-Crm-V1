@@ -4,7 +4,7 @@ class AppFeatureRequest < ActiveRecord::Base
   #belongs_to :employee, foreign_key: "assigned_to", class_name: "Working"
   belongs_to :app_list, foreign_key: "app_id"
   belongs_to :app_feature_type, foreign_key: "app_feature_type_id"
-  belongs_to :user_satisfaction_level, foreign_key: "user_satisfaction_level_id"
+  belongs_to :app_user_satisfaction_level, foreign_key: "user_satisfaction_level_id"
   belongs_to :app_velocity, foreign_key: "velocity_id"
   belongs_to :app_status, foreign_key: "current_status_id"
   belongs_to :app_priority, foreign_key: "priority_id"

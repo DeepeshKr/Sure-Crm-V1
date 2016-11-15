@@ -1,0 +1,31 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Listing Order Dispatch Statuses</h1>
+
+<table class="table table-bordered table-stripped">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Description</th>
+      <th>Sort order</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @order_dispatch_statuses.each do |order_dispatch_status| %>
+      <tr>
+        <td><%= order_dispatch_status.name %></td>
+        <td><%= order_dispatch_status.description %></td>
+        <td><%= order_dispatch_status.sort_order %></td>
+        <td><%= link_to 'Show', order_dispatch_status %></td>
+        <td><%= link_to 'Edit', edit_order_dispatch_status_path(order_dispatch_status) %></td>
+        <td><%= link_to 'Destroy', order_dispatch_status, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Order dispatch status', new_order_dispatch_status_path, class: "btn btn-primary" %>

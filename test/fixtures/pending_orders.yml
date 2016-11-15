@@ -1,0 +1,23 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  order_ref_id: 1
+  order_no: 1
+  order_dispatch_status_id: 1
+  cod_amount: 
+  cod_amount: 
+  pay_u_amount: 
+  pay_u_amount: 
+  courier_list_id: 1
+  pay_u_status_id: 1
+
+two:
+  order_ref_id: 1
+  order_no: 1
+  order_dispatch_status_id: 1
+  cod_amount: 
+  cod_amount: 
+  pay_u_amount: 
+  pay_u_amount: 
+  courier_list_id: 1
+  pay_u_status_id: 1

@@ -261,6 +261,54 @@ def maharastraccextra
 
 end
 
+def show_cc_savings
+  creditcardcharges = 0
+  if (self.orderid).present?
+    if self.product_master.sel_cc.blank? || self.product_master.sel_cc == 1
+      creditcardid = 10000
+      charges = Orderpaymentmode.find(creditcardid).charges
+
+      if (check_if_replacement(self.product_list_id) == "false")
+        charges = 0
+      end
+      return ((self.subtotal || 0)  * (charges || 0)).round(2)
+      
+    end
+    return creditcardcharges
+  end
+end
+
+def maharastracc_savings
+  maharastraccextra = 0
+  if (self.orderid).present?
+
+    if self.product_master.sel_m_cc.blank? || self.product_master.sel_m_cc == 1
+
+      creditcardid = 10000
+      creditcardcharges = Orderpaymentmode.find(creditcardid).charges
+      creditcardtotal = (self.subtotal || 0)  * (creditcardcharges || 0)
+      surchargeid = 10020
+      surcharge = Orderpaymentmode.find(surchargeid).charges
+
+
+      maharastraccextra =  (self.subtotal + creditcardtotal + self.shipping) * surcharge
+
+      #check if address is selected
+      if self.order_master.customer_address.present?
+         #check if state is maharastra
+        if self.order_master.customer_address.state.upcase == 'MAHARASHTRA'
+             maharastraccextra =  (self.subtotal + creditcardtotal + self.shipping) * surcharge
+         else
+            maharastraccextra = 0
+        end
+      end
+
+    end
+  end
+  return maharastraccextra.round(2)
+
+end
+
 def productcost
   pcode = self.product_list.product_variant.extproductcode
   cost_master =  ProductCostMaster.where("prod = ?", pcode).first

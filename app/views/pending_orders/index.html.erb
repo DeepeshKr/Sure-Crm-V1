@@ -1,0 +1,74 @@
+<!-- set page title start -->
+<% title "HBN Pending Orders #{@from_date} #{@to_date}" %>
+<!-- set page title end -->
+<p id="notice"><%= notice %></p>
+<div class="row">
+	<div class="col-xs-2"><h3>Search</h3></div>
+	<div class="col-xs-6">
+		<%= render 'date_range' %>
+	</div>
+	<%= render 'filter' %>
+</div>
+
+<%= render 'search' %>
+
+<div class="row">
+	<div class="col-xs-4"><h3>Pending Orders</h3></div>
+	<div class="col-xs-8">
+		<br>
+		<div class="digg_pagination">
+		  <%= will_paginate @pending_orders, :container => false %>
+		</div>
+		<br> 
+	</div>
+</div>
+
+<table class="table table-bordered table-stripped">
+  <thead>
+    <tr>
+	  <th>Date</th>
+      <th>Order ref</th>
+      <th>Order no</th>
+	  <th>Manifest</th>
+	  <th>Telephone</th>
+      <th>Dispatch status</th>
+      <th>Cod amount</th>
+      <th>Pay u</th>
+	  <th>Savings</th>
+      <th>Courier</th>
+      <th>Pay u status</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @pending_orders.each do |pending_order| %>
+      <tr>
+		<td><%= pending_order.order_date.strftime("%d-%b-%Y") if pending_order.order_date %></td>
+        <td><%= pending_order.order_ref_id %></td>
+        <td><%= pending_order.order_no %></td>
+		<td><%= pending_order.manifest %></td>
+		<td><%= pending_order.tel_1 %> <%= pending_order.tel_2 %></td>
+        <td><%= pending_order.order_dispatch_status.name if pending_order.order_dispatch_status %></td>
+        <td><%= pending_order.cod_amount %></td>
+        <td><%= pending_order.pay_u_amount %></td>
+        <td><%= pending_order.savings %></td>
+        <td>
+			<%= pending_order.courier_name %>
+			<%= pending_order.courier_list.name if pending_order.courier_list %></td>
+        <td><%= pending_order.payumoney_status.name if pending_order.payumoney_status %></td>
+        <td><%= link_to 'Show', pending_order %></td>
+        <td><%= link_to 'Edit', edit_pending_order_path(pending_order) %></td>
+        <td><%= link_to 'Destroy', pending_order, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+	<%= render 'import_file' %>
+<br>
+	<%= render 'generate_orders_date_range' %>
+<br>
+
+

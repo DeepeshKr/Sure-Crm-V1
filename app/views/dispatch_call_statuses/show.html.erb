@@ -1,0 +1,19 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @dispatch_call_status.name %>
+</p>
+
+<p>
+  <strong>Description:</strong>
+  <%= @dispatch_call_status.description %>
+</p>
+
+<p>
+  <strong>Sort order:</strong>
+  <%= @dispatch_call_status.sort_order %>
+</p>
+
+<%= link_to 'Edit', edit_dispatch_call_status_path(@dispatch_call_status) %> |
+<%= link_to 'Back', dispatch_call_statuses_path %>

@@ -246,6 +246,7 @@
                 <li><%= link_to "Feature Requests", "/app_feature_requests" %></li>
                 <li class="divider"></li>
 				<li><%= link_to "Delayed Job", "/delayed_job/overview", target: "_blank" %> </li>
+				<li><%= link_to "Delayed Job (2)", "/job/overview", target: "_blank" %> </li>
 				<li><%= link_to "Resque Job", "/resque", target: "_blank" %> </li>
 				<li><%= link_to "Resque Job New", "/resque_web", target: "_blank" %> </li>
 				<li><!-- = link_to "Delayed Job", "/jobs" % --> </li>
@@ -271,6 +272,7 @@
               <li><%= link_to "Profile", current_user %></li>
               <li><%= link_to "Settings", '#' %></li>
               <li class="divider"></li>
+			  <li><%= link_to "Help Files", help_path %></li>
               <li>
                 <%= link_to "Log out", logout_path, method: "delete" %>
               </li>

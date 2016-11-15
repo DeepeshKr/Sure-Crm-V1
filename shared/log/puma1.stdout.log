@@ -1,0 +1,82 @@
+=== puma startup: 2016-05-09 21:07:27 +0530 ===
+=== puma startup: 2016-05-09 21:07:27 +0530 ===
+=== puma startup: 2016-05-09 21:07:27 +0530 ===
+=== puma startup: 2016-05-09 21:07:27 +0530 ===
+=== puma startup: 2016-05-09 21:07:27 +0530 ===
+=== puma startup: 2016-05-09 21:07:27 +0530 ===
+=== puma startup: 2016-05-09 21:07:27 +0530 ===
+=== puma startup: 2016-05-09 21:07:27 +0530 ===
+[13196] === puma shutdown: 2016-05-09 21:07:27 +0530 ===
+[13196] - Goodbye!
+Exiting
+=== puma startup: 2016-05-09 21:09:13 +0530 ===
+[3048] * Starting control server on unix:///tmp/puma-status-1462808353580-3048
+[3048] - Worker 0 (pid: 3091) booted, phase: 0
+[3048] - Worker 2 (pid: 3097) booted, phase: 0
+[3048] - Worker 3 (pid: 3101) booted, phase: 0
+[3048] - Worker 1 (pid: 3095) booted, phase: 0
+[3048] - Gracefully shutting down workers...
+[3048] === puma shutdown: 2016-05-09 21:09:14 +0530 ===
+[3048] - Goodbye!
+Exiting
+=== puma startup: 2016-05-09 21:09:37 +0530 ===
+[3188] * Starting control server on unix:///tmp/puma-status-1462808373661-3188
+[3188] - Worker 1 (pid: 3435) booted, phase: 0
+[3188] - Worker 3 (pid: 3443) booted, phase: 0
+[3188] - Worker 0 (pid: 3431) booted, phase: 0
+[3188] - Worker 2 (pid: 3437) booted, phase: 0
+[3188] - Gracefully shutting down workers...
+[3188] === puma shutdown: 2016-05-09 21:17:20 +0530 ===
+[3188] - Goodbye!
+=== puma startup: 2016-05-09 21:17:25 +0530 ===
+[3903] * Starting control server on unix:///tmp/puma-status-1462808841737-3903
+[3903] - Worker 0 (pid: 4173) booted, phase: 0
+[3903] - Worker 3 (pid: 4185) booted, phase: 0
+[3903] - Worker 2 (pid: 4181) booted, phase: 0
+[3903] - Worker 1 (pid: 4177) booted, phase: 0
+[3903] - Gracefully shutting down workers...
+[3903] === puma shutdown: 2016-05-09 23:07:23 +0530 ===
+[3903] - Goodbye!
+=== puma startup: 2016-05-09 23:07:27 +0530 ===
+[7282] * Starting control server on unix:///tmp/puma-status-1462815443930-7282
+[7282] - Worker 1 (pid: 7553) booted, phase: 0
+[7282] - Worker 0 (pid: 7549) booted, phase: 0
+[7282] - Worker 2 (pid: 7555) booted, phase: 0
+[7282] - Worker 3 (pid: 7561) booted, phase: 0
+[7282] - Gracefully shutting down workers...
+[7282] === puma shutdown: 2016-05-09 23:09:27 +0530 ===
+[7282] - Goodbye!
+=== puma startup: 2016-05-09 23:09:32 +0530 ===
+[7794] * Starting control server on unix:///tmp/puma-status-1462815568834-7794
+[7794] - Worker 0 (pid: 8064) booted, phase: 0
+[7794] - Worker 1 (pid: 8068) booted, phase: 0
+[7794] - Worker 3 (pid: 8076) booted, phase: 0
+[7794] - Worker 2 (pid: 8070) booted, phase: 0
+[7794] - Gracefully shutting down workers...
+[7794] === puma shutdown: 2016-05-09 23:11:37 +0530 ===
+[7794] - Goodbye!
+=== puma startup: 2016-05-09 23:11:42 +0530 ===
+[8337] * Starting control server on unix:///tmp/puma-status-1462815698504-8337
+[8337] - Worker 0 (pid: 8607) booted, phase: 0
+[8337] - Worker 1 (pid: 8611) booted, phase: 0
+[8337] - Worker 3 (pid: 8619) booted, phase: 0
+[8337] - Worker 2 (pid: 8615) booted, phase: 0
+[8337] - Gracefully shutting down workers...
+[8337] === puma shutdown: 2016-05-09 23:15:18 +0530 ===
+[8337] - Goodbye!
+=== puma startup: 2016-05-09 23:15:23 +0530 ===
+[8923] * Starting control server on unix:///tmp/puma-status-1462815919430-8923
+[8923] - Worker 0 (pid: 9190) booted, phase: 0
+[8923] - Worker 1 (pid: 9194) booted, phase: 0
+[8923] - Worker 3 (pid: 9202) booted, phase: 0
+[8923] - Worker 2 (pid: 9198) booted, phase: 0
+
+SyntaxError (/home/ubuntubk57/sure-crm-v-1/app/views/product_stock_books/summary.csv.erb:3: syntax error, unexpected ')', expecting ']'
+...qty, c.total_corrections_value).html_safe.strip  );@output_b...
+...                               ^):
+  app/views/product_stock_books/summary.csv.erb:3: syntax error, unexpected ')', expecting ']'
+
+
+[8923] - Gracefully shutting down workers...
+[8923] === puma shutdown: 2016-05-09 23:28:47 +0530 ===
+[8923] - Goodbye!

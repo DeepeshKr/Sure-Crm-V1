@@ -1,2 +1,2 @@
-class CableOpertorComm < ActiveRecord::Base
+class CableOperatorComm < ActiveRecord::Base
 end

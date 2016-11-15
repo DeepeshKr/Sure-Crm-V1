@@ -39,6 +39,22 @@
   	</div>
   </div>
  <% if (current_user.employee_role.sortorder < 8) %>
+ <div class="well well-sm">
+ 	<div class="row">
+ 		<div class="col-xs-4">
+		Current Media Commission:<strong><%= @medium.media_commision.name || "None" if @medium.media_commision %></strong>
+		</div>
+		<div class="col-xs-3">
+		Operator Commission:<strong> <%= @medium.value  || "None" if @medium.value %></strong>
+		</div>
+		<div class="col-xs-3">
+		Agent Commission: <strong><%= @medium.agent_comm  || "None" if @medium.agent_comm %></strong>
+		</div>
+		<div class="col-xs-2">
+		Daily Charges: <strong> <%= @medium.daily_charges || "None" if @medium.daily_charges %></strong>
+		</div>
+	</div>
+ </div>
   <div class="row">
   	<div class="col-xs-4 col-offset-xs-2">
     <%= f.select(:media_commision_id,

@@ -2020,7 +2020,7 @@ attr_accessor  :total_nos_3, :total_pieces_3, :total_sales_3, :total_revenue_3, 
     return total * 0.764444444445
   end
 
-  def transfer_order_dealer_price subtotal, shipping, pieces
+  def cal_transfer_order_dealer_price subtotal, shipping, pieces
     total = 0
     total += (subtotal.to_f * (pieces.to_f ||= 1)) || 0
     total += (shipping.to_f * (pieces.to_f ||= 1)) || 0

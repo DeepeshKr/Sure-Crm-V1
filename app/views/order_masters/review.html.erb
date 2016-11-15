@@ -6,22 +6,20 @@
 <br>
 <div class="row">
   <div class="col-xs-3">
-  <div class="well well-sm">
-  <div class="row">
-    <%= bootstrap_form_tag url: detailedordersearch_path, :method => :GET, :enforce_utf8 => false do |f| %>
-      <div class="col-xs-8">
-          <%= text_field_tag(:mobile, @mobile,
-          {:class => "form-control", :placeholder => "Search Mobile Number"})  %>
+    	  <div class="well well-sm">
+         <div class="row">
+      	   <%= bootstrap_form_tag url: detailedordersearch_path, :method => :GET, :enforce_utf8 => false do |f| %>
+        	 <div class="col-xs-8">
+            		<%= text_field_tag(:order_id, @order_id,
+            	  	{:class => "form-control", :placeholder => "Search Order Id"})  %>
+        	</div>
+        	<div class="col-xs-4">
+            		<%= submit_tag "Ok", name: nil,  class: "btn btn-primary" %>
+        	</div>
+      		<% end %>
+    		</div>
       </div>
-      <div class="col-xs-4">
-          <%= submit_tag "Ok", name: nil,  class: "btn btn-primary" %>
-      </div>
-    <% end %>
   </div>
-  </div>
-  </div>
-
-
   <div class="col-xs-4">
   <div class="well well-sm">
      <div class="row">
@@ -38,20 +36,19 @@
 
     </div>
   </div>
-    <div class="col-xs-3">
-  <div class="well well-sm">
-       <div class="row">
-    <%= bootstrap_form_tag url: detailedordersearch_path, :method => :GET, :enforce_utf8 => false do |f| %>
-      <div class="col-xs-8">
-          <%= text_field_tag(:order_id, @order_id,
-          {:class => "form-control", :placeholder => "Search Order Id"})  %>
-      </div>
-      <div class="col-xs-4">
-          <%= submit_tag "Ok", name: nil,  class: "btn btn-primary" %>
-      </div>
-    <% end %>
-  </div>
-
+  <div class="col-xs-3">
+    <div class="well well-sm">
+	    <div class="row">
+	      <%= bootstrap_form_tag url: detailedordersearch_path, :method => :GET, :enforce_utf8 => false do |f| %>
+	        <div class="col-xs-8">
+	            <%= text_field_tag(:mobile, @mobile,
+	            {:class => "form-control", :placeholder => "Search Mobile Number"})  %>
+	        </div>
+	        <div class="col-xs-4">
+	            <%= submit_tag "Ok", name: nil,  class: "btn btn-primary" %>
+	        </div>
+	      <% end %>
+	    </div>
     </div>
   </div>
     <div class="col-xs-2">

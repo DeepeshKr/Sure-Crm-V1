@@ -1,0 +1,37 @@
+<!--  if @go_live == true % -->
+<div class="panel panel-danger">
+  <div class="panel-body">
+	<div class="row">
+		<div class="col-xs-2"><p class="lead">Import <strong>CSV</strong> File: </p></div>
+		<div class="col-xs-4">File should have these headers in <strong>CSV</strong> <br>
+			<ul class="list-inline">
+				<li>TEL1</li>
+				<li>TEL2</li>
+				<li>MANIFEST</li>
+				<li>DESPATCH</li>
+			</ul>
+		</div>
+	
+		<div class="col-xs-4">
+	
+			  <div class="row">
+			  <%= form_tag import_pending_orders_path, multipart: true do %>
+			    <div class="col-xs-8 col-offset-xs-2">
+			        <%= file_field_tag :file %>
+			    </div>
+			    <div class="col-xs-4">
+			        <%= submit_tag "Import CSV", class: "btn btn-warning btn-sm" %>
+			    </div>
+			  <% end %>
+			  </div>
+		  </div>
+
+	</div>
+  </div>
+   <div class="panel-footer">
+	   When you import the file you can generate the pay u money link when the agent visits the page to make calls. If the order is already present then the it WONT be imported.
+   
+   <!-- = link_to ' page', @return_url, class: "btn btn-info btn-xs" -->
+   </div>
+</div>
+<!-- % end % -->

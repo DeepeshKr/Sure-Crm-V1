@@ -1,0 +1,62 @@
+ <div class="row">
+	<div class="col-xs-4"><h4>HBN Campaign Cost Calculation</h4></div>
+ 	<div class="col-xs-6">
+  		<%= render partial: 'date_range', :locals => {:searchaction => "hbn_cost_summary"}  %>
+	</div>
+    <div class="col-xs-1 col-xs-offset-1">
+ 	   <%= link_to 'Back', url_for(:back), class: "btn btn-info btn-xs" %>
+    </div>
+ </div>
+ 
+<table class="table table-hover table-bordered">
+  <thead>
+    <tr>
+      <th>Time Slot</th>
+      <th class="text-right">Start</th>
+      <th class="text-right">End</th>
+      <th class="text-right">Secs</th>
+      <th class="text-right">Start Sec</th>
+      <th class="text-right">End Sec</th>
+      <th class="text-right">Cost per Sec</th>
+      <th class="text-right">%</th>
+      <th class="text-right">Cost</th>
+      <th class="text-right">Our Spends</th>
+    </tr>
+  </thead>
+  <% total_cost = 0 %> <% slot_percent = 0.0 %> <% average_total = 0 %> 
+<% if @hbn_cost_list.present? %>
+  <tbody>
+    <% @hbn_cost_list.each do |media_cost_master| %>
+      <tr>
+        <td><%= media_cost_master.name %></td>
+        <td class="text-right"><%= media_cost_master.str_hr %>:<%= media_cost_master.str_min %></td>
+        <td class="text-right"><%= media_cost_master.end_hr %>:<%= media_cost_master.end_min %></td>
+        <td class="text-right"><%= media_cost_master.duration_secs %></td>
+        <td class="text-right"><%= media_cost_master.starting_sec %></td>
+        <td class="text-right"><%= media_cost_master.ending_sec %></td>
+        <td class="text-right"><%= media_cost_master.cost_per_sec %></td>
+        <td class="text-right">
+			<%= media_cost_master.slot_percent if media_cost_master.slot_percent %>
+            <% slot_percent +=  media_cost_master.slot_percent if media_cost_master.slot_percent %>
+        </td>
+        <td class="text-right">
+			<%= media_cost_master.total_cost %> 
+			<% total_cost +=  media_cost_master.total_cost if media_cost_master.total_cost %>
+		</td>
+        <td class="text-right">
+			<%= media_cost_master.average_cost %> 
+			<% average_total +=  media_cost_master.average_cost if media_cost_master.average_cost %> 
+		</td>
+      </tr>
+    <% end %>
+  </tbody>
+  <tfoot>
+    <tr>
+      <th colspan="7">Total</th>
+      <th class="text-right"><%= slot_percent %></th>
+      <th class="text-right"><%= total_cost %></th>
+      <th class="text-right"><%= average_total %></th>
+    </tr>
+  </tfoot>
+   <% end %>
+</table>

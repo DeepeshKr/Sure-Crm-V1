@@ -20,13 +20,27 @@
   <div class="col-xs-6">
   <div class="row">
     <div class="col-xs-5">
-	  <small>DNIS <%= @order_master.calledno %> </small><br/>
-      <small> Mobile No <%= @order_master.customer.mobile if @order_master.customer %> | <%= @order_master.customer.alt_mobile if @order_master.customer %></small> 
+	  <small>DNIS <%= @order_master.calledno %> </small> <br/>
+      <small> Mobile No <%= @order_master.customer.mobile if @order_master.customer %> | <%= @order_master.customer.alt_mobile if @order_master.customer %> </small> 
     </div>
     <div class="col-xs-7">
 	<small>Channel <%= @order_master.medium.name if @order_master.medium %> </small> <br/>
     <small> Email Id  <%= @order_master.customer.emailid if @order_master.customer %> | <%= @order_master.customer.alt_emailid if @order_master.customer %></small>
     </div>
+  </div>
+  <div class="row">
+    <div class="col-xs-3">
+	Date of Birth
+  	</div>
+    <div class="col-xs-4">
+		<%= @order_master.customer.date_of_birth.strftime("%d-%b-%Y") if @order_master.customer.date_of_birth.present? %>
+	</div>
+    <div class="col-xs-3">
+	<small><small>Order given by</small></small>
+  	</div>
+    <div class="col-xs-2">
+	<small><%= @order_master.gender  if @order_master.gender %> </small>
+  	</div>
   </div>
 </div>
 </div>

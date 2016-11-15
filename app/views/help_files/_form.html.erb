@@ -3,14 +3,30 @@
 
   <div class="form-inputs">
     <%= f.input :name %>
-    <%= f.input :link %>
+    <%= f.input :link, :required => true, :label => "Link like http://"  %>
     <%= f.input :description %>
-     <% if (current_user.employee_role.sortorder < 3) %> 
-    <%= f.input :code_used %>
-    <%= f.input :database_used %>
+    <%= f.input :tags, :required => true, :label => "Single Word / Short cut Words to explain"  %>
+	<%= f.input :screen_shot, as: :file, label: "Upload Image" %>
+	
+    <% if (current_user.employee_role.sortorder < 3) %> 
+	<div class="row">
+			<div class="col-xs-3">
+				<%= f.input :domain, :label => "Enter the domain"  %>
+			</div>
+			<div class="col-xs-3">
+				<%= f.input :controller, :label => "Enter the controller details"  %>
+			</div>
+			<div class="col-xs-3">
+				<%= f.input :action, :label => "Enter the action details"  %>
+			</div>
+			<div class="col-xs-3">
+				<%= f.input :database_used, :label => "Enter the database used"  %>
+			</div>
+	</div>
+		<%= f.input :parameters, :label => "Enter the parameters / params if any"  %>
+    	<%= f.input :code_used, :label => "Paste the code as it is"  %>
+    	
     <% end %>
-    <%= f.input :tags %>
-
   </div>
 <div class="row">
   <div class="col-xs-4 col-xs-offset-8">

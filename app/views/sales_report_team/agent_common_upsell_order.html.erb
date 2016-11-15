@@ -7,73 +7,9 @@
 	 <h4>Sales Report for day <%=  @orderdate %> </h4>
 	 </div>
 	 <div class="col-xs-6">
-<%= render partial: 'date_range_search', :locals => {:searchaction => "agent_order"}  %>
+		 <%= render partial: 'date_range_search', :locals => {:searchaction => "agent_order"}  %>
 	 		
 	</div>
  </div>
 
-<% if @employeeorderlist.present? %>
-<table class="table table-hover table-bordered">
-  <thead>
-    <tr>
-	     <th>No</th>
-	     <th>Employee</th>
-	     <th>Pay U Orders</th>
-	     <th>Pay U Value</th>
-	     <th>CC Orders</th>
-	     <th>CC Value</th>
-	     <th>COD Orders</th>
-	     <th>COD Value</th>
-	     <th>Total Orders</th>
-	     <th>Total Value</th>
-     </tr>
-  </thead>
-<tbody>
-   <% @employeeorderlist.each do |c| %>
-   <tr>
-		<td><%= @sno %></td>
-		<td>
-		 <%= link_to c[:employee], orderlist_path(employee_id: c[:id], for_date: c[:for_date], completed: 'yes'), :target => "_blank" %>
-
-		</td>
-		<td class="text-right">
-		   <%= c[:pay_u_orders] %> 
-		</td>
-		<td class="text-right">
-		   <%= c[:pay_u_value] %> 
-		</td>
-		<td class="text-right">
-		   <%= c[:ccorders] %> 
-		</td>
-		<td class="text-right">
-		   <%= c[:ccvalue] %> 
-		</td>
-		<td class="text-right">
-		   <%= c[:codorders] %> 
-		</td>
-		<td class="text-right">
-		   <%= c[:codvalue] %> 
-		</td>
-		<td class="text-right">
-		   <%= c[:nos] %> 
-		</td>
-		<td class="text-right">
-		   <%= c[:total] %> 
-		</td>
-
-  </tr> 
-  <% @sno += 1 %> 
- <% end %>
-
- 
-
-  </tbody>
-
-  </table>
-  <% else %>
-  <div class="well well-sm">
-  <h5>Please select a date to generate the report </h5>
-  </div>
-  <% end %>
- <br>
-
+	<%= render 'agents_report' %>

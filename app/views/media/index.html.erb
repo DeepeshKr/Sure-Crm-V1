@@ -45,7 +45,7 @@
        <th>Ads</th>
       <% end %>
 
-      <th colspan=""></th>
+      <th colspan="2"></th>
     </tr>
   </thead>
 
@@ -69,6 +69,7 @@
          <% if (current_user.employee_role.sortorder < 6) %>
         <td><%= link_to 'Add Ad Slots', media_cost_masters_path(media_id: medium.id), class: "btn btn-primary btn-xs" %></td>
          <% end %>
+		  <td><%= link_to 'View', medium, class: "btn btn-primary btn-xs" %></td>
         <td><%= link_to 'Edit', edit_medium_path(medium), class: "btn btn-info btn-xs" %></td>
 
       </tr>
@@ -133,12 +134,14 @@
         <td><%= medium.employee.name || "NO BDM" if medium.employee %></td>
          <% if (current_user.employee_role.sortorder < 6) %>
         <td><%= medium.media_commision.name if medium.media_commision %></td>
-         <td><%= medium.value %></td>
+        <td><%= medium.value %></td>
         <td><%= medium.daily_charges  %></td>
         <td><%= medium.paid_correction %></td>
         <% end %>
          <% if (current_user.employee_role.sortorder < 6) %>
-        <td><%= link_to 'Add Ad Slots', media_cost_masters_path(media_id: medium.id), class: "btn btn-primary btn-xs" %></td>
+        <td><%= link_to 'Add Ad Slots', 
+			media_cost_masters_path(media_id: medium.id), class: "btn btn-primary btn-xs" %>
+		</td>
          <% end %>
         <td><%= link_to 'Edit', edit_medium_path(medium), class: "btn btn-info btn-xs" %></td>
         <td><%= link_to 'Destroy', medium, method: :delete, data: { confirm: 'Are you sure?' } %></td>
@@ -148,3 +151,5 @@
 </table>
 </div>
 <% end %>
+
+<%= render 'switch_cdm' %>

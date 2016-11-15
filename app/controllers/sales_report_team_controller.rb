@@ -3,6 +3,7 @@ class SalesReportTeamController < ApplicationController
    respond_to :html
    before_action :drop_downs, only: [:city, :update, :destroy, :deleteupsell]
    before_action :all_cancelled_orders
+   before_action :use_from_to_date
 
   def index
    @from_date = (Date.current + 330.minutes).strftime("%Y-%m-%d")
@@ -176,7 +177,6 @@ class SalesReportTeamController < ApplicationController
     
   end
   
-  
   def pay_u_orders
       #     #media segregation only HBN
       #     #media_segments
@@ -219,7 +219,7 @@ class SalesReportTeamController < ApplicationController
         end
       end
 
-      @orderdate = "Pay u money Orders between #{@from_date} and #{@to_date} found #{order_masters.count} orders!"
+      @orderdate = "Pay u money Orders between #{@from_date} and #{@to_date} found #{order_masters.count} orders order are processed to COD after 24 hours!"
 
       # =>
       @sno = 1
@@ -250,7 +250,7 @@ class SalesReportTeamController < ApplicationController
             
            # paid_status = "#{o.orderpaymentmode.name}"
 
-            employeeunorderlist << {:total => o.total,
+            employeeunorderlist << {:total => o.total_value,
             :order_id => o.id,
             :order_no => (o.external_order_no || "NA" if o.external_order_no.present?),
             :status => o.orderpaymentmode.name,
@@ -502,7 +502,112 @@ class SalesReportTeamController < ApplicationController
         #@order_masters = OrderMaster.where(id: sold_product_list)
      end
   end
+  
+  def showproducts
+    @btn1 = "btn btn-default"
+    @btn2 = "btn btn-default"
+    @btn3 = "btn btn-default"
+    @sno = 1
+    show_products
+  end
+  
+  def disposition_report
+    if params[:from_date].present?
+      #@summary ||= []
+      @or_for_date = params[:from_date]
+      for_date =  Date.strptime(params[:from_date], "%Y-%m-%d")
+      @from_date = for_date.beginning_of_day - 330.minutes  
+      @to_date = for_date.end_of_day - 330.minutes
 
+      if params.has_key?(:to_date)
+        @to_date =  Date.strptime(params[:to_date], "%Y-%m-%d")
+        @to_date = @to_date.end_of_day - 330.minutes
+      end
+      @to_date = @to_date.end_of_day - 330.minutes
+    end
+    
+    if @from_date == nil
+      @from_date = (Date.current + 330.minutes).strftime("%Y-%m-%d")
+      @to_date = (Date.current + 330.minutes).strftime("%Y-%m-%d")
+      return
+    end
+    
+    interaction_masters = InteractionMaster.where('created_at >= ? AND created_at <= ?', @from_date, @to_date).order(:created_at)
+    
+    @sno = 1
+      employeeunorderlist ||= []
+      dnis = "NA"
+      num = 1
+      ######
+      #######
+      interaction_masters.each do |inm|
+        product_list = "" # ||= []
+        customer_name = inm.customer.fullname || "NA" if inm.customer
+        name = Employee.find(inm.employee_id).first_name || "NA" if inm.employee_id.present?
+        products = ""
+        order_time = "NA"
+        order_id = inm.orderid if inm.orderid
+            #cats.each do |cat| cat.name end
+      if inm.orderid.present?
+
+        order_masters = OrderMaster.find(inm.orderid)
+        dnis = order_masters.calledno
+        city = order_masters.city ||= "NA"
+        total = order_masters.g_total
+        channel = Medium.find(order_masters.media_id).name ||= "NA" if order_masters.media_id
+    
+        @add_on_replacements = ProductMasterAddOn.where("activeid = 10000 AND replace_by_product_id IS NOT NULL").pluck(:product_list_id)
+           
+        
+        if order_masters.order_line.present?
+          #@order_lines_regular =  order_masters.order_line
+          @order_lines_regular = OrderLine.where(orderid: inm.orderid).joins(:product_variant)
+                        .where('PRODUCT_VARIANTS.product_sell_type_id = ? OR PRODUCT_LIST_ID in (?)', 10000, @add_on_replacements)
+          @order_lines_regular.each do |ord|
+            product_list << ord.product_list.extproductcode
+          end
+        end
+        
+        product_list = product_list.gsub(/\s+/, '') if !product_list.nil?
+        product_list = product_list.gsub(/&quot;/, '') if !product_list.nil?
+        order_time = (order_masters.created_at + 330.minutes).strftime("%Y-%m-%d %H:%M")
+      end
+        
+          employeeunorderlist << {:total => total,
+            :dnis => dnis,
+          :sno => num,
+          :employee => name,
+          :mobile => inm.mobile,
+          :customer => customer_name,
+          :order_time => (inm.created_at + 330.minutes).strftime("%H:%M %p"),
+          :on_date =>  (inm.created_at + 330.minutes).strftime("%Y-%m-%d"),
+          :products => product_list,
+          :city => city,
+          :order_id => order_id,
+          :channel => channel,
+          :disposition => inm.interaction_category.name,
+          :no_of =>  num}
+           num += 1
+      end # end loop
+   
+    @from_date = (@from_date + 330.minutes).strftime("%Y-%m-%d")
+    @to_date = (@to_date + 330.minutes).strftime("%Y-%m-%d")
+    
+    @orderdate = "Disposition between #{@from_date} and #{@to_date} found #{interaction_masters.count} records!"
+       #
+   @employeeorderlist = employeeunorderlist
+    respond_to do |format|
+      csv_file_name = "disposition_report_#{@from_date}_to_#{@to_date}.csv"
+        format.html
+        format.csv do
+          headers['Content-Disposition'] = "attachment; filename=\"#{csv_file_name}\""
+          headers['Content-Type'] ||= 'text/csv'
+        end
+    end #end csv
+  
+
+  end
+  
   private
 
   def shows_between
@@ -574,7 +679,7 @@ class SalesReportTeamController < ApplicationController
 
   end
 
-  def showproducts
+  def show_products
     @btn1 = "btn btn-info"
     @btn2 = "btn btn-info"
     @btn3 = "btn btn-info"
@@ -607,23 +712,23 @@ class SalesReportTeamController < ApplicationController
         #media segregation only HBN
         # media_segments
 
-        order_masters = OrderMaster.where('orderdate >= ? AND orderdate <= ?', from_date, to_date).where('ORDER_STATUS_MASTER_ID > 10002')
+        @order_masters = OrderMaster.where('orderdate >= ? AND orderdate <= ?', from_date, to_date).where('ORDER_STATUS_MASTER_ID > 10000')
           .where.not(ORDER_STATUS_MASTER_ID: @all_cancelled_orders)
         .select(:id).distinct
 
-        order_masters_cod = OrderMaster.where(orderpaymentmode_id: 10001)
+        @order_masters_cod = OrderMaster.where(orderpaymentmode_id: 10001)
         .where('orderdate >= ? AND orderdate <= ?', from_date, to_date)
-        .where('ORDER_STATUS_MASTER_ID > 10002')
+        .where('ORDER_STATUS_MASTER_ID > 10000')
         .where.not(ORDER_STATUS_MASTER_ID: @all_cancelled_orders).select(:id).distinct
 
-        order_masters_cc = OrderMaster.where(orderpaymentmode_id: 10000)
+        @order_masters_cc = OrderMaster.where(orderpaymentmode_id: 10000)
         .where('orderdate >= ? AND orderdate <= ?', from_date, to_date)
-        .where('ORDER_STATUS_MASTER_ID > 10002')
+        .where('ORDER_STATUS_MASTER_ID > 10000')
         .where.not(ORDER_STATUS_MASTER_ID: @all_cancelled_orders).select(:id).distinct
 
-        order_masters_payu = OrderMaster.where(orderpaymentmode_id: 10080)
+        @order_masters_payu = OrderMaster.where(orderpaymentmode_id: 10080)
         .where('orderdate >= ? AND orderdate <= ?', from_date, to_date)
-        .where('ORDER_STATUS_MASTER_ID > 10002')
+        .where('ORDER_STATUS_MASTER_ID > 10000')
         .where.not(ORDER_STATUS_MASTER_ID: @all_cancelled_orders).select(:id).distinct
 
          if params.has_key?(:start_time) && params.has_key?(:end_time)
@@ -634,22 +739,22 @@ class SalesReportTeamController < ApplicationController
           @Show_end_time = end_time.strftime("%H:%M")
 
 
-          order_masters = OrderMaster.where('orderdate >= ? AND orderdate <= ?', start_time, end_time)
-          .where('ORDER_STATUS_MASTER_ID > 10002').where('ORDER_STATUS_MASTER_ID <> 10006')
+          @order_masters = OrderMaster.where('orderdate >= ? AND orderdate <= ?', start_time, end_time)
+          .where('ORDER_STATUS_MASTER_ID > 10000').where('ORDER_STATUS_MASTER_ID <> 10006')
           .select(:id).distinct
-          order_masters_cod = OrderMaster.where(orderpaymentmode_id: 10001)
+          @order_masters_cod = OrderMaster.where(orderpaymentmode_id: 10001)
           .where('orderdate >= ? AND orderdate <= ?', start_time, end_time)
-          .where('ORDER_STATUS_MASTER_ID > 10002')
+          .where('ORDER_STATUS_MASTER_ID > 10000')
           .where.not(ORDER_STATUS_MASTER_ID: @all_cancelled_orders).select(:id).distinct
 
-          order_masters_cc = OrderMaster.where(orderpaymentmode_id: 10000)
+          @order_masters_cc = OrderMaster.where(orderpaymentmode_id: 10000)
           .where('orderdate >= ? AND orderdate <= ?', start_time, end_time)
-          .where('ORDER_STATUS_MASTER_ID > 10002')
+          .where('ORDER_STATUS_MASTER_ID > 10000')
           .where.not(ORDER_STATUS_MASTER_ID: @all_cancelled_orders).select(:id).distinct
 
-          order_masters_payu = OrderMaster.where(orderpaymentmode_id: 10080)
+          @order_masters_payu = OrderMaster.where(orderpaymentmode_id: 10080)
           .where('orderdate >= ? AND orderdate <= ?', start_time, end_time)
-          .where('ORDER_STATUS_MASTER_ID > 10002')
+          .where('ORDER_STATUS_MASTER_ID > 10000')
           .where.not(ORDER_STATUS_MASTER_ID: @all_cancelled_orders).select(:id).distinct
 
          end
@@ -669,18 +774,18 @@ class SalesReportTeamController < ApplicationController
                @orderdate = "Showing all "
              when "hbn"    #compare to 2
                @show = "hbn"
-               order_masters = order_masters.joins(:medium).where("media.media_group_id = 10000")
-               order_masters_cod = order_masters_cod.joins(:medium).where("media.media_group_id = 10000")
-               order_masters_cc= order_masters_cc.joins(:medium).where("media.media_group_id = 10000")
-               order_masters_payu = order_masters_payu.joins(:medium).where("media.media_group_id = 10000")
+               @order_masters = @order_masters.joins(:medium).where("media.media_group_id = 10000")
+               @order_masters_cod = @order_masters_cod.joins(:medium).where("media.media_group_id = 10000")
+               @order_masters_cc= @order_masters_cc.joins(:medium).where("media.media_group_id = 10000")
+               @order_masters_payu = @order_masters_payu.joins(:medium).where("media.media_group_id = 10000")
                @btn2 = "btn btn-success"
                @orderdate = "Showing all HBN"
              when "pvt"
                @show = "pvt"
-               order_masters = order_masters.joins(:medium).where("media.media_group_id IS NULL")
-               order_masters_cod = order_masters_cod.joins(:medium).where("media.media_group_id IS NULL")
-               order_masters_cc= order_masters_cc.joins(:medium).where("media.media_group_id IS NULL")
-               order_masters_payu = order_masters_payu.joins(:medium).where("media.media_group_id IS NULL")
+               @order_masters = @order_masters.joins(:medium).where("media.media_group_id IS NULL")
+               @order_masters_cod = @order_masters_cod.joins(:medium).where("media.media_group_id IS NULL")
+               @order_masters_cc= @order_masters_cc.joins(:medium).where("media.media_group_id IS NULL")
+               @order_masters_payu = @order_masters_payu.joins(:medium).where("media.media_group_id IS NULL")
                @btn3 = "btn btn-success"
                @orderdate = "Showing all Pvt"
              else
@@ -691,10 +796,11 @@ class SalesReportTeamController < ApplicationController
         common_sell_product_variant_list = ProductVariant.where(product_sell_type_id: 10001)
         basic_sell_product_variant_list =  ProductVariant.where(product_sell_type_id: 10040)
 
-        reg_order_lines = OrderLine.where(orderid: order_masters).where(productvariant_id: regular_product_variant_list).select(:product_list_id).distinct
-        common_order_lines = OrderLine.where(orderid: order_masters).where(productvariant_id: common_sell_product_variant_list).select(:product_list_id).distinct
-        basic_order_lines = OrderLine.where(orderid: order_masters).where(productvariant_id: basic_sell_product_variant_list).select(:product_list_id).distinct
-
+        reg_order_lines = OrderLine.where(orderid: @order_masters).where(productvariant_id: regular_product_variant_list).select(:product_list_id).distinct
+        common_order_lines = OrderLine.where(orderid: @order_masters).where(productvariant_id: common_sell_product_variant_list).select(:product_list_id).distinct
+        basic_order_lines = OrderLine.where(orderid: @order_masters).where(productvariant_id: basic_sell_product_variant_list).select(:product_list_id).distinct
+        
+        @total_main_nos, @total_common_nos, @total_basic_nos = 0, 0, 0
         #@orderdate = "Searched for #{for_date} found #{order_masters.count} agents!"
           main_product_list_orderlist ||= []
           num = 1
@@ -702,14 +808,14 @@ class SalesReportTeamController < ApplicationController
           e = o.product_list_id
 
           name = (ProductList.find(e).productlistdetails  || "NA" if ProductList.find(e).productlistdetails.present?)
-          orderlist = OrderLine.where(orderid: order_masters).where(product_list_id: e)
+          orderlist = OrderLine.where(orderid: @order_masters).where(product_list_id: e)
           timetaken = orderlist.sum(:codcharges)
-          payuvalue = OrderLine.where(orderid: order_masters_payu).where(product_list_id: e).sum(:total)
-          payuorders = OrderLine.where(orderid: order_masters_payu).where(product_list_id: e).count()
-          ccvalue = OrderLine.where(orderid: order_masters_cc).where(product_list_id: e).sum(:total)
-          ccorders = OrderLine.where(orderid: order_masters_cc).where(product_list_id: e).count()
-          codorders = OrderLine.where(orderid: order_masters_cod).where(product_list_id: e).count()
-          codvalue = OrderLine.where(orderid: order_masters_cod).where(product_list_id: e).sum(:total)
+          payuvalue = OrderLine.where(orderid: @order_masters_payu).where(product_list_id: e).sum(:total)
+          payuorders = OrderLine.where(orderid: @order_masters_payu).where(product_list_id: e).count()
+          ccvalue = OrderLine.where(orderid: @order_masters_cc).where(product_list_id: e).sum(:total)
+          ccorders = OrderLine.where(orderid: @order_masters_cc).where(product_list_id: e).count()
+          codorders = OrderLine.where(orderid: @order_masters_cod).where(product_list_id: e).count()
+          codvalue = OrderLine.where(orderid: @order_masters_cod).where(product_list_id: e).sum(:total)
           totalorders = orderlist.sum(:total)
           noorders = orderlist.count()
           main_product_list_orderlist << {:total => totalorders,
@@ -718,22 +824,24 @@ class SalesReportTeamController < ApplicationController
             :nos => noorders, :payuvalue => payuvalue, :payuorders => payuorders,
             :codorders => codorders, :codvalue => codvalue,
              :ccorders => ccorders, :ccvalue => ccvalue  }
+           @total_main_nos += noorders if noorders.present?
           end
           @main_product_list = main_product_list_orderlist.sort_by{|c| c[:total]}.reverse
-
+          
+           
           common_product_list_orderlist ||= []
           common_order_lines.each do |o|
           e = o.product_list_id
 
           name = (ProductList.find(e).productlistdetails  || "NA" if ProductList.find(e).productlistdetails.present?)
-          orderlist = OrderLine.where(orderid: order_masters).where(product_list_id: e)
+          orderlist = OrderLine.where(orderid: @order_masters).where(product_list_id: e)
           timetaken = orderlist.sum(:codcharges)
-          payuvalue = OrderLine.where(orderid: order_masters_payu).where(product_list_id: e).sum(:total)
-          payuorders = OrderLine.where(orderid: order_masters_payu).where(product_list_id: e).count()
-          ccvalue = OrderLine.where(orderid: order_masters_cc).where(product_list_id: e).sum(:total)
-          ccorders = OrderLine.where(orderid: order_masters_cc).where(product_list_id: e).count()
-          codorders = OrderLine.where(orderid: order_masters_cod).where(product_list_id: e).count()
-          codvalue = OrderLine.where(orderid: order_masters_cod).where(product_list_id: e).sum(:total)
+          payuvalue = OrderLine.where(orderid: @order_masters_payu).where(product_list_id: e).sum(:total)
+          payuorders = OrderLine.where(orderid: @order_masters_payu).where(product_list_id: e).count()
+          ccvalue = OrderLine.where(orderid: @order_masters_cc).where(product_list_id: e).sum(:total)
+          ccorders = OrderLine.where(orderid: @order_masters_cc).where(product_list_id: e).count()
+          codorders = OrderLine.where(orderid: @order_masters_cod).where(product_list_id: e).count()
+          codvalue = OrderLine.where(orderid: @order_masters_cod).where(product_list_id: e).sum(:total)
           totalorders = orderlist.sum(:total)
           noorders = orderlist.count()
           common_product_list_orderlist << {:total => totalorders,
@@ -742,34 +850,38 @@ class SalesReportTeamController < ApplicationController
             :nos => noorders, :payuvalue => payuvalue, :payuorders => payuorders,
             :codorders => codorders, :codvalue => codvalue,
              :ccorders => ccorders, :ccvalue => ccvalue  }
+          
+           @total_common_nos += noorders if noorders.present?
           end
           @common_product_list_orderlist = common_product_list_orderlist.sort_by{|c| c[:total]}.reverse
-
+          
 
          basic_product_list_orderlist ||= []
           basic_order_lines.each do |o|
           e = o.product_list_id
 
           name = (ProductList.find(e).productlistdetails  || "NA" if ProductList.find(e).productlistdetails.present?)
-          orderlist = OrderLine.where(orderid: order_masters).where(product_list_id: e)
+          orderlist = OrderLine.where(orderid: @order_masters).where(product_list_id: e)
           timetaken = orderlist.sum(:codcharges)
-          payuvalue = OrderLine.where(orderid: order_masters_payu).where(product_list_id: e).sum(:total)
-          payuorders = OrderLine.where(orderid: order_masters_payu).where(product_list_id: e).count()
-          ccvalue = OrderLine.where(orderid: order_masters_cc).where(product_list_id: e).sum(:total)
-          ccorders = OrderLine.where(orderid: order_masters_cc).where(product_list_id: e).count()
-          codorders = OrderLine.where(orderid: order_masters_cod).where(product_list_id: e).count()
-          codvalue = OrderLine.where(orderid: order_masters_cod).where(product_list_id: e).sum(:total)
+          payuvalue = OrderLine.where(orderid: @order_masters_payu).where(product_list_id: e).sum(:total)
+          payuorders = OrderLine.where(orderid: @order_masters_payu).where(product_list_id: e).count()
+          ccvalue = OrderLine.where(orderid: @order_masters_cc).where(product_list_id: e).sum(:total)
+          ccorders = OrderLine.where(orderid: @order_masters_cc).where(product_list_id: e).count()
+          codorders = OrderLine.where(orderid: @order_masters_cod).where(product_list_id: e).count()
+          codvalue = OrderLine.where(orderid: @order_masters_cod).where(product_list_id: e).sum(:total)
           totalorders = orderlist.sum(:total)
           noorders = orderlist.count()
           basic_product_list_orderlist << {:total => totalorders,
-             :id => e, :product => name, :for_date =>  @or_for_date,
-             :prod => o.product_list.extproductcode,
+            :id => e, :product => name, :for_date =>  @or_for_date,
+            :prod => o.product_list.extproductcode,
             :nos => noorders,:payuvalue => payuvalue, :payuorders => payuorders,
             :codorders => codorders, :codvalue => codvalue,
-             :ccorders => ccorders, :ccvalue => ccvalue  }
+            :ccorders => ccorders, :ccvalue => ccvalue  }
+            @total_basic_nos += noorders if noorders.present?
           end
           @basic_product_list_orderlist = basic_product_list_orderlist.sort_by{|c| c[:total]}.reverse
-
+          
+          
           @from_date = (@from_date).strftime("%Y-%m-%d")
           @to_date = (@to_date).strftime("%Y-%m-%d")
 
@@ -804,7 +916,8 @@ class SalesReportTeamController < ApplicationController
     @sales_staff = Employee.all.joins(:employee_role).where("employee_roles.sortorder > 7")
   end
 
-  def use_from_to_date back_days
+  def use_from_to_date back_days=nil
+    back_days = 1 if back_days == nil
     @from_date = Date.current - back_days.days #30.days
     @to_date = Date.current
     if params[:from_date].present?
@@ -823,14 +936,5 @@ class SalesReportTeamController < ApplicationController
       @to_date = @to_date.end_of_day - 330.minutes
     end
   end
-  # I want to give access of following reports to Sr Team Captains only;
-#
-#   HBN Showwise Report: http://3.0.3.26:120/sales_report/show?from_date=2016-05-18
-# http://3.0.3.26:3000/sales_report_team/show_wise?from_date=2016-05-18
-#   Agent Order Report: http://3.0.3.26:120/sales_report/employee?from_date=2016-05-18
-#   Agentwise Upsale (Common) Report: http://3.0.3.26:120/not_completed?from_date=2016-05-18
-#   Agentwise Upsale (Basic) Report: http://3.0.3.26:120/not_completed?from_date=2016-05-18
-#   Pay U Orders Report: http://3.0.3.26:120/sales_report/pay_u_orders?from_date=2016-05-18
-#
-#
+ 
 end

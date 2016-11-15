@@ -31,3 +31,4 @@ class TransDetails < ActiveRecord::Base
     end
    
 end
+ 

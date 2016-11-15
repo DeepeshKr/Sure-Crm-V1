@@ -1,0 +1,62 @@
+<%= render 'search' %>
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @medium.name %>
+</p>
+
+<p>
+  <strong>Telephone:</strong>
+  <%= @medium.telephone %>
+</p>
+
+<p>
+  <strong>Alttelephone:</strong>
+  <%= @medium.alttelephone %>
+</p>
+
+<p>
+  <strong>State:</strong>
+  <%= @medium.state %>
+</p>
+
+<p>
+  <strong>Active:</strong>
+  <%= @medium.active %>
+</p>
+ <% if (current_user.employee_role.sortorder < 5) %> 
+<p>
+  <strong>Daily Charges:</strong>
+  <%= @medium.daily_charges %>
+</p>
+<p>
+  <strong>Shipped Correction:</strong>
+  <%= @medium.paid_correction %>
+</p>
+<% end %>
+<p>
+  <strong>Group:</strong>
+  <%=  @medium.media_group.name if @medium.media_group.present? %>
+</p>
+<p>
+  <strong>Commission:</strong>
+  <%=  @medium.media_commision.name if @medium.media_commision.present? %>
+  <%= @medium.value %>
+</p>
+<p>
+  <strong>Corporateid:</strong>
+  <%= @medium.corporateid %>
+</p>
+
+<p>
+  <strong>Description:</strong>
+  <%= @medium.description %>
+</p>
+
+<p>
+  <strong>BDM:</strong>
+  <%= @medium.employee.fullname ||= "NO BDM" if @medium.employee.present?  %>
+</p>
+<%= link_to 'Edit', edit_medium_path(@medium) %> |
+<%= link_to 'Back', media_path %>

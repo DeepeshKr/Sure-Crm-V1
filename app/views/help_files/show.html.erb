@@ -1,41 +1,78 @@
 <p id="notice"><%= notice %></p>
+<!-- set page title start -->
+<% title "Help Files #{@help_file.name} " %>
+<!-- set page title end -->
 
-<p>
-  <strong>Name:</strong>
-  <%= @help_file.name %>
-</p>
+  <h3><%= @help_file.name.humanize %></h3>
 
-<p>
-  <strong>Link:</strong>
-  <%= @help_file.link %>
-</p>
-
+<small><%= link_to "Visit Link", @help_file.clickable_url(@host), target: "_blank", class:"btn btn-link" %></small>
+<%= image_tag @help_file.screen_shot.url if !@help_file.screen_shot.file.nil?  %>
 <p>
   <strong>Description:</strong>
-  <%= @help_file.description %>
+  <%= simple_format h(@help_file.description ) %>
 </p>
-
-<p>
-  <strong>Code used:</strong>
-  <%= @help_file.code_used %>
-</p>
-
-<p>
-  <strong>Database used:</strong>
-  <%= @help_file.database_used %>
-</p>
-
 <p>
   <strong>Tags:</strong>
   <%= @help_file.tags %>
 </p>
 
+<% if (current_user.employee_role.sortorder < 3) %> 
+	
+	<div class="row">
+			<div class="col-xs-2">
+				<p>
+				  <strong>Domain:</strong>
+				  <%= @help_file.domain %>
+				</p>
+			</div>
+			<div class="col-xs-4">
+				<p>
+				  <strong>Controller:</strong>
+				  <%= @help_file.controller %>
+				</p>
+			</div>
+			<div class="col-xs-4">
+				<p>
+				  <strong>Action:</strong>
+				  <%= @help_file.action %>
+				</p>
+			</div>
+			<div class="col-xs-2">
+				<p>
+			  	  <strong>Database used:</strong>
+			  		<%= @help_file.database_used %>
+				</p>
+			</div>
+	</div>
+	<p>
+	  <strong>Params:</strong>
+	  <%= @help_file.parameters %>
+	</p>
+	<p>
+  	  <strong>Code used:</strong>
+	   <%= simple_format h(@help_file.code_used ) %>
+	</p>
+	
+<% end %>
+
 <p>
   <strong>Employee:</strong>
-  <%= @help_file.employee_id %>
+  <%= @help_file.employee.fullname if @help_file.employee %>
 </p>
 
 <%= link_to 'Edit', edit_help_file_path(@help_file) %> |
 <%= link_to 'Back', help_files_path %> | <% if (current_user.employee_role.sortorder < 10) %>
 <%= link_to 'Destroy', @help_file, method: :delete, data: { confirm: 'Are you sure?' }, class:"btn btn-warning btn-sm" %>
+<% end %>
+
+<% if @features_searched.present? %>
+	<div class="row">
+		<div class="col-xs-12">
+			<%= render partial: 'app_feature_requests/home_index', 
+			:locals => {:name_of_status_list => "Search Results for #{@search}",
+				:app_feature_requests => @features_searched, 
+				:about_the_list => "If you have not found any results or relevant results for #{@search}, 
+				please raise a ticket for this query to be answered or bug to be fixed" }  %>
+		</div>
+	</div>
 <% end %>

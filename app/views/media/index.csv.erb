@@ -1,5 +1,5 @@
-<% headers = ['DNIS ', 'Channel Name', 'State', 'Telephone', 'Active'] %>
+<% headers = ['DNIS ', 'Channel Name', 'State', 'Telephone', 'Group','Active', 'CDM'] %>
 <%= CSV.generate_line headers %>
 	 <% @media.each do |c| %>
-	 <%= CSV.generate_line([c.dnis, c.name, c.state, c.telephone, c.active]).html_safe.strip  %>
+	 <%= CSV.generate_line([c.dnis, c.name, c.state, c.telephone, (c.media_group.name if c.media_group), c.active, (c.employee.name || "NO BDM" if c.employee)]).html_safe.strip  %>
 <% end %>

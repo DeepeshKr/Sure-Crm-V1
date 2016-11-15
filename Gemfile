@@ -5,9 +5,10 @@ source 'https://rubygems.org'
 gem 'rails', '4.2.1'
 # Use postgresql as the database for Active Record
 # gem 'pg'
-#visual view of models
-#gem 'rails-erd'
-gem 'rails-erd', github: 'ready4god2513/rails-erd', branch: 'rails-4.2-support-fix'
+# visual view of models
+# gem 'rails-erd'
+# rake erd filetype=dot
+gem 'rails-erd' #, github: 'ready4god2513/rails-erd', branch: 'rails-4.2-support-fix'
 #visual view of models dependecy
 gem 'ruby-graphviz'
 #charting tool https://github.com/ankane/chartkick
@@ -22,6 +23,10 @@ gem 'googlecharts'
 
 #intall luhn for credit card verification => not used for now
 gem 'luhn'
+
+#gem 'RedCloth'
+# #to import csv, excel etc
+# gem 'roo'
 
 ## Gemfile for Rails 3+, Sinatra, and Merb
 gem 'will_paginate', '~> 3.0.6'
@@ -74,6 +79,8 @@ gem 'resque-web', require: 'resque_web'
 gem 'resque-cleaner'
 
 gem "daemons"
+gem "rspec"
+
 #date picker
 #gem 'jquery-ui-rails'
 #https://github.com/joliss/jquery-ui-rails

@@ -14,23 +14,25 @@
 <table class="table table-hover table-bordered">
   <thead>
     <tr>
-     <th>No</th>
-     <th>Product</th>
-     <th>Prod</th>
-     <th>Pay U Orders</th>
-       <th>Pay U Value</th>
-     <th>CC Orders</th>
-       <th>CC Value</th>
-      <th>COD Orders</th>
-       <th>COD Value</th>
-       <th>Total Orders</th>
-     <th>Total Value</th>
-	 <th colspan="2">More</th>
+     	<th>No</th>
+     	<th>Product</th>
+     	<th>Prod</th>
+     	<th>Pay U Orders</th>
+     	<th>Pay U Value</th>
+     	<th>CC Orders</th>
+     	<th>CC Value</th>
+     	<th>COD Orders</th>
+     	<th>COD Value</th>
+     	<th>Total Orders</th>
+     	<th>Total Value</th>
+	 	<th colspan="2">More</th>
      </tr>
   </thead>
 <tbody>
   <% @pay_u_orders, @pay_u_value, @cc_orders, @cc_value, @cod_orders, @cod_value, @total_orders, @total_value = 0,0,0,0,0,0,0,0 %>
-   <% main_product_list.each do |c| %>
+  
+  
+ <% main_product_list.each do |c| %>
    <tr>
    <td><%= @sno %></td>
 

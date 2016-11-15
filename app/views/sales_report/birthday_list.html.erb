@@ -1,0 +1,62 @@
+<!-- def title(page_title) -->
+<% title "Birthdays for #{@month} #{@day}" %>
+<!-- end of the title-->
+
+<div class="row">
+    <div class="col-xs-6"><h3>Birthdays for <%= "#{@month_name} #{@day}" %></h3></div>
+
+    <%= form_tag  url_for(:controller => 'sales_report', :action => "birthday_list"), method: "get" do  %>
+    
+		<div class="col-xs-3">
+		 	 <%= select_tag :month, 
+			 options_for_select((1..12).map {|m| [Date::MONTHNAMES[m], m]}, 
+			 selected: @month), {:class => "form-control", label: "Select the Month" } %>
+		</div>
+	    <div class="col-xs-2">
+	 	 	<%= select_tag :day, 
+		 	options_for_select((1..31), 
+		 	selected: @day), {:class => "form-control", label: "Select the Day" } %>
+	    </div>
+    
+		<div class="col-xs-1"> <%= submit_tag "Show", name: nil, class: "btn btn-primary" %>
+	  	</div>
+ 	<% end %>
+</div>
+
+<hr>
+
+<% if @employeeorderlist.present? %>
+<% @sno, total_value, total_piece = 0, 0, 0 %>
+<table class="table table-hover table-bordered">
+  <thead>
+    <tr>
+    <th>S No</th>
+    <th>Date</th>
+    <th>Media</th>
+    <th>State</th>
+    <th>City</th>
+    <th>Products</th>
+    <th>Value</th>
+    </tr>
+  </thead>
+<tbody>
+   <% @employeeorderlist.each do |c| %>
+   <tr>
+   <td><% @sno += 1 %> <%= @sno %> </td>
+   <td><%= c[:orderdate] %></td>
+  <td> <%= c[:channel] %></td>
+  <td> <%= c[:state] %></td>
+  <td> <%= c[:city] %></td>
+  <td> <%= c[:products] %></td>
+  <td class="text-right"><%= c[:total] %> <% total_value += c[:total] %></td>
+  </tr>
+
+ <% end %>
+  </tbody>
+  </table>
+  <div class="well well-sm">
+  <%= link_to 'Download CSV file', sales_report_birthday_list_path(month: @month, day: @day, format: :csv), class: "btn btn-info btn-sm" %>
+  </div>
+
+  <% end %>
+

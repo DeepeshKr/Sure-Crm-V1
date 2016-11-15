@@ -31,6 +31,7 @@ class Employee < ActiveRecord::Base
   has_many :app_feature_comment, foreign_key: "comments_by_id"
   has_many :app_feature_request, foreign_key: "request_by"
   has_many :app_feature_request, foreign_key: "assigned_to"
+  has_many :help_files, foreign_key: "employee_id"
 def fullname
   return "#{self.title} #{self.first_name} #{self.last_name}"
   #(self.title || "NA") + " " + (self.first_name || "NA" )  + " " + (self.last_name || "NA" ) + " (" + (self.designation || "NA" ) + ")"

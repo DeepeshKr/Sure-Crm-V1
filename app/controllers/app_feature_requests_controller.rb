@@ -7,40 +7,20 @@ class AppFeatureRequestsController < ApplicationController
   # GET /app_feature_requests.json
   def index
     
-    working = [10006, 10009]
-    already_covered = [10000,10003,10004, 10008, 10010, 10012]
-    delayed = [10001, 10002, 10007, 10011]
-    others = working + already_covered + delayed
-    @app_new_features = AppFeatureRequest.where(app_feature_type_id: 10000, current_status_id: 10000).order("id desc")
-    @app_new_errors = AppFeatureRequest.where(app_feature_type_id: 10001, current_status_id: 10000).order("id desc")
-    
-    @app_log_features = AppFeatureRequest.where(app_feature_type_id: 10000, current_status_id: 10003).order("id desc")
-    @app_log_errors = AppFeatureRequest.where(app_feature_type_id: 10001, current_status_id: 10003).order("id desc")
- 
-    @app_queued_features = AppFeatureRequest.where(app_feature_type_id: 10000, current_status_id: 10004).order("id desc")
-    @app_queued_errors = AppFeatureRequest.where(app_feature_type_id: 10001, current_status_id: 10004).order("id desc")
-    
-    @app_working_features = AppFeatureRequest.where(app_feature_type_id: 10000, current_status_id: working).order("id desc")
-    @app_working_errors = AppFeatureRequest.where(app_feature_type_id: 10001, current_status_id: working).order("id desc")
-
-    @app_testing_features = AppFeatureRequest.where(app_feature_type_id: 10000, current_status_id: 10008).order("id desc")
-    @app_testing_errors = AppFeatureRequest.where(app_feature_type_id: 10001, current_status_id: 10008).order("id desc")
-
-    @app_beta_features = AppFeatureRequest.where(app_feature_type_id: 10000, current_status_id: 10010).order("id desc")
-    @app_beta_errors = AppFeatureRequest.where(app_feature_type_id: 10001, current_status_id: 10010).order("id desc")
-    
-    @app_delayed_features = AppFeatureRequest.where(app_feature_type_id: 10000).where(current_status_id: delayed).order("id desc")
-    @app_delayed_errors = AppFeatureRequest.where(app_feature_type_id: 10001).where(current_status_id: delayed).order("id desc")
-
-    @app_features = AppFeatureRequest.where(app_feature_type_id: 10000).where.not(current_status_id: others).order("id desc")
-    @app_errors = AppFeatureRequest.where(app_feature_type_id: 10001).where.not(current_status_id: others).order("id desc")
-    
-    
-    @app_recent_completed_features = AppFeatureRequest.where(app_feature_type_id: 10000, current_status_id: 10012).order("updated_at desc").limit(10)
-    @app_recent_completed_errors = AppFeatureRequest.where(app_feature_type_id: 10001, current_status_id: 10012).order("updated_at desc").limit(10)
-    
-    @app_completed_features = AppFeatureRequest.where(app_feature_type_id: 10000, current_status_id: 10012).order("actual_completion_date desc").limit(100)
-    @app_completed_errors = AppFeatureRequest.where(app_feature_type_id: 10001, current_status_id: 10012).order("actual_completion_date desc").limit(100)
+    @show_all_features = true
+    if params.has_key?(:search)
+      @search = params[:search]
+      #problem_this_solves, :mandatory_requirements, :technical_notes,extra_notes
+       @features_searched = AppFeatureRequest.joins(:app_feature_comment).where("problem_this_solves like ? 
+       or mandatory_requirements like ? or technical_notes like ? or extra_notes like ? or name like ? 
+       or app_feature_comments.details like ?", "%#{@search}%", "%#{@search}%", "%#{@search}%", "%#{@search}%", 
+       "%#{@search}%", "%#{@search}%")
+       .paginate(:page => params[:page]) #.all
+        @show_all_features = false
+     else
+        @show_all_features = true
+        show_all_features_and_errors
+     end
 
     @display_level = AppCommentDisplayLevel.all
   end
@@ -198,6 +178,44 @@ class AppFeatureRequestsController < ApplicationController
     end
     def current_time
         @current_time = (Time.zone.now + 330.minutes)
+    end
+    
+    def show_all_features_and_errors
+      working = [10006, 10009]
+      already_covered = [10000,10003,10004, 10008, 10010, 10012]
+      delayed = [10001, 10002, 10007, 10011]
+      others = working + already_covered + delayed
+      
+      
+      @app_new_features = AppFeatureRequest.where(app_feature_type_id: 10000, current_status_id: 10000).order("id desc")
+      @app_new_errors = AppFeatureRequest.where(app_feature_type_id: 10001, current_status_id: 10000).order("id desc")
+    
+      @app_log_features = AppFeatureRequest.where(app_feature_type_id: 10000, current_status_id: 10003).order("id desc")
+      @app_log_errors = AppFeatureRequest.where(app_feature_type_id: 10001, current_status_id: 10003).order("id desc")
+ 
+      @app_queued_features = AppFeatureRequest.where(app_feature_type_id: 10000, current_status_id: 10004).order("id desc")
+      @app_queued_errors = AppFeatureRequest.where(app_feature_type_id: 10001, current_status_id: 10004).order("id desc")
+      @app_working_features = AppFeatureRequest.where(app_feature_type_id: 10000, current_status_id: working).order("id desc")
+      @app_working_errors = AppFeatureRequest.where(app_feature_type_id: 10001, current_status_id: working).order("id desc")
+
+      @app_testing_features = AppFeatureRequest.where(app_feature_type_id: 10000, current_status_id: 10008).order("id desc")
+      @app_testing_errors = AppFeatureRequest.where(app_feature_type_id: 10001, current_status_id: 10008).order("id desc")
+
+      @app_beta_features = AppFeatureRequest.where(app_feature_type_id: 10000, current_status_id: 10010).order("id desc")
+      @app_beta_errors = AppFeatureRequest.where(app_feature_type_id: 10001, current_status_id: 10010).order("id desc")
+    
+      @app_delayed_features = AppFeatureRequest.where(app_feature_type_id: 10000).where(current_status_id: delayed).order("id desc")
+      @app_delayed_errors = AppFeatureRequest.where(app_feature_type_id: 10001).where(current_status_id: delayed).order("id desc")
+
+      @app_features = AppFeatureRequest.where(app_feature_type_id: 10000).where.not(current_status_id: others).order("id desc")
+      @app_errors = AppFeatureRequest.where(app_feature_type_id: 10001).where.not(current_status_id: others).order("id desc")
+    
+    
+      @app_recent_completed_features = AppFeatureRequest.where(app_feature_type_id: 10000, current_status_id: 10012).order("updated_at desc").limit(10)
+      @app_recent_completed_errors = AppFeatureRequest.where(app_feature_type_id: 10001, current_status_id: 10012).order("updated_at desc").limit(10)
+    
+      @app_completed_features = AppFeatureRequest.where(app_feature_type_id: 10000, current_status_id: 10012).order("actual_completion_date desc").limit(100)
+      @app_completed_errors = AppFeatureRequest.where(app_feature_type_id: 10001, current_status_id: 10012).order("actual_completion_date desc").limit(100)
     end
     # Use callbacks to share common setup or constraints between actions.
     def set_app_feature_request

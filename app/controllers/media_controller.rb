@@ -8,57 +8,78 @@ class MediaController < ApplicationController
   #Medium.recalculate_media_total_cost
   #recalculate_media_total_cost
     dropdowns
-     @statelists = State.all
+    @statelists = State.all
     @showall = true
-     @media = Medium.all.order("updated_at DESC").limit(50).paginate(:page => params[:page])
-      @inactivemedia = Medium.where(active:0).order("updated_at DESC").limit(50).paginate(:page => params[:page])
+    @media = Medium.all.order("updated_at DESC").limit(50).paginate(:page => params[:page])
+    @inactivemedia = Medium.where(active:0).order("updated_at DESC").limit(50).paginate(:page => params[:page])
     if params[:telephone].present?
        @telephone = params[:telephone]
-       @media = Medium.where("telephone like ? or dnis like ? ", "#{@telephone}%", "#{@telephone}%").paginate(:page => params[:page])
+       @media = Medium.where("telephone like ? or dnis like ? ", "#{@telephone}%", "#{@telephone}%")
+       .paginate(:page => params[:page])
 
-        @inactivemedia = Medium.where(active:0).where(telephone: params[:telephone]).paginate(:page => params[:page])
+        @inactivemedia = Medium.where(active:0).where(telephone: params[:telephone])
+        .paginate(:page => params[:page])
     end
-     if params.has_key?(:state)
+    if params.has_key?(:state)
        @media = Medium.where(state: params[:state]).paginate(:page => params[:page])
        @state = params[:state]
        @inactivemedia = Medium.where(active:0).where(state: params[:state]).paginate(:page => params[:page])
     end
 
     if params[:name].present?
-       @media = Medium.where(dnis: params[:dnis]).order("updated_at DESC").paginate(:page => params[:page])
+       @media = Medium.where(dnis: params[:dnis]).order("updated_at DESC")
+       .paginate(:page => params[:page])
        @name = params[:name]
-       @inactivemedia = Medium.where(active:0).where(dnis: params[:dnis]).order("updated_at DESC").paginate(:page => params[:page])
+       
+       @inactivemedia = Medium.where(active:0).where(dnis: params[:dnis])
+       .order("updated_at DESC").
+       paginate(:page => params[:page])
     end
     if params[:name].present?
       @search = params[:name]
       @search = @search.upcase
-      @media = Medium.where("name like ? or ref_name like ?", "%#{@search}%", "%#{@search}%").order("updated_at DESC").paginate(:page => params[:page])
-      @inactivemedia = Medium.where(active:0).where("name like ? or ref_name like ?", "#{@search}%", "#{@search}%").order("updated_at DESC").paginate(:page => params[:page])
+      
+      @media = Medium.where("name like ? or ref_name like ?", "%#{@search}%", "%#{@search}%")
+      .order("updated_at DESC").paginate(:page => params[:page])
+      
+      @inactivemedia = Medium.where(active:0)
+      .where("name like ? or ref_name like ?", "#{@search}%", "#{@search}%")
+      .order("updated_at DESC")
+      .paginate(:page => params[:page])
+      
        @dnis = params[:dnis]
     end
     #@commission
-     if params.has_key?(:commission)
+    if params.has_key?(:commission)
        @media = Medium.where(media_commision_id: params[:commission]).paginate(:page => params[:page])
        @commission = params[:commission]
-       @inactivemedia = Medium.where(active:0).where(media_commision_id: params[:commission]).paginate(:page => params[:page])
+       @inactivemedia = Medium.where(active:0)
+       .where(media_commision_id: params[:commission])
+       .paginate(:page => params[:page])
     end
-
-      if params[:showall].present?
-        if params[:showall] = "true"
-          @showall = "true"
-           @media = Medium.all.order("name, updated_at DESC") #.paginate(:page => params[:page])
-           @inactivemedia = Medium.where(active:0).order("name, updated_at DESC") #.paginate(:page => params[:page])
+    if params.has_key?(:employee_id)
+      
+       @employee_id = params[:employee_id]
+        @media = Medium.where(employee_id: @employee_id).paginate(:page => params[:page])
+        
+       @inactivemedia = Medium.where(active:0)
+       .where(employee_id: @employee_id)
+       .paginate(:page => params[:page])
+    end
+    if params[:showall].present?
+      if params[:showall] = "true"
+        @showall = "true"
+         @media = Medium.all.order("name, updated_at DESC") #.paginate(:page => params[:page])
+         # @inactivemedia = Medium.where(active:0).order("name, updated_at DESC") #.paginate(:page => params[:page])
         respond_to do |format|
           format.html
           format.csv do
             headers['Content-Disposition'] = "attachment; filename=\"media-list\""
             headers['Content-Type'] ||= 'text/csv'
-
           end
         end
-        end
       end
-
+    end
 
   end
 
@@ -71,7 +92,33 @@ class MediaController < ApplicationController
 
     respond_with(@medium)
   end
-
+  
+  def switch_cdm
+    #change the cdms to new ones
+    no_of = 0
+    
+    @current_employee_id = params[:current_employee_id]
+    @new_employee_id = params[:new_employee_id]
+    if @new_employee_id.to_i == @current_employee_id.to_i
+      flash[:error] = "You are attempting to replace by the same CDM!!!"
+    
+      return media_path(employee_id: @new_employee_id)
+      
+    else
+      current_employees = Medium.where(employee_id: @current_employee_id)
+      current_employees.each do |empl|
+        # empl.update(employee_id: @new_employee_id)
+        # update without validations
+        empl.update_attribute('employee_id',@new_employee_id)
+        no_of += 1
+      end
+    end
+    
+    flash[:notice] = "Updated #{no_of} media with the new employee details"
+    
+    redirect_to media_path(employee_id: @new_employee_id) and return
+    
+  end
   def new
     dropdowns
     @medium = Medium.new

@@ -1,0 +1,19 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @order_dispatch_status.name %>
+</p>
+
+<p>
+  <strong>Description:</strong>
+  <%= @order_dispatch_status.description %>
+</p>
+
+<p>
+  <strong>Sort order:</strong>
+  <%= @order_dispatch_status.sort_order %>
+</p>
+
+<%= link_to 'Edit', edit_order_dispatch_status_path(@order_dispatch_status) %> |
+<%= link_to 'Back', order_dispatch_statuses_path %>
