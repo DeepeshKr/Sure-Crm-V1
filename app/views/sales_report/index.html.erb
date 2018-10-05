@@ -40,7 +40,7 @@
 				 <%= bootstrap_form_tag url: url_for(:controller => 'sales_report', :action => 'channel_sales_summary'), :method => :GET, :enforce_utf8 => false do |f| %>
 	         <div class="row">
 				<div class="col-xs-8">
-				 <%= text_field_tag(:from_date, @from_date, :data => {:provide => "datepicker"}, :id => "datepicker4", :class => "form-control", :required => "true" )   %>
+				 <%= text_field_tag(:from_date, @from_date, :data => {:provide => "datepicker"}, :id => "datepicker2", :class => "form-control", :required => "true" )   %>
 
 				</div>
 
@@ -143,7 +143,7 @@
 			  	<%= bootstrap_form_tag url: url_for(:controller => 'sales_report', :action => 'city'), :method => :GET, :enforce_utf8 => false do |f| %>
 					 <div class="row">
 					<div class="col-xs-8">
-					 <%= text_field_tag(:from_date, @from_date, :data => {:provide => "datepicker"}, :id => "datepicker13", :class => "form-control", :required => "true" )   %>
+					 <%= text_field_tag(:from_date, @from_date, :data => {:provide => "datepicker"}, :id => "datepicker12", :class => "form-control", :required => "true" )   %>
 
 					</div>
 
@@ -168,7 +168,7 @@
 					<%= bootstrap_form_tag url: url_for(:controller => 'sales_report', :action => 'hour_sales'), :method => :GET, :enforce_utf8 => false do |f| %>
       		<div class="row">
        			<div class="col-xs-8">
-         		   <%= text_field_tag(:from_date, @from_date, :data => {:provide => "datepicker"}, :id => "datepicker20", :class => "form-control", :required => "true" )   %>
+         		   <%= text_field_tag(:from_date, @from_date, :data => {:provide => "datepicker"}, :id => "datepicker14", :class => "form-control", :required => "true" )   %>
         		</div>
         		<div class="col-xs-4">
              	   <%= submit_tag "Report", name: nil, class: "btn btn-success ", data: { confirm: 'Are you sure?'}  %>
@@ -239,7 +239,7 @@
                   <%= bootstrap_form_tag url: url_for(:controller => 'sales_report', :action => 'fitness_products_sold'), :method => :GET, :enforce_utf8 => false do |f| %>
 	      		<div class="row">
 	        		<div class="col-xs-8">
-	         		   	<%= text_field_tag(:from_date, @from_date, :data => {:provide => "datepicker"}, :id => "datepicker18", :class => "form-control", :required => "true" )   %>
+	         		   	<%= text_field_tag(:from_date, @from_date, :data => {:provide => "datepicker"}, :id => "datepicker17", :class => "form-control", :required => "true" )   %>
 	        		</div>
 	        		<div class="col-xs-4">
 	            <%= submit_tag "Report", name: nil, class: "btn btn-success ", data: { confirm: 'Are you sure?'}  %>
@@ -260,7 +260,7 @@
                   <%= bootstrap_form_tag url: url_for(:controller => 'pending_orders', :action => 'index'), :method => :GET, :enforce_utf8 => false do |f| %>
 	      		<div class="row">
 	        		<div class="col-xs-8">
-	         		   	<%= text_field_tag(:from_date, @from_date, :data => {:provide => "datepicker"}, :id => "datepicker19", :class => "form-control", :required => "true" )   %>
+	         		   	<%= text_field_tag(:from_date, @from_date, :data => {:provide => "datepicker"}, :id => "datepicker18", :class => "form-control", :required => "true" )   %>
 	        		</div>
 	        		<div class="col-xs-4">
 	            <%= submit_tag "Report", name: nil, class: "btn btn-success ", data: { confirm: 'Are you sure?'}  %>
@@ -271,28 +271,21 @@
     	</div>
 	</div>
    	<div class="col-xs-4">
-      	<div class="panel panel-primary hide">
-             <div class="panel-heading"><h3 class="panel-title">Birthday Report</h3></div>
+      	<div class="panel panel-primary">
+             <div class="panel-heading"><h3 class="panel-title">Employee Pay u Step Report</h3></div>
                <div class="panel-body">
-                List of all birthdays for a particular day
+                List of pay u money orders in various brackets
                </div>
             <div class="panel-footer">
 
-                  <%= bootstrap_form_tag url: url_for(:controller => 'sales_report', :action => 'birthday_list'), :method => :GET, :enforce_utf8 => false do |f| %>
+                  <%= bootstrap_form_tag url: url_for(:controller => 'sales_report', :action => 'employee_pay_u_report'), :method => :GET, :enforce_utf8 => false do |f| %>
 	      		<div class="row">
-					<div class="col-xs-4">
-					 	 <%= select_tag :month, 
-						 options_for_select((1..12).map {|m| [Date::MONTHNAMES[m], m]}, 
-						 selected: @month), {:class => "form-control", label: "Select the Month" } %>
-					</div>
-				    <div class="col-xs-3">
-				 	 	<%= select_tag :day, 
-					 	options_for_select((1..31), 
-					 	selected: @day), {:class => "form-control", label: "Select the Day" } %>
-				    </div>
-	        		<div class="col-xs-4">
-	            		<%= submit_tag "Report", name: nil, class: "btn btn-success ", data: { confirm: 'Are you sure?'}  %>
-	        		</div>
+		        		<div class="col-xs-8">
+		         		   	<%= text_field_tag(:from_date, @from_date, :data => {:provide => "datepicker"}, :id => "datepicker19", :class => "form-control", :required => "true" )   %>
+		        		</div>
+		        		<div class="col-xs-4">
+		            <%= submit_tag "Report", name: nil, class: "btn btn-success ", data: { confirm: 'Employee Pay u Step Report, Click Ok!'}  %>
+		        		</div>
 	       		</div>
 	   		<% end %>
 			</div>
@@ -305,7 +298,34 @@
 <!-- row 5 -->
 	
 	<div class="row">
-	 	<div class="col-xs-4"></div>
+	 	<div class="col-xs-4">
+	      	<div class="panel panel-primary hide">
+	             <div class="panel-heading"><h3 class="panel-title">Birthday Report</h3></div>
+	               <div class="panel-body">
+	                List of all birthdays for a particular day
+	               </div>
+	            <div class="panel-footer">
+
+	                  <%= bootstrap_form_tag url: url_for(:controller => 'sales_report', :action => 'birthday_list'), :method => :GET, :enforce_utf8 => false do |f| %>
+		      		<div class="row">
+						<div class="col-xs-4">
+						 	 <%= select_tag :month, 
+							 options_for_select((1..12).map {|m| [Date::MONTHNAMES[m], m]}, 
+							 selected: @month), {:class => "form-control", label: "Select the Month" } %>
+						</div>
+					    <div class="col-xs-3">
+					 	 	<%= select_tag :day, 
+						 	options_for_select((1..31), 
+						 	selected: @day), {:class => "form-control", label: "Select the Day" } %>
+					    </div>
+		        		<div class="col-xs-4">
+		            		<%= submit_tag "Report", name: nil, class: "btn btn-success ", data: { confirm: 'Are you sure?'}  %>
+		        		</div>
+		       		</div>
+		   		<% end %>
+				</div>
+	    	</div>
+	 	</div>
 	 	<div class="col-xs-4"></div>
 	 	<div class="col-xs-4"></div>
 	 </div>

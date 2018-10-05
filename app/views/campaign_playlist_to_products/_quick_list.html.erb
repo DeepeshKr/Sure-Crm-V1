@@ -3,6 +3,7 @@
   <thead>
     <tr>
       <th>Product variant</th>
+	  <th>Id</th>
 	  <th>Products </th>
       <th></th>
     </tr>
@@ -13,6 +14,7 @@
       <tr>
 
         <td><%= campaign_playlist_to_product.product_variant.name if campaign_playlist_to_product.product_variant_id.present? %></td>
+		<td><%= campaign_playlist_to_product.product_variant_id %></td>
         <td> 
 			<% if campaign_playlist_to_product.product_variant.product_list.present? %>
 			<ol>

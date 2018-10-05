@@ -1,0 +1,101 @@
+<!-- set page title start -->
+<% title "Orders in hbn.telebrandsindia.com #{@calledno} #{@from_date} #{@to_date}" %>
+<!-- set page title end -->
+<div class="row">
+    <div class="col-xs-7">
+   	 	<p class="lead">Orders in hbn.telebrandsindia.com from Pay U (unprocessed)</p>
+		<ul class="list-inline">
+		  <li><%= link_to "Pay u Pending Orders", order_masters_online_pending_search_path, target:"_blank", class:"btn btn-info btn-xs" %></li>
+		  <li> <%= link_to "Daily Orders", order_masters_online_one_day_search_path, target:"_blank", class:"btn btn-info btn-xs" %></li>
+		  <li><%= link_to "Orders between dates", order_masters_online_pending_search_path, target:"_blank", class:"btn btn-info btn-xs" %></li>
+		</ul>
+    </div>
+	<%= form_tag  url_for(:controller => "order_masters", :action => "online_pending_search"), method: "get" do  %>
+      <div class="col-xs-3">
+        <div class="input-daterange input-group">
+          <%= text_field_tag(:from_date, @from_date, :data => {:provide => "datepicker"}, :id => "datepicker_from", :class => "form-control", :required => "true" )   %>
+          <span class="input-group-addon">to</span>
+
+           <%= text_field_tag(:to_date, @to_date, :data => {:provide => "datepicker"}, :id => "datepicker_to", :class => "form-control", :required => "true" )   %>
+
+        </div>
+      </div>
+
+      <div class="col-xs-2">
+        <%= submit_tag "Show", name: nil, class: "btn btn-primary" %>
+      </div>
+  <% end %>
+</div>
+<br>
+<span style="color:red"><h4>We are pulling data from the <strong>very slow</strong> hbn.telebrandsindia.com website. So restrict the query range and be patient</h4></span>
+<br>
+
+
+<% if @hbn_trans_details.present? %>
+<div class="row">
+	<div class="col-xs-12">
+		<div class="digg_pagination">
+		<%= will_paginate @hbn_trans_details %>
+		</div>
+	</div>
+</div>
+<% end %>
+<br>
+<div class="panel panel-primary">
+  <div class="panel-heading"><h3 class="panel-title">Customer Order details online hbn.telebrandsindia.com 
+	  <%= @hbn_trans_details.count if @hbn_trans_details.present? %></h3> </div>
+
+<table class="table table-hover table-bordered table-stripped">
+  <thead>
+    <tr>
+	  <th>Ref Id</th>
+	  <th>Order Date <br> Tid</th>
+      <th>Channel | City</th>
+	  <th>Order No <br> Customer Name | Products</th>
+	  <th>Amount<br>Comm</th>
+    </tr>
+  </thead>
+   
+  <tbody>
+	<% if @hbn_trans_details.present? %>
+	    <% @hbn_trans_details.each do |hbn_trans_detail| %>
+	      <tr>
+			<td><%= hbn_trans_detail.id %>:<br>
+		<%= link_to "Create Details", order_masters_online_add_to_order_path(order_id: hbn_trans_detail.order_ref_id,from_date: @from_date, to_date: @todate), :method=> :post, class:"btn btn-info btn-xs" if hbn_trans_detail.order_ref_id %> </td>
+		
+			<td><%= hbn_trans_detail.order_date.strftime('%d-%b-%Y') %> <br>
+				<small><small>Tid: <%= hbn_trans_detail.tid %></small></small> </td>
+	        <td><%= hbn_trans_detail.channel %> | <%= hbn_trans_detail.city %></td>
+		
+			<td>Order No: <%= hbn_trans_detail.order_no if hbn_trans_detail.order_no %> <br>
+				Order Ref Id: <%= hbn_trans_detail.order_ref_id if hbn_trans_detail.order_ref_id %><br>
+				Customer: <%= hbn_trans_detail.customer_name %> <br> <%= hbn_trans_detail.product %></td>
+			<td><%= hbn_trans_detail.amount %><br><%= hbn_trans_detail.comm %></td>
+	      </tr>
+	    <% end %>
+	
+	<% else %>
+		<tr>
+			<td colspan="5"><span style="color:green"><h5>No un processed Details found on hbn.telebrandsindia.com</h5></span></td>
+		</tr>
+	<% end %>
+  </tbody>
+</table>
+</div>
+<br>
+<% if @hbn_trans_details.present? %>
+<div class="row">
+	<div class="col-xs-12">
+		<div class="digg_pagination">
+		<%= will_paginate @hbn_trans_details %>
+		</div>
+	</div>
+</div>
+<% end %>
+
+
+
+<script>
+$('#datepicker_to').datepicker({format: 'yyyy-mm-dd'});
+$('#datepicker_from').datepicker({format: 'yyyy-mm-dd'});
+</script>

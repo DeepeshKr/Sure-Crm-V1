@@ -1,34 +1,47 @@
-<p id="notice"><%= notice %></p>
+<!-- set page title start -->
+<% title "Update payment for #{@order_payment.order_master_id}" %>
+<!-- set page title end -->
 
-<p>
-  <strong>Order master:</strong>
-  <%= @order_payment.order_master_id %>
-</p>
+ <div class="panel panel-primary">
+  <div class="panel-heading">
+    <h3 class="panel-title">Customer Order Summary</h3>
+  </div>
+  	<%= render "order_masters/order_customer" %>
+  	<%= render "order_masters/order_address" %>
+ 	<%= render "order_masters/ordered_all_non_edit" %>
 
-<p>
-  <strong>Ref no:</strong>
-  <%= @order_payment.ref_no %>
-</p>
+  <div class="panel-footer">
+	<%= render "order_masters/order_footer" %>
+  </div>
+</div>
+<div class="panel panel-default">
+  <div class="panel-heading">
+	  <h3 class="panel-title">Update Order Payment <%= @order_payment.orderpaymentmode.name %></h3>
+  </div>
+	<% if @order_payment.order_master.order_source_id == 10081 %>
+		<%= render 'pay_over_direct_bank' %>
+	<% elsif @order_payment.order_master.order_source_id == 10080  %>
+		<%= render 'pay_over_bajaj_card' %>
+	<% end %>
+	
+    <div class="panel-footer">
+	<% if @order_payment.paid_date.blank? %>
+		<%= render 'complete_order' %>
+	<% else %>
+		<div class="row">
+			<div class="col-xs-2">Paid on: <%= @order_payment.paid_date.strftime("%d-%b-%Y") %> </div>
+			<div class="col-xs-2">Updated: <%= Employee.find(@order_payment.employee_id).fullname %> </div>
+			<div class="col-xs-2"><strong>Order No: <%= @order_payment.order_no %></strong> </div>
+			<div class="col-xs-4">Ref: <%= @order_payment.name %> </div>
+		</div>
+	<% end %>
+  	
+    </div>
+	
+</div>
 
-<p>
-  <strong>Orderpaymentmode:</strong>
-  <%= @order_payment.orderpaymentmode_id %>
-</p>
 
-<p>
-  <strong>Paid date:</strong>
-  <%= @order_payment.paid_date %>
-</p>
 
-<p>
-  <strong>Name:</strong>
-  <%= @order_payment.name %>
-</p>
+<%= link_to 'Edit', edit_order_payment_path(@order_payment), class:"btn btn-primary btn-sm" %> |
+<%= link_to 'Back', order_payments_path, class:"btn btn-default btn-sm" %>
 
-<p>
-  <strong>Description:</strong>
-  <%= @order_payment.description %>
-</p>
-
-<%= link_to 'Edit', edit_order_payment_path(@order_payment) %> |
-<%= link_to 'Back', order_payments_path %>

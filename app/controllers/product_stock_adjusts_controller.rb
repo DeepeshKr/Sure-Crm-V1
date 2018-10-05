@@ -1,5 +1,5 @@
 class ProductStockAdjustsController < ApplicationController
-   before_action { protect_controllers(8) } 
+   before_action { protect_controllers(4) } 
   before_action :set_product_stock_adjust, only: [:show, :edit, :update, :destroy]
   before_action :dropdown
   # GET /product_stock_adjusts

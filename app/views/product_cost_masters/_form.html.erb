@@ -3,10 +3,10 @@
   <%= f.hidden_field :product_list_id %>
    <%= f.hidden_field :product_id %>
 
-<h3><%= @product_cost_master.product_list.name if @product_cost_master.product_list  %></h3>
+<h3><%= @product_cost_master.product_variant.name if @product_cost_master.product_variant  %></h3>
 <div class="row">
   <div class="col-xs-2">
-  <small>Derived from Product List:  <%= @product_cost_master.product_list.name if @product_cost_master.product_list %>
+  <small>Derived from Product List:  <%= @product_cost_master.product_variant.full_product_details if @product_cost_master.product_variant  %>
 
     </small>
   </div>

@@ -6,7 +6,7 @@
               <table border="0" cellpadding="0" cellspacing="0" width="100%" id="templatePreheader">
                   <tr>
                       <td valign="top" class="preheaderContent" style="padding-top:10px; padding-right:20px; padding-bottom:10px; padding-left:20px;" mc:edit="preheader_content00">
-                          Ticket Updated in SURE CRM - ERP
+                          Your Request is now required to be tested
                       </td>
                       <!-- *|IFNOT:ARCHIVE_PAGE|* -->
                       <td valign="top" width="180" class="preheaderContent" style="padding-top:10px; padding-right:20px; padding-bottom:10px; padding-left:0;" mc:edit="preheader_content01">
@@ -49,8 +49,9 @@
                           The "<em><%= @app_feature_request.app_feature_type.name %></em>" request
                           has been updated to <%= @app_feature_request.app_status.name %> and follows <%= @app_feature_request.app_priority.name %> pace of work and estimated to be completed by <%= @app_feature_request.estimated_completion_date.strftime('%d-%b-%y') %>. You can view the request <a href="<%= @url %>" target="_blank">click here</a>
 
-                            <h4>Please test the app by  <a href=<"http://3.0.3.26:120" target="_blank">clicking here and View it in your browser</a></h4>
+                            <h4>Please test the management app by  <a href=<"http://3.0.3.26:120" target="_blank">clicking here and View it in your browser</a></h4>
                           <br/>
+						  <h4>Please test the call centre app by  <a href=<"http://3.0.3.26:120" target="_blank">clicking here and View it in your browser</a></h4>
                           <br/>
                           Upon completion of testing or encouring any further problem please update the
                           comment section to help us solve the problem. You can access it
@@ -137,10 +138,10 @@
                     <tr>
                         <td valign="top" class="footerContent" mc:edit="footer_content00">
                           <br>
-                          Check the results by <a href=<%= @test_url %>clicking here</a>
+                          Test the request by <a href=<%= @test_url %> >clicking here</a>
                           <br>
                           <br>
-                          Remain updated on this request by <a href=<%= @url %>clicking here</a>
+                          Remain updated on this request by <a href=<%= @url %> >clicking here</a>
                          <br>
                          <br>
                          <br>

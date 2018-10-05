@@ -11,7 +11,7 @@ class OrderMaster < ActiveRecord::Base
   belongs_to :medium, foreign_key: "media_id"
   belongs_to :promotion, foreign_key: "promotion_id"
   belongs_to :order_final_status, foreign_key: "order_final_status_id"
-  belongs_to :order_list_mile, foreign_key: "order_last_mile_id"
+  belongs_to :order_list_mile, foreign_key: "order_last_mile_id" 
 
   has_many :interaction_master, foreign_key: "orderid"
   has_many :page_trail, foreign_key: "order_id"
@@ -19,6 +19,7 @@ class OrderMaster < ActiveRecord::Base
   has_many :sales_ppo, foreign_key: "order_id"
   has_many :payumoney_detail, foreign_key: "orderid"
   has_many :pending_order, foreign_key: "order_ref_id"
+  has_many :order_payment, foreign_key: "order_master_id"
   
   # has_one :cust_details_track
   # has_one :cust_order_list
@@ -45,6 +46,16 @@ class OrderMaster < ActiveRecord::Base
   end
   def lastvisitpage
     return self.page_trail.name  if self.page_trail.present?
+  end
+  def channel_name
+    #Channel <%= @order_master.medium.name if @order_master.medium %>
+    return self.medium.name if self.medium
+  end
+  def is_hbn
+    return "No" if self.medium.media_group_id.blank?
+    return "Yes" if self.medium.media_group_id == 10000
+    return nil
+    #return self.medium.name if self.medium
   end
 
   def neworder(source, cli, dnis, empcode, empid,request_ip, session_id)
@@ -111,7 +122,9 @@ class OrderMaster < ActiveRecord::Base
       
       in_order_date = (pro_order_master.orderdate + 330.minutes).to_date
       
-      gra_total = pro_order_master.subtotal + pro_order_master.shipping + pro_order_master.codcharges +   pro_order_master.servicetax + pro_order_master.maharastracodextra + pro_order_master.creditcardcharges + pro_order_master.maharastraccextra
+      gra_total = pro_order_master.subtotal + pro_order_master.shipping + pro_order_master.codcharges +  
+       pro_order_master.servicetax + pro_order_master.maharastracodextra + pro_order_master.creditcardcharges + 
+       pro_order_master.maharastraccextra
 
       pro_order_master.update(g_total: gra_total)
 
@@ -348,6 +361,7 @@ class OrderMaster < ActiveRecord::Base
             dt_hour: nowhour,
             dt_min: nowminute,
             in_date: in_order_date,
+            birthdate: (pro_order_master.customer.date_of_birth if pro_order_master.customer.date_of_birth.present?),
             uae_status: pro_order_master.customer.gender[0..49].upcase,
             prod1: prod1, prod2: prod2, prod3: prod3, prod4: prod4, prod5: prod5, prod6: prod6, prod7: prod7, prod8:prod8, prod9: prod9, prod10: prod10,
             qty1: qty1, qty2: qty2, qty3: qty3, qty4: qty4, qty5: qty5, qty6: qty6, qty7: qty7, qty8: qty8, qty9: qty9, qty10: qty10)
@@ -388,6 +402,7 @@ class OrderMaster < ActiveRecord::Base
             dt_hour: nowhour,
             dt_min: nowminute,
             in_date: in_order_date,
+            birthdate: (pro_order_master.customer.date_of_birth if pro_order_master.customer.date_of_birth.present?),
             uae_status: pro_order_master.customer.gender[0..49].upcase,
             prod1: prod1, prod2: prod2, prod3: prod3, prod4: prod4, prod5: prod5, prod6: prod6, prod7: prod7, prod8:prod8, prod9: prod9, prod10: prod10,
             qty1: qty1, qty2: qty2, qty3: qty3, qty4: qty4, qty5: qty5, qty6: qty6, qty7: qty7, qty8: qty8, qty9: qty9, qty10: qty10)
@@ -429,6 +444,7 @@ class OrderMaster < ActiveRecord::Base
             dt_hour: nowhour,
             dt_min: nowminute,
             in_date: in_order_date,
+             birthdate: (pro_order_master.customer.date_of_birth if pro_order_master.customer.date_of_birth.present?),
             uae_status: pro_order_master.customer.gender[0..49].upcase,
             prod1: prod1, prod2: prod2, prod3: prod3, prod4: prod4, prod5: prod5, prod6: prod6, prod7: prod7, prod8:prod8, prod9: prod9, prod10: prod10,
             qty1: qty1, qty2: qty2, qty3: qty3, qty4: qty4, qty5: qty5, qty6: qty6, qty7: qty7, qty8: qty8, qty9: qty9, qty10: qty10)
@@ -469,6 +485,7 @@ class OrderMaster < ActiveRecord::Base
             dt_hour: nowhour,
             dt_min: nowminute,
             in_date: in_order_date,
+             birthdate: (pro_order_master.customer.date_of_birth if pro_order_master.customer.date_of_birth.present?),
             uae_status: pro_order_master.customer.gender[0..49].upcase,
             prod1: prod1, prod2: prod2, prod3: prod3, prod4: prod4, prod5: prod5, prod6: prod6, prod7: prod7, prod8:prod8, prod9: prod9, prod10: prod10,
             qty1: qty1, qty2: qty2, qty3: qty3, qty4: qty4, qty5: qty5, qty6: qty6, qty7: qty7, qty8: qty8, qty9: qty9, qty10: qty10)
@@ -688,6 +705,7 @@ class OrderMaster < ActiveRecord::Base
 
       payment_mode_id = order_master.orderpaymentmode_id
       payment_mode_id = payment_mode_id.to_i
+      
       case payment_mode_id
       when 10000 #paid over CC
         message = "Thanks for your payment of Rs.#{order_master.grand_total.to_i.to_s} towards#{cc_order_number.join(",")} which will reach you in 7-10 days.For any queries call 9223100730 HBN/TELEBRANDS."
@@ -697,8 +715,14 @@ class OrderMaster < ActiveRecord::Base
         message = "Thanks for your payment of Rs.#{order_master.grand_total.to_i.to_s} towards#{cc_order_number.join(",")} which will reach you in 7-10 days.For any queries call 9223100730 HBN/TELEBRANDS."
       when 10080 #paid over Pay u money
         message = "Thanks for your payment of Rs.#{order_master.grand_total.to_i.to_s} towards#{cc_order_number.join(",")} which will reach you in 7-10 days.For any queries call 9223100730 HBN/TELEBRANDS."
+      when 10100 #paid over Direct Bank Transfer 
+        message = "Thanks for your payment of Rs.#{order_master.grand_total.to_i.to_s} towards#{cc_order_number.join(",")} which will reach you in 7-10 days.For any queries call 9223100730 HBN/TELEBRANDS."
+      when 10101 #paid over Bajaj Finance 
+        message = "Thanks for your payment of Rs.#{order_master.grand_total.to_i.to_s} towards#{cc_order_number.join(",")} which will reach you in 7-10 days.For any queries call 9223100730 HBN/TELEBRANDS."
+      when 10102 #paid over Bajaj Finance
+        message = "Thanks for your payment of Rs.#{order_master.grand_total.to_i.to_s} towards#{cc_order_number.join(",")} which will reach you in 7-10 days.For any queries call 9223100730 HBN/TELEBRANDS."
       end
-
+      
       message = message[0..159]
       sms_message = MessageOnOrder.create(customer_id: order_master.customer_id,
         message_status_id: 10000, message_type_id: 10000,
@@ -855,6 +879,20 @@ class OrderMaster < ActiveRecord::Base
     end
 
   end
+
+def financing_charges
+  productcost = OrderLine.where('orderid = ?', self.id)
+  #return productcost.first.productcost
+  if productcost.exists?
+    total = 0
+    productcost.each do |c|
+      total += c.financing_cost || 0
+    end
+    return total.round(2)
+  else
+    return 0
+  end
+end
   # 10060 Based on Shipment
   # 10020 Based on Orders Generated All orders less estimated cancel rate is used to calculate the commission
   # 10021 Based on Paid Order Commission is paid only on all fully paid orders
@@ -879,7 +917,7 @@ class OrderMaster < ActiveRecord::Base
     else
       return 0
     end
-  end
+  end 
 
   def media_commission
      media_variable = Medium.where('id = ? AND value is not null', self.media_id)
@@ -942,9 +980,7 @@ class OrderMaster < ActiveRecord::Base
   end
 
   def grand_total
-
     return self.subtotal + self.shipping + self.codcharges + self.servicetax + self.maharastracodextra + self.creditcardcharges + self.maharastraccextra
-
   end
 
   def create_hbn_sales_ppo
@@ -969,6 +1005,7 @@ class OrderMaster < ActiveRecord::Base
       puts "checked about #{total_nos} orders and created #{ppos}"
   end
 
+  
   def create_hbn_sales_ppo_between_dates from_date, upto_date #, product_variant_id
     from_date = Date.strptime(args[from_date], "%Y-%m-%d")
     upto_date = Date.strptime(args[upto_date], "%Y-%m-%d")
@@ -1135,7 +1172,7 @@ class OrderMaster < ActiveRecord::Base
       end
 
   end
-  handle_asynchronously :add_product_to_campaign_hbn_ppo, :priority => 100
+  handle_asynchronously :add_product_to_campaign_hbn_ppo, :priority => 100, :queue => 'v1_add_product_to_campaign_hbn_ppo'
 
   def create_sales_hbn_ppo order_id
    #order_id = self.order_id
@@ -1180,7 +1217,7 @@ class OrderMaster < ActiveRecord::Base
        prod: (ordln.product_list.extproductcode || nil if ordln.product_list.present?),
        :start_time => time_of_order,
        :order_id => ordln.orderid,
-       :order_line_id=> ordln.id,
+       :order_line_id => ordln.id,
        :product_cost => ordln.productcost,
        :pieces => ordln.pieces,
        :revenue => ordln.productrevenue,
@@ -1202,7 +1239,8 @@ class OrderMaster < ActiveRecord::Base
        :city => order_master.city,
        :state => order_master.customer_address.state,
        :mobile_no => order_master.mobile,
-       :shipping_cost => ordln.product_postage)
+       :shipping_cost => ordln.product_postage,
+       payment_cost: ordln.financing_cost)
      
         puts "Updated existing Sales PPO with id #{@sale_ppo.id} created on #{@sale_ppo.created_at.strftime("%d-%b-%y %H:%M")} for order id #{order_master.id}"
       
@@ -1238,7 +1276,8 @@ class OrderMaster < ActiveRecord::Base
          :city => order_master.city,
          :state => order_master.customer_address.state,
          :mobile_no => order_master.mobile,
-         :shipping_cost => ordln.product_postage)
+         :shipping_cost => ordln.product_postage,
+         payment_cost: ordln.financing_cost)
        
          puts "Created NEW Sales PPO with id #{@sale_ppo.id} created on #{@sale_ppo.created_at.strftime("%d-%b-%y %H:%M")} for order id #{order_master.id}"
        
@@ -1247,7 +1286,7 @@ class OrderMaster < ActiveRecord::Base
 
     end
   end
-  handle_asynchronously :create_sales_hbn_ppo, :priority => 100
+  handle_asynchronously :create_sales_hbn_ppo, :priority => 100, :queue => 'v1_create_sales_hbn_ppo'
   ######## duplicate this is delayed job server #####
 
   def remove_from_sales_ppo order_id
@@ -1271,28 +1310,25 @@ class OrderMaster < ActiveRecord::Base
       end
     end
   end
-  handle_asynchronously :remove_from_sales_ppo, :priority => 100
+  handle_asynchronously :remove_from_sales_ppo, :priority => 100, :queue => 'v1_remove_from_sales_ppo'
 
   ###### above lines for hbn sales ppo asynchronised ##########
 
   ########### below lines for sql server update on hbn.telebrandsindia.com ###########
   def updatemedia  order_id = 0
-     order_id = self.id if order_id == 0
+    order_id = self.id if order_id == 0
    
-          t = (330.minutes).from_now
-          nowhour = t.strftime('%H').to_i
-          nowminute = t.strftime('%M').to_i
-          todaydate = (330.minutes).from_now.to_date
-
-     order_master = OrderMaster.find(order_id)
-    
-      external_order_no = order_master.external_order_no
+    t = (330.minutes).from_now
+    nowhour = t.strftime('%H').to_i
+    nowminute = t.strftime('%M').to_i
+    todaydate = (330.minutes).from_now.to_date
+    order_master = OrderMaster.find(order_id)
+    external_order_no = order_master.external_order_no
     @order_master = OrderMaster.find(order_id)
-
 
     @medialist =  Medium.where(active:1).where('dnis = ?', @order_master.calledno).order("updated_at DESC")
     puts "Checking for DNIS #{@order_master.calledno} ..."
-        if @medialist.count == 1   #&& @all_calllist.empty?
+      if @medialist.count == 1   #&& @all_calllist.empty?
 
           @order_master.update(media_id: @medialist.first.id)
           medianame = @medialist.first.name[0...-1]
@@ -1347,11 +1383,10 @@ class OrderMaster < ActiveRecord::Base
    
    
   end #update media end
-  handle_asynchronously :updatemedia, :priority => 100
+  handle_asynchronously :updatemedia, :priority => 100, :queue => 'v1_update_media'
 
-  def update_hbn_website_list order_id
-     #order_id = self.id if order_id == 0
-
+  def update_hbn_website_list(order_id)
+    puts "Processing for order #{order_id} line 679"
       order_master = OrderMaster.find(order_id)
       #external_order_no: external_order_no
       #order_id = order_master.id
@@ -1401,7 +1436,7 @@ class OrderMaster < ActiveRecord::Base
          prod7 = ""
          prod8 = ""
          prod9 = ""
-        
+          
           orderline1 = OrderLine.where("orderid = ?", order_id).order("order_lines.id")
            .joins(:product_variant)
            .where('PRODUCT_VARIANTS.product_sell_type_id = ?', 10000)
@@ -1486,19 +1521,11 @@ class OrderMaster < ActiveRecord::Base
              prod9 = orderline9.first.product_list.extproductcode[0..9].upcase
              #customer_order_list.update(prod9: orderline9.first.product_list.extproductcode.truncate(10).upcase, qty9: orderline9.first.pieces.to_i)
            end
-         
-          # allproducts = prod1 + " (" + qty1 +") + " + prod2 + " (" + qty2  +") " +
-          #  prod3 + " (" + qty3  +") " +  prod4 + " (" + qty4  +") " +
-          #  prod5 + " (" + qty5  +") " +  prod6 + " (" + qty6  +") " +
-          #  prod7 + " (" + qty7  +") " +  prod8 + " (" + qty8  +") " +
-          #  prod9 + " (" + qty9  +") "
-
-          allproducts = prod1 + " " + prod2 + " " +
-           prod3 + " " +  prod4 + " " +
-           prod5 + " " +  prod6 + " " +
-           prod7 + " " +  prod8 + " " +
-           prod9
-
+           
+          allproducts = "#{prod1} #{prod2} #{prod3} #{prod4} #{prod5} #{prod6} #{prod7} #{prod8} #{prod9}"
+      
+    
+        
             amount = 0.0
             reverse_vat_rate = 0.0
             commission = 0.0
@@ -1506,6 +1533,7 @@ class OrderMaster < ActiveRecord::Base
             #get Reverse VAT Rate
             reverse_vat_rate = TaxRate.find(10001)
             if reverse_vat_rate.present?
+
               amount  = order_master.subtotal * reverse_vat_rate.reverse_rate
               amount = amount.round(2)
             end
@@ -1513,7 +1541,6 @@ class OrderMaster < ActiveRecord::Base
             if Medium.where(id: order_master.media_id).present?
               medialist = Medium.find(order_master.media_id)
               if medialist.value.present?
-
                 commission =  amount * medialist.value
                 commission =  commission.round(2)
               end
@@ -1523,17 +1550,24 @@ class OrderMaster < ActiveRecord::Base
             # 	:refund, :customer_name, :city, :comm)
           end
 
-  				media_id = order_master.media_id || nil if order_master.medium
-  				media_id = order_master.media_id
-  				dnis = order_master.calledno
-  				city = order_master.customer_address.city
-  				state = order_master.customer_address.state
+					media_id = order_master.media_id || nil if order_master.medium
+					media_id = order_master.media_id
+					dnis = order_master.calledno
+					city = order_master.customer_address.city
+					state = order_master.customer_address.state
 
-          #check if orderno is already updated
-          if !TransDetails.where(order_no: order_master.external_order_no).present?
+          #check for the tid from CableOperatorComm
+          cable_operator = CableOperatorComm.where(order_id: order_id).where("transdetails_id IS NOT NULL")
+          if cable_operator.present?
+           transdetails_id = cable_operator.first.transdetails_id
+          end
+               
+          order_no = order_master.external_order_no || nil if order_master.external_order_no.present?
+          #check if orderno is tran detail id already updated
+          if !transdetails_id.present?
            channel = (order_master.medium.name.strip[0..48].upcase if order_master.medium.present?)[0...-1]
 
-            transdetail = TransDetails.create(order_no: order_master.external_order_no,
+            transdetail = TransDetails.create(order_no: order_no,
             order_date: (order_master.orderdate + 330.minutes).to_date,
             channel: channel,
             product: allproducts,
@@ -1542,14 +1576,19 @@ class OrderMaster < ActiveRecord::Base
             city: order_master.customer_address.city[0..29].upcase,
             comm: commission)
 
-              puts "Created NEW on hbn.telebrandsindia.com => channel #{channel} #{media_id} for dnis #{dnis} from #{city} in #{state} order dated #{(order_master.orderdate + 330.minutes).to_date} order no #{order_master.external_order_no} Gross Rs #{order_master.subtotal} Net Rs #{amount} Comm #{commission} "
+              puts "Created NEW on hbn.telebrandsindia.com => 
+              channel #{channel} #{media_id} for dnis #{dnis} from #{city} in #{state} 
+              order dated #{(order_master.orderdate + 330.minutes).to_date} 
+              order no #{order_master.external_order_no} 
+              Gross Rs #{order_master.subtotal} Net Rs #{amount} Comm #{commission} "
 
           else
             channel = (order_master.medium.name.strip[0..48].upcase if order_master.medium.present?)[0...-1]
 
-            transdetails = TransDetails.where(order_no: order_master.external_order_no)
-            transdetail = transdetails.first
+            transdetail = TransDetails.where(tid: transdetails_id).first
+           
             transdetail.update(order_date: (order_master.orderdate + 330.minutes).to_date,
+            order_no: order_no,
             channel: channel,
             product: allproducts,
             amount: amount,
@@ -1557,66 +1596,70 @@ class OrderMaster < ActiveRecord::Base
             city: order_master.customer_address.city[0..29].upcase,
             comm: commission)
 
-  					cable_operator_comms = CableOperatorComm.where(order_no: order_master.external_order_no)
+						cable_operator_comms = CableOperatorComm.where(order_id: order_id)
 
-  					media_id = order_master.media_id || nil if order_master.medium
+						media_id = order_master.media_id || nil if order_master.medium
 
             dnis = order_master.calledno
             city = order_master.customer_address.city
             state = order_master.customer_address.state
             media_id = order_master.media_id
-          
-            puts "Already Found details online hbn.telebrandsindia.com. Now again updated transdetails channel #{channel} #{media_id} for dnis #{dnis} from #{city} in #{state} order dated #{(order_master.orderdate + 330.minutes).to_date} order no #{order_master.external_order_no} Gross Rs #{order_master.subtotal} Net Rs #{amount} Comm #{commission}  
+            
+            puts "Already Found details online hbn.telebrandsindia.com. Now again updated transdetails 
+            channel #{channel} #{media_id} for dnis #{dnis} from #{city} in #{state} 
+            order dated #{(order_master.orderdate + 330.minutes).to_date} 
+            order no #{order_master.external_order_no} 
+            Gross Rs #{order_master.subtotal} Net Rs #{amount} Comm #{commission}  
             Channel: #{transdetail.channel} 
             customer: #{transdetail.customer_name}
             amount: #{transdetail.amount}
             Commission: #{transdetail.comm}
             product: #{transdetail.product} 
             city: #{transdetail.city}"
-          
+            
           end
 
-  				cable_operator_comms = CableOperatorComm.where(order_no: order_master.external_order_no)
+					cable_operator_comms = CableOperatorComm.where(order_id: order_id)
 
-  				if cable_operator_comms.present?
-  					cable_operator_comm = cable_operator_comms.first
+					if cable_operator_comms.present?
+						cable_operator_comm = cable_operator_comms.first
+            message = "Updated for channel #{channel} #{media_id} for dnis #{dnis} from #{city} in #{state} order dated #{(order_master.orderdate + 330.minutes).to_date} order no #{order_master.external_order_no} Gross Rs #{order_master.subtotal} Net Rs #{amount} Comm #{commission} "
+						cable_operator_comm.update(order_no: order_no,
+            transdetails_id: transdetails_id,
+						order_date: (order_master.orderdate + 330.minutes).to_date,
+						order_id: order_master.id,
+						media_id: order_master.media_id,
+						channel: channel,
+						product: allproducts,
+						amount: amount,
+						customer_name: order_master.customer.salute[0..4].upcase + " " + order_master.customer.first_name[0..29].upcase + " " + order_master.customer.last_name[0..29].upcase,
+						city: order_master.customer_address.city[0..29].upcase,
+						comm: commission,
+						description: message)
 
-  					cable_operator_comm.update(order_no: order_master.external_order_no,
-  					order_date: (order_master.orderdate + 330.minutes).to_date,
-  					order_id: order_master.id,
-  					media_id: order_master.media_id,
-  					channel: channel,
-  					product: allproducts,
-  					amount: amount,
-  					customer_name: order_master.customer.salute[0..4].upcase + " " + order_master.customer.first_name[0..29].upcase + " " + order_master.customer.last_name[0..29].upcase,
-  					city: order_master.customer_address.city[0..29].upcase,
-  					comm: commission,
-  					description: "Updated for channel #{channel} #{media_id} for dnis #{dnis} from #{city} in #{state} order dated #{(order_master.orderdate + 330.minutes).to_date} order no #{order_master.external_order_no} Gross Rs #{order_master.subtotal} Net Rs #{amount} Comm #{commission} ")
+						puts "Updated for Cable Operator Comm table"
 
-  					puts "Updated order for channel #{channel} #{media_id} for dnis #{dnis} from #{city} in #{state} order dated #{(order_master.orderdate + 330.minutes).to_date} order no #{order_master.external_order_no} Gross Rs #{order_master.subtotal} Net Rs #{amount} Comm #{commission} "
+					else
+            message = "Created order for channel #{channel} #{media_id} for dnis #{dnis} from #{city} in #{state} order dated #{(order_master.orderdate + 330.minutes).to_date} order no #{order_master.external_order_no} Gross Rs #{order_master.subtotal} Net Rs #{amount} Comm #{commission} "
+						CableOperatorComm.create(order_no: order_no,
+						order_date: (order_master.orderdate + 330.minutes).to_date,
+             transdetails_id: transdetails_id,
+						order_id: order_master.id,
+						media_id: media_id,
+						channel: channel,
+						product: allproducts,
+						amount: amount,
+						customer_name: order_master.customer.salute[0..4].upcase + " " + order_master.customer.first_name[0..29].upcase + " " + order_master.customer.last_name[0..29].upcase,
+						city: order_master.customer_address.city[0..29].upcase,comm: commission,
+						description: message)
 
-  				else
-  					CableOperatorComm.create(order_no: order_master.external_order_no,
-  					order_date: (order_master.orderdate + 330.minutes).to_date,
-  					order_id: order_master.id,
-  					media_id: media_id,
-  					channel: channel,
-  					product: allproducts,
-  					amount: amount,
-  					customer_name: order_master.customer.salute[0..4].upcase + " " + order_master.customer.first_name[0..29].upcase + " " + order_master.customer.last_name[0..29].upcase,
-  					city: order_master.customer_address.city[0..29].upcase,
-  					comm: commission,
-  					description: "Created order for channel #{channel} #{media_id} for dnis #{dnis} from #{city} in #{state} order dated #{(order_master.orderdate + 330.minutes).to_date} order no #{order_master.external_order_no} Gross Rs #{order_master.subtotal} Net Rs #{amount} Comm #{commission} ")
-
-  					puts "Created order for channel #{channel} #{media_id} for dnis #{dnis} from #{city} in #{state} order dated #{(order_master.orderdate + 330.minutes).to_date} order no #{order_master.external_order_no} Gross Rs #{order_master.subtotal} Net Rs #{amount} Comm #{commission} "
-  				end
+						puts "Created for Cable Operator Comm table"
+					end
 
           #- Integer update with customer order id
       end
-
-
   end
-  handle_asynchronously :update_hbn_website_list, :priority => 100
+  handle_asynchronously :update_hbn_website_list, :priority => 100, :queue => 'v1_update_hbn_website_list'
   ########### below lines for sql server update on hbn.telebrandsindia.com ###########
 
   def hbn_trans_detail
@@ -1624,6 +1667,7 @@ class OrderMaster < ActiveRecord::Base
      return trans_detail if trans_detail.present?
   end
   private
+  
   def on_create
     #self.update_column(pieces: 0,subtotal: 0, taxes: 0, codcharges: 0, shipping:0, total: 0)
     self.update(pieces: OrderLine.where('orderid = ?', self.id).sum(:pieces),

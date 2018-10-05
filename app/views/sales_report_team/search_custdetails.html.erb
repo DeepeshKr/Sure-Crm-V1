@@ -1,0 +1,46 @@
+<!-- set page title start -->
+<% title "Search #{@ordernum} Order No" %>
+<!-- set page title end -->
+<p id="notice"><%= notice %></p>
+<h3>Customer Order Details (CUSTDETAIL Order id Only)</h3>
+<br>
+<%= render 'cust_Details' %>
+
+<br>
+
+<%= render ('order_masters/order_summary') %>
+<br>
+
+<%= render ('custdetails/details') %>
+<br>
+
+<br>
+	<div class="panel panel-primary">
+	  	<div class="panel-heading">
+	    	<h3 class="panel-title">Order in Dispatch / Paid / Returned (VPP)</h3>
+	  	</div>
+	  	<% if @vpp.present? %>
+	 		<%= render 'vpp' %>
+		<% else %>
+		<div class="well well-sm">
+			<h4><%= @vppsearch %></h4>
+		</div>
+		<% end %>
+	</div>
+<br>
+<br>
+ <div class="panel panel-primary">
+  <div class="panel-heading">
+    <h3 class="panel-title">Order in Transfer Order (DEALTRAN)</h3>
+  </div>
+  <% if @dealtran.present? %>
+ <%= render 'deal_tran/list' %>
+
+<% else %>
+<div class="well well-sm">
+<h4><%= @dealtransearch %></h4>
+</div>
+<% end %>
+</div>
+
+<br>

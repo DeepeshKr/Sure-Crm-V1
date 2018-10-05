@@ -1,0 +1,70 @@
+<!-- set page title start -->
+<% title "Marketing messages" %>
+<!-- set page title end -->
+<p id="notice"><%= notice %></p>
+
+
+<div class="row">
+	<div class="col-xs-4">
+		<h3>Marketing Messages</h3>
+	</div>
+	<div class="col-xs-8">
+		<br>
+		<div class="digg_pagination">
+		    <%= will_paginate @marketing_messages, :container => false %>
+		</div>
+		<br>
+	</div>
+</div>
+<table class="table table-hover table-bordered">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Message</th>
+      <th>Total nos</th>
+      <th>Activated</th>
+      <th>Start date</th>
+      <th>End date</th>
+      <th>Payment Mode</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @marketing_messages.each do |marketing_message| %>
+      <tr>
+        <td><%= marketing_message.name %></td>
+        <td><%= marketing_message.description %></td>
+        <td><%= marketing_message.total_nos %></td>
+        <td><%= marketing_message.activate %> 
+			<% if marketing_message.activate == true %>
+				<br>Sent at: <%= marketing_message.updated_at.strftime("%d-%b-%y") %>
+			<% end %>
+		</td>
+        <td><%= marketing_message.start_date.strftime("%d-%b-%y") %></td>
+        <td><%= marketing_message.end_date.strftime("%d-%b-%y") %></td>
+        <td><%= marketing_message.orderpaymentmode.name %></td>
+        <td><%= link_to 'Show', marketing_message %></td>
+        <td><%= link_to 'Edit', edit_marketing_message_path(marketing_message) %></td>
+        <td><%= link_to 'Destroy', marketing_message, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+<div class="row">
+	<div class="col-xs-4">
+		<%= link_to 'New Marketing message', new_marketing_message_path, class:"btn btn-primary" %>
+	</div>
+	<div class="col-xs-8">
+		<br>
+		<div class="digg_pagination">
+
+		    <%= will_paginate @marketing_messages, :container => false %>
+		</div>
+		<br>
+	</div>
+</div>
+
+

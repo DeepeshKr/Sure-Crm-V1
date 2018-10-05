@@ -18,6 +18,7 @@ module SureCrm1
     config.autoload_paths += %W(#{config.root}/lib) # add this line to include modules
     # Autoload lib/ folder including all subdirectories
     config.autoload_paths += Dir["#{config.root}/lib/**/"]
+    
     #config.autoload_paths += %W(#{config.root}/lib/mod) # add this line
     # -- all .rb files in that directory are automatically loaded.
     # Set Time.zone default to the specified zone and make Active Record auto-convert to this zone.

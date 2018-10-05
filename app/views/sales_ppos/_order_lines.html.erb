@@ -1,72 +1,79 @@
 <% if order_lines.present? %>
-<div class="panel panel-info">
-<table class="table table-striped table-bordered">
-	<thead>
-		<tr>
-			<th>SNo</th>
-			<th>Id </th>
-			<th class="text-right">Billing</th>
-			<th class="text-right">Commission</th>
-			<th class="text-right">Cost / Postage</th>
-			<th class="text-right">Revenue</th>
-		</tr>
-	</thead>
-	<tbody>
-   	 <tr><th colspan="9"><%= order_description %> </th></tr>
-	 <% @sno= 1 %>
-	 <% @subtotal = 0
-      @shipping = 0
-      @total = 0
-      @cost = 0
-      @revenue = 0
-			@variable_media_commission = 0
-			@fixed_media_commission = 0
-	  @product_postage = 0 %>
-      <% order_lines.each do |order_line| %>
+	<div class="panel panel-info">
+	<table class="table table-striped table-bordered">
+		<thead>
 			<tr>
-				<td rowspan="2"><%= @sno %></td>
-				<td colspan="3"><%= order_line.description %> <small>PV: <%= order_line.productvariant_id %> : PL: <%= order_line.product_list_id %> </small></td>
-				<td><small><%= (order_line.order_master.orderdate + 330.minutes).strftime('%d-%b %H:%M %P') %></small></td>
-				<td> <%= order_line.order_master.order_status_master.name if order_line.order_master.order_status_master.present? %></td>
+				<th>SNo</th>
+				<th>Id </th>
+				<th class="text-right">Billing</th>
+				<th class="text-right">Commission</th>
+				<th class="text-right">Cost / Postage</th>
+				<th class="text-right">Revenue</th>
 			</tr>
+		</thead>
+		<tbody>
+	   	 <tr><th colspan="9"><%= order_description %> </th></tr>
+		 		<% @sno= 1 %>
+		 	   <% @subtotal, @shipping, @total, @cost, @revenue, @variable_media_commission, @fixed_media_commission, @product_postage = 0,0,0,0,0,0,0,0 %>
+	      <% order_lines.each do |order_line| %>
+				<tr>
+					<td rowspan="2"><%= @sno %> <br>
+					<%= link_to 'Re-Calculate PPO', re_calculate_order_id_sales_ppos_path(order_id: order_line.order_master.id, return_url: @return_url), method: :put, data: { confirm: 'Re Calcuate PPO?' }, class: "btn btn-default btn-sm" %>
+					</td>
+					<td colspan="3"><%= order_line.description %> <small>
+						PV: <%= order_line.productvariant_id %> : PL: <%= order_line.product_list_id %> </small>
+					</td>
+					<td>
+						<small><%= (order_line.order_master.orderdate + 330.minutes).strftime('%d-%b %H:%M %P') %></small>
+					</td>
+					<td> <%= order_line.order_master.order_status_master.name if order_line.order_master.order_status_master.present? %>
+					</td>
+				</tr>
+				<tr>
+					<td>
+		        	<%= link_to order_line.order_master.external_order_no, custordersearch_path(ordernum: order_line.order_master.external_order_no),
+				 	:target => "_blank" if order_line.order_master.external_order_no.present? %> <br>
+		         	<small><%= link_to order_line.order_master.id, 
+						detailedordersearch_path(order_id: order_line.order_master.id), :target => "_blank" if order_line.order_master.id.present? %></small>
+	        		</td>
+					<td class="text-right">
+						<%= order_line.subtotal %><% @subtotal += order_line.subtotal %><br>
+	        			<%= order_line.shipping %><% @shipping += order_line.shipping %><br>
+	        			<%= order_line.total %><% @total += order_line.total %>
+					</td>
+					<td class="text-right">
+						<%= order_line.variable_media_commission.round(0) %>
+						<% @variable_media_commission += order_line.variable_media_commission %><br>
+						<small><small>(Variable)</small></small><br>
+						<%= order_line.fixed_media_commission.round(0) %> <br>
+						<% @fixed_media_commission += order_line.fixed_media_commission %>
+						<small><small>(On Order)</small></small>  
+					</td>
+	        		<td class="text-right"><%= order_line.productcost %>
+						<% @cost += order_line.productcost if order_line.productcost.present? %> <br>
+						<small><%= order_line.product_postage %>
+						<% @product_postage += order_line.product_postage if order_line.product_postage.present? %> 
+					</small>
+					</td>
+	        		<td class="text-right">
+						<%= order_line.productrevenue.to_i %>
+						<% @revenue += order_line.productrevenue %>
+					</td>
 
-       <tr>
-
-        <td>
-	        	<%= link_to order_line.order_master.external_order_no, custordersearch_path(ordernum: order_line.order_master.external_order_no),
-			 	:target => "_blank" if order_line.order_master.external_order_no.present? %> <br>
-	         	<small><%= link_to order_line.order_master.id, detailedordersearch_path(order_id: order_line.order_master.id), :target => "_blank" if order_line.order_master.id.present? %></small>
-        </td>
-
-        <td class="text-right"><%= order_line.subtotal %><% @subtotal += order_line.subtotal %><br>
-        <%= order_line.shipping %><% @shipping += order_line.shipping %><br>
-        <%= order_line.total %><% @total += order_line.total %></td>
-				<td class="text-right"><%= order_line.variable_media_commission.round(0) %>
-					<% @variable_media_commission += order_line.variable_media_commission %><br>
-					<small><small>(Variable)</small></small><br>
-					<%= order_line.fixed_media_commission.round(0) %> <br>
-					<% @fixed_media_commission += order_line.fixed_media_commission %>
-				<small><small>(On Order)</small></small>  </td>
-        <td class="text-right"><%= order_line.productcost %>
-			<% @cost += order_line.productcost if order_line.productcost.present? %> <br>
-			<small><%= order_line.product_postage %>
-			<% @product_postage += order_line.product_postage if order_line.product_postage.present? %> </small>
-		</td>
-        <td class="text-right"><%= order_line.productrevenue.to_i %><% @revenue += order_line.productrevenue %></td>
-
-		</tr>
-		       <% @sno += 1 %>
-     <% end %>
-      <tr>
-	     <th colspan="2">Total</th>
-	     <th class="text-right"><%= @subtotal.to_i %><br><%= @shipping.to_i %><br><%= @total.to_i %></th>
-			 <th class="text-right"><%= @variable_media_commission.to_i %> <br> <%= @fixed_media_commission.to_i %></th>
-	     <th class="text-right"><%= @cost.to_i %> <br><small> <%= @product_postage.to_i %> </small></th>
-	     <th class="text-right"><%= @revenue.to_i %></th>
-     </tr>
-	</tbody>
-</table>
-</div>
+				</tr>
+			
+			       <% @sno += 1 %>
+	     <% end %>
+	      <tr>
+		    <th colspan="2">Total</th>
+		    <th class="text-right"><%= @subtotal.to_i %><br><%= @shipping.to_i %><br><%= @total.to_i %></th>
+			<th class="text-right"><%= @variable_media_commission.to_i %> <br> <%= @fixed_media_commission.to_i %></th>
+		    <th class="text-right"><%= @cost.to_i %> <br><small> <%= @product_postage.to_i %> </small></th>
+		    <th class="text-right"><%= @revenue.to_i %></th>
+	     </tr>
+		</tbody>
+	</table>
+	</div>
 <% else %>
-<p>No orders for <%= order_description%></p>
+	<p>No orders for <%= order_description%></p>
 <% end %>

@@ -14,59 +14,9 @@ class OrderLine < ActiveRecord::Base
   validates :orderid,  :presence => { :message => "Please add an order first!" }
   validates :product_list_id,  :presence => { :message => "Please add a product!" }
 
-#auto fill requirement
-#delegate :product, to: :product_variant, prefix: true
-
-  #after_create :updateorder # :creator
 
   after_save :updateorder # :updator
-
-  #after_update :updateorder
-
   after_destroy :updateorder
-
-# def self.to_csv(options = {})
-#   CSV.generate(options) do |csv|
-#     csv.add_row column_names
-#     all.each do |foo|
-#       values = foo.attributes.values
-#       csv.add_row values
-#     end
-#   end
-# end
-# def self.to_csv_with_bar(options = {})
-#   CSV.generate(options) do |csv|
-#     csv.add_row column_names + self.bar.column_names
-
-#     all.each do |foo|
-
-#       values = foo.attributes.values
-
-#       if foo.bar
-#         values += foo.bar.attributes.values
-#       end
-
-#       csv.add_row values
-#     end
-#   end
-# end
-# def self.to_csv(foo_attributes = column_names, bar_attributes = bar.column_names, options = {})
-
-#   CSV.generate(options) do |csv|
-#     csv.add_row foo_attributes + bar_attributes
-
-#     all.each do |foo|
-
-#       values = foo.attributes.slice(*foo_attributes).values
-
-#       if foo.contact_details
-#         values += foo.contact_details.attributes.slice(*bar_attributes).values
-#       end
-
-#       csv.add_row values
-#     end
-#   end
-# end
 
 def codcharges
 codcharges = 0
@@ -310,8 +260,8 @@ def maharastracc_savings
 end
 
 def productcost
-  pcode = self.product_list.product_variant.extproductcode
-  cost_master =  ProductCostMaster.where("prod = ?", pcode).first
+  # pcode = self.product_variant_id
+  cost_master =  ProductCostMaster.where(product_variant_id: self.productvariant_id).first
   if cost_master.present?
     return cost_master.cost * self.pieces || 0
   else
@@ -320,9 +270,9 @@ def productcost
 end
 
 def product_shipping_cost
-  pcode = self.product_list.product_variant.extproductcode
-  cost_master =  ProductCostMaster.where("prod = ?", pcode).first
-  if cost_master.present?
+  # pcode = self.product_variant_id
+  cost_master =  ProductCostMaster.where(product_variant_id: self.productvariant_id).first
+   if cost_master.present?
     return cost_master.shipping_handling * self.pieces || 0
   else
     return 0
@@ -330,10 +280,7 @@ def product_shipping_cost
 end
 
 def product_postage
-  pcode = self.product_list.product_variant.extproductcode if self.product_list
-
-  return 0 if pcode.blank?
-  cost_master = ProductCostMaster.where("prod = ?", pcode).where("postage is not null")
+  cost_master =  ProductCostMaster.where(product_variant_id: self.productvariant_id).where("postage is not null")
 
   if cost_master.present?
     return cost_master.first.postage * self.pieces || 0
@@ -341,14 +288,13 @@ def product_postage
   return 0
 end
 
-
 ######## product pricing change for ppo start #########
 
 def productrevenue
   vat_rate = TaxRate.find_by_name("VAT")
   shipping_rate = TaxRate.find_by_name("Shipping Reverse for PPO")
   
-  totalrevenue = 0
+    totalrevenue = 0
     totalrevenue += (self.subtotal * (self.pieces ||= 1) * vat_rate.reverse_rate.to_f) || 0
     totalrevenue += (self.shipping * (self.pieces ||= 1) * shipping_rate.reverse_rate.to_f) || 0
      return totalrevenue
@@ -482,6 +428,18 @@ def variable_media_commission
   else
     return 0
   end
+end
+
+
+
+def financing_cost
+  finance_charges = Orderpaymentmode.where('id = ? AND payment_cost is not null', self.order_master.orderpaymentmode_id)
+  total_charge = 0
+  if finance_charges.present?
+    total_charge = ((self.shipping + self.subtotal) * (self.pieces ||= 1) * finance_charges.first.payment_cost.to_f || 0) || 0
+  end
+
+  return total_charge
 end
 
 ######## product pricing change for ppo end #########

@@ -30,11 +30,22 @@ class ProductVariantsController < ApplicationController
       @found = nil
     
     end
-
+    
+    
     # @product_variants = ProductVariant.all
     # respond_with(@product_variants)
   end
-
+  
+  def get_csv
+    @cars = ProductVariant.all
+    respond_to do |format|
+      format.csv { send_data @cars.to_csv, filename: "product_variants-#{Date.today}.csv" }
+      format.xls { send_data @cars.to_csv(col_sep: "\t") }
+    end
+    
+    # redirect_to product_variants_path and return
+  end
+    
   def show
     @product_lists = ProductList.where(product_variant_id: @product_variant.id)
     @product_list = ProductList.new(:product_variant_id => @product_variant.id,

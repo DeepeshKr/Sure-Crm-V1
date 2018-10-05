@@ -1,0 +1,34 @@
+<!-- set page title start -->
+<% title "Employee Upsale Report #{@from_date} to #{@to_date}" %>
+<!-- set page title end -->
+ <div class="row">
+	 <div class="col-xs-4">
+	 	<h4>Employee Upsale Specific Report </h4>
+	 </div>
+	 <div class="col-xs-2">
+		 <%= link_to 'Upsale products', sales_upsale_products_path, target:"_blank", class:"btn btn-info btn-sm" %> 	</div>
+	 <div class="col-xs-5">
+		 <%= render partial: 'date_range_search', :locals => {:searchaction => "employee_upsales_report"}  %>		
+	</div>
+ </div>
+ <br>
+ 
+ <table class="table table-hover table-bordered">
+	 <tr>
+		<td>Employee</td>
+		<% @sales_upsale_products.each do |upsale| %>
+			<td class="text-right"><%= upsale.product_list.show_prod %> </td>
+		<% end %> 
+		<td class="text-right">Total</td>
+	</tr>
+		<% @sales_report.each do |sales| %>
+	 <tr>
+			<% sales.each do |sale| %>
+				<td class="text-right">
+					<%= sale %>
+				</td>
+			<% end %>
+	</tr>
+		<% end %>
+	
+</table>

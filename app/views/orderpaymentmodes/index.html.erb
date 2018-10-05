@@ -1,12 +1,38 @@
-<h3>Listing order payment modes</h3>
+<!-- set page title start -->
+<% title "Listing order payment modes" %>
+<!-- set page title end -->
 
-<table class="table table-hover">
+<div class="row">
+	<div class="col-xs-8">
+		<h3>Listing order payment modes</h3>
+	</div>
+	<div class="col-xs-4">
+		<ul class="list-inline">
+		  <li><%= link_to "Order Source", order_sources_path, class:"btn btn-info btn-xs" %></li>
+		  <li><%= link_to "Order Payment Modes", orderpaymentmodes_path, class:"btn btn-default btn-xs" %></li>
+		</ul>
+	</div>
+</div>
+
+<p>Combination of order sources is required with order payment, create a similar entry there as well</p>
+
+<table class="table table-hover table-bordered">
   <thead>
     <tr>
-      <th>Name</th>
-       <th>Charges</th>
-      <th>Description</th>
-      <th colspan="3"></th>
+      	<th>Name</th>
+       	<th class="text-right">Charges</th>
+      	<th class="text-right">Cost</th>
+		<th class="text-right">Hold Hours</th>
+		<th>Is Valid</th>
+      	<th colspan="2"></th>
+    </tr>
+    <tr>
+      	<td></td>
+       	<td class="text-right">Discount or Extra cost borne by customer</td>
+      	<td class="text-right">Charges we pay to bank (say to bank)</td>
+		<td class="text-right"></td>
+		<td></td>
+      	<td colspan="2"></td>
     </tr>
   </thead>
 
@@ -14,11 +40,13 @@
     <% @orderpaymentmodes.each do |orderpaymentmode| %>
       <tr>
         <td><%= orderpaymentmode.name %></td>
-        <td><%= orderpaymentmode.charges %></td>
-        <td><%= orderpaymentmode.description %></td>
+        <td class="text-right"><%= orderpaymentmode.charges %></td>
+		<td class="text-right"><%= orderpaymentmode.payment_cost %></td>
+		<td class="text-right"><%= orderpaymentmode.hold_hours %></td>
+		<td><%= orderpaymentmode.is_valid %></td>
+        
         <td><%= link_to 'Show', orderpaymentmode %></td>
-        <td><%= link_to 'Edit', edit_orderpaymentmode_path(orderpaymentmode) %></td>
-        <td><%= link_to 'Destroy', orderpaymentmode, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <td><%= link_to 'Edit', edit_orderpaymentmode_path(orderpaymentmode), class: "btn btn-primary btn-xs" %></td>
       </tr>
     <% end %>
   </tbody>
@@ -26,4 +54,4 @@
 
 <br>
 
-<%= link_to 'New Orderpaymentmode', new_orderpaymentmode_path %>
+<%= link_to 'New Orderpaymentmode', new_orderpaymentmode_path, class:"btn btn-primary btn-lg" %>

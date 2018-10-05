@@ -1,5 +1,6 @@
 <div class="row">
- <%= bootstrap_form_tag url: campaigns_path, :method => :GET do |f| %>
+ <%= form_tag  url_for(:controller => 'campaigns', :action => get_action), :method => :GET do  %>
+ 
 <div class="col-xs-9">
 <%= text_field_tag(:for_date, @for_date, :data => {:provide => "datepicker"}, :class => "form-control", :required => "true", :placeholder => "Search Campaign Date", :id => 'datepicker1')   %>
 

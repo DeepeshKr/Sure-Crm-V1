@@ -178,6 +178,7 @@ class SalesReportTeamController < ApplicationController
   end
   
   def pay_u_orders
+    cancelled_status_id = [10040, 10006, 10008]
       #     #media segregation only HBN
       #     #media_segments
       #     @sno = 1
@@ -194,7 +195,9 @@ class SalesReportTeamController < ApplicationController
       #10060 is the payumoney payment source and 10001 status is follow up
       # .where(ORDER_STATUS_MASTER_ID: 10001)
       order_masters = OrderMaster.where(order_source_id: 10060)
-      .where('orderdate >= ? AND orderdate <= ?', @from_date, @to_date).order("orderdate DESC") #.limit(20)
+      .where('orderdate >= ? AND orderdate <= ?', @from_date, @to_date)
+      .where.not(ORDER_STATUS_MASTER_ID: cancelled_status_id)
+      .order("orderdate DESC") #.limit(20)
 
 
       if params.has_key?(:show)
@@ -606,6 +609,103 @@ class SalesReportTeamController < ApplicationController
     end #end csv
   
 
+  end
+  
+  def employee_upsales_report
+    use_from_to_date 2
+    if (@from_date == nil || @to_date == nil )
+      return
+    end
+    
+    #@sales_executives = Employee.where(employee_role_id: [10003,10081]).order(id: :DESC).limit(10)
+    @sales_executives = OrderMaster.where('orderdate >= ? AND orderdate <= ?', @from_date, @to_date)
+    .where('ORDER_STATUS_MASTER_ID > 10000')
+    .where.not(ORDER_STATUS_MASTER_ID: @cancelled_status_id)
+    .select(:employee_id).distinct
+    
+    @sales_upsale_products = SalesUpsaleProduct.all
+    # 10081
+    @sales_report ||= []
+    total_nos = 0
+    @sales_executives.each do |sales|
+      @product_list ||= []
+      employee = Employee.find(sales.employee_id) 
+      @product_list << employee.employee_name
+        @sales_upsale_products.each do |upsale|
+      
+          all_order_lines = OrderLine.joins(:order_master)
+          .where('order_masters.orderdate >= ? AND order_masters.orderdate <= ?', @from_date, @to_date)
+          .where('order_masters.order_status_master_id > ?', 10000)
+          .where("order_masters.employeecode = ?", employee.employeecode)
+          .where('order_masters.order_status_master_id not in (10040, 10006, 10008)')
+          .where(product_list_id: upsale.product_list.id)
+          .pluck(:orderid)
+      
+          total_count = all_order_lines.count if all_order_lines.present?
+          total_nos += total_count ||= 0
+          @product_list << total_count ||= 0 
+        end #product list end
+    
+      @product_list << total_nos
+      @sales_report << @product_list  
+      @product_list = nil
+      total_nos = 0
+    end #salesloop end
+    
+    @from_date = (@from_date + 330.minutes).strftime("%Y-%m-%d")
+    @to_date = (@to_date + 330.minutes).strftime("%Y-%m-%d")
+  end
+  
+  def search_custdetails
+     @ordersearchresults = "Please search for Order, Results across Ordering, Processing and Dispatch"
+     @vppsearch = "Please search for Order, Results across Ordering, Processing and Dispatch"
+     @dealtransearch = "Please search for Orders in Transfer Orders"
+
+     if params.has_key?(:manifest)
+       @manifest = params[:manifest]
+       vpp_search = VPP.where(manifest: @manifest) #.where(custref: @ordernum)
+       if vpp_search.present?
+         #redirect_to custordersearch_path(:order_id => @order_id)
+         custref = vpp_search.first.custref
+         redirect_to custordersearch_path(:ordernum => vpp_search.first.custref)
+       else
+         flash[:error] = "The manifest does not exist!"
+       end
+     end
+
+     if params[:ordernum].present?
+       @ordernum = params[:ordernum]
+       @custdetails = CUSTDETAILS.where("ORDERNUM = ?", @ordernum)
+       @ordersearchresults = "No Results found in processing search #{@ordernum}"
+       @vppsearch = "No results found in Dispatch, we searched order number #{@ordernum}"
+       #if @custdetails.present?
+         order_masters = OrderMaster.where(external_order_no: @ordernum)
+         if order_masters.present?
+           #if @order_master.customer_address_id.present?
+             @customer_address = CustomerAddress.find(order_masters.first.customer_address_id)
+             @order_master = order_masters.first
+             @order_lines = OrderLine.where(orderid: @order_master.id).order("id")
+           #end
+         end
+        
+         @sales_ppos = SalesPpo.where(:external_order_no => @ordernum)
+         .order("start_time")
+         #custref related to
+        # if VPP.where(custref: @ordernum).present?
+           @vpp = VPP.where(custref: @ordernum)
+
+           if @vpp.present?
+             @manifest = @vpp.first.manifest
+           end
+        # end
+
+         # if DEALTRAN.where(custref: @ordernum).present?
+           @dealtran = DEALTRAN.where(custref: @ordernum)
+         #end
+        
+
+       end
+     #end
   end
   
   private

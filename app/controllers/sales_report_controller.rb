@@ -255,29 +255,33 @@ class SalesReportController < ApplicationController
         reverse_vat_rate = TaxRate.find(10001)
         rate_charge = reverse_vat_rate.reverse_rate ||= 0.8888889
           
-         order_master_calculations = OrderMaster.where('TRUNC(orderdate) = ?', for_date)
+         pvt_order_master_calculations = OrderMaster.where('TRUNC(orderdate) = ?', for_date)
          .where('ORDER_STATUS_MASTER_ID > 10000')
+         .joins(:medium).where("media.media_group_id <> 10000 or media.media_group_id is null")
          .where.not(ORDER_STATUS_MASTER_ID: @cancelled_status_id)
          
-         order_nos = order_master_calculations.count(:id)
-         order_value = (order_master_calculations.sum(:subtotal) * rate_charge).round(2)
+         hbn_order_master_calculations = OrderMaster.where('TRUNC(orderdate) = ?', for_date)
+         .where('ORDER_STATUS_MASTER_ID > 10000')
+         .joins(:medium).where("media.media_group_id = 10000")
+         .where.not(ORDER_STATUS_MASTER_ID: @cancelled_status_id)
          
-         male_customer_nos = order_master_calculations.joins(:customer)
-         .where("customers.salute in (?)", males).count(:id)
-         male_customer_value = (order_master_calculations.joins(:customer)
-         .where("customers.salute in (?)", males).sum(:subtotal) * rate_charge).round(2)
+         # order_nos = hbn_order_master_calculations.count(:id).to_i + pvt_order_master_calculations.count(:id).to_i
+  #        order_value = ((hbn_order_master_calculations.sum(:subtotal).to_f + pvt_order_master_calculations.sum(:subtotal).to_f).round(2) * rate_charge).round(2)
+  #   
+         hbn_male_caller_nos =  hbn_order_master_calculations.where(gender: "Male").count(:id)
+         hbn_male_caller_value = (hbn_order_master_calculations.where(gender: "Male").sum(:subtotal) * rate_charge).round(2)
          
-         female_customer_nos = order_master_calculations.joins(:customer)
-         .where("customers.salute in (?)", females).count(:id)
-         female_customer_value = (order_master_calculations.joins(:customer)
-         .where("customers.salute in (?)", females).sum(:subtotal) * rate_charge).round(2)
+         hbn_female_caller_nos = hbn_order_master_calculations.where(gender: "Female").count(:id)
+         hbn_female_caller_value = (hbn_order_master_calculations.where(gender: "Female").sum(:subtotal) * rate_charge).round(2)
          
-         male_caller_nos = order_master_calculations.where(gender: "Male").count(:id)
-         male_caller_value = (order_master_calculations.where(gender: "Male").sum(:subtotal) * rate_charge).round(2)
+         pvt_male_caller_nos = pvt_order_master_calculations.where(gender: "Male").count(:id)
+         pvt_male_caller_value = (pvt_order_master_calculations.where(gender: "Male").sum(:subtotal) * rate_charge).round(2)
          
-         female_caller_nos = order_master_calculations.where(gender: "Female").count(:id)
-         female_caller_value = (order_master_calculations.where(gender: "Female").sum(:subtotal) * rate_charge).round(2)
+         pvt_female_caller_nos = pvt_order_master_calculations.where(gender: "Female").count(:id)
+         pvt_female_caller_value = (pvt_order_master_calculations.where(gender: "Female").sum(:subtotal) * rate_charge).round(2)
          
+         order_nos = hbn_male_caller_nos.to_i + hbn_female_caller_nos.to_i + pvt_male_caller_nos.to_i + pvt_female_caller_nos.to_i
+         order_value = hbn_male_caller_value.to_f + hbn_female_caller_value.to_f + pvt_male_caller_value.to_f + pvt_female_caller_value.to_f
          #gender
         #  # order_master_calculations.each do |orc|
 # #            if reverse_vat_rate.present?
@@ -293,14 +297,14 @@ class SalesReportController < ApplicationController
 # (for_date).strftime("%Y-%m-%d")
           @employeeorderlist << {
             :for_date => for_date,
-            :male_customer_nos => male_customer_nos,
-            :male_customer_value => male_customer_value,
-            :female_customer_nos => female_customer_nos,
-            :female_customer_value => female_customer_value,
-            :male_caller_nos => male_caller_nos,
-            :male_caller_value => male_caller_value,
-            :female_caller_nos => female_caller_nos,
-            :female_caller_value => female_caller_value,
+            :hbn_male_caller_nos => hbn_male_caller_nos,
+            :hbn_male_caller_value => hbn_male_caller_value,
+            :hbn_female_caller_nos => hbn_female_caller_nos,
+            :hbn_female_caller_value => hbn_female_caller_value,
+            :pvt_male_caller_nos => pvt_male_caller_nos,
+            :pvt_male_caller_value => pvt_male_caller_value,
+            :pvt_female_caller_nos => pvt_female_caller_nos,
+            :pvt_female_caller_value => pvt_female_caller_value,
             :total_nos => order_nos,
             :total_value => order_value}
 
@@ -1202,8 +1206,9 @@ class SalesReportController < ApplicationController
 
     #10060 is the payumoney payment source and 10001 status is follow up
     # .where(ORDER_STATUS_MASTER_ID: 10001)
+    #.limit(20)
     order_masters = OrderMaster.where(order_source_id: 10060)
-    .where('orderdate >= ? AND orderdate <= ?', @from_date, @to_date).order("orderdate DESC") #.limit(20)
+    .where('orderdate >= ? AND orderdate <= ?', @from_date, @to_date).order("orderdate DESC") 
 
 
     if params.has_key?(:show)
@@ -1247,10 +1252,14 @@ class SalesReportController < ApplicationController
           #cats.each do |cat| cat.name end
           if o.order_line.present?
             o.order_line.where(orderid: o.id).joins(:product_variant)
-                  .where('PRODUCT_VARIANTS.product_sell_type_id = ?', 10000).each do |ord| main_products << " #{ord.product_variant.extproductcode}"  end
+                  .where('PRODUCT_VARIANTS.product_sell_type_id = ?', 10000).each do |ord| 
+                    main_products << " #{ord.product_variant.extproductcode}"  
+                  end
             #products = o.order_line.each(&:description)
             o.order_line.where(orderid: o.id).joins(:product_variant)
-                  .where.not('PRODUCT_VARIANTS.product_sell_type_id = ?', 10000).each do |ord| upsell_products << " #{ord.product_variant.extproductcode} |"  end
+                  .where.not('PRODUCT_VARIANTS.product_sell_type_id = ?', 10000).each do |ord| 
+                    upsell_products << " #{ord.product_variant.extproductcode} |"  
+                  end
           end
 
          # paid_status = "#{o.orderpaymentmode.name}"
@@ -1866,84 +1875,119 @@ class SalesReportController < ApplicationController
   end
 
   def employee
-        @sno = 1
-        @total_pay_u_orders, @total_pay_u_value, @total_ccorders, @total_ccvalue, @total_codorders, @total_codvalue, @total_nos, @total_total = 0,0,0,0,0,0,0,0
-        #@months = [['-', '']](1..12).each {|m| @months << [Date::MONTHNAMES[m], m]}
-        #@order_master.orderpaymentmode_id == 10000 #paid over CC
-        #@order_master.orderpaymentmode_id == 10001 #paid over COD
-      if params[:from_date].present?
-        #@summary ||= []
-        @or_for_date = params[:from_date]
-        for_date =  Date.strptime(params[:from_date], "%Y-%m-%d")
+    @sno = 1
+    @total_pay_u_orders, @total_pay_u_value, @total_ccorders, @total_ccvalue, @total_codorders, @total_codvalue, @total_nos, @total_total = 0,0,0,0,0,0,0,0
+    #@months = [['-', '']](1..12).each {|m| @months << [Date::MONTHNAMES[m], m]}
+    #@order_master.orderpaymentmode_id == 10000 #paid over CC
+    #@order_master.orderpaymentmode_id == 10001 #paid over COD
+    use_from_to_date 1
+    if @from_date == nil
+      return
+    end
 
-        @from_date = for_date.beginning_of_day - 330.minutes
-        @to_date = for_date.end_of_day - 330.minutes
-        #@to_date = @from_date + 1.day
+    order_masters = OrderMaster.where('orderdate >= ? AND orderdate <= ?', @from_date, @to_date)
+    .where('ORDER_STATUS_MASTER_ID > 10000')
+    .where.not(ORDER_STATUS_MASTER_ID: @cancelled_status_id)
+    
+    @first_order_at = order_masters.first.orderdate + 330.minutes
+    @last_order_at =  order_masters.last.orderdate + 330.minutes
+    
+    order_masters = order_masters.select(:employee_id).distinct
 
-        if params.has_key?(:to_date)
-          @to_date =  Date.strptime(params[:to_date], "%Y-%m-%d")
+    @orderdate = "Searched for #{for_date} found #{order_masters.count} agents!"
+    employeeunorderlist ||= []
+    num = 1
+    
+    order_masters.each do |o|
+      e = o.employee_id
+
+      name = (Employee.find(e).first_name  || "NA" if Employee.find(e).first_name.present?)
+      orderlist = OrderMaster.where('ORDER_STATUS_MASTER_ID > 10000')
+      .where.not(ORDER_STATUS_MASTER_ID: @cancelled_status_id)
+      .where('orderdate >= ? AND orderdate <= ?', @from_date, @to_date).where(employee_id: e)
+      timetaken = orderlist.sum(:codcharges)
+      pay_u_value = orderlist.where(orderpaymentmode_id: 10080).sum(:total)
+      pay_u_orders = orderlist.where(orderpaymentmode_id: 10080).count()
+
+      ccvalue = orderlist.where(orderpaymentmode_id: 10000).sum(:total)
+      ccorders = orderlist.where(orderpaymentmode_id: 10000).count()
+
+      codvalue = orderlist.where(orderpaymentmode_id: 10001).sum(:total)
+      codorders = orderlist.where(orderpaymentmode_id: 10001).count()
+
+      totalorders = orderlist.sum(:total)
+      noorders = orderlist.count()
+      employeeunorderlist << {:total => totalorders,
+         :id => e, :employee => name, :for_date =>  @or_for_date,
+        :nos => noorders, :pay_u_orders => pay_u_orders, :pay_u_value => pay_u_value,
+        :codorders => codorders, :codvalue => codvalue,
+         :ccorders => ccorders, :ccvalue => ccvalue  }
+    end
+      @employeeorderlist = employeeunorderlist.sort_by{|c| c[:total]}.reverse
+
+      #this is for date on the view
+      @from_date = (@from_date + 330.minutes).strftime("%Y-%m-%d")
+      @to_date = (@to_date + 330.minutes).strftime("%Y-%m-%d")
+
+      respond_to do |format|
+      csv_file_name = "employee_sales_#{@or_for_date}.csv"
+        format.html
+        format.csv do
+          headers['Content-Disposition'] = "attachment; filename=\"#{csv_file_name}\""
+          headers['Content-Type'] ||= 'text/csv'
         end
-
-        @to_date = @to_date.end_of_day - 330.minutes
-
-
-        order_masters = OrderMaster.where('orderdate >= ? AND orderdate <= ?', @from_date, @to_date)
-        .where('ORDER_STATUS_MASTER_ID > 10002')
-        .where.not(ORDER_STATUS_MASTER_ID: @cancelled_status_id)
-        
-        @first_order_at = order_masters.first.orderdate + 330.minutes
-        @last_order_at =  order_masters.last.orderdate + 330.minutes
-        
-        order_masters = order_masters.select(:employee_id).distinct
-
-        @orderdate = "Searched for #{for_date} found #{order_masters.count} agents!"
-        employeeunorderlist ||= []
-        num = 1
-        order_masters.each do |o|
-          e = o.employee_id
-
-          name = (Employee.find(e).first_name  || "NA" if Employee.find(e).first_name.present?)
-          orderlist = OrderMaster.where('ORDER_STATUS_MASTER_ID > 10002')
-          .where.not(ORDER_STATUS_MASTER_ID: @cancelled_status_id)
-          .where('orderdate >= ? AND orderdate <= ?', @from_date, @to_date).where(employee_id: e)
-          timetaken = orderlist.sum(:codcharges)
-          pay_u_value = orderlist.where(orderpaymentmode_id: 10080).sum(:total)
-          pay_u_orders = orderlist.where(orderpaymentmode_id: 10080).count()
-
-          ccvalue = orderlist.where(orderpaymentmode_id: 10000).sum(:total)
-          ccorders = orderlist.where(orderpaymentmode_id: 10000).count()
-
-          codvalue = orderlist.where(orderpaymentmode_id: 10001).sum(:total)
-          codorders = orderlist.where(orderpaymentmode_id: 10001).count()
-
-          totalorders = orderlist.sum(:total)
-          noorders = orderlist.count()
-          employeeunorderlist << {:total => totalorders,
-             :id => e, :employee => name, :for_date =>  @or_for_date,
-            :nos => noorders, :pay_u_orders => pay_u_orders, :pay_u_value => pay_u_value,
-            :codorders => codorders, :codvalue => codvalue,
-             :ccorders => ccorders, :ccvalue => ccvalue  }
-          end
-          @employeeorderlist = employeeunorderlist.sort_by{|c| c[:total]}.reverse
-
-        #this is for date on the view
-        @from_date = (@from_date + 330.minutes).strftime("%Y-%m-%d")
-        @to_date = (@to_date + 330.minutes).strftime("%Y-%m-%d")
-
-          respond_to do |format|
-          csv_file_name = "employee_sales_#{@or_for_date}.csv"
-            format.html
-            format.csv do
-              headers['Content-Disposition'] = "attachment; filename=\"#{csv_file_name}\""
-              headers['Content-Type'] ||= 'text/csv'
-            end
-          end
-
       end
+
   end
     # Processing by SalesReportController#city as HTML
     #   Parameters: {"utf8"=>"✓", "from_date"=>"2015-11-01", "to_date"=>"2015-11-30", "media_id"=>"10005", "commit"=>"Show Report"}
-
+    
+  def employee_pay_u_report
+    cancelled_status_id = [10040, 10006, 10008]
+    @sno = 1
+    use_from_to_date 1
+    if @from_date == nil
+      return
+    end
+    @cut_off_date = Time.zone.now - 1440.minutes # 24 hour back
+    if @to_date > @cut_off_date
+      @order_information = "Remember, it takes 24 hrs to convert the pay u money orders to become COD, all or some of these orders are in that window!"
+    else
+      @order_information = "All pay u order are now paid!"
+    end
+    #sales_report = new
+    
+    @order_list = OrderMaster.where('orderdate >= ? AND orderdate <= ?', @from_date, @to_date)
+    .where('ORDER_STATUS_MASTER_ID > 10002')
+    .where(order_source_id: 10060)
+    .where(orderpaymentmode_id: 10080)
+    .where.not(ORDER_STATUS_MASTER_ID: cancelled_status_id)
+    .select(:employee_id, :id, :total).distinct
+    .order(:employee_id)
+    
+    
+    #employee_wise_sales_step_report orderpaymentmode_id, from_date, to_date
+    @employeeorderlist = SalesReport.employee_wise_sales_step_report 10080, @from_date, @to_date
+    @employeeorderlist = @employeeorderlist.sort_by(&:step_total_value).reverse
+    #@employeeorderlist = @employeeunorderlist.sort_by{|c| c[:step_4_value]}.reverse
+    
+    #@employeeunorderlist.sort{|a,b| a && b ? a <=> b : a ? -1 : 1 }
+    
+    @from_date = (@from_date + 330.minutes).strftime("%Y-%m-%d")
+    @to_date = (@to_date + 330.minutes).strftime("%Y-%m-%d")
+    
+    respond_to do |format|
+    csv_file_name = "employee_pay_u_sales_step_report_#{@from_date}_#{@to_date}.csv"
+      format.html
+      format.csv do
+        headers['Content-Disposition'] = "attachment; filename=\"#{csv_file_name}\""
+        headers['Content-Type'] ||= 'text/csv'
+      end
+    end
+    
+    
+  end
+  
   def city
         @pay_u_nos, @pay_u_values, @cc_nos, @cc_values, @cod_nos, @cod_values, @total_nos, @total_values =0,0,0,0,0,0,0,0,0
         @sno = 1
@@ -1973,7 +2017,7 @@ class SalesReportController < ApplicationController
         total_count = 0
 
         order_cities = OrderMaster.where('orderdate >= ? AND orderdate <= ?', from_date, to_date)
-        .where('ORDER_STATUS_MASTER_ID > 10002')
+        .where('ORDER_STATUS_MASTER_ID > 10000')
         .where.not(ORDER_STATUS_MASTER_ID: @cancelled_status_id)
         .where('city IS NOT NULL')
         #.uniq.pluck(:city)
@@ -1993,7 +2037,7 @@ class SalesReportController < ApplicationController
                 #city = CustomerAddress.find(e).city  #  || "NA" if Employee.find(e).first_name.present?)
               channels = []
               orderlist = OrderMaster.where('orderdate >= ? AND orderdate <= ?', from_date, to_date)
-              .where('ORDER_STATUS_MASTER_ID > 10002')
+              .where('ORDER_STATUS_MASTER_ID > 10000')
               .where.not(ORDER_STATUS_MASTER_ID: @cancelled_status_id)
               .where('city IS NOT NULL').where("city = ?", city)
 
@@ -2348,7 +2392,6 @@ class SalesReportController < ApplicationController
 
   end
  
-  
   def show
       #add this link to show
       #<%= link_to "View PPO", ppo_details_path(campaign_id: c[:campaign_id]), :target => "_blank" %>
@@ -2676,6 +2719,7 @@ class SalesReportController < ApplicationController
                :ref_no => o.id,
                :order_date =>  (o.orderdate + 330.minutes).strftime('%d-%b-%Y'),
                :customer => o.customer.first_name + " " + o.customer.last_name,
+               :date_of_birth => (o.customer.date_of_birth.strftime('%d-%b-%Y') if o.customer.date_of_birth.present?),
                :phone => o.mobile + " / " + o.customer_address.telephone1,
                :email_id => o.customer.emailid,
                :city => o.customer_address.city + " " + o.customer_address.pincode,
@@ -2703,7 +2747,6 @@ class SalesReportController < ApplicationController
         end
 
   end
-
 
   private
 

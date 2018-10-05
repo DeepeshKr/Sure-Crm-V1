@@ -24,9 +24,20 @@
 	<% end %>
 	</div>
 </div>
+<div class="row">
+	<div class="col-xs-8">
+		<h3>Showing <%= @total_records%> Rows from India Post Website (External) for <%= @statename %><%= @pincode %></h3>
+	</div>
+	<div class="col-xs-4">
+		<ul class="list-inline">
+		  <li><%= link_to "Pincode (Ext)", india_pincode_lists_check_for_updates_path, class:"btn btn-info btn-xs" %></li>
+		  <li><%= link_to "Pincodes (Int)", india_pincode_lists_path, class:"btn btn-default btn-xs" %></li>
+		  <li><%= link_to "City List", india_city_lists_path, class:"btn btn-primary btn-xs" %></li>
+		</ul>
+	</div>
+</div>
 
 
-<h3>Showing <%= @total_records%> Rows from India Post Website (External) for <%= @statename %><%= @pincode %></h3>
 <hr>
 <table class="table table-hover">
   <thead>

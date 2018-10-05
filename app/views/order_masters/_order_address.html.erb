@@ -1,42 +1,35 @@
-<div class="well well-sm">
-<% if @order_master.customer_address.present? %>
-<div class="row">
-      <div class="col-xs-10"> <%= @order_master.customer_address.address1 %> </div>
-  <div class="clearfix"></div>
-     <div class="col-xs-10"><%= @order_master.customer_address.address2 %>      </div>
-    <div class="clearfix"></div>
-     <div class="col-xs-10">      <%= @order_master.customer_address.address3 %>     </div>
-   <div class="clearfix"></div>
- <div class="col-xs-8">   <%= @order_master.customer_address.landmark %>  </div>
-   <div class="clearfix"></div>
-   <div class="col-xs-3">    <%= @order_master.customer_address.district %>  </div>
-   <div class="col-xs-3">    <%= @order_master.customer_address.city %>  </div>
-    <div class="col-xs-2">     <%= @order_master.customer_address.pincode %>  </div>
-     <div class="col-xs-3">     <%= @order_master.customer_address.state %>  </div>
-<div class="clearfix"></div>
-
-  <div class="col-xs-4">   <%= @order_master.customer_address.country %>  </div>
-<div class="clearfix"></div>
-       <div class="col-xs-4">      <%= @order_master.customer_address.telephone1 %>
-     
-    </div>
-    
-    <div class="col-xs-4">
-      <%= @order_master.customer_address.telephone2 %>
-   
-    </div>
-    
-    <div class="col-xs-4">
-      <%= @order_master.customer_address.fax %>
-   
-    </div>
-  
-</div>
-<% else %>
-<div class="alert alert-danger" role="alert">
-<h4> No address found </h4>
-</div>
-
-
+<% if @order_master.present? %>
+	<div class="well well-sm">
+	<% if @order_master.customer_address.present? %>
+		<div class="row">
+	      	<div class="col-xs-10"> <%= @order_master.customer_address.address1 %> </div>
+		</div>
+		<div class="clearfix"></div>
+		<div class="row">
+	     	<div class="col-xs-10"><%= @order_master.customer_address.address2 %>      </div>
+		</div>
+		<div class="clearfix"></div>
+		<div class="row">	
+	     	<div class="col-xs-10"><%= @order_master.customer_address.address3 %>     </div>
+		</div>
+		<div class="clearfix"></div>
+		<div class="row">
+	 	   	<div class="col-xs-6"><%= @order_master.customer_address.landmark %>  </div>
+	   	 	<div class="col-xs-2"><%= @order_master.customer_address.district %>  </div>
+	   	 	<div class="col-xs-2"><%= @order_master.customer_address.city %>  </div>
+	    	<div class="col-xs-2"><%= @order_master.customer_address.pincode %>  </div>
+		</div>
+		<div class="clearfix"></div>
+		<div class="row">
+	     	<div class="col-xs-3"><%= @order_master.customer_address.state %>  </div>
+			<div class="col-xs-3"><%= @order_master.customer_address.country %>  </div>
+	       	<div class="col-xs-2"><%= @order_master.customer_address.telephone1 %></div>
+			<div class="col-xs-2"><%= @order_master.customer_address.telephone2 %></div>
+			<div class="col-xs-2"><%= @order_master.customer_address.fax %></div>
+		</div>
+		<div class="clearfix"></div>
+	<% else %>
+		<div class="alert alert-danger" role="alert"><h4> No address found </h4></div>
+	<% end %>
+	</div>
 <% end %>
-</div>

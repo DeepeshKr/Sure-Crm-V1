@@ -15,6 +15,7 @@ class ProductVariant < ActiveRecord::Base
   has_many :distributor_stock_summary, foreign_key: "product_variant_id"
   has_many :sales_ppo, foreign_key: "product_variant_id"
   has_many :campaign_playlist_to_product, foreign_key: "product_variant_id"
+  has_many :product_cost_master, foreign_key: "product_variant_id"
   #validates_uniqueness_of :emailid, :allow_blank => true
   #validates_uniqueness_of :employeecode, allow_blank: false
 
@@ -26,10 +27,9 @@ class ProductVariant < ActiveRecord::Base
   #validates_uniqueness_of :variantbarcode, { case_sensitive: false }
   #validates :total, presence: true
   #validates_uniqueness_of :extproductcode, { case_sensitive: false }
-
-after_create :creator
-
-after_save :updator
+  # validates :productmasterid, uniqueness: { scope: :price, :message => "A Product Variant with the same price has been added to the Product Master" }
+  after_create :creator
+  after_save :updator
 
 
   def productinfo
@@ -38,6 +38,10 @@ after_save :updator
 
    def productdetails
      self.name + " -- Basic: Rs." + (self.price.to_s ||= 'No Price') + " -- Total: Rs."  + (self.total.to_s ||= 'No Price') + " :(#{self.id})"
+   end
+   
+   def full_product_details
+     "#{self.name} Basic: Rs. #{self.price} Total: Rs.#{self.total} >> (#{self.product_active_code.name}) >> [#{self.id}]"
    end
 
   def get_product_value
@@ -66,46 +70,37 @@ after_save :updator
     total = (self.product_variant.price.to_f  * reverse_vat_rate.reverse_rate.to_f).round(2)
   end
   
-private
-  def create_product_cost_master
-    #check if the prod has pricing details entered
-    #if not found create new record
-    product_costs = ProductCostMaster.where(prod: self.extproductcode)
-    if product_costs.blank?
+  def self.to_csv
+    attributes = %w{product_variant_id name prod price shipping active} #customize columns here
 
-        ProductCostMaster.create(prod: self.extproductcode,
-          product_id: self.productmasterid,
-          :product_cost => 0,
-          :basic_cost => self.price * 0.8888888,
-          :shipping_handling => self.shipping * 0.88888888,
-          :postage => 0,
-          :tel_cost => 0,
-          :transf_order_basic => (self.price * 0.8888888 + self.shipping * 0.88888888) * 0.86,
-          :dealer_network_basic => (self.price * 0.8888888 + self.shipping * 0.88888888) * 0.70,
-          :wholesale_variable_cost => 0,
-          :royalty => 0,
-          :cost_of_return => 0,
-          :call_centre_commission => 0)
-    else
-      product_costs.each do |product_cost|
-        product_cost.update(product_id: self.productmasterid,
-          :basic_cost => self.price * 0.8888888,
-          :shipping_handling => self.shipping * 0.88888888,
-          :transf_order_basic => (self.price * 0.8888888 + self.shipping * 0.88888888) * 0.86,
-          :dealer_network_basic => (self.price * 0.8888888 + self.shipping * 0.88888888) * 0.70)
+    CSV.generate(headers: true) do |csv|
+      csv << attributes
+      all.each do |car|
+        csv << attributes.map{ |attr| car.send(attr) }
       end
     end
   end
+  
+  def product_variant_id
+    self.id
+  end
+  def prod
+    self.extproductcode
+  end
+  
+  def active
+    return true if self.activeid == 10000
+    return false
+  end
+  
+private
+  
   def creator
-    create_product_cost_master
-   # taxes =
-   # codcharges =
-   #self.update_columns(self.total: (self.price + self.taxes + self.shipping
+    ProductCostMaster.create_product_cost_master self.id
   end
+  
   def updator
-    create_product_cost_master
-   # taxes =
-   # codcharges =
-   #self.update_columns(self.total: (self.price + self.taxes + self.shipping
+    ProductCostMaster.create_product_cost_master self.id
   end
+  
 end

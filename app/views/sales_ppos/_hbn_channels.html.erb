@@ -1,0 +1,53 @@
+<div class="well well-sm">
+    <h3>List of HBN Media (Only Active and (Airtime Purchased / Fixed Daily Charges)</h3>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Telephone</th>
+                <th>DNIS
+                </th>
+                <th>State</th>
+                <th>Active</th>
+                <th>Group</th>
+                <th>BDM</th>
+                <th>Commission Type</th>
+                <th>Daily Charges</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            <% @total_daily_charges = 0 %>
+            <% @hbn_media.each do |medium| %>
+            <tr>
+                <td><%= medium.name %></td>
+                <td><%= medium.telephone %></td>
+                <td><%= medium.dnis %></td>
+                <td><%= medium.state %></td>
+                <td><%= medium.active %></td>
+                <td><%= medium.media_group.name if medium.media_group %></td>
+                <td><%= medium.employee.name || "NO BDM" if medium.employee %></td>
+                <td><%= medium.media_commision.name if medium.media_commision %></td>
+                <td class="text-right"><%= medium.daily_charges  %>
+                    <% if medium.daily_charges.present? %>
+                    <% @total_daily_charges += medium.daily_charges %>
+                    <% end %>
+                </td>
+                <td><%= link_to 'Edit', edit_medium_path(medium), class: "btn btn-info btn-xs" %></td>
+            </tr>
+            <% end %>
+        </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="8">
+                    <p class="lead">Total</p>
+                </td>
+                <td class="text-right">
+                    <p class="lead"><%= @total_daily_charges  %></p>
+                </td>
+                <td></td>
+            </tr>
+        </tfoot>
+
+    </table>
+</div>

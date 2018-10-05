@@ -14,6 +14,23 @@ belongs_to :medium, foreign_key: "media_id"
 	end
 	# after_create :recalculate_media_total_cost
 	# after_update :recalculate_media_total_cost
+  
+  def hbn_total_cost
+    MediaCostMaster.where(media_id: 11200).sum(:total_cost).to_i
+  end
+  
+  def hbn_total_cost_compare hbn_total_cost
+    media_cost = MediaCostMaster.where(media_id: 11200).sum(:total_cost).to_i
+    hbn_total_cost = hbn_total_cost.to_i
+    return "Less than by #{media_cost - hbn_total_cost}" if media_cost < hbn_total_cost
+    return "Greater than by #{media_cost - hbn_total_cost}" if media_cost > hbn_total_cost
+    return "Equal" if media_cost == hbn_total_cost
+  end
+  
+  def hbn_total_percent
+     MediaCostMaster.where(media_id: 11200).sum(:slot_percent).to_f
+  end
+  
 	def self.start_secs
 		(self.str_hr * 60 * 60) + (self.str_min * 60) + (self.str_sec)
 	end
@@ -66,7 +83,9 @@ belongs_to :medium, foreign_key: "media_id"
   end
   
 	def self.recalculate_media_total_cost
-		hbn_media_cost = Medium.where(media_group_id: 10000, active: true, media_commision_id: 10000).sum(:daily_charges).to_f
+    fixed_pre_paid = [10000, 10045]
+		hbn_media_cost = Medium.where(media_group_id: 10000, active: true, media_commision_id: fixed_pre_paid)
+    .sum(:daily_charges).to_f
 
 		hbn_list = MediaCostMaster.where(media_id: 11200).order("str_hr, str_min")
 		hbn_list.each do |hbn|

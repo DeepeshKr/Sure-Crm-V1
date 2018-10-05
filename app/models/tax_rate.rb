@@ -6,4 +6,6 @@ class TaxRate < ActiveRecord::Base
   validates :reverse_rate,  :presence => { :message => "Enter Reverse Tax Rate like this 0.8889" }
   validates_numericality_of :reverse_rate, allow_nil: false , numericality: { only_integer: true }, :less_than_or_equal_to => 1
   validates :name, uniqueness: { case_sensitive: false }
+  
+  has_many :product_master, foreign_key: "tax_id"  
 end

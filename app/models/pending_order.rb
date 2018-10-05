@@ -19,7 +19,7 @@ class PendingOrder < ActiveRecord::Base
   end
   
   def self.import(file)
-         
+    total_imported = 0
       CSV.foreach(file.path, headers: true) do |row|
     
         pending_orders_hash = row.to_hash # exclude the price field
@@ -35,9 +35,11 @@ class PendingOrder < ActiveRecord::Base
           #redirect_to custordersearch_path(:order_id => @order_id)
           order = vpp_search.first.order_master
           # get order master details order id to create the list
-          create_list order.id, tel1_l, tel2_l, manifest_l, despatch_l
+          total_imported += create_list order.id, tel1_l, tel2_l, manifest_l, despatch_l
         end
       end # end CSV.foreach
+      
+      return "Imported #{total_imported} records"
   end # end self.import(file)
   
   def self.create_list order_id, tel1 = nil, tel2 = nil, manifest = nil, dispatch = nil
@@ -67,12 +69,12 @@ class PendingOrder < ActiveRecord::Base
         # create pay by Pay U sms for customer
           # send_sms order_id, pay_u_total, order_master.first.g_total, pending_order.savings
         # create pay u money sms for customer
-          # send_pay_u_sms_invoice order_id, pay_u_total
+          send_pay_u_sms_invoice order_id
       
-        
+          return 1
         end
       end
-    
+      return 0
   end
     
   def self.send_pay_u_sms_invoice order_id
@@ -88,22 +90,17 @@ class PendingOrder < ActiveRecord::Base
       customerName = "#{order_master.customer.salute.upcase} #{order_master.customer.first_name.upcase} #{order_master.customer.last_name.upcase}"
 
       description = " order ref no #{order_id} to be paid in 2 hrs"
-
-      if alternative_mobile.present?
-        customerMobileNumber = alternative_mobile
-        confirmSMSPhone = alternative_mobile
-      else
-        customerMobileNumber = order_master.mobile
-        confirmSMSPhone = order_master.mobile
-      end
+      
+      customerMobileNumber = order_master.mobile
+      confirmSMSPhone = order_master.mobile
 
       url = "https://www.payumoney.com/payment/payment/smsInvoice?"
       encoded_url = URI.encode("amount=#{pay_u_amount}&customerName=#{customerName}&description=#{description}&referenceId=#{transaction_ref}&customerMobileNumber=#{customerMobileNumber}&confirmSMSPhone=#{customerMobileNumber}")
 
-
+     
       payumoney_detail = PayumoneyDetail.create(orderid: order_master.id,
         payumoney_status_id: 10000,
-        amount: amount.to_i,
+        amount: pay_u_amount.to_i,
         customerMobileNumber: customerMobileNumber,
         message_url: "#{url}#{encoded_url}",
         transaction_ref: transaction_ref,

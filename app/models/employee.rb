@@ -61,7 +61,8 @@ def name
 end
 
 def employee_name
-   (self.first_name || "NA") + " " + (self.last_name || " ") + (self.employeecode.to_s || " ")
+ return "#{self.first_name} #{self.last_name} (#{self.employeecode.to_s})" 
+   #(self.first_name || "NA") + " " + (self.last_name || " ") + (self.employeecode.to_s || " ")
 end
 
 def image_full_url host

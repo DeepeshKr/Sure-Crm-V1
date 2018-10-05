@@ -16,6 +16,7 @@ class ProductList < ActiveRecord::Base
   has_many :sales_ppo, foreign_key: "product_list_id"
 
   has_many :sales_ppo_product_alert, foreign_key: "product_list_id"
+  has_one :sales_upsale_product
   #has_many :product_master_add_on, :class_name => 'PointOfContact',  foreign_key: "replace_by_product_id"
   #coding not completed for this
   #has_many :interaction_master, foreign_key: "productvariantid"

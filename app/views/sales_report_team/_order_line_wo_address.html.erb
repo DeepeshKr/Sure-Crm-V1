@@ -43,7 +43,9 @@
     </td>
     <td>
       <%= ProductList.find(order_line.product_list_id).show_prod %> <br>
-       <small><small><%= order_line.product_variant.name  if order_line.product_variant %></td>
+       <small><small><%= order_line.product_variant.full_product_details  if order_line.product_variant %></small>  </small> 
+	    
+	   </td>
     <td> <%= order_line.order_master.medium.name  if order_line.order_master.medium %> <br>
       <% if  order_line.order_master.campaign_playlist_id.present? %>
       <br>

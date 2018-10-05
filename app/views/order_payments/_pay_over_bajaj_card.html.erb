@@ -1,0 +1,36 @@
+<div class="panel panel-info">
+	<div class="panel-heading">
+		<h3 class="panel-title"><%= label_tag("bajaj_payment","Bajaj Finance Card Details") %></h3>
+	</div>
+	<div class="panel-body">
+    	<div class="row">
+	        <div class="col-xs-4">
+				<h4></h4>
+				<p><%= name %></p>
+	     	</div>
+	       			
+  			<div class="col-xs-4">
+  				<%= label_tag("Bajaj Finance Card No", "#{@order_payment.card_no}") %>
+  			</div>
+			
+  			<div class="col-xs-2">
+				<%= label_tag("ECS Limit", "#{@order_payment.ecs_limit}") %>
+  				
+  			</div>
+			
+  			<div class="col-xs-2">
+				<%= label_tag("Secure Code (Recd over SMS)", "#{@order_payment.ref_no}") %>
+  				
+  			</div>
+		</div>
+		<div class="row">
+			<div class="col-xs-12">
+				<%= label_tag("Description", "#{@order_payment.description}") %>
+			</div>
+      
+         </div>
+    </div>
+
+</div>
+ 
+<div class="clearfix"></div>

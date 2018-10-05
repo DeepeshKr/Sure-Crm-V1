@@ -5,7 +5,7 @@
 <div class="row">
 	<div class="col-xs-2"><h3>Search</h3></div>
 	<div class="col-xs-6">
-		<%= render 'date_range' %>
+		<%= render partial: 'date_range', locals: {action: "index"} %>
 	</div>
 	<%= render 'filter' %>
 </div>

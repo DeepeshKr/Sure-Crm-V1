@@ -1,0 +1,111 @@
+   <div class="panel panel-primary">
+     	<div class="panel-heading">
+		 	<div class="row">
+				<div class="col-xs-2">
+					Current Total
+				</div>
+				<div class="col-xs-2">
+					<%= @media_cost_master.hbn_total_cost %>
+				</div>
+				<div class="col-xs-2">
+					Percent (should be 1)
+				</div>
+				<div class="col-xs-2">
+					<%= @media_cost_master.hbn_total_percent %>
+				</div>
+				<div class="col-xs-2">
+					Compared to HBN
+				</div>
+				<div class="col-xs-2">
+					<%= @media_cost_master.hbn_total_cost_compare @hbn_media_costs.to_i %> 
+				</div>
+			</div>
+	   </div>
+       <div class="panel-body">
+	   	<div class="row">
+	   	    <div class="col-xs-2">
+	   	      <%= text_field_tag(:total_inr, @hbn_media_costs, :id => "total_cost", :class => "form-control", :readonly =>true )   %>
+	   	    </div>
+	   	    <div class="col-xs-2">
+	   	      <%= text_field_tag(:calculate_inr, @media_cost_master.total_cost, :id => "calculate_inr", :class => "form-control", :placeholder => "Enter INR for percent" )   %>
+	   	    </div>
+	   	    <div class="col-xs-4">
+	         	  <p class="lead" id="percent"></p><br>
+	   	    </div>
+			<div class="col-xs-2">
+				<p><small>This value would get updated above text box</small></p>
+			</div>
+	   	    <div class="col-xs-2">
+	         	  <input type="button" value="Check Percent" onclick="calculate_percent()" class:"btn btn-primary">
+	   	    </div>	
+	   	</div>
+	   	<div class="row">
+	   	    <div class="col-xs-2">
+	   	      <%= text_field_tag(:total_inr, @hbn_media_costs, :id => "total_cost1", :class => "form-control", :readonly =>true )   %>
+	   	    </div>
+	   	    <div class="col-xs-2">
+	   	      <%= text_field_tag(:calculate_inr, @media_cost_master.slot_percent, :id => "calculate_percent", :class => "form-control", :placeholder => "Enter INR for percent" )   %>
+	   	    </div>
+	   	    <div class="col-xs-4">
+	         	  <p class="lead" id="value"></p>
+	   	    </div>
+			<div class="col-xs-2">
+				
+			</div>
+	   	    <div class="col-xs-2">
+	         	  <input type="button" value="Check Value" onclick="calculate_value()" class:"btn btn-primary">
+	   	    </div>	
+	   	</div>
+	   </div>
+	</div>
+
+<script>
+	$(document).ready(function() {
+		//on key change
+		calculate_percent();
+		calculate_value();
+		// jQuery('#calculate_inr').on('input propertychange paste', function() {
+// 	    // do your stuff
+// 			var total_cost = $('#total_cost').val();
+// 			var edit_cost = $('#calculate_inr').val();
+// 			var final_cost = parseFloat(edit_cost) / parseFloat(total_cost)
+// 			var str1 = "Cost percent: ";
+// 			var res = str1.concat(final_cost);
+//
+// 			//alert(res);
+// 			//
+// 			var div_output = document.getElementById("inr_pricing");
+// //
+// // 			final_cost = $('#inr_pricing');
+// // 			final_cost.val() =
+// 		});
+	});
+	
+	function calculate_percent() {
+		var total_cost = $('#total_cost').val();
+		var edit_cost = $('#calculate_inr').val();
+	
+		function myFunction(p1, p2) {
+		    return (p1 / p2).toFixed(4);
+		}
+			
+		var percent = myFunction(parseFloat(edit_cost), parseFloat(total_cost));
+		document.getElementById("percent").innerHTML = percent;
+		document.getElementById("hbn_percent").value = percent;
+		
+	}
+	
+	function calculate_value() {
+		var total_cost = $('#total_cost').val();
+		var calculate_percent = $('#calculate_percent').val();
+
+		
+		function show_value(p1, p2) {
+		    return (p1 * p2).toFixed(0);
+		}
+		var value = show_value(parseFloat(calculate_percent), parseFloat(total_cost));
+		document.getElementById("value").innerHTML = value;
+		
+		
+	}
+</script>

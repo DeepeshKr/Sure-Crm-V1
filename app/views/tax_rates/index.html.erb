@@ -9,7 +9,7 @@
       <th>Tax rate</th>
       <th>Reverse rate</th>
       <th>Description</th>
-      <th colspan="3"></th>
+      <th colspan="2"></th>
     </tr>
   </thead>
 
@@ -22,7 +22,6 @@
         <td><%= tax_rate.description %></td>
         <td><%= link_to 'Show', tax_rate %></td>
         <td><%= link_to 'Edit', edit_tax_rate_path(tax_rate) %></td>
-        <td><%= link_to 'Destroy', tax_rate, method: :delete, data: { confirm: 'Are you sure?' } %></td>
       </tr>
     <% end %>
   </tbody>
@@ -30,15 +29,30 @@
 <br>
 <ul class="list list-inline">
 	<li>Reverse Tax Calculation:</li> 
+	<li>For Tax Rate <strong>(X)</strong></li> 
+	<li>Reverse Tax Rate (1 / (1 + <strong>(X)</strong>))</li>
+	<li>Reverse Rate: <strong>(Y)</strong></li>
+	<li>Do your math</li>
+</ul>
+<ul class="list list-inline">
+	<li>Reverse Tax Calculation:</li> 
 	<li>For Tax Rate (0.125)</li> 
-	<li>Reverse Tax Rate (1 / (1 + 0.125))</li>
+	<li><strong>Reverse Tax Rate (1 / (1 + 0.125))</strong></li>
 	<li>Reverse Rate: 0.888888888888889</li>
 	<li>Do your math</li>
 </ul>
 <ul class="list list-inline">
 	<li>Reverse Tax Cross Check:</li> 
+	<li>For Tax Rate <strong>(Y)</strong></li> 
+	<li>Reverse Tax Rate (1 /<strong>(Y)</strong> - 1)</li>
+	<li>Reverse Rate: <strong>(X)</strong></li>
+	<li>Do your math</li>
+</ul>
+
+<ul class="list list-inline">
+	<li>Reverse Tax Cross Check:</li> 
 	<li>For Tax Rate (0.888888888888889)</li> 
-	<li>Reverse Tax Rate (1 /(0.888888888888889) - 1)</li>
+	<li><strong>Reverse Tax Rate (1 /(0.888888888888889) - 1)</strong></li>
 	<li>Reverse Rate: 0.125</li>
 	<li>Do your math</li>
 </ul>
@@ -46,3 +60,24 @@
 <br>
 
 <%= link_to 'New Tax rate', new_tax_rate_path, class: "btn btn-info btn-sm" %>
+<br>
+<br>
+<br>
+<%= render 'update_product_cost_master' %>
+
+<div class="panel panel-danger">
+	<div class="panel-heading"><h3 class="panel-title">Rules for Calcuating Product Cost </h3></div>
+  	<div class="panel-body">
+		<ul class="list-unstyled">
+			<li>basic_cost => basic_cost * reverse_vat_rate</li>
+			<li>shipping_handling => shipping_handling * reverse_vat_rate</li>
+			<li>transf_order_basic => (basic_cost * reverse_vat_rate + shipping_handling * reverse_vat_rate) * reverse_transfer_rate</li>
+			<li>dealer_network_basic => (basic_cost * reverse_vat_rate + shipping_handling * reverse_vat_rate) * reverse_dealer_rate</li>
+			
+		</ul>
+	</div>
+</div>
+
+<%= render 'product_cost_masters/calculations' %>
+	
+

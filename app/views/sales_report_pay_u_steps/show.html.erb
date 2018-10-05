@@ -1,0 +1,29 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @sales_report_pay_u_step.name %>
+</p>
+
+<p>
+  <strong>Description:</strong>
+  <%= @sales_report_pay_u_step.description %>
+</p>
+
+<p>
+  <strong>Min value:</strong>
+  <%= @sales_report_pay_u_step.min_value %>
+</p>
+
+<p>
+  <strong>Max value:</strong>
+  <%= @sales_report_pay_u_step.max_value %>
+</p>
+
+<p>
+  <strong>Active:</strong>
+  <%= @sales_report_pay_u_step.active %>
+</p>
+
+<%= link_to 'Edit', edit_sales_report_pay_u_step_path(@sales_report_pay_u_step) %> |
+<%= link_to 'Back', sales_report_pay_u_steps_path %>

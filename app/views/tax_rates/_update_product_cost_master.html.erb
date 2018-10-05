@@ -1,0 +1,23 @@
+<!--  if @go_live == true % -->
+<div class="panel panel-danger">
+	<div class="panel-heading"><h3 class="panel-title">Update Product Cost Masters</h3></div>
+  	<div class="panel-body">
+	    <div class="row">
+	   	 <div class="col-xs-8">
+	   	 	<h4>Update Product Cost Masters with new tax rates</h3>
+	   	 </div>
+	      <%= form_tag  url_for(:controller => 'product_cost_masters', :action => "update_all_product_costs"), 
+		  method: "post" do  %>
+		  <%= hidden_field_tag :return_url, @return_url %>
+
+	          <div class="col-xs-4">
+	            <%= submit_tag "Update Cost with Revised Taxes", name: nil, class: "btn btn-danger" %>
+	          </div>
+	      <% end %>
+	    </div>
+  	</div>
+   	<div class="panel-footer">
+	   Every change of tax rate would mean the products costs should also change, click on the above link to update all Product Costs
+   </div>
+</div>
+<!-- % end % -->

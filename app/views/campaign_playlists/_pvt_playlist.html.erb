@@ -1,0 +1,34 @@
+
+<table class="table table-hover">
+  <thead>
+    <tr>
+	    <th>Date</th>
+	    <th>Name</th>
+	    <th>Product variant</th>
+	    <th>Start time</th>
+	    <th>Air time</th>
+	    <th>End time</th>
+		<th>Updated</th>
+    </tr>
+  </thead>
+  <% if @campaign_playlists.present? %>
+  <tbody>
+    <% @campaign_playlists.each do |campaign_playlist| %>
+    <tr>
+      	<td><%= campaign_playlist.for_date.strftime("%d-%b-%Y") || "No Date" if campaign_playlist.for_date.present? %></td>
+       	<td><%= campaign_playlist.name %></td>
+        <td><%= campaign_playlist.product_variant.name if campaign_playlist.product_variant  %></td>
+        <td><%= campaign_playlist.starttime %></td>
+        <td><%= campaign_playlist.playtime %></td>
+        <td><%= campaign_playlist.endtime %></td>
+        <td><%= (campaign_playlist.updated_at + 330.minutes).strftime("%d-%b-%Y %I:%M %p") %></td>
+      </tr>
+    <% end %>
+
+  </tbody>
+  <% else %>
+  <tr>
+	  <td colspan="8"><p class="lead">No Campaign playlist found </p> </td>
+	</tr>
+	<% end %>
+</table>

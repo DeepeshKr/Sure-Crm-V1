@@ -1,0 +1,63 @@
+<!-- set page title start -->
+<% title "Private Campaign #{@campaign.id} Playlist" %>
+<!-- set page title end -->
+
+<p id="notice"><%= notice %></p>
+
+<h1>
+   <%= @campaign.name %>
+</h1>
+
+<div class="row">
+	<div class="col-xs-2">
+		<strong>From:</strong>
+  	   	<%= @campaign.startdate.strftime("%d-%b-%Y") if @campaign.startdate %>
+	</div>
+  	<div class="col-xs-2">
+  		<strong>To:</strong>
+    	<%= @campaign.enddate.strftime("%d-%b-%Y") if @campaign.enddate %>
+  	</div>
+
+	<div class="col-xs-5">
+		<strong>Media:</strong>
+  	   	<%= @campaign.medium.mediainfo if @campaign.medium %>
+	</div>
+	<div class="col-xs-2">
+	 	<strong>DNIS:</strong>
+  		<%= @campaign.medium.dnis if @campaign.medium %>
+	</div>
+  	<div class="col-xs-1">
+		<small><small><%= @campaign.id %></small></small>
+  	</div>
+
+</div>
+
+<p>
+  <strong>Description:</strong>
+  <%= @campaign.description %>
+</p>
+
+<%= link_to 'Back', private_campaign_playlists_campaigns_path, class: "btn btn-info btn-xs" %>
+
+<hr />
+<%= render partial: "campaign_playlists/pvt_playlist" %>
+
+<div class="panel panel-success">
+  <div class="panel-body">
+	<div class="row">
+		<div class="col-xs-8">
+			<p class="lead">Delete Pvt Campaign with Playlists</p>
+		</div>
+	    <%= form_tag  url_for(:controller => 'campaigns', :action => "delete_pvt_playlist"), method: "post" do  %>
+	  		<%= hidden_field_tag :campaign_id, @campaign.id %>
+	  		<%= hidden_field_tag :return_url, @return_url %>
+	    <div class="col-xs-2">
+	        <%= submit_tag "Destroy", name: nil, class: "btn btn-danger" %>
+	    </div>
+	    <% end %>
+			
+		</div>
+	</div> 
+  </div>
+</div>
+<hr>

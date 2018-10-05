@@ -1,0 +1,33 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Listing Sales Report Pay U Steps</h1>
+
+<table class="table table-hover table-bordered">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Description</th>
+      <th>Min value</th>
+      <th>Max value</th>
+      <th>Active</th>
+      <th colspan="1"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @sales_report_pay_u_steps.each do |sales_report_pay_u_step| %>
+      <tr>
+        <td><%= sales_report_pay_u_step.name %></td>
+        <td><%= sales_report_pay_u_step.description %></td>
+        <td><%= sales_report_pay_u_step.min_value %></td>
+        <td><%= sales_report_pay_u_step.max_value %></td>
+        <td><%= sales_report_pay_u_step.active %></td>
+        <td><%= link_to 'Edit', edit_sales_report_pay_u_step_path(sales_report_pay_u_step) %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+

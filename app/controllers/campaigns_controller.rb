@@ -18,16 +18,18 @@ class CampaignsController < ApplicationController
 
    @showing_for_date = "Showing campaigns for date #{@for_date}"
 
-   @campaigns =  Campaign.where('startdate = ?', @for_date)
+   @campaigns =  Campaign.where('startdate = ?', @for_date).where('mediumid = 11200')
 
     case a = params[:stage]
       when "old"
          @campaigns =  Campaign.where('startdate < ?', (330.minutes).from_now.to_date )
+         .where('mediumid = 11200')
          @stagename = "Recent Old Campaigns"
       when "curent"
          @stagename = "All Current Campaigns"
       when "new"
          @campaigns =  Campaign.where('startdate > ? ', (330.minutes).from_now.to_date)
+         .where('mediumid = 11200')
         @stagename = "All new Campaigns"
       else
         @stagename = "All Current Campaigns"
@@ -48,10 +50,12 @@ class CampaignsController < ApplicationController
     # end
     #
     # flash[:notice] = "Updated of #{records} please continue till updated records become ZERO! last updated is #{all_campaign_playlist.last.id}"
-
+    fixed_pre_paid = [10000, 10045]
+    @hbn_media_total = Medium.where(media_group_id: 10000, active: true, media_commision_id: fixed_pre_paid).sum(:daily_charges)
+    
     @for_date = @campaign.startdate
     @add_more = true
-      @campaign_playlists = CampaignPlaylist.where("campaignid = ?", params[:id]).order(:day, :start_hr, :start_min, :start_sec)
+    @campaign_playlists = CampaignPlaylist.where("campaignid = ?", params[:id]).order(:day, :start_hr, :start_min, :start_sec)
 
       if params.has_key?(:only_active)
         if params[:only_active] == "true"
@@ -117,7 +121,76 @@ class CampaignsController < ApplicationController
     # end
     # respond_with(@campaign, @campaign_playlists,  @campaign_playlist)
   end
-
+  
+  def new_private_campaign
+    @medialist =  Medium.where('(media_group_id IS NULL or media_group_id <> 10000) and id <> 11200').order('name')
+  end
+  
+  def private_campaign_playlists
+    if params.has_key?(:for_date)
+      @for_date =  Date.strptime(params[:for_date], "%Y-%m-%d")
+      @campaigns =  Campaign.where('startdate = ?', @for_date)
+      .joins(:medium).where('(media_group_id IS NULL or media_group_id <> 10000) and media.id <> 11200')
+    else
+      @campaigns = Campaign.joins(:medium)
+      .where('(media_group_id IS NULL or media_group_id <> 10000) and media.id <> 11200')
+      .order('campaigns.updated_at DESC').limit(30)
+    end
+    
+  end
+  
+  def private_campaign_playlist
+     @campaigns = Campaign.where(id: params[:campaign_id])
+     .joins(:medium).where('(media_group_id IS NULL or media_group_id <> 10000) and media.id <> 11200')
+     if @campaigns.present?
+       @campaign = @campaigns.first
+       @campaign_playlists = CampaignPlaylist.where(campaignid: @campaign.id)
+     end
+     
+  end
+  
+  def import_pvt_playlist
+    #import_pvt file, media_id, startdate, enddate, campaign_name
+    import_campaign = Campaign.where(startdate: params[:startdate], mediumid: params[:mediumid])
+    
+    if import_campaign.blank?
+      import_campaign = Campaign.create(name: params[:name], 
+      startdate: params[:startdate], enddate: params[:enddate], 
+      mediumid: params[:mediumid], cost: 0.0, total_cost: 0, total_revenue: 0,
+      description: "Uploaded campaign playlist for #{params[:name]}")
+    else
+      import_campaign = import_campaign.first
+    end
+    
+    campaign = Campaign.import_pvt(import_campaign.id, params[:file], params[:mediumid], 
+    params[:startdate], params[:enddate],import_campaign.name)
+  
+    flash[:notice] = "#{campaign.csv_file_updated}"
+    flash[:error] = "#{campaign.csv_file_errors}"
+    
+    redirect_to private_campaign_playlist_campaigns_path(campaign_id: campaign.id)
+  end
+  
+  def delete_pvt_playlist
+    @campaigns = Campaign.where(id: params[:campaign_id])
+    .joins(:medium).where('(media_group_id IS NULL or media_group_id <> 10000) and media.id <> 11200')
+    # media_group_id IS NULL or media_group_id <> 10000) and media.id <> 11200')
+    if @campaigns.present?
+      @campaign = Campaign.find(params[:campaign_id])
+      @campaign.destroy
+      @campaign_playlists = CampaignPlaylist.where(campaignid: params[:campaign_id])
+      if @campaign_playlists.present?
+        @campaign_playlists.each do |campaign_playlist|
+          campaign_playlist.destroy
+        end
+      end
+      flash[:notice] = "Destroyed campaign with all playlists inside"
+    else
+      flash[:error] = "You can only destroy Pvt Campaign and playlist here!"
+    end
+    redirect_to private_campaign_playlists_campaigns_path
+  end
+  
   def new
     proddropdown
     @campaign = Campaign.new
@@ -126,6 +199,7 @@ class CampaignsController < ApplicationController
   end
 
   def edit
+    
   end
 
   def create
@@ -203,15 +277,18 @@ class CampaignsController < ApplicationController
      @hbn_media_cost_master = MediaCostMaster.where(media_id: 11200).order(:total_cost)
 
     end
-     def proddropdown
+    
+    def proddropdown
       #product_sell_type_id
      @productvariant = ProductVariant.where('activeid = ? and product_sell_type_id <= ?', 10000, 10001).order('name')
 
      #@media_cost_masters
     end
-     def activestatus
+    
+    def activestatus
      @active_status = CampaignPlayListStatus.all.order('id')
     end
+    
     def set_campaign
       @campaign = Campaign.find(params[:id])
     end
@@ -224,6 +301,7 @@ class CampaignsController < ApplicationController
       params.require(:campaign).permit(:name, :startdate, :enddate, :mediumid,
         :description, :campaignstageid, :stage, :media,:total_cost, :total_revenue)
     end
+    
     def set_media_tape
       @media_tapes = MediaTape.where('product_variant_id is null')
     end

@@ -1,0 +1,25 @@
+<p id="notice"><%= notice %></p>
+
+<h4>Sales Upsale Products for Report</h4>
+
+<table class="table table-hover table-bordered">
+  <thead>
+    <tr>
+      <th>Product list</th>
+      <th></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @sales_upsale_products.each do |sales_upsale_product| %>
+      <tr>
+        <td><%= sales_upsale_product.product_list.productname %></td>
+        <td><%= link_to 'Destroy', sales_upsale_product, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Sales upsale product', new_sales_upsale_product_path, class:"btn btn-primary btn-lg" %>

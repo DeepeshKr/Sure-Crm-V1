@@ -117,7 +117,8 @@ class CampaignPlaylistsController < ApplicationController
       set_media_tape
       @campaign_playlist_id = params[:id]
       return if @campaign_playlist_id.blank?
-
+      @return_url = request.original_url
+      
       show_campaign_details
       # Parent.joins(:children).where(children:{favorite:true})
       #respond_with(@campaign_playlist, @orderlines)
@@ -384,7 +385,6 @@ class CampaignPlaylistsController < ApplicationController
             #ref name is combination of media tape head and media tape name
             ref_name = MediaTapeHead.find(media_tape_head_id).name
 
-            byebug
               campaign_time = CampaignTime.new
 
               campaign_time.start_hour = begin_hr
@@ -456,7 +456,7 @@ class CampaignPlaylistsController < ApplicationController
     end
   end
 
- def updatecampaigntimings
+  def updatecampaigntimings
    if params.has_key?(:campaignid)
     campaignid = params[:campaignid]
     update_timings(campaignid)
@@ -465,7 +465,7 @@ class CampaignPlaylistsController < ApplicationController
    end
  end
 
-def update_ppo_on_addition
+  def update_ppo_on_addition
   if params.has_key?(:campaignid)
       campaignid = params[:campaignid]
       @campaign = Campaign.find(campaignid)

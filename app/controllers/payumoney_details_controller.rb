@@ -25,7 +25,8 @@ class PayumoneyDetailsController < ApplicationController
       @to_date = (to_date.end_of_day - 330.minutes)
     end
     @payumoney_details = PayumoneyDetail.where("created_at >= ? and created_at <= ?", @from_date,@to_date).order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
-    
+    @total_orders = @payumoney_details.count 
+    @total_value = @payumoney_details.sum(:amount)
     
     if params.has_key?(:payumoney_status_id)
       status = params[:payumoney_status_id].to_i
@@ -34,11 +35,23 @@ class PayumoneyDetailsController < ApplicationController
         when 10000    #compare to 1
           @btn1 = "btn btn-success"
           @payumoney_details = @payumoney_details.where(payumoney_status_id: status)
+          @total_orders = @payumoney_details.count 
+          @total_value = @payumoney_details.sum(:amount)
         when 10003    #compare to 2
           @btn2 = "btn btn-success"
-           @payumoney_details = @payumoney_details.where(payumoney_status_id: status)
+          @payumoney_details = @payumoney_details.where(payumoney_status_id: status)
+          @total_orders = @payumoney_details.count 
+          @total_value = @payumoney_details.sum(:amount)
+        when 10007    #compare to 2
+          statuses = [10006, 10007]
+          @btn3 = "btn btn-success"
+          @payumoney_details = @payumoney_details.where(payumoney_status_id: statuses)
+          @total_orders = @payumoney_details.count 
+          @total_value = @payumoney_details.sum(:amount)
         else
           @payumoney_details = @payumoney_details.where(payumoney_status_id: status)
+          @total_orders = @payumoney_details.count 
+          @total_value = @payumoney_details.sum(:amount)
       end
     end
     
@@ -48,22 +61,29 @@ class PayumoneyDetailsController < ApplicationController
     if params.has_key?(:mobile_no)
       @mobile_no = params[:mobile_no].strip
       @payumoney_details = PayumoneyDetail.where(customerMobileNumber: @mobile_no).order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
+      @total_orders = @payumoney_details.count 
+      @total_value = @payumoney_details.sum(:amount)
     end
     
     if params.has_key?(:order_ref_no)
       @order_ref_no = params[:order_ref_no].strip()
         @payumoney_details = PayumoneyDetail.where(orderid: @order_ref_no).order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
+        @total_orders = @payumoney_details.count 
+        @total_value = @payumoney_details.sum(:amount)
     end
     
     if params.has_key?(:pay_u_ref)
       @pay_u_ref = params[:pay_u_ref].strip()
-        @payumoney_details = PayumoneyDetail.where(:merchantTransactionId => @pay_u_ref).order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
+      @payumoney_details = PayumoneyDetail.where(:merchantTransactionId => @pay_u_ref).order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
+      @total_orders = @payumoney_details.count 
+      @total_value = @payumoney_details.sum(:amount)
     end
     
     @from_date = (@from_date + 330.minutes).strftime("%Y-%m-%d")
     @to_date = (@to_date + 330.minutes).strftime("%Y-%m-%d")
 
      @page_heading = "Pay u Money details between #{@from_date} and #{@to_date}"
+    
   end
 
   def open_orders

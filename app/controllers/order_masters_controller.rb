@@ -160,7 +160,6 @@ class OrderMastersController < ApplicationController
 
   end
  
- 
   def detailed_search
     @btn1 = "btn btn-default"
     @btn2 = "btn btn-default"
@@ -258,15 +257,72 @@ class OrderMastersController < ApplicationController
     @to_date = (@to_date + 330.minutes).strftime("%Y-%m-%d")
 
   end
-   
-  # def online_add_to_order
-  #    if params.has_key?(:order_id)
-  #     @order_master = OrderMaster.find(params[:order_id])
-  #       @order_master(:queue => 'hbn website updation', priority: 100)updatemedia
-  #    end
-  # end
+  
+  def online_one_day_search
+    @limit = 250
+    @sno = 1
+    @from_date = (330.minutes).from_now.to_date
+    
+    if params.has_key?(:from_date)
+      @from_date =  Date.strptime(params[:from_date], "%Y-%m-%d")
+    end
+  
+    if @from_date.blank? 
+      return
+    end
+    @order_masters = OrderMaster.where('TRUNC(orderdate) = ?', @from_date)
+        .where('ORDER_STATUS_MASTER_ID > 10000')
+        .order("orderdate DESC")
+        .paginate(:page => params[:page])
+    @from_date = (@from_date + 330.minutes).strftime("%Y-%m-%d")
+
+  end
+  
+  def online_pending_search
+    #data from TransDetails
+    @limit = 250
+    @sno = 1
+    @from_date = (330.minutes).from_now.to_date
+    @to_date = (330.minutes).from_now.to_date
+    if params.has_key?(:from_date)
+      @from_date =  Date.strptime(params[:from_date], "%Y-%m-%d")
+    end
+    if params.has_key?(:to_date)
+      @to_date =  Date.strptime(params[:to_date], "%Y-%m-%d")
+    end
+    
+    if @from_date.blank? || @to_date.blank? 
+      return
+    end
+    @hbn_trans_details = TransDetails.where('OrderNo IS NULL')
+        .where('(OrderDate) >= ? and (OrderDate) <= ?', @from_date, @to_date)
+        .paginate(:page => params[:page])
+        
+    @from_date = (@from_date + 330.minutes).strftime("%Y-%m-%d")
+    @to_date = (@to_date + 330.minutes).strftime("%Y-%m-%d")
+
+  end
+  
+  def online_add_to_order
+     if params.has_key?(:order_id)
+      @tran_details = TransDetails.new
+      order_id = params[:order_id]
+      
+      @tran_details.update_customer_order_list order_id
+      
+      if params.has_key?(:from_date)
+        @from_date =  Date.strptime(params[:from_date], "%Y-%m-%d")
+      end
+      if params.has_key?(:to_date)
+        @to_date =  Date.strptime(params[:to_date], "%Y-%m-%d")
+      end
+      
+      redirect_to order_masters_online_pending_search_path(:from_date => @from_date, :to_date => @todate)
+      
+     end
+  end
   #get 'custordersearch' => 'order_masters#search'
-   def search
+  def search
      @ordersearchresults = "Please search for Order, Results across Ordering, Processing and Dispatch"
      @vppsearch = "Please search for Order, Results across Ordering, Processing and Dispatch"
      @dealtransearch = "Please search for Orders in Transfer Orders"
@@ -316,7 +372,7 @@ class OrderMastersController < ApplicationController
 
        end
      #end
-   end
+  end
    # get 'order_masters_review' => 'order_masters#review'
   def review
      @return_url = request.original_url
@@ -355,7 +411,8 @@ class OrderMastersController < ApplicationController
      
      begin
        # do something 
-       @trans_details =  TransDetails.where(order_no: @order_master.external_order_no)
+       
+       @trans_details =  TransDetails.where("OrderNo is not null").where(order_no: @order_master.external_order_no)
      
      rescue ActiveRecord::RecordNotFound
        # handle not found error

@@ -43,6 +43,7 @@ class OrderpaymentmodesController < ApplicationController
     end
 
     def orderpaymentmode_params
-      params.require(:orderpaymentmode).permit(:name, :description, :charges)
+      params.require(:orderpaymentmode).permit(:name, :description, :charges, :payment_cost, 
+      :is_valid, :hold_hours)
     end
 end

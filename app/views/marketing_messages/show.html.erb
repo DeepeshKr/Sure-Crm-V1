@@ -1,0 +1,46 @@
+<!-- set page title start -->
+<% title "Show Details of #{@marketing_message.name}" %>
+<!-- set page title end -->
+<p id="notice"><%= notice %></p>
+	  <div class="panel panel-info">
+	   <div class="panel-heading"><h3 class="panel-title"><%= @marketing_message.name %> </h3>  </div>
+	       <div class="panel-body">
+			   	<div class="row">
+					<div class="col-xs-12">
+						<%= @marketing_message.description %>
+					</div>
+				</div>
+		        <div class="row">
+					<div class="col-xs-1">
+						<strong>Criteria</strong>
+					</div>
+		          	<div class="col-xs-2">
+					   <strong>Start date:</strong> <%= @marketing_message.start_date.strftime("%d-%b-%y") %>
+					</div>
+		          	<div class="col-xs-2">
+					   <strong>End Date:</strong> <%= @marketing_message.end_date.strftime("%d-%b-%y") %>
+					</div>
+		          	<div class="col-xs-6">
+					  <strong>Payment Mode:</strong> <%= @marketing_message.orderpaymentmode.name %>
+					</div>
+					
+				</div> 
+			</div>
+			<% if @marketing_message.id.present? %>
+			<div class="panel-footer">
+		        <div class="row">
+		          	<div class="col-xs-3">
+						Total Nos: <%= @marketing_message.total_nos %>
+					</div>
+		          	<div class="col-xs-9">
+						Messages Sent: <%= @marketing_message.activate %>
+					</div>
+				</div>
+			</div>
+			<% end %>
+	</div>
+
+	<%= link_to 'Edit', edit_marketing_message_path(@marketing_message), class:"btn btn-primary btn-xs" %> |
+	<%= link_to 'Back', marketing_messages_path, class:"btn btn-default btn-xs" %>
+
+	<%= render 'message_on_orders/list_of_messages' %>

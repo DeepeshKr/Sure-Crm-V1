@@ -1,0 +1,7 @@
+ 	<div class="cols-xs-2">
+   	    <div class="btn-group" role="group" aria-label="...">
+   	     <%= link_to 'All', order_payments_path(orderpaymentmode_id: @order_payment_mode_id, to_date: @to_date, from_date: @from_date , filter: "all"), type:"button", class: @btn1 %>
+   	      <%= link_to 'Paid', order_payments_path(orderpaymentmode_id: @order_payment_mode_id, to_date: @to_date, from_date: @from_date, filter: "paid"), type:"button", class: @btn2 %>      
+		  <%= link_to 'Not Paid', order_payments_path(orderpaymentmode_id: @order_payment_mode_id, to_date: @to_date, from_date: @from_date, filter: "unpaid"), type:"button", class: @btn3 %>      
+   	      </div>
+ 	</div>

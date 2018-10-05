@@ -106,21 +106,15 @@
 
 <div class="well well-sm">
 <ul class="list-inline">
-
 	<li>Product Variant => Transfer Order Product Revenue = Rs 2599 + 495 => 0.764444444445 
 		=> where dealer price is => Price + Shipping * 0.88888888889</li>
-	<li>
-	    Product Variant => Retail Product Revenue = subtotal * 0.888889 + shipping * 0.98125
-	</li>
-  <li>
-    revenue => product revenue (you can check for product revenue against each product)
-  </li>
-  <li>total_profit += (total_revenue - (total_product_cost + total_var_cost +  total_refund + total_promo_cost))</li>
-  <li>Cost Per Order = (@total_cost_per_order + @total_fixed_cost) / @total_pieces</li>
-  <li>@total_cost_per_order = (@total_product_cost  + @total_var_cost +  @total_refund + @total_promo_cost)</li>
-  <li>
-  	The total is divided by total pieces
-  </li>
-
+	<li>Product Variant => Retail Product Revenue = subtotal * 0.888889 + shipping * 0.98125</li>
+  	<li>revenue => product revenue (you can check for product revenue against each product)</li>
+  	<li>total_profit += (total_revenue - (total_product_cost + total_var_cost +  total_refund + total_promo_cost))</li>
+  	<li>Cost Per Order = (@total_cost_per_order + @total_fixed_cost) / @total_pieces</li>
+  	<li>@total_cost_per_order = (@total_product_cost  + @total_var_cost +  @total_refund + @total_promo_cost)</li>
+  	<li>The total is divided by total pieces</li>
 </ul>
 </div>
+
+<%= render 'ppo_cost_revenue' %>

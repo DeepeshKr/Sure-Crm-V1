@@ -5,22 +5,18 @@
 
   <!-- Nav tabs -->
   <ul class="nav nav-tabs" role="tablist">
-    <li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">Private Channel Slot Pricing</a></li>
-    <li role="presentation"><a href="#profile" aria-controls="profile" role="tab" data-toggle="tab">HBN Time Slot wise Pricing Change</a></li>
-    
+    <li role="presentation" class="active"><a href="#profile" aria-controls="profile" role="tab" data-toggle="tab">HBN Time Slot wise Pricing Change</a></li>
+	<li role="presentation"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">Private Channel Slot Pricing</a></li>
   </ul>
 
   <!-- Tab panes -->
 <div class="tab-content">
-  <div role="tabpanel" class="tab-pane fade in active" id="home">
-       
-     <%= render('pvt_list') %>
-  </div>
-  <div role="tabpanel" class="tab-pane fade" id="profile">
-     <%= render('hbn_list') %>
-     
-  </div>
-  
+    <div role="tabpanel" class="tab-pane fade in active" id="profile">
+     	<%= render('hbn_list') %>
+  	</div>
+    <div role="tabpanel" class="tab-pane fade" id="home">
+       <%= render('pvt_list') %>
+    </div>
 </div>
 
 </div>

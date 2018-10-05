@@ -1,14 +1,48 @@
 <p id="notice"><%= notice %></p>
 
-<p>
-  <strong>Name:</strong>
-  <%= @orderpaymentmode.name %> <strong>Charges: <%= @orderpaymentmode.charges %> </strong>
-</p>
+<div class="panel panel-info">
+	<div class="panel-heading"><h3 class="panel-title"><%= @orderpaymentmode.name %> </h3></div>
+	<div class="panel-body">
+		<table class="table table-bordered">
+			<tr>
+				<td colspan="2">
+					<h4> </h4>
+				</td>
+			</tr>
+			<tr>
+				<td colspan="2">
+					<p>  </p>
+				</td>
+			</tr>
+			<tr>
+				<td>Charges (charges added / reduced from order):</td>
+				<td><strong> <%= @orderpaymentmode.charges %> </strong></td>
+			</tr>
+			<tr>
+				<td>Payment Cost (charges levied by bank):</td>
+				<td><strong> <%= @orderpaymentmode.payment_cost %> </strong></td>
+			</tr>
+			<tr>
+				<td>Hold for hours (hold these orders for):</td>
+				<td><strong> <%= @orderpaymentmode.hold_hours %> </strong></td>
+			</tr>
+			<tr>
+				<td>This is a currently valid payment option:</td>
+				<td><strong> <%= @orderpaymentmode.is_valid %> </strong></td>
+			</tr>
+	
+		</table>
 
-<p>
-  <strong>Description:</strong>
-  <%= @orderpaymentmode.description %>
-</p>
+	</div>
+	<div class="panel-footer">
+		 <p>Description: <%= @orderpaymentmode.description %> </p>
+	</div>
+</div>
+ 
+
+
+
+  
 
 <%= link_to 'Edit', edit_orderpaymentmode_path(@orderpaymentmode) %> |
 <%= link_to 'Back', orderpaymentmodes_path %>

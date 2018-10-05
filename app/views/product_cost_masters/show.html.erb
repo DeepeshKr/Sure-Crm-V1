@@ -1,79 +1,190 @@
 <p id="notice"><%= notice %></p>
 
-<p>
-  <strong>Product:</strong>
-  <%= @product_cost_master.product_id %>
-</p>
+<h3><%= @product_cost_master.product_variant.name if @product_cost_master.product_variant  %></h3>
+<div class="row">
+  <div class="col-xs-4">
+  	<small>Derived from Product List:  
+	  <%= @product_cost_master.product_variant.full_product_details if @product_cost_master.product_variant %>
+    </small>
+  </div>
+  	<div class="col-xs-4">
+      <div class="panel panel-primary">
+      <!-- Default panel contents -->
+      <div class="panel-heading">
+      <h3 class="panel-title">Total (After Saving)</h3>
+      </div>
+        <!-- Table -->
+        <table class="table table-hover table-bordered">
+	        <tr>
+	          <td> Product Cost </td>
+			  <td>Product Revenue </td>
+		  	</tr>
+			<tr>
+				<td class="text-right"><%= @product_cost_master.cost %></td>
+				<td class="text-right"><%= @product_cost_master.revenue %></td>
+	        </tr>
+        </table>
+      </div>
+  	</div>
+    <div class="col-xs-4">
+      <div class="panel panel-primary">
+      <!-- Default panel contents -->
+      <div class="panel-heading">
+      <h3 class="panel-title">Product Revenue</h3>
+      </div>
 
-<p>
-  <strong>Product list:</strong>
-  <%= @product_cost_master.product_list_id %>
-</p>
+        <!-- Table -->
+        <table class="table table-hover  table-bordered">
+	        <tr>
+	          <td>Basic Cost </td>
+			  <td>Shipping Handling</td>
+		  	</tr>
+			<tr>
+				<td class="text-right"><%= @product_cost_master.basic_cost %></td>
+				<td class="text-right"><%= @product_cost_master.shipping_handling %></td>
+	        </tr>
+        </table>
+      </div>
+  	</div>
+</div>
+    <div class="panel panel-primary">
+      <!-- Default panel contents -->
+      <div class="panel-heading">
+      <h3 class="panel-title">Product Cost Details <%= @product_cost_master.prod %></h3>
+      </div>
 
-<p>
-  <strong>Prod:</strong>
-  <%= @product_cost_master.prod %>
-</p>
+        <!-- Table -->
+        <table class="table table-hover table-bordered">
+	        <tr>
+	          <th>Product Cost</th>
+			  <th>Postage</th>
+			  <th>Telephone Cost</th>
+			  <th>Cost Of Return</th>
+			  <th>Royalty </th>
+ 			  <th>Packaging Cost</th>
+ 			  <th>Call Centre Commission</th>
+		  	</tr>
+			<tr>
+				<td class="text-right"><%= @product_cost_master.product_cost %></td>
+				<td class="text-right"><%= @product_cost_master.postage %></td>
+				<td class="text-right"><%= @product_cost_master.tel_cost %></td>
+				<td class="text-right"><%= @product_cost_master.cost_of_return %></td>
+				<td class="text-right"><%= @product_cost_master.royalty %></td>
+				<td class="text-right"><%= @product_cost_master.packaging_cost %></td>
+				<td class="text-right"><%= @product_cost_master.call_centre_commission %></td>
+	        </tr>
+	        <tr>
+	          <th>Transfer Order Basic</th>
+			  <th>Dealer Network Basic </th>
+			  <th>Wholesale Variable Cost</th>
+			  <th colspan="4"></th>
+		  	</tr>
+			<tr>
+				<td class="text-right"><%= @product_cost_master.transf_order_basic %></td>
+				<td class="text-right"><%= @product_cost_master.dealer_network_basic %></td>
+				<td class="text-right"><%= @product_cost_master.wholesale_variable_cost %></td>
+				<td colspan="4"></td>
+	        </tr>
+	        
+        </table>
+		<div class="panel-footer">
+			<table class="table table-bordered">
+				<tr>
+					<td>cost</td>
+					<td>product_cost</td>
+					<td>tel cost</td>
+					<td>postage</td>
+					<td>royalty</td>
+					<td>cost of return </td>
+					<td>call centre commission</td>
+					<td>packaging cost</td>
+				</tr>
+				
+			</table>
+			<table class="table table-bordered">
+				<tr>
+					<td>revenue</td>
+					<td>basic_cost</td>
+					<td>shipping_handling</td>
+				</tr>
+				
+			</table>
+			
+		</div>
+    </div>
+	
+    <div class="panel panel-primary">
+    <!-- Default panel contents -->
+    <div class="panel-heading">
+    <h3 class="panel-title">Product Variant Calculations 
+		<%= @product_variant.full_product_details if @product_variant.present? %></h3>
+    </div>
 
-<p>
-  <strong>Barcode:</strong>
-  <%= @product_cost_master.barcode %>
-</p>
+      <!-- Table -->
+      <table class="table table-hover">
+        <tr>
+          <th>Name</th>
+		  <th>Product Variant Value</th>
+		  <th>Tax Rate</th>
+		  <th>Value</th>
+		  <th>Explanation</th>
+	  	</tr>
+		<tr>
+			<td>Basic Cost</td>
+			<td class="text-right"><%= @product_variant.price if @product_variant.present? %></td>
+			<td class="text-right"><%= @reverse_vat_rate.reverse_rate.round(2) %></td>
+			<td class="text-right"><%= @product_cost_master.basic_cost %></td>
+			<td>product_variant price * reverse_vat_rate reverse_rate</td>
+        </tr>
+		<tr>
+			<td>Shipping Handling</td>
+			<td class="text-right"><%= @product_variant.shipping if @product_variant.present? %></td>
+			<td class="text-right"><%= @reverse_vat_rate.reverse_rate.round(2) %></td>
+			<td class="text-right"><%= @product_cost_master.shipping_handling %></td>
+			<td>product_variant shipping * reverse_vat_rate reverse_rate</td>
+        </tr>
+		<tr>
+			<td>Transfer Order Basic</td>
+			<td class="text-right"><%= @product_variant.price if @product_variant.present? %> | 
+			<%= @product_variant.shipping if @product_variant.present? %></td>
+			<td class="text-right"><%= @reverse_vat_rate.reverse_rate.round(2) %> | 
+				<%= @reverse_transfer_rate.reverse_rate.round(2)%></td>
+			<td class="text-right"><%= @product_cost_master.transf_order_basic %></td>
+			<td>
+				product_variant price * 
+				reverse_vat_rate reverse_rate + 
+				product_variant shipping * 
+				reverse_vat_rate reverse_rate  * 
+				reverse_transfer_rate
+			</td>
+        </tr>
+		<tr>
+			<td>Dealer Network Basic</td>
+			<td class="text-right"><%= @product_variant.price if @product_variant.present? %> | 
+			<%= @product_variant.shipping if @product_variant.present? %></td>
+			<td class="text-right"><%= @reverse_vat_rate.reverse_rate.round(2) %> | 
+				<%= @reverse_dealer_rate.reverse_rate.round(2)%></td>
+			<td class="text-right"><%= @product_cost_master.dealer_network_basic %></td>
+			<td>
+				product_variant price * 
+				reverse_vat_rate reverse_rate + 
+				product_variant shipping * 
+				reverse_vat_rate reverse_rate  * 
+				reverse_dealer_rate
+			</td>
+        </tr>
+      </table>
+    </div>
+	
+    <!-- p.update(:basic_cost => product_variant.price * reverse_vat_rate.reverse_rate.to_f,
+      : => product_variant.shipping * reverse_vat_rate.reverse_rate.to_f,
+      :transf_order_basic => (product_variant.price * reverse_vat_rate.reverse_rate.to_f + product_variant.shipping * reverse_vat_rate.reverse_rate.to_f) * reverse_transfer_rate.reverse_rate.to_f,
+      :dealer_network_basic => (product_variant.price * reverse_vat_rate.reverse_rate.to_f + product_variant.shipping * reverse_vat_rate.reverse_rate.to_f) * reverse_dealer_rate.reverse_rate.to_f) -->
 
-<p>
-  <strong>Product cost:</strong>
-  <%= @product_cost_master.product_cost %>
-</p>
+  	
 
-<p>
-  <strong>Basic cost:</strong>
-  <%= @product_cost_master.basic_cost %>
-</p>
 
-<p>
-  <strong>Shipping handling:</strong>
-  <%= @product_cost_master.shipping_handling %>
-</p>
 
-<p>
-  <strong>Postage:</strong>
-  <%= @product_cost_master.postage %>
-</p>
+<%= link_to 'Edit', edit_product_cost_master_path(@product_cost_master), class: "btn btn-default btn-sm" %> |
+<%= link_to 'Back', product_cost_masters_path, class: "btn btn-default btn-sm" %>
 
-<p>
-  <strong>Tel cost:</strong>
-  <%= @product_cost_master.tel_cost %>
-</p>
-
-<p>
-  <strong>Transf order basic:</strong>
-  <%= @product_cost_master.transf_order_basic %>
-</p>
-
-<p>
-  <strong>Dealer network basic:</strong>
-  <%= @product_cost_master.dealer_network_basic %>
-</p>
-
-<p>
-  <strong>Wholesale variable cost:</strong>
-  <%= @product_cost_master.wholesale_variable_cost %>
-</p>
-
-<p>
-  <strong>Royalty:</strong>
-  <%= @product_cost_master.royalty %>
-</p>
-
-<p>
-  <strong>Cost of return:</strong>
-  <%= @product_cost_master.cost_of_return %>
-</p>
-
-<p>
-  <strong>Call centre commission:</strong>
-  <%= @product_cost_master.call_centre_commission %>
-</p>
-
-<%= link_to 'Edit', edit_product_cost_master_path(@product_cost_master) %> |
-<%= link_to 'Back', product_cost_masters_path %>

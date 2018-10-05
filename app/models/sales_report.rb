@@ -1,8 +1,12 @@
 class SalesReport 
 attr_accessor :from_date, :to_date, :prod, :channel, :group, :media_id, :order_id, :total_nos, :total_value, :row_nos, :row_value, :host, :report_desc, :product_list_id, :product_variant_id
 
-attr_accessor :name, :orderlist, :payuvalue, :payuorders, :ccvalue, :ccorders, :codorders, :codvalue, :totalorders,
-:noorders
+attr_accessor :name, :description, :employee_name, :orderlist, :payuvalue, :payuorders, :ccvalue, :ccorders, :codorders, :codvalue, :totalorders, :noorders
+attr_accessor :step_1_active, :step_1_desc, :step_1_value, :step_1_nos, 
+              :step_2_active, :step_2_desc, :step_2_value, :step_2_nos, 
+              :step_3_active, :step_3_desc, :step_3_value, :step_3_nos,
+              :step_4_active, :step_4_desc, :step_4_value, :step_4_nos,
+              :step_total_desc, :step_total_value, :step_total_nos
 
   def channel_group_sales_summary from_date, to_date, product_list_id
     cancelled_status_id = [10040, 10006, 10008]
@@ -261,6 +265,68 @@ attr_accessor :name, :orderlist, :payuvalue, :payuorders, :ccvalue, :ccorders, :
 
   end
   
+  def self.employee_wise_sales_step_report orderpaymentmode_id, from_date, to_date
+    cancelled_status_id = [10040, 10006, 10008]
+    sales_report_list ||= []
+   
+    # "< Rs.1999/-"	"Rs.2000/- to Rs.4999/-"	"Rs.5000/- +"	Total PUM Paid	
+    # show only hbn playlist .joins(:medium).where("media.media_group_id = 10000") 
+    order_masters = OrderMaster.where('orderdate >= ? AND orderdate <= ?', from_date, to_date)
+    .where('ORDER_STATUS_MASTER_ID > 10002')
+    .where(order_source_id: 10060)
+    .where(orderpaymentmode_id: orderpaymentmode_id)
+    .where.not(ORDER_STATUS_MASTER_ID: cancelled_status_id)
+    .select(:employee_id).distinct
+     
+    order_masters.each do |o|
+      sales_report = SalesReport.new
+      
+      sales_report.employee_name = (Employee.find(o.employee_id).first_name  || "NA" if Employee.find(o.employee_id).first_name.present?)
+      
+    
+      orderlist = OrderMaster.where('ORDER_STATUS_MASTER_ID > 10002')
+      .where(order_source_id: 10060)
+      .where.not(ORDER_STATUS_MASTER_ID: cancelled_status_id)
+      .where(orderpaymentmode_id: orderpaymentmode_id)
+      .where('orderdate >= ? AND orderdate <= ?', from_date, to_date)
+      .where(employee_id: o.employee_id)
+      #
+      step_1 = SalesReportPayUStep.find 10000
+      sales_report.step_1_active = step_1.active
+      sales_report.step_1_desc = step_1.name
+      sales_report.step_1_value = orderlist.where("total > ? and total < ?", step_1.min_value, step_1.max_value).sum(:total)
+      sales_report.step_1_nos = orderlist.where("total > ? and total < ?", step_1.min_value, step_1.max_value).count()
+      
+      step_2 = SalesReportPayUStep.find 10001
+      sales_report.step_2_active = step_2.active
+      sales_report.step_2_desc = step_2.name
+      sales_report.step_2_value = orderlist.where("total > ? and total < ?", step_2.min_value, step_2.max_value).sum(:total)
+      sales_report.step_2_nos = orderlist.where("total > ? and total < ?", step_2.min_value, step_2.max_value).count()
+      
+      step_3 = SalesReportPayUStep.find 10002
+      sales_report.step_3_active = step_3.active
+      sales_report.step_3_desc = step_3.name
+      sales_report.step_3_value = orderlist.where("total > ? and total < ?", step_3.min_value, step_3.max_value).sum(:total)
+      sales_report.step_3_nos = orderlist.where("total > ? and total < ?", step_3.min_value, step_3.max_value).count()
+      
+      step_4 = SalesReportPayUStep.find 10003
+      sales_report.step_4_active = step_4.active
+      sales_report.step_4_desc = step_4.name
+      sales_report.step_4_value = orderlist.where("total > ? and total < ?", step_4.min_value, step_4.max_value).sum(:total)
+      sales_report.step_4_nos = orderlist.where("total > ? and total < ?", step_4.min_value, step_4.max_value).count()
+      
+      sales_report.step_total_desc = "Total Orders"
+      sales_report.step_total_value = orderlist.sum(:total)
+      sales_report.step_total_nos = orderlist.count()
+      
+       sales_report_list << sales_report
+      
+    end
+    
+    return sales_report_list
+    
+  end
+
 private
 
 def all_cancelled_orders

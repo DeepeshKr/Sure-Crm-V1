@@ -61,6 +61,12 @@ def fullname
     #return "NA"
     #end
 end
+def upper_full_name
+  salute = self.salute[0..4].upcase.strip if self.salute.present?
+  fname = self.first_name[0..29].upcase.strip if self.first_name.present?
+  lname = self.last_name[0..29].upcase.strip if self.last_name.present?
+  return "#{salute} #{fname} #{lname}"
+end
 
 def name
   return "#{self.first_name}  #{self.last_name}"

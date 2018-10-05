@@ -2,15 +2,17 @@ class ProductCostMastersController < ApplicationController
 
   before_action :set_product_cost_master, only: [:show, :edit, :update, :destroy]
   before_action { protect_controllers(5) }
+  before_action :set_default_values
   # GET /product_cost_masters
   # GET /product_cost_masters.json
   def index
-
-    @product_cost_masters = ProductCostMaster.all.paginate(:page => params[:page])
+    
+    @product_cost_masters = ProductCostMaster.all.order(created_at: :DESC).paginate(:page => params[:page])
     #update_all
     #reset_prices
 
     respond_to do |format|
+      format.html
       format.csv do
         @product_cost_masters = ProductCostMaster.all
               headers['Content-Disposition'] = "attachment; filename=\"product-costs\""
@@ -23,34 +25,30 @@ class ProductCostMastersController < ApplicationController
     @page_heading = "Product cost search"
     @showall = true
     #reset_prices
-    @all_product_cost_masters = ProductCostMaster.where("product_list_id IS NOT NULL").pluck(:product_list_id)
+    # @all_product_cost_masters = ProductCostMaster.where("product_list_id IS NOT NULL").pluck(:product_list_id)
+  #   @all_product_cost_masters_prod = ProductCostMaster.where("prod IS NOT NULL").pluck(:prod)
+  #   @all_product_variant_prod = ProductVariant.where("extproductcode IS NOT NULL").pluck(:extproductcode)
+  #   @all_product_master_prod = ProductMaster.where("extproductcode IS NOT NULL").pluck(:extproductcode)
 
-    @all_product_cost_masters_prod = ProductCostMaster.where("prod IS NOT NULL").pluck(:prod)
-
-    @all_product_variant_prod = ProductVariant.where("extproductcode IS NOT NULL").pluck(:extproductcode)
-
-    @all_product_master_prod = ProductMaster.where("extproductcode IS NOT NULL").pluck(:extproductcode)
-
-      # @product_cost_masters = ProductCostMaster.where("product_list_id IS NOT NULL").pluck(:product_list_id)
+    # @product_cost_masters = ProductCostMaster.where("product_list_id IS NOT NULL").pluck(:product_list_id)
     if params.has_key?(:search)
-      @search = "Search for " +  params[:search].upcase
-      @searchvalue = params[:search].upcase
+        @search = "Search for " +  params[:search].upcase
+        @searchvalue = params[:search].upcase
 
-      # @product_lists = ProductList.where(id: @product_cost_masters).where("name like ? OR extproductcode like ? or list_barcode like ?", "#{@searchvalue}%",
-      #   "#{@searchvalue}%", "#{@searchvalue}%")
-      # .paginate(:page => params[:page])
+        @product_cost_masters = ProductCostMaster.joins(:product_variant).where("UPPER(product_cost_masters.prod) like ? OR UPPER(product_cost_masters.barcode) like ? OR UPPER(product_variants.name) like ? ",
+          "#{@searchvalue}%", "#{@searchvalue}%", "#{@searchvalue}%").paginate(:page => params[:page])
 
-      @product_cost_masters = ProductCostMaster.all.where("UPPER(prod) like ? OR UPPER(barcode) like ?", "#{@searchvalue}%", "#{@searchvalue}%").paginate(:page => params[:page])
+        # @inactive_product_lists = ProductList.where('id NOT IN (?)', @all_product_cost_masters)
+ #          .where("UPPER(name) like ? OR UPPER(extproductcode) like ? or UPPER(list_barcode) like ?",
+ #          "#{@searchvalue}%", "#{@searchvalue}%", "#{@searchvalue}%")
+ #          .paginate(:page => params[:page])
+ #
+ #        @inactive_product_variants = ProductVariant.where('extproductcode NOT IN (?)',
+ #          @all_product_cost_masters_prod).where("UPPER(name) like ? OR UPPER(extproductcode) like ?",
+ #          "#{@searchvalue}%", "#{@searchvalue}%")
 
-      @inactive_product_lists = ProductList.where('id NOT IN (?)', @all_product_cost_masters)
-      .where("UPPER(name) like ? OR UPPER(extproductcode) like ? or UPPER(list_barcode) like ?",
-        "#{@searchvalue}%", "#{@searchvalue}%", "#{@searchvalue}%")
-      .paginate(:page => params[:page])
-
-      @inactive_product_variants = ProductVariant.where('extproductcode NOT IN (?)', @all_product_cost_masters_prod).where("UPPER(name) like ? OR UPPER(extproductcode) like ?", "#{@searchvalue}%", "#{@searchvalue}%")
-
-      @found = @product_cost_masters.count
-       @page_heading = "Product cost search #{@searchvalue}"
+        @found = @product_cost_masters.count
+        @page_heading = "Product cost search #{@searchvalue}"
       else
         @search = "Product Sell List"
         @searchvalue = nil
@@ -59,14 +57,17 @@ class ProductCostMastersController < ApplicationController
         #.limit(10)
         @nos_with_price = @product_cost_masters.count()
 
-        @inactive_product_lists = ProductList.where('id NOT IN (?)',   @all_product_cost_masters).order('updated_at DESC').paginate(:page => params[:page])
-        #.where('active_status_id = ?',  10000) .limit(10)
-        @nos_with_out_price = @inactive_product_lists.count()
-        @found = nil
-
-        @inactive_product_variants = ProductVariant.where('extproductcode NOT IN (?)', @all_product_cost_masters_prod) #.limit(10)
+        # @inactive_product_lists = ProductList.where('id NOT IN (?)',   @all_product_cost_masters)
+#         .order('updated_at DESC').paginate(:page => params[:page])
+#         #.where('active_status_id = ?',  10000) .limit(10)
+#         @nos_with_out_price = @inactive_product_lists.count()
+#         @found = nil
+#
+#         @inactive_product_variants = ProductVariant.where('extproductcode NOT IN (?)',
+#         @all_product_cost_masters_prod) #.limit(10)
         
-         @page_heading = "Product cost search => showing all"
+        @page_heading = "Product cost search => showing all"
+        
     end
         # format.csv do
         #     headers['Content-Disposition'] = "attachment; filename=\"product-costs\""
@@ -74,7 +75,54 @@ class ProductCostMastersController < ApplicationController
         # end
 
   end
+  
+  def update_all_product_costs
+    @return_url = product_cost_masters_url
+     
+    # ProductCostMaster.create_product_cost_master 15385
+    product_variants = ProductVariant.all
+    product_variants.each do |pv|
+      ProductCostMaster.create_product_cost_master pv.id
+    end
 
+    ProductCostMaster.update_product_cost_master
+
+    product_cost_masters = ProductCostMaster.all
+    product_cost_masters.each do |pc|
+      ppu = ProductCostMaster.find(pc.id)
+      ppu.update_price
+    end
+    
+    
+    if params.has_key?(:return_url)
+      @return_url = params[:return_url]
+    end
+    redirect_to product_cost_masters_path, notice: "All products costs have been updated with tax rates"
+  end
+  
+  def update_product_cost
+    
+    @return_url = product_cost_masters_url
+    search = nil
+    if params.has_key?(:product_variant_id)
+      @product_variant_id = params[:product_variant_id]
+      ProductCostMaster.create_product_cost_master @product_variant_id
+      search = ProductVariant.find(@product_variant_id).extproductcode
+    end
+    
+    if params.has_key?(:product_cost_master_id)
+      @product_cost_master_id = params[:product_cost_master_id]
+      ppu = ProductCostMaster.find(@product_cost_master_id)
+      ppu.update_price
+      search = ppu.prod
+    end
+    
+    if params.has_key?(:return_url)
+      @return_url = params[:return_url]
+    end
+    redirect_to product_cost_masters_path(search: search), notice: "All products costs have been updated with tax rates"
+  end
+  
   def product_costs_not_found
     @product_cost_masters = ProductCostMaster.where("product_list_id IS NOT NULL").pluck(:product_list_id)
 
@@ -94,6 +142,12 @@ class ProductCostMastersController < ApplicationController
   # GET /product_cost_masters/1
   # GET /product_cost_masters/1.json
   def show
+    @reverse_vat_rate = TaxRate.find(10001)
+    @reverse_ship_rate = TaxRate.find(10020)
+    @reverse_transfer_rate = TaxRate.find(10040)
+    @reverse_dealer_rate = TaxRate.find(10041)
+    @product_variant = ProductVariant.find_by_extproductcode(@product_cost_master.prod)
+    
   end
 
   # GET /product_cost_masters/new
@@ -187,6 +241,13 @@ class ProductCostMastersController < ApplicationController
     # Use callbacks to share common setup or constraints between actions.
     def set_product_cost_master
       @product_cost_master = ProductCostMaster.find(params[:id])
+     
+    end
+    def set_default_values
+      @reverse_vat_rate = TaxRate.find(10001)
+      @reverse_ship_rate = TaxRate.find(10020)
+      @reverse_transfer_rate = TaxRate.find(10040)
+      @reverse_dealer_rate = TaxRate.find(10041)
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.

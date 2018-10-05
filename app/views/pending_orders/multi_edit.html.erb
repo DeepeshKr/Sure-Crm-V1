@@ -1,0 +1,107 @@
+<!-- set page title start -->
+<% title "HBN Pending Orders #{@from_date} #{@to_date}" %>
+<!-- set page title end -->
+<p id="notice"><%= notice %></p>
+
+<div class="row">
+	<div class="col-xs-1"><h3>Pending Orders</h3></div>
+	<div class="col-xs-5">
+		<%= render partial: 'date_range', locals: {action: "multi_edit"} %>
+	</div>
+	<div class="col-xs-6">
+		<br>
+		<div class="digg_pagination">
+		  <%= will_paginate @pending_orders, :container => false %>
+		</div>
+		<br> 
+	</div>
+</div>
+
+<%= form_tag edit_multiple_pending_orders_path do %>
+	<table class="table table-bordered table-stripped">
+	  <thead>
+	    <tr>
+		  <th>
+			  <input type="button" value="Select" onclick="calculate_value()">
+			  <input type="button" value="Select all" id="check_all" onclick="selectAll()">
+	  	</th>
+		  <th>Date</th>
+	      <th>Order ref</th>
+	      <th>Order no</th>
+		  <th>Manifest</th>
+		  <th>Telephone</th>
+	      <th>Dispatch status</th>
+	      <th>Cod amount</th>
+	      <th>Pay u</th>
+		  <th>Savings</th>
+	      <th>Courier</th>
+	      <th>Pay u status</th>
+	    </tr>
+	  </thead>
+
+	  <tbody>
+	    <% @pending_orders.each do |pending_order| %>
+	      <tr>
+			<td><%= check_box_tag "pending_orders[]", pending_order.id, class: "check_box" %></td>
+			<td><%= pending_order.order_date.strftime("%d-%b-%Y") if pending_order.order_date %></td>
+	        <td><%= pending_order.order_ref_id %></td>
+	        <td><%= pending_order.order_no %></td>
+			<td><%= pending_order.manifest %></td>
+			<td><%= pending_order.tel_1 %> <%= pending_order.tel_2 %></td>
+	        <td><%= pending_order.order_dispatch_status.name if pending_order.order_dispatch_status %></td>
+	        <td><%= pending_order.cod_amount %></td>
+	        <td><%= pending_order.pay_u_amount %></td>
+	        <td><%= pending_order.savings %></td>
+	        <td>
+				<%= pending_order.courier_name %>
+				<%= pending_order.courier_list.name if pending_order.courier_list %></td>
+	        <td><%= pending_order.payumoney_status.name if pending_order.payumoney_status %></td>
+	   
+	      </tr>
+	    <% end %>
+	  </tbody>
+	</table>
+
+	<%= submit_tag "Edit Checked" %>
+<% end %>
+
+<script>
+	$(document).ready(function(){
+	   $('#check_all').on("click", function() {
+	    // grouping all the checkbox using the classname
+	    var checkboxes = $("check_box");
+	    // check whether checkboxs are selected.
+	    if(checkboxes.prop("checked")){
+	        // if they are selected,unchecking all the checkbox
+	        checkboxes.prop("checked",false);
+	    }
+	    else {
+	        // if they are not selected, checking all the checkbox
+	        checkboxes.prop("checked",true);
+	    }
+
+	});
+	function calculate_value() {
+		
+	    // grouping all the checkbox using the classname
+	    var checkboxes = $("check_box");
+	    // check whether checkboxs are selected.
+	    if(checkboxes.prop("checked")){
+	        // if they are selected,unchecking all the checkbox
+	        checkboxes.prop("checked",false);
+	    }
+	    else {
+	        // if they are not selected, checking all the checkbox
+	        checkboxes.prop("checked",true);
+	    }
+
+	}
+	function selectAll(){
+	        $("input:checkbox").each(function(){
+	          $(this).attr('checked', true);
+	        });
+
+	        return false;
+	      }
+</script>
+

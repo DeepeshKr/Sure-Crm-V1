@@ -1,0 +1,61 @@
+<!-- set page title start -->
+<% title "New Private Campaign Playlist" %>
+<!-- set page title end -->
+<!--  if @go_live == true % -->
+<div class="panel panel-success">
+  <div class="panel-body">
+	<div class="row">
+		<div class="col-xs-4"><p class="lead">Import <strong>CSV</strong> File: </p></div>
+		<div class="col-xs-8">File should have these headers in <strong>CSV</strong> <br>
+			<ul class="list-inline">
+				<li>yyyy</li>
+				<li>mm</li>
+				<li>dd</li>
+				<li>start_hh</li>
+				<li>start_mm</li>
+				<li>end_hh</li>
+				<li>end_mm</li>
+				<li>product_variant_id</li>
+			</ul>
+		</div>
+	</div>
+	<%= form_tag import_pvt_playlist_campaigns_path, multipart: true do %>
+  	<div class="row">
+		<div class="col-xs-6">
+			<%= text_field_tag(:name, nil, :class => "form-control", required: true) %>
+		</div>
+	  	<div class="col-xs-6">
+	    	<%= select_tag :mediumid, options_from_collection_for_select(@medialist, :id,  :mediainfo), 
+			:class => "form-control", required: true %>
+	  	</div>
+  	</div>
+	<div class="row">
+        <div class="col-xs-4">
+          <div class="input-daterange input-group">
+            <%= text_field_tag(:startdate, @from_date, :data => {:provide => "datepicker"}, 
+			:id => "datepicker_from", :class => "form-control", :required => "true" )   %>
+            <span class="input-group-addon">to</span>
+             <%= text_field_tag(:enddate, @to_date, :data => {:provide => "datepicker"}, 
+			 :id => "datepicker_to", :class => "form-control", :required => "true" )   %>
+          </div>
+        </div>
+	    <div class="col-xs-3">
+	        <%= file_field_tag :file, required: true %>
+	    </div>
+	    <div class="col-xs-3 col-xs-offset-2">
+	        <%= submit_tag "Import CSV", class: "btn btn-warning btn-sm" %>
+	    </div>
+	</div>
+	<% end %>
+  	</div>
+   <div class="panel-footer">
+	   When you import the file the campaign playlist would get generated and created, refer to the sample file to upload the file. <%= link_to "Campaign Playlist Sample File", "/excel/pvt_campaign_playlist_sample.csv", class: "btn btn-primary btn-xs" %><br>
+	   <strong>Do not change the headers and give the information in the desired format</strong>
+	   
+   </div>
+</div>
+<!-- % end % -->
+<script>
+	$('#datepicker_to').datepicker({format: 'yyyy-mm-dd'});
+	$('#datepicker_from').datepicker({format: 'yyyy-mm-dd'});
+</script>

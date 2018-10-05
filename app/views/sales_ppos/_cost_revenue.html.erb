@@ -1,0 +1,33 @@
+<tr>
+	<th colspan="4">Cost with headers</th>
+	<th colspan="2">Revenue with headers</th>
+</tr>
+<tr>
+	<td colspan="4">
+		<table class="table">
+			<tr>
+				<td>Cost</td>
+				<td><%= order_line.sales_ppo.productcost %></td>
+				<td>Damages</td>
+				<td><%= order_line.sales_ppo.product_postage %></td>
+			</tr>
+			<tr>
+				<td>Refund</td>
+				<td><%= order_line.sales_ppo.refund %></td>
+				<td>Damages</td>
+				<td><%= (order_line.sales_ppo.productcost.to_f * 0.10) %></td>
+			</tr>
+			<tr>
+				<td>Commission (V)</td>
+				<td><%= order_line.sales_ppo.variable_media_commission %></td>
+				<td>Commision (F)</td>
+				<td><%= order_line.sales_ppo.fixed_media_commission %></td>
+			</tr>
+			
+			
+		</table>
+	</td>
+	<td colspan="2">
+		
+	</td>
+</tr>

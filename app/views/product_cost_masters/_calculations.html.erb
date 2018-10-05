@@ -1,0 +1,30 @@
+<div class="well">
+	<dl class="dl-horizontal">
+	    <dt>basic_cost</dt>
+	    <dd>product_variant price * reverse_vat_rate</dd>
+	    <dt>shipping_handling</dt>
+	    <dd>product_variant shipping * reverse_vat_rate </dd>
+	    <dt>transf_order_basic</dt>
+	    <dd>(product_variant price * reverse_vat_rate + product_variant shipping * reverse_vat_rate ) * reverse_transfer_rate</dd>
+	    <dt>dealer_network_basic</dt>
+	    <dd>(product_variant price * reverse_vat_rate + product_variant shipping * reverse_vat_rate ) * reverse_dealer_rate</dd>
+	    <dt>reverse_vat_rate</dt>
+	    <dd><%= @reverse_vat_rate.reverse_rate %></dd>
+	    <dt>reverse_ship_rate</dt>
+	    <dd><%= @reverse_ship_rate.reverse_rate %></dd>
+	    <dt>reverse_transfer_rate</dt>
+	    <dd><%= @reverse_transfer_rate.reverse_rate %></dd>
+	    <dt>reverse_dealer_rate</dt>
+	    <dd><%= @reverse_dealer_rate.reverse_rate %></dd>
+			
+	</dl>
+</div>
+
+<div class="well well-sm">
+	<dl class="dl-horizontal">
+		    <dt>Cost:</dt>
+		    <dd>product_cost + tel_cost + royalty + Shipping handling + cost_of_return + call_centre_commission </dd>
+		    <dt>Revenue:</dt>
+		    <dd>basic_cost + shipping_handling </dd>
+	</dl>	
+</div>

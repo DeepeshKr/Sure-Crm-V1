@@ -5,7 +5,9 @@ class TaxRatesController < ApplicationController
   # GET /tax_rates
   # GET /tax_rates.json
   def index
+    @return_url = request.host
     @tax_rates = TaxRate.all
+    set_default_values
   end
 
   # GET /tax_rates/1
@@ -72,9 +74,14 @@ class TaxRatesController < ApplicationController
 
       @tax_rate = TaxRate.find(params[:id])
     end
-
+    def set_default_values
+      @reverse_vat_rate = TaxRate.find(10001)
+      @reverse_ship_rate = TaxRate.find(10020)
+      @reverse_transfer_rate = TaxRate.find(10040)
+      @reverse_dealer_rate = TaxRate.find(10041)
+    end
     # Never trust parameters from the scary internet, only allow the white list through.
     def tax_rate_params
-      params.require(:tax_rate).permit(:name, :tax_rate, :reverse_rate, :description)
+      params.require(:tax_rate).permit(:name, :tax_rate, :reverse_rate, :description, :is_external)
     end
 end

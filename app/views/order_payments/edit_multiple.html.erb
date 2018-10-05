@@ -1,0 +1,75 @@
+<!-- set page title start -->
+<% title "HBN Pending Orders #{@from_date} #{@to_date}" %>
+<!-- set page title end -->
+<p id="notice"><%= notice %></p>
+
+<div class="row">
+	<div class="col-xs-4"><h3>Selected Pending Orders</h3></div>
+	<div class="col-xs-8">
+		
+	</div>
+</div>
+
+<%= simple_form_for :pending_order, :url => update_multiple_pending_orders_path, :html => { :method => :put } do |f| %>
+
+	<table class="table table-bordered table-stripped">
+	  <thead>
+	    <tr>
+		  <th>Date</th>
+	      <th>Order ref</th>
+	      <th>Order no</th>
+		  <th>Manifest</th>
+		  <th>Telephone</th>
+	      <th>Dispatch status</th>
+	      <th>Cod amount</th>
+	      <th>Pay u</th>
+		  <th>Savings</th>
+	      <th>Courier</th>
+	      <th>Pay u status</th>
+	    </tr>
+	  </thead>
+
+	  <tbody>
+	    <% @pending_orders.each do |pending_order| %>
+	      <tr>
+			   <%= hidden_field_tag "pending_orders[]", pending_order.id%>
+			<td><%= pending_order.order_date.strftime("%d-%b-%Y") if pending_order.order_date %></td>
+	        <td><%= pending_order.order_ref_id %></td>
+	        <td><%= pending_order.order_no %></td>
+			<td><%= pending_order.manifest %></td>
+			<td><%= pending_order.tel_1 %> <%= pending_order.tel_2 %></td>
+	        <td><%= pending_order.order_dispatch_status.name if pending_order.order_dispatch_status %></td>
+	        <td><%= pending_order.cod_amount %></td>
+	        <td><%= pending_order.pay_u_amount %></td>
+	        <td><%= pending_order.savings %></td>
+	        <td>
+				<%= pending_order.courier_name %>
+				<%= pending_order.courier_list.name if pending_order.courier_list %></td>
+	        <td><%= f.input :pay_u_status_id, :collection => @pay_u_status, :label_method => :name,
+	        :value_method => :id, label: false, :include_blank => false, 
+			:selected => pending_order.payumoney_status.id %></td>
+	      	
+	      </tr>
+	    <% end %>
+	  </tbody>
+	</table>
+	
+	<div class="row">
+		<div class="col-xs-4">
+	        <%= f.input :pay_u_status_id, :collection => @pay_u_status, :label_method => :name,
+	        :value_method => :id,:label => "Change Pay u Status:", :include_blank => false %>
+			
+		</div>
+		<div class="col-xs-4">
+		
+		</div>
+		<div class="col-xs-4">
+			<br>
+			<%= submit_tag "Update Now", class: "btn btn-primary" %>
+		</div>
+	</div>
+	
+<% end %>
+
+
+

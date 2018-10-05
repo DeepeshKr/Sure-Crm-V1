@@ -1,0 +1,18 @@
+<%= simple_form_for(@sales_upsale_product) do |f| %>
+  <%= f.error_notification %>
+
+  <div class="form-inputs">
+    <%= f.input :product_list_id, :collection => @product_list,:label_method => :productname,:value_method => :id,
+    :required => true, :label => "Upsell Product List" ,:include_blank => false %>
+  </div>
+
+  <div class="form-actions">
+	  	<div class="row">
+			<div class="col-xs-4 col-xs-offset-8">
+				<%= f.button :submit, class:"btn btn-info btn-lg" %>
+			</div>
+		  
+		</div>
+    
+  </div>
+<% end %>

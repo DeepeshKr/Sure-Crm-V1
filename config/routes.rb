@@ -1,6 +1,6 @@
 Rails.application.routes.draw do
   
- 
+  resources :sales_report_pay_u_steps
   devise_for :logins
   #root             'product#home'
   root 'project#home'
@@ -39,21 +39,7 @@ Rails.application.routes.draw do
   get 'employee_incentives/search'
   get 'employee_incentives/details'
 
-  # get sales report team
-  get 'sales_reports_team' => 'sales_report_team#index'
-  get 'sales_report_team/show_wise'
-  get 'sales_report_team_show_wise' => 'sales_report_team#show_wise'
-  get 'sales_report_team/agent_order'
-  get 'sales_report_team_agent_order_list' => 'sales_report_team#agent_order_list'
-  get 'sales_report_team/agent_order_list'
-  get 'pay_u_orders_sales_report_team' => 'sales_report_team#pay_u_orders'
-  get 'sales_report_team/products_sold'
-  get 'products_sold_sales_report_team' => 'sales_report_team#products_sold'
-  get 'sales_report_team/pay_u_orders'
-  get 'agent_common_upsell_order_sales_report_team' => 'sales_report_team#agent_common_upsell_order'
-  get 'sales_report_team/agent_common_upsell_order'
-  get 'agent_basic_upsell_order_sales_report_team' => 'sales_report_team#agent_basic_upsell_order'
-  get 'sales_report_team/agent_basic_upsell_order'
+  
   
   get 'disposition_report_sales_report_team' => 'sales_report_team#disposition_report'
   get 'sales_report_team/disposition_report'
@@ -115,7 +101,6 @@ Rails.application.routes.draw do
   delete "remove_all_missed_orders" => "distributor_missed_orders#remove_missed"
   delete "remove_all_corporate_missed_orders" => "distributor_missed_orders#remove_missed"
   delete "remove_all_corporate_specific_missed_orders" => "distributor_missed_orders#remove_missed"
-  
   #get 'test_ppo' => 'product_ppo_news#index'
 
   mount Bootsy::Engine => '/bootsy', as: 'bootsy'
@@ -137,7 +122,10 @@ Rails.application.routes.draw do
   post 'sales_ppos/re_create_ppo'
   post 'sales_ppos/recreate_ppo_for_order_id'
   post 'sales_ppos/recreate_ppo_between_days'
-
+  
+  put 'sales_ppos/re_calculate_order_id'
+  put 're_calculate_order_id_sales_ppos' => 'sales_ppos#re_calculate_order_id'
+  
   get 'sales_ppos/index'
   get 'sales_ppos' => 'sales_ppos#index'
 
@@ -210,65 +198,95 @@ Rails.application.routes.draw do
   get 'packing_cost/search'
   get 'packing_cost/details'
   get 'listofproducts' => 'product_masters#listofproducts'
+  get 'showprod' => 'product_masters#showprod'
   #get 'productcost' => 'product_cost#details'
   get 'productcost' => 'product_cost_masters#product_costs'
   get 'productwithcosts' => 'product_cost_masters#product_costs'
+  #update_all_product_costs
   get 'product_costs_not_found' => 'product_cost_masters#product_costs_not_found'
-  get 'showprod' => 'product_masters#showprod'
-
   
-  #sales report
+  # get sales report team
+  get 'sales_reports_team' => 'sales_report_team#index'
+  get 'sales_report_team/show_wise'
+  get 'sales_report_team_show_wise' => 'sales_report_team#show_wise'
+  get 'sales_report_team/agent_order'
+  get 'sales_report_team_agent_order_list' => 'sales_report_team#agent_order_list'
+  get 'sales_report_team/agent_order_list'
+  get 'pay_u_orders_sales_report_team' => 'sales_report_team#pay_u_orders'
+  get 'sales_report_team/products_sold'
+  get 'products_sold_sales_report_team' => 'sales_report_team#products_sold'
+  get 'sales_report_team/pay_u_orders'
+  get 'agent_common_upsell_order_sales_report_team' => 'sales_report_team#agent_common_upsell_order'
+  get 'sales_report_team/agent_common_upsell_order'
+  get 'agent_basic_upsell_order_sales_report_team' => 'sales_report_team#agent_basic_upsell_order'
+  get 'sales_report_team/agent_basic_upsell_order'
   get 'sales_report_team_not_completed' => 'sales_report_team#not_completed'
   get 'sales_report_team/not_completed'
-
+  
+  get 'sales_report_team_search_custdetails' => 'sales_report_team#search_custdetails'
+  get 'sales_report_team/search_custdetails'
+  
+  get 'sales_report_team_employee_upsales_report' => 'sales_report_team#employee_upsales_report'
+  get 'sales_report_team/employee_upsales_report'
+  
+  
+  #sales report
   get 'sales_reports' => 'sales_report#index'
   get 'sales_report/index'
   get 'not_completed' => 'sales_report#not_completed'
   get 'sales_report/not_completed'
   get 'sales_report' => 'sales_report#summary'
   get 'sales_report/summary'
-  get 'sales_report/hourly'
   get 'hourly_report' => 'sales_report#hourly'
-  get 'sales_report/open_orders'
+  get 'sales_report/hourly'
   get 'open_orders' => 'sales_report#open_orders'
-  get 'sales_report/pincode_orders'
+  get 'sales_report/open_orders'
   get 'pincode_orders' => 'sales_report#pincode_orders'
-  get 'sales_report/daily'
+  get 'sales_report/pincode_orders'
   get 'daily_report' => 'sales_report#daily'
+  get 'sales_report/daily'
   
-  get 'sales_report/channel_group_product_sold'
   get 'sales_report_channel_group_product_sold' => "sales_report#channel_group_product_sold"
-  get 'sales_report/channel_group_sales_summary'
+  get 'sales_report/channel_group_product_sold'
+  
   get 'sales_report_channel_group_sales_summary' => "sales_report#channel_group_sales_summary"
+  get 'sales_report/channel_group_sales_summary'
   
-  get 'sales_report/pay_u_orders'
   get 'pay_u_orders_sales_report' => 'sales_report#pay_u_orders'
-  get 'sales_report/channel'
+  get 'sales_report/pay_u_orders'
+  
+  get 'employee_pay_u_report_sales_report' => 'sales_report#employee_pay_u_report'
+  get 'sales_report/employee_pay_u_report'
+  
   get 'channel_report' => 'sales_report#channel'
-
-  get 'sales_report/channel_summary_report'
+  get 'sales_report/channel'
+  
   get 'channel_summary_report' => 'sales_report#channel_summary_report'
+  get 'sales_report/channel_summary_report'
   
-  get 'sales_report/channel_sales_summary'
   get 'channel_sales_summary' => 'sales_report#channel_sales_summary'
+  get 'sales_report/channel_sales_summary'
   
-  get 'sales_report/channel_sales'
   get 'channel_sales' => 'sales_report#channel_sales'
+  get 'sales_report/channel_sales'
   
-  get 'sales_report/channel_product_sales_report'
   get 'sales_report_channel_product_sales_report' => 'sales_report#channel_product_sales_report'
-  get 'sales_report/channel_city_sales_report'
+  get 'sales_report/channel_product_sales_report'
+  
   get 'sales_report_channel_city_sales_report' => 'sales_report#channel_city_sales_report'
+  get 'sales_report/channel_city_sales_report'
+  
   
   # final report
-  get 'sales_report/cdm_report'
   get 'cdm_report' => 'sales_report#cdm_report'
+  get 'sales_report/cdm_report'
   
-  get 'sales_report/gender_report'
   get 'sales_report_gender_report' => 'sales_report#gender_report'
-  
-  get 'sales_report/birthday_list'
+  get 'sales_report/gender_report'
+ 
   get 'sales_report_birthday_list' => 'sales_report#birthday_list'
+  get 'sales_report/birthday_list'
+  
   # source 1 (order sales)
   get 'cdm_sales_summary' => 'sales_report#cdm_sales_summary'
   get 'sales_report/cdm_sales_summary'
@@ -279,35 +297,42 @@ Rails.application.routes.draw do
   get 'channel_consolidated_daily_report' => 'sales_report#channel_consolidated_daily_report'
   get 'sales_report/channel_consolidated_daily_report'
 
-
-  get 'sales_report/sales_incentives'
   get 'sales_report_sales_incentives' => 'sales_report#sales_incentives'
-  get 'sales_report/disposition_report'
+  get 'sales_report/sales_incentives'
+  
   get 'disposition_report' => 'sales_report#disposition_report'
-
-  get 'sales_report/hourly_products'
+  get 'sales_report/disposition_report'
+  
   get 'hourly_products' => 'sales_report#hourly_products'
-
-  get 'sales_report/hour_sales'
+  get 'sales_report/hourly_products'
+  
   get 'hour_sales' => 'sales_report#hour_sales'
-
-
-  get 'sales_report/employee'
+  get 'sales_report/hour_sales'
+  
   get 'employee_report' => 'sales_report#employee'
-  get 'sales_report/city'
+  get 'sales_report/employee'
+  
   get 'city_report' => 'sales_report#city'
-  get 'sales_report/product'
+  get 'sales_report/city'
+  
   get 'product_report' => 'sales_report#product'
-  get 'sales_report/show'
+  get 'sales_report/product'
+  
   get 'show_report' => 'sales_report#show'
-  get 'sales_report/product_sold'
+  get 'sales_report/show'
+  
   get 'products_sold' => 'sales_report#product_sold'
-  get 'sales_report/fitness_products_sold'
+  get 'sales_report/product_sold'
+  
   get 'fitness_products_sold' => 'sales_report#fitness_products_sold'
-  get 'sales_report/order_summary'
+  get 'sales_report/fitness_products_sold'
+  
   get 'order_summary' => 'sales_report#order_summary'
-  get 'sales_report/orders'
+  get 'sales_report/order_summary'
+  
   get 'orders_list' => 'sales_report#orders'
+  get 'sales_report/orders'
+  
 
   get 'tempinv_newwlsdet/list'
   get 'tempinv_newwlsdet/search'
@@ -320,6 +345,15 @@ Rails.application.routes.draw do
   get 'detailedordersearch' => 'order_masters#detailed_search'
   get 'order_masters_online_search' => 'order_masters#online_search'
   get 'order_masters/online_search'
+  get 'order_masters_online_one_day_search' => 'order_masters#online_one_day_search'
+  get 'order_masters/online_one_day_search'
+  
+  get 'order_masters_online_pending_search' => 'order_masters#online_pending_search'
+  get 'order_masters/online_pending_search'
+  
+  post 'order_masters_online_add_to_order' => 'order_masters#online_add_to_order'
+  post 'order_masters/online_add_to_order'
+  
   get 'order_masters_review' => 'order_masters#review'
   get 'order_masters/review'
   
@@ -533,7 +567,7 @@ Rails.application.routes.draw do
   #stock report retail sold
   get 'retailsoldreport' => 'product_report#retail_sold_stock_report'
   #stock report wholesale returned
-   get 'wholesalereturnreport' => 'product_report#wholesale_return_stock_report'
+  get 'wholesalereturnreport' => 'product_report#wholesale_return_stock_report'
   #stock report wholesale sold
   get 'wholesalesoldreport' => 'product_report#wholesale_sold_stock_report'
   #stock report branch sold
@@ -561,12 +595,23 @@ Rails.application.routes.draw do
     collection { post :import }
   end
   
+  resources :campaigns do
+    collection { post :import_pvt_playlist, :delete_pvt_playlist }
+    collection { get :index, :new_private_campaign, :private_campaign_playlist, :private_campaign_playlists }
+  end
+  
+  resources :marketing_messages
+  resources :sales_upsale_products
+  
   resources :dispatch_call_statuses
   resources :order_dispatch_statuses
   resources :pending_orders do
-      collection { post :import, :generate_orders, :generate_order_for_order_id, :generate_order_for_order_no }
+      collection { get :multi_edit }
+      collection { post :import, :generate_orders, :generate_order_for_order_id, :generate_order_for_order_no, :edit_multiple}
+      
+      collection {put :update_multiple}
   end
-  
+ # , :collection => {  => :post,  => :put }
   resources :page_names
   resources :page_trails
   resources :promotions
@@ -582,12 +627,12 @@ Rails.application.routes.draw do
   resources :courier_lists
   
   resources :product_cost_masters
-   resources :product_cost_masters do
-    collection { post :import }
+  resources :product_cost_masters do
+    collection { post :import, :update_all_product_costs, :update_product_cost }
   end
   
   resources :fedex_bill_checks
-    resources :fedex_bill_checks do
+  resources :fedex_bill_checks do
      collection { post :import }
   end
   
@@ -611,6 +656,10 @@ Rails.application.routes.draw do
     get :autocomplete_india_pincode_list_districtname, :on => :collection
     get :autocomplete_india_pincode_list_regionname, :on => :collection
 
+  end
+  
+  resources :product_variants do
+    collection { get :get_csv }
   end
   
   resources :media_tape_heads
@@ -679,6 +728,7 @@ Rails.application.routes.draw do
   resources :media_tapes
 
   mount Upmin::Engine => '/admin'
+
   
   resources :sales_incentives
   resources :user_roles
@@ -687,8 +737,8 @@ Rails.application.routes.draw do
   resources :order_fors, :media_groups,  :create_order , :order_payments
   resources :media_groups, :media_commisions, :customer_credit_cards, :change_log_trails, :change_log_types
   resources :order_masters, :order_lines, :orderpaymentmodes, :interaction_transcripts, :interaction_masters
-  resources :product_training_manuals, :product_variants, :product_masters
-  resources :media, :campaigns, :bills, :order_sources, :customers
+  resources :product_training_manuals, :product_masters
+  resources :media, :bills, :order_sources, :customers
   resources :customer_addresses, :address_valids, :address_types, :interaction_categories
   resources :campaign_stages, :product_types, :product_categories, :interaction_priorities
   resources :corporates, :product_warehouses, :interaction_statuses, :interaction_users

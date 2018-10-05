@@ -1,6 +1,22 @@
-<h1>Listing order_sources</h1>
+<!-- set page title start -->
+<% title "List of Order Sources" %>
+<!-- set page title end -->
 
-<table>
+<div class="row">
+	<div class="col-xs-8">
+		<h3>List of Order Sources</h3>
+	</div>
+	<div class="col-xs-4">
+		<ul class="list-inline">
+		  <li><%= link_to "Order Source", order_sources_path, class:"btn btn-default btn-xs" %></li>
+		  <li><%= link_to "Order Payment Modes", orderpaymentmodes_path, class:"btn btn-info btn-xs" %></li>
+		</ul>
+	</div>
+</div>
+
+<p>Combination of order sources is required with order payment, create a similar entry there as well</p>
+
+<table class="table table-hover table-bordered">
   <thead>
     <tr>
       <th>Name</th>
@@ -22,4 +38,4 @@
 
 <br>
 
-<%= link_to 'New Order source', new_order_source_path %>
+<%= link_to 'New Order source', new_order_source_path, class:"btn btn-primary btn-lg" %>

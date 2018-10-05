@@ -1,5 +1,5 @@
 class ProjectController < ApplicationController
-   include FooTime
+   include FooTime, SalesPpoTask
   #<%= javascript_include_tag 'https://cdn.datatables.net/1.10.10/js/jquery.dataTables.min.js' %>
 
     #before_action { protect_controllers(20) }

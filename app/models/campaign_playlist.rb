@@ -227,9 +227,20 @@ class CampaignPlaylist < ActiveRecord::Base
   end
   # ca = CampaignPlaylist.find_by_campaignid(16103)
   # ca.group_playlist_cost_update
-# after_create :updatecampaign , :group_playlist_cost_update
-
-# after_update :updatecampaign , :group_playlist_cost_update
+  # after_create :updatecampaign , :group_playlist_cost_update
+  # after_update :updatecampaign , :group_playlist_cost_update
+  
+  def self.add_new_pvt_playlist media_name, campaign_id, for_date,	start_hh,	start_mm,	end_hh,	end_mm,	product_variant_id, media_id
+   
+    campaign_playlist = CampaignPlaylist.create(name: media_name, campaignid: campaign_id,
+    start_hr: start_hh, start_min: start_mm, start_sec: 0, cost: 0.0,
+    end_hr: end_hh, end_min: end_mm, end_sec: 0, day:0, 
+    start_frame: 0, end_frame: 0, frames: 0,
+    productvariantid: product_variant_id,
+    for_date: for_date)
+    
+    return campaign_playlist
+  end
 
 private
 
@@ -264,6 +275,7 @@ private
         #self.group_total_cost = total_cost
     end
   end
+
  #   create_table "campaign_playlists", force: :cascade do |t|
  #      t.string   "name"
  #      t.integer  "campaignid",        precision: 38

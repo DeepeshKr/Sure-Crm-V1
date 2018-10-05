@@ -1,7 +1,6 @@
 <table class="table table-hover">
   <thead>
     <tr>
-
       <th>Time Slot</th>
       <th>Start</th>
       <th>End</th>
@@ -16,23 +15,21 @@
   </thead>
   <% total_cost = 0 %> <% slot_percent = 0.0 %>
 <% if @hbn_list.present? %>
-
   <tbody>
-
     <% @hbn_list.each do |media_cost_master| %>
       <tr>
-
         <td><%= media_cost_master.name %></td>
-        <td><%= media_cost_master.str_hr %>:<%= media_cost_master.str_min %></td>
-        <td><%= media_cost_master.end_hr %>:<%= media_cost_master.end_min %></td>
-        <td><%= media_cost_master.duration_secs %></td>
-        <td><%= media_cost_master.starting_sec %></td>
-        <td><%= media_cost_master.ending_sec %></td>
-        <td><%= media_cost_master.cost_per_sec %></td>
-        <td><%= media_cost_master.slot_percent if media_cost_master.slot_percent %>
+        <td class="text-right"><%= media_cost_master.str_hr %>:<%= media_cost_master.str_min %></td>
+        <td class="text-right"><%= media_cost_master.end_hr %>:<%= media_cost_master.end_min %></td>
+        <td class="text-right"><%= media_cost_master.duration_secs %></td>
+        <td class="text-right"><%= media_cost_master.starting_sec %></td>
+        <td class="text-right"><%= media_cost_master.ending_sec %></td>
+        <td class="text-right"><%= media_cost_master.cost_per_sec %></td>
+        <td class="text-right"><%= media_cost_master.slot_percent if media_cost_master.slot_percent %>
              <% slot_percent +=  media_cost_master.slot_percent if media_cost_master.slot_percent %>
           </td>
-        <td><%= media_cost_master.total_cost %> <% total_cost +=  media_cost_master.total_cost if media_cost_master.total_cost %></td>
+        <td class="text-right"><%= media_cost_master.total_cost %> 
+			<% total_cost +=  media_cost_master.total_cost if media_cost_master.total_cost %></td>
         <td><%= link_to 'Edit', edit_media_cost_master_path(media_cost_master) %></td>
         <td><%= link_to 'Destroy', media_cost_master, method: :delete, data: { confirm: 'Are you sure?' } %></td>
       </tr>
@@ -41,13 +38,10 @@
   <tfoot>
     <tr>
       <th colspan="7">Total</th>
-
-
-      <th><%= slot_percent %></th>
-      <th><%= total_cost %></th>
+      <th class="text-right"><%= slot_percent %></th>
+      <th class="text-right"><%= total_cost %></th>
       <th colspan="3"></th>
     </tr>
-
   </tfoot>
    <% end %>
 </table>

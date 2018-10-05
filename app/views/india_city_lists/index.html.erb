@@ -4,10 +4,21 @@
     <div class="col-xs-6"> <%= render 'search' %></div>
 </div>
 <br>
-<div class="alert alert-warning">
-<h4>We DONOT use this list in our application </h4>
-</div>
 
+<div class="row">
+	<div class="col-xs-8">
+		<div class="alert alert-warning">
+			<h4>We use this list in our application because of legacy software</h4>
+		</div>
+	</div>
+	<div class="col-xs-4">
+		<ul class="list-inline">
+		  <li><%= link_to "Pincode (Ext)", india_pincode_lists_check_for_updates_path, class:"btn btn-info btn-xs" %></li>
+		  <li><%= link_to "Pincodes (Int)", india_pincode_lists_path, class:"btn btn-default btn-xs" %></li>
+		  <li><%= link_to "City List", india_city_lists_path, class:"btn btn-primary btn-xs" %></li>
+		</ul>
+	</div>
+</div>
 <hr>
 <br>
 <div class="digg_pagination">

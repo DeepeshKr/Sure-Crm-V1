@@ -1,0 +1,26 @@
+<div class="row">
+  <%= form_tag  url_for(:controller => 'order_payments', :action => "index"), method: "get" do  %>
+        <div class="col-xs-3">
+   	 	 <%= select_tag :orderpaymentmode_id,  options_from_collection_for_select(@order_payment_modes,
+          :id, :name, selected: @order_payment_mode_id ),
+                {:class => "form-control", label: "Select the Payment Mode", :include_blank => true } %>
+        </div>
+      	<div class="col-xs-5">
+        <div class="input-daterange input-group">
+          <%= text_field_tag(:from_date, @from_date, :data => {:provide => "datepicker"}, :id => "datepicker_from", :class => "form-control", :required => "true" )   %>
+          <span class="input-group-addon">to</span>
+
+           <%= text_field_tag(:to_date, @to_date, :data => {:provide => "datepicker"}, :id => "datepicker_to", :class => "form-control", :required => "true" )   %>
+
+        </div>
+      </div>
+
+      <div class="col-xs-3">
+        <%= submit_tag "Show", name: nil, class: "btn btn-primary" %>
+      </div>
+  <% end %>
+</div>
+<script>
+$('#datepicker_to').datepicker({format: 'yyyy-mm-dd'});
+$('#datepicker_from').datepicker({format: 'yyyy-mm-dd'});
+</script>

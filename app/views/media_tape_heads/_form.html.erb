@@ -1,7 +1,11 @@
+<div class="well well-sm">
+	<p class="lead">Only Active Product Variants are Listed Below</p>
+</div>
+
 <%= simple_form_for(@media_tape_head) do |f| %>
   <%= f.error_notification %>
   <div class="form-inputs">
-  <%= f.input :product_variant_id, collection: @productvariants,:label_method => :productdetails,:value_method => :id,:label => "Select Product Variant" , prompt: "Choose a Product Variant" %>
+  <%= f.input :product_variant_id, collection: @productvariants,:label_method => :full_product_details,:value_method => :id,:label => "Select Product Variant" , prompt: "Choose a Product Variant" %>
   </div>
   <div class="row">
   <div class="col-xs-9">

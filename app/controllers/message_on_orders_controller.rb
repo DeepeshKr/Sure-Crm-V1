@@ -176,9 +176,16 @@ class MessageOnOrdersController < ApplicationController
   # DELETE /message_on_orders/1
   # DELETE /message_on_orders/1.json
   def destroy
+    marketing_message_id = @message_on_order.marketing_message_id if @message_on_order.marketing_message_id
     @message_on_order.destroy
     respond_to do |format|
-      format.html { redirect_to message_on_orders_url, notice: 'Message on order was successfully destroyed.' }
+      redirect = message_on_orders_url
+      if marketing_message_id.present?
+        marketing_message = MarketingMessage.find(marketing_message_id)
+        redirect = marketing_message
+      end
+      
+      format.html { redirect_to redirect, notice: 'Message was successfully destroyed.' }
       format.json { head :no_content }
     end
   end

@@ -1,0 +1,32 @@
+ <div class="panel panel-primary">
+  	<div class="panel-heading">
+    	<h3 class="panel-title">Search Order in Cust Details</h3>
+  	</div>
+ 	<div class="panel-body">
+	 	<div class="row">
+			<div class="col-xs-6">
+			    <%= bootstrap_form_tag url: url_for(:controller => 'sales_report_team', :action => 'search_custdetails'), :method => :GET, :enforce_utf8 => false do |f| %>
+			       <div class="col-xs-10">
+			           <%= text_field_tag(:ordernum, @ordernum,
+			           {:class => "form-control", :placeholder => "Search Order Number"})  %>
+			       </div>
+			       <div class="col-xs-2">
+			           <%= submit_tag "Ok", name: nil,  class: "btn btn-primary" %>
+			       </div>
+			     <% end %>
+			</div>
+			<div class="col-xs-6">
+			    <%= bootstrap_form_tag url: url_for(:controller => 'sales_report_team', :action => 'search_custdetails'), :method => :GET, :enforce_utf8 => false do |f| %>
+			       <div class="col-xs-10">
+		               <%= text_field_tag(:manifest, @manifest,
+		               {:class => "form-control", :placeholder => "Search M Number"})  %>
+			       </div>
+			       <div class="col-xs-2">
+			           <%= submit_tag "Ok", name: nil,  class: "btn btn-primary" %>
+			       </div>
+			     <% end %>
+			</div>
+		</div>
+	</div>
+</div>
+

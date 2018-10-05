@@ -126,25 +126,25 @@
 		</div>
 	</div>
 	<div class="col-xs-4">
-			<div class="panel panel-info">
+		<div class="panel panel-info">
 			<div class="panel-heading"><h3 class="panel-title">Agentwise upsale (basic) Report</h3></div>
-			  <div class="panel-body">
-			    All the upsell products sold by an agents on a selected day
-			  </div>
-			  <div class="panel-footer">
-			  	<%= bootstrap_form_tag url: url_for(:controller => 'sales_report_team', :action => 'agent_basic_upsell_order'), :method => :GET, :enforce_utf8 => false do |f| %>
-					 <div class="row">
-					<div class="col-xs-8">
-					 <%= text_field_tag(:from_date, @from_date, :data => {:provide => "datepicker"}, :id => "datepicker6", :class => "form-control", :required => "true" )   %>
+		  <div class="panel-body">
+		    All the upsell products sold by an agents on a selected day
+		  </div>
+		  <div class="panel-footer">
+		  	<%= bootstrap_form_tag url: url_for(:controller => 'sales_report_team', :action => 'agent_basic_upsell_order'), :method => :GET, :enforce_utf8 => false do |f| %>
+				 <div class="row">
+				<div class="col-xs-8">
+				 <%= text_field_tag(:from_date, @from_date, :data => {:provide => "datepicker"}, :id => "datepicker6", :class => "form-control", :required => "true" )   %>
 
-					</div>
+				</div>
 
-					<div class="col-xs-4">
-						<%= submit_tag "Report", name: nil, class: "btn btn-success ", data: { confirm: 'Are you sure?'}  %>
-			  </div>
+				<div class="col-xs-4">
+					<%= submit_tag "Report", name: nil, class: "btn btn-success ", data: { confirm: 'Are you sure?'}  %>
+		  	  </div>
 			</div>
 			<% end %>
-		</div>
+			</div>
 		</div>
 	</div>
 </div>
@@ -209,7 +209,7 @@
 		  	<%= bootstrap_form_tag url: url_for(:controller => 'sales_report_team', :action => 'showproducts'), :method => :GET, :enforce_utf8 => false do |f| %>
 				 <div class="row">
 				<div class="col-xs-8">
-				 <%= text_field_tag(:from_date, @from_date, :data => {:provide => "datepicker"}, :id => "datepicker14", :class => "form-control", :required => "true" )   %>
+				 <%= text_field_tag(:from_date, @from_date, :data => {:provide => "datepicker"}, :id => "datepicker10", :class => "form-control", :required => "true" )   %>
 
 				</div>
 
@@ -224,8 +224,38 @@
  </div>
 </div>
 
+<!-- row 4 nothing here -->
+<div class="row">
+ <div class="col-xs-4">
+	<div class="panel panel-info">
+		<div class="panel-heading"><h3 class="panel-title">Listed upsale Report </h3></div>
+	  <div class="panel-body">
+	    All the upsell products which belong to a upsale list of products (no download possible) <br>
+		<%= link_to 'Edit Upsale products', sales_upsale_products_path, target:"_blank", class:"btn btn-info btn-sm" %>
+	  </div>
+	  <div class="panel-footer">
+	  	<%= bootstrap_form_tag url: url_for(:controller => 'sales_report_team', :action => 'employee_upsales_report'), :method => :GET, :enforce_utf8 => false do |f| %>
+			 <div class="row">
+			<div class="col-xs-8">
+			 <%= text_field_tag(:from_date, @from_date, :data => {:provide => "datepicker"}, :id => "datepicker11", :class => "form-control", :required => "true" )   %>
 
- <script>
+			</div>
+
+			<div class="col-xs-4">
+				<%= submit_tag "Report", name: nil, class: "btn btn-success ", data: { confirm: 'This will generate report for upsale products'}  %>
+	  	  </div>
+		</div>
+		<% end %>
+		</div>
+	</div>
+ </div>
+ <div class="col-xs-8">
+	 <%= render 'custdetails' %>
+ </div>
+
+</div>
+
+<script>
 $('#datepicker1').datepicker({format: 'yyyy-mm-dd'});
 $('#datepicker2').datepicker({format: 'yyyy-mm-dd'});
 $('#datepicker3').datepicker({format: 'yyyy-mm-dd'});

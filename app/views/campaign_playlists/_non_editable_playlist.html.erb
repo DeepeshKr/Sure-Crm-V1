@@ -17,7 +17,7 @@
   </thead>
 
   <tbody>
-
+	  <% total_playlist_cost = 0.0 %>
     <% @campaign_playlists.each do |campaign_playlist| %>
     <tr class="<%= category_table_row_class(campaign_playlist.campaign_play_list_status.name) %>">
       <td><%= campaign_playlist.for_date.strftime("%d-%b-%Y") || "No Date" if campaign_playlist.for_date.present? %></td>
@@ -26,14 +26,20 @@
       <td><%= campaign_playlist.starttime %></td>
       <td><%= campaign_playlist.playlist_group_end_time %></td>
       <td><%= campaign_playlist.playlist_group_minutes %></td>
-
-      <td><%= campaign_playlist.cost_of_group_playlist %></td>
+	  <td class="text-right"><%= campaign_playlist.cost_of_group_playlist.to_i %> <% total_playlist_cost += campaign_playlist.cost_of_group_playlist.to_f if campaign_playlist.cost_of_group_playlist.present? %></td>
 	  <td><%= campaign_playlist.campaign_play_list_status.name if campaign_playlist.campaign_play_list_status%></td>
       <td><%= campaign_playlist.updated_at.strftime("%d-%b-%Y %I:%M %p") %></td>
 	  <td><%= link_to 'View Sales', { :controller => :campaign_playlists, :action => :search, :id => campaign_playlist.id}, class: "btn btn-primary btn-xs" %></td>
 	</tr>
     <% end %>
-
+	<tr>
+		<th colspan="2">	<p class="lead">HBN</p>				</th>
+		<th  class="text-right">	<p class="lead"><%= @hbn_media_total %></p>	</th>
+		<th colspan="2">	<p class="lead">Total</p></th>
+		<th colspan="2" class="text-right"><p class="lead"><%= total_playlist_cost.to_i %></p></th>
+		<th>	<p class="lead">Bal</p>				</th>
+		<th colspan="2"><p class="lead"><%= @hbn_media_total.to_i - total_playlist_cost.to_i %></p></th>
+	</tr>
   </tbody>
 </table>
 <% if @missed_orders.present? %>

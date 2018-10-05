@@ -141,6 +141,9 @@ gem 'ruby-oci8', '~>2.2.1'
 #gem 'activerecord-oracle_enhanced-adapter', github: 'rsim/oracle-enhanced', branch: 'rails42'
 gem "activerecord-oracle_enhanced-adapter", "~> 1.6.0"
 
+#get arel for sql quries
+gem 'arel', '~> 6.0'
+
 gem 'upmin-admin'
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development

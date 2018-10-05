@@ -70,6 +70,6 @@ class OrderUpdatesController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def order_update_params
-      params.require(:order_update).permit(:order_id, :orderno, :order_date, :process_date, :shipped_date, :return_date, :cancel_date, :paid_date)
+      params.require(:order_update).permit(:order_id, :orderno, :order_date, :process_date, :shipped_date, :return_date, :cancel_date, :paid_date, :payment_waiting, :payment_description)
     end
 end

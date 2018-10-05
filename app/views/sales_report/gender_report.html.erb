@@ -1,4 +1,4 @@
-<% title "Channel Sales Summary #{@from_date} to #{@to_date}" %>
+<% title "Gender Sales Break up #{@from_date} to #{@to_date}" %>
 
 <%= form_tag  url_for(:controller => 'sales_report', :action => 'gender_report'), method: "get" do  %>
  <div class="row">
@@ -28,16 +28,16 @@
 <% end %>
 
 <% if @employeeorderlist.present? %>
-<% total_male_customer_nos, total_male_customer_value, total_female_customer_nos, total_female_customer_value, total_male_caller_nos, total_male_caller_value, total_female_caller_nos, total_female_caller_value, total_value, total_piece = 0,0,0,0,0,0,0,0,0,0 %>
+<% hbn_total_male_caller_nos, hbn_total_male_caller_value, hbn_total_female_caller_nos, hbn_total_female_caller_value, pvt_total_male_caller_nos, pvt_total_male_caller_value, pvt_total_female_caller_nos, pvt_total_female_caller_value, total_value, total_piece = 0,0,0,0,0,0,0,0,0,0 %>
 <table class="table table-hover table-bordered">
   <thead>
 	<tr>
         <th rowspan="2">S No</th>
         <th rowspan="2">Date</th>
-		<th colspan="2">Male Customer</th>
-		<th colspan="2">Female Customer</th>
-		<th colspan="2">Male Caller</th>
-		<th colspan="2">Female Caller</th>
+		<th colspan="2">HBN Male Caller</th>
+		<th colspan="2">HBN Female Caller</th>
+		<th colspan="2">PVT Male Caller</th>
+		<th colspan="2">PVT Female Caller</th>
         <th colspan="2">Total</th>
 
 	</tr>
@@ -55,19 +55,20 @@
      </tr>
   </thead>
 <tbody>
+   
    <% @employeeorderlist.each do |c| %>
    <tr>
      <td><%= @sno %></td>
      <td><%= c[:for_date] %></td>
-     <td class="text-right"><%= c[:male_customer_nos] %> <% total_male_customer_nos += c[:male_customer_nos] %></td>
-     <td class="text-right"><%= c[:male_customer_value] %> <% total_male_customer_value += c[:male_customer_value] %> </td>
-     <td class="text-right"><%= c[:female_customer_nos] %> <% total_female_customer_nos += c[:female_customer_nos] %></td>
-     <td class="text-right"><%= c[:female_customer_value] %> <% total_female_customer_value += c[:female_customer_value] %> </td>
+     <td class="text-right"><%= c[:hbn_male_caller_nos] %> <% hbn_total_male_caller_nos += c[:hbn_male_caller_nos] %></td>
+     <td class="text-right"><%= c[:hbn_male_caller_value] %> <% hbn_total_male_caller_value += c[:hbn_male_caller_value] %> </td>
+     <td class="text-right"><%= c[:hbn_female_caller_nos] %> <% hbn_total_female_caller_nos += c[:hbn_female_caller_nos] %></td>
+     <td class="text-right"><%= c[:hbn_female_caller_value] %> <% hbn_total_female_caller_value += c[:hbn_female_caller_value] %> </td>
      
-     <td class="text-right"><%= c[:male_caller_nos] %> <% total_male_caller_nos += c[:male_caller_nos] %></td>
-     <td class="text-right"><%= c[:male_caller_value] %> <% total_male_caller_value += c[:male_caller_value] %> </td>
-     <td class="text-right"><%= c[:female_caller_nos] %> <% total_female_caller_nos += c[:female_caller_nos] %></td>
-     <td class="text-right"><%= c[:female_caller_value] %> <% total_female_caller_value += c[:female_caller_value] %> </td>
+     <td class="text-right"><%= c[:pvt_male_caller_nos] %> <% pvt_total_male_caller_nos += c[:pvt_male_caller_nos] %></td>
+     <td class="text-right"><%= c[:pvt_male_caller_value] %> <% pvt_total_male_caller_value += c[:pvt_male_caller_value] %> </td>
+     <td class="text-right"><%= c[:pvt_female_caller_nos] %> <% pvt_total_female_caller_nos += c[:pvt_female_caller_nos] %></td>
+     <td class="text-right"><%= c[:pvt_female_caller_value] %> <% pvt_total_female_caller_value += c[:pvt_female_caller_value] %> </td>
 	 
      <td class="text-right"><%= c[:total_nos] %> <% total_piece += c[:total_nos] %></td>
      <td class="text-right"><%= c[:total_value] %> <% total_value += c[:total_value] %> </td>
@@ -79,14 +80,14 @@
 <tfoot>
   <tr>
    <th colspan="2">Total</th>
-   <th class="text-right"><%= total_male_customer_nos %></th>
-   <th class="text-right"><%= total_male_customer_value %></th>
-   <th class="text-right"><%= total_female_customer_nos %></th>
-   <th class="text-right"><%= total_female_customer_value %></th>
-   <th class="text-right"><%= total_male_caller_nos %></th>
-   <th class="text-right"><%= total_male_caller_value %></th>
-   <th class="text-right"><%= total_female_caller_nos %></th>
-   <th class="text-right"><%= total_female_caller_value %></th>
+   <th class="text-right"><%= hbn_total_male_caller_nos %></th>
+   <th class="text-right"><%= hbn_total_male_caller_value %></th>
+   <th class="text-right"><%= hbn_total_female_caller_nos %></th>
+   <th class="text-right"><%= hbn_total_female_caller_value %></th>
+   <th class="text-right"><%= pvt_total_male_caller_nos %></th>
+   <th class="text-right"><%= pvt_total_male_caller_value %></th>
+   <th class="text-right"><%= pvt_total_female_caller_nos %></th>
+   <th class="text-right"><%= pvt_total_female_caller_value %></th>
    <th class="text-right"><%= total_piece %></th>
    <th class="text-right"><%= total_value %></th>
    </tr>

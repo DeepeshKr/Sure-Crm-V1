@@ -5,6 +5,7 @@
     <th>Ref No</th>
     <th>Order date</th>
     <th>Customer</th>
+	<th>DOB</th>
     <th>Phone</th>
     <th>Email Id</th>
     <th>City</th>
@@ -18,33 +19,23 @@
   <% @sno = 1 %> <% totalnos = 0 %> <% totalvalue = 0 %>
     <% @order_masters.each do |ord| %>
     <tr>
-    <td><%= ord.external_order_no %> (<small>Ref No: <%= ord.id %></small>) </td>
-    <td> <%= (ord.orderdate + 330.minutes).strftime('%d-%b-%Y') %> </td>
-    <td>
-      <%= ord.customer.first_name if ord.customer %>
-      <%= ord.customer.last_name if ord.customer %> </td>
-    <td>  <%= ord.mobile %>
-      <%= ord.customer_address.telephone1  if ord.customer_address %> </td>
-      <td>  <%= ord.customer.emailid if ord.customer %>
-         </td>
-    <td>
-      <%= ord.customer_address.city  if ord.customer_address %>
-      <%= ord.customer_address.pincode  if ord.customer_address %>
-    </td>
-    <td>
-      <%= ord.customer_address.state  if ord.customer_address %>
-    </td>
-    <td>
-		
-		<% ord.order_line.each do |orl| %>
-		<%= orl.product_variant.name  if orl.product_variant %>
-		<% end %>
-		
-	</td>
-     <td> <%= ord.subtotal %></td>
+	    <td><%= ord.external_order_no %> (<small>Ref No: <%= ord.id %></small>) </td>
+	    <td> <%= (ord.orderdate + 330.minutes).strftime('%d-%b-%Y') %> </td>
+	    <td> <%= ord.customer.first_name if ord.customer %> <%= ord.customer.last_name if ord.customer %> </td>
+		<td> <%= ord.customer.date_of_birth.strftime('%d-%b-%Y') if ord.customer.date_of_birth.present? %>  </td>
+	    <td> <%= ord.mobile %> <%= ord.customer_address.telephone1  if ord.customer_address %> </td>
+	    <td> <%= ord.customer.emailid if ord.customer %> </td>
+	    <td> <%= ord.customer_address.city  if ord.customer_address %> <%= ord.customer_address.pincode  if ord.customer_address %> </td>
+	    <td> <%= ord.customer_address.state  if ord.customer_address %>
+	    </td>
+	    <td>
+			<% ord.order_line.each do |orl| %>
+			<%= orl.product_variant.name  if orl.product_variant %>
+			<% end %>
+		</td>
+	    <td> <%= ord.subtotal %></td>
 
-
-      </tr>
+     </tr>
        <% @sno += 1 %>
 
     <% end %>

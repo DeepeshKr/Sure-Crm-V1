@@ -1,0 +1,3 @@
+<% headers = ['Employee', 'Nos Ref 1','Value Ref 1', 'Nos (Ref 2)','Value (Ref 2)', 'Nos (Ref 3)','Value (Ref 3)','Nos (Ref 4)','Value (Ref 4)', 'Nos (Total)','Value (Total)',] %><%= CSV.generate_line headers %><% @employeeorderlist.each do |c| %><%= CSV.generate_line([c.employee_name, c.step_1_nos, c.step_1_value,  c.step_2_nos, c.step_2_value, c.step_3_nos, c.step_3_value, c.step_4_nos, c.step_4_value, , c.step_total_nos, c.step_total_value]).html_safe.strip  %>
+	<% end %>
+

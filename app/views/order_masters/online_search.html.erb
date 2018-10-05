@@ -4,6 +4,11 @@
 <div class="row">
     <div class="col-xs-5">
    <p class="lead">Orders in hbn.telebrandsindia.com</p>
+		<ul class="list-inline">
+		  <li><%= link_to "Pay u Pending Orders", order_masters_online_pending_search_path, target:"_blank", class:"btn btn-info btn-xs" %></li>
+		  <li> <%= link_to "Daily Orders", order_masters_online_one_day_search_path, target:"_blank", class:"btn btn-info btn-xs" %></li>
+		  <li><%= link_to "Orders between dates", order_masters_online_pending_search_path, target:"_blank", class:"btn btn-info btn-xs" %></li>
+		</ul>
     </div>
   <%= form_tag  url_for(:controller => "order_masters", :action => "online_search"), method: "get" do  %>
     <div class="col-xs-2">
@@ -46,6 +51,7 @@
 <table class="table table-hover table-bordered table-stripped">
   <thead>
     <tr>
+	  <th>S No</th>
 	  <th>Ref Id</th>
 	  <th>Order Date <br> Tid</th>
       <th>Channel | City</th>
@@ -54,10 +60,11 @@
 	  <th>Amount<br>Comm</th>
     </tr>
   </thead>
-   
+   <% sno = 1%>
   <tbody>
     <% @order_masters.each do |tran| %>
       <tr>
+		  <td><%= sno %> <% sno += 1 %></td>
 		<td><%= tran.id %>:<br>
 	<%= link_to "View Details", order_masters_review_path(order_id: tran.id), target:"_blank", class:"btn btn-info btn-xs" %> </td>
 			<% if tran.hbn_trans_detail.present? %>

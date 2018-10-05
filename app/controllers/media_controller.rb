@@ -69,12 +69,13 @@ class MediaController < ApplicationController
     if params[:showall].present?
       if params[:showall] = "true"
         @showall = "true"
+        on_date = Date.current.strftime("%Y-%m-%d")
          @media = Medium.all.order("name, updated_at DESC") #.paginate(:page => params[:page])
          # @inactivemedia = Medium.where(active:0).order("name, updated_at DESC") #.paginate(:page => params[:page])
         respond_to do |format|
           format.html
           format.csv do
-            headers['Content-Disposition'] = "attachment; filename=\"media-list\""
+            headers['Content-Disposition'] = "attachment; filename=\"#{on_date}-media-list.csv\""
             headers['Content-Type'] ||= 'text/csv'
           end
         end
@@ -84,19 +85,18 @@ class MediaController < ApplicationController
   end
 
   def all_hbn
-    @media = Medium.where(media_group_id: 10000, active: true, media_commision_id: 10000)
-    @inactivemedia = Medium.where(media_group_id: 10000, active: false, media_commision_id: 10000)
+    fixed_pre_paid = [10000, 10045]
+    @media = Medium.where(media_group_id: 10000, active: true, media_commision_id: fixed_pre_paid)
+    @inactivemedia = Medium.where(media_group_id: 10000, active: false, media_commision_id: fixed_pre_paid)
   end
 
   def show
-
     respond_with(@medium)
   end
   
   def switch_cdm
     #change the cdms to new ones
     no_of = 0
-    
     @current_employee_id = params[:current_employee_id]
     @new_employee_id = params[:new_employee_id]
     if @new_employee_id.to_i == @current_employee_id.to_i

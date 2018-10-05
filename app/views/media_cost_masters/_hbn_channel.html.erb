@@ -1,53 +1,57 @@
+<h4>Total Fixed Per day HBN Media Cost (Active, Fixed Pre Paid, Daily Charges):
+    <strong><%= @hbn_media_costs %></strong>
+</h4>
+
+<hr>
 <%= bootstrap_form_for(@media_cost_master) do |f| %>
+<%= hidden_field_tag :hbn_total_cost, @hbn_media_costs %>
 
-<%= hidden_field_tag :hbn_total_cost, @totalmediacost %>
-  <h4>Total Fixed Per day HBN Media Cost: <%= @totalmediacost %> Total Split <%= @totalmediasplit %> <strong>Balance <%= @totalmediabalance %> </strong></h4>
-  <hr>
-   <div class="field">
-     <%= f.select(:media_id, 
-    options_from_collection_for_select(@hbnmedialist, :id, :mediainfo, selected: @media_cost_master.media_id), 
+<div class="field">
+    <%= f.select(:media_id,
+    options_from_collection_for_select(@hbnmedialist, :id, :mediainfo, selected: @media_cost_master.media_id),
     {:label => "All HBN Channels"}, :class => "form-control")  %>
-    <small> All HBN channels are automatically selected </small>
-   </div>
+    <small>
+        All HBN channels are automatically selected
+    </small>
+</div>
 
+<div class="row">
+    <div class="col-xs-1">
+        <%= f.select :str_hr, options_for_select((0..23).map{|s| ["#{s}", s]}, selected: @media_cost_master.str_hr), label: "Start Hr" %>
+    </div>
+    <div class="col-xs-1">
+        <%= f.select :str_min, options_for_select((0..59).step(15).map{|s| ["#{s}", s]}, selected: @media_cost_master.str_min), label: "Start Min" %>
+    </div>
+    <!-- <div class="col-xs-1">
+   	 	<%= f.select :str_sec, 0..59, label: "Start Sec" %>
+ 	</div> -->
+    <div class="col-xs-1 col-xs-offset-1">
+        <%= f.select :end_hr, options_for_select((0..23).map{|s| ["#{s}", s]}, selected: @media_cost_master.end_hr), label: "End Hr" %>
+    </div>
+    <div class="col-xs-1">
+        <%= f.select :end_min, options_for_select((0..59).step(15).map{|s| ["#{s}", s]}, selected: @media_cost_master.end_min), label: "End Min" %>
+    </div>
+    <!-- <div class="col-xs-1">
+   	 	<%= f.select :end_sec, 0..59, label: "End Sec" %>
+ 	</div> -->
+    <div class="col-xs-2 col-xs-offset-1">
+        <%= f.text_field :slot_percent, placeholder: "0.15", id: "hbn_percent", label: "Percent Cost of slot", :required => 'true'  %>
+    </div>
+    
+	
+</div>
 
-  
-   <div class="row">
- <div class="col-xs-1">
- <%= f.select :str_hr, options_for_select((0..23).map{|s| ["#{s}", s]}, selected: @media_cost_master.str_hr), label: "Start Hr" %>
- </div>
-  <div class="col-xs-1">
-   <%= f.select :str_min, options_for_select((0..59).step(15).map{|s| ["#{s}", s]}, selected: @media_cost_master.str_min), label: "Start Min" %>
- </div>
-  <!-- <div class="col-xs-1">
-   <%= f.select :str_sec, 0..59, label: "Start Sec" %>
- </div> -->
- 
- <div class="col-xs-1 col-xs-offset-1">
- <%= f.select :end_hr, options_for_select((0..23).map{|s| ["#{s}", s]}, selected: @media_cost_master.end_hr), label: "End Hr" %>
- </div>
-  <div class="col-xs-1">
-  <%= f.select :end_min, options_for_select((0..59).step(15).map{|s| ["#{s}", s]}, selected: @media_cost_master.end_min), label: "End Min" %>
- </div>
-  <!-- <div class="col-xs-1">
-   <%= f.select :end_sec, 0..59, label: "End Sec" %>
- </div> -->
-<div class="col-xs-2 col-xs-offset-1">
-       <%= f.text_field :slot_percent, placeholder: "0.15", label: "Percent Cost of slot", :required => 'true'  %>
-  </div>
-
- </div>
-
-
- 
-  <div class="field">
-  
+<div class="field">
     <%= f.text_area :description %>
-  </div>
-  <div class="row">
-  <div class="col-xs-3 col-md-offset-7">
-    <%= f.submit class:"btn btn-primary" %>
-  </div>
-  </div>
+</div>
+
+<div class="row">
+    <div class="col-xs-3 col-md-offset-7">
+        <%= f.submit class:"btn btn-primary" %>
+    </div>
+</div>
 
 <% end %>
+<br>
+</br>
+<%= render 'auto_calculate' %>

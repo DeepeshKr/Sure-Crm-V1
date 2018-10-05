@@ -1,0 +1,15 @@
+<%= simple_form_for(@sales_report_pay_u_step) do |f| %>
+  <%= f.error_notification %>
+
+  <div class="form-inputs">
+    <%= f.input :name, required: true %>
+    <%= f.input :description, required: true,:readonly => true %>
+    <%= f.input :min_value, required: true  %>
+    <%= f.input :max_value, required: true  %>
+    <%= f.input :active %>
+  </div>
+
+  <div class="form-actions">
+    <%= f.button :submit %>
+  </div>
+<% end %>

@@ -12,20 +12,42 @@
   <% end %>
 
   <div class="field">
-    <%= f.label :name %><br>
+    
     <%= f.text_field :name %>
   </div>
-  <div class="field">
-    <%= f.label :description %><br>
-    <%= f.text_area :description %>
+ 
+   <div class="field">
+    
+    <%= f.text_field :charges, :required => true, label: "Customer Charges (between -1.00 and 1.00 where 1.00 is 100%)", help: "When customer buys using this option he gets charged extra 5% then 0.05 or discount by say 5% enter -0.05 " %>
   </div>
    <div class="field">
-    <%= f.label :charges %><br>
-    <%= f.text_field :charges, :required => true %>
+    
+    <%= f.text_field :payment_cost, :required => true, label: "Cost incured by Telebrands", help: "When customer buys using this option we incur the following costs: 5% then 0.05 or discount by say 5% enter -0.05 "  %>
+  </div>
+   <div class="field">
+    
+    <%= f.text_field :hold_hours, :required => true, label: "The Order is held for the following hours before processed", help: "When customer buys using this option then the maxmimum we can hold the order is upto these many hours"  %>
+  </div>
+  <div class="well well-sm">
+	<div class="row">
+		
+		
+  		<div class="col-xs-2">
+  			<%= f.check_box :is_valid, :label => "Yes" %>
+  		</div>
+		<div class="col-xs-6">
+			<%= f.label :is_valid, "This is a currently valid payment option" %>
+		</div>
+	</div>
+</div>
+  <div class="field">  
+    <%= f.text_area :description %>
   </div>
   <div class="row">
       <div class="col-xs-2 col-md-offset-5">
         <%= f.submit  class: "btn btn-primary" %>       
       </div>
   </div>
+  
+  <p class="lead">Remember: Combination of order sources is required with order payment, create a similar entry there as well, if not present there!</p>
 <% end %>

@@ -20,6 +20,7 @@ class ProductMaster < ActiveRecord::Base
   has_many :sales_ppo, foreign_key: "product_master_id"
   
   belongs_to :product_training_manual, foreign_key: "productid"
+  has_many :tax_rate, foreign_key: "productmasterid" 
   validates_presence_of :name
   #validates :barcode, uniqueness: { case_sensitive: false }
   validates :extproductcode, uniqueness: { case_sensitive: false }

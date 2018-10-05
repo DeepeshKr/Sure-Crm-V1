@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161114085056) do
+ActiveRecord::Schema.define(version: 20161221062407) do
 
   create_table "address_types", force: :cascade do |t|
     t.string   "name"
@@ -168,20 +168,23 @@ ActiveRecord::Schema.define(version: 20161114085056) do
   end
 
   create_table "cable_operator_comms", force: :cascade do |t|
-    t.integer  "order_no",      precision: 38
+    t.integer  "order_no",        precision: 38
     t.datetime "order_date"
     t.string   "channel"
     t.string   "product"
-    t.integer  "amount",        precision: 38
+    t.integer  "amount",          precision: 38
     t.string   "customer_name"
     t.string   "city"
-    t.integer  "comm",          precision: 38
+    t.integer  "comm",            precision: 38
     t.text     "description"
-    t.datetime "created_at",                   null: false
-    t.datetime "updated_at",                   null: false
-    t.integer  "order_id",      precision: 38
-    t.integer  "media_id",      precision: 38
+    t.datetime "created_at",                     null: false
+    t.datetime "updated_at",                     null: false
+    t.integer  "order_id",        precision: 38
+    t.integer  "media_id",        precision: 38
+    t.integer  "transdetails_id", precision: 38
   end
+
+  add_index "cable_operator_comms", ["transdetails_id"], name: "i_cab_ope_com_tra_id"
 
   create_table "campaign_missed_lists", force: :cascade do |t|
     t.integer  "product_list_id",      precision: 38
@@ -549,9 +552,16 @@ ActiveRecord::Schema.define(version: 20161114085056) do
     t.string   "city"
     t.string   "state"
     t.datetime "date_of_birth"
+    t.decimal  "bajaj_finance_ecs", precision: 10, scale: 4
   end
 
+  add_index "customers", ["alt_emailid"], name: "index_customers_on_alt_emailid"
+  add_index "customers", ["alt_mobile"], name: "index_customers_on_alt_mobile"
+  add_index "customers", ["city"], name: "index_customers_on_city"
   add_index "customers", ["date_of_birth"], name: "i_customers_date_of_birth"
+  add_index "customers", ["emailid"], name: "index_customers_on_emailid"
+  add_index "customers", ["mobile"], name: "index_customers_on_mobile"
+  add_index "customers", ["state"], name: "index_customers_on_state"
 
   create_table "daily_task_logs", force: :cascade do |t|
     t.integer  "daily_task_id", precision: 38
@@ -1022,6 +1032,22 @@ ActiveRecord::Schema.define(version: 20161114085056) do
   add_index "logins", ["email"], name: "index_logins_on_email", unique: true
   add_index "logins", ["reset_password_token"], name: "i_logins_reset_password_token", unique: true
 
+  create_table "marketing_messages", force: :cascade do |t|
+    t.string   "name"
+    t.text     "description"
+    t.integer  "total_nos",                       precision: 38
+    t.boolean  "activate",            limit: nil
+    t.datetime "start_date"
+    t.datetime "end_date"
+    t.integer  "order_paymentmodeid",             precision: 38
+    t.datetime "created_at",                                     null: false
+    t.datetime "updated_at",                                     null: false
+  end
+
+  add_index "marketing_messages", ["end_date"], name: "i_marketing_messages_end_date"
+  add_index "marketing_messages", ["order_paymentmodeid"], name: "i_mar_mes_ord_pay"
+  add_index "marketing_messages", ["start_date"], name: "i_mar_mes_sta_dat"
+
   create_table "media", force: :cascade do |t|
     t.string   "name"
     t.string   "telephone"
@@ -1122,20 +1148,22 @@ ActiveRecord::Schema.define(version: 20161114085056) do
   end
 
   create_table "message_on_orders", force: :cascade do |t|
-    t.integer  "customer_id",                   precision: 38
-    t.integer  "message_type_id",               precision: 38
-    t.integer  "message_status_id",             precision: 38
-    t.string   "message",           limit: 500
+    t.integer  "customer_id",                      precision: 38
+    t.integer  "message_type_id",                  precision: 38
+    t.integer  "message_status_id",                precision: 38
+    t.string   "message",              limit: 500
     t.string   "response"
     t.string   "mobile_no"
     t.string   "alt_mobile_no"
-    t.datetime "created_at",                                   null: false
-    t.datetime "updated_at",                                   null: false
-    t.integer  "order_id",                      precision: 38
+    t.datetime "created_at",                                      null: false
+    t.datetime "updated_at",                                      null: false
+    t.integer  "order_id",                         precision: 38
     t.text     "long_url"
+    t.integer  "marketing_message_id",             precision: 38
   end
 
   add_index "message_on_orders", ["customer_id"], name: "i_mes_on_ord_cus_id"
+  add_index "message_on_orders", ["marketing_message_id"], name: "i_mes_on_ord_mar_mes_id"
   add_index "message_on_orders", ["message_status_id"], name: "i_mes_on_ord_mes_sta_id"
   add_index "message_on_orders", ["message_type_id"], name: "i_mes_on_ord_mes_typ_id"
   add_index "message_on_orders", ["mobile_no"], name: "i_message_on_orders_mobile_no"
@@ -1309,9 +1337,21 @@ ActiveRecord::Schema.define(version: 20161114085056) do
     t.datetime "paid_date"
     t.string   "name"
     t.text     "description"
-    t.datetime "created_at",                         null: false
-    t.datetime "updated_at",                         null: false
+    t.datetime "created_at",                                   null: false
+    t.datetime "updated_at",                                   null: false
+    t.integer  "employee_id",         precision: 38
+    t.decimal  "paid_amount",         precision: 10, scale: 4
+    t.integer  "order_no",            precision: 38
+    t.string   "card_no"
+    t.integer  "ecs_limit",           precision: 38
   end
+
+  add_index "order_payments", ["ecs_limit"], name: "i_order_payments_ecs_limit"
+  add_index "order_payments", ["employee_id"], name: "i_order_payments_employee_id"
+  add_index "order_payments", ["order_master_id"], name: "i_ord_pay_ord_mas_id"
+  add_index "order_payments", ["order_no"], name: "i_order_payments_order_no"
+  add_index "order_payments", ["orderpaymentmode_id"], name: "i_ord_pay_ord_id"
+  add_index "order_payments", ["paid_date"], name: "i_order_payments_paid_date"
 
   create_table "order_sources", force: :cascade do |t|
     t.string   "name"
@@ -1327,9 +1367,9 @@ ActiveRecord::Schema.define(version: 20161114085056) do
   end
 
   create_table "order_updates", force: :cascade do |t|
-    t.integer  "order_id",                  precision: 38
-    t.integer  "order_line_id",             precision: 38
-    t.decimal  "order_value",               precision: 10, scale: 2
+    t.integer  "order_id",                        precision: 38
+    t.integer  "order_line_id",                   precision: 38
+    t.decimal  "order_value",                     precision: 10, scale: 2
     t.string   "orderno"
     t.datetime "order_date"
     t.datetime "entry_date"
@@ -1338,11 +1378,18 @@ ActiveRecord::Schema.define(version: 20161114085056) do
     t.datetime "cancel_date"
     t.datetime "refund_date"
     t.datetime "paid_date"
-    t.decimal  "paid_value",                precision: 10, scale: 2
-    t.datetime "created_at",                                         null: false
-    t.datetime "updated_at",                                         null: false
-    t.boolean  "updated",       limit: nil
+    t.decimal  "paid_value",                      precision: 10, scale: 2
+    t.datetime "created_at",                                               null: false
+    t.datetime "updated_at",                                               null: false
+    t.boolean  "updated",             limit: nil
+    t.datetime "payment_waiting"
+    t.string   "payment_description"
   end
+
+  add_index "order_updates", ["order_date"], name: "i_order_updates_order_date"
+  add_index "order_updates", ["order_id"], name: "i_order_updates_order_id"
+  add_index "order_updates", ["orderno"], name: "index_order_updates_on_orderno"
+  add_index "order_updates", ["payment_waiting"], name: "i_ord_upd_pay_wai"
 
   create_table "orderpaymentmodes", force: :cascade do |t|
     t.string   "name"
@@ -1350,6 +1397,9 @@ ActiveRecord::Schema.define(version: 20161114085056) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.decimal  "charges"
+    t.decimal  "payment_cost",             precision: 6,  scale: 4
+    t.boolean  "is_valid",     limit: nil
+    t.integer  "hold_hours",               precision: 38
   end
 
   create_table "page_names", force: :cascade do |t|
@@ -1502,7 +1552,14 @@ ActiveRecord::Schema.define(version: 20161114085056) do
     t.integer  "cost",                    precision: 38
     t.integer  "revenue",                 precision: 38
     t.integer  "packaging_cost",          precision: 38
+    t.integer  "product_variant_id",      precision: 38
   end
+
+  add_index "product_cost_masters", ["barcode"], name: "i_product_cost_masters_barcode"
+  add_index "product_cost_masters", ["prod"], name: "i_product_cost_masters_prod"
+  add_index "product_cost_masters", ["product_id"], name: "i_pro_cos_mas_pro_id"
+  add_index "product_cost_masters", ["product_list_id"], name: "i_pro_cos_mas_pro_lis_id"
+  add_index "product_cost_masters", ["product_variant_id"], name: "i_pro_cos_mas_pro_var_id"
 
   create_table "product_inventory_codes", force: :cascade do |t|
     t.string   "name"
@@ -1595,6 +1652,7 @@ ActiveRecord::Schema.define(version: 20161114085056) do
     t.integer  "sel_m_cod",              precision: 38
     t.integer  "sel_m_cc",               precision: 38
     t.integer  "sel_cc",                 precision: 38
+    t.integer  "tax_id",                 precision: 38
   end
 
   add_index "product_masters", ["extproductcode"], name: "i_pro_mas_ext"
@@ -1935,6 +1993,7 @@ ActiveRecord::Schema.define(version: 20161114085056) do
     t.integer  "transfer_order_revenue",      precision: 38
     t.integer  "transfer_order_dealer_price", precision: 38
     t.decimal  "commission_on_order",         precision: 14, scale: 4
+    t.integer  "payment_cost",                precision: 38
   end
 
   add_index "sales_ppos", ["campaign_id"], name: "i_sales_ppos_campaign_id"
@@ -1952,6 +2011,24 @@ ActiveRecord::Schema.define(version: 20161114085056) do
   add_index "sales_ppos", ["product_master_id"], name: "i_sales_ppos_product_master_id"
   add_index "sales_ppos", ["product_variant_id"], name: "i_sal_ppo_pro_var_id"
   add_index "sales_ppos", ["state"], name: "index_sales_ppos_on_state"
+
+  create_table "sales_report_pay_u_steps", force: :cascade do |t|
+    t.string   "name"
+    t.text     "description"
+    t.integer  "min_value",               precision: 38
+    t.integer  "max_value",               precision: 38
+    t.boolean  "active",      limit: nil
+    t.datetime "created_at",                             null: false
+    t.datetime "updated_at",                             null: false
+  end
+
+  create_table "sales_upsale_products", force: :cascade do |t|
+    t.integer  "product_list_id", precision: 38
+    t.datetime "created_at",                     null: false
+    t.datetime "updated_at",                     null: false
+  end
+
+  add_index "sales_upsale_products", ["product_list_id"], name: "i_sal_ups_pro_pro_lis_id", unique: true
 
   create_table "salutes", force: :cascade do |t|
     t.string   "name"
@@ -1985,11 +2062,12 @@ ActiveRecord::Schema.define(version: 20161114085056) do
 
   create_table "tax_rates", force: :cascade do |t|
     t.string   "name"
-    t.decimal  "tax_rate",     precision: 6,  scale: 5
-    t.decimal  "reverse_rate", precision: 10, scale: 9
+    t.decimal  "tax_rate",                 precision: 6,  scale: 5
+    t.decimal  "reverse_rate",             precision: 10, scale: 9
     t.text     "description"
-    t.datetime "created_at",                            null: false
-    t.datetime "updated_at",                            null: false
+    t.datetime "created_at",                                        null: false
+    t.datetime "updated_at",                                        null: false
+    t.boolean  "is_external",  limit: nil
   end
 
   create_table "temp_test_emp", primary_key: "temp_test_emp_id", force: :cascade do |t|

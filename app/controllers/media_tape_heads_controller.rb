@@ -172,12 +172,14 @@ class MediaTapeHeadsController < ApplicationController
     end
 
     def dropdowns
-      @productvariants = ProductVariant.all.order("name")
+      @productvariants = ProductVariant.where(:activeid => 10000).order("name")
     end
+    
     # Never trust parameters from the scary internet, only allow the white list through.
     def media_tape_head_params
       params.require(:media_tape_head).permit(:name, :description, :product_variant_id)
     end
+    
     def last_ext_tape_id
 
       if MediaTape.exists?

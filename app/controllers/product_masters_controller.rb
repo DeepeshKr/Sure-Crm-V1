@@ -188,6 +188,6 @@ respond_to :html, :xml, :json
       :productactivecodeid, 
       :product_sell_type_id, :weight_kg, 
       :sel_cod, :sel_s_tax, :sel_m_cod,
-      :sel_m_cc, :sel_cc)
+      :sel_m_cc, :sel_cc, :tax_id)
     end
 end

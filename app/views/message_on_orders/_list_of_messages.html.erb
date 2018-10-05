@@ -1,0 +1,60 @@
+<hr>
+<div class="row">
+	<div class="col-xs-4">
+		<h3>List of Messages</h3>
+	</div>
+	<div class="col-xs-8">
+		<br>
+		<div class="digg_pagination">
+			<% if @message_on_orders.present? %>
+		    	<%= will_paginate @message_on_orders, :container => false %>
+			<% end %>
+		</div>
+		<br>
+	</div>
+</div>
+
+<% if @message_on_orders.present? %>
+<table class="table table-hover table-bordered">
+  <thead>
+    <tr>
+      <th>Created</th>
+      <th>Customer</th>
+      <th>Type</th>
+      <th>Status</th>
+      <th>Message <br> Response</th>
+      <th>Mobile <br>Alt mobile</th>
+      <th>Updated</th>
+      <th>  </th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @message_on_orders.each do |message_on_order| %>
+      <tr>
+      <td><%= (message_on_order.created_at + 330.minutes).strftime("%d-%b-%y %H:%M") %></td>
+        <td><%= message_on_order.customer.fullname if message_on_order.customer %></td>
+        <td><%= message_on_order.message_type.name if message_on_order.message_type %></td>
+        <td><%= message_on_order.message_status.name if message_on_order.message_status %></td>
+        <td><%= message_on_order.message %><br>
+        <small><%= message_on_order.response %></small></td>
+        <td><%= message_on_order.mobile_no %><br> <%= message_on_order.alt_mobile_no %></td>
+        <td><%= (message_on_order.updated_at + 330.minutes).strftime("%d-%b-%y %H:%M") %></td>
+        <td>
+          <%= link_to 'Destroy', message_on_order, method: :delete, data: { confirm: 'Are you sure?' }, class:"btn btn-danger btn-xs" %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+<hr>
+<% else %>
+<h3>Nothing here</h3>
+<% end %>
+<br>
+	<div class="digg_pagination">
+		<% if @message_on_orders.present? %>
+	    	<%= will_paginate @message_on_orders, :container => false %>
+		<% end %>
+  </div>
+  <br>

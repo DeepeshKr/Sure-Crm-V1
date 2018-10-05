@@ -1,11 +1,11 @@
 class ProductStockBooksController < ApplicationController
   require 'will_paginate/array'
-   include StockBook
-   before_action { protect_controllers_specific(4) }
-   before_action :set_product_stock_book, only: [:show, :edit, :update, :destroy]
-   before_action :get_variables, only: [:index, :show, :edit, :update, :destroy]
-   before_action :dropdowns, only: [:index, :edit, :update]
-   before_action :all_totals
+  include StockBook
+  before_action { protect_controllers_specific(4) }
+  before_action :set_product_stock_book, only: [:show, :edit, :update, :destroy]
+  before_action :get_variables, only: [:index, :show, :edit, :update, :destroy]
+  before_action :dropdowns, only: [:index, :edit, :update]
+  before_action :all_totals
   # get 'stockbook' => 'product_stock_books#summary'
   # get 'product_stock_books/summary'
   # get 'stockbook_details' => 'product_stock_books#stockbook_details'

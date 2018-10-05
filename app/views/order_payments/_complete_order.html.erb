@@ -1,0 +1,44 @@
+<%= simple_form_for(@order_payment) do |f| %>
+  <%= f.error_notification %>
+  	<%= f.hidden_field :id %>
+    <%= f.hidden_field :order_master_id %>
+    <%= f.hidden_field :employee_id, value: @employee.id %>
+<div class="form-inputs">
+    <div class="row">
+        <div class="col-xs-3">
+          <%= f.input :orderpaymentmode_id, :collection => @orderpaymentmodes, :label_method => :name,
+          :value_method => :id,:label => "Order Completed using:", 
+		  selected: @order_payment.orderpaymentmode_id,
+		  :include_blank => false %>
+        </div>
+        <div class="col-xs-3">
+          <%= f.input :name, :required => true, :label => "Update Ref no or Say COD" %>
+        </div>
+        <div class="col-xs-2">
+          <%= f.input :paid_date,:as => :date_picker, :required => true,
+          :placeholder => "Paid Date", :label => "Paid Date" %>
+        </div>
+        <div class="col-xs-2">
+          <%= f.input :paid_amount, :required => true,
+          :placeholder => "Paid Amount", :label => "Paid Amount" %>
+        </div>
+        <div class="col-xs-1">
+			<br>
+		  <%= f.button :submit, "Save", class: "btn btn-primary" %>     
+        </div>
+  	</div>
+</div>
+<% end %>
+
+<script>
+//:data => {:provide => "datepicker"} , :id => 'datepicker1'
+$(function() {
+  $("input.datepicker").each(function(input) {
+  $(this).datepicker({
+    dateFormat: "mm-dd-yyyy",
+    altField: $(this).next()
+  })
+})
+});
+
+</script>

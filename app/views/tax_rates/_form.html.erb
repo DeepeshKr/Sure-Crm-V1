@@ -8,6 +8,9 @@
     <%= f.input :tax_rate, label: "Tax Rate", placeholder: "0.125", :required => true %>
     <%= f.input :reverse_rate, label: "Tax Rate Reversal Rate", placeholder: "0.888889 for 0.125 Reversal", :required => true %>
     <%= f.input :description %>
+	<div class="well well-sm">
+	<%= f.input :is_external, label: "This is an External Tax Component (not used for internal calculation). External tax component can be selected by the user to enter the product cost master. Others are used for internal calculation" %>
+	</div>
   </div>
 
   <div class="form-actions">

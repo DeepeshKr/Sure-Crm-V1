@@ -9,7 +9,7 @@ class PendingOrdersController < ApplicationController
     @btn3 = "btn btn-default"
     
     
-    @from_date = Date.current - 3.days #30.days
+    @from_date = Date.current - 30.days #30.days
     @to_date = Date.current
     if params[:from_date].present?
       #@summary ||= []
@@ -26,7 +26,7 @@ class PendingOrdersController < ApplicationController
 
       @to_date = @to_date.end_of_day - 330.minutes
     end
-    @pending_orders = PendingOrder.where("TRUNc(order_date) >= ? and TRUNc(order_date) <= ?", @from_date,@to_date).order(created_at: :DESC).paginate(:page => params[:page])
+    @pending_orders = PendingOrder.where("TRUNC(order_date) >= ? and TRUNC(order_date) <= ?", @from_date,@to_date).order(updated_at: :DESC).paginate(:page => params[:page])
 
      
     if params.has_key?(:payumoney_status_id)
@@ -71,7 +71,49 @@ class PendingOrdersController < ApplicationController
     end
    
   end
+  
+  def multi_edit
+    @from_date = Date.current - 60.days #30.days
+    @to_date = Date.current
+    if params[:from_date].present?
+      @from_date = Date.strptime(params[:from_date], "%Y-%m-%d").beginning_of_day - 330.minutes
+      @to_date = Date.strptime(params[:from_date], "%Y-%m-%d").end_of_day - 330.minutes
 
+      if params.has_key?(:to_date)
+        @to_date =  Date.strptime(params[:to_date], "%Y-%m-%d")
+      end
+      
+      @to_date = @to_date.end_of_day - 330.minutes
+    end
+     
+    @pending_orders = PendingOrder.where("TRUNC(order_date) >= ? and TRUNC(order_date) <= ?", @from_date,@to_date).order(created_at: :DESC).paginate(:page => params[:page])
+
+     
+    
+    respond_to do |format|
+      format.html
+      format.csv do
+        headers['Content-Disposition'] = "attachment; filename=\"#{file_name}\""
+        headers['Content-Type'] ||= 'text/csv'
+      end
+    end
+  end
+  
+  def edit_multiple
+    @pay_u_status = PayumoneyStatus.all
+    @pending_orders = PendingOrder.find(params[:pending_orders])
+  end
+  
+  def update_multiple
+     @pay_u_status = PayumoneyStatus.all
+     @pending_orders = PendingOrder.find(params[:pending_orders])
+      @pending_orders.each do |pending_order|
+        pending_order.update_attributes!(params[:pending_order].reject { |k,v| v.blank? })
+      end
+      flash[:notice] = "Updated Pending Ordes!"
+      redirect_to pending_orders_path
+  end
+  
   # GET /pending_orders/1
   # GET /pending_orders/1.json
   def show
@@ -87,8 +129,8 @@ class PendingOrdersController < ApplicationController
   end
   
   def import
-    PendingOrder.import(params[:file])
-    redirect_to pending_orders_url, notice: "No Help File entries imported."
+    message = PendingOrder.import(params[:file])
+    redirect_to pending_orders_url, notice: message
   end
   
   # POST /generate_orders
